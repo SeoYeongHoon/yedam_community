@@ -1,4 +1,3 @@
-# yedam_community
 # 예담 수료생 전용 커뮤니티
 
 >  최초 업무 프로세스
@@ -12,6 +11,7 @@
 8. 그 날 작업 완료 후 Git Staging에서 +/+ 로 전부 추가
 9. Commit And Push. * Commit 메세지는 날짜 - 한 것 (ex: 2024/04/22 메인페이지 작성)
 10. 깃 허브로 와서 Pull Requests 생성 후 충돌 없는지 확인하고 Main 브랜치에 Merge
+11. 본인 PC 환경에 맞게 application.properties 수정(hr 계정 비밀번호 등)
 
 >  업무 프로세스(도중)
 1. 전날에 조원들이 Main 브랜치에 Merge를 했으므로, 작업 시작 시 yedam_community 우클릭 -> Pull... 클릭
