@@ -1,6 +1,6 @@
 # yedam_community
 <h2>예담 수료생 전용 커뮤니티</h2>
-<br>
+
 >  최초 업무 프로세스
 - STS의 Git Repository에서 yedam_community 우클릭
 - Switch To
@@ -13,7 +13,7 @@
 - Commit And Push. * Commit 메세지는 날짜 - 한 것 (ex: 2024/04/22 메인페이지 작성)
 - 깃 허브로 와서 Pull Requests 생성 후 충돌 없는지 확인하고 Main 브랜치에 Merge
 
-<br>
+
 >  업무 프로세스(도중)
 - 전날에 조원들이 Main 브랜치에 Merge를 했으므로, 작업 시작 시 yedam_community 우클릭 -> Pull... 클릭
 - Reference에 main 입력(입력하면 main[branch] 라고 뜰 것이다) 후 Finish
