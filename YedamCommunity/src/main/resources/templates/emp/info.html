@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmln:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="content">
+<head>
+<meta charset="UTF-8">
+<title>사원 단건 조회</title>
+</head>
+<body>
+	<div>
+		<div class="form-group">
+			<label>사원번호<input class="form-control" type="text" th:value="${empInfo.employeeId}" readonly></label>
+		</div>
+		<div class="form-group">
+			<label>이름<input class="form-control" type="text" th:value="${empInfo.lastName}" readonly></label>
+		</div>
+		<div class="form-group">
+			<label>이메일<input class="form-control" type="text" th:value="${empInfo.email}" readonly></label>
+		</div>
+		<div class="form-group">
+			<label>전화번호<input class="form-control" type="text" th:value="${empInfo.phoneNumber}" readonly></label>
+		</div>
+		<div class="form-group">
+			<label>입사일<input class="form-control" type="date" th:value="${#dates.format(empInfo.hireDate, 'yyyy-MM-dd')}" readonly></label>
+		</div>
+		<div class="form-group">
+			<label>업무<input class="form-control" type="text" th:value="${empInfo.jobId}" readonly></label>
+		</div>
+		<div class="form-group">
+			<label>
+				급여
+				<input class="form-control" type="text" th:value="${#numbers.formatInteger(empInfo.salary, 3, 'COMMA')}" readonly>
+				<!-- <span>[[ ${#numbers.formatInteger(empInfo.salary, 3, 'COMMA')} ]]</span> -->
+			</label>
+		</div>
+		<div class="form-group mt-4">
+			<button class="btn btn-warning" type="button" th:onclick="|location.href='@{/empUpdate(employeeId=${empInfo.employeeId})}'|">수정</button>
+			<button class="btn btn-danger" type="button" th:onclick="|location.href='@{/empDelete(employeeId=${empInfo.employeeId})}'|">삭제</button>
+			<button class="btn btn-primary" type="button" th:onclick="|location.href='@{/empList}'|">목록</button>
+		</div>
+	</div>
+</body>
+</html>

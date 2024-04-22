@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmln:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="content">
+<head>
+<meta charset="UTF-8">
+<title>전체 사원 조회</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>사원번호</th>
+				<th>이름</th>
+				<th>입사일자</th>
+				<th>업무</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- JSP에선 <c:foreach var="empInfo" varStatus="stat" items="${empList}"> -->
+			<th:block th:each="empInfo, stat : ${empList}">
+				<!-- empList: 컨트롤러의 Model 안에 있는 변수값 -->
+				<tr th:id="${stat.index}"
+					th:onclick="|location.href='@{/empInfo(employeeId=${empInfo.employeeId})}'|">
+					<td th:text="${empInfo.employeeId}" />
+					<!-- <td>[[ ${empInfo.employeeId} ]]</td> -->
+					<td th:text="${empInfo.lastName}" />
+					<td th:text="${#dates.format(empInfo.hireDate, 'yyyy년 MM월 dd일')}" />
+					<td th:text="${empInfo.jobId}" />
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
+</body>
+</html>
