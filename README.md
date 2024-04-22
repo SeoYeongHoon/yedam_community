@@ -1,8 +1,7 @@
 # yedam_community
 <h2>예담 수료생 전용 커뮤니티</h2>
-<br>
+<br />
 >  업무 프로세스(처음)
-<br>
 - STS의 Git Repository에서 yedam_community 우클릭
 - Switch To
 - New Branch
