@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<head>
+<meta charset="UTF-8">
+<title>과제 생성</title>
+</head>
+<body>
+	<div>
+		<div class="card-style settings-card-2 mb-30">
+			<div class="title mb-30">
+				<h6>과제 등록</h6>
+			</div>
+			<form action="#">
+				<div class="row">
+					<div class="col-12">
+						<div class="input-style-1">
+							<label>과제 제목</label> <input type="text"
+								placeholder="과제 제목을 입력하세요.">
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="input-style-1">
+							<label>과제 내용</label>
+							<textarea placeholder="과제 내용을 입력하세요" rows="6"></textarea>
+						</div>
+					</div>
+					<div>
+						<h6>
+						
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">시간과 날짜</font>
+							</font>
+						</h6>
+						<br>
+						<div >
+							<label>
+								<font style="vertical-align: inherit;">
+							 		<font style="vertical-align: inherit;">날짜</font>
+								</font>
+							</label> 
+							<input type="date" style="border: 1px solid #e5e5e5; padding: 16px;">
+						</div>
+						<!-- end input -->
+					    <!-- <div class="input-style-2"> -->
+						<div >
+							<input type="date" style="border: 1px solid #e5e5e5; padding: 16px;"> 
+							<span class="icon">
+								<i class="lni lni-chevron-down"></i>
+							</span>
+						</div>
+						<!-- end input -->
+						<div>
+							<input type="time" style="border: 1px solid #e5e5e5; padding: 16px;">
+						</div>
+						<!-- end input -->
+					</div>
+
+
+
+
+					<div class="col-12">
+						<button class="main-btn primary-btn btn-hover">등록</button>
+						<button class="main-btn primary-btn btn-hover">취소</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!-- end card -->
+	</div>
+</body>
+</html>
