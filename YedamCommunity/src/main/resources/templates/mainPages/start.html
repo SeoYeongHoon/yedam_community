@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="common/configs/config :: ConfigFragment">
+</head>	  
+<body>
+	<div class="d-flex">
+		<div class="button-group">
+			<a th:href="@{/login}" class="main-btn primary-btn btn-hover w-100 text-center">수강생 & 수료생</a>
+			<p>회원이 아니신가요? <a th:href="@{/register}">회원가입하기</a></p>
+		</div>
+		<div class="button-group d-flex justify-content-center">
+			<a th:href="@{/login}" class="main-btn primary-btn btn-hover w-100 text-center">관리자 & 교수</a>
+		</div>
+	</div>
+</body>
+</html>

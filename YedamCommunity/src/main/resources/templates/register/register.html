@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="common/configs/config :: ConfigFragment">
+</head>	  
+<body>
+	<section class="tab-components">
+		<div class="container-fluid" style="padding-bottom: 100px;">
+			<div class="title-wrapper pt-30" style="max-width: 720px; margin: 0 auto;">
+				<div class="row align-items-center">
+					<div class="col-md-6">
+						<div class="title">
+							<h2>회원가입</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<form id="register_form" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" method="post">
+				<div class="row">
+					<div class="col-12">
+						<!-- input style start -->
+						<div class="card-style mb-30">
+							<div class="input-style-1">
+								<label>아이디</label> 
+								<input name="id" type="text" placeholder="아이디를 입력하세요.">
+							</div>
+							
+							<div class="input-style-1" style="position: relative">
+								<label>비밀번호</label> 
+								<div class="password_input">
+									<input name="password" type="password" placeholder="비밀번호를 입력하세요.">
+									<i class="fa fa-eye fa-lg" style="position: absolute; right: 10px; top: 52px;"></i>
+								</div>
+							</div>
+							<div class="input-style-1" style="position: relative">
+								<label>비밀번호 확인</label> 
+								<div>
+									<input type="password" placeholder="비밀번호를 한 번 더 입력해주세요.">
+								</div>
+							</div>
+						</div>
+						
+						<div class="card-style mb-30">
+							<div class="input-style-1">
+								<label>이름</label> 
+								<input name="name" type="text" placeholder="이름을 입력하세요.">
+							</div>
+							<div class="input-style-1">
+								<label>이메일</label> 
+								<input name="email" type="text" placeholder="이메일을 입력하세요.">
+							</div>
+							<div class="input-style-1" style="position: relative">
+								<label>연락처</label> 
+								<div>
+									<input name="tel" type="text" placeholder="휴대폰 번호 (-제외)">
+									<button th:onclick="openPass()" href="#0" class="main-btn dark-btn-outline btn-hover" style="padding: 8px 30px; position: absolute; right: 10px; top: 38px;">본인인증</button>
+								</div>
+							</div>
+							<div class="input-style-1" style="position: relative">
+								<label>주소</label> 
+								<div>
+									<div class="d-flex" style="margin-bottom: 5px;">
+										<input name="address" style="max-width: 300px; margin-right: 5px;" type="text" id="zip-code" placeholder="우편번호">
+										<input style="max-width: 150px;" type="button" class="main-btn dark-btn-outline btn-hover" onclick="execDaumPostcode()" value="주소찾기" readonly>
+									</div>
+									<input style="margin-bottom: 5px;" type="text" id="address-1" placeholder="도로명 주소">
+									<input style="margin-bottom: 5px;" type="text" id="address-1-1" placeholder="지번 주소">
+									<input type="text" id="address-2" placeholder="상세 주소">
+									<a href="#0" class="main-btn dark-btn-outline btn-hover" style="padding: 8px 30px; position: absolute; right: 10px; top: 38px;">주소찾기</a>
+								</div>
+							</div>
+							<div class="input-style-1" style="position: relative">
+								<label>회사명</label> 
+								<div>
+									<input name="companyInfo" type="text" placeholder="현재 수강생이거나 취업 준비 중이면 비워두기">
+								</div>
+							</div>
+							<div class="input-style-1" style="position: relative">
+								<label>과정입력</label> 
+								<div>
+									<input name="curriculumId" type="number" placeholder="과정명 입력">
+								</div>
+							</div>
+							<!-- <div class="select-style-1" style="position: relative">
+								<label>과정 선택</label>
+								<div class="select-position">
+									<select>
+										<option value="">과정을 선택하세요.</option>
+										<option value="">과정1</option>
+										<option value="">과정2</option>
+										<option value="">과정3</option>
+									</select>
+								</div>
+							</div> -->
+							<div>
+								<label>프로필 사진</label> 
+								<div>
+									<input name="img" type="file" placeholder="현재 수강생 또는 취업 준비 중이면 공란">
+								</div>
+							</div>
+							<div class="d-flex" style="margin-top: 40px; justify-content: center;">
+								<button class="main-btn primary-btn btn-hover register_btn" type="submit" style="padding: 8px 30px; margin-right: 10px;">가입하기</button>
+								<button class="main-btn danger-btn btn-hover" type="button" onclick="location.href='/'" style="padding: 8px 30px;">뒤로가기</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- end row -->
+			</form>
+			<!-- ========== form-elements-wrapper end ========== -->
+		</div>
+		<!-- end container -->
+	</section>
+</body>
+<script>
+	// 가입하기 이벤트 호출
+	/* $(document).ready(function(){
+	//회원가입 버튼(회원가입 기능 작동)
+	$(".register_btn").click(function(){
+		$("#register_form").attr("action", "/user/register");
+		$("#register_form").submit();
+		});
+	}); */
+
+
+	// 비밀번호 보이기 함수
+	$(document).ready(function(){
+	    $('.password_input i').on('click',function(){
+	        $('input').toggleClass('active');
+	        if($('input').hasClass('active')){
+	            $(this).attr('class',"fa fa-eye-slash fa-lg")
+	            .prev('input').attr('type',"text");
+	        }else{
+	            $(this).attr('class',"fa fa-eye fa-lg")
+	            .prev('input').attr('type','password');
+	        }
+	    });
+	});
+	
+	// 휴대폰 본인인증 호출 함수
+	
+</script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+	function execDaumPostcode() {
+		new daum.Postcode({
+					oncomplete : function(data) {
+						document.getElementById('zip-code').value = data.zonecode;
+						document.getElementById('address-1').value = data.address;
+						document.getElementById('address-1-1').value = data.jibunAddress;
+						document.getElementById('address-2').focus();
+					}
+				}).open();
+	}
+</script>
+</html>
