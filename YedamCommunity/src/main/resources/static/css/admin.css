@@ -116,6 +116,8 @@ p {
 
 /* ========== cart style ========== */
 .card-style {
+  width:100%;
+  height:100%;
   background: #fff;
   box-sizing: border-box;
   padding: 25px 30px;
