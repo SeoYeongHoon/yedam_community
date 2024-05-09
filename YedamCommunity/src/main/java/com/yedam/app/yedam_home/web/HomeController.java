@@ -1,13 +1,13 @@
-package com.yedam.app.yedam_main.web;
+package com.yedam.app.yedam_home.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class MainController {
-	@GetMapping("/")
+public class HomeController {
+	@GetMapping("/home")
 	public String homePage() {
-		return "home";
+		return "mainPages/home";
 		//classpath:/templates/home.html
 	}
 }
