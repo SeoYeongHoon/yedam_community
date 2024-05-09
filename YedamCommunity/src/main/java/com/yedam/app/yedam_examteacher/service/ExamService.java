@@ -7,7 +7,7 @@ public interface ExamService {
 	public List<TeacherVO> testList();
 	
 	// 문제등록
-	public int quizInsert(TeacherVO teacherVO);
+	public void quizInsert(TeacherVO teacherVO);
 	
 	// 문제저장소에 문제출력
 	public List<TeacherVO> quizList();

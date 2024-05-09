@@ -24,6 +24,10 @@ public class TeacherVO {
 	private String quizAnswer;
 	
 	private String textContent;
-	
+	private String textContent2;
+	private String textContent3;
+	private String textContent4;
+	private String textContent5;
+	private int exampleNum;
 	
 }
