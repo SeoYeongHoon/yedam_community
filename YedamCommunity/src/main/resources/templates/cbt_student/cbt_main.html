@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<div class="container">
+	<br>
+	<br>
+	<div>	
+		<h1>내 시험</h1>
+	</div>
+	<br>
+	<br>
+	<br>
+	<button class="status-btn success-btn">응시완료</button>
+	<button class="status-btn active-btn">응시하기</button>
+	<button class="status-btn close-btn">재시험</button>
+	<br>
+	<div>
+		<h3>시험</h3>
+	</div>
+	<br>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>시험명</th>
+				<th>시험일자</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="list : ${testList}">
+				<td>[[${list.testName}]]</td>
+				<td>[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</html>
