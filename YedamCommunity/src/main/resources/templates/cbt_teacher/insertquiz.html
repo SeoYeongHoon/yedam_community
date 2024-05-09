@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<form name="" th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
+	<!-- ======= 과목설정 select ======= -->
+	<div class="card-style mb-30">
+		<div class="select-style-1">
+			<h6 class="mb-25">과목 선택</h6>
+			<div class="select-position">
+				<select th:field="*{subjectId}">
+					<option value="1">Java</option>
+					<option value="2">Sql</option>
+					<option value="3">JavaScript</option>
+					<option value="4">Html</option>
+				</select>
+			</div>
+		</div>
+	
+	<!-- 과목설정 end select -->
+	<!-- ======= 문제 유형 radio ======= -->
+		<h6 class="mb-25">문제 유형</h6>
+		<div class="form-check radio-style mb-20">
+			<input class="form-check-input" type="radio" value="" id="radio-1" />
+			<label class="form-check-label" for="radio-1"> 객관식 </label>
+		</div>
+		<!-- end radio -->
+		<div class="form-check radio-style radio-warning mb-20">
+			<input class="form-check-input" type="radio" value="" id="radio-4" />
+			<label class="form-check-label" for="radio-4"> 주관식 </label>
+		</div>
+		<!-- end radio -->
+	<!-- ======= 문제 유형 radio style end ======= -->
+	<!-- ======= 시험문제 입력 style start ======= -->
+		<h6 class="mb-25">시험 문제</h6>
+		<div class="input-style-1">
+			<textarea placeholder="문제를 입력하세요." rows="8" cols="100" th:field="*{quizContent}"></textarea>
+		</div>
+		<!-- end textarea -->
+	<!-- ======= 시험문제 입력 style end ======= -->
+	<!-- ======= 정답 지문 입력 radio style start ======= -->
+		<h6 class="mb-25">정답 체크</h6>
+		<div class="form-check radio-style mb-20">
+			<input class="form-check-input" type="radio" value="" id="radio-1" />
+			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}"/>
+		</div>
+		<!-- end radio -->
+		<div class="form-check radio-style radio-warning mb-20">
+			<input class="form-check-input" type="radio" value="" id="radio-4" />
+			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}"/>
+		</div>
+		<!-- <div class="form-check radio-style mb-20">
+			<input class="form-check-input" type="radio" value="" id="radio-1" />
+			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}" />
+		</div>
+		end radio
+		<div class="form-check radio-style radio-warning mb-20">
+			<input class="form-check-input" type="radio" value="" id="radio-4" />
+			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}" />
+		</div>
+		end radio
+		<div class="form-check radio-style radio-warning mb-20">
+			<input class="form-check-input" type="radio" value="" id="radio-4" />
+			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}" />
+		</div>
+		end radio -->
+	<!-- ======= 정답 지문 입력 radio style end ======= -->
+	<!-- ======= 문제 해설 style start ======= -->
+		<h6 class="mb-25">문제 해설</h6>
+		<div class="input-style-1">
+			<textarea placeholder="해설을 입력하세요." rows="5" th:field="*{quizSolution}"></textarea>
+		</div>
+		<!-- end textarea -->
+	<!-- ======= 문제 해설 style end ======= -->
+		<ul class="buttons-group">
+			<li>
+				<button type="submit" class="main-btn primary-btn square-btn btn-hover">등록</button>
+			</li>
+			<li>
+	        	<button class="main-btn deactive-btn square-btn btn-hover">취소</button>
+	        </li>
+		</ul>	
+	</div>
+</form>
+</html>

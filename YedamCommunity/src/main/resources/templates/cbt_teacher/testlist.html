@@ -31,23 +31,17 @@
 						<!-- end table row-->
 					</thead>
 					<tbody>
-						<th:block th:each="examInfo, idxStat : ${examlist}">
-						<tr>
-							<td>
-                      			<i class="mdi mdi-script-text-play-outline"></i>
-							</td>
-							<td class="min-width">[[ ${examInfo.examName} ]]</td>
-							<td class="min-width">
-								<p>
-									<a href="#0">yourmail@gmail.com</a>
-								</p>
-							</td>
-							<td class="min-width">
-								<p>Admin Dashboard Design</p>
-							</td>
-							<td class="min-width"><span class="status-btn active-btn">진행중</span>
-							</td>
-						</tr>
+						<th:block th:each="examInfo, idxStat : ${testlist}">
+							<tr>
+								<td>
+	                      			<i class="mdi mdi-script-text-play-outline"></i>
+								</td>
+								<td class="min-width">[[ ${examInfo.testName} ]]</td>
+								<td class="min-width">[[ ${#dates.format(examInfo.testDate, 'yyyy-MM-dd')} ]]</td>
+								<td class="min-width">[[ ${examInfo.testTime} ]]</td>
+								<td class="min-width"><span class="status-btn active-btn">진행중</span>
+								</td>
+							</tr>
 						</th:block>
 						<!-- end table row -->
 					</tbody>
