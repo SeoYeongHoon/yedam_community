@@ -90,7 +90,6 @@
 	<select id="selectQuizAll" resultType="TeacherVO">
 		SELECT quiz_content
 		FROM quizes
-		ORDER BY quiz_id      
 	</select>
 	
 	<!-- 문제저장소에 지문 출력 -->
