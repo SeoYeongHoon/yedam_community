@@ -16,7 +16,7 @@
              , POST_LIKE 
              , UPDATE_DATE
         FROM posts
-        ORDER BY post_id
+        ORDER BY post_id DESC
 	</select>
 	
 	<!-- 게시글 단건조회 -->

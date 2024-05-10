@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{common/layouts/default_layout}"
-	  layout:fragment="Content">
+	  layout:fragment="Home">
 <head>
 <meta charset="UTF-8">
 <title>boardInfo</title>
@@ -34,9 +34,9 @@
 			</div>
 			
 			<div>
-				<!--  
-				<button type="button" th:onclick="|location.href='@{/empUpdate(postId=${boardInfo.postId})}'|">수정</button>
-				-->
+				 
+				<button type="button" th:onclick="|location.href='@{/boardUpdate(postId=${boardInfo.postId})}'|">수정</button>
+				
 				<button type="button" th:onclick="|location.href='@{/boardDelete(postId=${boardInfo.postId})}'|">삭제</button>
 				
 				<button type="button" th:onclick="|location.href='@{/boardList}'|">목록</button>
