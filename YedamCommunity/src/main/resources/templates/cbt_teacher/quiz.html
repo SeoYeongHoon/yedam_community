@@ -3,17 +3,78 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<div id="test">
 
 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
 	<div class="card-style-3 mb-30">
-		<div class="card-content">
+		<div class="card-content" >
 			<h4>
 				<a href="#0">Card Title here </a>
 			</h4>
-			<p></p>
-			<a href="#0" class="read-more">Read More</a>
+			<th:block th:each="quizInfo, idxStat : ${quizlist}">
+			<p>[[${quizInfo.quizContent}]]</p>
+			</th:block>
+			<a class="read-more">Read More</a>
+			<button>아이템 추가</button>
+			<button id="updateBtn">아작스테스트</button>
 		</div>
 	</div>
 </div>
+
 <!-- end col -->
+</div>	
+<script>
+let quizContent = '';
+let aaa = '';
+let template = `
+<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+	<div class="card-style-3 mb-30">
+		<div class="card-content" >
+			<h4>
+				<a href="#0">Card Title here </a>
+			</h4>
+			<p>${aaa}</p>
+			<a id="btn" class="read-more">Read More</a>
+		</div>
+	</div>
+</div>
+`;
+
+/* $(function() {
+			$("button").on("click", function() {
+				$("#test").append(template);
+			});
+		}); */
+
+
+$('#updateBtn').on('click', updateAjaxJq);
+
+function updateAjaxJq(event){
+	let dataObj = getEmpObj();
+	// Ajax
+	$.ajax('quizlist',{
+		type : 'get',
+		//data : dataObj
+	})
+	.done(result =>{
+		console.log(result);
+	})
+	.fail(err => console.log(err + '에러났다'));
+};
+
+function getEmpObj(){
+	//let formTag = document.querySelector('form');			
+	
+	let formData = new FormData();
+	
+	let formObj = {};
+	formData.forEach((val, key) => {
+		formObj[key] = val;
+	})
+	return formObj;
+}
+
+</script>
 </html>
