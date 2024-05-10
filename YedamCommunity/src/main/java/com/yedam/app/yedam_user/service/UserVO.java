@@ -14,5 +14,6 @@ public class UserVO {
 	private String img;
 	private String companyInfo;
 //	private Integer isComplete;
+	private String userType;
 	private Integer curriculumId;
 }
