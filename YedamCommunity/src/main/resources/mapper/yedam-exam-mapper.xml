@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.yedam_examteacher.mapper.ExamMapper">
+	<!-- 시험목록 조회 -->
+	<select id="selectExamAll" resultType="TeacherVO">
+		SELECT test_id,
+		       test_name,
+		       test_date,
+		       test_time
+		FROM tests
+		ORDER BY test_id       
+	</select>
+	
+	<!-- 문제 등록 -->
+	<insert id="insertQuiz" parameterType="TeacherVO">
+		INSERT INTO quizes (quiz_id
+			  			  , subject_id
+						  , quiz_content
+						  , quiz_solution)
+		VALUES (quiz_id_seq.nextval
+			  , #{subjectId}
+			  , #{quizContent}
+			  , #{quizSolution})
+	</insert>
+	
+	<!-- 문제 지문 등록 -->
+	<insert id="insertAnswer" parameterType="TeacherVO">
+		INSERT INTO answers (text_id
+			  			  , example_num
+						  , text_content
+						  , quiz_id
+						  , subject_id)
+		VALUES (text_id_seq.nextval
+			  , 1
+			  , #{textContent}
+			  , quiz_id_seq.currval
+			  , #{subjectId})
+	</insert>
+	<insert id="insertAnswer2" parameterType="TeacherVO">
+		INSERT INTO answers (text_id
+			  			  , example_num
+						  , text_content
+						  , quiz_id
+						  , subject_id)
+		VALUES (text_id_seq.nextval
+			  , 2
+			  , #{textContent2}
+			  , quiz_id_seq.currval
+			  , #{subjectId})
+	</insert>
+	<insert id="insertAnswer3" parameterType="TeacherVO">
+		INSERT INTO answers (text_id
+			  			  , example_num
+						  , text_content
+						  , quiz_id
+						  , subject_id)
+		VALUES (text_id_seq.nextval
+			  , 3
+			  , #{textContent3}
+			  , quiz_id_seq.currval
+			  , #{subjectId})
+	</insert>
+	<insert id="insertAnswer4" parameterType="TeacherVO">
+		INSERT INTO answers (text_id
+			  			  , example_num
+						  , text_content
+						  , quiz_id
+						  , subject_id)
+		VALUES (text_id_seq.nextval
+			  , 4
+			  , #{textContent4}
+			  , quiz_id_seq.currval
+			  , #{subjectId})
+	</insert>
+	<insert id="insertAnswer5" parameterType="TeacherVO">
+		INSERT INTO answers (text_id
+			  			  , example_num
+						  , text_content
+						  , quiz_id
+						  , subject_id)
+		VALUES (text_id_seq.nextval
+			  , 5
+			  , #{textContent5}
+			  , quiz_id_seq.currval
+			  , #{subjectId})
+	</insert>
+	<!-- 문제저장소에 문제 출력 -->
+	<select id="selectQuizAll" resultType="TeacherVO">
+		SELECT quiz_content
+		FROM quizes
+		ORDER BY quiz_id      
+	</select>
+	
+	<!-- 문제저장소에 지문 출력 -->
+	<select id="selectAnswerAll" resultType="TeacherVO">
+		SELECT example_num,
+			   text_content
+		FROM example_num
+		WHERE quiz_id = #{quizId}
+		ORDER BY example_num      
+	</select>
+</mapper>	

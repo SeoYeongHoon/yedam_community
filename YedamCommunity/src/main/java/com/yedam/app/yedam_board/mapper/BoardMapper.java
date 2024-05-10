@@ -21,5 +21,6 @@ public interface BoardMapper {
 	// 수정
 	public int updateBoard(BoardVO boardId);
 
+	// 등록할 게시글번호 조회
 	public BoardVO getPostId();
 }
