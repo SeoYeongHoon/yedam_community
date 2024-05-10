@@ -5,10 +5,13 @@
 	  layout:fragment="Admin">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>과제 목록 교수</title>
+<style>
+ .row{
+ 	width:100%;
+ }
+</style>
 </head>
-<body>
-
 <h1>과제 목록 교수</h1>
 <div style='float: right;'>
 	<a href="insert_homework" class=" primary-btn rounded-full btn-hover"style='padding:10px;'>
@@ -17,6 +20,47 @@
 		</font>
 	</a>
 </div>
-
-</body>
+<div class="row">
+	<div >
+		<div class="card-style mb-30">
+			<h1 class="mb-30">과제 목록</h1>
+			<div class="table-wrapper table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>
+								<h6>강의실</h6>
+							</th>
+							<th>
+								<h6>과제명</h6>
+							</th>
+							<th>
+								<h6>마감일</h6>
+							</th>
+							<th>
+								<h6>진행상태</h6>
+							</th>
+						</tr>
+						<!-- end table row-->
+					</thead>
+					<tbody>
+						<th:block th:each="hworkinfo, idxStat : ${hlist}">
+							<tr>
+								<td class="min-width">[[ ${hworkinfo.classId} ]]강의실</td>
+								<td class="min-width">[[ ${hworkinfo.homeworkTitle} ]]</td>
+								<td class="min-width">[[ ${#dates.format(hworkinfo.homeworkDate, 'yyyy-MM-dd')} ]]</td>
+								<td class="min-width"><span class="status-btn active-btn">진행중</span>
+								</td>
+							</tr>
+						</th:block>
+						<!-- end table row -->
+					</tbody>
+				</table>
+				<!-- end table -->
+			</div>
+		</div>
+		<!-- end card -->
+	</div>
+	<!-- end col -->
+</div>
 </html>
