@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.yedam_board.mapper.BoardMapper">
+	<!-- 게시글 조회 -->
+	<select id="selectBoardAll" resultType="BoardVO">
+		SELECT POST_ID 
+             , BOARD_ID 
+             , USER_ID 
+             , TITLE 
+             , POST_CONTENT 
+             , CREATE_DATE 
+             , WRITER 
+             , POST_VIEW 
+             , POST_LIKE 
+             , UPDATE_DATE
+        FROM posts
+        ORDER BY post_id
+	</select>
+	
+	<!-- 게시글 단건조회 -->
+	<select id="selectboard" resultType="BoardVO">
+	    SELECT p.post_id
+	         , p.TITLE
+             , p.POST_CONTENT
+             , p.CREATE_DATE
+             , p.WRITER
+             , p.POST_VIEW
+             , p.POST_LIKE
+             , f.boardfile_name
+        FROM posts p JOIN boardfiles f 
+        ON p.post_id = f.post_id
+        WHERE p.post_id = #{postId}
+	</select>
+	
+	<!-- 게시글 추가 -->
+	<insert id="insertBoard" parameterType="BoardVO">
+		<selectKey keyProperty="postId">
+		   SELECT NVL(MAX(post_id),0)+1
+  		   FROM   posts
+  		   </selectKey>
+		INSERT INTO posts (post_id
+		                 , board_id
+                         , user_id
+                         <if test="userId !=null and !userId.equals('')">
+                         , user_id
+                         </if>
+                         , title
+                         , post_content
+                         , create_date
+                         , writer
+                         , post_view
+                         , post_like)
+        VALUES (#{postId}
+              , #{boardId}
+              , #{userId}
+              , #{title}
+              , #{postContent}
+              , #{createDate}
+              <choose>
+  		      	<when test="createDate != null">
+  		      		, #{createDate}
+  		        </when>
+  		        <otherwise>
+  		        	, sysdate
+  		        </otherwise>
+  		      </choose>
+              , #{writer}
+              , #{postView}
+              <if test="postLike > 0">
+              , #{postLike}
+              </if>
+              )
+	</insert>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="deleteBoard" parameterType="Integer">
+		DELETE FROM posts
+		WHERE post_id = #{postId}
+	</delete>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="BoardVO">
+		UPDATE posts
+		SET 
+			<if test="tirle !=null and !title.equals('')">
+			title = #{title}
+			</if>
+			<if test="postContent !=null and !postContent.equals('')">
+		  , post_content = #{postContent}
+		    </if>
+		  , update_date = #{updateDate}
+		WHERE post_id = #{postId}
+	</update>
+	
+	<!-- 등록할 게시글번호 조회 -->
+	<select id="getPostId" resultType="BoardVO">
+		SELECT NVL(MAX(post_id),0)+1 as post_id
+  		FROM   posts
+	</select>
+</mapper>

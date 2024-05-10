@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>boardInsert</title>
+</head>
+<body>
+<form th:action="@{/boardInsert}" method="post">
+	<div>제목<input type="text" name="title"></div>	
+	<div>파일<input type="file" name="lastName"></div>
+	<div>내용<input type="text" name="content"></div>
+	<button>등록</button>
+</form>
+</body>
+</html>
