@@ -53,7 +53,8 @@
 	margin-top: 150px;
 	margin-left: 150px;
 }
-#saveBtn{
+
+#saveBtn {
 	color: white;
 	font-size: 13px;
 	cursor: pointer;
@@ -69,6 +70,7 @@
 	padding: 30px 30px;
 	margin: 0;
 }
+
 #file {
 	float: left;
 	width: 600px;
@@ -77,8 +79,12 @@
 	padding: 30px 30px;
 	margin: 0;
 }
+
 #cancelBtn {
 	background-color: silver;
+}
+li{
+	display:inline;
 }
 }
 </style>
@@ -89,19 +95,19 @@
 			<div class="title mb-30">
 				<h6>과제 등록</h6>
 			</div>
-			<form action="uploadFormAction" method="post"
+			<form th:action="@{/insert_homework}" method="post" name="InsertForm" th:object="${homeworkVO}"
 				enctype="multipart/form-data">
 				<div class="row">
 					<div class="col-12">
 						<div class="input-style-1">
 							<label>과제 제목</label> <input type="text"
-								placeholder="과제 제목을 입력하세요.">
+								placeholder="과제 제목을 입력하세요." th:field="*{homeworkTitle}">
 						</div>
 					</div>
 					<div class="col-12">
 						<div class="input-style-1">
 							<label>과제 내용</label>
-							<textarea placeholder="과제 내용을 입력하세요" rows="6"></textarea>
+							<textarea placeholder="과제 내용을 입력하세요" rows="6" th:field="*{homeworkContent}"></textarea>
 						</div>
 					</div>
 
@@ -113,10 +119,10 @@
 						</h6>
 						<div class="input-style-1">
 							<label><font style="vertical-align: inherit;"><font
-									style="vertical-align: inherit;">날짜</font></font></label> <input type="date">
+									style="vertical-align: inherit;">날짜</font></font></label> <input type="date" th:field="*{homeworkDate}">
 						</div>
 						<div class="input-style-2">
-							<input type="time">
+							<input type="time" th:field="*{homeworkDate}">
 						</div>
 					</div>
 					<!-- 파일 업로드 -->
@@ -128,7 +134,7 @@
 					<!-- 등록 취소버튼 -->
 					<div id="btnWrap" class="col-12" style="text-align: center;">
 						<button id="insertBtn" class="main-btn primary-btn btn-hover"
-							type="button">등록</button>
+							type="submit">등록</button>
 						<button id="cancelBtn" class="main-btn primary-btn btn-hover"
 							type="button" onclick="location.href='homeworkList'">취소</button>
 					</div>
@@ -137,8 +143,7 @@
 		</div>
 		<!-- end card -->
 	</div>
-	<div id="modalWrap">
-		<!-- 모달창을 감싸는 div -->
+ 	<div id="modalWrap">
 		<div id="modalBody">
 			<p style="text-align: center;">등록이 완료되었습니다.</p>
 			<div style="text-align: center;">
@@ -147,20 +152,54 @@
 			<div>
 				<button id="closeBtn" class="main-btn primary-btn btn-hover"
 					type="button" onclick="location.href='homeworkList'">확인</button>
-				<!-- 모달창 닫는 버튼 -->
 			</div>
 		</div>
-	</div>
+	</div>  
 	<script>
+	function ajax(){
+		let formValues() = $('form[name="InsertForm"]').serialize();
+		
+		$.ajax({
+			url:"insert_homework",
+			type:"POST",
+			data: formValues,
+			success: function(json){
+				alert("등록완료");
+			},
+			error: function(){
+				alert("등록실패");
+			}
+		})
+	};
+		
+		// 입력확인
+		/* document.querySelector('form[name="InsertForm"]')
+				.addEventListener('submit', homeworkInsert);
+		
+		function homeworkInsert(event){
+				event.preventDefault();
+			
+			let name = document.getElementById('homeworkTitle');
+			if(name.value == ''){
+				alert('과제명이 입력되지 않았습니다.');
+				name.focus();
+				return;
+			}
+			InsertForm.submit();
+		} */
+		
+		//모달창
 		const btn = document.getElementById("insertBtn"); // 모달 띄우는 버튼
 		const modal = document.getElementById("modalWrap"); // 모달 창 요소 가져오기
-		const closeBtn = document.getElementById("closeBtn");
 		const cancelbtn = document.getElementById("cancelBtn");
+		const savebtn = document.getElementById("saveBtn");
 
 		btn.onclick = function() {
 			modal.style.display = "block"; // 버튼 클릭시 모달 보임
 			btn.style.display = "none"; // 등록 버튼 숨김
 			cancelbtn.style.display = "none"; // 취소 버튼 숨김
+			savebtn.style.display = "none"; // 취소 버튼 숨김
+			
 		};
 	</script>
 </body>
