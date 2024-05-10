@@ -1,10 +1,10 @@
-package com.yedam.app.yedam_cbt.mapper;
+package com.yedam.app.yedam_examstudent.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.yedam.app.yedam_cbt.service.TestVO;
+import com.yedam.app.yedam_examstudent.service.TestVO;
 
 @Mapper
 public interface CbtStudentMapper {

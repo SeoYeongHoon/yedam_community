@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<style>
+.testList_1 {
+	display: inline-block;
+}
+.sidebar-nav-wrapper {
+	position: fixed;
+}
+</style>
+<div style="padding-left: 300px;">
+	<h1 style="margin: 100px;">내 시험</h1>
+	<div class="card-style" style="width: 1500px; margin-top: 100px;">
+		<div>			
+			<div class="testList_1">
+				<h3>시험</h3>
+			</div>
+			<button class="testList_1 status-btn success-btn">응시완료</button>
+			<button class="testList_1 status-btn active-btn">응시하기</button>
+			<button class="testList_1 status-btn close-btn">재시험</button>
+			<br>
+			<br>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>시험명</th>
+						<th>마감일</th>
+						<th>총점</th>
+						<th>문제수</th>
+						<th>응시상태</th>
+						<th>피드백</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="list : ${testList}">
+						<td>[[${list.testName}]]</td>
+						<td>[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
+						<td>100점</td>
+						<td>20개</td>
+						<td><button class="main-btn danger-btn square-btn btn-hover">미응시</button></td>
+						<td><button class="main-btn success-btn square-btn btn-hover">피드백완료</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</html>

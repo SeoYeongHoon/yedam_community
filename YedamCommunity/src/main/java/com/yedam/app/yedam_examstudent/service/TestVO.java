@@ -1,4 +1,4 @@
-package com.yedam.app.yedam_cbt.service;
+package com.yedam.app.yedam_examstudent.service;
 
 import java.util.Date;
 
