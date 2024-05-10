@@ -67,7 +67,7 @@ public class BoardController {
 		
 		BoardVO findVO = new BoardVO();
 		model.addAttribute("boardInfo", findVO);
-		return "board/Update";
+		return "board/boardUpdate";
 	}
 	@ResponseBody
 	public Map<String, Object> empUPdateProcess(@RequestBody BoardVO boardVO) {
