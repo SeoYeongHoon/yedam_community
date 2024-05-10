@@ -27,4 +27,9 @@ public class HomeWorkController {
 		return "homework/insert_homework";
 	}
 	
+	//과제상세페이지
+	@GetMapping("homework_detail")
+	public String homework (Model model) {
+		return "homework/homework_detail";
+	}
 }
