@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.yedam.app.yedam_post.mapper.PostMapper">
+  
+  <insert id="insertPost" parameterType="int" useGeneratedKeys="true" keyProperty="postId">
+        INSERT INTO posts (post_id
+                         , board_id
+                         , user_id
+                         , title
+                         , post_content
+                         , create_date
+                         , writer
+                         , post_view
+                         , post_like
+                         , update_date)
+        VALUES (#{postId}
+              , #{boardId}
+              , #{userId}
+              , #{title}
+              , #{postContent}
+              , #{createDate}
+              , #{writer}
+              , #{postView}
+              , #{postLike}
+              , #{updateDate})
+    </insert>
+
+    <select id="getPostById" parameterType="int" resultType="Post">
+        SELECT * 
+        FROM posts
+        WHERE post_id = #{postId}
+    </select>
+
+    <select id="getAllPosts" resultType="Post">
+        SELECT * 
+        FROM posts
+    </select>
+
+    <update id="updatePost" parameterType="Post">
+        UPDATE posts
+        SET title = #{title}
+                   , post_content = #{postContent}
+                   , update_date = #{updateDate}
+        WHERE post_id = #{postId}
+    </update>
+
+    <delete id="deletePostById" parameterType="int">
+        DELETE 
+        FROM posts 
+        WHERE post_id = #{postId}
+    </delete>
+
+</mapper>
