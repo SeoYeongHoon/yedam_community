@@ -14,10 +14,17 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 
 	@Autowired
 	HomeWorkMapper hMapper; //mapper 불러옴
-	
+
+	// 과제 목록 조회
 	@Override
-	public List<HomeWorkVO> hList() {
-		return hMapper.AllList();
+	public List<HomeWorkVO> homeworkList() {
+		return hMapper.hselectAll();
+	}
+	
+	// 과제 등록
+	@Override
+	public int homeworkInsert(HomeWorkVO homeworkVO) {
+		return hMapper.insertHomework(homeworkVO);
 	}
 
 }

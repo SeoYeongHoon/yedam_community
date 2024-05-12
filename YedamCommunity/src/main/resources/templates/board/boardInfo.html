@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="Home">
+<head>
+<meta charset="UTF-8">
+<title>boardInfo</title>
+</head>
+<body>
+<h3>정보 게시판</h3>
+<div>
+	<div>
+	  <div>
+			<label>제목<input type="text"
+					th:value="${boardInfo.title}" readonly></label>
+			</div>
+			<div>
+				<label>내용<input type="text" th:value="${boardInfo.postContent}"
+					readonly></label>
+			</div>
+			<div>
+				<label>작성자  <input type="text" th:value="${boardInfo.writer}"
+					readonly></label>
+			</div>
+			<div>
+				<label>작성날짜 <input type="date" th:value="${boardInfo.createDate}"
+					readonly></label>
+			</div>
+			<div>
+				<label>파일<input type="text" th:value="${boardInfo.boardfileName}"
+					readonly></label>
+					<!-- <td><img th:src="@{/images/{fileName}(fileName=${boardInfo.boardfileName})}"></td> -->
+			</div>
+			
+			<div>
+				 
+				<button type="button" th:onclick="|location.href='@{/boardUpdate(postId=${boardInfo.postId})}'|">수정</button>
+				
+				<button type="button" th:onclick="|location.href='@{/boardDelete(postId=${boardInfo.postId})}'|">삭제</button>
+				
+				<button type="button" th:onclick="|location.href='@{/boardList}'|">목록</button>
+			</div>
+			
+			<!-- 댓글 추가 -->
+		</div>
+	</div>
+</body>
+</html>

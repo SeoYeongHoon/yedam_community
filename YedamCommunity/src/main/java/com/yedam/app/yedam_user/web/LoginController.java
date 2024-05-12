@@ -19,13 +19,13 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/login")
+	@GetMapping("/")
 	public String loginPage() {
 		return "login/login";
 		//classpath:/templates/login/login.html
 	}
 	
-	@RequestMapping(value="login", method=RequestMethod.POST)
+	@RequestMapping(value="/", method=RequestMethod.POST)
     public String loginPOST(HttpServletRequest req, UserVO userVO, RedirectAttributes rttr) throws Exception{
         
 		String id = req.getParameter("id");
@@ -47,7 +47,7 @@ public class LoginController {
 	    	session.setAttribute("logName", userVO.getName());
 	    	System.out.println("로그인 성공");
 	    	System.out.println(userVO);
-	    	return "mainPages/home"; 
+	    	return "redirect:/home"; 
 	    } else {
 	    	System.out.println("로그인 실패");
 	    	return "redirect:/";

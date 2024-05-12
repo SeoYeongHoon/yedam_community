@@ -14,22 +14,24 @@
 			, id
 			, password
 			, name
-			, tel
 			, email
+			, tel
 			, address
 			, user_image
 			, company_info
+			, user_type
 			, curriculum_id
 		) VALUES (
 			user_id_seq.NEXTVAL
 			, #{id}
 			, #{password}
 			, #{name}
-			, #{tel}
 			, #{email}
+			, #{tel}
 			, #{address}
 			, #{img}
 			, #{companyInfo}
+			, #{userType}
 			, #{curriculumId}
 		)
 	</insert>

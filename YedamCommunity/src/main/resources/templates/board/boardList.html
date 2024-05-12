@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Home">
+<head>
+<meta charset="UTF-8">
+<title>boardList</title>
+
+
+</head>
+<body>
+	<div class="container">
+		<h3>정보 게시판</h3>
+          <a th:onclick="|location.href='@{/boardInsert}'|" style="text-align: right">글쓰기</a>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>게시글 번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>작성시간</th>
+					<th>조회수</th>
+					<th>추천수</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="info, idxStat: ${boardList}">
+					<tr th:onclick="|location.href='@{/boardInfo(postId=${info.postId})}'|">
+						<td>[[${info.postId}]]</td>
+						<td>[[${info.title}]]</td>
+						<td>[[${info.writer}]]</td>
+						<td>[[${#dates.format(info.createDate, "yyyy-MM-dd")}]]</td>
+						<td>[[${info.postView}]]</td>
+						<td>[[${info.postLike}]]</td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+	
+</body>
+</html>

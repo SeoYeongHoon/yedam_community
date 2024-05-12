@@ -14,6 +14,10 @@ public interface ExamMapper {
 	
 	// 문제 정답지문 등록
 	public int insertAnswer(TeacherVO teacherVO);
+	public int insertAnswer2(TeacherVO teacherVO);
+	public int insertAnswer3(TeacherVO teacherVO);
+	public int insertAnswer4(TeacherVO teacherVO);
+	public int insertAnswer5(TeacherVO teacherVO);
 	
 	// 문제 저장소에 문제 출력
 	public List<TeacherVO> selectQuizAll();
