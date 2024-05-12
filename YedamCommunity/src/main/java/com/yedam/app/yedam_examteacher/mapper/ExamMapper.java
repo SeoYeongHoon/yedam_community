@@ -24,4 +24,7 @@ public interface ExamMapper {
 	
 	// 문제 저장소에 지문 출력
 	public List<TeacherVO> selectAnswerAll();
+	
+	// 문제 단건 조회
+	public TeacherVO selectQuiz(TeacherVO teacherVO);
 }
