@@ -16,11 +16,11 @@
 		<table class="table">
 			<tr>
 				<th>시험명</th>
-				<td>리눅스 서버 만들기</td>
+				<td>[[${testDetail.testName}]]</td>
 			</tr>
 			<tr>
 				<th>마감시간</th>
-				<td>2024년 05월 25일</td>
+				<td>[[${#dates.format(testDetail.testDate, 'yyyy년 MM월 dd일')}]]</td>
 			</tr>
 			<tr>
 				<th>총점</th>
@@ -32,12 +32,12 @@
 			</tr>
 			<tr>
 				<th>유의사항</th>
-				<td>전자기기 사용 적발 시 퇴실 조치</td>
+				<td>[[${testDetail.testContent}]]</td>
 			</tr>
 		</table>
 		<br><br>
 		<div style="text-align: center">		
-			<button class="main-btn dark-btn-outline square-btn btn-hover">목록</button>
+			<button class="main-btn dark-btn-outline square-btn btn-hover" th:onclick="|location.href='@{/testList}'|">목록</button>
 			<button class="main-btn dark-btn-outline square-btn btn-hover">시작</button>
 		</div>
 		<br><br>

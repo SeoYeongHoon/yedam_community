@@ -13,23 +13,28 @@ import com.yedam.app.yedam_examstudent.service.TestVO;
 @Controller
 public class CbtStudentController {
 	
-	// service 주입
+	//service주입
 	@Autowired
 	CbtStudentService cbtStudentService;
 
-	@GetMapping("testList")
+	//시험전체목록 조회
+	@GetMapping("/testList")
 	public String testList(Model model) {
 		List<TestVO> list = cbtStudentService.testListAll();
 		model.addAttribute("testList", list);
 		return "cbt_student/testMain";
 	}
 	
-	@GetMapping("testDetail")
-	public String testDetail(Model model) {
+	//시험단건(상세)정보 조회
+	@GetMapping("/testDetail")
+	public String testDetail(TestVO testVO, Model model) {
+		TestVO list = cbtStudentService.testDetail(testVO);
+		model.addAttribute("testDetail", list);
 		return "cbt_student/testDetail";
 	}
 	
-	@GetMapping("testStart")
+	//시험시작 페이지
+	@GetMapping("/testStart")
 	public String testStart(Model model) {
 		return "cbt_student/testStart";
 	}
