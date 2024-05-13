@@ -23,4 +23,5 @@ public class BoardVO {
 	private Date updateDate;
 	
 	private String boardfileName;
+
 }

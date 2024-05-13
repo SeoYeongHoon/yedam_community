@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+li {
+	display: inline;
+	
+	
+} 
+
+#fsc {
+	width: auto;
+}
+
+.selectClass {
+	padding: 10px;
+	border: 1px solid #E2E2E2;
+	width: 300px;
+}
+</style>
+</head>
+<div id="fsc" class="card-style">
+	<div th:each="class, idxStat : ${class}">
+		<ul>
+			<li>
+				<div class="selectClass" >
+					<h1>[[${class.classId}]]강의실</h1>
+					<h3>[[${class.curriculumName}]]</h3>
+					<hr>
+					<p>[[${#dates.format(class.curriculumStartDate,'yyyy년MM월dd일')}]]~[[${#dates.format(class.curriculumEndDate,'yyyy년MM월dd일')}]]</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<script type="text/javascript"></script>
+</html>

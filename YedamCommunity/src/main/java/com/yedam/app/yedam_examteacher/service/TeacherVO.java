@@ -18,7 +18,6 @@ public class TeacherVO {
 	private Date testTime;
 	// 문제저장소
 	private int quizId;
-	private int subjectId;
 	private String quizContent;
 	private String quizSolution;
 	private String quizAnswer;
@@ -30,4 +29,7 @@ public class TeacherVO {
 	private String textContent5;
 	private int exampleNum;
 	
+	// 과목명
+	private int subjectId;
+	private String subjectName;
 }
