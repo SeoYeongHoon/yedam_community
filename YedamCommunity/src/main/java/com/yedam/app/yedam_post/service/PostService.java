@@ -5,8 +5,6 @@ import java.util.List;
 public interface PostService {
 	
 	public int createPost(Post post);
-	
-    Post getPostById(int postId);
     
     List<Post> getAllPosts();
     
@@ -14,15 +12,22 @@ public interface PostService {
     
     public int deletePost(int postId);
     
+    public Post getPostDetails(int postId);
+    
+    
+    public int createReply(Reply reply);
+    
+    List<Reply> getRepliesByPostId(int postId);
+    
+    public int updateReply(Reply reply);
+    
+    public int deleteReply(int replyId);
+    
+    
     public int createComment(Comment comment);
-    
-    List<Comment> getCommentsByPostId(int postId);
-    
-    List<Comment> getRepliesByParentId(int parentId);
     
     public int updateComment(Comment comment);
     
-    public int deleteComment(int commentId);
-    
+    public int deleteComment(int comment);
 }
 

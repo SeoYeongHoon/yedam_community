@@ -27,16 +27,53 @@
               , #{updateDate})
     </insert>
 
-    <select id="getPostById" parameterType="int" resultType="Post">
-        SELECT * 
-        FROM posts
-        WHERE post_id = #{postId}
+    <select id="getPostDetails" parameterType="int" resultType="Post">
+        SELECT
+            p.post_id
+          , p.title
+          , p.post_content
+          , p.create_date AS post_create_date
+          , p.writer AS post_writer
+          , p.post_view
+          , p.post_like
+          , p.update_date AS post_update_date
+          , r.reply_id
+          , r.reply_content
+          , r.reply_date
+          , r.reply_writer
+          , c.comment_id
+          , c.comment_content
+          , c.comment_date
+          , c.comment_writer
+          , b.boardfile_name
+        FROM 
+            posts p
+        LEFT JOIN 
+            replies r ON p.post_id = r.post_id
+        LEFT JOIN 
+            comments c ON r.reply_id = c.reply_id
+        LEFT JOIN
+            boardfiles b ON p.post_id = b.post_id
+        WHERE 
+            p.post_id = 25
+        ORDER BY 
+        p.create_date, r.reply_date, c.comment_date
     </select>
-
+    
     <select id="getAllPosts" resultType="Post">
-        SELECT * 
+		SELECT POST_ID 
+             , BOARD_ID 
+             , USER_ID 
+             , TITLE 
+             , POST_CONTENT 
+             , CREATE_DATE 
+             , WRITER 
+             , POST_VIEW 
+             , POST_LIKE 
+             , UPDATE_DATE
         FROM posts
-    </select>
+        ORDER BY post_id DESC
+	</select>
 
     <update id="updatePost" parameterType="Post">
         UPDATE posts
