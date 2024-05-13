@@ -28,9 +28,4 @@ public class BoardVO {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public Object getPostId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
