@@ -35,14 +35,16 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="list : ${testList}">
-						<td>[[${list.testName}]]</td>
-						<td>[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
-						<td>100점</td>
-						<td>20개</td>
-						<td><button class="main-btn danger-btn square-btn btn-hover">미응시</button></td>
-						<td><button class="main-btn success-btn square-btn btn-hover">피드백완료</button></td>
-					</tr>
+					<th:block th:each="list : ${testList}" >
+						<tr th:id="${list.testId}" th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|">
+							<td>[[${list.testName}]]</td>
+							<td>[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
+							<td>100점</td>
+							<td>20개</td>
+							<td><button class="main-btn danger-btn square-btn btn-hover">미응시</button></td>
+							<td><button class="main-btn success-btn square-btn btn-hover">피드백완료</button></td>
+						</tr>
+					</th:block>
 				</tbody>
 			</table>
 		</div>

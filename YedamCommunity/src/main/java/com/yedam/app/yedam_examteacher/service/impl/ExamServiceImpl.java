@@ -31,13 +31,20 @@ public class ExamServiceImpl implements ExamService{
 		examMapper.insertAnswer5(teacherVO);
 	}
 	
-	@Override
-	public List<TeacherVO> quizList() {
-		return examMapper.selectQuizAll();
-	}
 	
+	 @Override 
+	 public List<TeacherVO> quizList() { 
+		return examMapper.selectQuizAll(); 
+	}
+	 
+
 	@Override
 	public List<TeacherVO> answerList() {
 		return examMapper.selectAnswerAll();
+	}
+	
+	@Override
+	public TeacherVO quizInfo(TeacherVO teacherVO) {
+		return examMapper.selectQuiz(teacherVO);
 	}
 }

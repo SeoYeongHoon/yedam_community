@@ -88,16 +88,25 @@
 	</insert>
 	<!-- 문제저장소에 문제 출력 -->
 	<select id="selectQuizAll" resultType="TeacherVO">
-		SELECT quiz_content
+		SELECT quiz_id,
+			   quiz_content,
+			   quiz_solution
 		FROM quizes
 	</select>
 	
 	<!-- 문제저장소에 지문 출력 -->
 	<select id="selectAnswerAll" resultType="TeacherVO">
-		SELECT example_num,
-			   text_content
-		FROM example_num
-		WHERE quiz_id = #{quizId}
+		SELECT example_num||'. '||text_content as text_content
+		FROM answers
+		WHERE quiz_id = 15
 		ORDER BY example_num      
+	</select>
+	
+	<!-- 문제 단건조회 -->
+	<select id="selectQuiz" resultType="TeacherVO">
+		SELECT quiz_id
+		      ,quiz_content
+		FROM quizes
+		WHERE quiz_id = #{quizId}
 	</select>
 </mapper>	
