@@ -5,23 +5,21 @@
 <head th:replace="common/configs/config :: ConfigFragment">
 </head>
 <body class="sb-nav-fixed">
-	<div id="layoutSidenav" class="d-flex">
+	<div id="layoutSidenav">
 		<div id="layoutSidenav_nav">
 			<!--Header 영역을 참조합니다.-->
 			<header th:replace="common/fragments/admin_header :: AdminHeaderFragment"></header>
 		</div>
-		<div id="layoutSidenav_content">
+		<div id="layoutSidenav_content" style="margin-left: 250px;">
 			<main>
 				<div class="container-fluid px-4">
-
 
 					<!--Content 내용 영역을 참조합니다-->
 					<th:block layout:fragment="Admin"></th:block>
 
 				</div>
 			</main>
-			<!--Footer 영역을 참조합니다.-->
-			<footer th:replace="common/fragments/footer :: FooterFragment"></footer>
+			<!-- 어드민 페이지는 Footer X -->
 		</div>
 	</div>
 </body>

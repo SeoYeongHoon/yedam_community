@@ -13,8 +13,8 @@ public class CurriculumVO {
 	private String curriculumName;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date curriculumStartDate;
-	private String classId;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date curriculumEndDate;
-	
+	private int isComplete;
+	private int classId;
 }

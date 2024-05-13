@@ -29,5 +29,4 @@
   	WHERE = comment_id = #{commentId}
   </delete>
   
-  
   </mapper>

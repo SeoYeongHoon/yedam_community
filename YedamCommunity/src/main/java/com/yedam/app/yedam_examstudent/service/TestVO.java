@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class TestVO {
+public class TestVO { //시험출제 테이블
 	private int testId;
 	private int curriculumId;
 	private String testContent;
@@ -13,6 +13,11 @@ public class TestVO {
 	private Date testDate;
 	private String testName;
 	private int classId;
+	private int userId;
+	
+	private int quizScoreSum; //시험목록 >> 시험총점
+	private int quizIdCnt; // 시험목록 >> 문제개수
+	private String curriculumName;
 	public int getTestId() {
 		return testId;
 	}
@@ -55,6 +60,31 @@ public class TestVO {
 	public void setClassId(int classId) {
 		this.classId = classId;
 	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	public int getQuizScoreSum() {
+		return quizScoreSum;
+	}
+	public void setQuizScoreSum(int quizScoreSum) {
+		this.quizScoreSum = quizScoreSum;
+	}
+	public int getQuizIdCnt() {
+		return quizIdCnt;
+	}
+	public void setQuizIdCnt(int quizIdCnt) {
+		this.quizIdCnt = quizIdCnt;
+	}
+	public String getCurriculumName() {
+		return curriculumName;
+	}
+	public void setCurriculumName(String curriculumName) {
+		this.curriculumName = curriculumName;
+	}
+	
 	
 	
 }

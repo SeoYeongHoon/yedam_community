@@ -4,43 +4,48 @@
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
 <style>
-.container1 {
-	magin: 0 auto;
-}
+
 </style>
-<div class="container1">
-	<div style="border: 1px solid gray; border-radius: 30px; width: 700px; margin-top: 50px; margin-bottom: 50px; background-color: white; display: inline-block;">
-		<br><br>
-		<h3 style="text-align: center;">시험</h3>
-		<br><br>
+<div>
+	<div class="card-style"
+		style="border: 1px solid gray; border-radius: 30px; width: 700px; margin-top: 50px; margin-bottom: 50px; background-color: white; display: inline-block;">
+		<br> <br>
+		<h1 style="text-align: center;">시험</h1>
+		<br> <br>
 		<table class="table">
 			<tr>
-				<th>시험명</th>
-				<td>리눅스 서버 만들기</td>
+				<th>과정명</th>
+				<td>[[${testDetail.curriculumName}]]</td>
 			</tr>
 			<tr>
-				<th>마감시간</th>
-				<td>2024년 05월 25일</td>
+				<th>시험명</th>
+				<td>[[${testDetail.testName}]]</td>
+			</tr>
+			<tr>
+				<th>응시기간</th>
+				<td>[[${#dates.format(testDetail.testDate, 'yyyy년 MM월 dd일')}]]</td>
 			</tr>
 			<tr>
 				<th>총점</th>
-				<td>100점</td>
+				<td>[[${testDetail.quizScoreSum}]]점</td>
 			</tr>
 			<tr>
 				<th>문제수</th>
-				<td>20개</td>
+				<td>[[${testDetail.quizIdCnt}]]개</td>
 			</tr>
 			<tr>
 				<th>유의사항</th>
-				<td>전자기기 사용 적발 시 퇴실 조치</td>
+				<td>[[${testDetail.testContent}]]</td>
 			</tr>
 		</table>
-		<br><br>
-		<div style="text-align: center">		
-			<button class="main-btn dark-btn-outline square-btn btn-hover">목록</button>
-			<button class="main-btn dark-btn-outline square-btn btn-hover">시작</button>
+		<br> <br>
+		<div style="text-align: center">
+			<button class="main-btn dark-btn-outline square-btn btn-hover"
+				th:onclick="|location.href='@{/testList}'|">목록</button>
+			<button th:id="${testDetail.testId}" class="main-btn dark-btn-outline square-btn btn-hover"
+			    th:onclick="|location.href='@{/testStart(testId=${testDetail.testId})}'|">시작</button>
 		</div>
-		<br><br>
+		<br> <br>
 	</div>
 </div>
 </html>

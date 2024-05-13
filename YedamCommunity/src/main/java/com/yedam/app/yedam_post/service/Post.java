@@ -25,5 +25,5 @@ public class Post {
     private List<BoardFiles> boardfiles; // 파일들
     private List<Reply> replies; // 댓글 리스트 추가
     private List<Comment> comments; // 대댓글 리스트 추가
-  
+ 
 }

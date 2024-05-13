@@ -12,14 +12,24 @@ import com.yedam.app.yedam_examstudent.service.TestVO;
 @Service
 public class CbtStudentServiceImpl implements CbtStudentService{
 
-	// mapper 주입
+	//mapper 주입
 	@Autowired
 	CbtStudentMapper cbtStudentMapper;
 	
-	// mapper 메소드 호출
+	//전체시험목록 조회
 	@Override
 	public List<TestVO> testListAll() {
 		return cbtStudentMapper.selectTestListAll();
 	}
-
+	//시험상세정보 조회
+	@Override
+	public TestVO testDetail(TestVO testVO) {
+		return cbtStudentMapper.selectTestDetail(testVO);
+	}
+	//시험시작정보 조회
+	@Override
+	public TestVO testStart(TestVO testVO) {
+		return cbtStudentMapper.selectTestStart(testVO);
+	}
+	
 }

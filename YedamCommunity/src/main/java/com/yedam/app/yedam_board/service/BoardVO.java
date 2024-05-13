@@ -24,6 +24,4 @@ public class BoardVO {
 	
 	private String boardfileName;
 
-
-
 }
