@@ -9,5 +9,8 @@ public interface HomeWorkService {
 
 	// 과제 등록
 	public int homeworkInsert(HomeWorkVO homeworkVO);
+	
+	// 과제 상세 조회
+	public HomeWorkVO homeworkInfo(HomeWorkVO homeworkVO);
 
 }

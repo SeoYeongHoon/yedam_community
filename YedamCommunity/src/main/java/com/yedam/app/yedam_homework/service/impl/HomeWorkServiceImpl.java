@@ -18,13 +18,19 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	// 과제 목록 조회
 	@Override
 	public List<HomeWorkVO> homeworkList() {
-		return homeworkMapper.hselectAll();
+		return homeworkMapper.selectHomeworkAll();
 	}
 	
 	// 과제 등록
 	@Override
 	public int homeworkInsert(HomeWorkVO homeworkVO) {
 		return homeworkMapper.insertHomework(homeworkVO);
+	}
+
+	// 과제 상세 조회
+	@Override
+	public HomeWorkVO homeworkInfo(HomeWorkVO homeworkVO) {
+		return homeworkMapper.selectHomework(homeworkVO);
 	}
 
 }

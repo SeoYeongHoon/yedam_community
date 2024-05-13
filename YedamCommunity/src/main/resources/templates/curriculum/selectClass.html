@@ -28,7 +28,7 @@ li {
 	<div th:each="class, idxStat : ${class}">
 		<ul>
 			<li>
-				<div class="selectClass" >
+				<div class="selectClass" th:onclick="|location.href='@{/homeworkInsert(curriculumId=${class.curriculumId})}'|">
 					<h1>[[${class.classId}]]강의실</h1>
 					<h3>[[${class.curriculumName}]]</h3>
 					<hr>

@@ -19,34 +19,36 @@ public class HomeWorkController {
     private String uploadPath;
 	
 	@Autowired
-	HomeWorkService heomworkService;// 서비스 불러옴
+	HomeWorkService homeworkService;// 서비스 불러옴
 
 	// 과제 전체조회
 	@GetMapping("homeworkList")
 	public String homeworkList(Model model) {
-		List<HomeWorkVO> list = heomworkService.homeworkList();
+		List<HomeWorkVO> list = homeworkService.homeworkList();
 		model.addAttribute("homeworklist", list);
-		return "homework/hlist_teacher"; // 출력할 페이지
+		return "homework/homeworkList_t"; // 출력할 페이지
 	}
 	
 	// 과제 등록 - 페이지
-	@GetMapping("insert_homework")
+	@GetMapping("homeworkInsert")
 	public String homeworkInsertForm(Model model) {
 		model.addAttribute("homeworkVO",new HomeWorkVO());
-		return "homework/insert_homework";
+		return "homework/homeworkInsert";
 	} 
 	
 	// 과제 등록 -처리
-	@PostMapping("insert_homework")
+	@PostMapping("homeworkInsert")
 	public String homeworkInsertProcess(HomeWorkVO homeworkVO) {
-		heomworkService.homeworkInsert(homeworkVO);
+		homeworkService.homeworkInsert(homeworkVO);
 		return "redirect:homeworkList";
 	}
 	
 	// 과제상세페이지
-	@GetMapping("homework_detail")
-	public String homework(Model model) {
-		return "homework/homework_detail";
+	@GetMapping("homeworkInfo")
+	public String homeworkInfo(HomeWorkVO homeworkVO,Model model) {
+		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
+		model.addAttribute("homeworkInfo", findVO);
+		return "homework/homeworkInfo";
 	}
 	
 	

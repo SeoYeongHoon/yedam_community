@@ -14,7 +14,7 @@
 </head>
 <h1>과제 목록 교수</h1>
 <div style='float: right;'>
-	<a href="insert_homework" class=" primary-btn rounded-full btn-hover"style='padding:10px;'>
+	<a href="homeworkInsert" class=" primary-btn rounded-full btn-hover"style='padding:10px;'>
 		<font style="vertical-align: inherit;">
 			<font style="vertical-align: inherit;">+ 과제</font>
 		</font>
@@ -45,7 +45,7 @@
 					</thead>
 					<tbody>
 						<th:block th:each="homeworkinfo, idxStat : ${homeworklist}">
-							<tr>
+							<tr th:onclick="|location.href='@{/homeworkInfo(homeworkId=${homeworkinfo.homeworkId})}'|">
 								<td class="min-width">[[ ${homeworkinfo.classId} ]]강의실</td>
 								<td class="min-width">[[ ${homeworkinfo.homeworkTitle} ]]</td>
 								<!-- <td class="min-width">[[ ${#dates.format(homeworkinfo.homeworkDate, 'yyyy-MM-dd')} ]]</td> -->
