@@ -59,7 +59,7 @@ li {
 	
 }        
 </style>
-<!-- <p th:text="${quizList}"></p> -->
+<p th:text="${quizList}"></p>
 <div>
 	<button type="button" id="subBtn" class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
@@ -70,7 +70,7 @@ li {
 					<select>
 					<th:block th:each="subjectInfo, idxStat : ${subjectList}">
 						<option value="">[[${subjectInfo.subjectName}]]</option>
-					</th:block>
+					</th:block>	
 					</select>
 				</div>
 			</div>
@@ -88,9 +88,27 @@ li {
 </div>	
 
 <div id="quizBox">
-
+<th:block th:each="quizInfo, idxStat : ${quizList}">
+<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+	<div class="card-style-3 mb-30">
+		<div class="card-content" >
+			<h4>
+				<a href="#0">Card Title here </a>
+			</h4>
+			<!-- <p>[[${quizList}]]</p>> -->
+			<p>[[${idxStat.index}]]</p>
+			<p>[[${quizInfo.quizId}]]. [[${quizInfo.quizContent}]] </p>
+			<br>
+			<th:block th:each="answerInfo, idxStat : ${answerList}">
+			<p>[[${answerInfo.textContent}]]</p>
+			</th:block>
+			<a class="infoBtn">자세히 보기</a><br>
+			<button id="updateBtn">아작스테스트</button>
+		</div>
+	</div>
+</div>
+</th:block>
 <!-- end col -->
-<button id="updateBtn">아작스테스트</button>
 </div>	
 
 <!-- 문제 상세보기 모달창 -->
@@ -98,7 +116,9 @@ li {
 	<div id="modalBody">
 			<div class="close-area">X</div>
 				<h3>문제</h3>
-				<p></p>
+				<th:block th:each="quizInfo, idxStat : ${quizList}">
+					<p>[[${quizInfo.quizId}]]. [[${quizInfo.quizContent}]]</p>
+				</th:block>
 			<br>
 			<br>
 			<div>
@@ -112,7 +132,9 @@ li {
 			<div>
 				<h3>문제 해설란</h3>
 				<br>
-				<p></p>
+				<th:block th:each="quizInfo, idxStat : ${quizList}">
+					<p>[[${quizInfo.quizSolution}]]</p>
+				</th:block>
 			</div>
 			<div style="text-align: center;">
 				<button id="closeBtn" class="main-btn primary-btn btn-hover"
@@ -131,14 +153,15 @@ li {
 			<!-- ======= checkbox style start ======= -->
                 <div class="card-style mb-30">
                   <h6 class="mb-25">과목 설정</h6>
-                  <<th:block th:each="subjectInfo, idxStat : ${subjectList}">
+                  <th:block th:each="subjectInfo, idxStat : ${subjectList}">
                   <div class="form-check checkbox-style mb-20">
                     <input class="form-check-input" type="checkbox" value="" id="checkbox-1" />
                     <label class="form-check-label" for="checkbox-1">
                       [[${subjectInfo.subjectName}]]</label>
                   </div>
                	  </th:block>
-				  <button type="button" class="main-btn danger-btn btn-hover">삭제</button>
+				  <button type="button" class="main-btn danger-btn btn-hover" 
+				  >삭제</button>
                 </div>
                 <!-- ======= checkbox style end ======= -->
 		</div>
@@ -157,51 +180,53 @@ li {
 </div> 	
 <!-- 과목추가 모달창 end -->
 <script>
-let qContent = '';
-let template = `
-<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-	<div class="card-style-3 mb-30">
-		<div class="card-content" id="quizcard">
-			<h4>
-				<a href="#0">Card Title here </a>
-			</h4>
-			<p id="test">${qContent}변수값</p>
-			<a class="infoBtn">자세히 보기</a><br>
-			<button id="updateBtn">아작스테스트</button>
-		</div>
-	</div>
-</div>
-`;
-/* $(function() {
+
+$(function() {
 			$("button").on("click", function() {
-				$("#quizBox").append(template);
+				$("#test").append('template');
 			});
 		});
- */
 
-//$('#updateBtn').on('click', updateAjaxJq);
 
-$(function updateAjaxJq(){
+$('#updateBtn').on('click', updateAjaxJq);
+
+function updateAjaxJq(event){
+	//let dataObj = getEmpObj();
+	// Ajax
 	$.ajax({
 		url: "quizlist",
-		type: "post", 
-		contentType: "application/json",
-		dataType : 'json',
+		type: "GET", 
 				
 		success : function(data){
 			console.log(data);
-			data.forEach((item,idx) => {
-				qContent = item.quizContent;
-				console.log(qContent);
-				//console.log(item.quizContent);
-				$("#quizBox").append(template);
-			});
-		},
+			$(data).each(function(){
+				console.log('성공')
+				});
+			},
 		error :function(){
-			alert('실패');
-		}
+			console.log('실패');
+			}
+		
 	}); 
-});
+	
+	// fetch 사용
+	/* fetch('quizlist')
+	.then(resolve => resolve.json())
+	.then(result => {
+		
+		console.log(result);
+		
+	})
+	.catch(err => console.log(err)); */
+	
+	// $.get사용
+	/* $.get('quizList', function(result) {
+			console.log(result);
+		}) */
+	
+	
+	
+};
 
 //모달창
 const modal = document.querySelector(".modal-overlay"); // 문제 상세보기 모달창 형태 불러오기

@@ -7,7 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.yedam.app.yedam_examteacher.service.ExamService;
 import com.yedam.app.yedam_examteacher.service.TeacherVO;
 
@@ -45,11 +49,22 @@ public class ExamController {
 		List<TeacherVO> list = examService.quizList();
 		List<TeacherVO> list2 = examService.answerList();
 		List<TeacherVO> list3 = examService.subjectList();
-		model.addAttribute("quizList",list);
+		
+		Gson gson = new GsonBuilder().create();
+		String json = gson.toJson(list);	
+		System.out.println(json);
+		
+		model.addAttribute("quizList",json);
 		model.addAttribute("answerList",list2);
 		model.addAttribute("subjectList",list3);
 		System.out.println(list);
 		return "cbt_teacher/quiz";
+	}
+	// 등록된 문제 출력
+	@PostMapping("/quizlist")
+	@ResponseBody
+	public List<TeacherVO> quizList(TeacherVO teacherVO){
+		return examService.quizList();
 	}
 
 	// 문제 단건조회를 문제 세부보기 모달창으로 적용시켜야 한다
