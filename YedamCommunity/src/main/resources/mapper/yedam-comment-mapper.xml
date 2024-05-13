@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.yedam.app.yedam_post.mapper.CommentMapper">
   
-   <insert id="insertComment" parameterType="com.example.demo.vo.Comment" useGeneratedKeys="true" keyProperty="commentId">
+   <insert id="insertComment" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentId">
    
         INSERT INTO comments (comment_id
                             , post_id

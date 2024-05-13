@@ -122,7 +122,7 @@ p {
   box-sizing: border-box;
   padding: 25px 30px;
   position: relative;
-  box-shadow: 0px 12px 24px -4px rgba(145, 158, 171, 0.12), 0px 0px 2px 0px rgba(145, 158, 171, 0.2);
+  box-shadow: 0px 12px 24px -4px rgba(145, 158, 171, 0.12), 0px 0px 2px 0px rgba(145, 158, 171, 0.5);
   border-radius: 7px;
 }
 @media (max-width: 767px) {
@@ -1768,9 +1768,9 @@ h6,
   width: 100%;
 }
 .table .employee-image {
-  width: 50px;
+  width: 80px;
   max-width: 100%;
-  height: 50px;
+  /* height: 50px; */
   border-radius: 50%;
   overflow: hidden;
   margin-right: 15px;

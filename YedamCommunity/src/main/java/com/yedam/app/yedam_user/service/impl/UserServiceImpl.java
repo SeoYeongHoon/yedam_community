@@ -1,5 +1,7 @@
 package com.yedam.app.yedam_user.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +34,14 @@ public class UserServiceImpl implements UserService {
 //		return userMapper.userLogin(userVO);
 //	}
 
+	@Override
+	public List<UserVO> userList(int page) {
+		return userMapper.selectAllList(page);
+	}
+
+	@Override
+	public int userTotalCnt() {
+		return userMapper.getTotalCnt();
+	}
 	
 }

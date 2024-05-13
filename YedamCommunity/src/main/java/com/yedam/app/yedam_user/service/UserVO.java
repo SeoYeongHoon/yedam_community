@@ -11,7 +11,7 @@ public class UserVO {
 	private String tel;
 	private String email;
 	private String address;
-	private String img;
+	private String userImage;
 	private String companyInfo;
 //	private Integer isComplete;
 	private String userType;
