@@ -22,28 +22,6 @@
 	cursor: pointer;
 }
 
-#modal {
-	position: fixed; /* 화면에 고정 */
-	z-index: 1; /* 상위에 위치 */
-	padding-top: 200px;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.7); /* 반투명한 배경색 */
-	display: none; /* 초기에는 숨김 */
-}
-
-#modalBody {
-	width: 500px;
-	height: 300px;
-	padding: 30px 30px;
-	margin: 0 auto;
-	border: 1px solid #777;
-	background-color: #fff;
-}
-
 #closeBtn {
 	float: center;
 	font-weight: bold;
@@ -96,8 +74,8 @@ li {
 			<div class="title mb-30">
 				<h6>과제 등록</h6>
 			</div>
-			<form th:action="@{/insert_homework}" method="post" name="InsertForm"
-				th:object="${homeworkVO}" enctype="multipart/form-data">
+			<form method="post" name="InsertForm" th:object="${homeworkVO}"
+				enctype="multipart/form-data">
 				<div class="row">
 					<div class="select-position">
 						<select th:field="*{curriculumId}">
@@ -144,15 +122,12 @@ li {
 									style="vertical-align: inherit;">날짜</font></font></label> <input type="date"
 								th:field="*{homeworkDate}">
 						</div>
-						<div class="input-style-2">
-							<input type="time" th:field="*{homeworkDate}">
-						</div>
 					</div>
 					<!-- 파일 업로드 -->
 					<div id="file" style="padding: 50px;" class="card-style mb-30">
 						<input type="file" name="uploadFiles" multiple>
-						<button id="saveBtn" class="main-btn primary-btn btn-hover"
-							type="submit">저장</button>
+						<button id="saveBtn" type="button"
+							class="main-btn primary-btn btn-hover">저장</button>
 					</div>
 					<!-- 등록 취소버튼 -->
 					<div id="btnWrap" class="col-12" style="text-align: center;">
@@ -166,33 +141,157 @@ li {
 		</div>
 		<!-- end card -->
 	</div>
-	<div id="modal">
-		<div id="modalBody">
-			<!-- 모달창 내용 -->
-			<p style="text-align: center;">등록이 완료되었습니다.</p>
-			<!-- 모달창 이미지 -->
-			<div style="text-align: center;">
-				<img alt="등록완료버튼" th:src="@{/images/registration.png}">
-			</div>
-			<!-- 모달창 확인 버튼 -->
-			<div>
-				<button id="closeBtn" class="main-btn primary-btn btn-hover"
-					type="button" >확인</button>
+
+	<!-- 등록완료 모달창 -->
+	<div id="modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">등록 완료</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<p style="text-align: center;">등록이 완료되었습니다.</p>
+					<div style="text-align: center;">
+						<img alt="등록완료버튼" th:src="@{/images/registration.png}">
+					</div>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button id='checkBtn' type="button" class="btn btn-primary"
+						onclick="location.href='homeworkList'">확인</button>
+				</div>
 			</div>
 		</div>
 	</div>
+
+	<!-- 과제 제목 모달창 -->
+	<div id="modalTitle" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">등록 실패</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<p style="text-align: center;">과제 제목을 입력하세요!</p>
+					<div style="text-align: center;">
+						<img alt="등록완료버튼" th:src="@{/images/failed.png}">
+					</div>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button id='checkBtn' type="button" class="btn btn-primary"
+						data-dismiss="modal">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 제출기한 모달창 -->
+	<div id="modalDate" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">등록 실패</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<p style="text-align: center;">제출기한을 설정하세요!</p>
+					<div style="text-align: center;">
+						<img alt="등록완료버튼" th:src="@{/images/failed.png}">
+					</div>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button id='checkBtn' type="button" class="btn btn-primary"
+						data-dismiss="modal">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 저장완료 모달창 -->
+	<div id="modalFile" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">저장 완료</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<p style="text-align: center;">파일이 저장되었습니다.</p>
+					<div style="text-align: center;">
+						<img alt="등록완료버튼" th:src="@{/images/registration.png}">
+					</div>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button id='checkBtn' type="button" class="btn btn-primary"
+						onclick="location.href='homeworkList'">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Error 모달창 -->
+	<div id="modalTitle" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">Error</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<p style="text-align: center;"></p>
+					<div style="text-align: center;">
+						<img alt="등록완료버튼" th:src="@{/images/failed.png}">
+					</div>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button id='errorBtn' type="button" class="btn btn-primary"
+						data-dismiss="modal">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<script>
 		$('#insertBtn').on('click', ajax);
 
 		function ajax() {
 			let formValues = $('form[name="InsertForm"]').serialize();
+			let title = document.getElementById('homeworkTitle');
+			let date = document.getElementById('homeworkDate');
+
+			if (title.value == '') {
+				$('#modalTitle').modal('show');
+				title.focus();
+				return;
+			} else if (date.value == '') {
+				$('#modalDate').modal('show');
+				date.focus();
+				return;
+			}
 
 			$.ajax({
 				url : "insert_homework",
 				type : "POST",
 				data : formValues,
 				success : function(json) {
-					console.log(json);
+					$('#modal').modal('show');
+	
 				},
 				error : function() {
 					alert("등록실패");
@@ -200,35 +299,31 @@ li {
 			})
 		};
 
-		// 입력확인
-		/* document.querySelector('form[name="InsertForm"]')
-				.addEventListener('submit', homeworkInsert);
-		
-		function homeworkInsert(event){
-				event.preventDefault();
+		$('#saveBtn').on('click', function(e){
+			let formData = new FormData();
 			
-			let name = document.getElementById('homeworkTitle');
-			if(name.value == ''){
-				alert('과제명이 입력되지 않았습니다.');
-				name.focus();
-				return;
+			let fileInput = document.querySelector("input[type='file']");
+			let fileList = fileInput.files;
+			for(let file of fileList){
+				formData.append('uploadFiles', file);
 			}
-			InsertForm.submit();
-		} */
-
-		/* //모달창
-		const btn = document.getElementById("insertBtn"); // 모달 띄우는 버튼
-		const modal = document.getElementById("modalWrap"); // 모달 창 요소 가져오기
-		const cancelbtn = document.getElementById("cancelBtn");
-		const savebtn = document.getElementById("saveBtn");
-
-		btn.onclick = function() {
-			modal.style.display = "block"; // 버튼 클릭시 모달 보임
-			btn.style.display = "none"; // 등록 버튼 숨김
-			cancelbtn.style.display = "none"; // 취소 버튼 숨김
-			savebtn.style.display = "none"; // 취소 버튼 숨김
 			
-		}; */
+			//ajax
+			$.ajax({
+				url:'uploadsAjax',
+				type:'POST',
+				processData: false,
+				contentType: false,
+				data: formData,
+				success:  function(result) {
+					$('#modalFile').modal('show');
+					
+				},
+				error: function(reject){	
+					alert("저장실패");
+	               }
+			})
+		});
 	</script>
 </body>
 </html>
