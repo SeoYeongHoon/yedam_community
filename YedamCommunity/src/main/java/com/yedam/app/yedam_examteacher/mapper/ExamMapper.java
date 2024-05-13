@@ -27,4 +27,13 @@ public interface ExamMapper {
 	
 	// 문제 단건 조회
 	public TeacherVO selectQuiz(TeacherVO teacherVO);
+	
+	// 과목명 출력
+	public List<TeacherVO> selectSubjectAll();
+	
+	// 과목 등록
+	public int insertSubject(TeacherVO teacherVO);
+	
+	// 과목 삭제
+	public int deleteSubject(int subjectId);
 }

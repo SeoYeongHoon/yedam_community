@@ -24,7 +24,6 @@ public class CbtStudentController {
 		model.addAttribute("testList", list);
 		return "cbt_student/testMain";
 	}
-	
 	//시험단건(상세)정보 조회
 	@GetMapping("/testDetail")
 	public String testDetail(TestVO testVO, Model model) {
@@ -32,10 +31,11 @@ public class CbtStudentController {
 		model.addAttribute("testDetail", list);
 		return "cbt_student/testDetail";
 	}
-	
-	//시험시작 페이지
+	//시험시작 페이지 >> 시작정보, 문제정보
 	@GetMapping("/testStart")
-	public String testStart(Model model) {
+	public String testStart(TestVO testVO, Model model) {
+		TestVO list = cbtStudentService.testStart(testVO);
+		model.addAttribute("testStart", list);
 		return "cbt_student/testStart";
 	}
 }

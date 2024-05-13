@@ -28,5 +28,4 @@ public class BoardVO {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
