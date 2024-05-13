@@ -29,7 +29,7 @@
 			, #{email}
 			, #{tel}
 			, #{address}
-			, #{img}
+			, #{userImage}
 			, #{companyInfo}
 			, #{userType}
 			, #{curriculumId}
@@ -45,4 +45,34 @@
 		WHERE id = #{id}
 		AND password = #{password}
 	</select>
+	
+	<!-- 관리자페이지 모든 유저 출력 -->
+	<select id="selectAllList" resultType="UserVO">
+		SELECT user_id
+			 , user_image
+			 , user_type
+			 , name
+			 , tel
+			 , email
+		FROM (SELECT rownum rn, b.*
+			  FROM users b
+			  <![CDATA[
+			  WHERE rownum <= (#{page} * 5)
+			  ]]>
+			  	<!-- <if test="userFilter == 'showGrad'">
+			  		AND user_type = 'graduated'
+			  	</if>
+			  	<if test="userFilter == 'showLearn'">
+			  		AND user_type = 'learning'
+			  	</if>
+			  	ORDER BY user_id -->
+			 ) a
+		WHERE (a.rn > (#{page} - 1) * 5)
+	</select>
+	
+	<select id="getTotalCnt" resultType="int">
+		SELECT COUNT(*)
+		FROM users
+	</select>
+	
 </mapper>

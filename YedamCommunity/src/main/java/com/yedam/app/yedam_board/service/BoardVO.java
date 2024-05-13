@@ -24,8 +24,4 @@ public class BoardVO {
 	
 	private String boardfileName;
 
-	public void setPostId(Integer postId2) {
-		// TODO Auto-generated method stub
-		
-	}
 }
