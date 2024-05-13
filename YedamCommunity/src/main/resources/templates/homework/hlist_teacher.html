@@ -44,11 +44,12 @@
 						<!-- end table row-->
 					</thead>
 					<tbody>
-						<th:block th:each="hworkinfo, idxStat : ${hlist}">
+						<th:block th:each="homeworkinfo, idxStat : ${homeworklist}">
 							<tr>
-								<td class="min-width">[[ ${hworkinfo.classId} ]]강의실</td>
-								<td class="min-width">[[ ${hworkinfo.homeworkTitle} ]]</td>
-								<td class="min-width">[[ ${#dates.format(hworkinfo.homeworkDate, 'yyyy-MM-dd')} ]]</td>
+								<td class="min-width">[[ ${homeworkinfo.classId} ]]강의실</td>
+								<td class="min-width">[[ ${homeworkinfo.homeworkTitle} ]]</td>
+								<!-- <td class="min-width">[[ ${#dates.format(homeworkinfo.homeworkDate, 'yyyy-MM-dd')} ]]</td> -->
+								<td class="min-width"><td>[[${#dates.format(homeworkinfo.homeworkDate,'yyyy년MM월dd일')}]]</td>
 								<td class="min-width"><span class="status-btn active-btn">진행중</span>
 								</td>
 							</tr>
@@ -63,5 +64,4 @@
 	</div>
 	<!-- end col -->
 </div>
->>>>>>> branch 'main' of https://github.com/SeoYeongHoon/yedam_community.git
 </html>

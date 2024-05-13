@@ -13,18 +13,18 @@ import com.yedam.app.yedam_homework.service.HomeWorkService;
 public class HomeWorkServiceImpl implements HomeWorkService{
 
 	@Autowired
-	HomeWorkMapper hMapper; //mapper 불러옴
+	HomeWorkMapper homeworkMapper; //mapper 불러옴
 
 	// 과제 목록 조회
 	@Override
 	public List<HomeWorkVO> homeworkList() {
-		return hMapper.hselectAll();
+		return homeworkMapper.hselectAll();
 	}
 	
 	// 과제 등록
 	@Override
 	public int homeworkInsert(HomeWorkVO homeworkVO) {
-		return hMapper.insertHomework(homeworkVO);
+		return homeworkMapper.insertHomework(homeworkVO);
 	}
 
 }
