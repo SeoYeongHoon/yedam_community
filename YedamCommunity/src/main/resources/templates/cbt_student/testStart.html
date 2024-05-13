@@ -8,27 +8,57 @@
 	justify-content: space-between;
 	display: flex;
 }
-.tstart3 { /*답안표기란-문제 가로 정렬*/
+.tstart3 {
+	justify-content: space-between;
+	display: flex;
+}
+.tstart2 { /*답안표기란-문제 가로 정렬*/
 	display: inline-block;
 }
 </style>
 <div class="row">
-	<div class="card-style col-lg-12 tstart1 tstart2">
+	<!-- 상단부분 -->
+	<div class="card-style col-lg-12 tstart1">
 		<h1>[[${testStart.testName}]]</h1>
 		<div>		
-			<p class="tstart3">제한시간:</p>
-			<p class="tstart3">[[${testStart.testTime}]]</p>
+			<p class="tstart2">제한시간:</p>
+			<p class="tstart2">[[${testStart.testTime}]]</p>
 		</div>
 		<div>		
-			<p class="tstart3">응시자:</p>
-			<p class="tstart3">홍길동</p>
+			<p class="tstart2">응시자:</p>
+			<p class="tstart2">홍길동</p>
 		</div>	
 	</div>
-	<div class="card-style col-lg-3 tstart2" style="height: 800px">
-		<h3 style="background-color: blue; color: white; text-align: center">답안표기란</h3>
-		
+	<!-- 좌측사이드 -->
+	<div class="card-style col-lg-2 tstart2" style="height: 800px">
+		<h3 style="text-align: center; background-color: blue; color: white">답안표기란</h3>
+		<div class="tstart3">	
+			<h3 style="background-color: aqua; display: inline-block">1</h3>
+			<div class="tstart2">①</div>
+			<div class="tstart2">②</div>
+			<div class="tstart2">③</div>
+			<div class="tstart2">④</div>
+			<div class="tstart2">⑤</div>
+		</div>
+		<div class="tstart3">	
+			<h3 style="background-color: aqua; display: inline-block">2</h3>
+			<div class="tstart2">①</div>
+			<div class="tstart2">②</div>
+			<div class="tstart2">③</div>
+			<div class="tstart2">④</div>
+			<div class="tstart2">⑤</div>
+		</div>
+		<div class="tstart3">	
+			<h3 style="background-color: aqua; display: inline-block">3</h3>
+			<div class="tstart2">①</div>
+			<div class="tstart2">②</div>
+			<div class="tstart2">③</div>
+			<div class="tstart2">④</div>
+			<div class="tstart2">⑤</div>
+		</div>
 	</div>
-	<div class="card-style col-lg-9 tstart2" style="height: 800px">
+	<!-- 우측사이드 -->
+	<div class="card-style col-lg-10" style="height: 800px">
 		<h1>1. 시험문제</h1>
 		<br> <br>
 		<ul>
@@ -39,8 +69,11 @@
 			<li>⑤ 5번보기</li>
 		</ul>
 	</div>
+	<!-- 하단부분 -->
 	<div class="card-style col-lg-12">
 		<div style="text-align: right">
+			<button class="main-btn dark-btn-outline square-btn btn-hover">이전</button>
+			<button class="main-btn dark-btn-outline square-btn btn-hover">다음</button>
 			<button class="main-btn dark-btn-outline square-btn btn-hover">제출</button>
 		</div>
 	</div>
