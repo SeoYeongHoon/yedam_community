@@ -15,4 +15,16 @@
 		FROM tests
 		ORDER BY test_id
 	</select>
+	<select id="selectTestDetail" resultType="TestVO">
+		SELECT test_id
+		       ,curriculum_id
+		       ,test_content
+		       ,test_time
+		       ,test_date
+		       ,test_name
+		       ,class_id
+		FROM tests
+		WHERE test_id = #{testId}
+		ORDER BY test_id
+	</select>
 </mapper>

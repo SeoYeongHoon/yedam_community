@@ -10,4 +10,6 @@ import com.yedam.app.yedam_examstudent.service.TestVO;
 public interface CbtStudentMapper {
 	//전체시험리스트 출력
 	public List<TestVO> selectTestListAll();
+	//상세시험정보 출력
+	public TestVO selectTestDetail(TestVO testVO);
 }
