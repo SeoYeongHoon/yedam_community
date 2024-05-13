@@ -20,11 +20,11 @@ DB관리 - 원영 <br>
 > 담당 기능
 <table>
  <thead>
-   <th>CBT 학생</th>
-   <th>CBT 교수</th>
-   <th>과제 학생 + 교수</th>
-   <th>게시판 + 댓글</th>
-   <th>회원가입 + 로그인 + 메인페이지 + 관리자페이지</th>
+   <th>CBT학생</th>
+   <th>CBT교수</th>
+   <th>과제학생,교수</th>
+   <th>게시판,댓글</th>
+   <th>회원가입,로그인,메인페이지,관리자페이지</th>
  </thead>
  <tbody>
    <td>원영</td>
