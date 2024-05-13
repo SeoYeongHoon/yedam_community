@@ -21,7 +21,7 @@ public class ExamController {
 	@GetMapping("/testlist")
 	public String examList(Model model) {
 		List<TeacherVO> list = examService.testList();
-		model.addAttribute("testlist",list);
+		model.addAttribute("testList",list);
 		return "cbt_teacher/testlist";
 	}
 	
@@ -43,9 +43,17 @@ public class ExamController {
 	@GetMapping("/quizlist")
 	public String quizList(Model model) {
 		List<TeacherVO> list = examService.quizList();
-		model.addAttribute("quizlist",list);
+		List<TeacherVO> list2 = examService.answerList();
+		model.addAttribute("quizList",list);
+		model.addAttribute("answerList",list2);
 		return "cbt_teacher/quiz";
 	}
 	
-	// 문제 저장소에 지문 출력
+	// 문제 단건조회
+	@GetMapping("/quizinfo")
+	public String quizInfo(TeacherVO teacherVO, Model model) {
+		TeacherVO findVO = examService.quizInfo(teacherVO);
+		model.addAttribute("quizInfo",findVO);
+		return "cbt_teacher/quizinfo";
+	}
 }

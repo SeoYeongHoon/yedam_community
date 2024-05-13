@@ -14,4 +14,7 @@ public interface ExamService {
 	
 	// 문제저장소에 지문출력
 	public List<TeacherVO> answerList();
+	
+	// 문제 단건조회
+	public TeacherVO quizInfo(TeacherVO teacherVO);
 }

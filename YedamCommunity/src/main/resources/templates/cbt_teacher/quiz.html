@@ -5,26 +5,93 @@
 	layout:fragment="Admin">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<div id="test">
+<style>
+#modalWrap {
+	position: fixed; /* 화면에 고정 */
+	z-index: 1; /* 상위에 위치 */
+	padding-top: 200px;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.7); /* 반투명한 배경색 */
+	display: none; /* 초기에는 숨김 */
+}
 
+#modalBody {
+	width: 70%;
+	height: 70%;
+	padding: 30px 30px;
+	margin: 0 auto;
+	border: 1px solid #777;
+	background-color: #fff;
+}
+.close-area {
+            display: inline;
+            float: right;
+            padding-right: 10px;
+            cursor: pointer;
+            color: black;
+        }
+</style>	
+<div id="test">
+<th:block th:each="quizInfo, idxStat : ${quizList}">
 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
 	<div class="card-style-3 mb-30">
 		<div class="card-content" >
 			<h4>
 				<a href="#0">Card Title here </a>
 			</h4>
-			<th:block th:each="quizInfo, idxStat : ${quizlist}">
-			<p>[[${quizInfo.quizContent}]]</p>
+			<!-- <p>[[${quizList}]]</p>> -->
+			<p>[[${idxStat.index}]]</p>
+			<p>[[${quizInfo.quizId}]]. [[${quizInfo.quizContent}]] </p>
+			<br>
+			<th:block th:each="answerInfo, idxStat : ${answerList}">
+			<p>[[${answerInfo.textContent}]]</p>
 			</th:block>
-			<a class="read-more">Read More</a>
-			<button>아이템 추가</button>
+			<a class="infoBtn">자세히 보기</a><br>
 			<button id="updateBtn">아작스테스트</button>
 		</div>
 	</div>
 </div>
-
+</th:block>
 <!-- end col -->
 </div>	
+
+<!-- 모달창 -->
+<div id="modalWrap" class="modal-overlay">
+	<div id="modalBody">
+			<div class="close-area">X</div>
+				<h3>문제</h3>
+				<th:block th:each="quizInfo, idxStat : ${quizList}">
+					<p>[[${quizInfo.quizId}]]. [[${quizInfo.quizContent}]]</p>
+				</th:block>
+			<br>
+			<br>
+			<div>
+				<h3>정답 지문</h3>
+				<th:block th:each="answerInfo, idxStat : ${answerList}">
+					<p>[[${answerInfo.textContent}]]</p>
+				</th:block>	
+			</div>
+			<br>
+			<br>
+			<div>
+				<h3>문제 해설란</h3>
+				<br>
+				<th:block th:each="quizInfo, idxStat : ${quizList}">
+					<p>[[${quizInfo.quizSolution}]]</p>
+				</th:block>
+			</div>
+			<div style="text-align: center;">
+				<button id="closeBtn" class="main-btn primary-btn btn-hover"
+					type="button" onclick="location.href='quizlist'" >확인</button>
+			</div>
+			
+	</div>
+</div> 
+<!-- 모달창 end--> 
 <script>
 let quizContent = '';
 let aaa = '';
@@ -42,17 +109,17 @@ let template = `
 </div>
 `;
 
-/* $(function() {
+$(function() {
 			$("button").on("click", function() {
 				$("#test").append(template);
 			});
-		}); */
+		});
 
 
 $('#updateBtn').on('click', updateAjaxJq);
 
 function updateAjaxJq(event){
-	let dataObj = getEmpObj();
+	//let dataObj = getEmpObj();
 	// Ajax
 	$.ajax('quizlist',{
 		type : 'get',
@@ -62,9 +129,27 @@ function updateAjaxJq(event){
 		console.log(result);
 	})
 	.fail(err => console.log(err + '에러났다'));
+	
+	// fetch 사용
+	/* fetch('quizlist')
+	.then(resolve => resolve.json())
+	.then(result => {
+		
+		console.log(result);
+		
+	})
+	.catch(err => console.log(err)); */
+	
+	// $.get사용
+	/* $.get('quizList', function(result) {
+			console.log(result);
+		}) */
+	
+	
+	
 };
 
-function getEmpObj(){
+/* function getEmpObj(){
 	//let formTag = document.querySelector('form');			
 	
 	let formData = new FormData();
@@ -74,7 +159,34 @@ function getEmpObj(){
 		formObj[key] = val;
 	})
 	return formObj;
+} */
+
+//모달창
+const btn = document.querySelector(".infoBtn"); // 모달 띄우는 버튼
+const modal = document.querySelector(".modal-overlay"); // 모달 띄우는 버튼
+//const modal = document.getElementById("modalWrap"); // 모달 창 요소 가져오기
+
+btn.onclick = function() {
+	modal.style.display = "flex"; // 버튼 클릭시 모달 보임
+};
+//X버튼 누르면 모달창 닫는 기능
+const closeBtn = modal.querySelector(".close-area"); // 모달 창 닫는 x버튼
+closeBtn.onclick = function() {
+	modal.style.display = "none"
 }
+// 모달창 밖에 화면 누르면 모달창 닫는 기능
+modal.addEventListener("click", e => {
+    const evTarget = e.target
+    if(evTarget.classList.contains("modal-overlay")) {
+        modal.style.display = "none"
+    }
+})
+// esc누르면 모달창 닫기
+window.addEventListener("keyup", e => {
+    if(modal.style.display === "flex" && e.key === "Escape") {
+        modal.style.display = "none"
+    }
+})
 
 </script>
 </html>
