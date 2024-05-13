@@ -23,20 +23,20 @@ public class PostController {
     public String postList(Model model) {
         List<Post> list = postService.getAllPosts();
         model.addAttribute("postList", list);
-        return "post/postlist";
+        return "posts/postlist";
     }
 
     @GetMapping("postInfo")
     public String postInfo(@RequestParam("postId") int postId, Model model) {
-        Post post = postService.getPostById(postId);
-        model.addAttribute("postInfo", post);
+        Post postDetails = postService.getPostDetails(postId);
+        model.addAttribute("postInfo", postDetails);
         return "post/postinfo";
     }
 
     @GetMapping("postInsert")
     public String postInsertForm(Model model) {
         model.addAttribute("post", new Post());
-        return "post/postinsert";
+        return "posts/postinsert";
     }
 
     @PostMapping("postInsert")
@@ -55,9 +55,9 @@ public class PostController {
 
     @GetMapping("postUpdate")
     public String postUpdateForm(@RequestParam("postId") int postId, Model model) {
-        Post post = postService.getPostById(postId);
+        Post post = postService.getPostDetails(postId);
         model.addAttribute("post", post);
-        return "post/postupdate";
+        return "posts/postupdate";
     }
 
     @PostMapping("postUpdate")
@@ -66,4 +66,5 @@ public class PostController {
         postService.updatePost(post);
         return "redirect:postInfo?postId=" + post.getPostId();
     }
+ 
 }

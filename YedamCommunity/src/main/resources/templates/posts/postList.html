@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Home">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="Home">
 <head>
-<meta charset="UTF-8">
-<title>boardList</title>
-
-
+    <title>게시글 목록</title>
 </head>
 <body>
 	<div class="container">
 		<h3>정보 게시판</h3>
-          <a th:onclick="|location.href='@{/boardInsert}'|" style="text-align: right">글쓰기</a>
+          <a th:onclick="|location.href='@{/postInsert}'|" style="text-align: right">글쓰기</a>
 		<table class="table">
 			<thead>
 				<tr>
@@ -26,7 +23,7 @@
 			</thead>
 			<tbody>
 				<th:block th:each="info, idxStat: ${postList}">
-					<tr th:onclick="|location.href='@{/boardInfo(postId=${info.postId})}'|">
+					<tr th:onclick="|location.href='@{/postInfo(postId=${info.postId})}'|">
 						<td>[[${info.postId}]]</td>
 						<td>[[${info.title}]]</td>
 						<td>[[${info.writer}]]</td>

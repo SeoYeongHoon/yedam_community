@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yedam.app.yedam_post.mapper.CommentMapper;
 import com.yedam.app.yedam_post.mapper.PostMapper;
+import com.yedam.app.yedam_post.mapper.ReplyMapper;
 import com.yedam.app.yedam_post.service.Comment;
 import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.PostService;
+import com.yedam.app.yedam_post.service.Reply;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -19,24 +20,13 @@ public class PostServiceImpl implements PostService {
     private PostMapper postMapper;
 
     @Autowired
-    private CommentMapper commentMapper;
+    private ReplyMapper replyMapper;
+ 
 
     @Override
     @Transactional
     public int createPost(Post post) {
         return postMapper.insertPost(post);
-    }
-
-    @Override
-    public Post getPostById(int postId) {
-        Post post = postMapper.getPostById(postId);
-        List<Comment> comments = commentMapper.getCommentsByPostId(postId);
-        for (Comment comment : comments) {
-            List<Comment> replies = commentMapper.getRepliesByParentId(comment.getCommentId());
-            comment.setReplies(replies);
-        }
-        post.setComments(comments);
-        return post;
     }
 
     @Override
@@ -51,36 +41,52 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public int deletePost(int postId) {
-        commentMapper.deleteCommentsByPostId(postId);
-        return postMapper.deletePostById(postId);
+    public int createReply(Reply reply) {
+        return replyMapper.insertReply(reply);
+    }
+
+    @Override
+    public List<Reply> getRepliesByPostId(int postId) {
+        return replyMapper.getRepliesByPostId(postId);
     }
 
     @Override
     @Transactional
-    public int createComment(Comment comment) {
-        return commentMapper.insertComment(comment);
-    }
-
-    @Override
-    public List<Comment> getCommentsByPostId(int postId) {
-        return commentMapper.getCommentsByPostId(postId);
-    }
-
-    @Override
-    public List<Comment> getRepliesByParentId(int parentId) {
-        return commentMapper.getRepliesByParentId(parentId);
+    public int updateReply(Reply reply) {
+        return replyMapper.updateReply(reply);
     }
 
     @Override
     @Transactional
-    public int updateComment(Comment comment) {
-        return commentMapper.updateComment(comment);
+    public int deleteReply(int replyId) {
+        return replyMapper.deleteReply(replyId);
+    }
+    
+    @Override
+    public Post getPostDetails(int postId) {
+        return postMapper.getPostDetails(postId);
     }
 
-    @Override
-    @Transactional
-    public int deleteComment(int commentId) {
-        return commentMapper.deleteComment(commentId);
-    }
+	@Override
+	public int deletePost(int postId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int createComment(Comment comment) {
+		return postMapper.insertComment(comment);
+	}
+
+	@Override
+	public int updateComment(Comment comment) {
+		return postMapper.updateComment(comment);
+	}
+
+	@Override
+	public int deleteComment(int comment) {
+		return postMapper.deleteComment(comment);
+	}
+
+
 }

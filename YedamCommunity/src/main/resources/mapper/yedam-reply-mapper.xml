@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.yedam.app.yedam_post.mapper.ReplyMapper">
+  
+   <insert id="insertReply" parameterType="Reply" useGeneratedKeys="true" keyProperty="replyId">
+        INSERT INTO replies (reply_id
+                           , post_id
+                           , parent_id
+                           , user_id
+                           , content
+                           , create_date
+                           , writer
+                           , update_date)
+        VALUES (#{replyId}
+              , #{postId}
+              , #{parentId}
+              , #{userId}
+              , #{content}
+              , #{createDate}
+              , #{writer}
+              , #{updateDate})
+    </insert>
+
+
+    <update id="updateReply" parameterType="Reply">
+        UPDATE replies
+        SET reply_content = #{content}
+          , update_date = #{updateDate}
+        WHERE reply_id = #{replyId}
+    </update>
+
+    <delete id="deleteReply" parameterType="int">
+        DELETE 
+        FROM replies 
+        WHERE reply_id = #{replyId}
+    </delete>
+
+    <delete id="deleteRepliesByPostId" parameterType="int">
+        DELETE 
+        FROM replies 
+        WHERE post_id = #{postId}
+    </delete>
+   
+  </mapper>

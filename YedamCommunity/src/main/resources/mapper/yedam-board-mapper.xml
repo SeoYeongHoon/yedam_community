@@ -99,4 +99,56 @@
 		SELECT NVL(MAX(post_id),0)+1 as post_id
   		FROM   posts
 	</select>
+	
+	<insert id="insertPost" parameterType="com.yedam.app.yedam_post.service.Post" useGeneratedKeys="true" keyProperty="postId">
+        INSERT INTO posts (post_id
+                         , board_id
+                         , user_id
+                         , title
+                         , post_content
+                         , create_date
+                         , writer
+                         , post_view
+                         , post_like
+                         , update_date)
+        VALUES (#{postId}
+              , #{boardId}
+              , #{userId}
+              , #{title}
+              , #{postContent}
+              , #{createDate}
+              , #{writer}
+              , #{postView}
+              , #{postLike}
+              , #{updateDate})
+    </insert>
+
+    <select id="getPostById" parameterType="int" resultType="com.yedam.app.yedam_post.service.Post">
+        SELECT * 
+        FROM posts 
+        WHERE post_id = #{postId}
+    </select>
+
+    <select id="getAllPosts" resultType="com.yedam.app.yedam_post.service.Post">
+        SELECT * 
+        FROM posts
+    </select>
+
+    <update id="updatePost" parameterType="com.yedam.app.yedam_post.service.Post">
+        UPDATE posts
+        SET title = #{title}
+          , post_content = #{postContent}
+          , update_date = #{updateDate}
+        WHERE post_id = #{postId}
+    </update>
+
+    <delete id="deletePostById" parameterType="int">
+        DELETE FROM reports 
+        WHERE post_id = #{postId}
+        DELETE FROM replies 
+        WHERE post_id = #{postId}
+        DELETE FROM posts 
+        WHERE post_id = #{postId}
+    </delete>
+	
 </mapper>
