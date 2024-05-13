@@ -10,11 +10,10 @@
 				<div class="">
 					<img src="images/yedam_logo.png" style="width: 300px; margin: -40px;">
 					<div class="title">
-						<h2>예담 커뮤니티에 오신 것을 환영합니다.</h2>
-						<p>예담 커뮤니티는 예담 출신의 수료생과 현재 수강하고 있는 학생을 위한 플랫폼입니다.</p>
+						<h2>회원 비밀번호 찾기</h2>
 					</div>
 				</div>
-				<div class="add-line">회원가입에 필요한 기본정보를 입력해주세요.</div>
+				<div class="add-line">비밀번호 찾기에 필요한 정보들을 입력해주세요.</div>
 			</div>
 			<form id="login_form" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" method="post">
 				<div class="row">
@@ -26,17 +25,20 @@
 								<input id="loginId" name="id" type="text" placeholder="아이디를 입력하세요.">
 							</div>
 							<div class="input-style-1" style="position: relative">
-								<label>비밀번호</label> 
-								<div class="password_input">
-									<input id="password" name="password" type="password" placeholder="비밀번호를 입력하세요.">
-									<i class="fa fa-eye fa-lg" style="position: absolute; right: 10px; top: 52px;"></i>
+								<div class="input-style-1">
+									<label>이름</label> 
+									<input id="nameInput" name="id" type="text" placeholder="이름을 입력하세요.">
 								</div>
+							</div>
+							<div class="input-style-1" style="position: relative">
+								<label>전화번호</label> 
+								<input id="phoneInput" name="phoneNumber" type="text" placeholder="전화번호를 ( - )를 제외하고 입력하세요.">
 							</div>
 						</div>
 						<p>회원이 아니신가요? <a href="/register">회원가입하기</a></p>
-						<p><a href="/findId">아이디 찾기</a> 또는 <a href="/findPw">비밀번호 찾기</a></p>
+						<p><a href="/findId">아이디 찾기</a></p>
 						<div class="d-flex" style="margin-top: 10px; justify-content: center;">
-							<button type="submit" class="login_btn main-btn primary-btn btn-hover" style="padding: 8px 30px; margin-right: 10px;">로그인</button>
+							<button type="submit" class="login_btn main-btn primary-btn btn-hover" style="padding: 8px 30px; margin-right: 10px;">비밀번호 찾기</button>
 						</div>
 					</div>
 				</div>
@@ -44,10 +46,4 @@
 		</div>
 	</section>
 </body>
-<script>
-	$(".login_btn").click(function() {
-		$("#login_form").attr("action", "/");
-		$("#login_form").submit();
-	});
-</script>
 </html>
