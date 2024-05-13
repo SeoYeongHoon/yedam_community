@@ -18,10 +18,30 @@
 	background-color: rgba(0, 0, 0, 0.7); /* 반투명한 배경색 */
 	display: none; /* 초기에는 숨김 */
 }
+#modalWrap2 {
+	position: fixed; /* 화면에 고정 */
+	z-index: 1; /* 상위에 위치 */
+	padding-top: 200px;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.7); /* 반투명한 배경색 */
+	display: none; /* 초기에는 숨김 */
+}
 
 #modalBody {
 	width: 70%;
 	height: 70%;
+	padding: 30px 30px;
+	margin: 0 auto;
+	border: 1px solid #777;
+	background-color: #fff;
+}
+#modalBody2 {
+	width: 50%;
+	height: 90%;
 	padding: 30px 30px;
 	margin: 0 auto;
 	border: 1px solid #777;
@@ -34,8 +54,40 @@
             cursor: pointer;
             color: black;
         }
-</style>	
-<div id="test">
+li {
+	display : inline;
+	
+}        
+</style>
+<p th:text="${quizList}"></p>
+<div>
+	<button type="button" id="subBtn" class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
+	<ul>
+		<li>
+			<div class="select-style-1">
+				<label>과목선택</label>
+				<div class="select-position">
+					<select>
+					<th:block th:each="subjectInfo, idxStat : ${subjectList}">
+						<option value="">[[${subjectInfo.subjectName}]]</option>
+					</th:block>	
+					</select>
+				</div>
+			</div>
+		</li>
+        <li>
+            <a href="#0" class="main-btn danger-btn-light btn-hover">시험출제</a>
+        </li>
+		<li>
+            <a href="quizinsert" class="main-btn primary-btn-light btn-hover">새문제</a>
+        </li>
+        <li> 
+            <a href="#0" class="main-btn primary-btn-light btn-hover">문제선택</a>
+        </li>
+	</ul>
+</div>	
+
+<div id="quizBox">
 <th:block th:each="quizInfo, idxStat : ${quizList}">
 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
 	<div class="card-style-3 mb-30">
@@ -59,7 +111,7 @@
 <!-- end col -->
 </div>	
 
-<!-- 모달창 -->
+<!-- 문제 상세보기 모달창 -->
 <div id="modalWrap" class="modal-overlay">
 	<div id="modalBody">
 			<div class="close-area">X</div>
@@ -91,27 +143,47 @@
 			
 	</div>
 </div> 
-<!-- 모달창 end--> 
-<script>
-let quizContent = '';
-let aaa = '';
-let template = `
-<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-	<div class="card-style-3 mb-30">
-		<div class="card-content" >
-			<h4>
-				<a href="#0">Card Title here </a>
-			</h4>
-			<p>${aaa}</p>
-			<a id="btn" class="read-more">Read More</a>
+<!-- 문제 상세보기 모달창 end--> 
+
+<!-- 과목추가 모달창 -->
+<div id="modalWrap2" class="modal-overlay">
+	<div id="modalBody2">
+		<div class="close-area">X</div>
+		<div class="input-style-1">
+			<!-- ======= checkbox style start ======= -->
+                <div class="card-style mb-30">
+                  <h6 class="mb-25">과목 설정</h6>
+                  <th:block th:each="subjectInfo, idxStat : ${subjectList}">
+                  <div class="form-check checkbox-style mb-20">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox-1" />
+                    <label class="form-check-label" for="checkbox-1">
+                      [[${subjectInfo.subjectName}]]</label>
+                  </div>
+               	  </th:block>
+				  <button type="button" class="main-btn danger-btn btn-hover" 
+				  >삭제</button>
+                </div>
+                <!-- ======= checkbox style end ======= -->
 		</div>
+	
+		
+		<form th:action="@{/subjectinsert}" method="post" th:object="${teacherVO}">
+		<div>
+			<div class="input-style-1">
+            	<input type="text" placeholder="과목명을 입력하세요"></input>
+            </div>
+			<button class="main-btn primary-btn btn-hover"
+				type="submit">과목추가</button>
+		</div>
+		</form>	
 	</div>
-</div>
-`;
+</div> 	
+<!-- 과목추가 모달창 end -->
+<script>
 
 $(function() {
 			$("button").on("click", function() {
-				$("#test").append(template);
+				$("#test").append('template');
 			});
 		});
 
@@ -121,14 +193,21 @@ $('#updateBtn').on('click', updateAjaxJq);
 function updateAjaxJq(event){
 	//let dataObj = getEmpObj();
 	// Ajax
-	$.ajax('quizlist',{
-		type : 'get',
-		//data : dataObj
-	})
-	.done(result =>{
-		console.log(result);
-	})
-	.fail(err => console.log(err + '에러났다'));
+	$.ajax({
+		url: "quizlist",
+		type: "GET", 
+				
+		success : function(data){
+			console.log(data);
+			$(data).each(function(){
+				console.log('성공')
+				});
+			},
+		error :function(){
+			console.log('실패');
+			}
+		
+	}); 
 	
 	// fetch 사용
 	/* fetch('quizlist')
@@ -149,31 +228,25 @@ function updateAjaxJq(event){
 	
 };
 
-/* function getEmpObj(){
-	//let formTag = document.querySelector('form');			
-	
-	let formData = new FormData();
-	
-	let formObj = {};
-	formData.forEach((val, key) => {
-		formObj[key] = val;
-	})
-	return formObj;
-} */
-
 //모달창
-const btn = document.querySelector(".infoBtn"); // 모달 띄우는 버튼
-const modal = document.querySelector(".modal-overlay"); // 모달 띄우는 버튼
+const modal = document.querySelector(".modal-overlay"); // 문제 상세보기 모달창 형태 불러오기
+const modalSub = document.getElementById("modalWrap2"); // 과목추가 모달창 형태 불러오기
 //const modal = document.getElementById("modalWrap"); // 모달 창 요소 가져오기
 
-btn.onclick = function() {
+$('#quizBox').on('click', '.infoBtn', function (e) {
 	modal.style.display = "flex"; // 버튼 클릭시 모달 보임
-};
-//X버튼 누르면 모달창 닫는 기능
-const closeBtn = modal.querySelector(".close-area"); // 모달 창 닫는 x버튼
-closeBtn.onclick = function() {
-	modal.style.display = "none"
-}
+});
+
+$('#subBtn').on('click', function(e){
+	modalSub.style.display = "flex";
+})
+
+// X버튼 누르면 모달창 닫기
+$('.modal-overlay').on('click', '.close-area',function (e){
+	modal.style.display = "none";
+	modalSub.style.display = "none";
+})
+
 // 모달창 밖에 화면 누르면 모달창 닫는 기능
 modal.addEventListener("click", e => {
     const evTarget = e.target
@@ -181,12 +254,25 @@ modal.addEventListener("click", e => {
         modal.style.display = "none"
     }
 })
+
+modalSub.addEventListener("click", e => {
+    const evTarget = e.target
+    if(evTarget.classList.contains("modal-overlay")) {
+        modalSub.style.display = "none";
+    }
+})
+
 // esc누르면 모달창 닫기
 window.addEventListener("keyup", e => {
     if(modal.style.display === "flex" && e.key === "Escape") {
         modal.style.display = "none"
+    } else if(modalSub.style.display === "flex" && e.key === "Escape") {
+    	modalSub.style.display = "none"
     }
+    
 })
+
+
 
 </script>
 </html>

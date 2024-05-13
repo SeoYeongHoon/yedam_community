@@ -109,4 +109,24 @@
 		FROM quizes
 		WHERE quiz_id = #{quizId}
 	</select>
+	
+	<!-- 과목명 출력 -->
+	<select id="selectSubjectAll" resultType="TeacherVO">
+		SELECT subject_name
+		FROM subjects
+	</select>
+	
+	<!-- 과목명 추가 -->
+	<insert id="insertSubject" parameterType="TeacherVO">
+		INSERT INTO subjects(subject_id
+						   , subject_name)
+		VALUES (subject_id_seq.nextval
+        		, #{subjectName})
+	</insert>
+	
+	<!-- 과목명 삭제 -->
+	<delete id="deleteSubject">
+		DELETE FROM subjects
+		WHERE subject_id = #{subjectId}
+	</delete>
 </mapper>	
