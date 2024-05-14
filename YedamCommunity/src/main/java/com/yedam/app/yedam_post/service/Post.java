@@ -1,7 +1,6 @@
 package com.yedam.app.yedam_post.service;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,8 +21,19 @@ public class Post {
     private int postLike;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updateDate;
-    private List<BoardFiles> boardfiles; // 파일들
-    private List<Reply> replies; // 댓글 리스트 추가
-    private List<Comment> comments; // 대댓글 리스트 추가
+    
+    private int replyId;
+    private String replyContent;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date replyDate;
+    private String replyWriter;
+    
+    private int commnetId;
+    private String commentContent;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date commentDate;
+    private String commentWriter;
+    
+    private String boardfileName;
  
 }

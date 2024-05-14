@@ -2,13 +2,16 @@ package com.yedam.app.yedam_post.web;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.PostService;
@@ -27,10 +30,10 @@ public class PostController {
     }
 
     @GetMapping("postInfo")
-    public String postInfo(@RequestParam("postId") int postId, Model model) {
-        Post postDetails = postService.getPostDetails(postId);
+    public String postInfo(Post post, Model model) {
+        Post postDetails = postService.getPostDetails(post);
         model.addAttribute("postInfo", postDetails);
-        return "post/postinfo";
+        return "posts/postinfo";
     }
 
     @GetMapping("postInsert")
@@ -48,23 +51,44 @@ public class PostController {
     }
 
     @GetMapping("postDelete")
-    public String postDelete(@RequestParam("postId") int postId) {
-        postService.deletePost(postId);
+    public String postDelete(Post post) {
+        postService.PostDelete(post);
         return "redirect:postList";
     }
 
-    @GetMapping("postUpdate")
-    public String postUpdateForm(@RequestParam("postId") int postId, Model model) {
-        Post post = postService.getPostDetails(postId);
-        model.addAttribute("post", post);
-        return "posts/postupdate";
-    }
+//    @GetMapping("postUpdate")
+//    public String postUpdateForm(@RequestParam Integer postId, Model model) {
+//        if (postId == null) {
+//            return "redirect:postList";
+//        }
+//        Post post = postService.getPostDetails(postId);
+//        if (post == null) {
+//            return "redirect:postList";
+//        }
+//        model.addAttribute("postInfo", post);
+//        return "posts/postUpdate";
+//    }
+    
+//    @GetMapping("postUpdate")
+//	public String postUdateForm(@RequestParam Integer postId, Model model) {
+//		Post post = new Post();
+//		post.setPostId(postId);
+//		
+//		Post postfind = new Post();
+//		model.addAttribute("boardInfo", postfind);
+//		return "posts/postUpdate";
+//	}
 
-    @PostMapping("postUpdate")
-    public String postUpdateProcess(Post post) {
-        post.setUpdateDate(new Date());
-        postService.updatePost(post);
-        return "redirect:postInfo?postId=" + post.getPostId();
-    }
- 
+//    @PostMapping("postUpdate")
+//    public String postUpdateProcess(Post post) {
+//        post.setUpdateDate(new Date());
+//        postService.updatePost(post);
+//        return "redirect:postInfo?postId=" + post.getPostId();
+//    }
+    
+//    @ResponseBody
+//	public Map<String, Object> postUPdateProcess(@RequestBody Post post) {
+//		return postService.PostUpdate(post);
+//	}
+    
 }
