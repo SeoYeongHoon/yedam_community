@@ -12,5 +12,8 @@ public interface HomeWorkService {
 	
 	// 과제 상세 조회
 	public HomeWorkVO homeworkInfo(HomeWorkVO homeworkVO);
+	
+	// 과목명 조회
+	public List<HomeWorkVO> subjectNameList(HomeWorkVO homeworkVO);
 
 }

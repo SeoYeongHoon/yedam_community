@@ -19,4 +19,7 @@ public class HomeWorkVO {
 	private int subjectId;
 	private String classId;
 	
+	// 과목
+	private String subjectName;
+	
 }
