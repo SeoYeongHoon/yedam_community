@@ -4,11 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.yedam_user.mapper.UserMapper">
 	<!-- 회원가입 -->
-	<insert id="insertUser" parameterType="UserVO">
-		<!-- <selectKey keyProperty="registerId" resultType="int" order="BEFORE">
-	        SELECT user_id_seq.NEXTVAL
-	        FROM DUAL;
-	    </selectKey> -->
+	<!-- <insert id="insertUser" parameterType="UserVO">
 		INSERT INTO users (
 			user_id
 			, id
@@ -34,7 +30,7 @@
 			, #{userType}
 			, #{curriculumId}
 		)
-	</insert>
+	</insert> -->
 	
 	<!-- 로그인 -->
 	<select id="selectUser" resultType="UserVO">
@@ -46,9 +42,22 @@
 		AND password = #{password}
 	</select>
 	
-	<!-- 관리자페이지 모든 유저 출력 -->
-	<select id="selectAllList" resultType="UserVO">
+	<!-- 관리자페이지 모든 수료생, 수강생 유저 출력 -->
+	<!-- <select id="selectStdList" resultType="UserVO">
 		SELECT user_id
+			 , user_image
+			 , user_type
+			 , name
+			 , tel
+			 , email
+		FROM users
+		WHERE user_type = 'graduated' OR user_type = 'learning'
+		ORDER BY user_id
+	</select> -->
+	
+	<!-- 관리자페이지 모든 유저 출력 -->
+	<select id="selectAllList" resultType="UserVO" parameterType="UserSearchVO">
+		<!-- SELECT user_id
 			 , user_image
 			 , user_type
 			 , name
@@ -59,15 +68,27 @@
 			  <![CDATA[
 			  WHERE rownum <= (#{page} * 5)
 			  ]]>
-			  	<!-- <if test="userFilter == 'showGrad'">
+			  <choose>
+			  	<when test="userFilter == 'showGrad'">
 			  		AND user_type = 'graduated'
-			  	</if>
-			  	<if test="userFilter == 'showLearn'">
+			  	</when>
+			  	<when test="userFilter == 'showLearn'">
 			  		AND user_type = 'learning'
-			  	</if>
-			  	ORDER BY user_id -->
+			  	</when>
+			  	<otherwise>
+			  		ORDER BY user_id
+			  	</otherwise>
+			  </choose>
 			 ) a
-		WHERE (a.rn > (#{page} - 1) * 5)
+		WHERE (a.rn > (#{page} - 1) * 5) -->
+		SELECT user_id
+			 , user_image
+			 , user_type
+			 , name
+			 , tel
+			 , email
+		FROM users
+		WHERE user_type = 'graduated' OR user_type = 'learning'
 	</select>
 	
 	<select id="getTotalCnt" resultType="int">
@@ -75,4 +96,109 @@
 		FROM users
 	</select>
 	
+	<!-- <select id="getUsersByFilter" parameterType="String" resultType="UserVO">
+		SELECT * FROM users
+		<where>
+			<choose>
+				<when test="filter == 'showAll'">
+					user_type = 'graduated' OR user_type = 'learning'
+				</when>
+				<when test="filter == 'showGrad'">
+					user_type = 'graduated'
+				</when>
+				<when test="filter == 'showLearn'">
+					user_type = 'learning'
+				</when>
+				<otherwise>
+					1=1
+				</otherwise>
+			</choose>
+		</where>
+		ORDER BY user_id
+	</select> -->
+	
+	<delete id="removeUser" parameterType="int">
+		DELETE register
+		WHERE register_id = #{registerId}
+	</delete>
+	
+	<!-- 회원가입 신청 -->
+	<insert id="requestUser" parameterType="RegisterVO">
+		INSERT INTO register (
+			register_id
+			, id
+			, password
+			, name
+			, email
+			, tel
+			, address
+			, user_image
+			, company_info
+			, user_type
+			, curriculum_id
+		) VALUES (
+			user_id_seq.NEXTVAL
+			, #{id}
+			, #{password}
+			, #{name}
+			, #{email}
+			, #{tel}
+			, #{address}
+			, #{userImage}
+			, #{companyInfo}
+			, #{userType}
+			, #{curriculumId}
+		)
+	</insert>
+	
+	<!-- 관리자페이지 첫 페이지(유저리스트 전체) -->
+	<select id="selectStdList" resultType="RegisterVO">
+		SELECT register_id
+			 , user_image
+			 , user_type
+			 , name
+			 , tel
+			 , email
+		FROM register
+		WHERE user_type = 'graduated' OR user_type = 'learning'
+		ORDER BY register_id
+	</select>
+	
+	<!-- 관리자페이지 유저 리스트 출력 및 필터링 -->
+	<select id="getUsersByFilter" parameterType="String" resultType="RegisterVO">
+		SELECT * FROM register
+		<where>
+			<choose>
+				<when test="filter == 'showAll'">
+					user_type = 'graduated' OR user_type = 'learning'
+				</when>
+				<when test="filter == 'showGrad'">
+					user_type = 'graduated'
+				</when>
+				<when test="filter == 'showLearn'">
+					user_type = 'learning'
+				</when>
+				<otherwise>
+					1=1
+				</otherwise>
+			</choose>
+		</where>
+		ORDER BY register_id
+	</select>
+	
+	<!-- 회원가입 승인 시, register테이블에서 users테이블로 데이터 이동 -->
+	<insert id="insertUser" parameterType="RegisterVO">
+		INSERT INTO users (SELECT user_id_seq.NEXTVAL
+		                        , id
+		                        , password
+		                        , name
+		                        , tel
+		                        , email
+		                        , address
+		                        , user_image
+		                        , company_info
+		                        , user_type
+		                        , curriculum_id
+                  		   FROM register WHERE register_id = #{registerId})
+	</insert>
 </mapper>
