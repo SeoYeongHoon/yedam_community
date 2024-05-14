@@ -1,5 +1,6 @@
 package com.yedam.app.yedam_examteacher.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,18 @@ import com.yedam.app.yedam_examteacher.service.TeacherVO;
 public class ExamServiceImpl implements ExamService{
 	@Autowired
 	ExamMapper examMapper;
+	
+	// 전체 출력 - 연구중
+	@Override
+	public List<TeacherVO> allList() {
+		List<TeacherVO> list = new ArrayList<TeacherVO>();
+		list.addAll(examMapper.selectExamAll());
+		list.addAll(examMapper.selectQuizAll());
+		list.addAll(examMapper.selectAnswerAll());
+		list.addAll(examMapper.selectSubjectAll());
+
+		return list;
+	}
 	
 	// 시험목록 출력
 	@Override

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface ExamService {
+	// 전체조회
+	public List<TeacherVO> allList();
+	
 	// 시험목록조회
 	public List<TeacherVO> testList();
 	
