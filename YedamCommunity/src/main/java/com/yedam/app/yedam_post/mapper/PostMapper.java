@@ -12,7 +12,10 @@ public interface PostMapper {
     public List<Post> getAllPosts();
 	
 	  // 단건 조회
-    public Post getPostDetails(int postId);
+    public Post getPostDetails(Post post);
+    
+      // 단건조회 int 타입
+	public Post getPostDetails(int postId);
 	
 	  // 게시글 등록
     public int insertPost(Post post);
@@ -21,8 +24,11 @@ public interface PostMapper {
     public int updatePost(Post post);
 	
 	  // 게시글 삭제
-    public int deletePost(int postId);
-
+    public int deletePost1(int postId);
+    public int deletePost2(int postId);
+    public int deletePost3(int postId);
+    //public int deletePost4(int postId);
+    public int deletePost5(int postId);
     // 댓글 및 대댓글 관련 메서드
 	
 	  // 댓글 추가
@@ -42,4 +48,8 @@ public interface PostMapper {
 	
 	  // 대댓글 삭제
     public int deleteComment(int commentId);
+
+	
+    
+    
 }

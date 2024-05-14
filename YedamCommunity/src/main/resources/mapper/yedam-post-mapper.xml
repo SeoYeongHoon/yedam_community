@@ -2,91 +2,128 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="com.yedam.app.yedam_post.mapper.PostMapper">
-  
-  <insert id="insertPost" parameterType="int" useGeneratedKeys="true" keyProperty="postId">
-        INSERT INTO posts (post_id
-                         , board_id
-                         , user_id
-                         , title
-                         , post_content
-                         , create_date
-                         , writer
-                         , post_view
-                         , post_like
-                         , update_date)
-        VALUES (#{postId}
-              , #{boardId}
-              , #{userId}
-              , #{title}
-              , #{postContent}
-              , #{createDate}
-              , #{writer}
-              , #{postView}
-              , #{postLike}
-              , #{updateDate})
-    </insert>
+<mapper namespace="com.yedam.app.yedam_post.mapper.PostMapper">
 
-    <select id="getPostDetails" parameterType="int" resultType="Post">
-        SELECT
-            p.post_id
-          , p.title
-          , p.post_content
-          , p.create_date AS post_create_date
-          , p.writer AS post_writer
-          , p.post_view
-          , p.post_like
-          , p.update_date AS post_update_date
-          , r.reply_id
-          , r.reply_content
-          , r.reply_date
-          , r.reply_writer
-          , c.comment_id
-          , c.comment_content
-          , c.comment_date
-          , c.comment_writer
-          , b.boardfile_name
-        FROM 
-            posts p
-        LEFT JOIN 
-            replies r ON p.post_id = r.post_id
-        LEFT JOIN 
-            comments c ON r.reply_id = c.reply_id
-        LEFT JOIN
-            boardfiles b ON p.post_id = b.post_id
-        WHERE 
-            p.post_id = 25
-        ORDER BY 
-        p.create_date, r.reply_date, c.comment_date
-    </select>
-    
-    <select id="getAllPosts" resultType="Post">
-		SELECT POST_ID 
-             , BOARD_ID 
-             , USER_ID 
-             , TITLE 
-             , POST_CONTENT 
-             , CREATE_DATE 
-             , WRITER 
-             , POST_VIEW 
-             , POST_LIKE 
-             , UPDATE_DATE
-        FROM posts
-        ORDER BY post_id DESC
+	<insert id="insertPost" parameterType="int"
+		useGeneratedKeys="true" keyProperty="postId">
+		INSERT INTO posts (post_id
+		,
+		board_id
+		, user_id
+		, title
+		, post_content
+		, create_date
+		, writer
+		, post_view
+		, post_like
+		, update_date)
+		VALUES (#{postId}
+		, #{boardId}
+		, #{userId}
+		,
+		#{title}
+		, #{postContent}
+		, #{createDate}
+		, #{writer}
+		, #{postView}
+		,
+		#{postLike}
+		, #{updateDate})
+	</insert>
+
+	<select id="getPostDetails" parameterType="int"
+		resultType="Post">
+		SELECT
+		p.post_id
+		, p.title
+		, p.post_content
+		, p.create_date AS
+		post_create_date
+		, p.writer AS post_writer
+		, p.post_view
+		, p.post_like
+		,
+		p.update_date AS post_update_date
+		, r.reply_id
+		, r.reply_content
+		,
+		r.reply_date
+		, r.reply_writer
+		, c.comment_id
+		, c.comment_content
+		,
+		c.comment_date
+		, c.comment_writer
+		, b.boardfile_name
+		FROM
+		posts p
+		LEFT JOIN
+		replies r ON p.post_id = r.post_id
+		LEFT JOIN
+		comments c ON r.reply_id =
+		c.reply_id
+		LEFT JOIN
+		boardfiles b ON p.post_id = b.post_id
+		WHERE
+		p.post_id = #{postId}
+		ORDER BY
+		p.create_date, r.reply_date,
+		c.comment_date
 	</select>
 
-    <update id="updatePost" parameterType="Post">
-        UPDATE posts
-        SET title = #{title}
-                   , post_content = #{postContent}
-                   , update_date = #{updateDate}
-        WHERE post_id = #{postId}
-    </update>
+	<select id="getAllPosts" resultType="Post">
+		SELECT POST_ID
+		, BOARD_ID
+		,
+		USER_ID
+		, TITLE
+		, POST_CONTENT
+		, CREATE_DATE
+		, WRITER
+		, POST_VIEW
+		,
+		POST_LIKE
+		, UPDATE_DATE
+		FROM posts
+		ORDER BY post_id DESC
+	</select>
 
-    <delete id="deletePostById" parameterType="int">
-        DELETE 
-        FROM posts 
-        WHERE post_id = #{postId}
-    </delete>
+	<update id="updatePost" parameterType="Post">
+		UPDATE posts
+		SET title =
+		#{title}
+		, post_content = #{postContent}
+		, update_date = #{updateDate}
+		WHERE post_id = #{postId}
+	</update>
+
+	<delete id="deletePost1" parameterType="int">
+		DELETE FROM comments
+		WHERE post_id = #{postId}
+	</delete>
+
+	<delete id="deletePost2" parameterType="int">
+		DELETE FROM replies
+		WHERE
+		post_id = #{postId}
+	</delete>
+
+	<delete id="deletePost3" parameterType="int">
+		DELETE FROM boardfiles
+		WHERE post_id = #{postId}
+	</delete>
+
+	<delete id="deletePost4" parameterType="int">
+		DELETE FROM reports
+		WHERE post_id = #{postId}
+	</delete>
+	
+	<delete id="deletePost5" parameterType="int">
+		DELETE FROM posts
+		WHERE
+		post_id = #{postId}
+	</delete>
+
+
 
 </mapper>
