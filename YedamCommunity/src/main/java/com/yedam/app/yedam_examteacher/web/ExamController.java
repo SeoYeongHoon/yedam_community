@@ -21,7 +21,7 @@ public class ExamController {
 	ExamService examService;
 	
 	// 등록된 시험리스트
-	@GetMapping("/testlist")
+	@GetMapping("testlist")
 	public String examList(Model model) {
 		List<TeacherVO> list = examService.testList();
 		model.addAttribute("testList",list);
@@ -29,60 +29,53 @@ public class ExamController {
 	}
 	
 	// 문제 등록 - 페이지
-	@GetMapping("/quizinsert")
+	@GetMapping("quizinsert")
 	public String quizInsertForm(Model model) {
 		model.addAttribute("teacherVO", new TeacherVO());
 		return "cbt_teacher/insertquiz";
 	}
 	
 	// 문제 등록 - 처리
-	@PostMapping("/quizinsert")
+	@PostMapping("quizinsert")
 	public String quizInsertProcess(TeacherVO teacherVO) {
 		examService.quizInsert(teacherVO);
 		return "redirect:quizlist";
 	}
 	
 	// 문제 저장소에 여러가지 값들 출력
-	@GetMapping("/quizlist")
+	@GetMapping("quizlist")
 	public String quizList(Model model) {
-		List<TeacherVO> list = examService.quizList();
+		List<TeacherVO> list1 = examService.quizList();
 		List<TeacherVO> list2 = examService.answerList();
 		List<TeacherVO> list3 = examService.subjectList();
 		
-		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(list);	
-		System.out.println(json);
 		
-		model.addAttribute("quizList",json);
+		Gson gson = new GsonBuilder().create();
+		String json1 = gson.toJson(list1);	
+		
+		model.addAttribute("quizList",json1);
 		model.addAttribute("answerList",list2);
 		model.addAttribute("subjectList",list3);
-		System.out.println(list);
+		model.addAttribute("teacherVO", new TeacherVO());
 		return "cbt_teacher/quiz";
 	}
 	// 등록된 문제 출력
-	@PostMapping("/quizlist")
+	@PostMapping("quizlist")
 	@ResponseBody
 	public List<TeacherVO> quizList(TeacherVO teacherVO){
 		return examService.quizList();
 	}
 
 	// 문제 단건조회를 문제 세부보기 모달창으로 적용시켜야 한다
-	@GetMapping("/quizinfo")
+	@GetMapping("quizinfo")
 	public String quizInfo(TeacherVO teacherVO, Model model) {
 		TeacherVO findVO = examService.quizInfo(teacherVO);
 		model.addAttribute("quizInfo",findVO);
 		return "cbt_teacher/quizinfo";
 	}
 	
-	// 과목 추가 - 페이지
-	@GetMapping("/subjectinsert")
-	public String subjectInsertForm(Model model) {
-		model.addAttribute("teacherVO", new TeacherVO());
-		return "cbt_teacher/quiz";
-	}
-	
 	// 과목 추가 - 처리
-	@PostMapping("/subjectinsert")
+	@PostMapping("subjectinsert")
 	public String subjectInsertProcess(TeacherVO teacherVO) {
 		int sId = examService.subjectInsert(teacherVO);
 		String uri = null;

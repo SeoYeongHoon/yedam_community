@@ -88,10 +88,14 @@
 	</insert>
 	<!-- 문제저장소에 문제 출력 -->
 	<select id="selectQuizAll" resultType="TeacherVO">
-		SELECT quiz_id,
-			   quiz_content,
-			   quiz_solution
-		FROM quizes
+		SELECT q.quiz_id
+       		 , s.subject_name
+       		 , q.quiz_content
+       		 , q.quiz_solution
+       		 , q.user_id
+       		 , q.quiz_answer
+		FROM quizes q JOIN subjects s 
+                ON q.subject_id = s.subject_id
 		ORDER BY quiz_id
 	</select>
 	
@@ -113,7 +117,8 @@
 	
 	<!-- 과목명 출력 -->
 	<select id="selectSubjectAll" resultType="TeacherVO">
-		SELECT subject_name
+		SELECT subject_id
+			  , subject_name
 		FROM subjects
 	</select>
 	
