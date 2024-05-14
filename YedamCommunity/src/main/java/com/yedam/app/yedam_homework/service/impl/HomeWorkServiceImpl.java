@@ -33,4 +33,10 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 		return homeworkMapper.selectHomework(homeworkVO);
 	}
 
+	//과제명 조회
+	@Override
+	public List<HomeWorkVO> subjectNameList(HomeWorkVO homeworkVO) {
+		return homeworkMapper.selectSubjectName(homeworkVO);
+	}
+
 }
