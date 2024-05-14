@@ -43,7 +43,7 @@
 			<button class="main-btn dark-btn-outline square-btn btn-hover"
 				th:onclick="|location.href='@{/testList}'|">목록</button>
 			<button th:id="${testDetail.testId}" class="main-btn dark-btn-outline square-btn btn-hover"
-			    th:onclick="|location.href='@{/testStart(testId=${testDetail.testId})}'|">시작</button>
+			    th:onclick="|location.href='@{/testStart(testId=${testDetail.testId},subjectId=${testDetail.subjectId},page=1)}'|">시작</button>
 		</div>
 		<br> <br>
 	</div>
