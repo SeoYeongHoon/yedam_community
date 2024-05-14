@@ -18,6 +18,7 @@
 	background-color: rgba(0, 0, 0, 0.7); /* 반투명한 배경색 */
 	display: none; /* 초기에는 숨김 */
 }
+
 #modalWrap2 {
 	position: fixed; /* 화면에 고정 */
 	z-index: 1; /* 상위에 위치 */
@@ -32,13 +33,14 @@
 }
 
 #modalBody {
-	width: 70%;
+	width: 50%;
 	height: 70%;
 	padding: 30px 30px;
 	margin: 0 auto;
 	border: 1px solid #777;
 	background-color: #fff;
 }
+
 #modalBody2 {
 	width: 50%;
 	height: 90%;
@@ -47,161 +49,209 @@
 	border: 1px solid #777;
 	background-color: #fff;
 }
+
 .close-area {
-            display: inline;
-            float: right;
-            padding-right: 10px;
-            cursor: pointer;
-            color: black;
-        }
+	display: inline;
+	float: right;
+	padding-right: 10px;
+	cursor: pointer;
+	color: black;
+}
+
 li {
-	display : inline;
-	
-}        
+	display: inline;
+}
+
+.box{
+	display: inline-block;
+}
+
 </style>
 <!-- <p th:text="${quizList}"></p> -->
 <div>
-	<button type="button" id="subBtn" class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
+	<button type="button" id="subBtn" 
+		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
 		<li>
-			<div class="select-style-1">
+			<div>
 				<label>과목선택</label>
 				<div class="select-position">
 					<select>
-					<th:block th:each="subjectInfo, idxStat : ${subjectList}">
-						<option value="">[[${subjectInfo.subjectName}]]</option>
-					</th:block>
+						<th:block th:each="subjectInfo, idxStat : ${subjectList}">
+							<option value="">[[${subjectInfo.subjectName}]]</option>
+						</th:block>
 					</select>
 				</div>
 			</div>
 		</li>
-        <li>
-            <a href="#0" class="main-btn danger-btn-light btn-hover">시험출제</a>
-        </li>
-		<li>
-            <a href="quizinsert" class="main-btn primary-btn-light btn-hover">새문제</a>
-        </li>
-        <li> 
-            <a href="#0" class="main-btn primary-btn-light btn-hover">문제선택</a>
-        </li>
+		<li><a href="#0" class="main-btn danger-btn-light btn-hover">시험출제</a>
+		</li>
+		<li><a href="quizinsert"
+			class="main-btn primary-btn-light btn-hover">새문제</a></li>
+		<li><a href="#0" class="main-btn primary-btn-light btn-hover">문제선택</a>
+		</li>
 	</ul>
-</div>	
-
-<div id="quizBox">
-
-<!-- end col -->
+</div>
+<div>
+<div id="quizBox" class="container"></div>
+</div>
 <button id="updateBtn">아작스테스트</button>
-</div>	
 
 <!-- 문제 상세보기 모달창 -->
 <div id="modalWrap" class="modal-overlay">
 	<div id="modalBody">
-			<div class="close-area">X</div>
-				<h3>문제</h3>
-				<p></p>
-			<br>
-			<br>
-			<div>
-				<h3>정답 지문</h3>
-				<th:block th:each="answerInfo, idxStat : ${answerList}">
-					<p>[[${answerInfo.textContent}]]</p>
-				</th:block>	
-			</div>
-			<br>
-			<br>
-			<div>
-				<h3>문제 해설란</h3>
-				<br>
-				<p></p>
-			</div>
-			<div style="text-align: center;">
-				<button id="closeBtn" class="main-btn primary-btn btn-hover"
-					type="button" onclick="location.href='quizlist'" >확인</button>
-			</div>
-			
-	</div>
-</div> 
-<!-- 문제 상세보기 모달창 end--> 
-
-<!-- 과목추가 모달창 -->
-<div id="modalWrap2" class="modal-overlay">
-	<div id="modalBody2">
 		<div class="close-area">X</div>
-		<div class="input-style-1">
-			<!-- ======= checkbox style start ======= -->
-                <div class="card-style mb-30">
-                  <h6 class="mb-25">과목 설정</h6>
-                  <<th:block th:each="subjectInfo, idxStat : ${subjectList}">
-                  <div class="form-check checkbox-style mb-20">
-                    <input class="form-check-input" type="checkbox" value="" id="checkbox-1" />
-                    <label class="form-check-label" for="checkbox-1">
-                      [[${subjectInfo.subjectName}]]</label>
-                  </div>
-               	  </th:block>
-				  <button type="button" class="main-btn danger-btn btn-hover">삭제</button>
-                </div>
-                <!-- ======= checkbox style end ======= -->
-		</div>
-	
-		
-		<form th:action="@{/subjectinsert}" method="post" th:object="${teacherVO}">
+			<label>문제</label><input type="text" placeholder="문제가 나와야 합니다."></input>
+		<br> <br>
 		<div>
-			<div class="input-style-1">
-            	<input type="text" placeholder="과목명을 입력하세요"></input>
-            </div>
-			<button class="main-btn primary-btn btn-hover"
-				type="submit">과목추가</button>
+			<label>보기</label><input type="text" placeholder="보기가 나와야 합니다."></input>
 		</div>
-		</form>	
-	</div>
-</div> 	
-<!-- 과목추가 모달창 end -->
-<script>
-let qContent = '';
-let template = `
-<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-	<div class="card-style-3 mb-30">
-		<div class="card-content" id="quizcard">
-			<h4>
-				<a href="#0">Card Title here </a>
-			</h4>
-			<p id="test">${qContent}변수값</p>
-			<a class="infoBtn">자세히 보기</a><br>
-			<button id="updateBtn">아작스테스트</button>
+		<br> <br>
+		<div>
+			<label>해설</label><input type="text" placeholder="해설이 나와야 합니다."></input>
 		</div>
+		<div style="text-align: center;">
+			<button id="closeBtn" class="main-btn primary-btn btn-hover"
+				type="button" onclick="location.href='quizlist'">확인</button>
+		</div>
+
 	</div>
 </div>
-`;
-/* $(function() {
-			$("button").on("click", function() {
-				$("#quizBox").append(template);
-			});
-		});
- */
+<!-- 문제 상세보기 모달창 end-->
 
-//$('#updateBtn').on('click', updateAjaxJq);
+<!-- 과목추가/삭제 모달창 -->
 
-$(function updateAjaxJq(){
+	<div id="modalWrap2" class="modal-overlay">
+		<div id="modalBody2">
+			<div class="close-area">X</div>
+			<div class="input-style-1">
+				<!-- ======= checkbox style start ======= -->
+				<div class="card-style mb-30">
+					<h6 class="mb-25">과목 설정</h6>
+					<th:block th:each="subjectInfo, idxStat : ${subjectList}">
+						<div class="form-check checkbox-style mb-20">
+							<table>
+								<tr>
+									<th>
+										<input class="form-check-input checkbox" type="checkbox" th:value="${subjectInfo.subjectId}"
+											id="checkbox" /> <label class="form-check-label"> [[${subjectInfo.subjectName}]]</label>
+									</th>
+									<td><button type="button" id="subDel" 
+										th:onclick="|location.href='@{/subjectdelete(subjectId=${subjectInfo.subjectId})}'|">삭제</button>
+									</td>
+								</tr>
+							</table>	
+						</div>
+					</th:block>
+				</div>
+				<button type="button" class="main-btn danger-btn-light square-btn btn-hover" >삭제</button>
+				<!-- ======= checkbox style end ======= -->
+			</div>
+			
+		<form th:action="@{/subjectinsert}" method="post" th:object="${teacherVO}">
+			<div>
+				<div class="input-style-1">
+					<input type="text" placeholder="과목명을 입력하세요" th:field=*{subjectName}></input>
+				</div>
+				<button id="subAdd" class="main-btn primary-btn btn-hover"
+					type="submit">과목추가</button>
+			</div>
+		</form>
+	</div>
+	</div>
+<!-- 과목추가 모달창 end -->
+<script>
+var subName = '';
+var qContent = '';
+var qId = 0;
+
+// 퀴즈 문제 불러오는 AJAX
+$(function quizContentList(){
 	$.ajax({
-		url: "quizlist",
-		type: "post", 
-		contentType: "application/json",
+		url : "quizlist",
+		type : "post", 
+		contentType : "application/json",
 		dataType : 'json',
 				
 		success : function(data){
-			console.log(data);
 			data.forEach((item,idx) => {
+				let rowTag = null;
+				if(idx%3==0){
+					rowTag = $(`<div id='row${idx}' class='row'></div>`);
+					$("#quizBox").append(rowTag);
+				}else{
+					let num = Math.floor(idx/3) * 3;
+					rowTag = $('#row' + num );
+				}
+
+				subName = item.subjectName;				
 				qContent = item.quizContent;
-				console.log(qContent);
-				//console.log(item.quizContent);
-				$("#quizBox").append(template);
+				qId = item.quizId;
+				
+				let temp = `
+					<div style="color:gray;" class="box col-4">
+						<div class="card-style-3 mb-30">
+							<div>
+							<input type="checkbox"></input><label>문제선택</label>
+							<p>과목명 : ${subName}</p>
+							</div>
+							<div class="card-content" id="quizcard">
+								<h4 id="test">${qContent}</h4>
+								<br>
+								<button type="button" class="infoBtn" id="${qId}">자세히 보기</button>
+							</div>
+						</div>
+					</div>
+					`;
+					
+				//$("#quizBox").append(temp);
+				rowTag.append(temp);
 			});
 		},
-		error :function(){
+		error : function(){
 			alert('실패');
 		}
 	}); 
 });
+
+// 과목추가 버튼 눌렀을때 처리되는 기능
+$('#subAdd').on('click', function(){
+	$.ajax({
+		url : "subjectinsert",
+		type : "post", 
+				
+		success : function(data){
+			alert('등록되었습니다.')
+		},
+		error : function(err){
+		}
+	}); 
+})
+
+// 과목 삭제버튼 기능
+$('#subDel').on('click', function(){
+	var subId = 
+	$.ajax({
+		url : "subjectdelete",
+		type : "get", 
+				
+		success : function(data){
+			alert('삭제되었습니다.')
+		},
+		error : function(err){
+		}
+	}); 
+})
+
+// 작업 테스트중
+$('.checkbox').on('click', function(e){
+	console.log(e.target);
+	var aaa = $('.checkbox').val();
+	console.log($("input[type='checkbox']").val());
+})
+/* $('.infoBtn').on('click', function() {
+        console.log($(.infoBtn).prop("id"));
+    }) */
 
 //모달창
 const modal = document.querySelector(".modal-overlay"); // 문제 상세보기 모달창 형태 불러오기
@@ -246,8 +296,6 @@ window.addEventListener("keyup", e => {
     }
     
 })
-
-
 
 </script>
 </html>

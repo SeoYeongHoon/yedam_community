@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.yedam.app.yedam_examstudent.service.AnswerVO;
+import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
 @Mapper
@@ -14,4 +16,10 @@ public interface CbtStudentMapper {
 	public TestVO selectTestDetail(TestVO testVO);
 	//시험시작정보 조회
 	public TestVO selectTestStart(TestVO testVO);
+	//시험시작정보 조회 = 문제내용
+	public QuizboxVO selectTestQuiz1(QuizboxVO quizboxVO);
+	//시험시작정보 조회 = 문제보기
+	public List<AnswerVO> selectTestQuiz2(AnswerVO answerVO);
+	//문제개수 구하기
+	public int selectQuizCnt(QuizboxVO quizboxVO);
 }

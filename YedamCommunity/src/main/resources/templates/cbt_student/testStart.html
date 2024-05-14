@@ -8,11 +8,22 @@
 	justify-content: space-between;
 	display: flex;
 }
+
 .tstart3 {
 	justify-content: space-between;
 	display: flex;
 }
+
 .tstart2 { /*답안표기란-문제 가로 정렬*/
+	display: inline-block;
+}
+
+#tstart4 { /*답안표기란 스크롤바*/
+	overflow: scroll;
+	border: 1px solid grey;
+}
+
+.tstart5 {
 	display: inline-block;
 }
 </style>
@@ -20,19 +31,20 @@
 	<!-- 상단부분 -->
 	<div class="card-style col-lg-12 tstart1">
 		<h1>[[${testStart.testName}]]</h1>
-		<div>		
+		<div>
 			<p class="tstart2">제한시간:</p>
 			<p class="tstart2">[[${testStart.testTime}]]</p>
 		</div>
-		<div>		
+		<div>
 			<p class="tstart2">응시자:</p>
 			<p class="tstart2">홍길동</p>
-		</div>	
+		</div>
 	</div>
 	<!-- 좌측사이드 -->
-	<div class="card-style col-lg-2 tstart2" style="height: 800px">
+	<div id="tstart4" class="card-style col-lg-2 tstart2"
+		style="height: 800px">
 		<h3 style="text-align: center; background-color: blue; color: white">답안표기란</h3>
-		<div class="tstart3">	
+		<div class="tstart3">
 			<h3 style="background-color: aqua; display: inline-block">1</h3>
 			<div class="tstart2">①</div>
 			<div class="tstart2">②</div>
@@ -40,7 +52,7 @@
 			<div class="tstart2">④</div>
 			<div class="tstart2">⑤</div>
 		</div>
-		<div class="tstart3">	
+		<div class="tstart3">
 			<h3 style="background-color: aqua; display: inline-block">2</h3>
 			<div class="tstart2">①</div>
 			<div class="tstart2">②</div>
@@ -48,7 +60,7 @@
 			<div class="tstart2">④</div>
 			<div class="tstart2">⑤</div>
 		</div>
-		<div class="tstart3">	
+		<div class="tstart3">
 			<h3 style="background-color: aqua; display: inline-block">3</h3>
 			<div class="tstart2">①</div>
 			<div class="tstart2">②</div>
@@ -59,22 +71,32 @@
 	</div>
 	<!-- 우측사이드 -->
 	<div class="card-style col-lg-10" style="height: 800px">
-		<h1>1. 시험문제</h1>
+		<h1>[[${testQuiz1.quizId}]]. [[${testQuiz1.quizContent}]]</h1>
 		<br> <br>
-		<ul>
-			<li>① 1번보기</li>
-			<li>② 2번보기</li>
-			<li>③ 3번보기</li>
-			<li>④ 4번보기</li>
-			<li>⑤ 5번보기</li>
+		<ul th:each="list2 : ${testQuiz2}">
+			<li>[[${list2.exampleNum}]]. [[${list2.textContent}]]</li>
 		</ul>
 	</div>
 	<!-- 하단부분 -->
 	<div class="card-style col-lg-12">
 		<div style="text-align: right">
-			<button class="main-btn dark-btn-outline square-btn btn-hover">이전</button>
-			<button class="main-btn dark-btn-outline square-btn btn-hover">다음</button>
-			<button class="main-btn dark-btn-outline square-btn btn-hover">제출</button>
+			<div class="tstart5" th:if="${page > 1}">
+				<a class="main-btn dark-btn-outline square-btn btn-hover"
+					th:href="@{/testStart(testId=${testStart.testId},subjectId=${testQuiz1.subjectId},page=${page-1})}">이전</a>
+			</div>
+			<div class="tstart5" th:unless="${page > 1}">
+				<a class="main-btn dark-btn-outline square-btn btn-hover">이전</a>
+			</div>
+			<div class="tstart5" th:if="${page < quizCnt}">
+				<a class="main-btn dark-btn-outline square-btn btn-hover"
+					th:href="@{/testStart(testId=${testStart.testId},subjectId=${testQuiz1.subjectId},page=${page+1})}">다음</a>
+			</div>
+			<div class="tstart5" th:unless="${page < quizCnt}">
+				<a class="main-btn dark-btn-outline square-btn btn-hover">다음</a>
+			</div>
+			<div class="tstart5">
+				<a class="main-btn dark-btn-outline square-btn btn-hover">제출</a>
+			</div>
 		</div>
 	</div>
 </div>

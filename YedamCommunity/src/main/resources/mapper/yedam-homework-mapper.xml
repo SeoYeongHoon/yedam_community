@@ -5,22 +5,22 @@
 <mapper
 	namespace="com.yedam.app.yedam_homework.mapper.HomeWorkMapper">
 
-	<!-- <select id="hselectAll" resultType="HomeWorkVO"> SELECT homework_id, 
-		homework_content, homework_date, homework_title, curriculum_id, subject_id 
-		FROM homeworks ORDER BY homework_id </select> -->
 	<!-- 과제 전체조회 -->
 	<select id="selectHomeworkAll" resultType="HomeWorkVO">
-		SELECT c.class_id,
-		h.homework_id,
-		h.homework_content,
-		h.homework_date,
-		h.homework_title,
-		h.curriculum_id,
-		h.subject_id
-		FROM homeworks h JOIN curriculum c ON (h.curriculum_id =
-		c.curriculum_id)
+		SELECT  c.class_id,
+				h.homework_id,
+				h.homework_content,
+				h.homework_date,
+				h.homework_title,
+				h.curriculum_id,
+				s.subject_id,
+        		s.subject_name
+		FROM homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
+               			 JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
+		WHERE h.subject_id = s.subject_id
 		ORDER BY homework_id
 	</select>
+
 	<!-- 상세조회 -->
 	<select id="selectHomework" resultType="HomeWorkVO">
 		SELECT homework_id,
@@ -32,26 +32,35 @@
 		FROM homeworks
 		WHERE homework_id =#{homeworkId}
 	</select>
+
+	<!-- 과제명 조회 -->
+	<select id="selectSubjectName" resultType="HomeWorkVO">
+		SELECT subject_name,
+		subject_id
+		FROM subjects
+		WHERE curriculum_id = #{curriculumId}
+	</select>
+
 	<!-- 과제등록 -->
 	<insert id="insertHomework" parameterType="HomeWorkVO">
 		INSERT INTO homeworks
-				(
-					homework_id,
-					homework_content,
-					homework_date,
-					homework_title,
-					curriculum_id,
-					subject_id
-				)
+		(
+		homework_id,
+		homework_content,
+		homework_date,
+		homework_title,
+		curriculum_id,
+		subject_id
+		)
 		VALUES
-				(
-					homework_id_seq.nextval,
-					#{homeworkContent},
-					#{homeworkDate},
-					#{homeworkTitle},
-					#{curriculumId},
-					#{subjectId}
-				)
+		(
+		homework_id_seq.nextval,
+		#{homeworkContent},
+		#{homeworkDate},
+		#{homeworkTitle},
+		#{curriculumId},
+		#{subjectId}
+		)
 	</insert>
 
 </mapper>

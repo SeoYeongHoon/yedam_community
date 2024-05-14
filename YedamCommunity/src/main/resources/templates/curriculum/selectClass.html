@@ -3,41 +3,43 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
-<head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<style>
-li {
-	display: inline;
-	
-	
-} 
-
-#fsc {
-	width: auto;
-}
-
-.selectClass {
-	padding: 10px;
-	border: 1px solid #E2E2E2;
-	width: 300px;
-}
-</style>
-</head>
-<div id="fsc" class="card-style">
-	<div th:each="class, idxStat : ${class}">
-		<ul>
-			<li>
-				<div class="selectClass" th:onclick="|location.href='@{/homeworkInsert(curriculumId=${class.curriculumId})}'|">
-					<h1>[[${class.classId}]]강의실</h1>
-					<h3>[[${class.curriculumName}]]</h3>
-					<hr>
-					<p>[[${#dates.format(class.curriculumStartDate,'yyyy년MM월dd일')}]]~[[${#dates.format(class.curriculumEndDate,'yyyy년MM월dd일')}]]</p>
-				</div>
-			</li>
-		</ul>
-	</div>
-</div>
-
-<script type="text/javascript"></script>
+<title>selectClass</title>
+<div class="container-fluid">
+          <div class="title-wrapper pt-30">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <div class="title">
+                  <h2><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">강의실 선택</font></font></h2>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 강의실 항목 -->
+          <div class="cards-styles" >
+            <div class="row" >
+              <div class="col-4" th:each="classInfo : ${class}">
+                <div class="card-style-1 mb-30">
+                  <div class="card-content" th:onclick="|location.href='@{/homeworkInsert(curriculumId=${classInfo.curriculumId})}'|">
+                    <h4>
+                    	<font style="vertical-align: inherit;">
+                    		<font style="vertical-align: inherit;">[[${classInfo.classId}]]강의실</font>
+                    	</font>
+                    </h4>
+                    <hr>
+                    <p>
+                    	<font style="vertical-align: inherit;">
+                    		<font style="vertical-align: inherit;">[[${classInfo.curriculumName}]]</font>
+                   		</font>
+                   		<font style="vertical-align: inherit;">
+                    		<font style="vertical-align: inherit;"><[[${#dates.format(classInfo.curriculumStartDate,'yyyy년MM월dd일')}]]~[[${#dates.format(classInfo.curriculumEndDate,'yyyy년MM월dd일')}]]></font>
+                   		</font>
+                   	</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 강의실 항목 end -->
+        </div>
 </html>

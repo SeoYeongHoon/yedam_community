@@ -9,4 +9,10 @@ public interface CbtStudentService {
 	public TestVO testDetail(TestVO testVO);
 	//시험시작정보 조회
 	public TestVO testStart(TestVO testVO);
+	//시험시작정보 조회 = 문제내용
+	public QuizboxVO testQuiz1(QuizboxVO quizboxVO);
+	//시험시작정보 조회 = 문제보기
+	public List<AnswerVO> testQuiz2(AnswerVO answerVO);
+	//문제개수 구하기
+	public int quizCnt(QuizboxVO quizboxVO);
 }
