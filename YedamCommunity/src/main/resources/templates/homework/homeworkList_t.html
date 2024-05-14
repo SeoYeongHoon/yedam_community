@@ -13,15 +13,19 @@
 </style>
 </head>
 <h1>과제 목록 교수</h1>
+<div class="row">
+<div class="col-10">
 <div style='float: right;'>
-	<a href="homeworkInsert" class=" primary-btn rounded-full btn-hover"style='padding:10px;'>
+	<a href="selectClass" class=" primary-btn rounded-full btn-hover"style='padding:10px;'>
 		<font style="vertical-align: inherit;">
 			<font style="vertical-align: inherit;">+ 과제</font>
 		</font>
 	</a>
 </div>
+</div>
+</div>
 <div class="row">
-	<div >
+	<div class="col-10">
 		<div class="card-style mb-30">
 			<h1 class="mb-30">과제 목록</h1>
 			<div class="table-wrapper table-responsive">
@@ -35,8 +39,12 @@
 								<h6>과제명</h6>
 							</th>
 							<th>
+								<h6>과목명</h6>
+							</th>
+							<th>
 								<h6>마감일</h6>
 							</th>
+							
 							<th>
 								<h6>진행상태</h6>
 							</th>
@@ -44,11 +52,11 @@
 						<!-- end table row-->
 					</thead>
 					<tbody>
-						<th:block th:each="homeworkinfo, idxStat : ${homeworklist}">
+						<th:block th:each="homeworkinfo : ${homeworklist}">
 							<tr th:onclick="|location.href='@{/homeworkInfo(homeworkId=${homeworkinfo.homeworkId})}'|">
 								<td class="min-width">[[ ${homeworkinfo.classId} ]]강의실</td>
 								<td class="min-width">[[ ${homeworkinfo.homeworkTitle} ]]</td>
-								<!-- <td class="min-width">[[ ${#dates.format(homeworkinfo.homeworkDate, 'yyyy-MM-dd')} ]]</td> -->
+								<td class="min-width">[[ ${homeworkinfo.subjectName} ]]</td>
 								<td class="min-width"><td>[[${#dates.format(homeworkinfo.homeworkDate,'yyyy년MM월dd일')}]]</td>
 								<td class="min-width"><span class="status-btn active-btn">진행중</span>
 								</td>

@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{common/layouts/default_layout}"
@@ -13,31 +13,31 @@
     <p th:text="${#dates.format(postInfo.createDate, 'yyyy-MM-dd')}">Post Date</p>
     <p>조회수: <span th:text="${postInfo.postView}"></span></p>
     <p>좋아요: <span th:text="${postInfo.postLike}"></span></p>
-
-    <h2>첨부 파일</h2>
+    
+    <!-- <h2>첨부 파일</h2>
     <ul>
         <li th:each="file : ${postInfo.boardFiles}">
             <a th:href="@{'/fileDownload/' + ${file.boardfileId}}" th:text="${file.boardfileName}">File Name</a>
         </li>
-    </ul>
+    </ul> -->
 
     <h2>댓글</h2>
     <ul>
-        <li th:each="reply : ${postInfo.replies}">
+        <li th:each="reply : ${postInfo}">
             <p th:text="${reply.replyContent}">Reply Content</p>
             <p th:text="${reply.writer}">Reply Writer</p>
             <p th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd')}">Reply Date</p>
 
             <h3>대댓글</h3>
             <ul>
-                <li th:each="comment : ${reply.comments}">
+                <li th:each="comment : ${postInfo}">
                     <p th:text="${comment.commentContent}">Comment Content</p>
                     <p th:text="${comment.commentWriter}">Comment Writer</p>
                     <p th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd')}">Comment Date</p>
                 </li>
             </ul>
 
-            <form th:action="@{/addComment}" th:object="${new com.yedam.app.yedam_post.service.Comment()}" method="post">
+            <form th:action="@{/addComment}" th:object="${postInfo}" method="post">
                 <input type="hidden" name="replyId" th:value="${reply.replyId}" />
                 <input type="hidden" name="postId" th:value="${postInfo.postId}" />
                 <textarea th:field="*{commentContent}"></textarea>
@@ -46,19 +46,19 @@
         </li>
     </ul>
 
-    <h3>댓글 작성</h3>
-    <form th:action="@{/addReply}" th:object="${new com.yedam.app.yedam_post.service.Reply()}" method="post">
+      <h3>댓글 작성</h3>
+    <form th:action="@{/addReply}" th:object="${post}" method="post">
         <input type="hidden" name="postId" th:value="${postInfo.postId}" />
         <textarea th:field="*{replyContent}"></textarea>
         <button type="submit">댓글 작성</button>
-    </form>
+    </form>  
 
     <a th:href="@{/postUpdate?postId={postId}(postId=${postInfo.postId})}">수정</a>
-    <form th:action="@{/postDelete}" method="post">
+    <form th:action="@{/postDelete}" method="get">
         <input type="hidden" name="postId" th:value="${postInfo.postId}" />
         <button type="submit">삭제</button>
     </form>
     <a th:href="@{/postList}">목록으로</a>
 </body>
 </html>
- -->
+ 

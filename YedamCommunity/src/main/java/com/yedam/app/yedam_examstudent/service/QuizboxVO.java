@@ -4,12 +4,13 @@ import lombok.Data;
 
 @Data
 public class QuizboxVO { //선택된문제 테이블
-	private int quizboxId;
-	private String quizContent;
-	private int quizId;
-	private int subjectId;
-	private int testId;
-	private int quizScore;
+	private int quizboxId; //문제관리번호
+	private String quizContent; //문제내용
+	private int quizId; //문제번호
+	private int subjectId; //과목번호
+	private int testId; //시험출제번호
+	private int quizScore; //배점
+	private int page; //페이지번호
 	public int getQuizboxId() {
 		return quizboxId;
 	}
@@ -45,6 +46,12 @@ public class QuizboxVO { //선택된문제 테이블
 	}
 	public void setQuizScore(int quizScore) {
 		this.quizScore = quizScore;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
 	}
 	
 	
