@@ -17,7 +17,8 @@ public class TestVO { //시험출제 테이블
 	
 	private int quizScoreSum; //시험목록 >> 시험총점
 	private int quizIdCnt; // 시험목록 >> 문제개수
-	private String curriculumName;
+	private String curriculumName; //과정명
+	private int subjectId; //과목번호
 	public int getTestId() {
 		return testId;
 	}
@@ -83,6 +84,12 @@ public class TestVO { //시험출제 테이블
 	}
 	public void setCurriculumName(String curriculumName) {
 		this.curriculumName = curriculumName;
+	}
+	public int getSubjectId() {
+		return subjectId;
+	}
+	public void setSubjectId(int subjectId) {
+		this.subjectId = subjectId;
 	}
 	
 	

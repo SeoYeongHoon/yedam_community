@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_examstudent.mapper.CbtStudentMapper;
+import com.yedam.app.yedam_examstudent.service.AnswerVO;
 import com.yedam.app.yedam_examstudent.service.CbtStudentService;
+import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
 @Service
@@ -30,6 +32,21 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Override
 	public TestVO testStart(TestVO testVO) {
 		return cbtStudentMapper.selectTestStart(testVO);
+	}
+	//시험시작정보 조회 = 문제내용
+	@Override
+	public QuizboxVO testQuiz1(QuizboxVO quizboxVO) {
+		return cbtStudentMapper.selectTestQuiz1(quizboxVO);
+	}
+	//시험시작정보 조회 = 문제보기
+	@Override
+	public List<AnswerVO> testQuiz2(AnswerVO answerVO) {
+		return cbtStudentMapper.selectTestQuiz2(answerVO);
+	}
+	//문제개수
+	@Override
+	public int quizCnt(QuizboxVO quizboxVO) {
+		return cbtStudentMapper.selectQuizCnt(quizboxVO);
 	}
 	
 }
