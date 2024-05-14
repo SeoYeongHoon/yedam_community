@@ -9,12 +9,12 @@
 	display: flex;
 }
 
-.tstart3 {
+.tstart3 { /*답안표기란 답안정렬*/
 	justify-content: space-between;
 	display: flex;
 }
 
-.tstart2 { /*답안표기란-문제 가로 정렬*/
+.tstart2 { /*답안표기란 문제 가로정렬*/
 	display: inline-block;
 }
 
@@ -23,7 +23,7 @@
 	border: 1px solid grey;
 }
 
-.tstart5 {
+.tstart5 { /*페이징버튼*/
 	display: inline-block;
 }
 </style>
@@ -40,28 +40,11 @@
 			<p class="tstart2">홍길동</p>
 		</div>
 	</div>
-	<!-- 좌측사이드 -->
-	<div id="tstart4" class="card-style col-lg-2 tstart2"
-		style="height: 800px">
-		<h3 style="text-align: center; background-color: blue; color: white">답안표기란</h3>
-		<div class="tstart3">
-			<h3 style="background-color: aqua; display: inline-block">1</h3>
-			<div class="tstart2">①</div>
-			<div class="tstart2">②</div>
-			<div class="tstart2">③</div>
-			<div class="tstart2">④</div>
-			<div class="tstart2">⑤</div>
-		</div>
-		<div class="tstart3">
-			<h3 style="background-color: aqua; display: inline-block">2</h3>
-			<div class="tstart2">①</div>
-			<div class="tstart2">②</div>
-			<div class="tstart2">③</div>
-			<div class="tstart2">④</div>
-			<div class="tstart2">⑤</div>
-		</div>
-		<div class="tstart3">
-			<h3 style="background-color: aqua; display: inline-block">3</h3>
+	<!-- 중간부분 좌측사이드 -->
+	<div id="tstart4" class="card-style col-lg-2 tstart2" style="height: 800px">
+		<h3 style="text-align: center; background-color: #A6A6A6; color: white">답안표기란</h3>
+		<div class="tstart3" th:each="num, idx : ${#numbers.sequence(1,quizCnt)}">
+			<h3 class="tstart2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
 			<div class="tstart2">①</div>
 			<div class="tstart2">②</div>
 			<div class="tstart2">③</div>
@@ -69,7 +52,7 @@
 			<div class="tstart2">⑤</div>
 		</div>
 	</div>
-	<!-- 우측사이드 -->
+	<!-- 중간부분 우측사이드 -->
 	<div class="card-style col-lg-10" style="height: 800px">
 		<h1>[[${testQuiz1.quizId}]]. [[${testQuiz1.quizContent}]]</h1>
 		<br> <br>

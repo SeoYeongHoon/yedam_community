@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
 import com.yedam.app.yedam_examstudent.service.CbtStudentService;
@@ -36,20 +37,17 @@ public class CbtStudentController {
 	}
 	//시험시작 페이지 >> 시작정보, 문제내용, 문제보기
 	@GetMapping("testStart")
-	public String testStart(TestVO testVO, QuizboxVO quizboxVO, AnswerVO answerVO,  Model model) {
+	public String testStart(@RequestParam int page, TestVO testVO, QuizboxVO quizboxVO, AnswerVO answerVO,  Model model) {
 		TestVO list1 = cbtStudentService.testStart(testVO);
 		QuizboxVO list2 = cbtStudentService.testQuiz1(quizboxVO);
 		List<AnswerVO> list3 = cbtStudentService.testQuiz2(answerVO);
 		//페이징관련
 		int quizCnt = cbtStudentService.quizCnt(quizboxVO);
-		int page = 1;
-		//QuizPagination quizPagination = new QuizPagination();
-		//quizPagination.pageInfo(quizCnt1);
-		model.addAttribute("testStart", list1);
-		model.addAttribute("testQuiz1", list2);
-		model.addAttribute("testQuiz2", list3);
-		model.addAttribute("quizCnt", quizCnt);
-		model.addAttribute("page", page);
+		model.addAttribute("testStart", list1); //시험응시정보
+		model.addAttribute("testQuiz1", list2); //시험문제내용
+		model.addAttribute("testQuiz2", list3); //시험보기내용
+		model.addAttribute("quizCnt", quizCnt); //시험문제개수
+		model.addAttribute("page", page); //페이지번호 파라미터
 		return "cbt_student/testStart";
 	}
 }
