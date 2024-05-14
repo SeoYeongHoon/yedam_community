@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
 
@@ -27,15 +28,20 @@ public class RegisterController {
 		//classpath:/templates/register/register.html
 	}
 	
+	@GetMapping("/registerComplete")
+	public String registerCompletePage() {
+		return "register/registerComplete";
+	}
+	
 	@RequestMapping(value="register", method=RequestMethod.POST)
-    public String registerPost(HttpServletRequest req, UserVO userVO, RedirectAttributes rttr) throws Exception{
+    public String registerPost(HttpServletRequest req, RegisterVO registerVO, RedirectAttributes rttr) throws Exception{
         
 		System.out.println("Register 메서드 진입");
-        System.out.println("전달된 데이터 : " + userVO);
+        System.out.println("전달된 데이터 : " + registerVO);
         
-        if(userService.insertUser(userVO) > 0) {
+        if(userService.requestUser(registerVO) > 0) {
             System.out.println("데이터 저장");
-            return "redirect:/";
+            return "register/registerComplete";
         } else {
         	
         }

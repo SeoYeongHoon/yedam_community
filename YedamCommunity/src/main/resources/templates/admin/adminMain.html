@@ -3,10 +3,164 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{common/layouts/admin_layout}"
 	  layout:fragment="Admin">
+	<style>
+		tr img {
+			width: 80px;
+		    max-width: 100%;
+		    overflow: hidden;
+		    margin-right: 15px;
+		}
+	</style>
+	<script>
+		// SELECT 박스 코드
+		function filterUsers() {
+	        var filterValue = document.getElementById('userFilter').value;
+	
+	        // AJAX 요청
+	        var xhr = new XMLHttpRequest();
+	        xhr.open('GET', '/filterUsers?filter=' + filterValue, true);
+	        xhr.onreadystatechange = function() {
+	            if (xhr.readyState == 4 && xhr.status == 200) {
+	                var users = JSON.parse(xhr.responseText);
+	                var tbody = document.getElementById('userInfoTable');
+	                tbody.innerHTML = ''; // 이전 내용 지우기
+	
+	                users.forEach(user => {
+	                    var tr = document.createElement('tr');
+                      
+                      	var makeInputTd = document.createElement('td');
+	                    var tdCheckBox = document.createElement('input');
+	                    tdCheckBox.setAttribute('type', 'checkbox');
+	                    tdCheckBox.setAttribute('name', 'checkItem');
+	                    tdCheckBox.onclick = function() {
+	            			checkAll(this);
+	                    }
+	                    makeInputTd.appendChild(tdCheckBox);
+	                    tr.appendChild(makeInputTd);
+	                    
+	                    var tdUserId = document.createElement('td');
+	                    tdUserId.textContent = user.registerId;
+	                    tr.appendChild(tdUserId);
+	
+	                    /* var makeImgTd = document.createElement('td');
+	                    var tdImg = document.createElement('img');
+	                    tdImg.src = '/images/' + user.userImage;
+	                    makeImgTd.appendChild(tdImg);
+	                    tr.appendChild(makeImgTd); */
+	
+	                    var tdType = document.createElement('td');
+	                    tdType.textContent = user.userType;
+	                    tr.appendChild(tdType);
+	                    
+	                    var tdName = document.createElement('td');
+	                    tdName.textContent = user.name;
+	                    tr.appendChild(tdName);
+	                    
+	                    var tdTel = document.createElement('td');
+	                    tdTel.textContent = user.tel;
+	                    tr.appendChild(tdTel);
+	                    
+	                    var tdEmail = document.createElement('td');
+	                    tdEmail.textContent = user.email;
+	                    tr.appendChild(tdEmail);
+	                    
+	                    var makeBtnTd = document.createElement('td');
+	                    var tdInfoBtn = document.createElement('a');
+	                    tdInfoBtn.className = "main-btn light-btn btn-hover";
+	                    tdInfoBtn.style = "padding: 5px 10px;"
+	                    tdInfoBtn.innerText = "상세보기";
+	                    tdInfoBtn.onclick = function() {
+	                    	fetchUserDetails(user.registerId);
+	                    }
+	                    makeBtnTd.appendChild(tdInfoBtn);
+	                    tr.appendChild(makeBtnTd);
+
+	                    var makeLinkTd = document.createElement('td');
+	                    var tdApprove = document.createElement('a');
+	                    tdApprove.href = '#';
+	                    tdApprove.className = 'main-btn dark-btn btn-hover approveBtn';
+	                    tdApprove.style = 'padding: 5px 10px;';
+	                    tdApprove.innerText = '승인하기';
+	                    makeLinkTd.appendChild(tdApprove);
+	                    tr.appendChild(makeLinkTd);
+	
+	                    tbody.appendChild(tr);
+	                });
+	            }
+	        };
+	        xhr.send();
+	    }
+		
+		// 특정 유저 정보 출력
+		function fetchUserDetails(registerId) {
+	        // AJAX 요청
+	        var xhr = new XMLHttpRequest();
+	        xhr.open('GET', '/userDetails?registerId=' + registerId, true);
+	        xhr.onreadystatechange = function() {
+	            if (xhr.readyState == 4 && xhr.status == 200) {
+	                var user = JSON.parse(xhr.responseText);
+	                console.log(user);
+	                document.getElementById('userName').textContent = user.name;
+	                document.getElementById('userType').innerText = user.userType;
+	                document.getElementById('curriculumId').textContent = user.curriculumId;
+	                document.getElementById('userEmail').textContent = user.email;
+	                document.getElementById('userTel').textContent = user.tel;
+	                document.getElementById('userImage').src = '/images/' + user.userImage;
+	
+	                document.querySelector('.infoModal').style.display = 'block';
+	                
+	                // 삭제버튼
+	                document.querySelector('.delUserBtn').addEventListener('click', function() {
+	                	if (confirm('삭제하시겠습니까?')) {
+	                		var xhr = new XMLHttpRequest();
+					        xhr.open('GET', '/deleteUser?registerId=' + registerId, true);
+					        xhr.onreadystatechange = function() {
+					            if (xhr.readyState == 4 && xhr.status == 200) {
+					                var user = JSON.parse(xhr.responseText);
+					                var tbody = document.getElementById('userInfoTable');
+					
+					                document.querySelector('.infoModal').style.display = 'none';
+					                location.reload();
+					            }
+					        };
+					        xhr.send();
+
+			                alert('성공적으로 삭제되었습니다!');
+	                	} else {
+	                		return;
+	                	}
+	                	
+	                })
+	            }
+	        };
+	        xhr.send();
+	    }
+		
+		function closeInfoModal() {
+			document.querySelector('.infoModal').style.display = 'none';
+		}
+		
+		function approveRegister(registerId) {
+			var xhr = new XMLHttpRequest();
+	        xhr.open('GET', '/insertUser?registerId=' + registerId, true);
+	        xhr.onreadystatechange = function() {
+	            if (xhr.readyState == 4 && xhr.status == 200) {
+	                var user = JSON.parse(xhr.responseText);
+	                console.log(user);
+	                
+	                document.querySelector('.approveBtn').style.display = 'none';
+	                document.querySelector('.approved').style.display = 'inline-flex';
+	                
+	                
+	            }
+	        };
+	        xhr.send();
+		}
+	</script>
 	
 	<!-- 어드민페이지 내부 컨텐트 -->
 	<div id="adminContainer">
-		<h1>예담 관리자 페이지</h1>
+		<h1 class="mb-4 mt-4">예담 관리자 페이지</h1>
 		
 		<div class="tables-wrapper">
 
@@ -16,10 +170,10 @@
                   <h2 class="mb-10">회원관리</h6>
                   <div class="select-style-1" style="position: relative; margin-top: 20px; margin-bottom: 10px;">
 					<div class="select-position" style="max-width: 300px;">
-						<select name="userFilter" id="userFilter" style="padding: 10px;">
-							<option id="showAll" value="showAll">전체</option>
-							<option id="showGrad" value="showGrad">수료생</option>
-							<option id="showLearn" value="showLearn">수강생</option>
+						<select name="userFilter" id="userFilter" style="padding: 10px;" onchange="filterUsers()">
+							<option name="showAll" value="showAll">전체</option>
+							<option name="showGrad" value="showGrad">수료생</option>
+							<option name="showLearn" value="showLearn">수강생</option>
 						</select>
 					</div>
 					
@@ -29,9 +183,15 @@
                     <table class="table">
                       <thead>
                         <tr>
+	                      <th>
+	                      	<input type="checkbox" value="checkAll" onclick="checkAll(this)">
+	                      </th>
                           <th>
-                            <h6>프로필사진</h6>
+                          	<h6>No</h6>
                           </th>
+                          <!-- <th>
+                            <h6>프로필사진</h6>
+                          </th> -->
                           <th>
                             <h6>유형</h6>
                           </th>
@@ -45,41 +205,52 @@
                             <h6>이메일</h6>
                           </th>
                           <th>
+                          	<h6>상세정보</h6>
+                          </th>
+                          <th>
                             <h6>승인유무</h6>
                           </th>
                         </tr>
-                        <!-- end table row-->
                       </thead>
-                      <tbody>
-                        <tr th:each="info : ${users}">
+                      <tbody id="userInfoTable">
+                        <tr th:each="user : ${users}">
                           <td>
-                            <div class="employee-image">
-                              <img th:src="@{/images/{fileName}(fileName=${info.userImage})}" alt="">
-                            </div>
+	                        <input type="checkbox" name="checkItem">
+	                      </td>
+                          <td>
+                            <p>[[${user.registerId}]]</p>
+                          </td>
+                          <!-- <td>
+                            <img th:src="@{/images/{fileName}(fileName=${user.userImage})}" alt="">
+                          </td> -->
+                          <td>
+                            <p>[[${user.userType}]]</p>
                           </td>
                           <td>
-                            <p>[[${info.userType}]]</p>
+                            <p>[[${user.name}]]</p>
                           </td>
                           <td>
-                            <p>[[${info.name}]]</p>
+                            <p>[[${user.tel}]]</p>
                           </td>
                           <td>
-                            <p>[[${info.tel}]]</p>
+                            <p>[[${user.email}]]</p>
                           </td>
                           <td>
-                            <p>[[${info.email}]]</p>
+                            <!-- <a href="#0" class="modal_info_btn main-btn light-btn btn-hover" style="padding: 5px 10px;">더보기</a> -->
+                            <a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchUserDetails(' + ${user.registerId} + ')'">상세보기</a>
                           </td>
                           <td>
-                            <a href="#0" class="main-btn warning-btn btn-hover" style="padding: 5px 10px;">승인대기</a>
+                            <a th:onclick="'approveRegister(' + ${user.registerId} + ')'" href="#0" class="approveBtn main-btn dark-btn btn-hover" style="padding: 5px 10px;">승인하기</a>
+                            <a class="approved main-btn deactive-btn-outline btn-hover" style="display: none; padding: 5px 10px;">승인완료</a>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
                   
-                  <!-- 모달 -->
+                  <!-- 일괄등록 모달 -->
                   <div class="addModal">
-                  	<div class="add_modal_popup" style="min-width: 700px; min-height: 300px;">
+                  	<div class="add_modal_popup" style="min-width: 800px; min-height: 300px;">
                   		<div class="add_modal_title center">
                   			<h4>수강생 일괄 등록 및 받기</h4>
                   			<a href="" class="modal_close">X</a>
@@ -95,7 +266,10 @@
                   		<table class="table">
 	                      <thead>
 	                      	  <th>
-	                      	  	<h6>선택</h6>
+		                      	<input type="checkbox" value="checkAll" onclick="checkAll(this)">
+		                      </th>
+	                      	  <th>
+	                      	  	<input type="checkbox" value="checkAll" onclick="checkAll(this)">
 	                      	  </th>
 	                          <th>
 	                            <h6>과정명</h6>
@@ -107,10 +281,10 @@
 	                            <h6>다운로드</h6>
 	                          </th>
 	                      </thead>
-	                      <tbody>
+	                      <tbody id="userTable">
 	                        <tr>
 	                          <td>
-	                          	<input type="checkbox">
+	                          	<input type="checkbox" name="checkItem">
 	                          </td>
 	                          <td>
 	                            <p>JAVA 기반 웹 프레임워크 양성과정 A</p>
@@ -124,7 +298,7 @@
 	                        </tr>
 	                        <tr>
 	                          <td>
-	                          	<input type="checkbox">
+	                          	<input type="checkbox" name="checkItem">
 	                          </td>
 	                          <td>
 	                            <p>JAVA 기반 웹 프레임워크 양성과정 A</p>
@@ -138,7 +312,7 @@
 	                        </tr>
 	                        <tr>
 	                          <td>
-	                          	<input type="checkbox">
+	                          	<input type="checkbox" name="checkItem">
 	                          </td>
 	                          <td>
 	                            <p>JAVA 기반 웹 프레임워크 양성과정 A</p>
@@ -158,10 +332,42 @@
                   	</div>
                   </div>
                   
-                </div>
+                  <!-- 상세정보 모달 -->
+                  <div class="infoModal">
+			        <div class="info_modal_popup" style="min-width: 700px; min-height: 300px;">
+			            <div class="add_modal_title center">
+			                <h4>상세정보</h4>
+			                <a href="#0" class="info_modal_close" onclick="closeInfoModal()">X</a>
+			            </div>
+			
+			            <div id="info_profile" class="info_profile_content">
+			            	<div class="info_image_wrapper">
+			                	<img class="info_image" id="userImage" src="">
+			            	</div>
+			                <div class="">
+			                	<p class="info_type">이름</p>
+			                	<span class="info_detail" id="userName"></span>
+				                <p class="info_type">소속</p>
+				                <span class="info_detail" id="userType"></span>
+				                <p class="info_type">수강 정보</p>
+				                <span class="info_detail" id="curriculumId"></span>
+				                <!-- <p class="info_type">수강 기간: <span id="curriculumDate"></span></p> -->
+				                <p class="info_type">연락처</p>
+				                <span class="info_detail" id="userTel"></span>
+				                <p class="info_type">이메일</p>
+				                <span class="info_detail" id="userEmail"></span>
+			                </div>
+			            </div>
+			
+			            <div class="download_all">
+			                <a href="#0" class="main-btn dark-btn btn-hover" style="padding: 7px 5px;">승인하기</a>
+			                <a href="#0" class="delUserBtn main-btn danger-btn btn-hover" style="padding: 7px 5px;">회원삭제</a>
+			            </div>
+			        </div>
+			      </div>
                 
                 <!-- 페이지네이션 -->
-                <div class="center">
+                <!-- <div class="center">
                 	<div class="adminPaging">
                 		<th:block th:if="${page.prev}">
                 			<a th:href="@{/adminMain(page=${page.starPage - 1})}">&laquo;</a>
@@ -173,27 +379,79 @@
 							<a th:href="@{/adminMain(page=${page.endPage + 1})}">&raquo;</a>
 						</th:block>
                 	</div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
 	</div>
 	
 	<script>
-	const addModal = document.querySelector('.addModal');
-	const modalOpen = document.querySelector('.modal_btn');
-	const modalClose = document.querySelector('.modal_close');
-
-	//열기 버튼을 눌렀을 때 모달팝업이 열림
-	modalOpen.addEventListener('click',function(){
-	  	//'on' class 추가
-	    addModal.classList.add('on');
-	});
-	//닫기 버튼을 눌렀을 때 모달팝업이 닫힘
-	modalClose.addEventListener('click',function(){
-	    //'on' class 제거
-	    addModal.classList.remove('on');
-	});
 	
+		/* 일괄등록 모달 코드 */
+		const addModal = document.querySelector('.addModal');
+		const modalOpen = document.querySelector('.modal_btn');
+		const modalClose = document.querySelector('.modal_close');
+	
+		//열기 버튼을 눌렀을 때 모달팝업이 열림
+		modalOpen.addEventListener('click',function(){
+		    addModal.classList.add('on');
+		});
+		//닫기 버튼을 눌렀을 때 모달팝업이 닫힘
+		modalClose.addEventListener('click',function(){
+		    addModal.classList.remove('on');
+		    infoModal.classList.remove('on');
+		});
+		
+		// 모달창 체크박스 전체체크
+		function checkAll(checkAll) {
+			const checkBoxes = document.getElementsByName('checkItem');
+			
+			checkBoxes.forEach((checkBox) => {
+				checkBox.checked = checkAll.checked;
+			})
+		}
+		
+		// 유저 삭제
+		/* document.querySelector('.delUserBtn').addEventListener('click', function() {
+			if (confirm('삭제하시겠습니까?')) {
+				
+				function deleteUser(userId) {
+			        // AJAX 요청
+			        var xhr = new XMLHttpRequest();
+			        xhr.open('GET', '/deleteUser?userId=' + userId, true);
+			        xhr.onreadystatechange = function() {
+			            if (xhr.readyState == 4 && xhr.status == 200) {
+			                var user = JSON.parse(xhr.responseText);
+			                console.log(user);
+			                document.getElementById('userName').textContent = user.name;
+			                document.getElementById('userType').innerText = user.userType;
+			                document.getElementById('curriculumId').textContent = user.curriculumId;
+			                document.getElementById('userEmail').textContent = user.email;
+			                document.getElementById('userTel').textContent = user.tel;
+			                document.getElementById('userImage').src = '/images/' + user.userImage;
+			
+			                document.querySelector('.infoModal').style.display = 'block';
+			            }
+			        };
+			        xhr.send();
+			    }
+				alert('삭제되었습니다!');
+				document.querySelector('.infoModal').style.display = 'none';
+			}
+			
+		}); */
+		
+		/* function deleteUser() {
+	        // AJAX 요청
+	        var xhr = new XMLHttpRequest();
+	        xhr.open('GET', '/deleteUser?userId=' + userId, true);
+	        xhr.onreadystatechange = function() {
+	            if (xhr.readyState == 4 && xhr.status == 200) {
+	                var user = JSON.parse(xhr.responseText);
+	                console.log(user);
+	            }
+	        };
+	        xhr.send();
+	    } */
 	</script>
 </html>
