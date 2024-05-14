@@ -5,14 +5,16 @@
 	layout:fragment="Admin">
 <head>
 <meta charset="UTF-8">
-<title>homework_detail</title>
+<title>homeworkInfo</title>
 </head>
 <body>
-	<div th:each="class, idxStat : ${class}">
+	<div th:each="homeworkInfo, idxStat : ${homeworkInfo}">
 		<div style="border: 1px solid black; width: 1200px; height: 600px;">
 			<hr>
-			<h1>과제</h1>
+			<h1>[[${homeworkInfo.homeworkTitle}]]</h1>
 			<hr>
+			<h3>[[${homeworkInfo.homeworkContent}]]</h3>
+			<p>[[${#dates.format(homeworkInfo.homeworkDate,'yyyy년MM월dd일')}]]</p>
 		</div>
 		<div style="border: 1px solid black; width: 1200px; height: 200px;">
 			댓글</div>

@@ -77,7 +77,8 @@ li {
 			<form method="post" name="InsertForm" th:object="${homeworkVO}"
 				enctype="multipart/form-data">
 				<div class="row">
-					<div class="select-position">
+
+					<!-- <div class="select-position">
 						<select th:field="*{curriculumId}">
 							<option value="1">1강의실</option>
 							<option value="2">2강의실</option>
@@ -85,7 +86,7 @@ li {
 							<option value="4">4강의실</option>
 							<option value="5">5강의실</option>
 						</select>
-					</div>
+					</div> -->
 					<div>
 						<select th:field="*{subjectId}">
 							<option value="1">자바</option>
@@ -236,12 +237,12 @@ li {
 				<!-- 모달 푸터 -->
 				<div class="modal-footer">
 					<button id='checkBtn' type="button" class="btn btn-primary"
-						onclick="location.href='homeworkList'">확인</button>
+						data-dismiss="modal">확인</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Error 모달창 -->
 	<div id="modalTitle" class="modal fade">
 		<div class="modal-dialog">
@@ -266,7 +267,7 @@ li {
 			</div>
 		</div>
 	</div>
-	
+
 	<script>
 		$('#insertBtn').on('click', ajax);
 

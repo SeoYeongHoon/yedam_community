@@ -7,8 +7,11 @@ import com.yedam.app.yedam_homework.service.HomeWorkVO;
 public interface HomeWorkMapper {
 
 	// 과제전체조회
-	public List<HomeWorkVO> hselectAll();
+	public List<HomeWorkVO> selectHomeworkAll();
 	
 	// 과제등록
 	public int insertHomework(HomeWorkVO homeworkVO);
+	
+	// 과제 상세 조회
+	public HomeWorkVO selectHomework(HomeWorkVO homeworkVO);
 }
