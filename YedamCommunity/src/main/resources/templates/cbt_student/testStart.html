@@ -28,7 +28,7 @@
 }
 </style>
 <div class="row">
-	<!-- 상단부분 -->
+	<!-- 상단1 -->
 	<div class="card-style col-lg-12 tstart1">
 		<h1>[[${testStart.testName}]]</h1>
 		<div>
@@ -40,27 +40,7 @@
 			<p class="tstart2">홍길동</p>
 		</div>
 	</div>
-	<!-- 중간부분 좌측사이드 -->
-	<div id="tstart4" class="card-style col-lg-2 tstart2" style="height: 800px">
-		<h3 style="text-align: center; background-color: #A6A6A6; color: white">답안표기란</h3>
-		<div class="tstart3" th:each="num, idx : ${#numbers.sequence(1,quizCnt)}">
-			<h3 class="tstart2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
-			<div class="tstart2">①</div>
-			<div class="tstart2">②</div>
-			<div class="tstart2">③</div>
-			<div class="tstart2">④</div>
-			<div class="tstart2">⑤</div>
-		</div>
-	</div>
-	<!-- 중간부분 우측사이드 -->
-	<div class="card-style col-lg-10" style="height: 800px">
-		<h1>[[${testQuiz1.quizId}]]. [[${testQuiz1.quizContent}]]</h1>
-		<br> <br>
-		<ul th:each="list2 : ${testQuiz2}">
-			<li>[[${list2.exampleNum}]]. [[${list2.textContent}]]</li>
-		</ul>
-	</div>
-	<!-- 하단부분 -->
+	<!-- 상단2 -->
 	<div class="card-style col-lg-12">
 		<div style="text-align: right">
 			<div class="tstart5" th:if="${page > 1}">
@@ -81,6 +61,26 @@
 				<a class="main-btn dark-btn-outline square-btn btn-hover">제출</a>
 			</div>
 		</div>
+	</div>
+	<!-- 좌측 -->
+	<div id="tstart4" class="card-style col-lg-2 tstart2" style="height: 800px">
+		<h3 style="text-align: center; background-color: #A6A6A6; color: white">답안표기란</h3>
+		<div class="tstart3" th:each="num, idx : ${#numbers.sequence(1,quizCnt)}">
+			<h3 class="tstart2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
+			<div class="tstart2">①</div>
+			<div class="tstart2">②</div>
+			<div class="tstart2">③</div>
+			<div class="tstart2">④</div>
+			<div class="tstart2">⑤</div>
+		</div>
+	</div>
+	<!-- 우측 -->
+	<div class="card-style col-lg-10" style="height: 800px">
+		<h1>[[${page}]]. [[${testQuiz1.quizContent}]]</h1>
+		<br> <br>
+		<ul th:each="list2 : ${testQuiz2}">
+			<li>[[${list2.exampleNum}]]. [[${list2.textContent}]]</li>
+		</ul>
 	</div>
 </div>
 </html>
