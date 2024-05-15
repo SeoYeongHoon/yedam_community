@@ -12,7 +12,7 @@ public interface ExamMapper {
 	// 문제 저장소에 문제 출력
 	public List<TeacherVO> selectQuizAll();
 	// 문제 저장소에 지문 출력
-	public List<TeacherVO> selectAnswerAll();
+	public List<TeacherVO> selectAnswerAll(TeacherVO teacherVO);
 	// 과목명 출력
 	public List<TeacherVO> selectSubjectAll();	
 	

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface ExamService {
 	// 전체조회
-	public List<TeacherVO> allList();
+	public List<TeacherVO> allList(TeacherVO teacherVO);
 	
 	// 시험목록조회
 	public List<TeacherVO> testList();
@@ -17,7 +17,7 @@ public interface ExamService {
 	public List<TeacherVO> quizList();
 	
 	// 문제저장소에 지문출력
-	public List<TeacherVO> answerList();
+	public List<TeacherVO> answerList(TeacherVO teacherVO);
 	
 	// 문제 단건조회
 	public TeacherVO quizInfo(TeacherVO teacherVO);

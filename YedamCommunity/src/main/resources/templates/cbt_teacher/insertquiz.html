@@ -3,6 +3,12 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>	
+<style>
+#shortAnswer {
+}
+</style>	
 <form name="" th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
 	<!-- ======= 과목설정 select ======= -->
 	<div class="card-style mb-30">
@@ -22,16 +28,19 @@
 	<!-- ======= 문제 유형 radio ======= -->
 		<h6 class="mb-25">문제 유형</h6>
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-			<label class="form-check-label" for="radio-1"> 객관식 </label>
+			<input class="form-check-input chk" type="radio" value="gek" id="radio-1" name="qType" checked />
+			<label class="form-check-label" for="radio-1">객관식</label>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style radio-warning mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-4" />
-			<label class="form-check-label" for="radio-4"> 주관식 </label>
+			<input class="form-check-input chk" type="radio" value="ju" id="radio-2" name="qType"/>
+			<label class="form-check-label" for="radio-2"> 주관식 </label>
 		</div>
 		<!-- end radio -->
 	<!-- ======= 문제 유형 radio style end ======= -->
+	
+	<!-- 객관식 문제 입력 영역 ----------------------------------------------------->
+	<div id="multiple">
 	<!-- ======= 시험문제 입력 style start ======= -->
 		<h6 class="mb-25">시험 문제</h6>
 		<div class="input-style-1">
@@ -43,35 +52,35 @@
 		<h6 class="mb-25">정답 체크</h6>
 		<div class="form-check radio-style mb-20">
 			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" value="1" >
+                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="1" >
                       1.</label>
 			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
 			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" value="2" >
+                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="2" >
                       2.</label>
 			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent2}"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
 			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" value="3" >
+                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="3" >
                       3.</label>
 			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent3}"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
 			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" value="4" >
+                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="4" >
                       4.</label>
 			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent4}"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
 			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" value="5" >
+                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="5" >
                       5.</label>
 			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent5}"/>
 		</div>
@@ -84,6 +93,38 @@
 		</div>
 		<!-- end textarea -->
 	<!-- ======= 문제 해설 style end ======= -->
+	</div>
+	<!-- 객관식 문제 입력 영역 종료-------------------------------------------------->
+	
+	<!-- 주관식 문제 입력 영역 ----------------------------------------------------->
+	<div id="shortAnswer">
+	<!-- ======= 시험문제 입력 style start ======= -->
+		<h6 class="mb-25">시험 문제</h6>
+		<div class="input-style-1">
+			<textarea placeholder="문제를 입력하세요." rows="8" cols="100" th:field="*{quizContent}"></textarea>
+		</div>
+		<!-- end textarea -->
+	<!-- ======= 시험문제 입력 style end ======= -->
+	<!-- ======= 정답 지문 입력 radio style start ======= -->
+		<h6 class="mb-25">정답 체크</h6>
+		<div class="form-check radio-style mb-20">
+			<input class="form-check-input" type="radio" value="" id="radio-1" />
+                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="1" >
+                      1.</label>
+			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}"/>
+		</div>
+		<!-- end radio -->
+		
+	<!-- ======= 정답 지문 입력 radio style end ======= -->
+	<!-- ======= 문제 해설 style start ======= -->
+		<h6 class="mb-25">문제 해설</h6>
+		<div class="input-style-1">
+			<textarea placeholder="해설을 입력하세요." rows="5" th:field="*{quizSolution}"></textarea>
+		</div>
+		<!-- end textarea -->
+	<!-- ======= 문제 해설 style end ======= -->	
+	</div>	
+	<!-- 주관식 문제 입력 영영 종료 ------------------------------------------------->	
 		<ul class="buttons-group">
 			<li>
 				<button type="submit" class="main-btn primary-btn square-btn btn-hover">등록</button>
@@ -91,7 +132,26 @@
 			<li>
 	        	<button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
 	        </li>
-		</ul>	
+		</ul>
 	</div>
 </form>
+
+<script>
+const multi = document.getElementById("multiple");
+const shor = document.getElementById("shortAnswer");
+
+var checkVal = $('input[name=qType]:checked').val(); // 데이터 확인용
+
+
+$('#radio-1').change(function(e){
+	multi.style.display = "block";
+	shor.style.display = "none";	
+})
+$('#radio-2').change(function(e){
+	multi.style.display = "none";	
+	shor.style.display = "block";	
+})
+
+
+</script>
 </html>

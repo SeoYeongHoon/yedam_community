@@ -44,11 +44,13 @@ public class ExamController {
 	
 	// 문제 저장소에 여러가지 값들 출력
 	@GetMapping("quizlist")
-	public String quizList(Model model) {
+	public String quizList(TeacherVO teacherVO, Model model) {
 		List<TeacherVO> list1 = examService.quizList();
-		List<TeacherVO> list2 = examService.answerList();
+		List<TeacherVO> list2 = examService.answerList(teacherVO);
 		List<TeacherVO> list3 = examService.subjectList();
 		
+		TeacherVO findVO = examService.quizInfo(teacherVO);
+		model.addAttribute("quizInfo",findVO);
 		
 		Gson gson = new GsonBuilder().create();
 		String json1 = gson.toJson(list1);	
@@ -68,10 +70,14 @@ public class ExamController {
 
 	// 문제 단건조회를 문제 세부보기 모달창으로 적용시켜야 한다
 	@GetMapping("quizinfo")
-	public String quizInfo(TeacherVO teacherVO, Model model) {
-		TeacherVO findVO = examService.quizInfo(teacherVO);
-		model.addAttribute("quizInfo",findVO);
-		return "cbt_teacher/quizinfo";
+	@ResponseBody
+	public String quizInfo(TeacherVO teacherVO){
+		TeacherVO qInfo = examService.quizInfo(teacherVO);
+		
+		Gson gson = new GsonBuilder().create();
+		String json = gson.toJson(qInfo);	
+		
+		return json;
 	}
 	
 	// 과목 추가 - 처리
