@@ -10,7 +10,8 @@ public class QuizboxVO { //선택된문제 테이블
 	private int subjectId; //과목번호
 	private int testId; //시험출제번호
 	private int quizScore; //배점
-	private int page; //페이지번호
+	private int page; //문제페이지번호
+	private int quizCnt; //문제개수
 	public int getQuizboxId() {
 		return quizboxId;
 	}
@@ -52,6 +53,12 @@ public class QuizboxVO { //선택된문제 테이블
 	}
 	public void setPage(int page) {
 		this.page = page;
+	}
+	public int getQuizCnt() {
+		return quizCnt;
+	}
+	public void setQuizCnt(int quizCnt) {
+		this.quizCnt = quizCnt;
 	}
 	
 	
