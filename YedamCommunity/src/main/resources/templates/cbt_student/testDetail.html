@@ -4,7 +4,9 @@
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
 <style>
-
+.tdetail1 {
+	display: inline-block;
+}
 </style>
 <div>
 	<div class="card-style"
@@ -40,9 +42,9 @@
 		</table>
 		<br> <br>
 		<div style="text-align: center">
-			<button class="main-btn dark-btn-outline square-btn btn-hover"
+			<button class="tdetail1 main-btn dark-btn-outline square-btn btn-hover"
 				th:onclick="|location.href='@{/testList}'|">목록</button>
-			<form action="testStart" method="post">
+			<form class="tdetail1" action="testStart" method="post">
 				<input type="hidden" name="page" th:value="1">
 				<input type="hidden" name="quizCnt" th:value="${quizCnt}">
 				<input type="hidden" name="testId" th:value="${testId}">
@@ -53,6 +55,7 @@
 				<div th:each="rn : ${randRn}">				
 					<input type="hidden" name="randRn" th:value="${rn}">
 				</div>
+				
 				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">시작</button>
 			</form>
 		</div>

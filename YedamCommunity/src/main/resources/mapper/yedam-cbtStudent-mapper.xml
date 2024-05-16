@@ -17,6 +17,20 @@
 		WHERE b.user_id = 7
 		ORDER BY a.test_id
 	</select>
+	<!-- 시험 피드백 조회 -->
+	<select id="selectTestFeedback" resultType="ExamResultVO">
+		SELECT b.result_id
+		       ,b.result_score
+		       ,b.feedback
+		       ,b.is_reexam
+		       ,b.subject_id
+		       ,b.pass_score
+		       ,b.test_target_id
+		       ,a.test_id
+		FROM test_targets a JOIN exam_results b ON(a.test_target_id = b.test_target_id)
+		WHERE b.user_id = 7
+		ORDER BY a.test_id
+	</select>
 	<!-- 시험상세정보 조회 -->
 	<select id="selectTestDetail" resultType="TestVO">
 		SELECT a.test_id
