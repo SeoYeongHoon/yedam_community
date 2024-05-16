@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
 import com.yedam.app.yedam_examstudent.service.CbtStudentService;
+import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
@@ -22,9 +23,11 @@ public class CbtStudentController {
 	
 	//시험전체목록 조회
 	@GetMapping("testList")
-	public String testList(TestVO testVO, Model model) {
-		List<TestVO> list = cbtStudentService.testListAll(); //시험전체목록
-		model.addAttribute("testList", list);
+	public String testList(TestVO testVO, ExamResultVO examResultVO, Model model) {
+		List<TestVO> list1 = cbtStudentService.testListAll();
+		ExamResultVO list2 = cbtStudentService.testFeedback(examResultVO);
+		model.addAttribute("testList", list1); //시험전체목록
+		model.addAttribute("testFeedback", list2); //시험피드백
 		return "cbt_student/testMain";
 	}
 	
