@@ -63,9 +63,6 @@ li {
 }
 </style>
 <!-- <p th:text="${subjectList}"></p>  -->
-<th:block th:each="answ, idxStat : ${answerList}">
-	<p></p>							
-</th:block>
 <div>
 	<button type="button" id="subBtn" class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
@@ -86,7 +83,7 @@ li {
 		</li>
 		<li><a href="quizinsert"
 			class="main-btn primary-btn-light btn-hover">새문제</a></li>
-		<li><a href="#0" class="main-btn primary-btn-light btn-hover">문제선택</a>
+		<li><a href="#0" class="main-btn primary-btn-light btn-hover" id="quizSelect">문제선택</a>
 		</li>
 	</ul>
 </div>
@@ -95,28 +92,9 @@ li {
 
 <button id="updateBtn">아작스테스트</button>
 
-<th:block th:each="subjectInfo, idxStat : ${subjectList}">
-	<p></p>
-</th:block>
-
 <!-- 문제 상세보기 모달창 -->
 <div id="modalWrap" class="modal-overlay">
-	<!-- <div id="modalBody">
-		<div class="close-area">X</div>
-			<label>문제</label><input type="text" placeholder="문제가 나와야 합니다."></input>
-		<br> <br>
-		<div>
-			<label>보기</label><input type="text" placeholder="보기가 나와야 합니다."></input>
-		</div>
-		<br> <br>
-		<div>
-			<label>해설</label><input type="text" placeholder="해설이 나와야 합니다."></input>
-		</div>
-		<div style="text-align: center;">
-			<button id="closeBtn" class="main-btn primary-btn btn-hover"
-				type="button" onclick="location.href='quizlist'">확인</button>
-		</div>
-	</div> -->
+	
 </div> 
 <!-- 문제 상세보기 모달창 end-->
 
@@ -159,15 +137,19 @@ li {
 var subName = ''; // 탬플릿문법안에 들어가있는 변수
 var qContent = '';
 var qId, sId = 0;
-var qContentInfo = '';
 var solution = '';
-var answer = '';
-var subjectId = '0';
+var answer = [];
 var sName = ''; // 필터링에 사용될 과목명
+var textContent1 = '';
+var textContent2 = '';
+var textContent3 = '';
+var textContent4 = '';
+var textContent5 = '';
 
 //퀴즈 문제 전체를 불러오는 AJAX
 function quizContentList(sName){
 	$('#quizBox').html('');
+	// 문제 전체 조회 ajax
 	$.ajax({
 		url : "quizlist",
 		type : "post", 
@@ -191,7 +173,7 @@ function quizContentList(sName){
 					<div style="color:gray;" class="col-4 box" id="${sId}">
 						<div class="card-style-3 mb-30 box2">
 							<div>
-							<label>문제선택</label><input type="checkbox"></input>
+							<label>문제선택</label><input type="checkbox" class="quizChk"></input>
 							<p>과목명 : ${subName}</p>
 							</div>
 							<div class="card-content">
@@ -206,10 +188,20 @@ function quizContentList(sName){
 				rowTag.append(temp);
 			}); // forEach 종료
 			
-			// test 영역 시작
+			$('#quizSelect').on('click', function(e){
+				console.log('문제선택 버튼 누름');
+				
+				if($('.quizChk').is(":checked") == true){
+					console.log($('.quizChk').is(":checked"));
+					$(".box2").attr("style", "border-color:blue;")
+				}
+			})
+			
+			// 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax)
 			$('.box').on('click', '.infoBtn', function(qId) {
 				$("#modalWrap").empty(); // 최초로 모달창 비워주는 기능 필요
 				qId = $(this).val()
+				// 문제,해설 불러오기
 				$.ajax({
 					url : "quizinfo",
 					type : "post", 
@@ -222,14 +214,19 @@ function quizContentList(sName){
 							let qInfo = `
 								<div id="modalBody">
 									<div class="close-area">X</div>
-										<label>문제</label><input type="text">${qContent}</input>
-									<br> <br>
+										<h4>문제</h4><input type="text">${qContent}</input>
+									<br><br><br>
 									<div>
-										<label>보기</label><input type="text">${qId}</input>
+										<h4>보기</h4>
+										<input type="text" id="textContent1">${textContent1}</input>
+										<input type="text" id="textContent2">${textContent2}</input>
+										<input type="text" id="textContent3">${textContent3}</input>
+										<input type="text" id="textContent4">${textContent4}</input>
+										<input type="text" id="textContent5">${textContent5}</input>
 									</div>
-									<br> <br>
+									<br><br><br>
 									<div>
-										<label>해설</label><input type="text">${solution}</input>
+										<h4>해설</h4><input type="text">${solution}</input>
 									</div>
 									<div style="text-align: center;">
 										<button id="closeBtn" class="main-btn primary-btn btn-hover"
@@ -246,14 +243,33 @@ function quizContentList(sName){
 					}
 				}); // end of ajax
 				
-			})// end of func
+				// 지문 불러오기
+				$.ajax({
+					url : "textcontent",
+					type : "post", 
+					data : {qId : qId},
+							
+					success : function(data){
+						data.forEach((item,idx) => {
+							answer.push(item.textContent);
+						})
+						textContent1 = answer[0];
+						textContent2 = answer[1];
+						textContent3 = answer[2];
+						textContent4 = answer[3];
+						textContent5 = answer[4];
+					},
+					error : function(err){
+						console.log('에러입니다');
+					}
+				}); // 지문 불러오기 ajax 종료
+				answer = [];
+			})// 단건조회 불러오는(자세히보기 버튼) 함수 종료
 			
-				
 				/* $('.box').on('click', '.infoBtn', function(e) {
 					console.log(e.target.id);
 				}) */
 				
-			// test 영역 종료
 			$('#quizBox').on('click', '.infoBtn', function (e) {
 				modal.style.display = "flex"; // 버튼 클릭시 모달 보임
 			});
@@ -262,7 +278,7 @@ function quizContentList(sName){
 		error : function(){
 			alert('실패');
 		}
-	}); // ajax 종료 	
+	}); // 문제 전체 조회 ajax 종료 	
 }; // function quizContentList() 종료
 
 $('#updateBtn').on('click', function quizInfo(qId){
@@ -351,7 +367,7 @@ window.addEventListener("keyup", e => {
     	modal.style.display = "none"
     }  
 });
-
+// 모달창 기능 종료
 
 // 과목명 필터링해서 문제 출력
 $('#subject').on('change', function(){
