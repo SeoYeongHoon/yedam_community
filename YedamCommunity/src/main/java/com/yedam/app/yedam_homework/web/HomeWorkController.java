@@ -65,17 +65,17 @@ public class HomeWorkController {
 	@PostMapping("insertReply")
 	public String insertReply(HomeWorkVO homeworkVO, Model model) {
 		homeworkReplyService.replyInsert(homeworkVO);
-		return "redirect:homeworkInfo";
+		return "redirect:homeworkInfo?homeworkId="+homeworkVO.getHomeworkId();
 	}
 
 	// 과제상세페이지
 	@GetMapping("homeworkInfo")
 	public String homeworkInfo(HomeWorkVO homeworkVO, Model model) {
+		
 		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
-		HomeWorkVO reply = homeworkReplyService.replyInfo(homeworkVO); 
-		System.out.println(reply.toString());
+		List<HomeWorkVO> replyList = homeworkReplyService.replyInfo(findVO); 
 		model.addAttribute("homeworkInfoList", findVO);
-		model.addAttribute("replyList", reply); 
+		model.addAttribute("replyList", replyList); 
 		
 		return "homework/homeworkInfo";
 	}
