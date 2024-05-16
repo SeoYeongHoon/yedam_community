@@ -7,22 +7,40 @@
 
 	<!-- 과제 전체조회 -->
 	<select id="selectHomeworkAll" resultType="HomeWorkVO">
-		SELECT  c.class_id,
-				h.homework_id,
-				h.homework_content,
-				h.homework_date,
-				h.homework_title,
-				h.curriculum_id,
-				s.subject_id,
-        		s.subject_name
-		FROM homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
-               			 JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
-		WHERE h.subject_id = s.subject_id
+		SELECT c.class_id,
+		h.homework_id,
+		h.homework_content,
+		h.homework_date,
+		h.homework_title,
+		h.curriculum_id,
+		s.subject_id,
+		s.subject_name
+		FROM homeworks h JOIN
+		curriculum c ON (h.curriculum_id =
+		c.curriculum_id)
+		JOIN subjects s ON
+		(h.curriculum_id = s.curriculum_id)
+		WHERE h.subject_id =
+		s.subject_id
 		ORDER BY homework_id
 	</select>
 
 	<!-- 상세조회 -->
 	<select id="selectHomework" resultType="HomeWorkVO">
+		<!-- SELECT  h.homework_id,
+		h.homework_content,
+		h.homework_date,
+		h.homework_title,
+		h.curriculum_id,
+		h.subject_id,
+        r.reply_content,
+        r.reply_date,
+        r.reply_writer,
+        r.homework_target_id
+		FROM homeworks h JOIN homework_targets t ON (h.homework_id = t.homework_id)
+                         JOIN replies r ON (t.homework_target_id = r.homework_target_id)
+		WHERE h.homework_id = #{homeworkId} -->
+		
 		SELECT homework_id,
 		homework_content,
 		homework_date,
@@ -63,4 +81,30 @@
 		)
 	</insert>
 
+	<!-- 과제 대상자 등록 -->
+	<insert id="insertHomeworkTarget" parameterType="HomeWorkTargetVO">
+		INSERT INTO
+		homework_targets
+		(
+		homework_target_id,
+		homework_id,
+		curriculum_id
+		)
+		VALUES
+		(
+		homework_target_id_seq.nextval,
+		#{homeworkId},
+		#{curriculumId}
+		)
+	</insert>
+	
+	<!-- 과제 대상자 조회 -->
+	<select id="selectHomeworktarget" resultType="HomeWorkTargetVO">
+		SELECT homework_id,
+			curriculum_id
+		FROM homeworks
+		WHERE homework_id = ( SELECT max(homework_id)
+								FROM homeworks
+								WHERE curriculum_id = #{curriculumId})
+	</select>
 </mapper>

@@ -70,9 +70,7 @@
 			<div class="title mb-30">
 				<h6>과제 등록</h6>
 			</div>
-
-
-
+			<!-- 입력시작 -->
 			<form method="post" name="InsertForm" th:object="${homeworkVO}"
 				enctype="multipart/form-data">
 				<div class="row">
@@ -108,23 +106,23 @@
 
 					<!-- 제출기한 -->
 					<div class="col-5">
-							<div id="date" class="card-style mb-30">
-								<h6 class="mb-25">
-									<font style="vertical-align: inherit;"><font
-										style="vertical-align: inherit;">제출 기한 설정</font></font>
-								</h6>
-								<div class="input-style-1">
-									<label><font style="vertical-align: inherit;"><font
-											style="vertical-align: inherit;">날짜</font></font></label> <input type="date"
-										th:field="*{homeworkDate}">
-								</div>
+						<div id="date" class="card-style mb-30">
+							<h6 class="mb-25">
+								<font style="vertical-align: inherit;"><font
+									style="vertical-align: inherit;">제출 기한 설정</font></font>
+							</h6>
+							<div class="input-style-1">
+								<label><font style="vertical-align: inherit;"><font
+										style="vertical-align: inherit;">날짜</font></font></label> <input type="date"
+									th:field="*{homeworkDate}">
 							</div>
-							<!-- 파일 업로드 -->
-							<div id="file" style="padding: 50px;" class="card-style mb-30">
-								<input type="file" name="uploadFiles" multiple>
-								<button id="saveBtn" type="button"
-									class="main-btn primary-btn btn-hover">저장</button>
-							</div>
+						</div>
+						<!-- 파일 업로드 -->
+						<div id="file" style="padding: 50px;" class="card-style mb-30">
+							<input type="file" name="uploadFiles" multiple>
+							<button id="saveBtn" type="button"
+								class="main-btn primary-btn btn-hover">저장</button>
+						</div>
 					</div>
 					<!-- 등록 취소버튼 -->
 					<div id="btnWrap" class="col-12" style="text-align: center;">
@@ -138,7 +136,9 @@
 		</div>
 		<!-- end card -->
 	</div>
+	<!-- 입력 끝  -->
 
+	<!-- 모달창 시작 -->
 	<!-- 등록완료 모달창 -->
 	<div id="modal" class="modal fade">
 		<div class="modal-dialog">
@@ -263,7 +263,9 @@
 			</div>
 		</div>
 	</div>
-
+	<!-- 모달창 끝 -->
+	
+	
 	<script>
 		$('#insertBtn').on('click', ajax);
 
@@ -287,6 +289,7 @@
 				type : "POST",
 				data : formValues,
 				success : function(json) {
+					console.log(json);
 					$('#modal').modal('show');
 	
 				},
