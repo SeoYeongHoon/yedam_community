@@ -15,5 +15,11 @@ public interface HomeWorkService {
 	
 	// 과목명 조회
 	public List<HomeWorkVO> subjectNameList(HomeWorkVO homeworkVO);
+	
+	// 과제 대상자 등록
+	public int homeworkTargetInsert(HomeWorkTargetVO homeworktargetVO);
+	
+	//과제 대상자 조회
+	public HomeWorkTargetVO homeworktargetList(HomeWorkVO homeworkVO);
 
 }

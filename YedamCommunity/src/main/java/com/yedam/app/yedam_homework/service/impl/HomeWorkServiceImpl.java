@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_homework.mapper.HomeWorkMapper;
-import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_homework.service.HomeWorkService;
+import com.yedam.app.yedam_homework.service.HomeWorkTargetVO;
+import com.yedam.app.yedam_homework.service.HomeWorkVO;
 
 @Service
 public class HomeWorkServiceImpl implements HomeWorkService{
@@ -37,6 +38,16 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	@Override
 	public List<HomeWorkVO> subjectNameList(HomeWorkVO homeworkVO) {
 		return homeworkMapper.selectSubjectName(homeworkVO);
+	}
+	//과제 대상자 등록
+	@Override
+	public int homeworkTargetInsert(HomeWorkTargetVO homeworktargetVO) {
+		return homeworkMapper.insertHomeworkTarget(homeworktargetVO);
+	}
+	//과제 대상자 조회
+	@Override
+	public HomeWorkTargetVO homeworktargetList(HomeWorkVO homeworkVO) {
+		return homeworkMapper.selectHomeworktarget(homeworkVO);
 	}
 
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.yedam.app.yedam_homework.mapper.HomeWorkReplyMapper">
+	<!-- <insert id="insertReply" parameterType="HomeWorkVO">
+		INSERT INTO replies
+			(reply_id,
+			reply_content,
+			reply_date,
+			update_date,
+			reply_writer,
+			homework_target_id)
+		VALUES
+			(reply_id_seq.nextval,
+			#{replyContent},
+			#{replyDate},
+			#{updateDate},
+			#{replyWriter},
+			#{homeworkTargetId}
+			)
+	</insert> -->
+	<!-- 댓글등록 -->
+	<insert id="insertReply" parameterType="HomeWorkVO">
+		INSERT INTO replies
+			(reply_id,
+			reply_content)
+		VALUES
+			(reply_id_seq.nextval,
+			#{replyContent}
+			)
+	</insert>
+
+	<!-- 댓글 조회 -->
+	<select id="selectReply" resultType="HomeWorkVO">
+	SELECT  r.homework_target_id,
+        r.reply_content,
+        r.reply_date,
+        r.update_date,
+        r.reply_writer
+	FROM homeworks h JOIN homework_targets t ON (h.homework_id = t.homework_id)
+                         JOIN replies r ON (t.homework_target_id = r.homework_target_id)
+	WHERE h.homework_id =#{homeworkId}
+	</select>
+</mapper>

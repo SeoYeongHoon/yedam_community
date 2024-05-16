@@ -22,4 +22,11 @@ public class HomeWorkVO {
 	// 과목
 	private String subjectName;
 	
+	//댓글
+	private int replyId;
+	private String replyContent;
+	private Date replyDate;
+	private Date updateDate;
+	private String replyWriter;
+	private int homeworkTargetId;
 }
