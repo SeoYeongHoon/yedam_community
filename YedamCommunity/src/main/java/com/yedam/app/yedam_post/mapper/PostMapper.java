@@ -27,7 +27,6 @@ public interface PostMapper {
     public int deletePost1(int postId);
     public int deletePost2(int postId);
     public int deletePost3(int postId);
-    //public int deletePost4(int postId);
     public int deletePost5(int postId);
     // 댓글 및 대댓글 관련 메서드
 	

@@ -34,6 +34,10 @@ public class Post {
     private Date commentDate;
     private String commentWriter;
     
+    private int boardfileId;
     private String boardfileName;
+    private int boardfileSize;
+    private String boardfileLocation;
+    private String boardfileExt;
  
 }

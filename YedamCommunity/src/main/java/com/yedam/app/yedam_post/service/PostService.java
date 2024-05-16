@@ -9,7 +9,7 @@ public interface PostService {
 	public int createPost(Post post);
     
 	// 게시글 전체 조회
-    List<Post> getAllPosts();
+	public List<Post> getAllPosts();
     
     // 게시글 삭제
     public Map<String, Object> PostDelete(Post post);
@@ -23,17 +23,20 @@ public interface PostService {
     // 게시글 단건 조회 - int 타입
     public Post getPostDetails(int postId);  
     
+    
+    
     // 댓글 등록
     public int createReply(Reply reply);
     
     // 댓글 조회
-    List<Reply> getRepliesByPostId(int postId);
+    public List<Reply> getRepliesByPostId(int postId);
     
     // 댓글 수정
     public int updateReply(Reply reply);
     
     // 댓글 삭제
     public int deleteReply(int replyId);
+    
     
     
     // 대댓글 등록

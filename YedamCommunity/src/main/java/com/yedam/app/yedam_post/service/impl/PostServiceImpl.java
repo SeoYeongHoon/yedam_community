@@ -25,7 +25,6 @@ public class PostServiceImpl implements PostService {
 	private ReplyMapper replyMapper;
 
 	@Override
-	@Transactional
 	public int createPost(Post post) {
 		return postMapper.insertPost(post);
 	}
@@ -84,23 +83,32 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public Map<String, Object> PostDelete(Post post) {
-		Map<String, Object> map = new HashMap<>();
-		int result = postMapper.deletePost1(post.getPostId());
-		if(result == 1) {
-			map.put("postId", post.getPostId());
-		}
-		return map;
-	}
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            int postId = post.getPostId();
+            postMapper.deletePost1(postId);
+            postMapper.deletePost2(postId);
+            postMapper.deletePost3(postId);
+            postMapper.deletePost5(postId);
+
+            resultMap.put("status", "success");
+        } catch (Exception e) {
+            resultMap.put("status", "error");
+            resultMap.put("error", e.getMessage());
+        }
+        return resultMap;
+    }
 
 	@Override
 	public Map<String, Object> PostUpdate(Post post) {
 		Map<String, Object> map = new HashMap<>();
 		boolean isSuccessed = false;
-		
+
 		int result = postMapper.updatePost(post);
-		
-		if(result == 1) {
+
+		if (result == 1) {
 			isSuccessed = true;
 		}
 		map.put("result", isSuccessed);
