@@ -28,7 +28,7 @@
 	                users.forEach(user => {
 	                    var tr = document.createElement('tr');
                       
-                      	var makeInputTd = document.createElement('td');
+                      	/* var makeInputTd = document.createElement('td');
 	                    var tdCheckBox = document.createElement('input');
 	                    tdCheckBox.setAttribute('type', 'checkbox');
 	                    tdCheckBox.setAttribute('name', 'checkItem');
@@ -36,10 +36,10 @@
 	            			checkAll(this);
 	                    }
 	                    makeInputTd.appendChild(tdCheckBox);
-	                    tr.appendChild(makeInputTd);
+	                    tr.appendChild(makeInputTd); */
 	                    
 	                    var tdUserId = document.createElement('td');
-	                    tdUserId.textContent = user.registerId;
+	                    tdUserId.textContent = user.userId;
 	                    tr.appendChild(tdUserId);
 	
 	                    /* var makeImgTd = document.createElement('td');
@@ -70,19 +70,19 @@
 	                    tdInfoBtn.style = "padding: 5px 10px;"
 	                    tdInfoBtn.innerText = "상세보기";
 	                    tdInfoBtn.onclick = function() {
-	                    	fetchUserDetails(user.registerId);
+	                    	fetchUserDetails(user.userId);
 	                    }
 	                    makeBtnTd.appendChild(tdInfoBtn);
 	                    tr.appendChild(makeBtnTd);
 
-	                    var makeLinkTd = document.createElement('td');
+	                    /* var makeLinkTd = document.createElement('td');
 	                    var tdApprove = document.createElement('a');
 	                    tdApprove.href = '#';
 	                    tdApprove.className = 'main-btn dark-btn btn-hover approveBtn';
 	                    tdApprove.style = 'padding: 5px 10px;';
 	                    tdApprove.innerText = '승인하기';
 	                    makeLinkTd.appendChild(tdApprove);
-	                    tr.appendChild(makeLinkTd);
+	                    tr.appendChild(makeLinkTd); */
 	
 	                    tbody.appendChild(tr);
 	                });
@@ -91,15 +91,16 @@
 	        xhr.send();
 	    }
 		
-		// 특정 유저 정보 출력
-		function fetchUserDetails(registerId) {
+		// 가입된 유저 정보 출력
+		function fetchUserDetails(userId) {
 	        // AJAX 요청
 	        var xhr = new XMLHttpRequest();
-	        xhr.open('GET', '/userDetails?registerId=' + registerId, true);
+	        xhr.open('GET', '/userDetails?userId=' + userId, true);
 	        xhr.onreadystatechange = function() {
 	            if (xhr.readyState == 4 && xhr.status == 200) {
 	                var user = JSON.parse(xhr.responseText);
 	                console.log(user);
+	                
 	                document.getElementById('userName').textContent = user.name;
 	                document.getElementById('userType').innerText = user.userType;
 	                document.getElementById('curriculumId').textContent = user.curriculumId;
@@ -108,16 +109,16 @@
 	                document.getElementById('userImage').src = '/images/' + user.userImage;
 	
 	                document.querySelector('.infoModal').style.display = 'block';
+	                document.querySelector('.approveUserBtn').style.display = 'none';
 	                
 	                // 삭제버튼
 	                document.querySelector('.delUserBtn').addEventListener('click', function() {
 	                	if (confirm('삭제하시겠습니까?')) {
 	                		var xhr = new XMLHttpRequest();
-					        xhr.open('GET', '/deleteUser?registerId=' + registerId, true);
+					        xhr.open('GET', '/removeUser?userId=' + userId, true);
 					        xhr.onreadystatechange = function() {
 					            if (xhr.readyState == 4 && xhr.status == 200) {
 					                var user = JSON.parse(xhr.responseText);
-					                var tbody = document.getElementById('userInfoTable');
 					
 					                document.querySelector('.infoModal').style.display = 'none';
 					                location.reload();
@@ -130,7 +131,77 @@
 	                		return;
 	                	}
 	                	
-	                })
+	                });
+	            }
+	        };
+	        xhr.send();
+	    }
+		
+		// 회원가입 신청한 유저 정보 모달 출력
+		function fetchReqDetails(registerId) {
+	        // AJAX 요청
+	        var xhr = new XMLHttpRequest();
+	        xhr.open('GET', '/reqDetails?registerId=' + registerId, true);
+	        xhr.onreadystatechange = function() {
+	            if (xhr.readyState == 4 && xhr.status == 200) {
+	                var user = JSON.parse(xhr.responseText);
+	                console.log(user);
+	                
+	                document.getElementById('userName').textContent = user.name;
+	                document.getElementById('userType').innerText = user.userType;
+	                document.getElementById('curriculumId').textContent = user.curriculumId;
+	                document.getElementById('userEmail').textContent = user.email;
+	                document.getElementById('userTel').textContent = user.tel;
+	                document.getElementById('userImage').src = '/images/' + user.userImage;
+	
+	                document.querySelector('.infoModal').style.display = 'block';
+	                document.querySelector('.approveUserBtn').style.display = 'inline-block';
+	                
+	                // 삭제버튼
+	                document.querySelector('.delUserBtn').addEventListener('click', function() {
+	                	if (confirm('삭제하시겠습니까?')) {
+	                		var xhr = new XMLHttpRequest();
+					        xhr.open('GET', '/refuseUser?registerId=' + registerId, true);
+					        xhr.onreadystatechange = function() {
+					            if (xhr.readyState == 4 && xhr.status == 200) {
+					                var user = JSON.parse(xhr.responseText);
+					
+					                document.querySelector('.infoModal').style.display = 'none';
+					                location.reload();
+					            }
+					        };
+					        xhr.send();
+
+			                alert('성공적으로 삭제되었습니다!');
+	                	} else {
+	                		return;
+	                	}
+	                	
+	                });
+	                
+	                // (모달)회원가입 승인버튼
+	                document.querySelector('.approveUserBtn').addEventListener('click', function() {
+	                	if (confirm('회원가입을 승인하시겠습니까?')) {
+	                		var xhr = new XMLHttpRequest();
+	        		        xhr.open('GET', '/insertUser?registerId=' + registerId, true);
+	        		        xhr.onreadystatechange = function() {
+	        		            if (xhr.readyState == 4 && xhr.status == 200) {
+	        		                var user = JSON.parse(xhr.responseText);
+	        		                console.log(user);
+	        		                
+	        		                /* document.querySelector('.approveBtn').style.display = 'none';
+	        		                document.querySelector('.approved').style.display = 'inline-flex'; */
+	        		                
+	        		                closeInfoModal();
+	        		            }
+	        		        };
+	        		        xhr.send();
+	        		        
+	                        alert('회원가입을 승인했습니다!');
+	        			} else {
+	        				return;
+	        			}
+	                });
 	            }
 	        };
 	        xhr.send();
@@ -139,23 +210,69 @@
 		function closeInfoModal() {
 			document.querySelector('.infoModal').style.display = 'none';
 		}
-		
-		function approveRegister(registerId) {
-			var xhr = new XMLHttpRequest();
-	        xhr.open('GET', '/insertUser?registerId=' + registerId, true);
-	        xhr.onreadystatechange = function() {
-	            if (xhr.readyState == 4 && xhr.status == 200) {
-	                var user = JSON.parse(xhr.responseText);
-	                console.log(user);
-	                
-	                document.querySelector('.approveBtn').style.display = 'none';
-	                document.querySelector('.approved').style.display = 'inline-flex';
-	                
-	                
-	            }
-	        };
-	        xhr.send();
+
+		function openAddModal() {
+			document.querySelector('.addModal').style.display = 'block';
 		}
+		function closeAddModal() {
+			document.querySelector('.addModal').style.display = 'none';
+		}
+		
+		// 회원가입 승인
+		function approveRegister(registerId) {
+			if (confirm('회원가입을 승인하시겠습니까?')) {
+				var xhr = new XMLHttpRequest();
+		        xhr.open('GET', '/insertUser?registerId=' + registerId, true);
+		        xhr.onreadystatechange = function() {
+		            if (xhr.readyState == 4 && xhr.status == 200) {
+		                var user = JSON.parse(xhr.responseText);
+		                console.log(user);
+
+		            }
+		        };
+		        xhr.send();
+		        
+                alert('회원가입을 승인했습니다!');
+                location.reload();
+			} else {
+				return;
+			}
+			
+		}
+
+		function approveAll() {
+	        var checkedItems = document.querySelectorAll('input[name="checkReqItem"]:checked');
+	        var registerIds = Array.from(checkedItems).map(item => item.value);
+			
+			if (confirm("체크한 모든 인원을 승인하시겠습니까?")) {
+				if (registerIds.length > 0) {
+					var xhr = new XMLHttpRequest();
+					xhr.open("POST", "/insertCheckedUsers", true);
+					xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+					xhr.onreadystatechange = function () {
+						if (xhr.readyState == 4 && xhr.status == 200) {
+							alert("선택된 항목들이 성공적으로 승인되었습니다.");
+							// 성공 시 페이지를 새로고침하거나 다른 처리를 할 수 있습니다.
+							location.reload();
+						} else if (xhr.readyState == 4) {
+							alert("승인 중 오류가 발생했습니다.");
+						}
+					};
+					xhr.send(JSON.stringify({ registerIds: registerIds }));
+				} else {
+					alert('승인할 항목을 선택하세요.');
+				}
+			}
+	        
+	    }
+		
+		// 체크박스 전체체크
+		function checkAll(item) {
+	        checkboxes = document.getElementsByName('checkReqItem');
+	        for (var i in checkboxes) {
+	            checkboxes[i].checked = item.checked;
+	        }
+	    }
 	</script>
 	
 	<!-- 어드민페이지 내부 컨텐트 -->
@@ -165,293 +282,270 @@
 		<div class="tables-wrapper">
 
             <div class="row">
-              <div class="col-lg-12">
-                <div class="card-style mb-30">
-                  <h2 class="mb-10">회원관리</h6>
-                  <div class="select-style-1" style="position: relative; margin-top: 20px; margin-bottom: 10px;">
-					<div class="select-position" style="max-width: 300px;">
-						<select name="userFilter" id="userFilter" style="padding: 10px;" onchange="filterUsers()">
-							<option name="showAll" value="showAll">전체</option>
-							<option name="showGrad" value="showGrad">수료생</option>
-							<option name="showLearn" value="showLearn">수강생</option>
-						</select>
+            	<div class="col-lg-12">
+              
+              		<!-- 회원가입 신청한 유저 리스트 -->
+					<div class="card-style mb-30 request_wrapper"  style="position: relative; padding: 0;">
+						<div class="table-top-content" style="height: 100px;">
+							<h2 class="mb-10" style="color: white">회원가입 신청 관리</h6>
+							<a href="#0" onclick="openAddModal()" class="modal_btn" style="background-color: #e96b56; padding: 7px; position: absolute; margin: 0; right: 30px; top: 50px;">수강생 일괄 등록 및 받기</a>
+						</div>
+						<div class="table-wrapper table-responsive" style="overflow-y: scroll; max-height: 500px;">
+							<table class="table" style="padding: 0 30px;">
+								<thead>
+									<tr>
+										<th>
+											<input type="checkbox" value="checkAll" onclick="checkAll(this)">
+										</th>
+										<th>
+											<h6>No</h6>
+										</th>
+										<!-- <th>
+											<h6>프로필사진</h6>
+										</th> -->
+										<th>
+											<h6>유형</h6>
+										</th>
+										<th>
+											<h6>이름</h6>
+										</th>
+										<th>
+											<h6>연락처</h6>
+										</th>
+										<th>
+											<h6>이메일</h6>
+										</th>
+										<th>
+											<h6>상세정보</h6>
+										</th>
+										<th>
+											<h6>승인유무</h6>
+										</th>
+									</tr>
+								</thead>
+								<tbody id="requestInfoTable">
+									<tr th:each="req : ${requests}">
+										<td>
+											<!-- <input type="checkbox" name="checkReqItem" class="checkReqItem" onclick="getCheckboxValue(event)"> -->
+											<input type="checkbox" name="checkReqItem" class="checkReqItem" th:value="${req.registerId}">
+										</td>
+										<td>
+											<p>[[${req.registerId}]]</p>
+										</td>
+										<td>
+											<p>[[${req.userType}]]</p>
+										</td>
+										<td>
+											<p>[[${req.name}]]</p>
+										</td>
+										<td>
+											<p>[[${req.tel}]]</p>
+										</td>
+										<td>
+											<p>[[${req.email}]]</p>
+										</td>
+										<td>
+											<a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchReqDetails(' + ${req.registerId} + ')'">상세보기</a>
+										</td>
+										<td>
+											<a th:onclick="'approveRegister(' + ${req.registerId} + ')'" href="#0" class="approveBtn main-btn dark-btn btn-hover" style="padding: 5px 10px;">승인하기</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div style="position: sticky; bottom: 0; width: 100%; padding: 10px; z-index: 99; background-color: white; box-shadow: 0px 0px 3px 0px #00000040;">
+							<a href="#0" onclick="approveAll()" class="approveAllBtn main-btn dark-btn btn-hover" style="padding: 5px 10px;">일괄 승인</a>
+						</div>
 					</div>
-					
-					<a href="#0" class="modal_btn" style="padding: 7px; position: absolute; margin: 0; right: 0; top: 0;">수강생 일괄 등록 및 받기</a>
-				  </div>
-                  <div class="table-wrapper table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-	                      <th>
-	                      	<input type="checkbox" value="checkAll" onclick="checkAll(this)">
-	                      </th>
-                          <th>
-                          	<h6>No</h6>
-                          </th>
-                          <!-- <th>
-                            <h6>프로필사진</h6>
-                          </th> -->
-                          <th>
-                            <h6>유형</h6>
-                          </th>
-                          <th>
-                            <h6>이름</h6>
-                          </th>
-                          <th>
-                            <h6>연락처</h6>
-                          </th>
-                          <th>
-                            <h6>이메일</h6>
-                          </th>
-                          <th>
-                          	<h6>상세정보</h6>
-                          </th>
-                          <th>
-                            <h6>승인유무</h6>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody id="userInfoTable">
-                        <tr th:each="user : ${users}">
-                          <td>
-	                        <input type="checkbox" name="checkItem">
-	                      </td>
-                          <td>
-                            <p>[[${user.registerId}]]</p>
-                          </td>
-                          <!-- <td>
-                            <img th:src="@{/images/{fileName}(fileName=${user.userImage})}" alt="">
-                          </td> -->
-                          <td>
-                            <p>[[${user.userType}]]</p>
-                          </td>
-                          <td>
-                            <p>[[${user.name}]]</p>
-                          </td>
-                          <td>
-                            <p>[[${user.tel}]]</p>
-                          </td>
-                          <td>
-                            <p>[[${user.email}]]</p>
-                          </td>
-                          <td>
-                            <!-- <a href="#0" class="modal_info_btn main-btn light-btn btn-hover" style="padding: 5px 10px;">더보기</a> -->
-                            <a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchUserDetails(' + ${user.registerId} + ')'">상세보기</a>
-                          </td>
-                          <td>
-                            <a th:onclick="'approveRegister(' + ${user.registerId} + ')'" href="#0" class="approveBtn main-btn dark-btn btn-hover" style="padding: 5px 10px;">승인하기</a>
-                            <a class="approved main-btn deactive-btn-outline btn-hover" style="display: none; padding: 5px 10px;">승인완료</a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  
-                  <!-- 일괄등록 모달 -->
-                  <div class="addModal">
-                  	<div class="add_modal_popup" style="min-width: 800px; min-height: 300px;">
-                  		<div class="add_modal_title center">
-                  			<h4>수강생 일괄 등록 및 받기</h4>
-                  			<a href="" class="modal_close">X</a>
-                  		</div>
-                  		<!-- <a href="#0" class="main-btn dark-btn btn-hover addBtn">등록(.csv ...)</a> -->
-                  		<input type="file" name="file" id="file">
-                  		
-                  		<!-- <label class="main-btn dark-btn btn-hover addBtn" for="input-file">
-                  			등록(.csv ...)
-                  		</label>
-                  		<input type="file" id="input-file" style="display: none" /> -->
-                  		
-                  		<table class="table">
-	                      <thead>
-	                      	  <th>
-		                      	<input type="checkbox" value="checkAll" onclick="checkAll(this)">
-		                      </th>
-	                      	  <th>
-	                      	  	<input type="checkbox" value="checkAll" onclick="checkAll(this)">
-	                      	  </th>
-	                          <th>
-	                            <h6>과정명</h6>
-	                          </th>
-	                          <th>
-	                            <h6>인원</h6>
-	                          </th>
-	                          <th>
-	                            <h6>다운로드</h6>
-	                          </th>
-	                      </thead>
-	                      <tbody id="userTable">
-	                        <tr>
-	                          <td>
-	                          	<input type="checkbox" name="checkItem">
-	                          </td>
-	                          <td>
-	                            <p>JAVA 기반 웹 프레임워크 양성과정 A</p>
-	                          </td>
-	                          <td>
-	                            <p>23</p>
-	                          </td>
-	                          <td>
-	                            <a href="#0" class="main-btn dark-btn-light btn-hover" style="padding: 7px 5px;">다운로드</a>
-	                          </td>
-	                        </tr>
-	                        <tr>
-	                          <td>
-	                          	<input type="checkbox" name="checkItem">
-	                          </td>
-	                          <td>
-	                            <p>JAVA 기반 웹 프레임워크 양성과정 A</p>
-	                          </td>
-	                          <td>
-	                            <p>23</p>
-	                          </td>
-	                          <td>
-	                            <a href="#0" class="main-btn dark-btn-light btn-hover" style="padding: 7px 5px;">다운로드</a>
-	                          </td>
-	                        </tr>
-	                        <tr>
-	                          <td>
-	                          	<input type="checkbox" name="checkItem">
-	                          </td>
-	                          <td>
-	                            <p>JAVA 기반 웹 프레임워크 양성과정 A</p>
-	                          </td>
-	                          <td>
-	                            <p>23</p>
-	                          </td>
-	                          <td>
-	                            <a href="#0" class="main-btn dark-btn-light btn-hover" style="padding: 7px 5px;">다운로드</a>
-	                          </td>
-	                        </tr>
-	                      </tbody>
-	                    </table>
-	                    <div class="download_all">
-	                    	<a href="#0" class="main-btn dark-btn btn-hover" style="padding: 7px 5px;">선택 다운로드</a>
-	                    </div>
-                  	</div>
-                  </div>
-                  
-                  <!-- 상세정보 모달 -->
-                  <div class="infoModal">
-			        <div class="info_modal_popup" style="min-width: 700px; min-height: 300px;">
-			            <div class="add_modal_title center">
-			                <h4>상세정보</h4>
-			                <a href="#0" class="info_modal_close" onclick="closeInfoModal()">X</a>
-			            </div>
-			
-			            <div id="info_profile" class="info_profile_content">
-			            	<div class="info_image_wrapper">
-			                	<img class="info_image" id="userImage" src="">
-			            	</div>
-			                <div class="">
-			                	<p class="info_type">이름</p>
-			                	<span class="info_detail" id="userName"></span>
-				                <p class="info_type">소속</p>
-				                <span class="info_detail" id="userType"></span>
-				                <p class="info_type">수강 정보</p>
-				                <span class="info_detail" id="curriculumId"></span>
-				                <!-- <p class="info_type">수강 기간: <span id="curriculumDate"></span></p> -->
-				                <p class="info_type">연락처</p>
-				                <span class="info_detail" id="userTel"></span>
-				                <p class="info_type">이메일</p>
-				                <span class="info_detail" id="userEmail"></span>
-			                </div>
-			            </div>
-			
-			            <div class="download_all">
-			                <a href="#0" class="main-btn dark-btn btn-hover" style="padding: 7px 5px;">승인하기</a>
-			                <a href="#0" class="delUserBtn main-btn danger-btn btn-hover" style="padding: 7px 5px;">회원삭제</a>
-			            </div>
-			        </div>
-			      </div>
-                
-                <!-- 페이지네이션 -->
-                <!-- <div class="center">
-                	<div class="adminPaging">
-                		<th:block th:if="${page.prev}">
-                			<a th:href="@{/adminMain(page=${page.starPage - 1})}">&laquo;</a>
-                		</th:block>
-                		<th:block th:each="p : ${#numbers.sequence(page.starPage, page.endPage)}">
-							<a th:href="@{/adminMain(page=${p})}" th:class="${p == page.page} ? 'active'">[[${p}]]</a>
-						</th:block>
-						<th:block th:if="${page.next}">
-							<a th:href="@{/adminMain(page=${page.endPage + 1})}">&raquo;</a>
-						</th:block>
-                	</div>
-                </div> -->
-              </div>
-            </div>
-          </div>
-	</div>
+               
+                 
+					<!-- 회원가입 된 유저리스트 -->
+					<div class="card-style mb-30 request_wrapper" style="position: relative; max-height: 100%; padding: 0;">
+						<div class="table-top-content">
+							<h2 class="mb-10" style="color: white">회원 관리</h6>
+							<div class="select-style-1" style="position: relative; margin-top: 20px; margin-bottom: 10px;">
+								<div class="select-position" style="max-width: 300px;">
+									<select name="userFilter" id="userFilter" style="padding: 10px; color: white; background-color: #e96b56;" onchange="filterUsers()">
+										<option name="showAll" value="showAll">전체</option>
+										<option name="showGrad" value="showGrad">수료생</option>
+										<option name="showLearn" value="showLearn">수강생</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="table-wrapper table-responsive" style="padding: 0 30px; overflow-y: scroll; max-height: 500px;">
+							<table class="table">
+							<thead>
+								<tr>
+								<th>
+									<h6>No</h6>
+								</th>
+								<!-- <th>
+									<h6>프로필사진</h6>
+								</th> -->
+								<th>
+									<h6>유형</h6>
+								</th>
+								<th>
+									<h6>이름</h6>
+								</th>
+								<th>
+									<h6>연락처</h6>
+								</th>
+								<th>
+									<h6>이메일</h6>
+								</th>
+								<th>
+									<h6>상세정보</h6>
+								</th>
+								</tr>
+							</thead>
+							<tbody id="userInfoTable">
+								<tr th:each="user : ${users}">
+								<td>
+									<p>[[${user.userId}]]</p>
+								</td>
+								<!-- <td>
+									<img th:src="@{/images/{fileName}(fileName=${user.userImage})}" alt="">
+								</td> -->
+								<td>
+									<p>[[${user.userType}]]</p>
+								</td>
+								<td>
+									<p>[[${user.name}]]</p>
+								</td>
+								<td>
+									<p>[[${user.tel}]]</p>
+								</td>
+								<td>
+									<p>[[${user.email}]]</p>
+								</td>
+								<td>
+									<a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchUserDetails(' + ${user.userId} + ')'">상세보기</a>
+								</td>
+								</tr>
+							</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- 페이지네이션 -->
+					<!-- <div class="center">
+						<div class="adminPaging">
+							<th:block th:if="${page.prev}">
+								<a th:href="@{/adminMain(page=${page.starPage - 1})}">&laquo;</a>
+							</th:block>
+							<th:block th:each="p : ${#numbers.sequence(page.starPage, page.endPage)}">
+								<a th:href="@{/adminMain(page=${p})}" th:class="${p == page.page} ? 'active'">[[${p}]]</a>
+							</th:block>
+							<th:block th:if="${page.next}">
+								<a th:href="@{/adminMain(page=${page.endPage + 1})}">&raquo;</a>
+							</th:block>
+						</div>
+					</div> -->
+            	</div>
+          	</div>
+		</div>
 	
+		<!-- 일괄등록 모달 -->
+		<div class="addModal">
+			<div class="add_modal_popup" style="min-width: 800px; min-height: 300px;">
+				<div class="add_modal_title center">
+					<h4>수강생 일괄 등록 및 받기</h4>
+					<a href="" class="modal_close" onclick="closeAddModal()">X</a>
+				</div>
+				<input type="file" name="file" id="file">
+				
+				<table class="table">
+					<thead>
+						<th>
+						<!-- <input type="checkbox" value="checkAll" onclick="checkAll(this)"> -->
+						</th>
+						<!-- <th>
+							<input type="checkbox" value="checkAll" onclick="checkAll(this)">
+						</th> -->
+						<th>
+						<h6>과정명</h6>
+						</th>
+						<th>
+						<h6>인원</h6>
+						</th>
+						<th>
+						<h6>다운로드</h6>
+						</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input type="checkbox" name="checkFileItem">
+							</td>
+							<td>
+							<p>JAVA 기반 웹 프레임워크 양성과정 A</p>
+							</td>
+							<td>
+							<p>23</p>
+							</td>
+							<td>
+							<a href="#0" class="main-btn dark-btn-light btn-hover" style="padding: 7px 5px;">다운로드</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="download_all">
+					<a href="#0" class="main-btn dark-btn btn-hover" style="padding: 7px 5px;">선택 다운로드</a>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 상세정보 모달 -->
+		<div class="infoModal">
+			<div class="info_modal_popup" style="min-width: 700px; min-height: 300px;">
+				<div class="add_modal_title center">
+					<h4>상세정보</h4>
+					<a href="#0" class="info_modal_close" onclick="closeInfoModal()">X</a>
+				</div>
+			
+				<div id="info_profile" class="info_profile_content">
+					<div class="info_image_wrapper">
+						<img class="info_image" id="userImage" src="">
+					</div>
+					<div class="">
+						<p class="info_type">이름</p>
+						<span class="info_detail" id="userName"></span>
+						<p class="info_type">소속</p>
+						<span class="info_detail" id="userType"></span>
+						<p class="info_type">수강 정보</p>
+						<span class="info_detail" id="curriculumId"></span>
+						<!-- <p class="info_type">수강 기간: <span id="curriculumDate"></span></p> -->
+						<p class="info_type">연락처</p>
+						<span class="info_detail" id="userTel"></span>
+						<p class="info_type">이메일</p>
+						<span class="info_detail" id="userEmail"></span>
+					</div>
+				</div>
+				<div class="download_all">
+					<a href="#0" class="approveUserBtn main-btn dark-btn btn-hover" style="padding: 7px 5px; display: none;">승인하기</a>
+					<a href="#0" class="delUserBtn main-btn danger-btn btn-hover" style="padding: 7px 5px;">회원삭제</a>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+		
 	<script>
 	
 		/* 일괄등록 모달 코드 */
 		const addModal = document.querySelector('.addModal');
 		const modalOpen = document.querySelector('.modal_btn');
-		const modalClose = document.querySelector('.modal_close');
+		// const modalClose = document.querySelector('.modal_close');
 	
 		//열기 버튼을 눌렀을 때 모달팝업이 열림
-		modalOpen.addEventListener('click',function(){
-		    addModal.classList.add('on');
-		});
+		// modalOpen.addEventListener('click',function(){
+		//     addModal.classList.add('on');
+		// });
 		//닫기 버튼을 눌렀을 때 모달팝업이 닫힘
-		modalClose.addEventListener('click',function(){
-		    addModal.classList.remove('on');
-		    infoModal.classList.remove('on');
-		});
-		
-		// 모달창 체크박스 전체체크
-		function checkAll(checkAll) {
-			const checkBoxes = document.getElementsByName('checkItem');
-			
-			checkBoxes.forEach((checkBox) => {
-				checkBox.checked = checkAll.checked;
-			})
-		}
-		
-		// 유저 삭제
-		/* document.querySelector('.delUserBtn').addEventListener('click', function() {
-			if (confirm('삭제하시겠습니까?')) {
-				
-				function deleteUser(userId) {
-			        // AJAX 요청
-			        var xhr = new XMLHttpRequest();
-			        xhr.open('GET', '/deleteUser?userId=' + userId, true);
-			        xhr.onreadystatechange = function() {
-			            if (xhr.readyState == 4 && xhr.status == 200) {
-			                var user = JSON.parse(xhr.responseText);
-			                console.log(user);
-			                document.getElementById('userName').textContent = user.name;
-			                document.getElementById('userType').innerText = user.userType;
-			                document.getElementById('curriculumId').textContent = user.curriculumId;
-			                document.getElementById('userEmail').textContent = user.email;
-			                document.getElementById('userTel').textContent = user.tel;
-			                document.getElementById('userImage').src = '/images/' + user.userImage;
-			
-			                document.querySelector('.infoModal').style.display = 'block';
-			            }
-			        };
-			        xhr.send();
-			    }
-				alert('삭제되었습니다!');
-				document.querySelector('.infoModal').style.display = 'none';
-			}
-			
-		}); */
-		
-		/* function deleteUser() {
-	        // AJAX 요청
-	        var xhr = new XMLHttpRequest();
-	        xhr.open('GET', '/deleteUser?userId=' + userId, true);
-	        xhr.onreadystatechange = function() {
-	            if (xhr.readyState == 4 && xhr.status == 200) {
-	                var user = JSON.parse(xhr.responseText);
-	                console.log(user);
-	            }
-	        };
-	        xhr.send();
-	    } */
+		// modalClose.addEventListener('click',function(){
+		//     addModal.classList.remove('on');
+		// });
 	</script>
 </html>

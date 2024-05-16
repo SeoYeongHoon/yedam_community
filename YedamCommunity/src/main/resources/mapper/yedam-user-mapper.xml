@@ -42,84 +42,21 @@
 		AND password = #{password}
 	</select>
 	
-	<!-- 관리자페이지 모든 수료생, 수강생 유저 출력 -->
-	<!-- <select id="selectStdList" resultType="UserVO">
-		SELECT user_id
-			 , user_image
-			 , user_type
-			 , name
-			 , tel
-			 , email
-		FROM users
-		WHERE user_type = 'graduated' OR user_type = 'learning'
-		ORDER BY user_id
-	</select> -->
-	
-	<!-- 관리자페이지 모든 유저 출력 -->
-	<select id="selectAllList" resultType="UserVO" parameterType="UserSearchVO">
-		<!-- SELECT user_id
-			 , user_image
-			 , user_type
-			 , name
-			 , tel
-			 , email
-		FROM (SELECT rownum rn, b.*
-			  FROM users b
-			  <![CDATA[
-			  WHERE rownum <= (#{page} * 5)
-			  ]]>
-			  <choose>
-			  	<when test="userFilter == 'showGrad'">
-			  		AND user_type = 'graduated'
-			  	</when>
-			  	<when test="userFilter == 'showLearn'">
-			  		AND user_type = 'learning'
-			  	</when>
-			  	<otherwise>
-			  		ORDER BY user_id
-			  	</otherwise>
-			  </choose>
-			 ) a
-		WHERE (a.rn > (#{page} - 1) * 5) -->
-		SELECT user_id
-			 , user_image
-			 , user_type
-			 , name
-			 , tel
-			 , email
-		FROM users
-		WHERE user_type = 'graduated' OR user_type = 'learning'
-	</select>
-	
 	<select id="getTotalCnt" resultType="int">
 		SELECT COUNT(*)
 		FROM users
 	</select>
 	
-	<!-- <select id="getUsersByFilter" parameterType="String" resultType="UserVO">
-		SELECT * FROM users
-		<where>
-			<choose>
-				<when test="filter == 'showAll'">
-					user_type = 'graduated' OR user_type = 'learning'
-				</when>
-				<when test="filter == 'showGrad'">
-					user_type = 'graduated'
-				</when>
-				<when test="filter == 'showLearn'">
-					user_type = 'learning'
-				</when>
-				<otherwise>
-					1=1
-				</otherwise>
-			</choose>
-		</where>
-		ORDER BY user_id
-	</select> -->
-	
-	<delete id="removeUser" parameterType="int">
+	<!-- 회원가입 신청 거절(삭제) -->
+	<delete id="refuseUser" parameterType="int">
 		DELETE register
 		WHERE register_id = #{registerId}
+	</delete>
+	
+	<!-- 유저 삭제 -->
+	<delete id="removeUser" parameterType="int">
+		DELETE users
+		WHERE user_id = #{userId}
 	</delete>
 	
 	<!-- 회원가입 신청 -->
@@ -151,7 +88,7 @@
 		)
 	</insert>
 	
-	<!-- 관리자페이지 첫 페이지(유저리스트 전체) -->
+	<!-- 관리자페이지 첫 페이지(회원가입 신청한 유저) -->
 	<select id="selectStdList" resultType="RegisterVO">
 		SELECT register_id
 			 , user_image
@@ -164,9 +101,22 @@
 		ORDER BY register_id
 	</select>
 	
+	<!-- 관리자페이지 첫 페이지(회원가입 된 유저) -->
+	<select id="selectUserList" resultType="UserVO">
+		SELECT user_id
+			 , user_image
+			 , user_type
+			 , name
+			 , tel
+			 , email
+		FROM users
+		WHERE user_type = 'graduated' OR user_type = 'learning'
+		ORDER BY user_id
+	</select>
+	
 	<!-- 관리자페이지 유저 리스트 출력 및 필터링 -->
-	<select id="getUsersByFilter" parameterType="String" resultType="RegisterVO">
-		SELECT * FROM register
+	<select id="getUsersByFilter" parameterType="String" resultType="UserVO">
+		SELECT * FROM users
 		<where>
 			<choose>
 				<when test="filter == 'showAll'">
@@ -183,22 +133,94 @@
 				</otherwise>
 			</choose>
 		</where>
-		ORDER BY register_id
+		ORDER BY user_id
 	</select>
 	
-	<!-- 회원가입 승인 시, register테이블에서 users테이블로 데이터 이동 -->
-	<insert id="insertUser" parameterType="RegisterVO">
-		INSERT INTO users (SELECT user_id_seq.NEXTVAL
-		                        , id
-		                        , password
-		                        , name
-		                        , tel
-		                        , email
-		                        , address
-		                        , user_image
-		                        , company_info
-		                        , user_type
-		                        , curriculum_id
-                  		   FROM register WHERE register_id = #{registerId})
-	</insert>
+	<update id="insertUser" parameterType="UserVO">
+	    BEGIN
+	        INSERT INTO users (
+	            user_id
+	            , id
+	            , password
+	            , name
+	            , tel
+	            , email
+	            , address
+	            , user_image
+	            , company_info
+	            , user_type
+	            , curriculum_id
+	        )
+	        SELECT user_id_seq.NEXTVAL
+	            , id
+	            , password
+	            , name
+	            , tel
+	            , email
+	            , address
+	            , user_image
+	            , company_info
+	            , user_type
+	            , curriculum_id
+	        FROM register
+	        WHERE register_id = #{registerId};
+	
+	        DELETE FROM register
+	        WHERE register_id = #{registerId};
+	    END;
+	</update>
+	
+	<update id="insertCheckedUsers" parameterType="java.util.Map">
+	    BEGIN
+	        FOR i IN (SELECT register_id 
+	                , id
+	                , password
+	                , name
+	                , tel
+	                , email
+	                , address
+	                , user_image
+	                , company_info
+	                , user_type
+	                , curriculum_id
+	                FROM register
+	                WHERE register_id IN
+	                <foreach item="registerId" collection="registerIds" open="(" separator="," close=")">
+	                    #{registerId}
+	                </foreach>
+	                )
+	        LOOP
+	            INSERT INTO users (user_id
+	                             , id
+	                             , password
+	                             , name
+	                             , tel
+	                             , email
+	                             , address
+	                             , user_image
+	                             , company_info
+	                             , user_type
+	                             , curriculum_id
+	                             )
+	            VALUES (user_id_seq.NEXTVAL
+	                  , i.id
+	                  , i.password
+	                  , i.name
+	                  , i.tel
+	                  , i.email
+	                  , i.address
+	                  , i.user_image
+	                  , i.company_info
+	                  , i.user_type
+	                  , i.curriculum_id
+	            );
+	            
+	            DELETE FROM register
+	            WHERE register_id = i.register_id;
+	        END LOOP;
+	    END;
+	</update>
+
+
+
 </mapper>

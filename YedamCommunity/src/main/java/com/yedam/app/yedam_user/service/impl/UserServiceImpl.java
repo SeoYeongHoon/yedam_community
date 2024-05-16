@@ -1,19 +1,20 @@
 package com.yedam.app.yedam_user.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_user.mapper.UserMapper;
 import com.yedam.app.yedam_user.service.RegisterVO;
-import com.yedam.app.yedam_user.service.UserSearchVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	@Autowired
 	UserMapper userMapper;
 
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
 			return -1;
 		}
 	}
-	
+
 	// 회원가입 승인
 	@Override
 	public int insertUser(int registerId) {
@@ -34,6 +35,17 @@ public class UserServiceImpl implements UserService {
 		} else {
 			return -1;
 		}
+	}
+
+	// 체크된 다수의 회원가입 요청 승인
+	@Override
+	public void insertCheckedUsers(List<String> registerIds) {
+
+		if (registerIds == null || registerIds.isEmpty()) {
+			throw new IllegalArgumentException("No register IDs provided");
+		}
+
+		userMapper.insertCheckedUsers(registerIds);
 	}
 
 	@Override
@@ -47,8 +59,8 @@ public class UserServiceImpl implements UserService {
 //	}
 
 	@Override
-	public List<UserVO> userList(int page) {
-		return userMapper.selectAllList(page);
+	public List<UserVO> userList() {
+		return userMapper.selectUserList();
 	}
 
 	@Override
@@ -67,12 +79,25 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public RegisterVO getUserById(String registerId) {
-		return userMapper.getUserById(registerId);
+	public RegisterVO getReqById(String registerId) {
+		return userMapper.getReqById(registerId);
 	}
 
 	@Override
-	public boolean removeUser(int registerId) {
-		return userMapper.removeUser(registerId) == 1;
+	public UserVO getUserById(String userId) {
+		return userMapper.getUserById(userId);
 	}
+
+//	회원가입 신청 거절(삭제)
+	@Override
+	public boolean refuseUser(int registerId) {
+		return userMapper.refuseUser(registerId) == 1;
+	}
+
+//	유저 삭제
+	@Override
+	public boolean removeUser(int userId) {
+		return userMapper.removeUser(userId) == 1;
+	}
+
 }
