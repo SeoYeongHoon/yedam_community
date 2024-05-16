@@ -12,7 +12,6 @@ public class AnswerVO {
 	private int subjectId; //과목번호
 	private String quizAnswer; //문제정답
 	private int page;
-	
 	public int getTestId() {
 		return testId;
 	}
