@@ -10,5 +10,5 @@ import com.opencsv.CSVReader;
 
 @Service
 public interface AdminService {
-	public List<CsvFileVO> readCsv(String filePath);
+//	public List<CsvFileVO> readCsv(String filePath);
 }

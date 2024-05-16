@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.app.yedam_admin.service.AdminService;
-import com.yedam.app.yedam_admin.service.CsvFileVO;
 //import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
@@ -26,7 +24,9 @@ public class AdminController {
 
 	@Autowired
 	UserService userService;
-	AdminService adminService;
+	
+//	@Autowired
+//	AdminService adminService;
 
 	// 어드민 메인 페이지 및 유저 전체조회
 	@GetMapping("/adminMain")
@@ -106,9 +106,9 @@ public class AdminController {
 		return "admin/adminMain";
 	}
 	
-	@GetMapping("/read")
-	public List<CsvFileVO> readCsv() {
-		String filePath = "";
-		return adminService.readCsv(filePath);
-	}
+//	@GetMapping("/read")
+//	public List<CsvFileVO> readCsv() {
+//		String filePath = "";
+//		return adminService.readCsv(filePath);
+//	}
 }
