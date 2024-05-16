@@ -1,14 +1,12 @@
 package com.yedam.app.yedam_examstudent.web;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
 import com.yedam.app.yedam_examstudent.service.CbtStudentService;
@@ -24,61 +22,66 @@ public class CbtStudentController {
 	
 	//시험전체목록 조회
 	@GetMapping("testList")
-	public String testList(Model model) {
-		List<TestVO> list = cbtStudentService.testListAll();
+	public String testList(TestVO testVO, Model model) {
+		List<TestVO> list = cbtStudentService.testListAll(); //시험전체목록
 		model.addAttribute("testList", list);
 		return "cbt_student/testMain";
 	}
+	
 	//시험단건(상세)정보 조회
 	@GetMapping("testDetail")
-	public String testDetail(TestVO testVO, Model model) {
+	public String testDetail(TestVO testVO, QuizboxVO quizboxVO, Model model) {
+		int quizCnt = cbtStudentService.quizCnt(quizboxVO);
 		TestVO list = cbtStudentService.testDetail(testVO);
-		model.addAttribute("testDetail", list);
+		quizboxVO.setTestId(list.getTestId()); //시험 번호 저장
+		quizboxVO.setSubjectId(list.getSubjectId()); //과목 번호 저장
+		int testId = list.getTestId();
+		int subjectId = list.getSubjectId();
+		List<QuizboxVO> list2 = cbtStudentService.testQuizRand(quizboxVO);
+		int[] randQuizId = new int[quizCnt]; //랜덤 문제 번호를 배열로 저장
+		int[] randRn = new int[quizCnt]; //랜덤 문제 일련번호를 배열로 저장
+		int i = 0;
+		for(QuizboxVO quiz : list2) { //랜덤 문제 목록에 값 꺼내기		
+			randQuizId[i] = quiz.getQuizId(); //랜덤으로 생성된 문제의 번호 저장
+			randRn[i] = quiz.getRn(); //랜덤으로 생성된 문제의 일련번호 저장
+			i++;
+		}
+		model.addAttribute("testDetail", list); //시험 상세정보 전달
+		model.addAttribute("quizCnt", quizCnt); //시험 문제개수 전달
+		model.addAttribute("testId", testId); //시험 번호 전달
+		model.addAttribute("subjectId", subjectId); //과목 번호 전달
+		model.addAttribute("randQuizId", randQuizId); //문제 번호 전달
+		model.addAttribute("randRn", randRn); //문제일련번호 전달
 		return "cbt_student/testDetail";
 	}
 	
-	private static int[] quiz;
-	private static int i = 0;
 	//시험시작 페이지 >> 시작정보, 문제내용, 문제보기
-	@GetMapping("testStart")
-	public String testStart(@RequestParam int page, TestVO testVO, QuizboxVO quizboxVO, AnswerVO answerVO,  Model model) {
-		int quizCnt = cbtStudentService.quizCnt(quizboxVO); //시험문제개수
-		TestVO list1 = cbtStudentService.testStart(testVO); //시험응시정보
-		QuizboxVO list2 = cbtStudentService.testQuiz1(quizboxVO); //시험문제관련
-		quiz = new int[quizCnt]; //문제 개수만큼 배열 크기 초기화
-//		if(quiz.length < 20) {				
-//			for(int num : quiz) { //배열 내 존재여부 확인
-//				if(num != list2.getQuizId()) {
-//					quiz[i] = list2.getQuizId(); //배열에 추가
-//					if(i < 19) { //배열 인덱스 증가
-//						i++;
-//					}
-//				}
-//					while(num == list2.getQuizId()) {
-//						list2 = cbtStudentService.testQuiz1(quizboxVO); //시험문제관련
-//					}
-//			}
-//		}
-		
-		
-		if(quiz.length < 20) {
-			while(Arrays.asList(quiz).contains(list2.getQuizId())) {
-				list2 = cbtStudentService.testQuiz1(quizboxVO); //시험문제관련
+	@PostMapping("testStart")
+	public String testStart(int page, int[] randQuizId, int[] randRn, int quizCnt, int testId, int subjectId, TestVO testVO, QuizboxVO quizboxVO, AnswerVO answerVO, Model model) {
+		TestVO list1 = cbtStudentService.testStart(testVO);
+		int i = 0;
+		for(int rn : randRn) { //랜덤 문제 목록을 일련번호와 비교
+			if(rn == page) { //현재 페이지 번호와 일련번호가 같을 때
+				quizboxVO.setQuizId(randQuizId[i]); //해당 시험의 문제번호 저장
+				quizboxVO.setTestId(testId); //해당 시험 번호 저장
+				quizboxVO.setSubjectId(subjectId); //해당 과목 번호 저장
+				answerVO.setQuizId(randQuizId[i]); //해당 시험의 문제번호 저장
+				answerVO.setTestId(testId); //해당 시험 번호 저장
+				answerVO.setSubjectId(subjectId); //해당 과목 번호 저장
 			}
-			quiz[i] = list2.getQuizId(); //배열에 추가
-			if(i < 19) { //배열 인덱스 증가
-				i++;
-			}
+			i++;
 		}
-		System.out.println(quiz[2]);
-		System.out.println(quiz[1]);
-		answerVO.setQuizId(list2.getQuizId()); //시험문제번호 넘기기
-		List<AnswerVO> list3 = cbtStudentService.testQuiz2(answerVO); //시험보기관련
-		model.addAttribute("testStart", list1);
-		model.addAttribute("testQuiz1", list2);
-		model.addAttribute("testQuiz2", list3);
-		model.addAttribute("quizCnt", quizCnt);
-		model.addAttribute("page", page); //페이지번호 파라미터
+		QuizboxVO list2 = cbtStudentService.testQuiz1(quizboxVO);
+		List<AnswerVO> list3 = cbtStudentService.testQuiz2(answerVO);
+		model.addAttribute("testStart", list1); //시험 응시정보 전달
+		model.addAttribute("testQuiz1", list2); //시험 문제 내용정보 전달
+		model.addAttribute("testQuiz2", list3); //시험 문제 보기정보 전달
+		model.addAttribute("quizCnt", quizCnt); //시험 문제개수 전달
+		model.addAttribute("testId", testId); //시험 번호 전달
+		model.addAttribute("subjectId", subjectId); //과목 번호 전달
+		model.addAttribute("page", page); //현재 페이지 번호 전달
+		model.addAttribute("randQuizId", randQuizId); //문제번호 전달
+		model.addAttribute("randRn", randRn); //문제일련번호 전달
 		return "cbt_student/testStart";
 	}
 }

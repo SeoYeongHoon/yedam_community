@@ -7,6 +7,8 @@ public interface CbtStudentService {
 	public List<TestVO> testListAll();
 	//시험상세정보 조회
 	public TestVO testDetail(TestVO testVO);
+	//시험문제랜덤
+	public List<QuizboxVO> testQuizRand(QuizboxVO quizboxVO);
 	//시험시작정보 조회
 	public TestVO testStart(TestVO testVO);
 	//시험시작정보 조회 = 문제내용

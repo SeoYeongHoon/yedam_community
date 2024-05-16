@@ -14,6 +14,8 @@ public interface CbtStudentMapper {
 	public List<TestVO> selectTestListAll();
 	//시험상세정보 조회
 	public TestVO selectTestDetail(TestVO testVO);
+	//시험문제랜덤
+	public List<QuizboxVO> selectTestQuizRand(QuizboxVO quizboxVO);
 	//시험시작정보 조회
 	public TestVO selectTestStart(TestVO testVO);
 	//시험시작정보 조회 = 문제내용

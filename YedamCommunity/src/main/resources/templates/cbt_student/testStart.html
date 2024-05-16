@@ -44,19 +44,43 @@
 	<div class="card-style col-lg-12">
 		<div style="text-align: right">
 			<div class="tstart5" th:if="${page > 1}">
-				<a class="main-btn dark-btn-outline square-btn btn-hover"
-					th:href="@{/testStart(testId=${testStart.testId},subjectId=${testQuiz1.subjectId},page=${page-1})}">이전</a>
+				<form action="testStart" method="post">
+					<input type="hidden" name="page" th:value="${page-1}">
+					<input type="hidden" name="quizCnt" th:value="${quizCnt}">
+					<input type="hidden" name="testId" th:value="${testId}">
+					<input type="hidden" name="subjectId" th:value="${subjectId}">
+ 					<div th:each="quiz : ${randQuizId}">				
+						<input type="hidden" name="randQuizId" th:value="${quiz}">
+					</div>
+					<div th:each="rn : ${randRn}">				
+						<input type="hidden" name="randRn" th:value="${rn}">
+					</div>
+					<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">이전</button>
+				</form>
 			</div>
 			<div class="tstart5" th:unless="${page > 1}">
 				<a class="main-btn dark-btn-outline square-btn btn-hover">이전</a>
 			</div>
+			
 			<div class="tstart5" th:if="${page < quizCnt}">
-				<a class="main-btn dark-btn-outline square-btn btn-hover"
-					th:href="@{/testStart(testId=${testStart.testId},subjectId=${testQuiz1.subjectId},page=${page+1})}">다음</a>
+				<form action="testStart" method="post">
+					<input type="hidden" name="page" th:value="${page+1}">
+					<input type="hidden" name="quizCnt" th:value="${quizCnt}">
+					<input type="hidden" name="testId" th:value="${testId}">
+					<input type="hidden" name="subjectId" th:value="${subjectId}">
+ 					<div th:each="quiz : ${randQuizId}">				
+						<input type="hidden" name="randQuizId" th:value="${quiz}">
+					</div>
+					<div th:each="rn : ${randRn}">				
+						<input type="hidden" name="randRn" th:value="${rn}">
+					</div>
+					<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">다음</button>
+				</form>
 			</div>
 			<div class="tstart5" th:unless="${page < quizCnt}">
 				<a class="main-btn dark-btn-outline square-btn btn-hover">다음</a>
 			</div>
+			
 			<div class="tstart5">
 				<a class="main-btn dark-btn-outline square-btn btn-hover">제출</a>
 			</div>
@@ -77,6 +101,7 @@
 	<!-- 우측 -->
 	<div class="card-style col-lg-10" style="height: 800px">
 		<h1>[[${page}]]. [[${testQuiz1.quizContent}]]</h1>
+		<p>([[${testQuiz1.quizScore}]]점)</p>
 		<br> <br>
 		<ul th:each="list2 : ${testQuiz2}">
 			<li>[[${list2.exampleNum}]]. [[${list2.textContent}]]</li>

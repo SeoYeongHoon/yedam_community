@@ -28,6 +28,11 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public TestVO testDetail(TestVO testVO) {
 		return cbtStudentMapper.selectTestDetail(testVO);
 	}
+	//시험문제랜덤
+	@Override
+	public List<QuizboxVO> testQuizRand(QuizboxVO quizboxVO) {
+		return cbtStudentMapper.selectTestQuizRand(quizboxVO);
+	}
 	//시험시작정보 조회
 	@Override
 	public TestVO testStart(TestVO testVO) {
@@ -48,5 +53,8 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public int quizCnt(QuizboxVO quizboxVO) {
 		return cbtStudentMapper.selectQuizCnt(quizboxVO);
 	}
+	
+	
+	
 	
 }
