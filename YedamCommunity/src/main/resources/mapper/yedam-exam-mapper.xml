@@ -94,8 +94,16 @@
        		 , q.quiz_solution
        		 , q.user_id
        		 , q.quiz_answer
+       		 , s.subject_id
 		FROM quizes q JOIN subjects s 
                 ON q.subject_id = s.subject_id
+        <if test="subjectName != null and !subjectName.equals('')">
+        WHERE subject_id IN (
+        <foreach collection="subjectId" item="subId" index="i" separator=",">
+        	#{subId}
+        </foreach>
+        )
+        </if>        
 		ORDER BY quiz_id
 	</select>
 	
@@ -103,14 +111,15 @@
 	<select id="selectAnswerAll" resultType="TeacherVO">
 		SELECT example_num||'. '||text_content as text_content
 		FROM answers
-		WHERE quiz_id = 15
+		WHERE quiz_id = #{quizId}
 		ORDER BY example_num      
 	</select>
 	
 	<!-- 문제 단건조회 -->
 	<select id="selectQuiz" resultType="TeacherVO">
 		SELECT quiz_id
-		      ,quiz_content
+		      , quiz_content
+		      , quiz_solution
 		FROM quizes
 		WHERE quiz_id = #{quizId}
 	</select>
@@ -120,6 +129,7 @@
 		SELECT subject_id
 			  , subject_name
 		FROM subjects
+		ORDER BY subject_id
 	</select>
 	
 	<!-- 과목명 추가 -->

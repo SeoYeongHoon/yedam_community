@@ -19,12 +19,13 @@ public class ExamServiceImpl implements ExamService{
 	ExamMapper examMapper;
 	
 	// 전체 출력 - 연구중
+	
 	@Override
-	public List<TeacherVO> allList() {
+	public List<TeacherVO> allList(TeacherVO teacherVO) {
 		List<TeacherVO> list = new ArrayList<TeacherVO>();
 		list.addAll(examMapper.selectExamAll());
 		list.addAll(examMapper.selectQuizAll());
-		list.addAll(examMapper.selectAnswerAll());
+		list.addAll(examMapper.selectAnswerAll(teacherVO));
 		list.addAll(examMapper.selectSubjectAll());
 
 		return list;
@@ -56,11 +57,11 @@ public class ExamServiceImpl implements ExamService{
 	 
 	// 등록된 지문 출력
 	@Override
-	public List<TeacherVO> answerList() {
-		return examMapper.selectAnswerAll();
+	public List<TeacherVO> answerList(TeacherVO teacherVO) {
+		return examMapper.selectAnswerAll(teacherVO);
 	}
 	
-	// 문제 상세 보기
+	// 문제 단건조회(자세히 보기)
 	@Override
 	public TeacherVO quizInfo(TeacherVO teacherVO) {
 		return examMapper.selectQuiz(teacherVO);
