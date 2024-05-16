@@ -12,6 +12,7 @@ public class QuizboxVO { //선택된문제 테이블
 	private int quizScore; //배점
 	private int page; //문제페이지번호
 	private int quizCnt; //문제개수
+	private int rn; //문제랜덤 일련번호
 	public int getQuizboxId() {
 		return quizboxId;
 	}
@@ -59,6 +60,12 @@ public class QuizboxVO { //선택된문제 테이블
 	}
 	public void setQuizCnt(int quizCnt) {
 		this.quizCnt = quizCnt;
+	}
+	public int getRn() {
+		return rn;
+	}
+	public void setRn(int rn) {
+		this.rn = rn;
 	}
 	
 	

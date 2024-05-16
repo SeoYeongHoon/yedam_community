@@ -42,8 +42,19 @@
 		<div style="text-align: center">
 			<button class="main-btn dark-btn-outline square-btn btn-hover"
 				th:onclick="|location.href='@{/testList}'|">목록</button>
-			<button th:id="${testDetail.testId}" class="main-btn dark-btn-outline square-btn btn-hover"
-			    th:onclick="|location.href='@{/testStart(testId=${testDetail.testId},subjectId=${testDetail.subjectId},page=1)}'|">시작</button>
+			<form action="testStart" method="post">
+				<input type="hidden" name="page" th:value="1">
+				<input type="hidden" name="quizCnt" th:value="${quizCnt}">
+				<input type="hidden" name="testId" th:value="${testId}">
+				<input type="hidden" name="subjectId" th:value="${subjectId}">
+ 				<div th:each="quiz : ${randQuizId}">				
+					<input type="hidden" name="randQuizId" th:value="${quiz}">
+				</div>
+				<div th:each="rn : ${randRn}">				
+					<input type="hidden" name="randRn" th:value="${rn}">
+				</div>
+				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">시작</button>
+			</form>
 		</div>
 		<br> <br>
 	</div>
