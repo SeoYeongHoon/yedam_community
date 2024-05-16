@@ -49,7 +49,7 @@ public class ExamServiceImpl implements ExamService{
 		examMapper.insertAnswer5(teacherVO);
 	}
 	
-	// 등록된 문제 출력
+	// 등록된 문제 출력 => 필터출력으로 대체. 나중에 삭제.
 	 @Override 
 	 public List<TeacherVO> quizList() { 
 		return examMapper.selectQuizAll(); 
@@ -89,5 +89,17 @@ public class ExamServiceImpl implements ExamService{
 			map.put("subjectId", teacherVO.getSubjectId());
 		}
 		return map;
+	}
+	
+	// 문제 필터링 출력
+	@Override
+	public List<TeacherVO> getQuizFilter(String sName) {
+		return examMapper.filterQuiz(sName);
+	}
+	
+	// 문제 자세히보기 단건조회
+	@Override
+	public List<TeacherVO> getQuizInfo(int qId) {
+		return examMapper.infoQuiz(qId);
 	}
 }

@@ -2,6 +2,8 @@ package com.yedam.app.yedam_examteacher.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yedam.app.yedam_examteacher.service.TeacherVO;
 
 
@@ -9,7 +11,7 @@ public interface ExamMapper {
 
 	// 시험목록 전체조회
 	public List<TeacherVO> selectExamAll();
-	// 문제 저장소에 문제 출력
+	// 문제 저장소에 문제 출력 => 필터출력으로 대체. 나중에 삭제.
 	public List<TeacherVO> selectQuizAll();
 	// 문제 저장소에 지문 출력
 	public List<TeacherVO> selectAnswerAll(TeacherVO teacherVO);
@@ -34,4 +36,10 @@ public interface ExamMapper {
 	
 	// 과목 삭제
 	public int deleteSubject(int subjectId);
+	
+	// 등록된 문제 필터출력 테스트
+	public List<TeacherVO> filterQuiz(@Param("sName") String sName);
+	
+	// 문제 자세히보기 단건조회
+	public List<TeacherVO> infoQuiz(@Param("qId") int qId);
 }
