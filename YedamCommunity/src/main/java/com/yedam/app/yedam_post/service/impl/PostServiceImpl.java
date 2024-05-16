@@ -102,18 +102,14 @@ public class PostServiceImpl implements PostService {
     }
 
 	@Override
-	public Map<String, Object> PostUpdate(Post post) {
-		Map<String, Object> map = new HashMap<>();
-		boolean isSuccessed = false;
-
-		int result = postMapper.updatePost(post);
-
-		if (result == 1) {
-			isSuccessed = true;
-		}
-		map.put("result", isSuccessed);
-		map.put("target", post);
-		return map;
-	}
-
+    public Map<String, Object> PostUpdate(Post post) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            postMapper.updatePost(post);
+            result.put("success", true);
+        } catch (Exception e) {
+            result.put("success", false);
+        }
+        return result;
+    }
 }
