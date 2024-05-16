@@ -43,6 +43,7 @@ public class CbtStudentController {
 		//페이징관련
 		int quizCnt = cbtStudentService.quizCnt(quizboxVO);
 		int page = 1;
+		System.out.println(page);
 		//QuizPagination quizPagination = new QuizPagination();
 		//quizPagination.pageInfo(quizCnt1);
 		model.addAttribute("testStart", list1);
