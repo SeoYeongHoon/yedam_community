@@ -1,5 +1,7 @@
 package com.yedam.app.yedam_homework.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 	}
 
 	@Override
-	public HomeWorkVO replyInfo(HomeWorkVO homeworkVO) {
+	public List<HomeWorkVO> replyInfo(HomeWorkVO homeworkVO) {
 		return homeworkReplyMapper.selectReply(homeworkVO);
 	}
 

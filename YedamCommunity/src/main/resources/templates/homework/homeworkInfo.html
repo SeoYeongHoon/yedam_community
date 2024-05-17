@@ -77,10 +77,12 @@
 				<p>작성일자 : [[${#dates.format(reply.replyDate,'yyyy년MM월dd일')}]]</p>
 			</div>
 		</div>
-		
+
 		<!-- end reply  -->
 		<h3>댓글 작성</h3>
-		<form  name="insertReply" method="post" th:object="${homeworkInfoList}">
+		<form name="insertReply" method="post" th:object="${homeworkInfoList}">
+			<input type="hidden" th:field="*{homeworkTargetId}">
+			<input type="hidden" th:field="*{homeworkId}">
 			<textarea
 				style="border: 1px solid black; width: 1200px; height: 200px;"
 				placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
@@ -102,11 +104,11 @@
 		let formValues = $('form[name="insertReply"]').serialize();
 		console.log(formValues)
 		let content = document.getElementById('replyContent');
+
 		if (content.value == '') {
 			$('#modalReply').modal('show');
-			content.focus();
 			return;
-		}else{
+		} else {
 			$.ajax({
 				url : "insertReply",
 				type : "POST",
