@@ -21,7 +21,8 @@ public class PostController {
 
 	@Autowired
 	private PostService postService;
-
+	
+	// 게시글 리스트 조회
 	@GetMapping("postList")
 	public String postList(Model model) {
 		List<Post> list = postService.getAllPosts();
@@ -29,13 +30,16 @@ public class PostController {
 		return "posts/postlist";
 	}
 
+	// 게시글 단건조회
 	@GetMapping("postInfo")
-	public String postInfo(Post post, Model model) {
-		Post postDetails = postService.getPostDetails(post);
-		model.addAttribute("postInfo", postDetails);
-		return "posts/postinfo";
-	}
+    public String getPostDetail(@RequestParam("postId") int postId, Model model) {
+        // 게시글과 댓글 정보를 조회합니다.
+        Post post = postService.getPostReplies(postId);
+        model.addAttribute("postInfo", post);
+        return "posts/postInfo";
+    }
 
+	// 게시글 등록
 	@GetMapping("postInsert")
 	public String postInsertForm(Model model) {
 		Post post = new Post();
@@ -44,7 +48,8 @@ public class PostController {
 		model.addAttribute("post", post);
 		return "posts/postinsert";
 	}
-
+	
+	// 게시글 등록 처리 
 	@PostMapping("postInsert")
 	public String postInsertProcess(Post post) {
 		post.setCreateDate(new Date());
@@ -52,7 +57,8 @@ public class PostController {
 		postService.createPost(post);
 		return "redirect:postList";
 	}
-
+	
+	// 게시글 삭제
 	@GetMapping("postDelete")
 	public String postDelete(@RequestParam("postId") int postId, Model model) {
 		Post post = new Post();
@@ -68,38 +74,25 @@ public class PostController {
 		return "redirect:postList";
 	}
 
+	// 게시글 업데이트
 	@GetMapping("postUpdate")
 	public String postUpdateForm(@RequestParam Integer postId, Model model) {
 		if (postId == null) {
 			return "redirect:postList";
 		}
-		Post post = postService.getPostDetails(postId);
+		Post post = postService.getPostReplies(postId);
 		if (post == null) {
 			return "redirect:postList";
 		}
 		model.addAttribute("postInfo", post);
 		return "posts/postUpdate";
 	}
-//    @GetMapping("postUpdate")
-//	public String postUdateForm(@RequestParam Integer postId, Model model) {
-//		Post post = new Post();
-//		post.setPostId(postId);
-//		
-//		Post postfind = new Post();
-//		model.addAttribute("boardInfo", postfind);
-//		return "posts/postUpdate";
-//	}
-
-//    @PostMapping("postUpdate")
-//    public String postUpdateProcess(Post post) {
-//        post.setUpdateDate(new Date());
-//        postService.updatePost(post);
-//        return "redirect:postInfo?postId=" + post.getPostId();
-//    }
 	
+	// 게시글 업데이트 처리
 	@PostMapping("postUpdate")
 	@ResponseBody
-	public Map<String, Object> empUPdateProcess(Post post) {
+	public Map<String, Object> postUPdateProcess(@RequestBody Post post) {
+		post.setUpdateDate(new Date());
 		return postService.PostUpdate(post);
 	}
 

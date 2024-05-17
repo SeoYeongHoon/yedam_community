@@ -1,12 +1,11 @@
 package com.yedam.app.yedam_post.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class Post {
@@ -23,6 +22,10 @@ public class Post {
     private int postLike;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updateDate;
+    // 댓글 출력을 위한 리스트
+    private List<Reply> replies;
+    // 대댓글을 출력하기 위한 리스트
+    private List<Comment> comments;
     
     private int replyId;
     private String replyContent;
@@ -41,6 +44,8 @@ public class Post {
     private int boardfileSize;
     private String boardfileLocation;
     private String boardfileExt;
+    
+    
     
 	public int getPostId() {
 		return postId;

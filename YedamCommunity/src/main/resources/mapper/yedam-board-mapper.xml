@@ -150,5 +150,7 @@
         DELETE FROM posts 
         WHERE post_id = #{postId}
     </delete>
+    
+    
 	
 </mapper>
