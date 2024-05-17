@@ -96,6 +96,7 @@ public class PostController {
 //        postService.updatePost(post);
 //        return "redirect:postInfo?postId=" + post.getPostId();
 //    }
+	
 	@PostMapping("postUpdate")
 	@ResponseBody
 	public Map<String, Object> empUPdateProcess(Post post) {
