@@ -5,25 +5,7 @@
 
 <mapper
 	namespace="com.yedam.app.yedam_homework.mapper.HomeWorkReplyMapper">
-	<!-- <insert id="insertReply" parameterType="HomeWorkVO">
-		INSERT INTO replies
-			(reply_id,
-			reply_content,
-			reply_date,
-			update_date,
-			reply_writer,
-			homework_target_id)
-		VALUES
-			(reply_id_seq.nextval,
-			#{replyContent},
-			#{replyDate},
-			#{updateDate},
-			#{replyWriter},
-			#{homeworkTargetId}
-			)
-	</insert> -->
-	
-	
+		
 	<!-- 댓글등록 -->
 	<insert id="insertReply" parameterType="HomeWorkVO">
 		INSERT INTO replies
@@ -43,9 +25,36 @@
         	r.reply_content,
        		r.reply_date,
        		r.update_date,
-        	r.reply_writer
+        	r.reply_writer,
+        	r.reply_id
 	FROM homeworks h JOIN homework_targets t ON (h.homework_id = t.homework_id)
                          JOIN replies r ON (t.homework_target_id = r.homework_target_id)
 	WHERE h.homework_id =#{homeworkId}
 	</select>
+	
+	<!-- 대댓글 조회 -->
+	<select id="selectComment" resultType="HomeWorkVO" >
+		SELECT  c.comment_id,
+        		c.comment_content,
+        		c.comment_date,
+        		r.reply_id,
+        		r.reply_content,
+        		r.reply_date
+		FROM homework_targets t JOIN replies r ON (t.homework_target_id = r.homework_target_id)
+                         		JOIN comments c ON ( r.reply_id = c.reply_id)
+		WHERE   t.homework_id =  #{homeworkId}
+	</select>
+	
+	<!-- 대댓글 등록 -->
+	<insert id="insertComment" parameterType="HomeWorkVO">
+		INSERT INTO comments
+					(comment_id,
+					reply_id,
+					comment_content)
+		VALUES
+					(reply_id_seq.nextval,
+					#{replyId},
+					#{commentContent}
+			)
+	</insert>
 </mapper>

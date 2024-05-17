@@ -22,12 +22,12 @@
 		(h.curriculum_id = s.curriculum_id)
 		WHERE h.subject_id =
 		s.subject_id
-		ORDER BY homework_id
+		ORDER BY homework_id DESC
 	</select>
 
 	<!-- 상세조회 -->
 	<select id="selectHomework" resultType="HomeWorkVO">
-		SELECT h.homework_id,
+	 SELECT h.homework_id,
 		h.homework_content,
 		h.homework_date,
 		h.homework_title,
@@ -35,7 +35,8 @@
 		h.subject_id,
 		t.homework_target_id
 		FROM homeworks h JOIN homework_targets t ON (h.homework_id = t.homework_id)
-		WHERE h.homework_id = #{homeworkId}
+		WHERE h.homework_id = #{homeworkId} 
+		
 	</select>
 
 	<!-- 과제명 조회 -->
