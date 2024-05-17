@@ -10,9 +10,6 @@ public interface PostMapper {
 
 	  // 전체 조회
     public List<Post> getAllPosts();
-	
-	  // 단건 조회
-    public Post getPostDetails(Post post);
     
       // 단건조회 int 타입
 	public Post getPostDetails(int postId);
@@ -28,7 +25,18 @@ public interface PostMapper {
     public int deletePost2(int postId);
     public int deletePost3(int postId);
     public int deletePost5(int postId);
+    
+    // 조회수
+    public int updatePostViewCNT(Post post);
+    
+    // 개추 (추천수)
+    public int updatePostLikeCNT(Post post);
+    
     // 댓글 및 대댓글 관련 메서드
+    
+    
+     // 대댓글들 조회
+   public Post getComments(Post post);
 	
 	  // 댓글 추가
     public int insertReply(Reply reply);
@@ -47,7 +55,6 @@ public interface PostMapper {
 	
 	  // 대댓글 삭제
     public int deleteComment(int commentId);
-
 	
     
     

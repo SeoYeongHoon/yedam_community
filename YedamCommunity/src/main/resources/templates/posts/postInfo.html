@@ -21,37 +21,38 @@
         </li>
     </ul> -->
 
-    <h2>댓글</h2>
+<h2>댓글</h2>
+	<!-- 같이 붙어있어서 댓글을 늘리면 증식 합니다 -->
     <ul>
-        <li th:each="reply : ${postInfo}">
+        <li th:each="reply, idxStat: ${postInfo.replies}">
             <p th:text="${reply.replyContent}">Reply Content</p>
-            <p th:text="${reply.writer}">Reply Writer</p>
+            <p th:text="${reply.replyWriter}">Reply Writer</p>
             <p th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd')}">Reply Date</p>
 
             <h3>대댓글</h3>
             <ul>
-                <li th:each="comment : ${postInfo}">
+                <li th:each="comment, idxStat: ${postInfo.comments}">
                     <p th:text="${comment.commentContent}">Comment Content</p>
                     <p th:text="${comment.commentWriter}">Comment Writer</p>
                     <p th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd')}">Comment Date</p>
                 </li>
             </ul>
 
-            <form th:action="@{/addComment}" th:object="${postInfo}" method="post">
+          <!-- <form th:action="@{/addComment}" th:object="${postInfo}" method="post">
                 <input type="hidden" name="replyId" th:value="${reply.replyId}" />
                 <input type="hidden" name="postId" th:value="${postInfo.postId}" />
                 <textarea th:field="*{commentContent}"></textarea>
                 <button type="submit">대댓글 작성</button>
-            </form>
+            </form> -->
         </li>
     </ul>
 
-      <h3>댓글 작성</h3>
-    <form th:action="@{/addReply}" th:object="${post}" method="post">
+     <!-- <h3>댓글 작성</h3>
+     <form th:action="@{/addReply}" th:object="${post}" method="post">
         <input type="hidden" name="postId" th:value="${postInfo.postId}" />
         <textarea th:field="*{replyContent}"></textarea>
         <button type="submit">댓글 작성</button>
-    </form>  
+    </form> -->
 
     <a th:href="@{/postUpdate?postId={postId}(postId=${postInfo.postId})}">수정</a>
     <form th:action="@{/postDelete}" method="get">

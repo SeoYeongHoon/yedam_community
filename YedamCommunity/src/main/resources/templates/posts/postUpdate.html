@@ -39,9 +39,9 @@
             dataType: 'json'
         })
         .done(function(result) {
-            if (result.success) {
+            if (result != null) {
                 alert('정상적으로 수정되었습니다.');
-                window.location.href = 'postList';
+                console.log(result);
             } else {
                 alert('수정되지 않았습니다.');
             }

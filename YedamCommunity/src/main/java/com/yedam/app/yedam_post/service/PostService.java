@@ -21,15 +21,12 @@ public interface PostService {
     public Post getPostDetails(Post post);
     
     // 게시글 단건 조회 - int 타입
-    public Post getPostDetails(int postId);  
+    public Post getPostDetails(int postId); 
     
     
     
     // 댓글 등록
     public int createReply(Reply reply);
-    
-    // 댓글 조회
-    public List<Reply> getRepliesByPostId(int postId);
     
     // 댓글 수정
     public int updateReply(Reply reply);
@@ -47,6 +44,15 @@ public interface PostService {
     
     // 대댓글 삭제
     public int deleteComment(int comment);
+    
+    
+	// 댓글 조회
+	public Post getPostReplies(int postId);
+	  
+	// 대댓글 조회
+	public Post getPostComments(int replyId);
 
+	
+    
 }
 

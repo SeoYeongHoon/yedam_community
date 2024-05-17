@@ -4,35 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.yedam_post.mapper.PostMapper">
 
-<!--    <insert id="insertPost" parameterType="int" useGeneratedKeys="true" keyProperty="postId">
-		INSERT INTO posts (post_id
-		                 , board_id
-		                 , user_id
-		                 , title
-		                 , post_content
-		                 , create_date
-		                 , writer
-		                 , post_view
-                         , post_like)
-		VALUES (post_id_seq.nextval
-		      , #{boardId}
-		      , #{userId}
-		      , #{title}
-		      , #{postContent}
-		      <choose>
-  		      	<when test="createDate != null">
-  		      		, #{createDate}
-  		        </when>
-  		        <otherwise>
-  		        	, sysdate
-  		        </otherwise>
-  		      </choose>
-		      , #{writer}
-		      , 0
-		      , 0);
-		
-	</insert> -->
-	
+	<!-- 게시글 등록 - PL/SQL - -->
     <insert id="insertPost" parameterType="Post" statementType="CALLABLE">
         <![CDATA[
     DECLARE
@@ -86,8 +58,8 @@
     ]]>
     </insert>
 
-	<select id="getPostDetails" parameterType="int"
-		resultType="Post">
+	<!-- 게시글 단건조회  수정 필요 -->
+	<select id="getPostDetails" parameterType="int" resultType="Post">
 		SELECT p.post_id
 		     , p.title
 		     , p.post_content
@@ -96,25 +68,13 @@
 		     , p.post_view
 		     , p.post_like
 		     , p.update_date AS post_update_date
-		     , r.reply_id
-		     , r.reply_content
-		     , r.reply_date
-		     , r.reply_writer
-		     , c.comment_id
-		     , c.comment_content
-		     , c.comment_date
-		     , c.comment_writer
 		     , b.boardfile_name
-		FROM posts p LEFT JOIN replies r 
-		               ON p.post_id = r.post_id
-		             LEFT JOIN comments c 
-		               ON r.reply_id = c.reply_id
-		             LEFT JOIN boardfiles b 
+		FROM posts p LEFT JOIN boardfiles b 
 		               ON p.post_id = b.post_id
 		WHERE p.post_id = #{postId}
-		ORDER BY p.create_date, r.reply_date, c.comment_date
 	</select>
 
+	<!-- 게시글 전체 조회 -->
 	<select id="getAllPosts" resultType="Post">
 		SELECT POST_ID
 	   	     , BOARD_ID
@@ -130,6 +90,7 @@
 		ORDER BY post_id DESC
 	</select>
 
+	<!-- 게시글 수정 -->
 	<update id="updatePost" parameterType="Post">
 		UPDATE posts
 		SET title =	#{title}
@@ -138,11 +99,12 @@
 		WHERE post_id = #{postId}
 	</update>
 
+	<!-- 삭제 -->
 	<delete id="deletePost1" parameterType="int">
 		DELETE FROM comments
         WHERE reply_id IN (SELECT reply_id
-                          FROM replies
-                          WHERE post_id = #{postId})
+                           FROM replies
+                           WHERE post_id = #{postId})
 	</delete>
 
 	<delete id="deletePost2" parameterType="int">
@@ -165,5 +127,38 @@
 		DELETE FROM posts
 		WHERE post_id = #{postId}
 	</delete>
+	
+	<!-- 조회수 -->
+	<update id="updatePostViewCNT" parameterType="Post">
+		UPDATE posts
+        SET    post_view = post_view + 1
+        WHERE post_id = #{postId}
+    </update>
+    
+    <!-- 추천수 -->
+    <update id="updatePostLikeCNT" parameterType="Post">
+    	UPDATE posts
+		SET post_like = post_like + 1
+		WHERE post_id = #{postId}
+    </update>
+    
+   	<!-- <insert id="createReply" parameterType="Post" useGeneratedKeys="true" keyProperty="postId">
+   		INSERT INTO replies (reply_id
+                           , board_id
+                           , post_id
+                           , reply_content
+                           , reply_date
+                           , update_date
+                           , reply_writer
+                           , homework_target_id)
+       VALUES (reply_id_seq.nextval
+             , #{boardId}
+             , #{postId}
+             , #{replyContent}
+             , sysdate
+             , #{updateDate}
+             , #{replyWriter}
+             , #{homeworkTargetId})
+   	</insert>  -->
 
 </mapper>

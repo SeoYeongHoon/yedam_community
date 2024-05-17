@@ -15,10 +15,14 @@ public class Reply {
     private String replyContent;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date replyDate;
-    private String writer;
+    private String replyWriter;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updateDate;
-    private List<Comment> comments; // 대댓글 리스트 추가
+    
+    // 대댓글을 끌고올려는곳
+    private List<Comment> comments;
+    
+    
     
 	public int getReplyId() {
 		return replyId;
@@ -50,23 +54,11 @@ public class Reply {
 	public void setReplyDate(Date replyDate) {
 		this.replyDate = replyDate;
 	}
-	public String getWriter() {
-		return writer;
-	}
-	public void setWriter(String writer) {
-		this.writer = writer;
-	}
 	public Date getUpdateDate() {
 		return updateDate;
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
-	}
-	public List<Comment> getComments() {
-		return comments;
-	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
 	}
 
     
