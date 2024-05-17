@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
-import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
@@ -13,8 +12,6 @@ import com.yedam.app.yedam_examstudent.service.TestVO;
 public interface CbtStudentMapper {
 	//전체시험목록 조회
 	public List<TestVO> selectTestListAll();
-	//시험 피드백 조회
-	public ExamResultVO selectTestFeedback(ExamResultVO examResultVO);
 	//시험상세정보 조회
 	public TestVO selectTestDetail(TestVO testVO);
 	//시험문제랜덤

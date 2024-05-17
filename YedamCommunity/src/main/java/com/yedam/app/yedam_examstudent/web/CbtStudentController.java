@@ -25,9 +25,7 @@ public class CbtStudentController {
 	@GetMapping("testList")
 	public String testList(TestVO testVO, ExamResultVO examResultVO, Model model) {
 		List<TestVO> list1 = cbtStudentService.testListAll();
-		ExamResultVO list2 = cbtStudentService.testFeedback(examResultVO);
 		model.addAttribute("testList", list1); //시험전체목록
-		model.addAttribute("testFeedback", list2); //시험피드백
 		return "cbt_student/testMain";
 	}
 	

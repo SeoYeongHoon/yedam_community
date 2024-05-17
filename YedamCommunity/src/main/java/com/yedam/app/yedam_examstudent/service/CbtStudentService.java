@@ -5,8 +5,6 @@ import java.util.List;
 public interface CbtStudentService {
 	//전체시험목록 조회
 	public List<TestVO> testListAll();
-	//시험피드백 조회
-	public ExamResultVO testFeedback(ExamResultVO examResultVO);
 	//시험상세정보 조회
 	public TestVO testDetail(TestVO testVO);
 	//시험문제랜덤
