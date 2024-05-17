@@ -29,4 +29,10 @@ public class HomeWorkVO {
 	private Date updateDate;
 	private String replyWriter;
 	private int homeworkTargetId;
+	
+	//대댓글
+	private int commentId;
+	private String commentWriter;
+	private String commentContent;
+	private Date commentDate;
 }
