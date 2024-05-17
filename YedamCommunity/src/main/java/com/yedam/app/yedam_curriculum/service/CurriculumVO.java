@@ -17,4 +17,5 @@ public class CurriculumVO {
 	private Date curriculumEndDate;
 	private int isComplete;
 	private int classId;
+	private String curriculumImg;
 }

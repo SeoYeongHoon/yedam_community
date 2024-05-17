@@ -11,9 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumService;
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 //import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
@@ -24,6 +28,9 @@ public class AdminController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	CurriculumService curriculumService;
 	
 //	@Autowired
 //	AdminService adminService;
@@ -111,4 +118,42 @@ public class AdminController {
 //		String filePath = "";
 //		return adminService.readCsv(filePath);
 //	}
+	
+	@GetMapping("/manageCourse")
+	public String manageCourse(Model model) {
+		List<CurriculumVO> currList = curriculumService.CurriculumList();
+		model.addAttribute("class", currList);
+		
+		return "admin/manageCourse";
+	}
+	
+//	@RequestMapping(value="manageCourse", method=RequestMethod.POST)
+//	public String insertCurriculum(CurriculumVO curriculumVO) throws Exception {
+//		System.out.println("전달된 데이터: " + curriculumVO);
+//		String uri = null;
+//		
+//		if (curriculumService.insertCurriculum(curriculumVO) > 0) {
+//			uri = "admin/manageCourse";
+//		} else {
+//			uri = "admin/manageCourse";
+//		}
+//		
+//		return uri;
+//	}
+	
+	@PostMapping("/manageCourse")
+	public String insertCurriculums(CurriculumVO curriculumVO) {
+		System.out.println("전달된 데이터: " + curriculumVO);
+		String uri = null;
+		
+		int curId = curriculumService.insertCurriculum(curriculumVO);
+		
+		if (curId > -1) {
+			uri = "admin/manageCourse";
+		} else {
+			uri = "admin/manageCourse";
+		}
+		
+		return uri;
+	}
 }

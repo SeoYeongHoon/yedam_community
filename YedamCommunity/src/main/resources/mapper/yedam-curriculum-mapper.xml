@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-  <mapper namespace="com.yedam.app.yedam_curriculum.mapper.CurriculumMapper">
+<mapper namespace="com.yedam.app.yedam_curriculum.mapper.CurriculumMapper">
   
   <select id="cSelectAll" resultType="CurriculumVO">
   	SELECT	curriculum_id,
@@ -11,12 +11,31 @@
   			curriculum_start_date,
   			curriculum_end_date,
   			is_complete,
-  			class_id
+  			class_id,
+  			curriculum_img
   	FROM	curriculum
   	WHERE   is_complete = 2
-  	ORDER BY class_id
-  			
-  			
+  	ORDER BY curriculum_id DESC
   </select>
   
-  </mapper>
+  <insert id="insertCurriculum" parameterType="CurriculumVO">
+  	INSERT INTO curriculum (curriculum_id
+				  		  , curriculum_name
+				  		  , curriculum_start_date
+				  		  , curriculum_end_date
+				  		  , is_complete
+				  		  , class_id
+				  		  , curriculum_img
+				  			)
+	VALUES (
+		curriculum_id_seq.NEXTVAL
+	  , #{curriculumName}
+	  , #{curriculumStartDate}
+	  , #{curriculumEndDate}
+	  , 2
+	  , #{classId}
+	  , #{curriculumImg}
+	)			  			
+  
+  </insert>
+</mapper>
