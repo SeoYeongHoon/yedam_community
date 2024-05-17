@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.yedam_examstudent.mapper.CbtStudentMapper;
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
 import com.yedam.app.yedam_examstudent.service.CbtStudentService;
-import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
@@ -23,11 +22,6 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Override
 	public List<TestVO> testListAll() {
 		return cbtStudentMapper.selectTestListAll();
-	}
-	//시험피드백 조회
-	@Override
-	public ExamResultVO testFeedback(ExamResultVO examResultVO) {
-		return cbtStudentMapper.selectTestFeedback(examResultVO);
 	}
 	//시험상세정보 조회
 	@Override
@@ -59,8 +53,6 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public int quizCnt(QuizboxVO quizboxVO) {
 		return cbtStudentMapper.selectQuizCnt(quizboxVO);
 	}
-	
-	
 	
 	
 	

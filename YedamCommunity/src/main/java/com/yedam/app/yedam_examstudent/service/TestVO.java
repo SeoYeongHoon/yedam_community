@@ -5,7 +5,8 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class TestVO { //시험출제 테이블
+public class TestVO {
+	//tests 테이블
 	private int testId;
 	private int curriculumId;
 	private String testContent;
@@ -13,12 +14,31 @@ public class TestVO { //시험출제 테이블
 	private Date testDate;
 	private String testName;
 	private int classId;
-	private int userId;
 	
-	private int quizScoreSum; //시험목록 >> 시험총점
-	private int quizIdCnt; // 시험목록 >> 문제개수
-	private String curriculumName; //과정명
-	private int subjectId; //과목번호
+	//test_targets 테이블
+	private int userId;
+	private int testTargetId;
+	
+	//quizbox 테이블
+	private int quizScoreSum;
+	private int subjectId;
+	
+	//curriculum 테이블
+	private String curriculumName;
+	
+	//exam_results 테이블
+	private int resultId;
+	private int resultScore;
+	private String feedback;
+	private int isReexam;
+	private int passScore;
+	
+	//기타 필드
+	private int quizIdCnt; //시험문제개수
+
+	
+	
+	//getter,setter
 	public int getTestId() {
 		return testId;
 	}
@@ -67,23 +87,17 @@ public class TestVO { //시험출제 테이블
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
+	public int getTestTargetId() {
+		return testTargetId;
+	}
+	public void setTestTargetId(int testTargetId) {
+		this.testTargetId = testTargetId;
+	}
 	public int getQuizScoreSum() {
 		return quizScoreSum;
 	}
 	public void setQuizScoreSum(int quizScoreSum) {
 		this.quizScoreSum = quizScoreSum;
-	}
-	public int getQuizIdCnt() {
-		return quizIdCnt;
-	}
-	public void setQuizIdCnt(int quizIdCnt) {
-		this.quizIdCnt = quizIdCnt;
-	}
-	public String getCurriculumName() {
-		return curriculumName;
-	}
-	public void setCurriculumName(String curriculumName) {
-		this.curriculumName = curriculumName;
 	}
 	public int getSubjectId() {
 		return subjectId;
@@ -91,7 +105,46 @@ public class TestVO { //시험출제 테이블
 	public void setSubjectId(int subjectId) {
 		this.subjectId = subjectId;
 	}
-	
-	
-	
+	public String getCurriculumName() {
+		return curriculumName;
+	}
+	public void setCurriculumName(String curriculumName) {
+		this.curriculumName = curriculumName;
+	}
+	public int getResultId() {
+		return resultId;
+	}
+	public void setResultId(int resultId) {
+		this.resultId = resultId;
+	}
+	public int getResultScore() {
+		return resultScore;
+	}
+	public void setResultScore(int resultScore) {
+		this.resultScore = resultScore;
+	}
+	public String getFeedback() {
+		return feedback;
+	}
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+	public int getIsReexam() {
+		return isReexam;
+	}
+	public void setIsReexam(int isReexam) {
+		this.isReexam = isReexam;
+	}
+	public int getPassScore() {
+		return passScore;
+	}
+	public void setPassScore(int passScore) {
+		this.passScore = passScore;
+	}
+	public int getQuizIdCnt() {
+		return quizIdCnt;
+	}
+	public void setQuizIdCnt(int quizIdCnt) {
+		this.quizIdCnt = quizIdCnt;
+	}
 }
