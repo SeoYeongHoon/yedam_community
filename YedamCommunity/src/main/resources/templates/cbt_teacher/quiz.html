@@ -79,7 +79,7 @@ li {
 				</div>
 			</div>
 		</li>
-		<li><a href="#0" class="main-btn danger-btn-light btn-hover">시험출제</a>
+		<li><a href="selectClassExam" class="main-btn danger-btn-light btn-hover">시험출제</a>
 		</li>
 		<li><a href="quizinsert"
 			class="main-btn primary-btn-light btn-hover">새문제</a></li>
@@ -111,8 +111,8 @@ li {
 						<table>
 							<tr>
 								<th>
-								<input class="form-check-input checkbox" th:id="checkbox+${subjectInfo.subjectId}" type="checkbox" th:value="${subjectInfo.subjectId}" th:name="chkBox"/> 
-								<label th:for="checkbox+${subjectInfo.subjectId}" class="form-check-label">[[${subjectInfo.subjectName}]]</label>
+								<input class="form-check-input checkbox" th:id="${subjectInfo.subjectName}" type="checkbox" th:value="${subjectInfo.subjectId}" th:name="chkBox"/> 
+								<label th:for="${subjectInfo.subjectName}" class="form-check-label">[[${subjectInfo.subjectName}]]</label>
 								</th>
 							</tr>
 						</table>
@@ -146,7 +146,7 @@ var textContent3 = '';
 var textContent4 = '';
 var textContent5 = '';
 
-//퀴즈 문제 전체를 불러오는 AJAX
+// 퀴즈 문제 전체를 불러오는 AJAX
 function quizContentList(sName){
 	$('#quizBox').html('');
 	// 문제 전체 조회 ajax
@@ -169,6 +169,7 @@ function quizContentList(sName){
 				qContent = item.quizContent;
 				qId = item.quizId;
 				sId = item.subjectId;
+				// template 문법 사용. 직관적으로 생성되는 태그 확인.				
 				let temp = `
 					<div style="color:gray;" class="col-4 box" id="${sId}">
 						<div class="card-style-3 mb-30 box2">
@@ -188,6 +189,7 @@ function quizContentList(sName){
 				rowTag.append(temp);
 			}); // forEach 종료
 			
+			// 문제 체크박스 버튼 누르고 문제선택 누를시 문제박스 색상 변경
 			$('#quizSelect').on('click', function(e){
 				console.log('문제선택 버튼 누름');
 				
@@ -263,7 +265,7 @@ function quizContentList(sName){
 						console.log('에러입니다');
 					}
 				}); // 지문 불러오기 ajax 종료
-				answer = [];
+				answer = []; // 배열값 초기화
 			})// 단건조회 불러오는(자세히보기 버튼) 함수 종료
 			
 				/* $('.box').on('click', '.infoBtn', function(e) {
@@ -281,6 +283,7 @@ function quizContentList(sName){
 	}); // 문제 전체 조회 ajax 종료 	
 }; // function quizContentList() 종료
 
+//테스트용 버튼 
 $('#updateBtn').on('click', function quizInfo(qId){
 	console.log(qId);
 	$.ajax({

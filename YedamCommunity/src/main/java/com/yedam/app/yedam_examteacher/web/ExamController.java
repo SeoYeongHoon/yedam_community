@@ -18,7 +18,7 @@ public class ExamController {
 
 	@Autowired
 	ExamService examService;
-
+	
 	// 등록된 시험리스트 출력
 	@GetMapping("testlist")
 	public String examList(Model model) {
@@ -29,11 +29,13 @@ public class ExamController {
 	
 	// 시험 등록 - 페이지
 	@GetMapping("testinsert")
-	public String testInsertForm(Model model) {
+	public String testInsertForm(TeacherVO teacherVO, Model model) {
+		List<TeacherVO> list = examService.userList(teacherVO);
 		model.addAttribute("teacherVO", new TeacherVO());
+		model.addAttribute("userList", list);
 		return "cbt_teacher/insertTest";
 	}
-
+	
 	// 문제 등록 - 페이지
 	@GetMapping("quizinsert")
 	public String quizInsertForm(Model model) {
@@ -43,10 +45,17 @@ public class ExamController {
 		return "cbt_teacher/insertquiz";
 	}
 
-	// 문제 등록 - 처리
+	// 문제 객관식 등록 - 처리
 	@PostMapping("quizinsert")
 	public String quizInsertProcess(TeacherVO teacherVO) {
 		examService.quizInsert(teacherVO);
+		return "redirect:quizlist";
+	}
+	
+	// 문제 주관식 등록 - 처리
+	@PostMapping("quizinsertJu")
+	public String quizInsertProcessJu(TeacherVO teacherVO) {
+		examService.quizInsertJu(teacherVO);
 		return "redirect:quizlist";
 	}
 
@@ -63,18 +72,18 @@ public class ExamController {
 		return "cbt_teacher/quiz";
 	}
 	
-	// 문제에 대한 지문들 출력
-	@PostMapping("textcontent")
-	@ResponseBody
-	public List<TeacherVO> textContentList(@RequestParam("qId") int qId){
-		return examService.answerList(qId);
-	}
-
 	// 등록된 문제 필터링해서 출력
 	@PostMapping("quizlist")
 	@ResponseBody
 	public List<TeacherVO> quizList(@RequestParam("sName") String sName) {
 		return examService.getQuizFilter(sName);
+	}
+	
+	// 문제에 대한 지문들 출력
+	@PostMapping("textcontent")
+	@ResponseBody
+	public List<TeacherVO> textContentList(@RequestParam("qId") int qId){
+		return examService.answerList(qId);
 	}
 
 	// 문제 단건조회
@@ -92,7 +101,7 @@ public class ExamController {
 		if (sId > -1) {
 			uri = "quizlist";
 		} else {
-			uri = "quizlist";
+			uri = "quizinsert";
 		}
 		return uri;
 	}

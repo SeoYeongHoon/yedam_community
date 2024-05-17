@@ -13,8 +13,12 @@ public interface ExamService {
 	// 시험 등록
 	public int testInsert(TeacherVO teacherVO);
 	
+	// 시험 대상자 출력
+	public List<TeacherVO> userList(TeacherVO teacherVO);
+	
 	// 문제등록
-	public void quizInsert(TeacherVO teacherVO);
+	public void quizInsert(TeacherVO teacherVO); //객관식문제
+	public void quizInsertJu(TeacherVO teacherVO); //주관식문제
 	
 	// 문제저장소에 문제출력 -> 필터링 출력으로 기능구현함. 마지막에 삭제해야됨
 	public List<TeacherVO> quizList();

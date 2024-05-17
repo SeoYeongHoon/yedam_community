@@ -11,8 +11,7 @@
 }
 </style>	
 
-<p th:text="${TeacherVO}"></p>
-<form name="" th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
+<form th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
 	<!-- ======= 과목설정 select ======= -->
 	<div class="card-style mb-30">
 		<div class="select-style-1">
@@ -95,6 +94,14 @@
 		</div>
 		<!-- end textarea -->
 	<!-- ======= 문제 해설 style end ======= -->
+	<ul class="buttons-group">
+		<li>
+			<button type="submit" class="main-btn primary-btn square-btn btn-hover" id="addBtn">등록</button>
+		</li>
+		<li>
+	        <button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
+	    </li>
+	</ul>	
 	</div>
 	<!-- 객관식 문제 입력 영역 종료-------------------------------------------------->
 	
@@ -103,7 +110,7 @@
 	<!-- ======= 시험문제 입력 style start ======= -->
 		<h6 class="mb-25">시험 문제</h6>
 		<div class="input-style-1">
-			<textarea placeholder="문제를 입력하세요." rows="8" cols="100" th:field="*{quizContent}"></textarea>
+			<textarea placeholder="문제를 입력하세요." rows="8" cols="100" name="quizContentJu"></textarea>
 		</div>
 		<!-- end textarea -->
 	<!-- ======= 시험문제 입력 style end ======= -->
@@ -113,7 +120,7 @@
 			<input class="form-check-input" type="radio" value="" id="radio-1" />
                     <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="1" >
                       1.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}"/>
+			<input type="text" placeholder="문제의 정답을 입력하세요." name="textContentJu"/>
 		</div>
 		<!-- end radio -->
 		
@@ -121,20 +128,20 @@
 	<!-- ======= 문제 해설 style start ======= -->
 		<h6 class="mb-25">문제 해설</h6>
 		<div class="input-style-1">
-			<textarea placeholder="해설을 입력하세요." rows="5" th:field="*{quizSolution}"></textarea>
+			<textarea placeholder="해설을 입력하세요." rows="5" name="quizSolutionJu"></textarea>
 		</div>
 		<!-- end textarea -->
+	<ul class="buttons-group">
+		<li>
+			<button type="submit" class="main-btn primary-btn square-btn btn-hover" id="addBtnJu" formaction="quizinsertJu">등록</button>
+		</li>
+		<li>
+	        <button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
+	    </li>
+	</ul>	
+	</div>
 	<!-- ======= 문제 해설 style end ======= -->	
-	</div>	
 	<!-- 주관식 문제 입력 영영 종료 ------------------------------------------------->	
-		<ul class="buttons-group">
-			<li>
-				<button type="submit" class="main-btn primary-btn square-btn btn-hover">등록</button>
-			</li>
-			<li>
-	        	<button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
-	        </li>
-		</ul>
 	</div>
 </form>
 
@@ -153,6 +160,7 @@ $('#radio-2').change(function(e){
 	multi.style.display = "none";	
 	shor.style.display = "block";	
 })
+
 
 
 </script>

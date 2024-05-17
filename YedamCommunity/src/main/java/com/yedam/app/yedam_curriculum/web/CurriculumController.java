@@ -16,11 +16,19 @@ public class CurriculumController {
 	@Autowired
 	CurriculumService curriculumService;
 	
-	//강의실 전체 조회
+	//강의실 전체 조회 - 과제등록
 	@GetMapping("selectClass")
 	public String classList(Model model) {
 		List<CurriculumVO> list = curriculumService.CurriculumList();
 		model.addAttribute("class",list);
 		return "curriculum/selectClass";
 	}
+	
+	//강의실 전체 조회 - 문제등록
+		@GetMapping("selectClassExam")
+		public String classListExam(Model model) {
+			List<CurriculumVO> list = curriculumService.CurriculumList();
+			model.addAttribute("class",list);
+			return "curriculum/selectClassExam";
+		}
 }
