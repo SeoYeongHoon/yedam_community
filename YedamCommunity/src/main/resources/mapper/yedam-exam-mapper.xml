@@ -27,9 +27,23 @@
 				, #{testTime}
 				, #{testDate}
 				, #{testName}
-				, #{classId});				  
+				, #{classId})				  
 	</insert>
 	
+	<select id="selectUserAll" resultType="TeacherVO">
+	<!-- 유저 정보 출력(시험 대상자) -->
+		SELECT user_id
+		     , name
+		     , tel
+		     , email
+		     , address
+		     , user_image
+		     , company_info
+		     , user_type
+		     , curriculum_id
+		FROM users
+		WHERE curriculum_id = #{curriculumId}
+	</select>
 	<!-- 문제 등록 -->
 	<insert id="insertQuiz" parameterType="TeacherVO">
 		INSERT INTO quizes (quiz_id
@@ -41,6 +55,18 @@
 			  , #{quizContent}
 			  , #{quizSolution})
 	</insert>
+	
+	<insert id="insertQuizJu" parameterType="TeacherVO">
+		INSERT INTO quizes (quiz_id
+			  			  , subject_id
+						  , quiz_content
+						  , quiz_solution)
+		VALUES (quiz_id_seq.nextval
+			  , #{subjectId}
+			  , #{quizContentJu}
+			  , #{quizSolutionJu})
+	</insert>
+	
 	
 	<!-- 문제 지문 등록 -->
 	<insert id="insertAnswer" parameterType="TeacherVO">
@@ -100,6 +126,18 @@
 		VALUES (text_id_seq.nextval
 			  , 5
 			  , #{textContent5}
+			  , quiz_id_seq.currval
+			  , #{subjectId})
+	</insert>
+	<insert id="insertAnswerJu" parameterType="TeacherVO">
+		INSERT INTO answers (text_id
+			  			  , example_num
+						  , text_content
+						  , quiz_id
+						  , subject_id)
+		VALUES (text_id_seq.nextval
+			  , 1
+			  , #{textContentJu}
 			  , quiz_id_seq.currval
 			  , #{subjectId})
 	</insert>
@@ -170,10 +208,9 @@
 	
 	<!-- 과목명 출력 -->
 	<select id="selectSubjectAll" resultType="TeacherVO">
-		SELECT subject_id
-			  , subject_name
+		SELECT DISTINCT subject_name
 		FROM subjects
-		ORDER BY subject_id
+		ORDER BY subject_name
 	</select>
 	
 	<!-- 과목명 추가 -->

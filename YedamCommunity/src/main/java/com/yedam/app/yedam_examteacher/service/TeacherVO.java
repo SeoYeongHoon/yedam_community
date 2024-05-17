@@ -19,7 +19,9 @@ public class TeacherVO {
 	// 문제저장소
 	private int quizId;
 	private String quizContent;
+	private String quizContentJu;
 	private String quizSolution;
+	private String quizSolutionJu;
 	private String quizAnswer;
 	
 	private String textContent;
@@ -27,9 +29,14 @@ public class TeacherVO {
 	private String textContent3;
 	private String textContent4;
 	private String textContent5;
+	private String textContentJu;
 	private int exampleNum;
 	
 	// 과목명
 	private int subjectId;
 	private String subjectName;
+	
+	// 유저정보
+	private int curriculumId;
+	private String name;
 }

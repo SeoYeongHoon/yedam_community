@@ -4,156 +4,92 @@
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>	
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
 #shortAnswer {
-	display : none;
+	display: none;
 }
-</style>	
+</style>
 
 <p th:text="${TeacherVO}"></p>
-<form name="" th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
-	<!-- ======= 과목설정 select ======= -->
+<form name="" th:action="@{/}" method="post"
+	th:object="${teacherVO}">
+	<!-- ======= 시험 이름 입력 start ======= -->
+	<div class="input-style-1">
+		<h6 class="mb-25">시험 Title</h6>
+		<input type="text" placeholder="시험의 이름 입력" />
+	</div>
+	<!-- ======= 시험 이름 입력 end ======= -->
+
+	<!-- ======= 시험 안내사항 입력 start ======= -->
+	<h6 class="mb-25">시험 안내사항</h6>
+	<div class="input-style-1">
+		<textarea placeholder="시험의 안내사항을 입력하세요." rows="8" cols="100"
+			th:field="*{quizContent}"></textarea>
+	</div>
+	<!-- ======= 시험 안내사항 입력 start ======= -->
+
+	<!-- ======= 시험 제한시간 입력 start ======= -->
+	<div>
+		<label>제한시간</label><input type="checkbox" id="checkbox-0" /><input
+			type="text" placeholder="시간입력">
+
+	</div>
+	<br>
+	<!-- ======= 시험 제한시간 입력 end ======= -->
+
+	<!-- ======= 시험 대상 선택 start ======= -->
 	<div class="card-style mb-30">
-		<div class="select-style-1">
-			<h6 class="mb-25">과목 선택</h6>
-			<div class="select-position">
-				<select th:field="*{subjectId}">
-					<th:block th:each="subjectInfo, idxStat : ${subjectList}">
-						<option th:value="${subjectInfo.subjectId}">[[${subjectInfo.subjectName}]]</option>
-					</th:block>
-				</select>
+		<h6 class="mb-25">시험 대상</h6>
+		<div class="form-check checkbox-style mb-20">
+			<input class="form-check-input" type="checkbox" value=""
+				id="checkbox-1" /> <label class="form-check-label" for="checkbox-1">
+				전체 추가</label>
+		</div>
+		<!-- end checkbox -->
+		<th:block th:each="userInfo, idxStat : ${userList}">
+			<div class="form-check checkbox-style mb-20">
+				<input class="form-check-input checkbox" type="checkbox" th:value="${userInfo.userId}"
+					th:id="${userInfo.name}" /> <label class="form-check-label"
+					th:for="${userInfo.name}">[[${userInfo.name}]]</label>
 			</div>
-		</div>
-	
-	<!-- 과목설정 end select -->
-	<!-- ======= 문제 유형 radio ======= -->
-		<h6 class="mb-25">문제 유형</h6>
-		<div class="form-check radio-style mb-20">
-			<input class="form-check-input chk" type="radio" value="gek" id="radio-1" name="qType" checked />
-			<label class="form-check-label" for="radio-1">객관식</label>
-		</div>
-		<!-- end radio -->
-		<div class="form-check radio-style radio-warning mb-20">
-			<input class="form-check-input chk" type="radio" value="ju" id="radio-2" name="qType"/>
-			<label class="form-check-label" for="radio-2"> 주관식 </label>
-		</div>
-		<!-- end radio -->
-	<!-- ======= 문제 유형 radio style end ======= -->
-	
-	<!-- 객관식 문제 입력 영역 ----------------------------------------------------->
-	<div id="multiple">
-	<!-- ======= 시험문제 입력 style start ======= -->
-		<h6 class="mb-25">시험 문제</h6>
-		<div class="input-style-1">
-			<textarea placeholder="문제를 입력하세요." rows="8" cols="100" th:field="*{quizContent}"></textarea>
-		</div>
-		<!-- end textarea -->
-	<!-- ======= 시험문제 입력 style end ======= -->
-	<!-- ======= 정답 지문 입력 radio style start ======= -->
-		<h6 class="mb-25">정답 체크</h6>
-		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="1" >
-                      1.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}"/>
-		</div>
-		<!-- end radio -->
-		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="2" >
-                      2.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent2}"/>
-		</div>
-		<!-- end radio -->
-		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="3" >
-                      3.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent3}"/>
-		</div>
-		<!-- end radio -->
-		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="4" >
-                      4.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent4}"/>
-		</div>
-		<!-- end radio -->
-		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="5" >
-                      5.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent5}"/>
-		</div>
-		<!-- end radio -->
-	<!-- ======= 정답 지문 입력 radio style end ======= -->
-	<!-- ======= 문제 해설 style start ======= -->
-		<h6 class="mb-25">문제 해설</h6>
-		<div class="input-style-1">
-			<textarea placeholder="해설을 입력하세요." rows="5" th:field="*{quizSolution}"></textarea>
-		</div>
-		<!-- end textarea -->
-	<!-- ======= 문제 해설 style end ======= -->
+		</th:block>
+		<!-- end checkbox -->
+		<!-- ======= 시험 대상 선택 end ======= -->
 	</div>
-	<!-- 객관식 문제 입력 영역 종료-------------------------------------------------->
-	
-	<!-- 주관식 문제 입력 영역 ----------------------------------------------------->
-	<div id="shortAnswer">
-	<!-- ======= 시험문제 입력 style start ======= -->
-		<h6 class="mb-25">시험 문제</h6>
-		<div class="input-style-1">
-			<textarea placeholder="문제를 입력하세요." rows="8" cols="100" th:field="*{quizContent}"></textarea>
-		</div>
-		<!-- end textarea -->
-	<!-- ======= 시험문제 입력 style end ======= -->
-	<!-- ======= 정답 지문 입력 radio style start ======= -->
-		<h6 class="mb-25">정답 체크</h6>
-		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="1" >
-                      1.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}"/>
-		</div>
-		<!-- end radio -->
-		
-	<!-- ======= 정답 지문 입력 radio style end ======= -->
-	<!-- ======= 문제 해설 style start ======= -->
-		<h6 class="mb-25">문제 해설</h6>
-		<div class="input-style-1">
-			<textarea placeholder="해설을 입력하세요." rows="5" th:field="*{quizSolution}"></textarea>
-		</div>
-		<!-- end textarea -->
-	<!-- ======= 문제 해설 style end ======= -->	
-	</div>	
-	<!-- 주관식 문제 입력 영영 종료 ------------------------------------------------->	
-		<ul class="buttons-group">
-			<li>
-				<button type="submit" class="main-btn primary-btn square-btn btn-hover">등록</button>
-			</li>
-			<li>
-	        	<button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
-	        </li>
-		</ul>
-	</div>
+	<ul class="buttons-group">
+		<li>
+			<button type="submit"
+				class="main-btn primary-btn square-btn btn-hover" id="addBtn"
+				formaction="">다음</button>
+		</li>
+		<li>
+			<button type="button"
+				class="main-btn deactive-btn square-btn btn-hover"
+				th:onclick="|location.href='@{/selectClassExam}'|">취소</button>
+		</li>
+	</ul>
 </form>
 
 <script>
-const multi = document.getElementById("multiple");
-const shor = document.getElementById("shortAnswer");
+var selectAllCheckbox = document.getElementById("checkbox-1");
+var checkboxes = document.querySelectorAll(".checkbox");
 
-var checkVal = $('input[name=qType]:checked').val(); // 데이터 확인용
+// 전체 선택/해제 체크박스의 상태에 따라 모든 항목 체크박스 선택/해제
+selectAllCheckbox.addEventListener("change", function() {
+  var isChecked = selectAllCheckbox.checked;
+  checkboxes.forEach(function(checkbox) {
+    checkbox.checked = isChecked;
+  });
+});
 
-
-$('#radio-1').change(function(e){
-	multi.style.display = "block";
-	shor.style.display = "none";	
-})
-$('#radio-2').change(function(e){
-	multi.style.display = "none";	
-	shor.style.display = "block";	
-})
-
-
+// 항목 체크박스 중 하나라도 선택 취소될 경우, 전체 선택/해제 체크박스도 선택 취소
+checkboxes.forEach(function(checkbox) {
+  checkbox.addEventListener("change", function() {
+    if (!checkbox.checked) {
+      selectAllCheckbox.checked = false;
+    }
+  });
+});
 </script>
 </html>

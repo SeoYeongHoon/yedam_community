@@ -3,55 +3,57 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
-
 <div class="row">
-	<div class="col-lg-12">
-		<div class="card-style mb-30">
-			<h1 class="mb-30">시험 목록</h1>
-			<div class="table-wrapper table-responsive">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>
-								<h6>#</h6>
-							</th>
-							<th>
-								<h6>시험명</h6>
-							</th>
-							<th>
-								<h6>마감일</h6>
-							</th>
-							<th>
-								<h6>시험 시간</h6>
-							</th>
-							<th>
-								<h6>진행상태</h6>
-							</th>
-						</tr>
-						<!-- end table row-->
-					</thead>
-					<tbody>
-						<th:block th:each="examInfo, idxStat : ${testList}">
-							<tr>
-								<td>
-	                      			<i class="mdi mdi-script-text-play-outline"></i>
-								</td>
-								<td class="min-width">[[ ${examInfo.testName} ]]</td>
-								<td class="min-width">[[ ${#dates.format(examInfo.testDate, 'yyyy-MM-dd')} ]]</td>
-								<td class="min-width">[[ ${examInfo.testTime} ]]</td>
-								<td class="min-width"><span class="status-btn active-btn">진행중</span>
-								</td>
-							</tr>
-						</th:block>
-						<!-- end table row -->
-					</tbody>
-				</table>
-				<!-- end table -->
-			</div>
+	<div class="col-12">
+		<div style='float: right;'>
+			<a href="selectClassExam" class=" primary-btn rounded-full btn-hover"
+				style='padding: 10px;'> <font style="vertical-align: inherit;">
+					<font style="vertical-align: inherit;">+ 시험</font>
+			</font>
+			</a>
 		</div>
-		<!-- end card -->
 	</div>
-	<!-- end col -->
 </div>
-<!-- end row -->
+<div class="col-lg-12">
+	<div class="card-style mb-30">
+		<h1 class="mb-30">시험 목록</h1>
+		<div class="table-wrapper table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							<h6>#</h6>
+						</th>
+						<th>
+							<h6>시험명</h6>
+						</th>
+						<th>
+							<h6>마감일</h6>
+						</th>
+						<th>
+							<h6>시험 시간</h6>
+						</th>
+						<th>
+							<h6>진행상태</h6>
+						</th>
+					</tr>
+					<!-- end table row-->
+				</thead>
+				<tbody>
+					<th:block th:each="examInfo, idxStat : ${testList}">
+						<tr>
+							<td><i class="mdi mdi-script-text-play-outline"></i></td>
+							<td class="min-width">[[ ${examInfo.testName} ]]</td>
+							<td class="min-width">[[ ${#dates.format(examInfo.testDate,
+								'yyyy-MM-dd')} ]]</td>
+							<td class="min-width">[[ ${examInfo.testTime} ]]</td>
+							<td class="min-width"><span class="status-btn active-btn">진행중</span>
+							</td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 </html>
