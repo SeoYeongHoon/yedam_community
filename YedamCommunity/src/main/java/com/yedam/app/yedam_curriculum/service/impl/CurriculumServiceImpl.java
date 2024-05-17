@@ -19,4 +19,13 @@ public class CurriculumServiceImpl implements CurriculumService {
 		return curriculumMapper.cSelectAll();
 	}
 
+	@Override
+	public int insertCurriculum(CurriculumVO curriculumVO) {
+		if (curriculumMapper.insertCurriculum(curriculumVO) > 0) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+
 }
