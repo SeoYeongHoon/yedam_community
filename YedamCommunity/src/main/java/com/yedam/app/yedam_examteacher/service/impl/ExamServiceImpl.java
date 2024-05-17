@@ -37,6 +37,18 @@ public class ExamServiceImpl implements ExamService{
 		return examMapper.selectExamAll();
 	}
 	
+	// 시험 등록
+	@Override
+	public int testInsert(TeacherVO teacherVO) {
+		int result = examMapper.insertTest(teacherVO);
+		
+		if(result == 1) {
+			return teacherVO.getTestId();
+		} else {
+			return -1;
+		}
+	}
+	
 	// 문제 및 지문 등록
 	@Transactional
 	@Override
@@ -55,10 +67,16 @@ public class ExamServiceImpl implements ExamService{
 		return examMapper.selectQuizAll(); 
 	}
 	 
-	// 등록된 지문 출력
+	// 등록된 지문 출력 -> 나중에 삭제
 	@Override
-	public List<TeacherVO> answerList(TeacherVO teacherVO) {
+	public List<TeacherVO> answerList1(TeacherVO teacherVO) {
 		return examMapper.selectAnswerAll(teacherVO);
+	}
+	
+	// 문제 지문 출력
+	@Override
+	public List<TeacherVO> answerList(int qId) {
+		return examMapper.quizAnswer(qId);
 	}
 	
 	// 문제 단건조회(자세히 보기)

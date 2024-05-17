@@ -12,6 +12,23 @@
 		FROM tests
 		ORDER BY test_id       
 	</select>
+	<!-- 시험 등록 -->
+	<insert id="insertTest" parameterType="TeacherVO">
+		INSERT INTO tests (test_id
+						  , curriculum_id
+						  , test_content
+						  , test_time
+						  , test_date
+						  , test_name
+						  , class_id)
+		VALUES (test_id_seq.nextval
+				, #{curriculumId}
+				, #{testContent}
+				, #{testTime}
+				, #{testDate}
+				, #{testName}
+				, #{classId});				  
+	</insert>
 	
 	<!-- 문제 등록 -->
 	<insert id="insertQuiz" parameterType="TeacherVO">
@@ -125,6 +142,13 @@
 		FROM answers
 		WHERE quiz_id = #{quizId}
 		ORDER BY example_num      
+	</select>
+	
+	<select id="quizAnswer" resultType="TeacherVO" parameterType="int">
+		SELECT example_num||'. '||text_content as text_content
+		FROM answers
+		WHERE quiz_id = #{qId}
+		ORDER BY example_num    
 	</select>
 	
 	<!-- 문제 단건조회 -->

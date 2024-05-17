@@ -10,16 +10,22 @@ public interface ExamService {
 	// 시험목록조회
 	public List<TeacherVO> testList();
 	
+	// 시험 등록
+	public int testInsert(TeacherVO teacherVO);
+	
 	// 문제등록
 	public void quizInsert(TeacherVO teacherVO);
 	
 	// 문제저장소에 문제출력 -> 필터링 출력으로 기능구현함. 마지막에 삭제해야됨
 	public List<TeacherVO> quizList();
 	
-	// 문제저장소에 지문출력
-	public List<TeacherVO> answerList(TeacherVO teacherVO);
+	// 문제저장소에 지문출력 -> 나중에 삭제
+	public List<TeacherVO> answerList1(TeacherVO teacherVO);
 	
-	// 문제 단건조회 => 나중에 파라미터 주는거랑 둘중하나 삭제
+	// 문제에 대한 지문 출력
+	public List<TeacherVO> answerList(int qId);
+	
+	// 문제 단건조회 => 나중에 삭제 (getQuizInfo로 진행함)
 	public TeacherVO quizInfo(TeacherVO teacherVO);
 	
 	// 과목명 출력

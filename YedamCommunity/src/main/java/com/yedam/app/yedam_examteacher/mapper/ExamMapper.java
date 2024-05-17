@@ -13,10 +13,17 @@ public interface ExamMapper {
 	public List<TeacherVO> selectExamAll();
 	// 문제 저장소에 문제 출력 => 필터출력으로 대체. 나중에 삭제.
 	public List<TeacherVO> selectQuizAll();
-	// 문제 저장소에 지문 출력
+	// 문제 저장소에 지문 출력 -> 나중에 삭제
 	public List<TeacherVO> selectAnswerAll(TeacherVO teacherVO);
+	
+	// 문제 지문 출력
+	public List<TeacherVO> quizAnswer(@Param("qId") int qId);
+	
 	// 과목명 출력
 	public List<TeacherVO> selectSubjectAll();	
+	
+	// 시험 등록
+	public int insertTest(TeacherVO teacherVO);
 	
 	// 문제 등록
 	public int insertQuiz(TeacherVO teacherVO);
@@ -28,7 +35,7 @@ public interface ExamMapper {
 	public int insertAnswer4(TeacherVO teacherVO);
 	public int insertAnswer5(TeacherVO teacherVO);
 	
-	// 문제 단건 조회
+	// 문제 단건 조회 -> 나중에 삭제
 	public TeacherVO selectQuiz(TeacherVO teacherVO);
 	
 	// 과목 등록
