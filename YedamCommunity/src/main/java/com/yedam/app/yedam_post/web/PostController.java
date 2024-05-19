@@ -21,25 +21,47 @@ public class PostController {
 
 	@Autowired
 	private PostService postService;
-	
-	// 게시글 리스트 조회
+
+	/**
+     * 게시글 리스트 조회
+     * @param page 현재 페이지 번호, 기본값은 1
+     * @param pageSize 한 페이지당 게시글 수, 기본값은 10
+     * @param Model 객체
+     * @return 게시글 리스트 페이지
+     */
 	@GetMapping("postList")
-	public String postList(Model model) {
+	public String postList(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int pageSize, Model model) {
 		List<Post> list = postService.getAllPosts();
+		           list = postService.getPosts(page, pageSize);
+		int totalCount = postService.getPostCount();
+		
 		model.addAttribute("postList", list);
+		model.addAttribute("totalCount", totalCount);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize);
+        
 		return "posts/postlist";
 	}
 
-	// 게시글 단건조회
+	/**
+     * 게시글 단건 조회
+     * @param postId 조회할 게시글의 ID
+     * @param Model 객체
+     * @return 게시글 상세 페이지
+     */
 	@GetMapping("postInfo")
-    public String getPostDetail(@RequestParam("postId") int postId, Model model) {
-        // 게시글과 댓글 정보를 조회합니다.
-        Post post = postService.getPostReplies(postId);
-        model.addAttribute("postInfo", post);
-        return "posts/postInfo";
-    }
+	public String getPostDetail(@RequestParam("postId") int postId, Model model) {
+		// 게시글과 댓글 정보를 조회합니다.
+		Post post = postService.getPostReplies(postId);
+		model.addAttribute("postInfo", post);
+		return "posts/postInfo";
+	}
 
-	// 게시글 등록
+	/**
+     * 게시글 등록 
+     * @param model Spring MVC의 Model 객체
+     * @return 게시글 등록 페이지
+     */
 	@GetMapping("postInsert")
 	public String postInsertForm(Model model) {
 		Post post = new Post();
@@ -48,8 +70,12 @@ public class PostController {
 		model.addAttribute("post", post);
 		return "posts/postinsert";
 	}
-	
-	// 게시글 등록 처리 
+
+	/**
+     * 게시글 등록 처리
+     * @param post 등록할 게시글 객체
+     * @return 게시글 리스트 페이지로 리다이렉트
+     */
 	@PostMapping("postInsert")
 	public String postInsertProcess(Post post) {
 		post.setCreateDate(new Date());
@@ -57,8 +83,13 @@ public class PostController {
 		postService.createPost(post);
 		return "redirect:postList";
 	}
-	
-	// 게시글 삭제
+
+	/**
+     * 게시글 삭제 처리
+     * @param postId 삭제할 게시글의 ID
+     * @param Model 객체
+     * @return 게시글 리스트 페이지로 리다이렉트
+     */
 	@GetMapping("postDelete")
 	public String postDelete(@RequestParam("postId") int postId, Model model) {
 		Post post = new Post();
@@ -74,7 +105,12 @@ public class PostController {
 		return "redirect:postList";
 	}
 
-	// 게시글 업데이트
+	/**
+     * 게시글 업데이트 
+     * @param postId 업데이트할 게시글의 ID
+     * @param Model 객체
+     * @return 게시글 업데이트 페이지
+     */
 	@GetMapping("postUpdate")
 	public String postUpdateForm(@RequestParam Integer postId, Model model) {
 		if (postId == null) {
@@ -87,13 +123,17 @@ public class PostController {
 		model.addAttribute("postInfo", post);
 		return "posts/postUpdate";
 	}
-	
-	// 게시글 업데이트 처리
+
+	/**
+     * 게시글 업데이트 처리
+     * @param post 업데이트할 게시글 객체
+     * @return 성공 또는 오류 메시지를 담은 Map 객체
+     */
 	@PostMapping("postUpdate")
 	@ResponseBody
 	public Map<String, Object> postUPdateProcess(@RequestBody Post post) {
 		post.setUpdateDate(new Date());
 		return postService.PostUpdate(post);
 	}
-
+	
 }

@@ -39,67 +39,17 @@
     </insert>
 
 
-    <update id="updateReply" parameterType="Reply">
-        UPDATE replies
-        SET reply_content = #{content}
-          , update_date = #{updateDate}
-        WHERE reply_id = #{replyId}
-    </update>
-
-    <delete id="deleteReply" parameterType="int">
+    <delete id="deleteReply1" parameterType="int">
         DELETE 
         FROM replies 
         WHERE reply_id = #{replyId}
     </delete>
-
-    <delete id="deleteRepliesByPostId" parameterType="int">
+    
+    <delete id="deleteReply2" parameterType="int">
         DELETE 
-        FROM replies 
-        WHERE post_id = #{postId}
-    </delete>
-    
-    <!-- 댓글 조회 -->
-   <!--  <select id="getReplies" parameterType="int" resultType="com.yedam.app.yedam_post.service.Reply">
-        SELECT REPLY_ID,
-               BOARD_ID,
-               POST_ID,
-               REPLY_CONTENT,
-               REPLY_DATE,
-               REPLY_WRITER,
-        FROM replies
-        WHERE post_id = #{postId}
-    </select>
-    
-    대댓글 조회
-    <select id="getComments" parameterType="int" resultType="com.yedam.app.yedam_post.service.Comment">
-        SELECT COMMENT_ID,
-               REPLY_ID,
-               COMMENT_WRITER,
-               COMMENT_CONTENT,
-               COMMENT_DATE
         FROM comments
-        WHERE reply_id IN (SELECT reply_id
-                           FROM replies
-                           WHERE post_id = #{postId})
-    </select>
-   
-   	<insert id="createReply" parameterType="com.yedam.app.yedam_post.service.Post" useGeneratedKeys="true" keyProperty="postId">
-   		INSERT INTO replies (reply_id
-                           , board_id
-                           , post_id
-                           , reply_content
-                           , reply_date
-                           , update_date
-                           , reply_writer
-                           , homework_target_id)
-       VALUES (reply_id_seq.nextval
-             , #{boardId}
-             , #{postId}
-             , #{replyContent}
-             , sysdate
-             , #{updateDate, }
-             , '77게시글의 댓글 작성사'
-             , null)
-   	</insert> -->
+        WHERE reply_id = #{replyId}
+    </delete>
+
    
   </mapper>
