@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.yedam_homework.service.HomeWorkReplyService;
 import com.yedam.app.yedam_homework.service.HomeWorkService;
@@ -61,18 +60,25 @@ public class HomeWorkController {
 		return "redirect:homeworkList";
 	}
 
-
 	// 과제상세페이지
 	@GetMapping("homeworkInfo")
 	public String homeworkInfo(HomeWorkVO homeworkVO, Model model) {
-		//과제 상세 조회
+
+		// 과제 상세 조회
 		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
 		model.addAttribute("homeworkList", findVO);
-		//댓글 조회
-		List<HomeWorkVO> replyList = homeworkReplyService.replyInfo(homeworkVO);
-		model.addAttribute("replySelect",replyList);
-		//대댓글 조회
-		HomeWorkVO commentList = homeworkReplyService.commentList(homeworkVO);
+		homeworkVO.setHomeworkId(findVO.getHomeworkId());
+
+		// 댓글 조회
+		List<HomeWorkVO> replyList = homeworkReplyService.replyList(homeworkVO);
+		model.addAttribute("replySelect", replyList);
+		for(HomeWorkVO reply : replyList) {
+			homeworkVO.setReplyId(reply.getReplyId());
+		}
+		model.addAttribute("homework", homeworkVO);
+
+		// 대댓글 조회
+		List<HomeWorkVO> commentList = homeworkReplyService.commentList(homeworkVO);
 		model.addAttribute("commentSelect", commentList);
 		return "homework/homeworkInfo";
 	}
@@ -84,11 +90,11 @@ public class HomeWorkController {
 		return "redirect:homeworkInfo?homeworkId=" + homeworkVO.getHomeworkId();
 	}
 
-	//대댓글 등록 - 처리
+	// 대댓글 등록 - 처리
 	@PostMapping("insertComment")
 	public String insertComment(HomeWorkVO homeworkVO, Model model) {
 		System.err.println(homeworkVO);
-		homeworkReplyService.commentInsert(homeworkVO);	
+		homeworkReplyService.commentInsert(homeworkVO);
 		return "redirect:homeworkInfo?homeworkId=" + homeworkVO.getHomeworkId();
 	}
 }
