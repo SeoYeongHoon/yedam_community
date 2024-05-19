@@ -37,7 +37,7 @@
 		       ,b.subject_id
 		       ,c.curriculum_name
 		       ,COUNT(quiz_id) as quizIdCnt
-		       ,SUM(quiz_score) as quizScoreSum
+		       ,SUM(quiz_score) as quizScore
 		FROM tests a JOIN quizbox b ON(a.test_id = b.test_id)
 		     JOIN curriculum c ON(a.curriculum_id = c.curriculum_id)
 		WHERE a.test_id = #{testId}
@@ -91,6 +91,20 @@
         AND b.test_id = #{testId} 
         AND b.quiz_id = #{quizId}
         ORDER BY a.example_num
+	</select>
+	<!-- 시험문제 -->
+	<select id="selectTestQuiz" resultType="TestVO">
+		SELECT b.quiz_id
+       		   ,b.quiz_content
+       		   ,b.quiz_score
+       		   ,b.subject_id
+       		   ,a.example_num
+       		   ,a.text_content
+		FROM answers a JOIN quizbox b ON(a.quiz_id = b.quiz_id)
+		WHERE a.subject_id = #{subjectId}
+		AND b.test_id = #{testId}
+		AND b.quiz_id = #{quizId}
+		ORDER BY a.example_num
 	</select>
 	<!-- 문제개수 구하기 -->
 	<select id="selectQuizCnt" resultType="int">

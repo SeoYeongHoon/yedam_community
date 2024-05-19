@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
 import com.yedam.app.yedam_examstudent.service.CbtStudentService;
@@ -58,7 +60,7 @@ public class CbtStudentController {
 	
 	//시험시작 페이지 >> 시작정보, 문제내용, 문제보기
 	@PostMapping("testStart")
-	public String testStart(int page, int[] randQuizId, int[] randRn, int quizCnt, int testId, int subjectId, TestVO testVO, QuizboxVO quizboxVO, AnswerVO answerVO, Model model) {
+	public String testStart(int page, int quizCnt, int testId, int subjectId, int[] randQuizId, int[] randRn, TestVO testVO, QuizboxVO quizboxVO, AnswerVO answerVO, Model model) {
 		TestVO list1 = cbtStudentService.testStart(testVO);
 		int i = 0;
 		for(int rn : randRn) { //랜덤 문제 목록을 일련번호와 비교
@@ -84,5 +86,22 @@ public class CbtStudentController {
 		model.addAttribute("randQuizId", randQuizId); //문제번호 전달
 		model.addAttribute("randRn", randRn); //문제일련번호 전달
 		return "cbt_student/testStart";
+	}
+	
+	@ResponseBody
+	@GetMapping("testStart")
+	public List<TestVO> testStart(@RequestParam("testId") int testId, @RequestParam("subjectId") int subjectId, 
+			@RequestParam("page") int page, @RequestParam("randQuizId") int[] randQuizId, 
+			@RequestParam("randRn") int[] randRn, @RequestParam("quizCnt") int quizCnt, TestVO testVO){
+		int i = 0;
+		for(int rn : randRn) { //랜덤 문제 목록을 일련번호와 비교
+			if(rn == page) { //현재 페이지 번호와 일련번호가 같을 때
+				testVO.setQuizId(randQuizId[i]); //해당 시험의 문제번호 저장
+				testVO.setTestId(testId); //해당 시험 번호 저장
+				testVO.setSubjectId(subjectId); //해당 과목 번호 저장
+			}
+			i++;
+		}
+		return cbtStudentService.testQuiz(testVO);
 	}
 }

@@ -18,6 +18,8 @@ public interface CbtStudentMapper {
 	public List<QuizboxVO> selectTestQuizRand(QuizboxVO quizboxVO);
 	//시험시작정보 조회
 	public TestVO selectTestStart(TestVO testVO);
+	//시험문제
+	public List<TestVO> selectTestQuiz(TestVO testVO);
 	//시험시작정보 조회 = 문제내용
 	public QuizboxVO selectTestQuiz1(QuizboxVO quizboxVO);
 	//시험시작정보 조회 = 문제보기

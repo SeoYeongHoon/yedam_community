@@ -3,109 +3,520 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-.tstart1 { /*상단바 레이아웃*/
+.tstart_1 { /*상단바 레이아웃*/
 	justify-content: space-between;
 	display: flex;
 }
-
-.tstart3 { /*답안표기란 답안정렬*/
-	justify-content: space-between;
-	display: flex;
-}
-
-.tstart2 { /*답안표기란 문제 가로정렬*/
+.tstart_2 {
 	display: inline-block;
 }
-
-#tstart4 { /*답안표기란 스크롤바*/
+.tstart_3 { /*답안표기란 답안정렬*/
+	justify-content: space-between;
+	display: flex;
+}
+#tstart_4 { /*답안표기란 스크롤바*/
 	overflow: scroll;
 	border: 1px solid grey;
 }
-
-.tstart5 { /*페이징버튼*/
+.tstart_5 { /*페이징버튼*/
 	display: inline-block;
 }
+.tstart_6 {
+ 	line-height: 50px;
+ }
+ /*토스트 메시지*/
+#toast_message {
+    opacity: 0;
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translate(-50%,0);
+    padding: 10px 50px;
+    background: rgba(0, 0, 0, 0.70);
+    border-radius: 50px;
+    color: #fff;
+    box-shadow: 3px 4px 11px 0px #00000040;
+    transition: all 0.5s;
+}
+/*토스트 메시지 활성화 되었을 때*/
+#toast_message.active {
+    opacity: 100%;
+    top: 50px;
+}
 </style>
-<div class="row">
+<div id="start" class="row">
+	<!-- 타이머 토스트 알림창 
+	<div id="toast_message"></div>-->
 	<!-- 상단1 -->
-	<div class="card-style col-lg-12 tstart1">
+	<div class="card-style col-lg-12 tstart_1">
 		<h1>[[${testStart.testName}]]</h1>
 		<div>
-			<p class="tstart2">제한시간:</p>
-			<p class="tstart2">[[${testStart.testTime}]]</p>
+			<h3 class="tstart_2">제한시간:</h3>
+			<h3 id="testTimeMin" class="tstart_2">[[${testStart.testTime}]]</h3>
+			<h3 class="tstart_2">:</h3>
+			<h3 id="testTimeSec" class="tstart_2">00</h3>
 		</div>
 		<div>
-			<p class="tstart2">응시자:</p>
-			<p class="tstart2">홍길동</p>
+			<h3 class="tstart_2">응시자:</h3>
+			<h3 class="tstart_2">홍길동</h3>
 		</div>
 	</div>
 	<!-- 상단2 -->
-	<div class="card-style col-lg-12">
-		<div style="text-align: right">
-			<div class="tstart5" th:if="${page > 1}">
-				<form action="testStart" method="post">
-					<input type="hidden" name="page" th:value="${page-1}">
-					<input type="hidden" name="quizCnt" th:value="${quizCnt}">
-					<input type="hidden" name="testId" th:value="${testId}">
-					<input type="hidden" name="subjectId" th:value="${subjectId}">
- 					<div th:each="quiz : ${randQuizId}">				
-						<input type="hidden" name="randQuizId" th:value="${quiz}">
-					</div>
-					<div th:each="rn : ${randRn}">				
-						<input type="hidden" name="randRn" th:value="${rn}">
-					</div>
-					<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">이전</button>
-				</form>
+	<div class="card-style col-lg-12 tstart_1">
+		<!-- 문제개수 관련 -->
+		<div>
+			<h3 class="tstart_2">전체문제:</h3>
+			<h3 id="allQuizCnt" class="tstart_2">[[${quizCnt}]]</h3>
+			<br>
+			<h3 class="tstart_2">남은문제:</h3>
+			<h3 id="remainQuizCnt" class="tstart_2">[[${quizCnt}]]</h3>
+		</div>	
+		<div>
+			<!-- 문제갱신 위한 ajax용 데이터 hidden 처리 -->
+			<div>
+				<input id="page" type="hidden" name="page" th:value="${page}">
+				<input id="quizCnt" type="hidden" name="quizCnt" th:value="${quizCnt}">
+				<input id="testId" type="hidden" name="testId" th:value="${testId}">
+				<input id="subjectId" type="hidden" name="subjectId" th:value="${subjectId}">
+ 				<div th:each="quiz : ${randQuizId}">				
+					<input class="randQuizId" type="hidden" name="randQuizId" th:value="${quiz}">
+				</div>
+				<div th:each="rn : ${randRn}">				
+					<input class="randRn" type="hidden" name="randRn" th:value="${rn}">
+				</div>
 			</div>
-			<div class="tstart5" th:unless="${page > 1}">
-				<a class="main-btn dark-btn-outline square-btn btn-hover">이전</a>
+			<!-- 시험관련 버튼 -->
+			<div class="tstart_5">
+				<a id="prevQuiz" class="main-btn dark-btn-outline square-btn btn-hover">이전</a>
 			</div>
-			
-			<div class="tstart5" th:if="${page < quizCnt}">
-				<form action="testStart" method="post">
-					<input type="hidden" name="page" th:value="${page+1}">
-					<input type="hidden" name="quizCnt" th:value="${quizCnt}">
-					<input type="hidden" name="testId" th:value="${testId}">
-					<input type="hidden" name="subjectId" th:value="${subjectId}">
- 					<div th:each="quiz : ${randQuizId}">				
-						<input type="hidden" name="randQuizId" th:value="${quiz}">
-					</div>
-					<div th:each="rn : ${randRn}">				
-						<input type="hidden" name="randRn" th:value="${rn}">
-					</div>
-					<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">다음</button>
-				</form>
+			<div class="tstart_5">
+				<a id="nextQuiz" class="main-btn dark-btn-outline square-btn btn-hover">다음</a>
 			</div>
-			<div class="tstart5" th:unless="${page < quizCnt}">
-				<a class="main-btn dark-btn-outline square-btn btn-hover">다음</a>
-			</div>
-			
-			<div class="tstart5">
-				<a class="main-btn dark-btn-outline square-btn btn-hover">제출</a>
+			<div class="tstart_5">
+				<a id="submitBtn" class="main-btn dark-btn-outline square-btn btn-hover">제출</a>
 			</div>
 		</div>
 	</div>
 	<!-- 좌측 -->
-	<div id="tstart4" class="card-style col-lg-2 tstart2" style="height: 800px">
+	<!-- 답안표기 부분 -->
+	<div id="tstart_4" class="card-style col-lg-2 tstart_2" style="height: 800px">
 		<h3 style="text-align: center; background-color: #A6A6A6; color: white">답안표기란</h3>
-		<div class="tstart3" th:each="num, idx : ${#numbers.sequence(1,quizCnt)}">
-			<h3 class="tstart2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
-			<div class="tstart2">①</div>
-			<div class="tstart2">②</div>
-			<div class="tstart2">③</div>
-			<div class="tstart2">④</div>
-			<div class="tstart2">⑤</div>
-		</div>
+		<th:block th:each="num, idx : ${#numbers.sequence(1,quizCnt)}">
+			<div class="selectedQuiz tstart_3">
+				<h3 class="tstart_2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
+				<input class="thisAnswer" type="hidden" th:value="${idx.count}">
+				<input class="submitAnswer" type="hidden" th:value="1">
+				<div class="one selectedAnswer">①</div>
+				<div class="two selectedAnswer">②</div>
+				<div class="three selectedAnswer">③</div>
+				<div class="four selectedAnswer">④</div>
+				<div class="five selectedAnswer">⑤</div>
+			</div>
+		</th:block>
 	</div>
 	<!-- 우측 -->
-	<div class="card-style col-lg-10" style="height: 800px">
+	<!-- 문제갱신되는 부분 -->
+	<div id="quiz" class="card-style col-lg-10" style="height: 800px">
 		<h1>[[${page}]]. [[${testQuiz1.quizContent}]]</h1>
 		<p>([[${testQuiz1.quizScore}]]점)</p>
 		<br> <br>
-		<ul th:each="list2 : ${testQuiz2}">
-			<li>[[${list2.exampleNum}]]. [[${list2.textContent}]]</li>
-		</ul>
+		<div th:each="list2, idx: ${testQuiz2}">
+			<span class="selectedContent tstart_6" style="background: white;">[[${list2.exampleNum}]]. [[${list2.textContent}]]</span>
+		</div>
 	</div>
 </div>
+<script>
+//<<시험제출 관련>>
+/*
+$('#submitBtn').on('click',function(){
+	let submitAnswer = document.querySelector('.submitAnswer');
+	
+})*/
+
+//<<시험타이머 관련>>
+let testTimeMinElement = document.querySelector('#testTimeMin');
+let testTimeSecElement = document.querySelector('#testTimeSec');
+let toastMsg = document.querySelector('#toast_message');
+let testTime = testTimeMinElement.innerText; //서버에서 받아온 시험시간
+let min = testTime;
+let sec = 0;
+setInterval(function(){
+	sec--;
+	if(sec < 0){
+		min--;
+		sec = 59;
+	}
+	testTimeMinElement.innerText = String(min).padStart(2,0);
+	testTimeSecElement.innerText = String(sec).padStart(2,0);
+	if(min == 10 && sec == 0){ //10:00인 경우
+		toastMsg.innerText = '시험시간이 10분 남았습니다.';
+		toastMsg.classList.add('active');
+		setTimeout(function(){
+			toastMsg.classList.remove('active');
+		}, 2000);
+	}
+	if(min == 5 && sec == 0){ //05:00인 경우
+		toastMsg.innerText = '시험시간이 5분 남았습니다.';
+		toastMsg.classList.add('active');
+		setTimeout(function(){
+			toastMsg.classList.remove('active');
+		}, 2000);
+	}
+	if(min == 3 && sec == 0){ //03:00인 경우
+		toastMsg.innerText = '시험시간이 3분 남았습니다.';
+		toastMsg.classList.add('active');
+		setTimeout(function(){
+			toastMsg.classList.remove('active');
+		}, 2000);
+	}
+},1000)
+//<<답안제어 관련>>
+$(document).on('click', '.selectedContent', function(e){ //동적으로 생성되는 버튼까지 이벤트 처리
+	//e.preventDefault();
+	let thisAnswer = document.querySelectorAll('.thisAnswer'); //1~총문제개수 답안
+	let selectedContent = document.querySelectorAll('.selectedContent'); //전체 보기 번호 1~5
+	let one = document.querySelectorAll('.one'); //전체 1번 보기
+	let two = document.querySelectorAll('.two'); //전체 2번 보기
+	let three = document.querySelectorAll('.three'); //전체 3번 보기
+	let four = document.querySelectorAll('.four'); //전체 4번 보기
+	let five = document.querySelectorAll('.five'); //전체 5번 보기
+	let page = document.querySelector('#page'); //페이지 번호
+	let clicked = e.target.innerText.substr(0,1); //현재 클릭된 보기 번호 1~5
+	let submitAnswer = document.querySelectorAll('.submitAnswer');
+	//<보기 선택시 보기 색상 및 답안 색상 변경>
+	//<전체 문제개수 및 남은 문제개수 변경>
+	for(let i = 0; i < thisAnswer.length; i++){
+		if(thisAnswer[i].value == page.value){
+			let remainQuizCnt = document.querySelector('#remainQuizCnt'); //남은 문제개수
+			let quizCnt = document.querySelector('#quizCnt'); //전체 문제개수
+			if(clicked == 1){
+				selectedContent.forEach(function(select,item){
+					if(item == (clicked - 1)){ //현재 선택한 보기인 경우
+						if(e.target.style.background == 'white'){ //현재 보기가 아직 선택되지 경우
+							//하나라도 색상이 되어 있는 경우
+							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
+								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+							}
+							else{ //모두 색상이 되어 있지 않은 경우
+								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+							}
+							e.target.style.background = 'aqua'; //보기 색상 넣기
+							one[i].style.background = 'aqua'; //답안 색상 넣기
+							two[i].style.background = 'white';
+							three[i].style.background = 'white';
+							four[i].style.background = 'white';
+							five[i].style.background = 'white';
+						}
+						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
+							e.target.style.background = 'white'; //보기 색상 빼기
+							one[i].style.background = 'white'; //답안 색상 빼기
+							//모두 선택되지 않은 경우
+							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
+								if(remainQuizCnt.innerText >= quizCnt){ //남은 문제가 문제개수보다 많은 경우							
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText); //남은 문제개수 유지
+								}
+								else{ //남은 문제가 문제개수보다 적은 경우
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText) + Number(1); //남은 문제개수 증가
+								}
+							}
+						}
+					}
+					else { //나머지 보기인 경우
+						select.style.background = 'white'; //나머지 보기 색상 초기화
+					}
+				})
+				//remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 조절
+				submitAnswer[i].value = clicked; //선택된 닶안 제출
+			}
+			else if(clicked == 2){
+				selectedContent.forEach(function(select,item){
+					if(item == (clicked - 1)){ //현재 선택한 보기인 경우
+						if(e.target.style.background == 'white'){ //현재 보기가 아직 선택되지 경우
+							//하나라도 색상이 되어 있는 경우
+							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
+								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+							}
+							else{ //모두 색상이 되어 있지 않은 경우
+								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+							}
+							e.target.style.background = 'aqua'; //보기 색상 넣기
+							one[i].style.background = 'white'; //답안 색상 넣기
+							two[i].style.background = 'aqua';
+							three[i].style.background = 'white';
+							four[i].style.background = 'white';
+							five[i].style.background = 'white';
+						}
+						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
+							e.target.style.background = 'white'; //보기 색상 빼기
+							two[i].style.background = 'white'; //답안 색상 빼기
+							//모두 선택되지 않은 경우
+							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
+								if(remainQuizCnt.innerText >= quizCnt){ //남은 문제가 문제개수보다 많은 경우									
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText); //남은 문제개수 유지
+								}
+								else{ //남은 문제가 문제개수보다 적은 경우
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText) + Number(1); //남은 문제개수 증가
+								}
+							}
+						}
+					}
+					else { //나머지 보기인 경우
+						select.style.background = 'white'; //나머지 보기 색상 초기화
+					}
+				})
+				submitAnswer[i].value = clicked; //선택된 닶안 제출
+			}
+			else if(clicked == 3){
+				selectedContent.forEach(function(select,item){
+					if(item == (clicked - 1)){ //현재 선택한 보기인 경우
+						if(e.target.style.background == 'white'){ //현재 보기가 아직 선택되지 경우
+							//하나라도 색상이 되어 있는 경우
+							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
+								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+							}
+							else{ //모두 색상이 되어 있지 않은 경우
+								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+							}
+							e.target.style.background = 'aqua'; //보기 색상 넣기
+							one[i].style.background = 'white'; //답안 색상 넣기
+							two[i].style.background = 'white';
+							three[i].style.background = 'aqua';
+							four[i].style.background = 'white';
+							five[i].style.background = 'white';
+						}
+						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
+							e.target.style.background = 'white'; //보기 색상 빼기
+							three[i].style.background = 'white'; //답안 색상 빼기
+							//모두 선택되지 않은 경우
+							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
+								if(remainQuizCnt.innerText >= quizCnt){	//남은 문제가 문제개수보다 많은 경우							
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText); //남은 문제개수 유지
+								}
+								else{ //남은 문제가 문제개수보다 적은 경우
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText) + Number(1); //남은 문제개수 증가
+								}
+							}
+						}
+					}
+					else { //나머지 보기인 경우
+						select.style.background = 'white'; //나머지 보기 색상 초기화
+					}
+				})
+				submitAnswer[i].value = clicked; //선택된 닶안 제출
+			}
+			else if(clicked == 4){
+				selectedContent.forEach(function(select,item){
+					if(item == (clicked - 1)){ //현재 선택한 보기인 경우
+						if(e.target.style.background == 'white'){ //현재 보기가 아직 선택되지 경우
+							//하나라도 색상이 되어 있는 경우
+							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
+								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+							}
+							else{ //모두 색상이 되어 있지 않은 경우
+								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+							}
+							e.target.style.background = 'aqua'; //보기 색상 넣기
+							one[i].style.background = 'white'; //답안 색상 넣기
+							two[i].style.background = 'white';
+							three[i].style.background = 'white';
+							four[i].style.background = 'aqua';
+							five[i].style.background = 'white';
+						}
+						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
+							e.target.style.background = 'white'; //보기 색상 빼기
+							four[i].style.background = 'white'; //답안 색상 빼기
+							//모두 선택되지 않은 경우
+							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
+								if(remainQuizCnt.innerText >= quizCnt){	//남은 문제가 문제개수보다 많은 경우								
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText); //남은 문제개수 유지
+								}
+								else{ //남은 문제가 문제개수보다 적은 경우
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText) + Number(1); //남은 문제개수 증가
+								}
+							}
+						}
+					}
+					else { //나머지 보기인 경우
+						select.style.background = 'white'; //나머지 보기 색상 초기화
+					}
+				})
+				submitAnswer[i].value = clicked; //선택된 닶안 제출
+			}
+			else if(clicked == 5){
+				selectedContent.forEach(function(select,item){
+					if(item == (clicked - 1)){ //현재 선택한 보기인 경우
+						if(e.target.style.background == 'white'){ //현재 보기가 아직 선택되지 경우
+							//하나라도 색상이 되어 있는 경우
+							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
+								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+							}
+							else{ //모두 색상이 되어 있지 않은 경우
+								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+							}
+							e.target.style.background = 'aqua'; //보기 색상 넣기
+							one[i].style.background = 'white'; //답안 색상 넣기
+							two[i].style.background = 'white';
+							three[i].style.background = 'white';
+							four[i].style.background = 'white';
+							five[i].style.background = 'aqua';
+						}
+						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
+							e.target.style.background = 'white'; //보기 색상 빼기
+							five[i].style.background = 'white'; //답안 색상 빼기
+							//모두 선택되지 않은 경우
+							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
+								if(remainQuizCnt.innerText >= quizCnt){  //남은 문제가 문제개수보다 많은 경우							
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText); //남은 문제개수 유지
+								}
+								else{ //남은 문제가 문제개수보다 적은 경우
+									remainQuizCnt.innerText = Number(remainQuizCnt.innerText) + Number(1); //남은 문제개수 증가
+								}
+							}
+						}
+					}
+					else { //나머지 보기인 경우
+						select.style.background = 'white'; //나머지 보기 색상 초기화
+					}
+				})
+				submitAnswer[i].value = clicked; //선택된 닶안 제출
+			}
+		}
+	}
+});
+//<<문제갱신 관련>>
+let prevBtn = document.querySelector('#prevQuiz');
+let nextBtn = document.querySelector('#nextQuiz');
+let pageVal = document.querySelector('#page');
+let selectedQuiz = document.querySelectorAll('.selectedQuiz');
+let page = 1;
+$('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼, 다음버튼 동시 클릭 이벤트 정의
+	e.preventDefault();
+	if(this.id == 'prevQuiz' && pageVal.value > 1){ //현재 클릭된 요소가 이전버튼이면서 페이지 번호가 1초과인 경우
+		page = Number(pageVal.value) - Number(1); //페이지 번호 1 감소
+		pageVal.value = page;
+	}
+	else if(this.id == 'nextQuiz' && pageVal.value < 20){ //현재 클릭된 요소가 다음버튼이면서 페이지 번호가 20미만인 경우
+		page = Number(pageVal.value) + Number(1); //페이지 번호 1 증가
+		pageVal.value = page;
+	}
+	else if(this.classList.contains('selectedQuiz')){ //현재 클릭된 요소가 특정 답안 번호인 경우
+		page = this.childNodes[3].value; //클릭된 답안 번호
+		console.log(this.childNodes);
+		pageVal.value = page;
+	}
+	//<ajax 데이터 관련>
+	let testIdVal = document.querySelector('#testId'); //시험 번호
+	let testId = testIdVal.value;
+	let subjectIdVal = document.querySelector('#subjectId'); //과목 번호
+	let subjectId = subjectIdVal.value;
+	let quizCntVal = document.querySelector('#quizCnt');
+	let quizCnt = quizCntVal.value;
+	let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤문제 번호
+	const randQuizId = new Array(quizCnt);
+	for(let i = 0; i < randQuizIdVal.length; i++){
+		randQuizId[i] = randQuizIdVal[i].value;
+	}
+	let randRnVal = document.querySelectorAll('.randRn'); //랜덤문제 일련번호
+	const randRn = new Array(quizCnt); 
+	for(let i = 0; i < randRnVal.length; i++){
+		randRn[i] = randRnVal[i].value;
+	}
+	//<html 제어 관련>
+	let quiz = document.querySelector('#quiz'); //문제가 나타나는 요소
+	let start = document.querySelector('#start'); //화면 시작 요소
+	let div1 = document.createElement('div'); //div1 태그 생성 >> 카드형식 문제 공강
+	div1.setAttribute('id', 'quiz');
+	div1.setAttribute('class', 'card-style col-lg-10');
+	div1.setAttribute('style', 'width: 800px');
+	let h1 = document.createElement('h1'); //h1태그 생성 >> 문제내용
+	h1.innerText = null;
+	let p = document.createElement('p'); //p태그 생성 >> 문제배점
+	p.innerText = null;
+	let br1 = document.createElement('br');
+	let br2 = document.createElement('br');
+	//<문제갱신 ajax>
+	$.ajax({
+		url: 'testStart',
+		method: 'get',
+		data: {
+			page: page,
+			testId: testId,
+			subjectId: subjectId,
+			quizCnt: quizCnt,
+			randQuizId: randQuizId,
+			randRn: randRn
+		},
+		dataType: 'json',
+		traditional: true,
+		success: function(data){
+			data.forEach(function(item, idx){
+				if(idx == 0){ //보기 5개 중 첫번째 보기인 경우
+					h1.innerText = page + '. ' + item.quizContent; //문제내용
+					p.innerText = '(' + item.quizScore + '점)'; //문제배점
+					div1.append(h1);
+					div1.append(p);
+					div1.append(br1);
+					div1.append(br2);
+					let span = document.createElement('span'); //첫번째 보기
+					let div2 = document.createElement('div'); //첫번째 보기 감싸기
+					span.classList.add('selectedContent');
+					span.classList.add('tstart_6');
+					span.setAttribute('data-index', idx + 1);
+					span.setAttribute('style', 'background: white');
+					span.innerText = item.exampleNum + '. ' + item.textContent;
+					div2.append(span);
+					div1.append(div2);
+				}
+				else { //보기 5개 중 나머지 4개인 경우
+					let span = document.createElement('span'); //나머지 보기
+					let div2 = document.createElement('div'); //나머지 보기 감싸기
+					span.classList.add('selectedContent');
+					span.classList.add('tstart_6');
+					span.setAttribute('data-index', idx + 1);
+					span.setAttribute('style', 'background: white');
+					span.innerText = item.exampleNum + '. ' + item.textContent;
+					div2.append(span);
+					div1.append(div2);
+				}
+			});
+			quiz.remove(); //현재 문제 지우기
+			start.append(div1); //새로운 문제 붙이기
+			//<문제 재생성시 답안 색상에 따른 보기 색상 유지>
+			let thisAnswer = document.querySelectorAll('.thisAnswer'); //1~총문제개수 답안
+			let selectedContent = document.querySelectorAll('.selectedContent'); //선택된 보기
+			let one = document.querySelectorAll('.one'); //전체 1번 보기
+			let two = document.querySelectorAll('.two'); //전체 2번 보기
+			let three = document.querySelectorAll('.three'); //전체 3번 보기
+			let four = document.querySelectorAll('.four'); //전체 4번 보기
+			let five = document.querySelectorAll('.five'); //전체 5번 보기
+			let pageVal = document.querySelector('#page'); //페이지 번호
+			for(let i = 0; i < thisAnswer.length; i++){
+				if(thisAnswer[i].value == pageVal.value){
+					if(one[i].style.background == 'aqua'){ //이미 선택된 보기 가져오기
+						selectedContent[0].style.background = 'aqua';
+					}
+					else if(two[i].style.background == 'aqua'){
+						selectedContent[1].style.background = 'aqua';
+					}
+					else if(three[i].style.background == 'aqua'){
+						selectedContent[2].style.background = 'aqua';
+					}
+					else if(four[i].style.background == 'aqua'){
+						selectedContent[3].style.background = 'aqua';
+					}
+					else if(five[i].style.background == 'aqua'){
+						selectedContent[4].style.background = 'aqua';
+					}
+				}
+			}
+		},
+		error: function(){
+			console.log('error');
+		}
+	});
+});
+
+</script>
 </html>
