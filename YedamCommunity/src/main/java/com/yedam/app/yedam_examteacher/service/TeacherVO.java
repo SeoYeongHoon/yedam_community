@@ -32,11 +32,16 @@ public class TeacherVO {
 	private String textContentJu;
 	private int exampleNum;
 	
-	// 과목명
 	private int subjectId;
 	private String subjectName;
 	
-	// 유저정보
 	private int curriculumId;
+	private String curriculumName;
 	private String name;
+	private int classId;
+	private Date curriculumStartDate;
+	private Date curriculumEndDate;
+	private int isComplete;
+	
+	private int subjectAvg;
 }

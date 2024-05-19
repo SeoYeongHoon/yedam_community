@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<div class="col-lg-12" id="allClass">
+	<div class="card-style mb-30">
+		<ul class="buttons-group">
+			<li>
+				<button type="button"
+					class="main-btn success-btn-outline rounded-full btn-hover classNum"
+					th:value="1">1강의실</button>
+			</li>
+			<li>
+				<button type="button"
+					class="main-btn success-btn-outline rounded-full btn-hover classNum"
+					value="2">2강의실</button>
+			</li>
+			<li>
+				<button type="button"
+					class="main-btn success-btn-outline rounded-full btn-hover classNum"
+					value="3">3강의실</button>
+			</li>
+			<li>
+				<button type="button"
+					class="main-btn success-btn-outline rounded-full btn-hover classNum"
+					value="4">4강의실</button>
+			</li>
+			<li>
+				<button type="button"
+					class="main-btn success-btn-outline rounded-full btn-hover classNum"
+					value="5">5강의실</button>
+			</li>
+		</ul>
+	</div>
+	<!-- end card -->
+</div>
+<!-- end col -->
+
+<div class="row chart">
+	<div class="col-lg-5">
+		<div class="card-style mb-30">
+			<div
+				class="title d-flex flex-wrap align-items-center justify-content-between">
+				<div class="left">
+					<h6 class="text-medium mb-30">Sales/Revenue</h6>
+				</div>
+				<div class="right">
+					<div class="select-style-1">
+						<div class="select-position select-sm">
+							<select class="light-bg">
+								<option value="">Yearly</option>
+								<option value="">Monthly</option>
+								<option value="">Weekly</option>
+							</select>
+						</div>
+					</div>
+					<!-- end select -->
+				</div>
+			</div>
+			<!-- End Title -->
+			<div class="chart">
+				<canvas id="Chart2"
+					style="width: 100%; height: 400px; margin-left: -45px;"></canvas>
+			</div>
+			<!-- End Chart -->
+		</div>
+	</div>
+	<!-- End Col -->
+</div>
+<!-- End Row -->
+
+<!-- ========= card-style-3 start ========= -->
+<div class="row classInfo">
+	<div class="col-12">
+		<div class="title mt-30 mb-30">
+			<h2 id="currName">n강의실 시작기간~종료기간</h2>
+		</div>
+	</div>
+	<!-- end col -->
+	<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+		<div class="card-style-3 mb-30">
+			<div class="card-content">
+				<h4 id="classTest">n강의실 시험정보</h4>
+				<br>
+				<div class="test"></div>
+			</div>
+		</div>
+	</div>
+	<!-- end col -->
+	<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+		<div class="card-style-3 mb-30">
+			<div class="card-content">
+				<h4 id="classStudent">n강의실 수강생</h4>
+				<br>
+				<div class="classUser"></div>
+			</div>
+		</div>
+	</div>
+	<!-- end col -->
+</div>
+<!-- end row -->
+<!-- ========= card-style-3 end ========= -->
+<button id="Btn">테스트</button>
+<script>
+var cId = 1;
+function classInfo(cId){
+	// 학생정보 불러오기
+	$.ajax({
+		url : "userinfo",
+		type : "post", 
+		data : {cId : cId},
+				
+		success : function(data){
+			data.forEach((item,idx) => {
+				$('.classUser').append($('<p />').text(item.name));
+			})
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}	
+	}); // 학생정보 불러오기 end of ajax
+	// 강의실정보 불러오기
+	$.ajax({
+		url : "classinfo",
+		type : "post", 
+		data : {cId : cId},
+				
+		success : function(data){
+			data.forEach((item,idx) => {
+				
+				
+				$('#currName').text(item.curriculumName + ' ' + formatDate(item.curriculumStartDate) + '~' + formatDate(item.curriculumEndDate));
+				$('#classTest').text(item.classId + '강의실 시험정보');
+				$('#classStudent').text(item.classId + '강의실 수강생');
+			})
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}	
+	}); // 강의실정보 불러오기 end of ajax
+	// 강의실별 시험정보 불러오기
+	$.ajax({
+		url : "testinfo",
+		type : "post", 
+		data : {cId : cId},
+				
+		success : function(data){
+			data.forEach((item,idx) => {
+				// 날짜 포멧 변환 함수
+				function formatDate(date) {
+				    var d = new Date(date),
+				        month = '' + (d.getMonth() + 1),
+				        day = '' + d.getDate(),
+				        year = d.getFullYear();
+
+				    if (month.length < 2) month = '0' + month;
+				    if (day.length < 2) day = '0' + day;
+
+				    return [year, month, day].join('/');
+				} // 날짜 포멧 변환 end
+				$('.test').append($('<p />').text(item.testName + ' ' + formatDate(item.testDate)));
+			})
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}	
+	}); // 시험정보 end of ajax
+}
+
+// 강의실 버튼 클릭시 정보 갱신
+$('#allClass').on('click','.classNum', function(cId) {
+	
+	$('.test').html('');
+	$('.classUser').html('');
+	//console.log($(this).val());
+	cId = $(this).val()
+	// 강의실별 학생정보 불러오기
+	$.ajax({
+		url : "userinfo",
+		type : "post", 
+		data : {cId : cId},
+				
+		success : function(data){
+			data.forEach((item,idx) => {
+				$('.classUser').append($('<p />').text(item.name));
+			})
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}	
+	}); // 학생정보 end of ajax
+	
+	// 강의실별 과정명 불러오기
+	$.ajax({
+		url : "classinfo",
+		type : "post", 
+		data : {cId : cId},
+				
+		success : function(data){
+			data.forEach((item,idx) => {
+				$('#currName').text(item.curriculumName + ' ' + formatDate(item.curriculumStartDate) + '~' + formatDate(item.curriculumEndDate));
+				$('#classTest').text(item.classId + '강의실 시험정보');
+				$('#classStudent').text(item.classId + '강의실 수강생');
+			})
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}	
+	}); // 과정명 end of ajax
+	
+	// 강의실별 시험정보 불러오기
+	$.ajax({
+		url : "testinfo",
+		type : "post", 
+		data : {cId : cId},
+				
+		success : function(data){
+			data.forEach((item,idx) => {
+				$('.test').append($('<p />').text(item.testName + ' ' + formatDate(item.testDate)));
+			})
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}	
+	}); // 시험정보 end of ajax
+})// on click 함수 종료
+
+classInfo(cId);
+
+//날짜 포멧 변환 함수
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('/');
+} // 날짜 포멧 변환 end
+
+// 테스트중1
+$('#Btn').on('click', function(){
+	
+})
+
+</script>
+</html>

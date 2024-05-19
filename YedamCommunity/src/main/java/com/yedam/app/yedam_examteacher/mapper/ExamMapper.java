@@ -11,7 +11,7 @@ public interface ExamMapper {
 
 	// 시험목록 전체조회
 	public List<TeacherVO> selectExamAll();
-	
+
 	// 유저 정보 출력 (시험 출제시 필요)
 	public List<TeacherVO> selectUserAll(TeacherVO teacherVO);
 	
@@ -55,4 +55,10 @@ public interface ExamMapper {
 	
 	// 문제 자세히보기 단건조회
 	public List<TeacherVO> infoQuiz(@Param("qId") int qId);
+	
+	// 강의실 정보 출력(과목평균,시험리스트,수강생)
+	public List<TeacherVO> subjectAvg(@Param("cId") int cId);
+	public List<TeacherVO> testList(@Param("cId") int cId);
+	public List<TeacherVO> userList(@Param("cId") int cId);
+	public List<TeacherVO> currList(@Param("cId") int cId);
 }

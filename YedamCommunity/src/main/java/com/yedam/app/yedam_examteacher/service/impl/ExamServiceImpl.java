@@ -24,7 +24,6 @@ public class ExamServiceImpl implements ExamService{
 		List<TeacherVO> list = new ArrayList<TeacherVO>();
 		list.addAll(examMapper.selectExamAll());
 		list.addAll(examMapper.selectQuizAll());
-		list.addAll(examMapper.selectAnswerAll(teacherVO));
 		list.addAll(examMapper.selectSubjectAll());
 
 		return list;
@@ -130,5 +129,26 @@ public class ExamServiceImpl implements ExamService{
 	@Override
 	public List<TeacherVO> getQuizInfo(int qId) {
 		return examMapper.infoQuiz(qId);
+	}
+	
+	// 강의실별 과목평균점수 조회
+	@Override
+	public List<TeacherVO> subjectAvg(int cId) {
+		return examMapper.subjectAvg(cId);
+	}
+	// 강의실별 시험리스트 조회
+	@Override
+	public List<TeacherVO> subTestList(int cId) {
+		return examMapper.testList(cId);
+	}
+	// 강의실별 수강생 조회
+	@Override
+	public List<TeacherVO> subUserList(int cId) {
+		return examMapper.userList(cId);
+	}
+	// 강의실에 따른 과정명 조회
+	@Override
+	public List<TeacherVO> classList(int cId) {
+		return examMapper.currList(cId);
 	}
 }
