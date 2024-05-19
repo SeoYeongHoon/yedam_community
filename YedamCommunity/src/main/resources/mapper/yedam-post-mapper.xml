@@ -143,7 +143,7 @@
     </update>
     
  	<!-- 페이지네이션 -->
-<!--	<select id="getPosts" resultType="Post">
+<!-- 	<select id="getPosts" resultType="Post">
         SELECT * 
         FROM (
             SELECT

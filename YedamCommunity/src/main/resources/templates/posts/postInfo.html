@@ -32,21 +32,21 @@
                 </li>
             </ul>
 
-<!--             <form class="comment-form">
+            <form class="comment-form">
                 <input type="hidden" name="replyId" th:value="${reply.replyId}" />
                 <input type="hidden" name="postId" th:value="${postInfo.postId}" />
                 <textarea name="commentContent"></textarea>
                 <button type="button" class="comment-submit">대댓글 작성</button>
-            </form> -->
+            </form>
         </li>
     </ul>
 
-<!--     <h3>댓글 작성</h3>
+     <h3>댓글 작성</h3>
     <form id="reply-form">
         <input type="hidden" name="postId" th:value="${postInfo.postId}" />
         <textarea name="replyContent"></textarea>
         <button type="button" id="reply-submit">댓글 작성</button>
-    </form> -->
+    </form> 
 
     <a th:href="@{/postUpdate?postId={postId}(postId=${postInfo.postId})}">수정</a>
     <form th:action="@{/postDelete}" method="get">
@@ -55,7 +55,7 @@
     </form>
     <a th:href="@{/postList}">목록으로</a>
 
-    <!-- <script>
+    <script>
         $(document).ready(function() {
             // 댓글 작성
             $('#reply-submit').on('click', function() {
@@ -133,6 +133,6 @@
                 }
             });
         });
-    </script> -->
+    </script> 
 </body>
 </html>
