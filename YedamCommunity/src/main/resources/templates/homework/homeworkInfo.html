@@ -73,18 +73,39 @@
 					style="border: 1px solid black;">
 					<p>댓글 내용 : [[${reply.replyContent}]]</p>
 					<p>작성일자 : [[${#dates.format(reply.replyDate,'yyyy년MM월dd일')}]]</p>
+					<hr>
+					<!-- 대댓글 출력 -->
+					<div th:each="comment : ${commentSelect}"
+						style="border: 1px solid black;">
+						<p>대댓글 내용 : [[${comment.commentContent}]]</p>
+						<p>작성일자 :
+							[[${#dates.format(comment.commentDate,'yyyy년MM월dd일')}]]</p>
+					</div>
+					<!-- 대댓글 출력 끝-->
 
 					<div class="col-12" style="text-align: right;">
-						<button id="commentBtn" class="main-btn primary-btn btn-hover"
+						<button class="main-btn primary-btn btn-hover commentBtn "
 							type="button">답글</button>
+						<!-- <div class="reply_data"></div>  -->
+						<!-- 대댓글 등록 -->
+						<form name="insertComment" method="post"
+							th:action="@{/insertComment}" th:object="${homework}">
+							<input type="hidden" th:value="${reply.replyId}"
+								th:field="*{replyId}">
+							<th:block th:object="${homeworkList}">
+								<input type="hidden" th:field="*{homeworkId}">
+							</th:block>
+							<textarea name="commentContent" style="border: 1px solid black;"
+								rows="8" cols="50" placeholder="내용을 입력하세요"
+								th:field="*{commentContent}"></textarea>
+							<div class="col-12" style="text-align: left;">
+								<button id="commentInsertBtn"
+									class="main-btn primary-btn btn-hover" type="submit">답글
+									등록</button>
+							</div>
+						</form>
+						<!-- 대댓글 등록 끝 -->
 					</div>
-				</div>
-				<div id="reply_data"></div>
-				<div th:each="comment : ${commentSelect}"
-					style="border: 1px solid black; width: 1200px; height: 200px;">
-					<p>댓글 내용 : [[${comment.commentContent}]]</p>
-					<p>작성일자 :
-						[[${#dates.format(comment.commentDate,'yyyy년MM월dd일')}]]</p>
 				</div>
 
 			</div>
@@ -106,49 +127,42 @@
 
 <script>
 	//대댓글 등록
-	let wrapper = $('#reply_data'); // 입력 필드를 포함하는 컨테이너 선택
-	let addButton = $('#commentBtn'); // 추가 버튼 선택
-	
-	/* let commentInsert = $('form[name="insertComment"]').serialize();
-	let formValues = $('form[name="insertReply"]').serialize(); */
-	
-// 답글 클릭 시 대댓글 입력창 생성
-$('#commentBtn').on('click',function(e) {
-    e.preventDefault();
-        $('#reply_data').append(
-       `<div>
-        	<form name="insertComment" method="post">
-				<textarea id="commentContent"style="border: 1px solid black;"rows="8" cols="50" placeholder="내용을 입력하세요"></textarea>
-				<div class="col-12" style="text-align: left;">
-					<button id="commentInsertBtn" class="main-btn primary-btn btn-hover" type="button">답글 등록</button>
-				</div>
-			</form>
-		</div>`
-        );
-     // 답글 등록 버튼으로 등록하기
-    	$('#commentInsertBtn').on('click',function(){
-    		   $.ajax({
-    		    	url:"insertComment",
-    		    	type: "POST",
-    		    	data: commentInsert,
-    		     	success : function(data){
-    		     		alert("성공");
-    		     	},
-    		     	error : function(err){
-    		     		alert("error");
-    		     	}
-    		    });  
-    	});
-    });
-	
 
+	// 답글 클릭 시 대댓글 입력창 생성
+	/* $('.commentBtn').on('click', function(e) {
+		e.preventDefault();
+		      $('.reply_data').append(
+		    `<div>
+		        <form name="insertComment" method="post">
+		          <input name="hidden" type="hidden" >
+		         <textarea name="commentContent"style="border: 1px solid black;"rows="8" cols="50" placeholder="내용을 입력하세요" ></textarea>
+		         <div class="col-12" style="text-align: left;">
+		            <button id="commentInsertBtn" class="main-btn primary-btn btn-hover" type="button">답글 등록</button>
+		         </div>
+		      </form>
+		   </div>`
+		     ); 
+		let commentInsert = $('form[name="insertComment"]').serialize();
+		console.log("대댓글버튼 = " + commentInsert);
 
-// '삭제' 링크 클릭 시 이벤트
-wrapper.on('click', '.remove_field', function(e) {
-    e.preventDefault(); // 페이지 리로드 방지
-    $(this).parent('.input_list').remove(); // 필드 제거
-    fieldCount--; // 필드 수 감소
-});
+		// 답글 등록 버튼으로 등록하기
+		$('.reply_data').on('click', '#commentInsertBtn', function() {
+			let commentInsert = $('input[name="hidden"]').val();
+			console.log("대댓글버튼 = " + commentInsert);
+
+			$.ajax({
+				url : "insertComment",
+				type : "POST",
+				data : commentInsert,
+				success : function(data) {
+					alert("성공");
+				},
+				error : function(err) {
+					alert("error");
+				}
+			});
+		});
+	}); */
 
 	//댓글 등록
 	$('#insertBtn').on('click', addReply);

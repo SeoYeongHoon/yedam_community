@@ -9,10 +9,10 @@ public interface HomeWorkReplyMapper {
 	public int insertReply(HomeWorkVO homeworkVO);
 
 	// 댓글 조회
-	public List<HomeWorkVO> selectReply(HomeWorkVO homeworkVO);
+	public List<HomeWorkVO> selectReplyAll(HomeWorkVO homeworkVO);
 
 	// 대댓글 조회
-	public HomeWorkVO selectComment(HomeWorkVO homeworkVO);
+	public List<HomeWorkVO> selectComment(HomeWorkVO homeworkVO);
 
 	// 대댓글 등록
 	public int insertComment(HomeWorkVO homeworkVO);
