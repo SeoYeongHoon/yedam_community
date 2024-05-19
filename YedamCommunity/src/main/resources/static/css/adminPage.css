@@ -151,6 +151,28 @@
 	color: #fff;
 }
 
+.courseModal {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	z-index: 999;
+}
+
+.courseModal .course_modal_popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #ffffff;
+	border-radius: 20px;
+	padding: 20px;
+	box-shadow: 0px 10px 40px 10px #00000040;
+}
+
 /* 상세정보 모달창 */
 .infoModal {
 	display: none;
@@ -288,4 +310,14 @@
 .add_course_item {
 	margin-right: 20px;
 	min-width: 200px;
+}
+
+.deleteCheck {
+	position: absolute;
+	bottom: 5px;
+	left: 47%;
+}
+
+input[type=checkbox] {
+	zoom: 2;
 }

@@ -1,5 +1,6 @@
 package com.yedam.app.yedam_admin.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -127,33 +127,12 @@ public class AdminController {
 		return "admin/manageCourse";
 	}
 	
-//	@RequestMapping(value="manageCourse", method=RequestMethod.POST)
-//	public String insertCurriculum(CurriculumVO curriculumVO) throws Exception {
-//		System.out.println("전달된 데이터: " + curriculumVO);
-//		String uri = null;
-//		
-//		if (curriculumService.insertCurriculum(curriculumVO) > 0) {
-//			uri = "admin/manageCourse";
-//		} else {
-//			uri = "admin/manageCourse";
-//		}
-//		
-//		return uri;
-//	}
-	
 	@PostMapping("/manageCourse")
-	public String insertCurriculums(CurriculumVO curriculumVO) {
+	public String addCourse(@ModelAttribute CurriculumVO curriculumVO) {
 		System.out.println("전달된 데이터: " + curriculumVO);
-		String uri = null;
 		
-		int curId = curriculumService.insertCurriculum(curriculumVO);
+		curriculumService.insertCurriculum(curriculumVO);
 		
-		if (curId > -1) {
-			uri = "admin/manageCourse";
-		} else {
-			uri = "admin/manageCourse";
-		}
-		
-		return uri;
+		return "redirect:/manageCourse";
 	}
 }
