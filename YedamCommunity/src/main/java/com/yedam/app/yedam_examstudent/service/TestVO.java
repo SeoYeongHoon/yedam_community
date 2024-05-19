@@ -10,7 +10,7 @@ public class TestVO {
 	private int testId;
 	private int curriculumId;
 	private String testContent;
-	private Date testTime;
+	private int testTime;
 	private Date testDate;
 	private String testName;
 	private int classId;
@@ -20,8 +20,14 @@ public class TestVO {
 	private int testTargetId;
 	
 	//quizbox 테이블
-	private int quizScoreSum;
+	private int quizScore;
 	private int subjectId;
+	private int quizId;
+	private String quizContent;
+	
+	//answers 테이블
+	private int exampleNum;
+	private String textContent;
 	
 	//curriculum 테이블
 	private String curriculumName;
@@ -35,10 +41,8 @@ public class TestVO {
 	
 	//기타 필드
 	private int quizIdCnt; //시험문제개수
-
-	
-	
-	//getter,setter
+	private int quizCnt;
+	private int page;
 	public int getTestId() {
 		return testId;
 	}
@@ -57,10 +61,10 @@ public class TestVO {
 	public void setTestContent(String testContent) {
 		this.testContent = testContent;
 	}
-	public Date getTestTime() {
+	public int getTestTime() {
 		return testTime;
 	}
-	public void setTestTime(Date testTime) {
+	public void setTestTime(int testTime) {
 		this.testTime = testTime;
 	}
 	public Date getTestDate() {
@@ -93,17 +97,41 @@ public class TestVO {
 	public void setTestTargetId(int testTargetId) {
 		this.testTargetId = testTargetId;
 	}
-	public int getQuizScoreSum() {
-		return quizScoreSum;
+	public int getQuizScore() {
+		return quizScore;
 	}
-	public void setQuizScoreSum(int quizScoreSum) {
-		this.quizScoreSum = quizScoreSum;
+	public void setQuizScore(int quizScoreSum) {
+		this.quizScore = quizScoreSum;
 	}
 	public int getSubjectId() {
 		return subjectId;
 	}
 	public void setSubjectId(int subjectId) {
 		this.subjectId = subjectId;
+	}
+	public int getQuizId() {
+		return quizId;
+	}
+	public void setQuizId(int quizId) {
+		this.quizId = quizId;
+	}
+	public String getQuizContent() {
+		return quizContent;
+	}
+	public void setQuizContent(String quizContent) {
+		this.quizContent = quizContent;
+	}
+	public int getExampleNum() {
+		return exampleNum;
+	}
+	public void setExampNum(int exampNum) {
+		this.exampleNum = exampNum;
+	}
+	public String getTextContent() {
+		return textContent;
+	}
+	public void setTextContent(String textContent) {
+		this.textContent = textContent;
 	}
 	public String getCurriculumName() {
 		return curriculumName;
@@ -147,4 +175,22 @@ public class TestVO {
 	public void setQuizIdCnt(int quizIdCnt) {
 		this.quizIdCnt = quizIdCnt;
 	}
+	public int getQuizCnt() {
+		return quizCnt;
+	}
+	public void setQuizCnt(int quizCnt) {
+		this.quizCnt = quizCnt;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	
+	
+	//getter,setter
+	
+	
+	
 }

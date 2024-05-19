@@ -11,6 +11,8 @@ public interface CbtStudentService {
 	public List<QuizboxVO> testQuizRand(QuizboxVO quizboxVO);
 	//시험시작정보 조회
 	public TestVO testStart(TestVO testVO);
+	//시험문제
+	public List<TestVO> testQuiz(TestVO testVO);
 	//시험시작정보 조회 = 문제내용
 	public QuizboxVO testQuiz1(QuizboxVO quizboxVO);
 	//시험시작정보 조회 = 문제보기

@@ -4,13 +4,13 @@
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
 <style>
-.tdetail1 {
+.tdetail_1 {
 	display: inline-block;
 }
 </style>
 <div>
 	<div class="card-style"
-		style="border: 1px solid gray; border-radius: 30px; width: 700px; margin-top: 50px; margin-bottom: 50px; background-color: white; display: inline-block;">
+		style="border: 1px solid gray; border-radius: 20px; width: 700px; margin: 0 auto; margin-top: 100px; margin-bottom: 100px;">
 		<br> <br>
 		<h1 style="text-align: center;">시험</h1>
 		<br> <br>
@@ -28,8 +28,12 @@
 				<td>[[${#dates.format(testDetail.testDate, 'yyyy년 MM월 dd일')}]]</td>
 			</tr>
 			<tr>
+				<th>응시기간</th>
+				<td>[[${testDetail.testTime}]]</td>
+			</tr>
+			<tr>
 				<th>총점</th>
-				<td>[[${testDetail.quizScoreSum}]]점</td>
+				<td>[[${testDetail.quizScore}]]점</td>
 			</tr>
 			<tr>
 				<th>문제수</th>
@@ -42,9 +46,9 @@
 		</table>
 		<br> <br>
 		<div style="text-align: center">
-			<button class="tdetail1 main-btn dark-btn-outline square-btn btn-hover"
+			<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
 				th:onclick="|location.href='@{/testList}'|">목록</button>
-			<form class="tdetail1" action="testStart" method="post">
+			<form class="tdetail_1" action="testStart" method="post">
 				<input type="hidden" name="page" th:value="1">
 				<input type="hidden" name="quizCnt" th:value="${quizCnt}">
 				<input type="hidden" name="testId" th:value="${testId}">
