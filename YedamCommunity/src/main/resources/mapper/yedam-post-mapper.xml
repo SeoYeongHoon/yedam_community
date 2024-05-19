@@ -142,23 +142,27 @@
 		WHERE post_id = #{postId}
     </update>
     
-   	<!-- <insert id="createReply" parameterType="Post" useGeneratedKeys="true" keyProperty="postId">
-   		INSERT INTO replies (reply_id
-                           , board_id
-                           , post_id
-                           , reply_content
-                           , reply_date
-                           , update_date
-                           , reply_writer
-                           , homework_target_id)
-       VALUES (reply_id_seq.nextval
-             , #{boardId}
-             , #{postId}
-             , #{replyContent}
-             , sysdate
-             , #{updateDate}
-             , #{replyWriter}
-             , #{homeworkTargetId})
-   	</insert>  -->
+ 	<!-- 페이지네이션 -->
+<!-- 	<select id="getPosts" resultType="Post">
+        SELECT * 
+        FROM (
+            SELECT
+                p.*,
+                ROWNUM AS rnum
+            FROM (
+                SELECT *
+                FROM posts
+                ORDER BY post_id DESC
+            ) p
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum > #{startRow}
+    </select>
+    
+    게시글 개수
+    <select id="getPostCount" resultType="int">
+        SELECT COUNT(*)
+        FROM posts
+    </select> -->
 
 </mapper>

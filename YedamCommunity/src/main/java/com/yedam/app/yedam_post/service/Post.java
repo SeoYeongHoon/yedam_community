@@ -44,9 +44,6 @@ public class Post {
     private int boardfileSize;
     private String boardfileLocation;
     private String boardfileExt;
-    
-    
-    
 	public int getPostId() {
 		return postId;
 	}
@@ -106,6 +103,18 @@ public class Post {
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	public List<Reply> getReplies() {
+		return replies;
+	}
+	public void setReplies(List<Reply> replies) {
+		this.replies = replies;
+	}
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 	public int getReplyId() {
 		return replyId;
@@ -185,5 +194,6 @@ public class Post {
 	public void setBoardfileExt(String boardfileExt) {
 		this.boardfileExt = boardfileExt;
 	}
+    
  
 }
