@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.yedam_curriculum.mapper.CurriculumMapper;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
+import com.yedam.app.yedam_user.service.UserVO;
 
 @Service
 public class CurriculumServiceImpl implements CurriculumService {
@@ -27,6 +28,11 @@ public class CurriculumServiceImpl implements CurriculumService {
 		} else {
 			return -1;
 		}
+	}
+
+	@Override
+	public List<UserVO> showCurriculumStd(int curriculumId) {
+		return curriculumMapper.selectCurriculumStd(curriculumId);
 	}
 
 }

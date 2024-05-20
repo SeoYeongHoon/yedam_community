@@ -38,4 +38,16 @@
 	)			  			
   
   </insert>
+  
+  <!-- 해당 과정의 유저 출력 -->
+  <select id="selectCurriculumStd" parameterType="UserVO">
+  	SELECT u.id
+  		 , u.name
+  		 , u.email
+  		 , u.curriculum_id
+  		 , c.curriculum_name
+	FROM users u JOIN curriculum c
+	             ON (u.curriculum_id = c.curriculum_id)
+	WHERE c.curriculum_id = #{curriculumId}
+  </select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.yedam.app.yedam_admin.web;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,17 +37,6 @@ public class AdminController {
 	// 어드민 메인 페이지 및 유저 전체조회
 	@GetMapping("/adminMain")
 	public String adminPage(Model model, HttpServletRequest req) {
-
-//		String page = req.getParameter("page");
-//		page = page == null ? "1" : page;
-//		int boardCountInPage = Integer.parseInt(page);
-//		List<UserVO> list = userService.userList(boardCountInPage);
-//		PageDTO pageDTO = new PageDTO(Integer.parseInt(page), userService.userTotalCnt(), 5);
-//		
-//		model.addAttribute("users", list);
-//		System.out.println("위 리스트: " + list);
-//		
-//		req.setAttribute("page", pageDTO);
 
 		// 관리자 최초 페이지. 수강생, 수료생 리스트 출력.
 		List<UserVO> requestList = userService.stdList();
@@ -113,12 +101,8 @@ public class AdminController {
 		return "admin/adminMain";
 	}
 	
-//	@GetMapping("/read")
-//	public List<CsvFileVO> readCsv() {
-//		String filePath = "";
-//		return adminService.readCsv(filePath);
-//	}
 	
+//	과정 목록 출력
 	@GetMapping("/manageCourse")
 	public String manageCourse(Model model) {
 		List<CurriculumVO> currList = curriculumService.CurriculumList();
@@ -127,6 +111,7 @@ public class AdminController {
 		return "admin/manageCourse";
 	}
 	
+//	과정 등록
 	@PostMapping("/manageCourse")
 	public String addCourse(@ModelAttribute CurriculumVO curriculumVO) {
 		System.out.println("전달된 데이터: " + curriculumVO);
@@ -134,5 +119,24 @@ public class AdminController {
 		curriculumService.insertCurriculum(curriculumVO);
 		
 		return "redirect:/manageCourse";
+	}
+	
+//	모달창에 해당 과정의 학생 리스트 출력
+	@GetMapping("/showCourse")
+	@ResponseBody
+	public List<UserVO> showCourseStd(@RequestParam("curriculumId") int curriculumId, Model model) {
+		System.out.println("아이디: " + curriculumId);
+		List<UserVO> students = curriculumService.showCurriculumStd(curriculumId);
+		model.addAttribute("students", students);
+		System.out.println("학생정보: " + students);
+		
+		return students;
+	}
+	
+	
+//	신고목록 페이지
+	@GetMapping("/manageReport")
+	public String manageReport() {
+		return "admin/manageReport";
 	}
 }

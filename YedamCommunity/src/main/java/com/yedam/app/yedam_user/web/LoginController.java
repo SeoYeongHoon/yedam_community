@@ -3,7 +3,6 @@ package com.yedam.app.yedam_user.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,6 @@ public class LoginController {
 	@GetMapping("/")
 	public String loginPage() {
 		return "login/login";
-		//classpath:/templates/login/login.html
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.POST)
@@ -45,9 +43,16 @@ public class LoginController {
 	    	session.setAttribute("logid", id);
 	    	session.setAttribute("logPw", pw);
 	    	session.setAttribute("logName", userVO.getName());
-	    	System.out.println("로그인 성공");
-	    	System.out.println(userVO);
-	    	return "redirect:/home"; 
+	    	
+	    	if (userVO.getUserType().equals("ROLE_ADMIN")) {
+		    	System.out.println("관리자 로그인");
+		    	System.out.println(userVO);
+		    	return "redirect:/adminMain";
+	    	} else {
+	    		System.out.println("로그인 성공");
+		    	System.out.println(userVO);
+		    	return "redirect:/home";
+	    	}
 	    } else {
 	    	System.out.println("로그인 실패");
 	    	return "redirect:/";

@@ -8,6 +8,5 @@ public class HomeController {
 	@GetMapping("/home")
 	public String homePage() {
 		return "mainPages/home";
-		//classpath:/templates/home.html
 	}
 }
