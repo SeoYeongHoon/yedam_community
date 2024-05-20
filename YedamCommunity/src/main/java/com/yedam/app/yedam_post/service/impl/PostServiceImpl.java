@@ -41,9 +41,9 @@ public class PostServiceImpl implements PostService {
 	}
 
 	// 게시글 단건조회 + 댓글 + 대댓글
-	@Override
+	@Override                  // Post post
 	public Post getPostReplies(int postId) {
-		
+		// Reply re
 		Post post = postMapper.getPostDetails(postId);
 		            postMapper.updatePostViewCNT(post);
 		List<Reply> replies = replyMapper.getReplies(postId);
