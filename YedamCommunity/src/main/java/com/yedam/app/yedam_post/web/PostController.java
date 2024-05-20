@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.PostService;
+import com.yedam.app.yedam_post.service.Reply;
 
 @Controller
 public class PostController {
@@ -50,10 +51,11 @@ public class PostController {
      * @return 게시글 상세 페이지
      */
 	@GetMapping("postInfo")
-	public String getPostDetail(@RequestParam("postId") int postId, Model model) {
+	public String getPostDetail(@RequestParam("postId") int postId, Reply reply, Model model) {
 		// 게시글과 댓글 정보를 조회합니다.
 		Post post = postService.getPostReplies(postId);
 		model.addAttribute("postInfo", post);
+		/* model.addAttribute("replies", post); */
 		return "posts/postInfo";
 	}
 

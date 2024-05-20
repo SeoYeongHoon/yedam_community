@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,9 +31,11 @@ public class ReplyController {
 	public String addReply(@RequestParam("postId") int postId, @RequestParam("replyContent") String replyContent) {
 		Reply reply = new Reply();
 		reply.setPostId(postId);
+		reply.setBoardId(1); // 게시판 1번유형
 		reply.setReplyContent(replyContent);
+		reply.setReplyDate(new Date());
 		reply.setUpdateDate(new Date());
-		reply.setReplyWriter("작성자"); // 작성자를 적절히 설정
+		reply.setReplyWriter("익명");
 		postService.createReply(reply);
 		return "success";
 	}
@@ -64,10 +67,10 @@ public class ReplyController {
      */
     @PostMapping("addComment")
     @ResponseBody
-    public String addComment(@RequestParam("replyId") int replyId, @RequestParam("commentContent") String commentContent) {
-        Comment comment = new Comment();
-        comment.setReplyId(replyId);
-        comment.setCommentContent(commentContent);
+    public String addComment(Comment comment, Model model) {
+        comment.getReplyId();
+        comment.getCommentContent();
+        comment.getCommentWriter();
         postService.createComment(comment);
         return "대댓글이 성공적으로 추가되었습니다.";
     }
@@ -80,7 +83,9 @@ public class ReplyController {
     @PostMapping("deleteComment")
     @ResponseBody
     public String deleteComment(@RequestParam("commentId") int commentId) {
-        Map<String, Object> result = postService.deleteComment(commentId);
+    	Comment comment = new Comment();
+    	comment.setCommentId(commentId);
+        Map<String, Object> result = postService.deleteComment(comment);
         if ("success".equals(result.get("status"))) {
             return "대댓글이 성공적으로 삭제되었습니다.";
         } else {

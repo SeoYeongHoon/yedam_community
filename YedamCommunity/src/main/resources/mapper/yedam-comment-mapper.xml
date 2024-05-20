@@ -13,9 +13,7 @@
                COMMENT_CONTENT ,
                COMMENT_DATE  
         FROM comments
-        WHERE reply_id IN (SELECT reply_id
-                           FROM replies
-                           WHERE post_id = #{postId}) 
+        WHERE reply_id = #{replyId}
   </select>
   
   <insert id="insertComment" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentId">
@@ -24,17 +22,17 @@
                         , comment_writer
                         , comment_content
                         , comment_date)
-     VALUES (#{commentId}
+     VALUES (comment_id_seq.nextval
            , #{replyId}
            , #{commentWriter}
            , #{commentContent}
-           , sysdate);
+           , sysdate)
   </insert>
   
   <delete id="deleteComment" parameterType="int">
   	DELETE 
   	FROM comments
-  	WHERE = comment_id = #{commentId}
+  	WHERE comment_id = #{commentId}
   </delete>
   
   </mapper>

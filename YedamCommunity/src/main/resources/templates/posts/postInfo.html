@@ -61,16 +61,14 @@
             $('#reply-submit').on('click', function() {
                 let formData = $('#reply-form').serialize();
                 $.ajax({
-                    url: '/addReply',
+                    url: 'addReply',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
                         alert('댓글이 등록되었습니다.');
-                        location.reload(); 
                     },
                     error: function(error) {
-                        console.log('Error:', error);
-                        alert('댓글 등록에 실패하였습니다.');
+                        location.reload();
                     }
                 });
             });
@@ -80,7 +78,7 @@
                 let replyId = $(this).data('reply-id');
                 if (confirm('댓글을 삭제하시겠습니까?')) {
                     $.ajax({
-                        url: '/deleteReply',
+                        url: 'deleteReply',
                         type: 'POST',
                         data: { replyId: replyId },
                         success: function(response) {
@@ -88,8 +86,8 @@
                             location.reload(); 
                         },
                         error: function(error) {
-                            console.log('Error:', error);
-                            alert('댓글 삭제에 실패하였습니다.');
+                        	alert('댓글이 삭제 실패되었습니다.');
+                            location.reload(); 
                         }
                     });
                 }
@@ -99,7 +97,7 @@
             $('.comment-submit').on('click', function() {
                 let formData = $(this).closest('form').serialize();
                 $.ajax({
-                    url: '/addComment',
+                    url: 'addComment',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -118,7 +116,7 @@
                 let commentId = $(this).data('comment-id');
                 if (confirm('대댓글을 삭제하시겠습니까?')) {
                     $.ajax({
-                        url: '/deleteComment',
+                        url: 'deleteComment',
                         type: 'POST',
                         data: { commentId: commentId },
                         success: function(response) {
@@ -133,6 +131,15 @@
                 }
             });
         });
+         /*function validationCheck() {
+            let content = $('textarea[name=replyContent]');
+            if (title.val() === '') {
+                alert('댓글내용은 필수로 입력해야합니다.');
+                content.focus();
+                return false;
+            }
+            return true;
+        } */
     </script> 
 </body>
 </html>

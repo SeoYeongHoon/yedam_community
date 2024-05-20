@@ -4,13 +4,42 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Home">
 <head>
+<style>
+.pagination {
+	display: inline-block;
+}
+
+.pagination.col-lg-6{
+	padding: 0px 0px 0px 0px;
+}
+.pagination a {
+	color: black;
+	float: left;
+	padding: 8px 16px;
+	text-decoration: none;
+}
+
+.pagination a.active {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.pagination a:hover:not(.active) {
+	background-color: #ddd;
+}
+
+.insertBtn {
+	text-align: right;
+}
+</style>
 <title>게시글 목록</title>
 </head>
 <body>
 	<div class="container">
 		<h3>정보 게시판</h3>
-		<a th:onclick="|location.href='@{/postInsert}'|"
-			style="text-align: right">글쓰기</a>
+		<div class="insertBtn">
+			<a th:onclick="|location.href='@{/postInsert}'|">글쓰기</a>
+		</div>
 		<table class="table">
 			<thead>
 				<tr>
@@ -36,22 +65,23 @@
 				</th:block>
 			</tbody>
 		</table>
-
-		<div class="pagination">
-			<div th:if="${currentPage > 1}">
-				<a
-					th:href="@{/postList(page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
-			</div>
-			<div
-				th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
-				<a th:href="@{/postList(page=${page}, pageSize=${pageSize})}"
-					th:text="${page}"
-					th:classappend="${page == currentPage} ? 'active'"></a>
-			</div>
-			<div
-				th:if="${currentPage < (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1)}">
-				<a
-					th:href="@{/postList(page=${currentPage + 1}, pageSize=${pageSize})}">&raquo;</a>
+		<div class="center">
+			<div class="pagination col-lg-6">
+				<div th:if="${currentPage > 1}">
+					<a
+						th:href="@{/postList(page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
+				</div>
+				<div
+					th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
+					<a th:href="@{/postList(page=${page}, pageSize=${pageSize})}"
+						th:text="${page}"
+						th:classappend="${page == currentPage} ? 'active'"></a>
+				</div>
+				<div
+					th:if="${currentPage < (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1)}">
+					<a
+						th:href="@{/postList(page=${currentPage + 1}, pageSize=${pageSize})}">&raquo;</a>
+				</div>
 			</div>
 		</div>
 	</div>
