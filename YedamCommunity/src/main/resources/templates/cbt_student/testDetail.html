@@ -59,7 +59,9 @@
 				<div th:each="rn : ${randRn}">				
 					<input type="hidden" name="randRn" th:value="${rn}">
 				</div>
-				
+				<div th:each="score : ${randQuizScore}">				
+					<input type="hidden" name="randQuizScore" th:value="${score}">
+				</div>
 				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">시작</button>
 			</form>
 		</div>

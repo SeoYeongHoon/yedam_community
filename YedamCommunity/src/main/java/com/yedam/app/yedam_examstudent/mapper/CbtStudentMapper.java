@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
+import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
 @Mapper
@@ -26,4 +27,6 @@ public interface CbtStudentMapper {
 	public List<AnswerVO> selectTestQuiz2(AnswerVO answerVO);
 	//문제개수 구하기
 	public int selectQuizCnt(QuizboxVO quizboxVO);
+	//문제 제출
+	public boolean insertTestSubmit(TestResultVO testResultVO);
 }

@@ -142,29 +142,25 @@
 	</div>
 </div>
 <script>
+//<<모달 관련>>
 feedbackModal();
-//testListFilter();
-
-//<<모달 관련 JS>>
 function feedbackModal(){
 	const modalContent = document.querySelectorAll('.modal');
 	const modalOpen = document.querySelectorAll('.feedbackOn');
 	const modalClose = document.querySelectorAll('.closeBtn');
 
 	for(let i = 0; i < modalOpen.length; i++){
-		modalOpen[i].addEventListener('click', function() {
-			//'on' class 추가
-			modalContent[i].classList.add('on');
+		modalOpen[i].addEventListener('click', function() { //피드백버튼을 클릭하면
+			modalContent[i].classList.add('on'); //모달창 열기
 		});
 	}
 	for(let i = 0; i < modalClose.length; i++){
-		modalClose[i].addEventListener('click', function() {
-			//'on' class 제거
-			modalContent[i].classList.remove('on');
+		modalClose[i].addEventListener('click', function() { //닫기버튼을 클릭하면
+			modalContent[i].classList.remove('on'); //모달창 닫기
 		});
 	}
 }
-//<<시험목록 필터링 관련 JS>>
+//<<시험목록 필터링 관련>>
 $('.filterItem').show(); //처음에 요소들 나타내기
 $('.filterBtn').click(function(){
 	let selected = $(this).data('category'); //현재 선택된 카테고리 데이터

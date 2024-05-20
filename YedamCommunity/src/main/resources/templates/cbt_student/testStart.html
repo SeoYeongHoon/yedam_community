@@ -45,6 +45,44 @@
     opacity: 100%;
     top: 50px;
 }
+/*모달*/
+.modal h1, #closeBtn, #confirmBtn {
+	text-align: center;
+}
+/*모달 팝업 영역 스타일링*/
+.modal {
+	display: none; /*평소에 숨김처리*/
+	position: fixed; /*모달창 화면전체*/
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+	background: rgba(0, 0, 0, 0.5);
+}
+.modal .modal-dialog {
+	/*팝업*/
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 20px;
+	background: #ffffff;
+	border-radius: 10px;
+}
+#closeBtn, #confirmBtn {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: rgb(116, 0, 0);
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	cursor: pointer;
+	transition: box-shadow 0.2s;
+}
+.modal.on {
+	display: block;
+}
 </style>
 <div id="start" class="row">
 	<!-- 타이머 토스트 알림창 
@@ -74,17 +112,20 @@
 			<h3 id="remainQuizCnt" class="tstart_2">[[${quizCnt}]]</h3>
 		</div>	
 		<div>
-			<!-- 문제갱신 위한 ajax용 데이터 hidden 처리 -->
+			<!-- 문제갱신 위한 ajax용 데이터 -->
 			<div>
 				<input id="page" type="hidden" name="page" th:value="${page}">
 				<input id="quizCnt" type="hidden" name="quizCnt" th:value="${quizCnt}">
 				<input id="testId" type="hidden" name="testId" th:value="${testId}">
 				<input id="subjectId" type="hidden" name="subjectId" th:value="${subjectId}">
  				<div th:each="quiz : ${randQuizId}">				
-					<input class="randQuizId" type="hidden" name="randQuizId" th:value="${quiz}">
+					<input class="randQuizId" type="hidden" th:value="${quiz}">
 				</div>
 				<div th:each="rn : ${randRn}">				
-					<input class="randRn" type="hidden" name="randRn" th:value="${rn}">
+					<input class="randRn" type="hidden" th:value="${rn}">
+				</div>
+				<div th:each="score : ${randQuizScore}">				
+					<input class="randQuizScore" type="hidden" th:value="${score}">
 				</div>
 			</div>
 			<!-- 시험관련 버튼 -->
@@ -98,6 +139,20 @@
 				<a id="submitBtn" class="main-btn dark-btn-outline square-btn btn-hover">제출</a>
 			</div>
 		</div>
+		<!-- 제출관련 모달형식 -->
+		<div class="modal">
+			<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 300px; text-align: center;">
+				<h1>시험제출</h1><br>
+				<div id="remainQuizSubmit">
+				</div><br>
+				<h3 style="color: blue;">답안을 제출하시겠습니까?</h3><br>
+				<h3 style="color: red;">(답안 제출 이후에는 답안 변경이 불가합니다.)</h3><br>
+				<div>
+					<button type="button" id="closeBtn">닫기</button>
+					<button type="button" id="confirmBtn">확인</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	<!-- 좌측 -->
 	<!-- 답안표기 부분 -->
@@ -107,7 +162,7 @@
 			<div class="selectedQuiz tstart_3">
 				<h3 class="tstart_2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
 				<input class="thisAnswer" type="hidden" th:value="${idx.count}">
-				<input class="submitAnswer" type="hidden" th:value="1">
+				<input class="submitAnswer" type="hidden" th:value="0">
 				<div class="one selectedAnswer">①</div>
 				<div class="two selectedAnswer">②</div>
 				<div class="three selectedAnswer">③</div>
@@ -120,7 +175,9 @@
 	<!-- 문제갱신되는 부분 -->
 	<div id="quiz" class="card-style col-lg-10" style="height: 800px">
 		<h1>[[${page}]]. [[${testQuiz1.quizContent}]]</h1>
-		<p>([[${testQuiz1.quizScore}]]점)</p>
+		<p class="tstart_5">( </p>
+		<p class="tstart_5">[[${testQuiz1.quizScore}]]</p>
+		<p class="tstart_5"> 점 )</p>
 		<br> <br>
 		<div th:each="list2, idx: ${testQuiz2}">
 			<span class="selectedContent tstart_6" style="background: white;">[[${list2.exampleNum}]]. [[${list2.textContent}]]</span>
@@ -129,11 +186,79 @@
 </div>
 <script>
 //<<시험제출 관련>>
-/*
-$('#submitBtn').on('click',function(){
-	let submitAnswer = document.querySelector('.submitAnswer');
-	
-})*/
+
+submitTest();
+function submitTest(){
+	let remainQuizCnt = document.querySelector('#remainQuizCnt'); //남은 문제개수
+	let remainQuizSubmit = document.querySelector('#remainQuizSubmit'); //남은 문제개수 출력부분
+	let modal = document.querySelector('.modal');
+	let h3 = document.createElement('h3'); //텍스트 태그 생성
+	let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
+	let quizCnt = quizCntVal.value;
+	let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출한 답안
+	let submitAnswer = new Array(quizCnt); //제출한 답안 배열 생성
+	for(let i = 0; i < submitAnswerVal.length; i++){
+		submitAnswer[i] = submitAnswerVal[i].value;
+	}
+	let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤 문제번호
+	let randQuizId = new Array(quizCnt); //랜덤 문제번호 배열 생성
+	for(let i = 0; i < randQuizIdVal.length; i++){
+		randQuizId[i] = randQuizIdVal[i].value;
+	}
+	let randRnVal = document.querySelectorAll('.randRn'); //랜덤 일련번호
+	const randRn = new Array(quizCnt); 
+	for(let i = 0; i < randRnVal.length; i++){
+		randRn[i] = randRnVal[i].value;
+	}
+	let randQuizScoreVal = document.querySelectorAll('.randQuizScore'); //문제 배점
+	let randQuizScore = new Array(quizCnt); //랜덤 문제번호 배열 생성
+	for(let i = 0; i < randQuizScoreVal.length; i++){
+		randQuizScore[i] = randQuizScoreVal[i].value;
+	}
+	//<시험제출 버튼>
+	$('#submitBtn').on('click',function(){ //제출버튼을 클릭하면
+		modal.classList.add('on'); //모달창 열기
+		if(remainQuizCnt.innerText > 0){ //남은 문제개수가 있으면
+			h3.innerText = remainQuizCnt.innerText + '개 문제가 남았습니다.';
+			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기
+		}
+		else{
+			h3.innerText = '문제를 모두 풀었습니다.';
+			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기
+		}
+	});
+	//<모달창 닫기 버튼>
+	$('#closeBtn').on('click',function(){ //닫기버튼을 클릭하면
+		modal.classList.remove('on'); //모달창 닫기
+	});
+	//<모달창 확인 버튼>
+	$('#confirmBtn').on('click',function(){ //확인버튼을 클릭하면
+		modal.classList.remove('on'); //모달창 닫기
+		$.ajax({
+			url: 'testStart1',
+			method: 'post',
+			data: {
+				submitAnswer: submitAnswer,
+				randQuizId: randQuizId,
+				randRn: randRn,
+				randQuizScore: randQuizScore
+			},
+			dataType: 'json',
+			traditional: true,
+			success: function(data){
+				console.log(data);
+				console.log(submitAnswer);
+				//if(data == 1){					
+				//	console.log('성공');
+				//}
+			},
+			error: function(){
+				console.log('error');
+			}
+		})
+	});
+}
+
 
 //<<시험타이머 관련>>
 let testTimeMinElement = document.querySelector('#testTimeMin');
@@ -182,9 +307,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 	let three = document.querySelectorAll('.three'); //전체 3번 보기
 	let four = document.querySelectorAll('.four'); //전체 4번 보기
 	let five = document.querySelectorAll('.five'); //전체 5번 보기
-	let page = document.querySelector('#page'); //페이지 번호
+	let page = document.querySelector('#page'); //현재 페이지 번호
 	let clicked = e.target.innerText.substr(0,1); //현재 클릭된 보기 번호 1~5
-	let submitAnswer = document.querySelectorAll('.submitAnswer');
+	let selectedAnswer = document.querySelectorAll('.selectedAnswer'); //1~5 답안
+	//console.log(selectedAnswer[0]);
+	let submitAnswer = document.querySelectorAll('.submitAnswer'); //선택된 문제 답안 저장
+	//console.log(submitAnswer[0]);
 	//<보기 선택시 보기 색상 및 답안 색상 변경>
 	//<전체 문제개수 및 남은 문제개수 변경>
 	for(let i = 0; i < thisAnswer.length; i++){
@@ -227,8 +355,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				//remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 조절
-				submitAnswer[i].value = clicked; //선택된 닶안 제출
+				if(submitAnswer[i].value == 0){ //처음 선택하는 경우 >> 현재 답 저장, 다른 답이 선택되어 있는 경우 다른 답 취소하고 현재 답 저장
+					submitAnswer[i].value = clicked; //선택된 답안 저장
+				}
+				else { //이미 선댁된 경우 >> 현재 답 취소
+					submitAnswer[i].value = 0; //선택된 답안 취소
+				}
 			}
 			else if(clicked == 2){
 				selectedContent.forEach(function(select,item){
@@ -266,7 +398,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				submitAnswer[i].value = clicked; //선택된 닶안 제출
+				if(submitAnswer[i].value == 0){ //처음 선택하는 경우			
+					submitAnswer[i].value = clicked; //선택된 답안 저장
+				}
+				else { //이미 선댁된 경우
+					submitAnswer[i].value = 0; //선택된 답안 취소
+				}
 			}
 			else if(clicked == 3){
 				selectedContent.forEach(function(select,item){
@@ -304,7 +441,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				submitAnswer[i].value = clicked; //선택된 닶안 제출
+				if(submitAnswer[i].value == 0){ //처음 선택하는 경우			
+					submitAnswer[i].value = clicked; //선택된 답안 저장
+				}
+				else { //이미 선댁된 경우
+					submitAnswer[i].value = 0; //선택된 답안 취소
+				}
 			}
 			else if(clicked == 4){
 				selectedContent.forEach(function(select,item){
@@ -342,7 +484,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				submitAnswer[i].value = clicked; //선택된 닶안 제출
+				if(submitAnswer[i].value == 0){ //처음 선택하는 경우			
+					submitAnswer[i].value = clicked; //선택된 답안 저장
+				}
+				else { //이미 선댁된 경우
+					submitAnswer[i].value = 0; //선택된 답안 취소
+				}
 			}
 			else if(clicked == 5){
 				selectedContent.forEach(function(select,item){
@@ -380,7 +527,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				submitAnswer[i].value = clicked; //선택된 닶안 제출
+				if(submitAnswer[i].value == 0){ //처음 선택하는 경우			
+					submitAnswer[i].value = clicked; //선택된 답안 저장
+				}
+				else { //이미 선댁된 경우
+					submitAnswer[i].value = 0; //선택된 답안 취소
+				}
 			}
 		}
 	}
@@ -403,7 +555,6 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 	}
 	else if(this.classList.contains('selectedQuiz')){ //현재 클릭된 요소가 특정 답안 번호인 경우
 		page = this.childNodes[3].value; //클릭된 답안 번호
-		console.log(this.childNodes);
 		pageVal.value = page;
 	}
 	//<ajax 데이터 관련>
@@ -517,6 +668,5 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 		}
 	});
 });
-
 </script>
 </html>

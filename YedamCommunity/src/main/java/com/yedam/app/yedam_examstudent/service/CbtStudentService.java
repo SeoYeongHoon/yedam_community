@@ -19,4 +19,6 @@ public interface CbtStudentService {
 	public List<AnswerVO> testQuiz2(AnswerVO answerVO);
 	//문제개수 구하기
 	public int quizCnt(QuizboxVO quizboxVO);
+	//문제 제출
+	public boolean testSubmit(TestResultVO testResultVO);
 }

@@ -112,4 +112,14 @@
 		FROM quizbox
 		WHERE test_id = #{testId}
 	</select>
+	<insert id="insertTestSubmit" parameterType="TestResultVO">
+		INSERT INTO test_results(test_result_id
+		                         ,test_answer
+		                         ,quiz_id
+		                         ,user_id)
+		VALUES(test_result_id_seq.NEXTVAL
+		       ,#{testAnswer}
+		       ,#{quizId}
+		       ,1)
+	</insert>
 </mapper>
