@@ -6,7 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserService {
 
 	// 회원가입 신청
-	public int requestUser(RegisterVO registerVO);
+//	public int requestUser(RegisterVO registerVO);
+	public void requestUser(RegisterVO registerVO) throws Exception;
+	
 	// 회원가입 승인
 	public int insertUser(int registerId);
 	// 다수 회원가입 요청 승인(체크된)
@@ -17,7 +19,10 @@ public interface UserService {
 //	public UserVO userLogin(UserVO userVO);
 	UserVO loginCheck(UserVO userVO);
 //	public UserDetails loadUserByUsername(String id);
+	UserVO loginUser(String id, String password);
 	
+	// Spring Security용 메소드
+	UserVO findByUsername(String id);
 	
 	public List<UserVO> stdList();
 	
@@ -40,6 +45,5 @@ public interface UserService {
 	
 //	유저 삭제
 	public boolean removeUser(int userId);
-	
 	
 }

@@ -7,6 +7,7 @@ public class UserVO {
 	private Integer userId;
 	private String id;
 	private String password;
+	private String encryptedPassword;
 	private String name;
 	private String tel;
 	private String email;

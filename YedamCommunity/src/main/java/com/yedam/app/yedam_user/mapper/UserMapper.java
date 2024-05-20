@@ -1,7 +1,6 @@
 package com.yedam.app.yedam_user.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +13,7 @@ import com.yedam.app.yedam_user.service.UserVO;
 public interface UserMapper {
 
 	// 회원가입 신청
-	public int requestUser(RegisterVO registerVO);
+	public void requestUser(RegisterVO registerVO);
 
 	// 회원가입 승인
 	public int insertUser(int registerId);
@@ -25,6 +24,9 @@ public interface UserMapper {
 	// 로그인
 	public UserVO userLogin(UserVO userVO);
 //	UserVO selectUser(String id);
+	
+	// Spring Security용 메소드
+	UserVO findByUsername(String id);
 
 	// (회원가입 신청한) 수강생, 수료생 리스트 전체
 	public List<UserVO> selectStdList();
