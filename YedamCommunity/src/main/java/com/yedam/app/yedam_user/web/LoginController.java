@@ -20,7 +20,7 @@ public class LoginController {
 	
 	@GetMapping("/")
 	public String loginPage() {
-		return "login/login";
+		return "login/loginForm";
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.POST)

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_user.mapper.UserMapper;
+import com.yedam.app.yedam_user.service.PasswordEncoder;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
@@ -15,14 +16,22 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserMapper userMapper;
-
+	
+	// 회원가입 신청
 	@Override
-	public int requestUser(RegisterVO registerVO) {
-		if (userMapper.requestUser(registerVO) > 0) {
-			return 1;
-		} else {
-			return -1;
-		}
+	public void requestUser(RegisterVO registerVO) throws Exception {
+
+//		String imagePath = fileUploadService.uploadFile(userImage);
+//		registerVO.setUserImage(imagePath);
+		
+//		String encodedPassword = passwordEncoder.encode(registerVO.getPassword());
+//		registerVO.setPassword(encodedPassword);
+		
+//		byte[] userImageBytes = convertMultipartFileToByteArray(userImage);
+//		byte[] userImageBytes = userImage.getBytes();
+//        registerVO.setUserImage(userImage);
+		
+		userMapper.requestUser(registerVO);
 	}
 
 	// 회원가입 승인
@@ -107,6 +116,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean removeUser(int userId) {
 		return userMapper.removeUser(userId) == 1;
+	}
+
+	// Spring Security용 인터페이스
+	@Override
+	public UserVO findByUsername(String id) {
+		return userMapper.findByUsername(id);
+	}
+
+	@Override
+	public UserVO loginUser(String id, String password) {
+		UserVO userVO = userMapper.getUserById(id);
+		
+		PasswordEncoder passwordEncoder = new PasswordEncoder();
+		
+		if (userVO != null && passwordEncoder.checkPassword(password, userVO.getEncryptedPassword())) {
+			return userVO;
+		}
+		return null;
 	}
 
 }
