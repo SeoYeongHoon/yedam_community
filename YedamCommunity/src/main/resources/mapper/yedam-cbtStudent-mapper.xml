@@ -5,7 +5,7 @@
 <mapper namespace="com.yedam.app.yedam_examstudent.mapper.CbtStudentMapper">
 	<!-- 전체시험목록 조회 -->
 	<select id="selectTestListAll" resultType="TestVO">
-		SELECT a.test_id
+		SELECT  a.test_id
        			,b.user_id
        			,a.curriculum_id
        			,a.test_content
@@ -20,27 +20,31 @@
        			,c.pass_score
        			,c.subject_id
        			,c.test_target_id
-		FROM tests a JOIN test_targets b ON(a.test_id = b.test_id)
-     		 JOIN exam_results c ON(b.test_target_id = c.test_target_id)
-		WHERE b.user_id = 7
+		FROM    tests a JOIN test_targets b
+		        ON(a.test_id = b.test_id)
+     		    JOIN exam_results c
+     		    ON(b.test_target_id = c.test_target_id)
+		WHERE   b.user_id = 7
 		ORDER BY a.test_id
 	</select>
 	<!-- 시험상세정보 조회 -->
 	<select id="selectTestDetail" resultType="TestVO">
-		SELECT a.test_id
-		       ,a.curriculum_id
-		       ,a.test_content
-		       ,a.test_time
-		       ,a.test_date
-		       ,a.test_name
-		       ,a.class_id
-		       ,b.subject_id
-		       ,c.curriculum_name
-		       ,COUNT(quiz_id) as quizIdCnt
-		       ,SUM(quiz_score) as quizScore
-		FROM tests a JOIN quizbox b ON(a.test_id = b.test_id)
-		     JOIN curriculum c ON(a.curriculum_id = c.curriculum_id)
-		WHERE a.test_id = #{testId}
+		SELECT  a.test_id
+		        ,a.curriculum_id
+		        ,a.test_content
+		        ,a.test_time
+		        ,a.test_date
+		        ,a.test_name
+		        ,a.class_id
+		        ,b.subject_id
+		        ,c.curriculum_name
+		        ,COUNT(quiz_id) as quizIdCnt
+		        ,SUM(quiz_score) as quizScore
+		FROM    tests a JOIN quizbox b
+		        ON(a.test_id = b.test_id)
+		        JOIN curriculum c
+		        ON(a.curriculum_id = c.curriculum_id)
+		WHERE   a.test_id = #{testId}
 		GROUP BY a.test_id
 		         ,a.curriculum_id
 		         ,a.test_content
@@ -53,64 +57,66 @@
 	</select>
 	<!-- 시험문제 랜덤 -->
 	<select id="selectTestQuizRand" resultType="QuizboxVO">
-		SELECT aa.*, ROWNUM as rn
-        FROM (SELECT quiz_content
-                     ,quiz_id
-                     ,quiz_score
-                     ,subject_id
-              FROM quizbox
-              WHERE test_id = #{testId}
-              AND subject_id = #{subjectId}
-              ORDER BY DBMS_RANDOM.VALUE) aa
+		SELECT  aa.*, ROWNUM as rn
+        FROM    (SELECT  quiz_content
+                         ,quiz_id
+                         ,quiz_score
+                         ,subject_id
+                 FROM    quizbox
+                 WHERE   test_id = #{testId}
+                 AND     subject_id = #{subjectId}
+                 ORDER BY DBMS_RANDOM.VALUE) aa
 	</select>
 	<!-- 시험시작정보 조회 = 시험명, 제한시간, 응시자 -->
 	<select id="selectTestStart" resultType="TestVO">
-		SELECT test_id
-		       ,test_time
-		       ,test_name
-		FROM tests
-		WHERE test_id = #{testId}
+		SELECT  test_id
+		        ,test_time
+		        ,test_name
+		FROM    tests
+		WHERE   test_id = #{testId}
 	</select>
 	<!-- 시험시작정보 조회 = 문제내용 -->
 	<select id="selectTestQuiz1" resultType="QuizboxVO">
-		SELECT quiz_content
-               ,quiz_id
-               ,quiz_score
-               ,subject_id
-        FROM quizbox
-        WHERE test_id = #{testId}
-        AND subject_id = #{subjectId}
-        AND quiz_id = #{quizId}
+		SELECT  quiz_content
+                ,quiz_id
+                ,quiz_score
+                ,subject_id
+        FROM    quizbox
+        WHERE   test_id = #{testId}
+        AND     subject_id = #{subjectId}
+        AND     quiz_id = #{quizId}
 	</select>
 	<!-- 시험시작정보 조회 = 문제보기 -->
 	<select id="selectTestQuiz2" resultType="AnswerVO">
-		SELECT a.example_num
-		       ,a.text_content
-        FROM answers a JOIN quizbox b ON(a.quiz_id = b.quiz_id)
-        WHERE a.subject_id = #{subjectId} 
-        AND b.test_id = #{testId} 
-        AND b.quiz_id = #{quizId}
+		SELECT  a.example_num
+		        ,a.text_content
+        FROM    answers a JOIN quizbox b
+                ON(a.quiz_id = b.quiz_id)
+        WHERE   a.subject_id = #{subjectId} 
+        AND     b.test_id = #{testId} 
+        AND     b.quiz_id = #{quizId}
         ORDER BY a.example_num
 	</select>
 	<!-- 시험문제 -->
 	<select id="selectTestQuiz" resultType="TestVO">
-		SELECT b.quiz_id
-       		   ,b.quiz_content
-       		   ,b.quiz_score
-       		   ,b.subject_id
-       		   ,a.example_num
-       		   ,a.text_content
-		FROM answers a JOIN quizbox b ON(a.quiz_id = b.quiz_id)
-		WHERE a.subject_id = #{subjectId}
-		AND b.test_id = #{testId}
-		AND b.quiz_id = #{quizId}
+		SELECT  b.quiz_id
+       		    ,b.quiz_content
+       		    ,b.quiz_score
+       		    ,b.subject_id
+       		    ,a.example_num
+       		    ,a.text_content
+		FROM    answers a JOIN quizbox b
+		        ON(a.quiz_id = b.quiz_id)
+		WHERE   a.subject_id = #{subjectId}
+		AND     b.test_id = #{testId}
+		AND     b.quiz_id = #{quizId}
 		ORDER BY a.example_num
 	</select>
 	<!-- 문제개수 구하기 -->
 	<select id="selectQuizCnt" resultType="int">
-		SELECT COUNT(quiz_id) as quizCnt
-		FROM quizbox
-		WHERE test_id = #{testId}
+		SELECT  COUNT(quiz_id) as quizCnt
+		FROM    quizbox
+		WHERE   test_id = #{testId}
 	</select>
 	<insert id="insertTestSubmit" parameterType="TestResultVO">
 		INSERT INTO test_results(test_result_id
@@ -121,5 +127,12 @@
 		       ,#{testAnswer}
 		       ,#{quizId}
 		       ,1)
+		<!-- 
+		select example_num
+from answers
+where subject_id = 1
+and quiz_id <= 20
+and example_answer = 1
+		 -->
 	</insert>
 </mapper>
