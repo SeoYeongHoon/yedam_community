@@ -120,37 +120,46 @@ public class ExamController {
 	}
 	
 	// 강의실별 시험정보 페이지
-	@GetMapping("classinfo")
+	@GetMapping("testinfo")
 	public String classInfoForm(TeacherVO teacherVO, Model model) {
-		return "cbt_teacher/classinfo";
+		TeacherVO findVO = examService.testInfo(teacherVO);
+		model.addAttribute("testInfo", findVO);
+		return "cbt_teacher/testinfo";
+	}
+	
+	// 강의실별 시험 결과 확인
+	@PostMapping("testresult")
+	@ResponseBody
+	public List<TeacherVO> testResult(@RequestParam("testId") int tId){
+		return examService.userTestResult(tId);
 	}
 	
 	// 교수님 페이지 - 강의실에 따른 과정명 출력
 	@PostMapping("classinfo")
 	@ResponseBody
-	public List<TeacherVO> classInfo(@RequestParam("cId") int cId) {
+	public List<TeacherVO> classInfo(@RequestParam("classId") int cId) {
 		return examService.classList(cId);
 	}
 	
 	// 교수님 페이지 - 강의실별 수강생 정보
 	@PostMapping("userinfo")
 	@ResponseBody
-	public List<TeacherVO> userInfo(@RequestParam("cId") int cId) {
+	public List<TeacherVO> userInfo(@RequestParam("classId") int cId) {
 		return examService.subUserList(cId);
 	}
 	
 	// 교수님 페이지 - 강의실별 시험 정보
 	@PostMapping("testinfo")
 	@ResponseBody
-	public List<TeacherVO> testInfo(@RequestParam("cId") int cId) {
+	public List<TeacherVO> testInfo(@RequestParam("classId") int cId) {
 		return examService.subTestList(cId);
 	}
 	
-	// 교수님 페이지 - 강의실별 시험 정보
+	// 교수님 페이지 - 강의실별 시험 평균점수
 	@PostMapping("subjectavg")
 	@ResponseBody
-	public List<TeacherVO> subjectAvg(@RequestParam("cId") int cId) {
+	public List<TeacherVO> subjectAvg(@RequestParam("classId") int cId) {
 		return examService.subjectAvg(cId);
 	}
-	
+
 }

@@ -39,9 +39,17 @@ public class TeacherVO {
 	private String curriculumName;
 	private String name;
 	private int classId;
+	@DateTimeFormat(pattern = "yyyy.MM.dd")
 	private Date curriculumStartDate;
+	@DateTimeFormat(pattern = "yyyy.MM.dd")
 	private Date curriculumEndDate;
 	private int isComplete;
 	
 	private int subjectAvg;
+	private int resultId;
+	private int resultScore;
+	private String feedback;
+	private int isReexam;
+	private int passScore;
+	private int testTargetId;
 }

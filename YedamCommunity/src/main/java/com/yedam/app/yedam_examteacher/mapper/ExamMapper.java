@@ -57,9 +57,10 @@ public interface ExamMapper {
 	public List<TeacherVO> infoQuiz(@Param("qId") int qId);
 	
 	// 강의실 정보 출력(과목평균,시험리스트,수강생)
-	public List<TeacherVO> subjectAvg(@Param("cId") int cId);
-	public List<TeacherVO> testList(@Param("cId") int cId);
-	public List<TeacherVO> userList(@Param("cId") int cId);
-	public List<TeacherVO> currList(@Param("cId") int cId);
-	public TeacherVO testList(TeacherVO teacherVO); // 시험목록 단건조회
+	public List<TeacherVO> subjectAvg(@Param("classId") int cId);
+	public List<TeacherVO> testList(@Param("classId") int cId);
+	public List<TeacherVO> userList(@Param("classId") int cId);
+	public List<TeacherVO> currList(@Param("classId") int cId);
+	public TeacherVO testInfo(TeacherVO teacherVO); // 시험목록 단건조회
+	public List<TeacherVO> testResult(@Param("testId") int tId);
 }

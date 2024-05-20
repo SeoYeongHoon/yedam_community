@@ -71,6 +71,7 @@
 	<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
 		<div class="card-style-3 mb-30">
 			<div class="card-content">
+				<input type="hidden" id="hideTid"/>
 				<h4 id="classTest">n강의실 시험정보</h4>
 				<br>
 				<div class="test"></div>
@@ -93,16 +94,17 @@
 <!-- ========= card-style-3 end ========= -->
 <button id="Btn">테스트</button>
 <script>
-var cId = 1;
+var classId = 1;
+var testId = 0;
 var label = [];
 var chartData = [];
 var myChart = null;
-function classInfo(cId){
+function classInfo(classId){
 	// 학생정보 불러오기
 	$.ajax({
 		url : "userinfo",
 		type : "post", 
-		data : {cId : cId},
+		data : {classId : classId},
 				
 		success : function(data){
 			data.forEach((item,idx) => {
@@ -117,7 +119,7 @@ function classInfo(cId){
 	$.ajax({
 		url : "classinfo",
 		type : "post", 
-		data : {cId : cId},
+		data : {classId : classId},
 				
 		success : function(data){
 			data.forEach((item,idx) => {
@@ -135,7 +137,7 @@ function classInfo(cId){
 	$.ajax({
 		url : "testinfo",
 		type : "post", 
-		data : {cId : cId},
+		data : {classId : classId},
 				
 		success : function(data){
 			data.forEach((item,idx) => {
@@ -151,7 +153,7 @@ function classInfo(cId){
 
 				    return [year, month, day].join('/');
 				} // 날짜 포멧 변환 end
-				$('.test').append($('<p />').text(item.testName + ' ' + formatDate(item.testDate)));
+				$('.test').append($('<p />').text(item.testName + ' ' + formatDate(item.testDate)).attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
 			})
 		},
 		error : function(err){
@@ -163,7 +165,7 @@ function classInfo(cId){
 	$.ajax({
 		url : "subjectavg",
 		type : "post", 
-		data : {cId : cId},
+		data : {classId : classId},
 					
 		success : function(data){
 			data.forEach((item,idx) => {
@@ -194,19 +196,19 @@ function classInfo(cId){
 }
 
 // 강의실 버튼 클릭시 정보 갱신
-$('#allClass').on('click','.classNum', function(cId) {
+$('#allClass').on('click','.classNum', function(classId) {
 	$('.test').html('');
 	$('.classUser').html('');
 	myChart.destroy();
 	label = [];
 	chartData = [];
 	//console.log($(this).val());
-	cId = $(this).val()
+	classId = $(this).val()
 	// 강의실별 학생정보 불러오기
 	$.ajax({
 		url : "userinfo",
 		type : "post", 
-		data : {cId : cId},
+		data : {classId : classId},
 				
 		success : function(data){
 			data.forEach((item,idx) => {
@@ -222,7 +224,7 @@ $('#allClass').on('click','.classNum', function(cId) {
 	$.ajax({
 		url : "classinfo",
 		type : "post", 
-		data : {cId : cId},
+		data : {classId : classId},
 				
 		success : function(data){
 			data.forEach((item,idx) => {
@@ -241,12 +243,11 @@ $('#allClass').on('click','.classNum', function(cId) {
 	$.ajax({
 		url : "testinfo",
 		type : "post", 
-		data : {cId : cId},
+		data : {classId : classId},
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				console.log(item.testId);
-				$('.test').append($('<p />').text(item.testName + ' ' + formatDate(item.testDate)).attr("onclick","location.href='/classinfo'"));
+				$('.test').append($('<p />').text(item.testName + ' ' + formatDate(item.testDate)).attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
 			})
 		},
 		error : function(err){
@@ -258,7 +259,7 @@ $('#allClass').on('click','.classNum', function(cId) {
 	$.ajax({
 		url : "subjectavg",
 		type : "post", 
-		data : {cId : cId},
+		data : {classId : classId},
 					
 		success : function(data){
 			data.forEach((item,idx) => {
@@ -287,7 +288,7 @@ $('#allClass').on('click','.classNum', function(cId) {
 	}); // 시험정보 end of ajax
 })// on click 함수 종료
 
-classInfo(cId);
+classInfo(classId);
 
 //날짜 포멧 변환 함수
 function formatDate(date) {
