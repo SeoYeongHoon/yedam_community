@@ -241,12 +241,14 @@
 		FROM subjects s JOIN curriculum c 
 		                  ON s.curriculum_id = c.curriculum_id
 		WHERE class_id = #{cId}
+		AND is_complete = 2
 	</select>
 	
 	<!-- 강의실별 시험리스트 조회 -->
 	<select id="testList" resultType="TeacherVO" parameterType="int">
 		SELECT t.test_name
 		     , t.test_date
+		     , test_id
 		FROM tests t JOIN curriculum c
 		               ON t.curriculum_id = c.curriculum_id
 		WHERE c.class_id = #{cId}

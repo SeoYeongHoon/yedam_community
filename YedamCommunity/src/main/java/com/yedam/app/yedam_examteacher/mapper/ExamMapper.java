@@ -61,4 +61,5 @@ public interface ExamMapper {
 	public List<TeacherVO> testList(@Param("cId") int cId);
 	public List<TeacherVO> userList(@Param("cId") int cId);
 	public List<TeacherVO> currList(@Param("cId") int cId);
+	public TeacherVO testList(TeacherVO teacherVO); // 시험목록 단건조회
 }

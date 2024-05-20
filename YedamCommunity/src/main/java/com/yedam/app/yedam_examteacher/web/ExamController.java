@@ -119,6 +119,12 @@ public class ExamController {
 		return "cbt_teacher/teacherMain";
 	}
 	
+	// 강의실별 시험정보 페이지
+	@GetMapping("classinfo")
+	public String classInfoForm(TeacherVO teacherVO, Model model) {
+		return "cbt_teacher/classinfo";
+	}
+	
 	// 교수님 페이지 - 강의실에 따른 과정명 출력
 	@PostMapping("classinfo")
 	@ResponseBody
@@ -139,4 +145,12 @@ public class ExamController {
 	public List<TeacherVO> testInfo(@RequestParam("cId") int cId) {
 		return examService.subTestList(cId);
 	}
+	
+	// 교수님 페이지 - 강의실별 시험 정보
+	@PostMapping("subjectavg")
+	@ResponseBody
+	public List<TeacherVO> subjectAvg(@RequestParam("cId") int cId) {
+		return examService.subjectAvg(cId);
+	}
+	
 }
