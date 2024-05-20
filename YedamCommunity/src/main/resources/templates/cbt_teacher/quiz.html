@@ -62,7 +62,7 @@ li {
 	display: inline;
 }
 </style>
-<!-- <p th:text="${subjectList}"></p>  -->
+<!-- <p th:text="${answerList}"></p>  -->
 <div>
 	<button type="button" id="subBtn" class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
@@ -145,6 +145,8 @@ var textContent2 = '';
 var textContent3 = '';
 var textContent4 = '';
 var textContent5 = '';
+var answerList = '${answerList}';
+var answer1 = '';
 
 // 퀴즈 문제 전체를 불러오는 AJAX
 function quizContentList(sName){
@@ -198,7 +200,7 @@ function quizContentList(sName){
 					$(".box2").attr("style", "border-color:blue;")
 				}
 			})
-			
+				
 			// 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax)
 			$('.box').on('click', '.infoBtn', function(qId) {
 				$("#modalWrap").empty(); // 최초로 모달창 비워주는 기능 필요
@@ -236,38 +238,37 @@ function quizContentList(sName){
 									</div>
 								</div>
 								`;
-								
 							$("#modalWrap").append(qInfo);
 						})
+						// 지문 불러오기
+						answer = []; // 배열값 초기화
+						$.ajax({
+							url : "textcontent",
+							type : "post", 
+							data : {qId : qId},
+									
+							success : function(data){
+								data.forEach((item,idx) => {
+									answer.push(item.textContent);
+								})
+								textContent1 = answer[0];
+								textContent2 = answer[1];
+								textContent3 = answer[2];
+								textContent4 = answer[3];
+								textContent5 = answer[4];
+								console.log(answer);
+							},
+							error : function(err){
+								console.log('에러입니다');
+							}
+						}); // 지문 불러오기 ajax 종료
 					},
 					error : function(err){
 						console.log('에러입니다');
 					}
 				}); // end of ajax
 				
-				// 지문 불러오기
-				$.ajax({
-					url : "textcontent",
-					type : "post", 
-					data : {qId : qId},
-							
-					success : function(data){
-						data.forEach((item,idx) => {
-							answer.push(item.textContent);
-						})
-						textContent1 = answer[0];
-						textContent2 = answer[1];
-						textContent3 = answer[2];
-						textContent4 = answer[3];
-						textContent5 = answer[4];
-					},
-					error : function(err){
-						console.log('에러입니다');
-					}
-				}); // 지문 불러오기 ajax 종료
-				answer = []; // 배열값 초기화
 			})// 단건조회 불러오는(자세히보기 버튼) 함수 종료
-			
 				/* $('.box').on('click', '.infoBtn', function(e) {
 					console.log(e.target.id);
 				}) */
@@ -284,7 +285,7 @@ function quizContentList(sName){
 }; // function quizContentList() 종료
 
 //테스트용 버튼 
-$('#updateBtn').on('click', function quizInfo(qId){
+$('#updateBtn1').on('click', function quizInfo(qId){
 	console.log(qId);
 	$.ajax({
 		url : "quizinfo?quizId="+qId,
@@ -382,6 +383,7 @@ $('#subject').on('change', function(){
 		quizContentList(sName);
 	}
 });
+
 
 quizContentList(sName)
 </script>

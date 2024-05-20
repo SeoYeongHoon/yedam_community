@@ -12,6 +12,7 @@
 		FROM tests
 		ORDER BY test_id       
 	</select>
+
 	<!-- 시험 등록 -->
 	<insert id="insertTest" parameterType="TeacherVO">
 		INSERT INTO tests (test_id
@@ -177,6 +178,7 @@
 	<!-- 문제저장소에 지문 출력 -->
 	<select id="selectAnswerAll" resultType="TeacherVO">
 		SELECT example_num||'. '||text_content as text_content
+			  , quiz_id
 		FROM answers
 		WHERE quiz_id = #{quizId}
 		ORDER BY example_num      
@@ -226,4 +228,48 @@
 		DELETE FROM subjects
 		WHERE subject_id = #{subjectId}
 	</delete>
+	
+	<!-- 강의실별 과목평균점수 조회 -->
+	<select id="subjectAvg" resultType="TeacherVO" parameterType="int">
+		SELECT s.subject_name
+		     , c.class_id 
+		     , (select AVG(quiz_score)
+		        from quizbox q JOIN exam_results e
+		                         ON q.quizbox_id = e.quizbox_id
+		                       JOIN test_results t
+		                         ON t.quiz_id = e.quiz_id) AS subject_avg
+		FROM subjects s JOIN curriculum c 
+		                  ON s.curriculum_id = c.curriculum_id
+		WHERE class_id = #{cId}
+	</select>
+	
+	<!-- 강의실별 시험리스트 조회 -->
+	<select id="testList" resultType="TeacherVO" parameterType="int">
+		SELECT t.test_name
+		     , t.test_date
+		FROM tests t JOIN curriculum c
+		               ON t.curriculum_id = c.curriculum_id
+		WHERE c.class_id = #{cId}
+	</select>
+	
+	<!-- 강의실별 수강생 조회 -->
+	<select id="userList" resultType="TeacherVO" parameterType="int">
+		SELECT name
+		     , class_id
+		FROM users u JOIN curriculum c
+		               ON u.curriculum_id = c.curriculum_id
+		WHERE class_id = #{cId}
+		AND is_complete = 2
+	</select>
+	
+	<!-- 강의실별 과정명 조회 -->
+	<select id="currList" resultType="TeacherVO" parameterType="int">
+		SELECT curriculum_name
+			  , class_id
+			  , curriculum_start_date
+			  , curriculum_end_date
+		FROM curriculum
+		WHERE class_id = #{cId}
+		AND is_complete = 2
+	</select>
 </mapper>	

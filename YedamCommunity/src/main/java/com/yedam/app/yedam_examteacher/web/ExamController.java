@@ -63,12 +63,12 @@ public class ExamController {
 	@GetMapping("quizlist")
 	public String quizList(TeacherVO teacherVO, Model model) {
 		
-		List<TeacherVO> list2 = examService.answerList1(teacherVO);
+		List<TeacherVO> findVO = examService.answerList1(teacherVO);
 		List<TeacherVO> list3 = examService.subjectList();
 
-		model.addAttribute("answerList", list2);
+		model.addAttribute("answerList", findVO);
 		model.addAttribute("subjectList", list3);
-		
+		System.out.println(findVO);
 		return "cbt_teacher/quiz";
 	}
 	
@@ -111,5 +111,32 @@ public class ExamController {
 	public String subjectDelete(TeacherVO teacherVO) {
 		examService.subjectDelete(teacherVO);
 		return "redirect:quizlist";
+	}
+	
+	// 교수님 메인페이지 (강의실별 평균점수,시험리스트,학생)
+	@GetMapping("teachermain")
+	public String teacherMain(Model model) {
+		return "cbt_teacher/teacherMain";
+	}
+	
+	// 교수님 페이지 - 강의실에 따른 과정명 출력
+	@PostMapping("classinfo")
+	@ResponseBody
+	public List<TeacherVO> classInfo(@RequestParam("cId") int cId) {
+		return examService.classList(cId);
+	}
+	
+	// 교수님 페이지 - 강의실별 수강생 정보
+	@PostMapping("userinfo")
+	@ResponseBody
+	public List<TeacherVO> userInfo(@RequestParam("cId") int cId) {
+		return examService.subUserList(cId);
+	}
+	
+	// 교수님 페이지 - 강의실별 시험 정보
+	@PostMapping("testinfo")
+	@ResponseBody
+	public List<TeacherVO> testInfo(@RequestParam("cId") int cId) {
+		return examService.subTestList(cId);
 	}
 }

@@ -10,10 +10,8 @@ public interface ReplyMapper {
 	public int insertReply(Reply reply);
 	
 	// 댓글 삭제
-	public int deleteReply(int replyId);
-	
-	// 댓글 수정
-	public int updateReply(Reply reply);
+	public int deleteReply1(int replyId);
+	public int deleteReply2(int replyId);
 	
 	// 댓글 조회
 	public List<Reply> getReplies(int postId);

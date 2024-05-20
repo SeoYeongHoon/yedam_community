@@ -18,14 +18,6 @@
                            WHERE post_id = #{postId}) 
   </select>
   
-  
-  
-  
-  
-  
-  
-  
-  
   <insert id="insertComment" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentId">
   	INSERT INTO comments (comment_id
                         , reply_id
@@ -38,12 +30,6 @@
            , #{commentContent}
            , sysdate);
   </insert>
-  
-  <update id="updateComment" parameterType="int">
-  	UPDATE comments
-  	SET comment_content = #{commentContent}
-  	WHERE comment_id = #{commentId}
-  </update>
   
   <delete id="deleteComment" parameterType="int">
   	DELETE 

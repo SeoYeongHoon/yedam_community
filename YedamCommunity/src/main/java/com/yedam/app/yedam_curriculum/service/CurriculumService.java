@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-@Service
 public interface CurriculumService {
 	//과정 전체 조회
 	public List<CurriculumVO> CurriculumList();

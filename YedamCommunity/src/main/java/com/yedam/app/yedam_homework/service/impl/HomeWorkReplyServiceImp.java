@@ -21,13 +21,13 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 	}
 	//댓글 조회
 	@Override
-	public List<HomeWorkVO> replyInfo(HomeWorkVO homeworkVO) {
-		return homeworkReplyMapper.selectReply(homeworkVO);
+	public List<HomeWorkVO> replyList(HomeWorkVO homeworkVO) {
+		return homeworkReplyMapper.selectReplyAll(homeworkVO);
 	}
 	
 	//대댓글 조회
 	@Override
-	public HomeWorkVO commentList(HomeWorkVO homeworkVO) {
+	public List<HomeWorkVO> commentList(HomeWorkVO homeworkVO) {
 		return homeworkReplyMapper.selectComment(homeworkVO);
 	}
 	//대댓글 등록

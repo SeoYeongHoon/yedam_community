@@ -14,30 +14,17 @@
 .tlist_3 { /*버튼크기*/
 	width: 150px;
 }
-.filterItem {
-	display: none;
-}
-.filterItem.visible {
-	display: block;
-}
-.trList {
-	display: none;
-}
-.trList.visible {
-	display: block;
-}
 .sidebar-nav-wrapper {
 	position: fixed;
 }
 /*모달*/
-.moal_popup h1 {
+.modal h1, .closeBtn {
 	text-align: center;
 }
 /*모달 팝업 영역 스타일링*/
 .modal {
-	/*팝업 배경*/
-	display: none; /*평소에는 보이지 않도록*/
-	position: absolute;
+	display: none; /*평소에 숨김처리*/
+	position: fixed; /*모달창 화면전체*/
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -55,7 +42,7 @@
 	background: #ffffff;
 	border-radius: 10px;
 }
-.modal .modal_popup .closeBtn {
+.modal .closeBtn {
 	display: block;
 	padding: 10px 20px;
 	background-color: rgb(116, 0, 0);
@@ -111,8 +98,9 @@
 							<td class="tlist_2" th:if="${not #strings.isEmpty(list.feedback)}">
 								<!-- 피드백내용 모달형식 -->
 								<div class="modal">
-									<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 380px;">
 										<h1>피드백</h1>
+										<br>
 										<table class="table">
 											<tr>
 												<th>시험명</th>
@@ -131,7 +119,10 @@
 												<td>[[${list.feedback}]]</td>
 											</tr>
 										</table>
-										<button type="button" class="closeBtn">닫기</button>
+										<br>
+										<div>
+											<button type="button" class="closeBtn">닫기</button>
+										</div>
 									</div>
 								</div>
 								<main>
@@ -173,21 +164,21 @@ function feedbackModal(){
 		});
 	}
 }
-
-$('.trList').addClass('visible');
+//<<시험목록 필터링 관련 JS>>
+$('.filterItem').show(); //처음에 요소들 나타내기
 $('.filterBtn').click(function(){
-	let selected = $(this).data('category');
-	if(selected == 'all'){
-		$('.filterItem').addClass('visible');
+	let selected = $(this).data('category'); //현재 선택된 카테고리 데이터
+	if(selected == 'all'){ //전체선택시
+		$('.filterItem').closest('td').closest('tr').show(); //해당 행 출력
 	}
 	else{
 		$('.filterItem').each(function(){
-			let item = $(this).data('category');
+			let item = $(this).data('category'); //현재 선택된 카테고리 데이터
 			if(item == selected){
-				$(this).addClass('visible');
+				$(this).closest('td').closest('tr').show(); //해당 행 출력
 			}
 			else{
-				$(this).removeClass('visible');
+				$(this).closest('td').closest('tr').hide(); //나머지 행 숨기기
 			}
 		});
 	}
