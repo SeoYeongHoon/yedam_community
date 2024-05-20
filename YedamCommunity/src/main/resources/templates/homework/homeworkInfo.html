@@ -109,8 +109,8 @@
 	let wrapper = $('#reply_data'); // 입력 필드를 포함하는 컨테이너 선택
 	let addButton = $('#commentBtn'); // 추가 버튼 선택
 	
-	/* let commentInsert = $('form[name="insertComment"]').serialize();
-	let formValues = $('form[name="insertReply"]').serialize(); */
+	let commentInsert = $('form[name="insertComment"]').serialize();
+	let formValues = $('form[name="insertReply"]').serialize(); 
 	
 // 답글 클릭 시 대댓글 입력창 생성
 $('#commentBtn').on('click',function(e) {
@@ -118,7 +118,7 @@ $('#commentBtn').on('click',function(e) {
         $('#reply_data').append(
        `<div>
         	<form name="insertComment" method="post">
-				<textarea id="commentContent"style="border: 1px solid black;"rows="8" cols="50" placeholder="내용을 입력하세요"></textarea>
+				<input type="text" id="commentContent"style="border: 1px solid black;"rows="8" cols="50" placeholder="내용을 입력하세요">
 				<div class="col-12" style="text-align: left;">
 					<button id="commentInsertBtn" class="main-btn primary-btn btn-hover" type="button">답글 등록</button>
 				</div>
