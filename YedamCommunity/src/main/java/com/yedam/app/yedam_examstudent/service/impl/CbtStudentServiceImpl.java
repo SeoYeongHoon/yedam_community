@@ -9,6 +9,7 @@ import com.yedam.app.yedam_examstudent.mapper.CbtStudentMapper;
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
 import com.yedam.app.yedam_examstudent.service.CbtStudentService;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
+import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
 @Service
@@ -57,6 +58,10 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Override
 	public int quizCnt(QuizboxVO quizboxVO) {
 		return cbtStudentMapper.selectQuizCnt(quizboxVO);
+	}
+	@Override
+	public boolean testSubmit(TestResultVO testResultVO) {
+		return cbtStudentMapper.insertTestSubmit(testResultVO);
 	}
 	
 	

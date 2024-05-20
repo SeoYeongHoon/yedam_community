@@ -12,6 +12,7 @@ public class AnswerVO {
 	private int subjectId; //과목번호
 	private String quizAnswer; //문제정답
 	private int page;
+	private int quisScore;
 	public int getTestId() {
 		return testId;
 	}
@@ -59,6 +60,12 @@ public class AnswerVO {
 	}
 	public void setPage(int page) {
 		this.page = page;
+	}
+	public int getQuisScore() {
+		return quisScore;
+	}
+	public void setQuisScore(int quisScore) {
+		this.quisScore = quisScore;
 	}
 	
 	

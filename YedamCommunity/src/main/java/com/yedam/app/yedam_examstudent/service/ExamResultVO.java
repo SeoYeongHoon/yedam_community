@@ -5,6 +5,7 @@ public class ExamResultVO {
 	private int resultScore;
 	private String feedback;
 	private int isReexam;
+	private int quizId;
 	private int subjectId;
 	private int passScore;
 	private int testTargetId;
@@ -31,6 +32,12 @@ public class ExamResultVO {
 	}
 	public void setIsReexam(int isReexam) {
 		this.isReexam = isReexam;
+	}
+	public int getQuizId() {
+		return quizId;
+	}
+	public void setQuizId(int quizId) {
+		this.quizId = quizId;
 	}
 	public int getSubjectId() {
 		return subjectId;
