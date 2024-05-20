@@ -13,7 +13,8 @@ public class UserVO {
 	private String address;
 	private String userImage;
 	private String companyInfo;
-//	private Integer isComplete;
+	private Integer isComplete;
 	private String userType;
 	private Integer curriculumId;
+	private String curriculumName;
 }

@@ -48,8 +48,19 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserVO loginCheck(UserVO userVO) {
-		return userMapper.selectUser(userVO);
+		return userMapper.userLogin(userVO);
 	}
+
+//	@Override
+//	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+//		UserVO userVO = userMapper.getUserById(id);
+//		
+//		if (userVO == null) {
+//			throw new UsernameNotFoundException("No User Found");
+//		}
+//		
+//		return new LoginVO(userVO);
+//	}
 
 //	@Override
 //	public UserVO userLogin(UserVO userVO) {

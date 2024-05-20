@@ -23,8 +23,8 @@ public interface UserMapper {
 	public void insertCheckedUsers(@Param("registerIds") List<String> registerIds);
 
 	// 로그인
-//	public UserVO userLogin(UserVO userVO);
-	UserVO selectUser(UserVO userVO);
+	public UserVO userLogin(UserVO userVO);
+//	UserVO selectUser(String id);
 
 	// (회원가입 신청한) 수강생, 수료생 리스트 전체
 	public List<UserVO> selectStdList();
