@@ -11,10 +11,10 @@ public class Comment {
 	
 	private int commentId;
     private int replyId;
+    private String commentWriter;
     private String commentContent;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date commentDate;
-    private String commentWriter;
 	
     private int postId;
 

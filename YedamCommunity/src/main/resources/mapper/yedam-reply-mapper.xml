@@ -22,32 +22,30 @@
    <insert id="insertReply" parameterType="Reply" useGeneratedKeys="true" keyProperty="replyId">
         INSERT INTO replies (reply_id
                            , post_id
-                           , parent_id
-                           , user_id
-                           , content
-                           , create_date
-                           , writer
+                           , board_id
+                           , reply_content
+                           , reply_date
+                           , reply_writer
                            , update_date)
-        VALUES (#{replyId}
+        VALUES (reply_id_seq.nextval
               , #{postId}
-              , #{parentId}
-              , #{userId}
-              , #{content}
-              , #{createDate}
-              , #{writer}
+              , #{boardId}
+              , #{replyContent}
+              , #{replyDate}
+              , #{replyWriter}
               , #{updateDate})
     </insert>
 
 
     <delete id="deleteReply1" parameterType="int">
         DELETE 
-        FROM replies 
+        FROM comments
         WHERE reply_id = #{replyId}
     </delete>
     
     <delete id="deleteReply2" parameterType="int">
         DELETE 
-        FROM comments
+        FROM replies 
         WHERE reply_id = #{replyId}
     </delete>
 

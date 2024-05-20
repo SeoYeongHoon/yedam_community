@@ -44,6 +44,8 @@ public class Post {
     private int boardfileSize;
     private String boardfileLocation;
     private String boardfileExt;
+    
+    
 	public int getPostId() {
 		return postId;
 	}

@@ -36,7 +36,7 @@ public interface PostService {
     public int createComment(Comment comment);
     
     // 대댓글 삭제
-    public Map<String, Object> deleteComment(int commentId);
+    public Map<String, Object> deleteComment(Comment comment);
 
     
 }

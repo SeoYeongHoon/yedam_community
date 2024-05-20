@@ -43,8 +43,9 @@ public class PostServiceImpl implements PostService {
 	// 게시글 단건조회 + 댓글 + 대댓글
 	@Override
 	public Post getPostReplies(int postId) {
+		
 		Post post = postMapper.getPostDetails(postId);
-		postMapper.updatePostViewCNT(post);
+		            postMapper.updatePostViewCNT(post);
 		List<Reply> replies = replyMapper.getReplies(postId);
 		List<Comment> comments = commentMapper.getComments(postId);
 		post.setReplies(replies);
@@ -111,7 +112,7 @@ public class PostServiceImpl implements PostService {
 	public Map<String, Object> deleteReply(Reply reply) {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
-			int replyId = reply.getPostId();
+			int replyId = reply.getReplyId();
 			replyMapper.deleteReply1(replyId);
 			replyMapper.deleteReply2(replyId);
 
@@ -132,10 +133,12 @@ public class PostServiceImpl implements PostService {
 	// 대댓글 삭제
     @Override
     @Transactional
-    public Map<String, Object> deleteComment(int commentId) {
+    public Map<String, Object> deleteComment(Comment comment) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
+        	int commentId = comment.getCommentId();
             commentMapper.deleteComment(commentId);
+            
             resultMap.put("status", "success");
         } catch (Exception e) {
             resultMap.put("status", "error");
