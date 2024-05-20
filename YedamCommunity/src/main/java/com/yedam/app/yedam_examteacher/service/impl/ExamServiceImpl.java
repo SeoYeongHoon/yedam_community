@@ -143,9 +143,8 @@ public class ExamServiceImpl implements ExamService{
 	}
 	@Override
 	public TeacherVO testInfo(TeacherVO teacherVO) {
-		return examMapper.testList(teacherVO);
+		return examMapper.testInfo(teacherVO);
 	}
-	
 	// 강의실별 수강생 조회
 	@Override
 	public List<TeacherVO> subUserList(int cId) {
@@ -155,5 +154,10 @@ public class ExamServiceImpl implements ExamService{
 	@Override
 	public List<TeacherVO> classList(int cId) {
 		return examMapper.currList(cId);
+	}
+	// 강의실별 시험결과 조회
+	@Override
+	public List<TeacherVO> userTestResult(int tId) {
+		return examMapper.testResult(tId);
 	}
 }

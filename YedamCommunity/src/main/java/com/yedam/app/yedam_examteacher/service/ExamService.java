@@ -56,4 +56,6 @@ public interface ExamService {
 	public List<TeacherVO> subUserList(int cId);
 	// 강의실에 따른 과정명 조회
 	public List<TeacherVO> classList(int cId);
+	// 강의실 - 선택한 시험항목 결과 조회
+	public List<TeacherVO> userTestResult(int tId);
 }

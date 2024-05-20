@@ -142,23 +142,8 @@
 			  , quiz_id_seq.currval
 			  , #{subjectId})
 	</insert>
-	<!-- 문제저장소에 문제 출력 -->
-	<!-- <select id="selectQuizAll" resultType="TeacherVO">
-		SELECT q.quiz_id
-       		 , s.subject_name
-       		 , q.quiz_content
-       		 , q.quiz_solution
-       		 , q.user_id
-       		 , q.quiz_answer
-       		 , s.subject_id
-		FROM quizes q JOIN subjects s 
-                        ON q.subject_id = s.subject_id
-        <if test="sName != null and !sName.equals('') and sName != 'all' ">
-        WHERE subject_name = #{sName}
-        </if>        
-		ORDER BY quiz_id
-	</select> -->
 	
+	<!-- 문제저장소에 문제 출력 -->
 	<select id="filterQuiz" resultType="TeacherVO" parameterType="String">
 		SELECT q.quiz_id
        		 , s.subject_name
@@ -240,7 +225,7 @@
 		                         ON t.quiz_id = e.quiz_id) AS subject_avg
 		FROM subjects s JOIN curriculum c 
 		                  ON s.curriculum_id = c.curriculum_id
-		WHERE class_id = #{cId}
+		WHERE class_id = #{classId}
 		AND is_complete = 2
 	</select>
 	
@@ -248,19 +233,35 @@
 	<select id="testList" resultType="TeacherVO" parameterType="int">
 		SELECT t.test_name
 		     , t.test_date
-		     , test_id
+		     , t.test_id
+		     , t.class_id
+		     , c.curriculum_name
+		     , c.curriculum_start_date
+			 , c.curriculum_end_date
 		FROM tests t JOIN curriculum c
 		               ON t.curriculum_id = c.curriculum_id
-		WHERE c.class_id = #{cId}
+		WHERE c.class_id = #{classId}
 	</select>
-	
+	<!-- 강의실별 시험리스트 단건조회 -->
+	<select id="testInfo" resultType="TeacherVO">
+		SELECT t.test_name
+		     , t.test_date
+		     , t.test_id
+		     , t.class_id
+		     , c.curriculum_name
+		     , c.curriculum_start_date
+			 , c.curriculum_end_date
+		FROM tests t JOIN curriculum c
+		               ON t.curriculum_id = c.curriculum_id
+		WHERE test_id = #{testId}
+	</select>
 	<!-- 강의실별 수강생 조회 -->
 	<select id="userList" resultType="TeacherVO" parameterType="int">
 		SELECT name
 		     , class_id
 		FROM users u JOIN curriculum c
 		               ON u.curriculum_id = c.curriculum_id
-		WHERE class_id = #{cId}
+		WHERE class_id = #{classId}
 		AND is_complete = 2
 	</select>
 	
@@ -271,7 +272,20 @@
 			  , curriculum_start_date
 			  , curriculum_end_date
 		FROM curriculum
-		WHERE class_id = #{cId}
+		WHERE class_id = #{classId}
 		AND is_complete = 2
+	</select>
+	
+	<!-- testId기준 수강생 시험 결과 출력 -->
+	<select id="testResult" resultType="TeacherVO" parameterType="int">
+		select e.result_score
+		     , e.is_reexam
+		     , e.feedback
+		     , u.name
+		from exam_results e JOIN test_targets t
+		                    ON e.test_target_id = t.test_target_id
+		                    JOIN users u
+		                    ON t.user_id = u.user_id
+		where test_id = #{testId}
 	</select>
 </mapper>	
