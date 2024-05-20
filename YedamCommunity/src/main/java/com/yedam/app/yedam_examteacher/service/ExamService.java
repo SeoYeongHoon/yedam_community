@@ -51,6 +51,7 @@ public interface ExamService {
 	public List<TeacherVO> subjectAvg(int cId);
 	// 강의실별 시험리스트 조회
 	public List<TeacherVO> subTestList(int cId);	
+	public TeacherVO testInfo(TeacherVO teacherVO);
 	// 강의실별 수강생 조회
 	public List<TeacherVO> subUserList(int cId);
 	// 강의실에 따른 과정명 조회

@@ -141,6 +141,11 @@ public class ExamServiceImpl implements ExamService{
 	public List<TeacherVO> subTestList(int cId) {
 		return examMapper.testList(cId);
 	}
+	@Override
+	public TeacherVO testInfo(TeacherVO teacherVO) {
+		return examMapper.testList(teacherVO);
+	}
+	
 	// 강의실별 수강생 조회
 	@Override
 	public List<TeacherVO> subUserList(int cId) {

@@ -64,7 +64,8 @@ li {
 </style>
 <!-- <p th:text="${answerList}"></p>  -->
 <div>
-	<button type="button" id="subBtn" class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
+	<button type="button" id="subBtn"
+		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
 		<li>
 			<div id="subSelec">
@@ -79,12 +80,12 @@ li {
 				</div>
 			</div>
 		</li>
-		<li><a href="selectClassExam" class="main-btn danger-btn-light btn-hover">시험출제</a>
-		</li>
+		<li><a href="selectClassExam"
+			class="main-btn danger-btn-light btn-hover">시험출제</a></li>
 		<li><a href="quizinsert"
 			class="main-btn primary-btn-light btn-hover">새문제</a></li>
-		<li><a href="#0" class="main-btn primary-btn-light btn-hover" id="quizSelect">문제선택</a>
-		</li>
+		<li><a href="#0" class="main-btn primary-btn-light btn-hover"
+			id="quizSelect">문제선택</a></li>
 	</ul>
 </div>
 
@@ -93,9 +94,7 @@ li {
 <button id="updateBtn">아작스테스트</button>
 
 <!-- 문제 상세보기 모달창 -->
-<div id="modalWrap" class="modal-overlay">
-	
-</div> 
+<div id="modalWrap" class="modal-overlay"></div>
 <!-- 문제 상세보기 모달창 end-->
 
 <!-- 과목추가/삭제 모달창 -->
@@ -110,24 +109,28 @@ li {
 					<div class="form-check checkbox-style mb-20">
 						<table>
 							<tr>
-								<th>
-								<input class="form-check-input checkbox" th:id="${subjectInfo.subjectName}" type="checkbox" th:value="${subjectInfo.subjectId}" th:name="chkBox"/> 
-								<label th:for="${subjectInfo.subjectName}" class="form-check-label">[[${subjectInfo.subjectName}]]</label>
+								<th><input class="form-check-input checkbox"
+									th:id="${subjectInfo.subjectName}" type="checkbox"
+									th:value="${subjectInfo.subjectId}" th:name="chkBox" /> <label
+									th:for="${subjectInfo.subjectName}" class="form-check-label">[[${subjectInfo.subjectName}]]</label>
 								</th>
 							</tr>
 						</table>
 					</div>
 				</th:block>
 			</div>
-			<button type="button" class="main-btn danger-btn-light square-btn btn-hover" id="testBtn">삭제</button>
+			<button type="button"
+				class="main-btn danger-btn-light square-btn btn-hover" id="testBtn">삭제</button>
 			<!-- ======= checkbox style end ======= -->
 		</div>
-		<form th:action="@{/subjectinsert}" method="post" th:object="${teacherVO}">
+		<form th:action="@{/subjectinsert}" method="post"
+			th:object="${teacherVO}">
 			<div>
 				<div class="input-style-1">
 					<input type="text" placeholder="과목명을 입력하세요" th:field=*{subjectName}></input>
 				</div>
-				<button id="subAdd" class="main-btn primary-btn btn-hover" type="submit">과목추가</button>
+				<button id="subAdd" class="main-btn primary-btn btn-hover"
+					type="submit">과목추가</button>
 			</div>
 		</form>
 	</div>
@@ -175,8 +178,8 @@ function quizContentList(sName){
 				let temp = `
 					<div style="color:gray;" class="col-4 box" id="${sId}">
 						<div class="card-style-3 mb-30 box2">
-							<div>
-							<label>문제선택</label><input type="checkbox" class="quizChk"></input>
+							<div class=chkDiv>
+							<label>문제선택</label><input type="checkbox" class="quizChk" name="select"></input>
 							<p>과목명 : ${subName}</p>
 							</div>
 							<div class="card-content">
@@ -193,81 +196,78 @@ function quizContentList(sName){
 			
 			// 문제 체크박스 버튼 누르고 문제선택 누를시 문제박스 색상 변경
 			$('#quizSelect').on('click', function(e){
-				console.log('문제선택 버튼 누름');
-				
-				if($('.quizChk').is(":checked") == true){
-					console.log($('.quizChk').is(":checked"));
-					$(".box2").attr("style", "border-color:blue;")
-				}
+				$("input:checkbox[name=select]:checked").each(function(){
+					$("input:checkbox[name=select]:checked").parent().parent().attr("style", "border-color:blue;")
+				})
 			})
 				
 			// 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax)
 			$('.box').on('click', '.infoBtn', function(qId) {
 				$("#modalWrap").empty(); // 최초로 모달창 비워주는 기능 필요
 				qId = $(this).val()
-				// 문제,해설 불러오기
+				// 지문 불러오기
+				answer = []; // 배열값 초기화
 				$.ajax({
-					url : "quizinfo",
+					url : "textcontent",
 					type : "post", 
 					data : {qId : qId},
-							
+									
 					success : function(data){
 						data.forEach((item,idx) => {
-							solution = item.quizSolution;
-							qContent = item.quizContent;
-							let qInfo = `
-								<div id="modalBody">
-									<div class="close-area">X</div>
-										<h4>문제</h4><input type="text">${qContent}</input>
-									<br><br><br>
-									<div>
-										<h4>보기</h4>
-										<input type="text" id="textContent1">${textContent1}</input>
-										<input type="text" id="textContent2">${textContent2}</input>
-										<input type="text" id="textContent3">${textContent3}</input>
-										<input type="text" id="textContent4">${textContent4}</input>
-										<input type="text" id="textContent5">${textContent5}</input>
-									</div>
-									<br><br><br>
-									<div>
-										<h4>해설</h4><input type="text">${solution}</input>
-									</div>
-									<div style="text-align: center;">
-										<button id="closeBtn" class="main-btn primary-btn btn-hover"
-											type="button" onclick="location.href='quizlist'">확인</button>
-									</div>
-								</div>
-								`;
-							$("#modalWrap").append(qInfo);
+							answer.push(item.textContent);
 						})
-						// 지문 불러오기
-						answer = []; // 배열값 초기화
+						textContent1 = answer[0];
+						textContent2 = answer[1];
+						textContent3 = answer[2];
+						textContent4 = answer[3];
+						textContent5 = answer[4];
+						//console.log(answer);
+								
+						// 문제,해설 불러오기
 						$.ajax({
-							url : "textcontent",
+							url : "quizinfo",
 							type : "post", 
 							data : {qId : qId},
-									
+											
 							success : function(data){
 								data.forEach((item,idx) => {
-									answer.push(item.textContent);
+									solution = item.quizSolution;
+									qContent = item.quizContent;
+									let qInfo = `
+										<div id="modalBody">
+											<div class="close-area">X</div>
+												<h4>문제</h4><input type="text">${qContent}</input>
+											<br><br><br>
+											<div>
+												<h4>보기</h4>
+												<input type="text" id="textContent1">${textContent1}</input>
+												<input type="text" id="textContent2">${textContent2}</input>
+												<input type="text" id="textContent3">${textContent3}</input>
+												<input type="text" id="textContent4">${textContent4}</input>
+												<input type="text" id="textContent5">${textContent5}</input>
+											</div>
+											<br><br><br>
+											<div>
+												<h4>해설</h4><input type="text">${solution}</input>
+											</div>
+											<div style="text-align: center;">
+												<button id="closeBtn" class="main-btn primary-btn btn-hover"
+													type="button" onclick="location.href='quizlist'">확인</button>
+											</div>
+										</div>
+										`;
+									$("#modalWrap").append(qInfo);
 								})
-								textContent1 = answer[0];
-								textContent2 = answer[1];
-								textContent3 = answer[2];
-								textContent4 = answer[3];
-								textContent5 = answer[4];
-								console.log(answer);
 							},
 							error : function(err){
 								console.log('에러입니다');
 							}
-						}); // 지문 불러오기 ajax 종료
+						}); // 문제,해설 불러오기 end of ajax	
 					},
 					error : function(err){
 						console.log('에러입니다');
 					}
-				}); // end of ajax
-				
+				}); // 지문 불러오기 ajax 종료
 			})// 단건조회 불러오는(자세히보기 버튼) 함수 종료
 				/* $('.box').on('click', '.infoBtn', function(e) {
 					console.log(e.target.id);
