@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_homework.mapper.HomeWorkReplyMapper;
+import com.yedam.app.yedam_homework.service.CommentVO;
 import com.yedam.app.yedam_homework.service.HomeWorkReplyService;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
+import com.yedam.app.yedam_homework.service.ReplyVO;
 
 @Service
 public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
@@ -21,14 +23,14 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 	}
 	//댓글 조회
 	@Override
-	public List<HomeWorkVO> replyList(HomeWorkVO homeworkVO) {
+	public List<ReplyVO> replyList(HomeWorkVO homeworkVO) {
 		return homeworkReplyMapper.selectReplyAll(homeworkVO);
 	}
 	
 	//대댓글 조회
 	@Override
-	public List<HomeWorkVO> commentList(HomeWorkVO homeworkVO) {
-		return homeworkReplyMapper.selectComment(homeworkVO);
+	public List<CommentVO> commentList(ReplyVO replyId) {
+		return homeworkReplyMapper.selectComment(replyId);
 	}
 	//대댓글 등록
 	@Override

@@ -69,39 +69,30 @@
 		<div style="border: 1px solid black;">
 			<h3>댓글</h3>
 			<div id="replyList">
-				<div th:each="reply : ${replySelect}"
+				<div th:each="reply : ${homeworkList.replyList}"
 					style="border: 1px solid black;">
 					<p>댓글 내용 : [[${reply.replyContent}]]</p>
 					<p>작성일자 : [[${#dates.format(reply.replyDate,'yyyy년MM월dd일')}]]</p>
 					<hr>
 					<!-- 대댓글 출력 -->
-					<div th:each="comment : ${commentSelect}"
-						style="border: 1px solid black;">
+					<div th:each="comment : ${reply.commentList}" style="border: 1px solid black;">
 						<p>대댓글 내용 : [[${comment.commentContent}]]</p>
 						<p>작성일자 :
 							[[${#dates.format(comment.commentDate,'yyyy년MM월dd일')}]]</p>
 					</div>
 					<!-- 대댓글 출력 끝-->
 
-					<div class="col-12" style="text-align: right;">
-						<button class="main-btn primary-btn btn-hover commentBtn "
-							type="button">답글</button>
+					<div id="commentInsert" class="col-12 " style="text-align: right;">
+						<button class="main-btn primary-btn btn-hover commentBtn " type="button">답글</button>
 						<!-- <div class="reply_data"></div>  -->
+						
 						<!-- 대댓글 등록 -->
-						<form name="insertComment" method="post"
-							th:action="@{/insertComment}" th:object="${homework}">
-							<input type="hidden" th:value="${reply.replyId}"
-								th:field="*{replyId}">
-							<th:block th:object="${homeworkList}">
-								<input type="hidden" th:field="*{homeworkId}">
-							</th:block>
-							<textarea name="commentContent" style="border: 1px solid black;"
-								rows="8" cols="50" placeholder="내용을 입력하세요"
-								th:field="*{commentContent}"></textarea>
+						<form name="insertComment" method="post" th:action="@{/insertComment}" th:object="${homeworkList}">
+							<input type="hidden"  name="replyId" th:value="${reply.replyId}">
+							<input type="hidden"  th:field="*{homeworkId}">
+							<textarea name="commentContent" style="border: 1px solid black;" rows="8" cols="50" placeholder="내용을 입력하세요" th:field="*{commentContent}" ></textarea>
 							<div class="col-12" style="text-align: left;">
-								<button id="commentInsertBtn"
-									class="main-btn primary-btn btn-hover" type="submit">답글
-									등록</button>
+								<button id="commentInsertBtn" class="main-btn primary-btn btn-hover" type="submit">답글 등록</button>
 							</div>
 						</form>
 						<!-- 대댓글 등록 끝 -->
@@ -111,12 +102,13 @@
 			</div>
 			<!-- end reply  -->
 			<h3>댓글 작성</h3>
-			<form name="insertReply" method="post" th:object="${homeworkList}">
+			<form name="insertReply" method="post" th:object="${homeworkList}" enctype="multipart/form-data">
 				<input type="hidden" th:field="*{homeworkTargetId}"> <input
 					type="hidden" th:field="*{homeworkId}">
 				<textarea style="border: 1px solid black;" rows="8" cols="50"
 					placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
 				<div class="col-12" style="text-align: center;">
+				<input type="file" name="uploadFiles" mltiple>
 					<button id="insertBtn" class="main-btn primary-btn btn-hover"
 						type="button">등록</button>
 				</div>
@@ -126,6 +118,8 @@
 </main>
 
 <script>
+let values = $('input[name="replyId"]').val();
+console.log(values)
 	//대댓글 등록
 
 	// 답글 클릭 시 대댓글 입력창 생성
@@ -163,7 +157,9 @@
 			});
 		});
 	}); */
-
+	//답글창 
+/* 	$("#commentInsert").css("display","none"); */
+	
 	//댓글 등록
 	$('#insertBtn').on('click', addReply);
 

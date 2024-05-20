@@ -15,7 +15,7 @@
   			curriculum_img
   	FROM	curriculum
   	WHERE   is_complete = 2
-  	ORDER BY curriculum_id DESC
+  	ORDER BY class_id
   </select>
   
   <insert id="insertCurriculum" parameterType="CurriculumVO">
