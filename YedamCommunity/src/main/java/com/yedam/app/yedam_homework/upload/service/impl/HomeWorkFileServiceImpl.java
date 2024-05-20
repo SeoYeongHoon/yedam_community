@@ -2,6 +2,7 @@ package com.yedam.app.yedam_homework.upload.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +19,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.yedam_homework.upload.mapper.HomeWorkFileMapper;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileService;
 @Service
 public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 
 	@Value("${file.upload.path}")
 	private String uploadPath;
+	
+	@Autowired
+	HomeWorkFileMapper homeworkfileMapper;
 	
 	@Override
 	@PostMapping("uploadsAjax")
@@ -35,24 +41,41 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			
 			// 모든경로를 포함한 파일 이름
 			String originalName = uploadFile.getOriginalFilename();
-			
+			System.err.println("오리지날 이름 = "+originalName);
 			// 모든 경로에서 마지막 / 부분으로부터 +1 해준 부분부터 출력하겠다.
 			String fileName = originalName.substring(originalName.lastIndexOf("//")+1);
-			
+			System.err.println("파일 이름 = "+fileName );
+			// 확장자
+			String fileExt = originalName.substring(originalName.lastIndexOf(".")+1);
+			System.err.println();
 			//날짜 폴더 생성
 			String folderPath = makeFolder();
-			
+			System.err.println("날짜 폴더 생성 = " + folderPath);
 			// UUID = 시간을 기준으로 랜덤한 값
 			String uuid = UUID.randomUUID().toString();
-			
+			System.err.println("uuid = " + uuid );
 			// 저장할 파일이름 중간에 "_"를 이용하여 구분
 			String uploadFileName = folderPath + File.separator + uuid + "_" + fileName;
-			
+			System.err.println("파일 이름 중간에 _ 구분 = "+ uploadFileName);
 			// 저장할때 이름 = 경로 + / + 랜덤한 파일 이름
 			String saveName = uploadPath + File.separator + uploadFileName;
-			
+			System.err.println("저장할 때 이름 = " + saveName);
 			// Paths.get() 매서드는 특정 경로의 파일 정보를 가져옴(경로 정의)
+			
 			Path savePath = Paths.get(saveName);
+			
+			try {
+				long fileSizeInBytes = Files.size(savePath);
+				double fileSizeinKB = fileSizeInBytes/ 1024;
+				double fileSizeinMB = fileSizeinKB / 1024;
+				
+				System.err.println("fileSizeInBytes =" + fileSizeInBytes);
+				System.err.println("fileSizeinKB =" + fileSizeinKB);
+				System.err.println("fileSizeinMB =" + fileSizeinMB);
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			
 			
 			System.out.println("path: " + saveName);
@@ -66,7 +89,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			FileList.add(setFilepath(uploadFileName));
 		}
 		
-		return FileList;
+		return homeworkfileMapper.insertHomeWorkFile(uploadFiles);
 	}
 	
 	private String makeFolder() {

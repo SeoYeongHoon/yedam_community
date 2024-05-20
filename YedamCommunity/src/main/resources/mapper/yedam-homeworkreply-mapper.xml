@@ -20,47 +20,45 @@
 	</insert>
 
 	<!-- 댓글 조회 -->
-	<select id="selectReplyAll" resultType="HomeWorkVO">
-		<!-- SELECT r.homework_target_id, r.reply_content, r.reply_date, r.update_date, 
-			r.reply_writer, r.reply_id FROM homeworks h LEFT JOIN homework_targets t 
-			ON (h.homework_id = t.homework_id) LEFT JOIN replies r ON (t.homework_target_id 
-			= r.homework_target_id) LEFT JOIN comments c ON (r.reply_id = c.comment_id) 
-			WHERE h.homework_id = #{homeworkId} -->
+	<select id="selectReplyAll" resultType="ReplyVO">
+		<!-- SELECT r.homework_target_id, 
+						r.reply_content, 
+						r.reply_date,
+						r.update_date,
+						r.reply_writer, 
+						r.reply_id 
+		FROM homeworks h JOIN	homework_targets t	ON (h.homework_id = t.homework_id) 
+                		JOIN replies r ON(t.homework_target_id= r.homework_target_id) 
+                		JOIN comments c ON (r.reply_id = c.reply_id)
+		WHERE h.homework_id = #{homeworkId} -->
 
-		SELECT r.homework_target_id,
-		r.reply_content,
-		r.reply_date,
-		r.reply_writer,
-		r.reply_id,
-		c.comment_content
-		FROM homework_targets t
-		JOIN replies r ON (t.homework_target_id = r.homework_target_id)
-		JOIN comments c ON (r.reply_id = c.reply_id)
-		<where>
-			<if test="homeworkId != null and !homeworkId.equals('')">
-				AND t.homework_id = #{homeworkId}
-			</if>
-			<if test="replyId != null and !replyId.equals('')">
-				AND r.reply_id = #{replyId}
-			</if>
-		</where>
+		SELECT	reply_id,
+       			reply_content,
+       			reply_date,
+      			update_date,
+       			reply_writer
+		FROM    replies
+		WHERE   homework_target_id = #{homeworkTargetId}
 	</select>
 
 	<!-- 대댓글 조회 -->
-	<select id="selectComment" resultType="HomeWorkVO">
-		SELECT
-		c.comment_id,
-		c.comment_content,
-		c.comment_date,
-		r.reply_id,
-		r.reply_content,
-		r.reply_date
-		FROM homework_targets t JOIN replies r ON
-		(t.homework_target_id =
-		r.homework_target_id)
-		JOIN comments c ON (
-		r.reply_id = c.reply_id)
-		WHERE r.reply_id = #{replyId}
+	<select id="selectComment" resultType="CommentVO">
+	 SELECT comment_id,
+       		reply_id,
+        	comment_writer,
+        	comment_content,
+        	comment_date
+	FROM    comments
+	WHERE   reply_id = #{replyId}
+	ORDER BY comment_id 
+	
+	<!-- SELECT  c.comment_id,
+        c.reply_id,
+        c.comment_writer,
+        c.comment_content,
+        c.comment_date
+FROM    comments c JOIN replies r ON (c.reply_id = r.reply_id)
+WHERE   r.homework_target_id= #{homeworkTargetId} AND c.comment_id = #{commentId} -->
 	</select>
 
 	<!-- 대댓글 등록 -->

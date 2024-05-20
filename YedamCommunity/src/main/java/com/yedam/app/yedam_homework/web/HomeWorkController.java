@@ -9,10 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.yedam.app.yedam_homework.service.CommentVO;
 import com.yedam.app.yedam_homework.service.HomeWorkReplyService;
 import com.yedam.app.yedam_homework.service.HomeWorkService;
 import com.yedam.app.yedam_homework.service.HomeWorkTargetVO;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
+import com.yedam.app.yedam_homework.service.ReplyVO;
 import com.yedam.app.yedam_subjects.service.SubjectService;
 
 @Controller
@@ -66,20 +68,18 @@ public class HomeWorkController {
 
 		// 과제 상세 조회
 		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
-		model.addAttribute("homeworkList", findVO);
-		homeworkVO.setHomeworkId(findVO.getHomeworkId());
 
-		// 댓글 조회
-		List<HomeWorkVO> replyList = homeworkReplyService.replyList(homeworkVO);
-		model.addAttribute("replySelect", replyList);
-		for(HomeWorkVO reply : replyList) {
-			homeworkVO.setReplyId(reply.getReplyId());
+		// 댓글조회
+		List<ReplyVO> replyList = homeworkReplyService.replyList(findVO);
+		for (ReplyVO reply : replyList) {
+			// 대댓글 조회
+			List<CommentVO> commentList = homeworkReplyService.commentList(reply);
+			reply.setCommentList(commentList);
 		}
-		model.addAttribute("homework", homeworkVO);
+		findVO.setReplyList(replyList);
 
-		// 대댓글 조회
-		List<HomeWorkVO> commentList = homeworkReplyService.commentList(homeworkVO);
-		model.addAttribute("commentSelect", commentList);
+		model.addAttribute("homeworkList", findVO);
+
 		return "homework/homeworkInfo";
 	}
 
@@ -93,7 +93,7 @@ public class HomeWorkController {
 	// 대댓글 등록 - 처리
 	@PostMapping("insertComment")
 	public String insertComment(HomeWorkVO homeworkVO, Model model) {
-		System.err.println(homeworkVO);
+		System.err.println("과제번호 들고있니? " + homeworkVO);
 		homeworkReplyService.commentInsert(homeworkVO);
 		return "redirect:homeworkInfo?homeworkId=" + homeworkVO.getHomeworkId();
 	}

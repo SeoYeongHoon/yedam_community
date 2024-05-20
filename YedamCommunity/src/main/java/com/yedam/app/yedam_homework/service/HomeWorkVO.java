@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_homework.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -35,4 +36,9 @@ public class HomeWorkVO {
 	private String commentWriter;
 	private String commentContent;
 	private Date commentDate;
+	
+	//댓글목록
+	private List<ReplyVO> replyList;
+	//대댓글목록
+	private List<CommentVO> commentList;
 }

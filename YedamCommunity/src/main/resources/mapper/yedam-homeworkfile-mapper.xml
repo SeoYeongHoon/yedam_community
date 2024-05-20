@@ -5,23 +5,20 @@
   <mapper namespace="com.yedam.app.yedam_homework.upload.mapper.HomeWorkFileMapper">
   <!-- 과제 파일등록 -->
 	<insert id="insertHomeWorkFile" parameterType="HomeWorkFilesVO">
-		INSERT INTO homeworks
-		(
-		homework_id,
-		homework_content,
-		homework_date,
-		homework_title,
-		curriculum_id,
-		subject_id
-		)
-		VALUES
-		(
-		homework_id_seq.nextval,
-		#{homeworkContent},
-		#{homeworkDate},
-		#{homeworkTitle},
-		#{curriculumId},
-		#{subjectId}
-		)
+	INSERT INTO homeworkfiles
+    (homeworkfile_id,
+     homeworkfile_name,
+     homeworkfile_size,
+     homeworkfile_location,
+     homeworkfile_ext,
+     reply_id)
+VALUES
+    (homeworkfile_id_seq.nextval,
+     #{homeworkfileName},
+     #{homeworkfileSize},
+     #{homeworkfileLocation},
+     #{homeworkfileExt},
+     #{replyId}
+    )
 	</insert>
   </mapper>

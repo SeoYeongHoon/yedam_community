@@ -8,10 +8,10 @@ public interface HomeWorkReplyService {
 	public int replyInsert(HomeWorkVO homeworkVO);
 	
 	//댓글 조회
-	public List<HomeWorkVO> replyList(HomeWorkVO homeworkVO);
+	public List<ReplyVO> replyList(HomeWorkVO homeworkVO);
 	
 	//대댓글 조회
-	public List<HomeWorkVO> commentList(HomeWorkVO homeworkVO);
+	public List<CommentVO> commentList(ReplyVO replyId);
 	
 	//대댓글 등록
 	public int commentInsert (HomeWorkVO homeworkVO);
