@@ -127,7 +127,6 @@ public class CbtStudentController {
 			testResultVO.setQuizId(randQuizId[i]);
 			a = cbtStudentService.testSubmit(testResultVO);
 		}
-		
 		return a;
 	}
 }

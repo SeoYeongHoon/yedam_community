@@ -185,82 +185,6 @@
 	</div>
 </div>
 <script>
-//<<시험제출 관련>>
-
-submitTest();
-function submitTest(){
-	let remainQuizCnt = document.querySelector('#remainQuizCnt'); //남은 문제개수
-	let remainQuizSubmit = document.querySelector('#remainQuizSubmit'); //남은 문제개수 출력부분
-	let modal = document.querySelector('.modal');
-	let h3 = document.createElement('h3'); //텍스트 태그 생성
-	let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
-	let quizCnt = quizCntVal.value;
-	let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출한 답안
-	let submitAnswer = new Array(quizCnt); //제출한 답안 배열 생성
-	for(let i = 0; i < submitAnswerVal.length; i++){
-		submitAnswer[i] = submitAnswerVal[i].value;
-	}
-	let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤 문제번호
-	let randQuizId = new Array(quizCnt); //랜덤 문제번호 배열 생성
-	for(let i = 0; i < randQuizIdVal.length; i++){
-		randQuizId[i] = randQuizIdVal[i].value;
-	}
-	let randRnVal = document.querySelectorAll('.randRn'); //랜덤 일련번호
-	const randRn = new Array(quizCnt); 
-	for(let i = 0; i < randRnVal.length; i++){
-		randRn[i] = randRnVal[i].value;
-	}
-	let randQuizScoreVal = document.querySelectorAll('.randQuizScore'); //문제 배점
-	let randQuizScore = new Array(quizCnt); //랜덤 문제번호 배열 생성
-	for(let i = 0; i < randQuizScoreVal.length; i++){
-		randQuizScore[i] = randQuizScoreVal[i].value;
-	}
-	//<시험제출 버튼>
-	$('#submitBtn').on('click',function(){ //제출버튼을 클릭하면
-		modal.classList.add('on'); //모달창 열기
-		if(remainQuizCnt.innerText > 0){ //남은 문제개수가 있으면
-			h3.innerText = remainQuizCnt.innerText + '개 문제가 남았습니다.';
-			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기
-		}
-		else{
-			h3.innerText = '문제를 모두 풀었습니다.';
-			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기
-		}
-	});
-	//<모달창 닫기 버튼>
-	$('#closeBtn').on('click',function(){ //닫기버튼을 클릭하면
-		modal.classList.remove('on'); //모달창 닫기
-	});
-	//<모달창 확인 버튼>
-	$(document).on('click','#confirmBtn',function(){ //확인버튼을 클릭하면
-		modal.classList.remove('on'); //모달창 닫기
-		//submitTest();
-		$.ajax({
-			url: 'testStart1',
-			method: 'post',
-			data: {
-				submitAnswer: submitAnswer,
-				randQuizId: randQuizId,
-				randRn: randRn,
-				randQuizScore: randQuizScore
-			},
-			dataType: 'json',
-			traditional: true,
-			success: function(data){
-				console.log(data);
-				console.log(submitAnswer);
-				//if(data == 1){					
-				//	console.log('성공');
-				//}
-			},
-			error: function(){
-				console.log('error');
-			}
-		})
-	});
-}
-
-
 //<<시험타이머 관련>>
 let testTimeMinElement = document.querySelector('#testTimeMin');
 let testTimeSecElement = document.querySelector('#testTimeSec');
@@ -325,9 +249,11 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+								submitAnswer[i].value = clicked;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+								submitAnswer[i].value = clicked;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'aqua'; //답안 색상 넣기
@@ -339,6 +265,7 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
 							e.target.style.background = 'white'; //보기 색상 빼기
 							one[i].style.background = 'white'; //답안 색상 빼기
+							submitAnswer[i].value = 0;
 							//모두 선택되지 않은 경우
 							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
 								if(remainQuizCnt.innerText >= quizCnt){ //남은 문제가 문제개수보다 많은 경우							
@@ -354,20 +281,6 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				/*
-				for(let j = 0; j < 5; j++){
-					if((clicked - 1) == j)
-						if()
-						submitAnswer[i].value = clicked;
-					console.log(selectedAnswer[j]);
-				}*/
-				//console.log(selectedAnswer[i].style.background);
-				//submitAnswer[i].value = clicked; //선택된 답안 저장
-				//if(submitAnswer[i].value == 0){ //처음 선택하는 경우 >> 현재 답 저장, 다른 답이 선택되어 있는 경우 다른 답 취소하고 현재 답 저장
-				//}
-				//else { //이미 선댁된 경우 >> 현재 답 취소
-				//	submitAnswer[i].value = 0; //선택된 답안 취소
-				//}
 			}
 			else if(clicked == 2){
 				selectedContent.forEach(function(select,item){
@@ -376,9 +289,11 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+								submitAnswer[i].value = clicked;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+								submitAnswer[i].value = clicked;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -390,6 +305,7 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
 							e.target.style.background = 'white'; //보기 색상 빼기
 							two[i].style.background = 'white'; //답안 색상 빼기
+							submitAnswer[i].value = 0;
 							//모두 선택되지 않은 경우
 							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
 								if(remainQuizCnt.innerText >= quizCnt){ //남은 문제가 문제개수보다 많은 경우									
@@ -405,13 +321,6 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				//console.log(selectedAnswer[0]);
-				//submitAnswer[i].value = clicked; //선택된 답안 저장
-				//if(submitAnswer[i].value == 0){ //처음 선택하는 경우			
-				//}
-				//else { //이미 선댁된 경우
-				//	submitAnswer[i].value = 0; //선택된 답안 취소
-				//}
 			}
 			else if(clicked == 3){
 				selectedContent.forEach(function(select,item){
@@ -420,9 +329,11 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+								submitAnswer[i].value = clicked;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+								submitAnswer[i].value = clicked;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -434,6 +345,7 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
 							e.target.style.background = 'white'; //보기 색상 빼기
 							three[i].style.background = 'white'; //답안 색상 빼기
+							submitAnswer[i].value = 0;
 							//모두 선택되지 않은 경우
 							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
 								if(remainQuizCnt.innerText >= quizCnt){	//남은 문제가 문제개수보다 많은 경우							
@@ -449,13 +361,6 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				//console.log(selectedAnswer[0]);
-				//submitAnswer[i].value = clicked; //선택된 답안 저장
-				//if(submitAnswer[i].value == 0){ //처음 선택하는 경우			
-				//}
-				//else { //이미 선댁된 경우
-				//	submitAnswer[i].value = 0; //선택된 답안 취소
-				//}
 			}
 			else if(clicked == 4){
 				selectedContent.forEach(function(select,item){
@@ -464,9 +369,11 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+								submitAnswer[i].value = clicked;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+								submitAnswer[i].value = clicked;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -478,6 +385,7 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
 							e.target.style.background = 'white'; //보기 색상 빼기
 							four[i].style.background = 'white'; //답안 색상 빼기
+							submitAnswer[i].value = 0;
 							//모두 선택되지 않은 경우
 							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
 								if(remainQuizCnt.innerText >= quizCnt){	//남은 문제가 문제개수보다 많은 경우								
@@ -493,13 +401,6 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				//console.log(selectedAnswer[0]);
-				//submitAnswer[i].value = clicked; //선택된 답안 저장
-				//if(submitAnswer[i].value == 0){ //처음 선택하는 경우			
-				//}
-				//else { //이미 선댁된 경우
-				//	submitAnswer[i].value = 0; //선택된 답안 취소
-				//}
 			}
 			else if(clicked == 5){
 				selectedContent.forEach(function(select,item){
@@ -508,9 +409,11 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
+								submitAnswer[i].value = clicked;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
+								submitAnswer[i].value = clicked;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -522,6 +425,7 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						else if(e.target.style.background == 'aqua'){ //현재 보기가 이미 선택된 경우
 							e.target.style.background = 'white'; //보기 색상 빼기
 							five[i].style.background = 'white'; //답안 색상 빼기
+							submitAnswer[i].value = 0;
 							//모두 선택되지 않은 경우
 							if(one[i].style.background == 'white' && two[i].style.background == 'white' && three[i].style.background == 'white' && four[i].style.background == 'white' && five[i].style.background == 'white'){								
 								if(remainQuizCnt.innerText >= quizCnt){  //남은 문제가 문제개수보다 많은 경우							
@@ -537,49 +441,10 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 						select.style.background = 'white'; //나머지 보기 색상 초기화
 					}
 				})
-				//console.log(selectedAnswer[0]);
-				//submitAnswer[i].value = clicked; //선택된 답안 저장
-				//if(submitAnswer[i].value == 0){ //처음 선택하는 경우			
-				//}
-				//else { //이미 선댁된 경우
-				//	submitAnswer[i].value = 0; //선택된 답안 취소
-				//}
 			}
 		}
 	}
 });
-let submitAnswer = document.querySelectorAll('.submitAnswer');
-submitAnswer[0].value = 1;
-console.log(submitAnswer[0].value);
-//시험제출관련
-/*
-function submitTest(){
-	let one = document.querySelectorAll('.one');
-	let two = document.querySelectorAll('.two');
-	let three = document.querySelectorAll('.three');
-	let four = document.querySelectorAll('.four');
-	let five = document.querySelectorAll('.five');
-	
-	for(let i = 0; i < submitAnswer.length; i++){
-		if(one[i].style.background == 'aqua'){
-			submitAnswer[i].value = 1;
-		}
-		else if(two[i].style.background == 'aqua'){
-			submitAnswer[i].value = 2;
-		}
-		else if(three[i].style.background == 'aqua'){
-			submitAnswer[i].value = 3;
-		}
-		else if(four[i].style.background == 'aqua'){
-			submitAnswer[i].value = 4;
-		}
-		else if(five[i].style.background == 'aqua'){
-			submitAnswer[i].value = 5;
-		}
-	}
-}*/
-
-
 //<<문제갱신 관련>>
 let prevBtn = document.querySelector('#prevQuiz');
 let nextBtn = document.querySelector('#nextQuiz');
@@ -711,5 +576,74 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 		}
 	});
 });
+//<<시험제출 관련>>
+submitTest();
+function submitTest(){
+	let remainQuizCnt = document.querySelector('#remainQuizCnt'); //남은 문제개수
+	let remainQuizSubmit = document.querySelector('#remainQuizSubmit'); //남은 문제개수 출력부분
+	let modal = document.querySelector('.modal'); //모달창
+	let h3 = document.createElement('h3'); //텍스트 태그 생성
+	let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
+	let quizCnt = quizCntVal.value; //문제 개수
+	let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤 문제번호
+	let randQuizId = new Array(quizCnt); //랜덤 문제번호 배열 생성
+	for(let i = 0; i < randQuizIdVal.length; i++){
+		randQuizId[i] = randQuizIdVal[i].value;
+	}
+	let randRnVal = document.querySelectorAll('.randRn'); //랜덤 일련번호
+	const randRn = new Array(quizCnt); 
+	for(let i = 0; i < randRnVal.length; i++){
+		randRn[i] = randRnVal[i].value;
+	}
+	let randQuizScoreVal = document.querySelectorAll('.randQuizScore'); //문제 배점
+	let randQuizScore = new Array(quizCnt); //랜덤 문제번호 배열 생성
+	for(let i = 0; i < randQuizScoreVal.length; i++){
+		randQuizScore[i] = randQuizScoreVal[i].value;
+	}
+	//<시험제출 버튼>
+	$('#submitBtn').on('click',function(){ //제출버튼을 클릭하면
+		modal.classList.add('on'); //모달창 열기
+		if(remainQuizCnt.innerText > 0){ //남은 문제개수가 있으면
+			h3.innerText = remainQuizCnt.innerText + '개 문제가 남았습니다.';
+			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기
+		}
+		else{
+			h3.innerText = '문제를 모두 풀었습니다.';
+			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기
+		}
+	});
+	//<모달창 닫기 버튼>
+	$('#closeBtn').on('click',function(){ //닫기버튼을 클릭하면
+		modal.classList.remove('on'); //모달창 닫기
+	});
+	//<모달창 확인 버튼>
+	$('#confirmBtn').on('click',function(){ //확인버튼을 클릭하면
+		modal.classList.remove('on'); //모달창 닫기
+		let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출 답안 정의
+		let submitAnswer = []; //배열 생성
+		for(let i = 0; i < submitAnswerVal.length; i++){ //답안 길이만큼 반복		
+			submitAnswer[i] = submitAnswerVal[i].value //현재 선택된 답안들 배열에 저장
+		}
+		$.ajax({ //답안 저장 ajax
+			url: 'testStart1',
+			method: 'post',
+			data: {
+				submitAnswer: submitAnswer,
+				randQuizId: randQuizId,
+				randRn: randRn,
+				randQuizScore: randQuizScore
+			},
+			dataType: 'json',
+			traditional: true,
+			success: function(data){
+				console.log(data);
+				console.log(submitAnswer);
+			},
+			error: function(){
+				console.log('error');
+			}
+		})
+	});
+}
 </script>
 </html>
