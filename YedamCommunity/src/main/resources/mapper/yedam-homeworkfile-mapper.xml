@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.yedam.app.yedam_homework.upload.mapper.HomeWorkFileMapper">
   <!-- 과제 파일등록 -->
-	<insert id="insertHomeWorkFile" parameterType="HomeWorkFilesVO">
+	<insert id="insertHomeWorkFile" parameterType="HomeWorkFileVO">
 	INSERT INTO homeworkfiles
     (homeworkfile_id,
      homeworkfile_name,

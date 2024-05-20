@@ -3,7 +3,7 @@ package com.yedam.app.yedam_homework.upload.service;
 import lombok.Data;
 
 @Data
-public class HomeWorkFilesVO {
+public class HomeWorkFileVO {
 
 	private int homeworkfileId;
 	private String homeworkfileName;
