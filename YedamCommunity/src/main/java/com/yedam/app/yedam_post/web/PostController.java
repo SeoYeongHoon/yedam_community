@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.yedam_post.service.Comment;
 import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.Reply;
@@ -51,11 +52,24 @@ public class PostController {
      * @return 게시글 상세 페이지
      */
 	@GetMapping("postInfo")
-	public String getPostDetail(@RequestParam("postId") int postId, Reply reply, Model model) {
-		// 게시글과 댓글 정보를 조회합니다.
-		Post post = postService.getPostReplies(postId);
-		model.addAttribute("postInfo", post);
-		/* model.addAttribute("replies", post); */
+	public String getPostDetail(Post post, int postId , Model model) {
+		// 게시글단건 조회
+		postService.PostViewCnt(postId);
+		Post postfind = postService.getPostReplies(post);
+		
+		                
+		
+		// 댓글 조회
+		List<Reply> replylist = postService.getPostReply(postfind);
+		for (Reply reply : replylist) {
+			// 대댓글 조회
+			List<Comment> commentlist = postService.getPostComment(reply);
+			reply.setComments(commentlist);
+		}
+		postfind.setReplies(replylist);
+		
+		model.addAttribute("postInfo", postfind);
+		
 		return "posts/postInfo";
 	}
 
@@ -114,11 +128,11 @@ public class PostController {
      * @return 게시글 업데이트 페이지
      */
 	@GetMapping("postUpdate")
-	public String postUpdateForm(@RequestParam Integer postId, Model model) {
-		if (postId == null) {
+	public String postUpdateForm(Post post, Model model) {
+		if (post == null) {
 			return "redirect:postList";
 		}
-		Post post = postService.getPostReplies(postId);
+		    postService.getPostReplies(post);
 		if (post == null) {
 			return "redirect:postList";
 		}
@@ -137,5 +151,20 @@ public class PostController {
 		post.setUpdateDate(new Date());
 		return postService.PostUpdate(post);
 	}
+	
+//    @PostMapping("")
+//    @ResponseBody
+//    public int updateLike(@RequestParam int postId, @RequestParam String userId) throws Exception {
+//        int post = 
+//        if (likeCheck == 0) {
+//            // 좋아요 처음 누름
+//            postService.updateLike(postId); // 게시판 테이블 +1
+//            postService.updateLikeCheck(postId, userId); // likes 테이블 구분자 1
+//        } else if (likeCheck == 1) {
+//            postService.updateLikeCheckCancel(postId, userId); // likes 테이블 구분자 0
+//            postService.updateLikeCancel(postId); // 게시판 테이블 -1
+//        }
+//        return likeCheck;
+//    }
 	
 }

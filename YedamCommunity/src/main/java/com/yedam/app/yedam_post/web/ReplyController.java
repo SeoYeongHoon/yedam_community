@@ -63,14 +63,16 @@ public class ReplyController {
      * 대댓글 추가 처리
      * @param replyId 댓글 ID
      * @param commentContent 대댓글 내용
+     * @param commentWriter 
      * @return 성공 메시지
      */
     @PostMapping("addComment")
     @ResponseBody
-    public String addComment(Comment comment, Model model) {
-        comment.getReplyId();
-        comment.getCommentContent();
-        comment.getCommentWriter();
+    public String addComment(@RequestParam("replyId") int replyId, @RequestParam("commentContent") String commentContent) {
+    	Comment comment = new Comment();
+        comment.setReplyId(replyId);
+        comment.setCommentContent(commentContent);
+		comment.setCommentWriter("익명대댓글");
         postService.createComment(comment);
         return "대댓글이 성공적으로 추가되었습니다.";
     }

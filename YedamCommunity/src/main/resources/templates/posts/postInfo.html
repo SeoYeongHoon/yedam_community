@@ -47,7 +47,10 @@
         <textarea name="replyContent"></textarea>
         <button type="button" id="reply-submit">댓글 작성</button>
     </form> 
-
+	
+	
+	<button type="button" id="Good-submit">추천</button>
+	
     <a th:href="@{/postUpdate?postId={postId}(postId=${postInfo.postId})}">수정</a>
     <form th:action="@{/postDelete}" method="get">
         <input type="hidden" name="postId" th:value="${postInfo.postId}" />
@@ -105,8 +108,7 @@
                         location.reload(); 
                     },
                     error: function(error) {
-                        console.log('Error:', error);
-                        alert('대댓글 등록에 실패하였습니다.');
+                    	location.reload();
                     }
                 });
             });
@@ -140,6 +142,6 @@
             }
             return true;
         } */
-    </script> 
+    </script>
 </body>
 </html>
