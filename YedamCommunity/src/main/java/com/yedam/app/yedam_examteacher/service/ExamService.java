@@ -50,7 +50,8 @@ public interface ExamService {
 	// 강의실별 과목평균점수 조회
 	public List<TeacherVO> subjectAvg(int cId);
 	// 강의실별 시험리스트 조회
-	public List<TeacherVO> subTestList(int cId);	
+	public List<TeacherVO> subTestList(int cId);
+	// 시험정보 단건조회
 	public TeacherVO testInfo(TeacherVO teacherVO);
 	// 강의실별 수강생 조회
 	public List<TeacherVO> subUserList(int cId);
@@ -58,4 +59,8 @@ public interface ExamService {
 	public List<TeacherVO> classList(int cId);
 	// 강의실 - 선택한 시험항목 결과 조회
 	public List<TeacherVO> userTestResult(int tId);
+	// 시험본 학생 개개인의 수강정보 단건조회
+	public TeacherVO userTestInfo(TeacherVO teacherVO);
+	// 학생 개개인의 과목 점수리스트 조회
+	public List<TeacherVO> userScoreList(int uId);
 }

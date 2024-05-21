@@ -111,7 +111,7 @@ li {
 							<tr>
 								<th><input class="form-check-input checkbox"
 									th:id="${subjectInfo.subjectName}" type="checkbox"
-									th:value="${subjectInfo.subjectId}" th:name="chkBox" /> <label
+									th:value="${subjectInfo.subjectName}" th:name="chkBox" /> <label
 									th:for="${subjectInfo.subjectName}" class="form-check-label">[[${subjectInfo.subjectName}]]</label>
 								</th>
 							</tr>
@@ -326,7 +326,7 @@ $('.form-check').on('click', '.checkbox', function(){
 		    }
 	});
 	if($(".checkbox").is(":checked")){
-		$("#testBtn").attr("onclick", "location.href='/subjectdelete?subjectId=" + chkVal +"'");
+		$("#testBtn").attr("onclick", "location.href='/subjectdelete?subjectName=" + chkVal +"'");
 	} else {
 		$("#testBtn").attr("th:onclick", "");
 	};

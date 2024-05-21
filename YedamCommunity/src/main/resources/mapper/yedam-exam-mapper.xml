@@ -211,7 +211,7 @@
 	<!-- 과목명 삭제 -->
 	<delete id="deleteSubject">
 		DELETE FROM subjects
-		WHERE subject_id = #{subjectId}
+		WHERE subject_name = #{subjectName}
 	</delete>
 	
 	<!-- 강의실별 과목평균점수 조회 -->
@@ -259,6 +259,7 @@
 	<select id="userList" resultType="TeacherVO" parameterType="int">
 		SELECT name
 		     , class_id
+		     , user_id
 		FROM users u JOIN curriculum c
 		               ON u.curriculum_id = c.curriculum_id
 		WHERE class_id = #{classId}
@@ -278,14 +279,37 @@
 	
 	<!-- testId기준 수강생 시험 결과 출력 -->
 	<select id="testResult" resultType="TeacherVO" parameterType="int">
-		select e.result_score
+		SELECT e.result_score
 		     , e.is_reexam
 		     , e.feedback
 		     , u.name
-		from exam_results e JOIN test_targets t
+		FROM exam_results e JOIN test_targets t
 		                    ON e.test_target_id = t.test_target_id
 		                    JOIN users u
 		                    ON t.user_id = u.user_id
-		where test_id = #{testId}
+		WHERE test_id = #{testId}
+	</select>
+	
+	<!-- 학생 개인의 과목(시험)별 점수 확인 -->
+	<select id="userTestInfo" resultType="TeacherVO">
+		SELECT name
+			 , user_id
+		     , user_image
+		     , curriculum_name
+		     , curriculum_start_date
+		     , curriculum_end_date
+		FROM users u JOIN curriculum c
+		               ON c.curriculum_id = u.curriculum_id
+		WHERE user_id = #{userId}
+	</select>
+	<select id="userScore" resultType="TeacherVO" parameterType="int">
+		SELECT subject_name
+		     , result_score
+		     , user_id
+		FROM subjects s JOIN exam_results e
+		                 ON s.subject_id = e.subject_id
+		                JOIN test_targets t
+		                 ON e.test_target_id = t.test_target_id
+		WHERE user_id = #{userId}
 	</select>
 </mapper>	

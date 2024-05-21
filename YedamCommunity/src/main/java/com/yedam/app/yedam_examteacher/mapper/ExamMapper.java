@@ -48,7 +48,7 @@ public interface ExamMapper {
 	public int insertSubject(TeacherVO teacherVO);
 	
 	// 과목 삭제
-	public int deleteSubject(int subjectId);
+	public int deleteSubject(String subjectName);
 	
 	// 등록된 문제 필터출력 테스트
 	public List<TeacherVO> filterQuiz(@Param("sName") String sName);
@@ -62,5 +62,8 @@ public interface ExamMapper {
 	public List<TeacherVO> userList(@Param("classId") int cId); // 강의실별 수강생리스트
 	public List<TeacherVO> currList(@Param("classId") int cId); // 과정명 출력
 	public TeacherVO testInfo(TeacherVO teacherVO); // 시험목록 단건조회 페이지
-	public List<TeacherVO> testResult(@Param("testId") int tId); // 시험본 학생들 개인 점수
+	public List<TeacherVO> testResult(@Param("testId") int tId); // 시험본 학생들 점수 전체리스트
+	public TeacherVO userTestInfo(TeacherVO teacherVO); // 시험본 학생 개개인의 수강정보 단건조회
+	public List<TeacherVO> userScore(@Param("userId") int uId); // 학생 개개인의 과목당 점수리스트
+	
 }
