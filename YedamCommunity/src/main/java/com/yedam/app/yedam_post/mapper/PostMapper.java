@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_post.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -11,14 +12,26 @@ public interface PostMapper {
 	  // 전체 조회
     public List<Post> getAllPosts();
     
-      // 단건조회 int 타입 ;
-	public Post getPostDetails(int postId);
+      // 단건조회 ;
+	public Post getPostDetails(Post post);
 	
 	  // 조회수
-    public int updatePostViewCNT(Post post);
+    public int updatePostViewCNT(int postId);
     
-      // 개추 (추천수) - 사용중 아님
-    public int updatePostLikeCNT(Post post);
+      // 추천확인
+    public int likeCheck(int postId);
+    
+      // 개추 (추천수 증가)
+    public int updatePostLikePlus(int postId);
+    
+      // 개추 (추천수 감소)
+    public int updatePostLikeMinus(int postId);
+    
+      // 개추 (추천수 1) 중복방지
+    public int updatePostLikeOne(Map<String, Object> map);
+    
+  	  // 개추 (추천수 0) 중복방지
+    public int updatePostLikeZero(Map<String, Object> map);
     
 	  // 게시글 등록
     public int insertPost(Post post);

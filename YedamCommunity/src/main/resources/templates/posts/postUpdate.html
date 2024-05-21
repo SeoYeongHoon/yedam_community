@@ -33,7 +33,7 @@
         let dataObj = getPostObj();
         $.ajax({
             url: 'postUpdate',
-            type: 'post',
+            type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dataObj),
             dataType: 'json'

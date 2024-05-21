@@ -135,12 +135,43 @@
         WHERE post_id = #{postId}
     </update>
     
-    <!-- 추천수 -->
-    <update id="updatePostLikeCNT" parameterType="Post">
+    <!-- 추천수 조회 -->
+<!--     <select id="likeCheck" parameterType="map" resultType="Integer">
+    	SELECT post_like
+    	FROM likes
+    	WHERE post_id = #{postId}
+    	AND user_id = #{userId}
+    </select> -->
+    
+    <!-- 추천수 + 1 -->
+    <update id="updatePostLikePlus" parameterType="int">
     	UPDATE posts
 		SET post_like = post_like + 1
 		WHERE post_id = #{postId}
     </update>
+    
+    <!-- 추천수 - 1 -->
+    <update id="updatePostLikeMinus" parameterType="int">
+    	UPDATE posts
+		SET post_like = post_like - 1
+		WHERE post_id = #{postId}
+    </update>
+    
+    <!-- 게시글 추천 시 Check를 1로 만들어서 중복방지 -->
+    <update id="updatePostLikeOne">
+   		UPDATE posts
+   		SET post_like = 1
+		WHERE post_id = #{postId}
+		AND user_id = #{userId}
+	</update>
+	
+	<!-- 게시글 추천 시 Check를 0으로 만들어서 중복방지 -->
+    <update id="updatePostLikeZero">
+   		UPDATE posts
+   		SET post_like = 0
+		WHERE post_id = #{postId}
+		AND user_id = #{userId}
+	</update>
     
  	<!-- 페이지네이션 -->
  	 <select id="getPosts" resultType="Post">
@@ -166,5 +197,7 @@
         SELECT COUNT(*)
         FROM posts
     </select>
+
+	
 
 </mapper>

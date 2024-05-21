@@ -40,17 +40,10 @@ public class PostServiceImpl implements PostService {
 		return postMapper.getAllPosts();
 	}
 
-	// 게시글 단건조회 + 댓글 + 대댓글
-	@Override                  // Post post
-	public Post getPostReplies(int postId) {
-		// Reply re
-		Post post = postMapper.getPostDetails(postId);
-		            postMapper.updatePostViewCNT(post);
-		List<Reply> replies = replyMapper.getReplies(postId);
-		List<Comment> comments = commentMapper.getComments(postId);
-		post.setReplies(replies);
-		post.setComments(comments);
-		return post;
+	// 게시글 단건조회
+	@Override                  
+	public Post getPostReplies(Post post) {
+		return postMapper.getPostDetails(post);
 	}
 
 	// 게시글 수정
@@ -146,5 +139,46 @@ public class PostServiceImpl implements PostService {
         }
         return resultMap;
     }
+
+	@Override
+	public List<Reply> getPostReply(Post post) {
+		return replyMapper.getReplies(post);
+	}
+
+	@Override
+	public List<Comment> getPostComment(Reply replyId) {
+		return commentMapper.getComments(replyId);
+	}
+
+	@Override
+	public int PostViewCnt(int postId) {
+		return postMapper.updatePostViewCNT(postId);
+	}
+
+	@Override
+	public int updateLike(int postId){
+		return postMapper.updatePostLikePlus(postId);
+	}
+
+	@Override
+	public int updateLikeCancel(int postId){
+		return postMapper.updatePostLikeMinus(postId);
+	}
+
+	@Override
+	public int updateLikeCheck(int postId, String userId){
+		Map<String, Object> map = new HashMap<>();
+        map.put("postId", postId);
+        map.put("userId", userId);
+        return postMapper.updatePostLikeOne(map);
+	}
+
+	@Override
+	public int updateLikeCheckCancel(int postId, String userId){
+		Map<String, Object> map = new HashMap<>();
+        map.put("postId", postId);
+        map.put("userId", userId);
+        return postMapper.updatePostLikeZero(map);
+	}
 
 }

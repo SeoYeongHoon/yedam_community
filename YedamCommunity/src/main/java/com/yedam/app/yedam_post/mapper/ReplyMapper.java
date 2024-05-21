@@ -2,6 +2,7 @@ package com.yedam.app.yedam_post.mapper;
 
 import java.util.List;
 
+import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.Reply;
 
 public interface ReplyMapper {
@@ -14,5 +15,5 @@ public interface ReplyMapper {
 	public int deleteReply2(int replyId);
 	
 	// 댓글 조회
-	public List<Reply> getReplies(int postId);
+	public List<Reply> getReplies(Post post);
 }
