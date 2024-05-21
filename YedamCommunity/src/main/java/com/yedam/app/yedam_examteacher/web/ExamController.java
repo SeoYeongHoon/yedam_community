@@ -127,8 +127,20 @@ public class ExamController {
 		return "cbt_teacher/testinfo";
 	}
 	
-	// 강의실별 학생 개인의 과목 성적
-	//@GetMapping("userTestInfo")
+	// 강의실별 학생 개인의 과정정보 및 성적조회 페이지
+	@GetMapping("userTestInfo")
+	public String userTestInfo(TeacherVO teacherVO, Model model) {
+		TeacherVO findVO = examService.userTestInfo(teacherVO);
+		model.addAttribute("userTestInfo", findVO);
+		return "cbt_teacher/userTestInfo";
+	}
+	
+	// 학생 개개인의 과목별 점수 조회 기능
+	@PostMapping("userScore")
+	@ResponseBody
+	public List<TeacherVO> userScore(@RequestParam("userId") int uId){
+		return examService.userScoreList(uId);
+	}
 	
 	// 강의실별 시험 결과(통과자,재시험자) 확인
 	@PostMapping("testresult")
@@ -164,5 +176,6 @@ public class ExamController {
 	public List<TeacherVO> subjectAvg(@RequestParam("classId") int cId) {
 		return examService.subjectAvg(cId);
 	}
+	
 
 }

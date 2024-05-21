@@ -111,10 +111,10 @@ public class ExamServiceImpl implements ExamService{
 	@Override
 	public Map<String, Object> subjectDelete(TeacherVO teacherVO) {
 		Map<String, Object> map = new HashMap<>();
-		int result = examMapper.deleteSubject(teacherVO.getSubjectId());
+		int result = examMapper.deleteSubject(teacherVO.getSubjectName());
 		
 		if(result == 1) {
-			map.put("subjectId", teacherVO.getSubjectId());
+			map.put("subjectName", teacherVO.getSubjectName());
 		}
 		return map;
 	}
@@ -159,5 +159,15 @@ public class ExamServiceImpl implements ExamService{
 	@Override
 	public List<TeacherVO> userTestResult(int tId) {
 		return examMapper.testResult(tId);
+	}
+	// 수강생 개개인의 과정정보 단건조회
+	@Override
+	public TeacherVO userTestInfo(TeacherVO teacherVO) {
+		return examMapper.userTestInfo(teacherVO);
+	}
+	// 개개인의 시험 과목점수 리스트 조회
+	@Override
+	public List<TeacherVO> userScoreList(int uId) {
+		return examMapper.userScore(uId);
 	}
 }

@@ -5,5 +5,82 @@
 	layout:fragment="Admin">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+table {
+	width: 60%;
+}
+</style>
+<div>
+	<img src="">
+</div>
+<div>
+	<input type="hidden" id="uId" th:value="${userTestInfo.userId}">
+	<table>
+		<tr>
+			<th>이름</th>
+			<td th:text="${userTestInfo.name}">123</td>
+		</tr>
+		<tr>
+			<th>수강 정보</th>
+			<td th:text="${userTestInfo.curriculumName}">123</td>
+		</tr>
+		<tr>
+			<th>수강 기간</th>
+			<td
+				th:text="${#dates.format(userTestInfo.curriculumStartDate, 'yyyy.MM.dd')}+' ~ '+${#dates.format(userTestInfo.curriculumEndDate, 'yyyy.MM.dd')}">123</td>
+		</tr>
+	</table>
+</div>
+<div>
+	<h2>과목 성적</h2>
+	<div class="chart">
+		<canvas id="chart"
+			style="width: 100%; height: 300px; margin-left: 45px;"></canvas>
+	</div>
+</div>
+<br>
+<div align="right">
+	<button class="col-2" type="button">뒤로가기</button>
+</div>
+<script>
+var userId = 0;
+var label = [];
+var chartData = [];
+var myChart = null;
+function showPage(userId){
+	userId = $('#uId').val();
+	$.ajax({
+		url : "userScore",
+		type : "post", 
+		data : {userId : userId},
+				
+		success : function(data){
+			data.forEach((item,idx) => {
+				label.push(item.subjectName);
+				chartData.push(item.resultScore);
+			})
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}	
+	}); // 학생 과목 점수정보 end of ajax
+}
+showPage(userId)
+// 차트 그리기
+let myCt = document.getElementById('chart');
 
+myChart = new Chart(myCt, {
+  type: 'line',
+  data: {
+    labels: label,
+    datasets: [
+      {
+        label: '과목명',
+        data: chartData,
+      }
+    ]
+  },
+});
+</script>
 </html>
