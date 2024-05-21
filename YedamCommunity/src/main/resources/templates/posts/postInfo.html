@@ -14,6 +14,14 @@
     <p>조회수: <span th:text="${postInfo.postView}"></span></p>
     <p>좋아요: <span th:text="${postInfo.postLike}"></span></p>
     
+    <!-- 첨부 파일 출력 -->
+<!--     <h2>첨부 파일</h2>
+    <ul>
+        <li>
+            <a th:href="@{'/fileDownload/' + ${postInfo.boardfileId}}" th:text="${postInfo.boardfileName}">File Name</a>
+        </li>
+    </ul> -->
+    
     <h2>댓글</h2>
     <ul id="reply-list">
         <li th:each="reply : ${postInfo.replies}">
@@ -142,6 +150,33 @@
             }
             return true;
         } */
+        
+		/* var postId = ${.postId};
+		var userId = ${login.userId};
+		var replyId = ${.replyId};
+		
+		 function updateLike(){ 
+		     $.ajax({
+		            type : "POST",  
+		            url : "",       
+		            dataType : "json",   
+		            data : {'postId' : postId, 'userId' : userId , 'replyId' : replyId},
+		            error : function(){
+		               alert("통신 에러");
+		            },
+		            success : function(likeCheck) {
+		                
+		                    if(likeCheck == 0){
+		                    	alert("추천완료.");
+		                    	location.reload();
+		                    }
+		                    else if (likeCheck == 1){
+		                     alert("추천취소");
+		                    	location.reload();
+		                }
+		            }
+		        });
+		 } */
     </script>
 </body>
 </html>

@@ -136,12 +136,12 @@
     </update>
     
     <!-- 추천수 조회 -->
-<!--     <select id="likeCheck" parameterType="map" resultType="Integer">
+     <select id="likeCheck" parameterType="map" resultType="Integer">
     	SELECT post_like
     	FROM likes
     	WHERE post_id = #{postId}
     	AND user_id = #{userId}
-    </select> -->
+    </select> 
     
     <!-- 추천수 + 1 -->
     <update id="updatePostLikePlus" parameterType="int">

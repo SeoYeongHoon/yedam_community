@@ -181,4 +181,12 @@ public class PostServiceImpl implements PostService {
         return postMapper.updatePostLikeZero(map);
 	}
 
+	@Override
+	public int likeCheck(int postId, String userId) {
+		Map<String, Object> map = new HashMap<>();
+        map.put("postId", postId);
+        map.put("userId", userId);
+        return postMapper.likeCheck(map);
+	}
+
 }
