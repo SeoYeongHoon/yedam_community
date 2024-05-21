@@ -116,7 +116,21 @@ $('#Btn').on('click', function(){
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				$('#passUser').append('<p/>').text(item.name);
+				if(item.feedback == null){
+					item.feedback = "피드백 등록";
+				} else {
+					item.feedback = "피드백 완료";
+				}
+				
+				if(item.isReexam == 1){
+					item.isReexam = '재시험X';
+					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam));
+					$('#passFeed').append($('<p/>').text(item.feedback));
+				} else {
+					item.isReexam = '재시험O';
+					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam));
+					$('#failFeed').append($('<p/>').text(item.feedback));
+				}
 			})
 		},
 		error : function(err){
