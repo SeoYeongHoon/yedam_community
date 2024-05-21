@@ -19,8 +19,8 @@
         <label for="writer">작성자:</label>
         <input type="text" id="writer" th:field="*{writer}" /><br/>
         
-        <label for="file">첨부파일</label>
-        <input type="file" id="boardfile" th:field="*{boardfileName}" /><br/>
+        <label for="file">파일 :</label>
+        <input type="file" id="file" th:field="file" /><br/>
 
         <!-- Hidden boardId and userId -->
         <input type="hidden" th:field="*{boardId}"/>
