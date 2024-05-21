@@ -24,7 +24,7 @@
 		        ON(a.test_id = b.test_id)
      		    JOIN exam_results c
      		    ON(b.test_target_id = c.test_target_id)
-		WHERE   b.user_id = 7
+		WHERE   b.user_id = 14
 		ORDER BY a.test_id
 	</select>
 	<!-- 시험상세정보 조회 -->
@@ -118,21 +118,41 @@
 		FROM    quizbox
 		WHERE   test_id = #{testId}
 	</select>
-	<insert id="insertTestSubmit" parameterType="TestResultVO">
-		INSERT INTO test_results(test_result_id
-		                         ,test_answer
-		                         ,quiz_id
-		                         ,user_id)
-		VALUES(test_result_id_seq.NEXTVAL
-		       ,#{testAnswer}
-		       ,#{quizId}
-		       ,1)
-		<!-- 
-		select example_num
-from answers
-where subject_id = 1
-and quiz_id <= 20
-and example_answer = 1
-		 -->
-	</insert>
+	<update id="insertTestSubmit" parameterType="TestResultVO">
+		DECLARE
+    		v_answer NUMBER(10);
+    		v_iscorrect NUMBER(10);
+		BEGIN
+			<!-- 한 문제씩 제출 답안 저장하기 -->
+    		INSERT INTO test_results(test_result_id
+		                         	 ,test_answer
+		                         	 ,quiz_id
+		                         	 ,user_id)
+    		VALUES(test_result_id_seq.NEXTVAL
+		    	   ,#{testAnswer}
+		    	   ,#{quizId}
+		    	   ,14);
+    		COMMIT;
+    		
+    		<!-- 현재 문제의 원래 답안 가져오기 -->
+    		SELECT  example_num
+    		INTO    v_answer
+    		FROM    answers
+    		WHERE   quiz_id = #{quizId}
+    		AND     example_answer = 1;
+    		
+    		<!-- 현재 문제 답안 비교하기 -->
+    		IF v_answer = #{testAnswer} THEN
+        		v_iscorrect := 1;
+    		ELSE
+        		v_iscorrect := 0;
+    		END IF;
+    
+    		<!-- 정답유무 저장하기 -->
+    		UPDATE test_results
+    		SET is_correct = v_iscorrect
+    		WHERE quiz_id = #{quizId};
+    		COMMIT;
+    	END;
+	</update>
 </mapper>
