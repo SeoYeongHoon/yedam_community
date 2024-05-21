@@ -39,14 +39,15 @@ public class AdminController {
 	@GetMapping("/adminMain")
 	public String adminPage(Model model, HttpServletRequest req) {
 		HttpSession session = req.getSession();
-	    String logid = (String) session.getAttribute("logid");
-	    System.out.println("로그인 아이디: " + logid);
+//	    String logid = (String) session.getAttribute("logid");
+	    String logType = (String) session.getAttribute("logType");
+	    System.out.println("로그인 타입: " + logType);
 	    
-	    if (logid == null) {
+	    if (logType == null) {
 	    	return "login/loginForm";
 	    }
 
-	    if (!logid.equals("admin")) {
+	    if (!logType.equals("ROLE_ADMIN")) {
 	        return "redirect:/home";
 	    }
 	    
@@ -136,13 +137,22 @@ public class AdminController {
 //	모달창에 해당 과정의 학생 리스트 출력
 	@GetMapping("/showCourse")
 	@ResponseBody
-	public List<UserVO> showCourseStd(@RequestParam("curriculumId") int curriculumId, Model model) {
+	public List<UserVO> showCourseStd(@RequestParam("curriculumId") int curriculumId, Model model, @ModelAttribute CurriculumVO curriculumVO) {
 		System.out.println("아이디: " + curriculumId);
 		List<UserVO> students = curriculumService.showCurriculumStd(curriculumId);
+		String courseName = curriculumVO.getCurriculumName();
 		model.addAttribute("students", students);
 		System.out.println("학생정보: " + students);
+		System.out.println("과정정보: " + courseName);
 		
 		return students;
+	}
+	
+	// 과정 삭제
+	@GetMapping("/deleteCourse")
+	@ResponseBody
+	public boolean deleteCourse(@RequestParam("curriculumId") int curriculumId) {
+		return curriculumService.removeCurriculum(curriculumId);
 	}
 	
 	

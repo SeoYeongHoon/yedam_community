@@ -19,4 +19,6 @@ public interface CurriculumMapper {
 	
 	// 과정별 유저 목록 출력
 	public List<UserVO> selectCurriculumStd(@Param("curriculumId") int curriculumId);
+
+	public int removeCurriculum(int curriculumId);
 }

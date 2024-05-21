@@ -15,4 +15,7 @@ public interface CurriculumService {
 	
 	// 과정별 유저 목록 출력
 	public List<UserVO> showCurriculumStd(int curriculumId);
+
+	// 과정 삭제
+	public boolean removeCurriculum(int curriculumId);
 }
