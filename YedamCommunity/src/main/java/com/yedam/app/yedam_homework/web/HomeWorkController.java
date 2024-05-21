@@ -85,7 +85,7 @@ public class HomeWorkController {
 			reply.setCommentList(commentList);
 		}
 		findVO.setReplyList(replyList);
-
+		
 		model.addAttribute("homeworkList", findVO);
 		System.err.println("findVO = "+findVO);
 		return "homework/homeworkInfo";
