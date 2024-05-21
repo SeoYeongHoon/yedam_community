@@ -1,11 +1,14 @@
 package com.yedam.app.yedam_user.web;
 
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
@@ -38,8 +41,26 @@ public class RegisterController {
 //		}
 //	}
 	@PostMapping("/register")
-	public String registerRequest(RegisterVO registerVO, Model model) {
+	public String registerRequest(RegisterVO registerVO, Model model, RedirectAttributes rttr, HttpServletRequest req) {
+		String password = req.getParameter("password");
+		String passwordConfirm = req.getParameter("password-confirm");
+		System.out.println(password + ", " + passwordConfirm);
+		
 	    try {
+	    	boolean isExist = userService.isUserExist(registerVO.getId());
+	    	
+	    	if (isExist) {
+	    		System.out.println("이미 존재하는 아이디입니다.");
+	    		rttr.addFlashAttribute("idError", "이미 존재하는 아이디입니다.");
+	    		return "redirect:/register";
+	    	}
+	    	
+	    	if (!password.equals(passwordConfirm)) {
+	    		System.out.println("비밀번호가 서로 다릅니다.");
+	    		rttr.addFlashAttribute("pwError", "비밀번호가 서로 다릅니다.");
+	    		return "redirect:/register";
+	    	}
+	    	
 	        userService.requestUser(registerVO);
 	        System.out.println("성공! " + registerVO);
 	        return "register/registerComplete";
