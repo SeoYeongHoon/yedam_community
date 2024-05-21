@@ -186,20 +186,21 @@
 </div>
 <script>
 //<<시험타이머 관련>>
-let testTimeMinElement = document.querySelector('#testTimeMin');
-let testTimeSecElement = document.querySelector('#testTimeSec');
+let testTimeMin = document.querySelector('#testTimeMin');
+let testTimeSec = document.querySelector('#testTimeSec');
 let toastMsg = document.querySelector('#toast_message');
-let testTime = testTimeMinElement.innerText; //서버에서 받아온 시험시간
+let testTime = testTimeMin.innerText; //서버에서 받아온 시험시간
 let min = testTime;
+//let min = 0;
 let sec = 0;
 setInterval(function(){
 	sec--;
-	if(sec < 0){
+	if(sec < 0){ //초 리셋
 		min--;
 		sec = 59;
 	}
-	testTimeMinElement.innerText = String(min).padStart(2,0);
-	testTimeSecElement.innerText = String(sec).padStart(2,0);
+	testTimeMin.innerText = String(min).padStart(2,0); //타이머 분 2자리
+	testTimeSec.innerText = String(sec).padStart(2,0); //타이머 초 2자리
 	if(min == 10 && sec == 0){ //10:00인 경우
 		toastMsg.innerText = '시험시간이 10분 남았습니다.';
 		toastMsg.classList.add('active');
@@ -217,9 +218,57 @@ setInterval(function(){
 	if(min == 3 && sec == 0){ //03:00인 경우
 		toastMsg.innerText = '시험시간이 3분 남았습니다.';
 		toastMsg.classList.add('active');
+		//testTimeMin.setAttribute('style', 'color: red');
+		//testTimeSec.setAttribute('style', 'color: red');
 		setTimeout(function(){
 			toastMsg.classList.remove('active');
 		}, 2000);
+	}
+	if(min == 0 && sec == 0){ //00:00인 경우
+		//min = 0;
+		//sec = 0;
+		//자동제출
+		let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
+		let quizCnt = quizCntVal.value; //문제 개수
+		let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤 문제번호
+		let randQuizId = new Array(quizCnt); //랜덤 문제번호 배열 생성
+		for(let i = 0; i < randQuizIdVal.length; i++){
+			randQuizId[i] = randQuizIdVal[i].value;
+		}
+		let randRnVal = document.querySelectorAll('.randRn'); //랜덤 일련번호
+		const randRn = new Array(quizCnt); 
+		for(let i = 0; i < randRnVal.length; i++){
+			randRn[i] = randRnVal[i].value;
+		}
+		let randQuizScoreVal = document.querySelectorAll('.randQuizScore'); //문제 배점
+		let randQuizScore = new Array(quizCnt); //랜덤 문제번호 배열 생성
+		for(let i = 0; i < randQuizScoreVal.length; i++){
+			randQuizScore[i] = randQuizScoreVal[i].value;
+		}
+		let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출 답안 정의
+		let submitAnswer = []; //배열 생성
+		for(let i = 0; i < submitAnswerVal.length; i++){ //답안 길이만큼 반복		
+			submitAnswer[i] = submitAnswerVal[i].value //현재 선택된 답안들 배열에 저장
+		}
+		$.ajax({ //답안 저장 ajax
+			url: 'testStart1',
+			method: 'post',
+			data: {
+				submitAnswer: submitAnswer,
+				randQuizId: randQuizId,
+				randRn: randRn,
+				randQuizScore: randQuizScore
+			},
+			dataType: 'json',
+			traditional: true,
+			success: function(data){
+				console.log(data);
+				console.log(submitAnswer);
+			},
+			error: function(){
+				console.log('error');
+			}
+		})
 	}
 },1000)
 //<<답안제어 관련>>
@@ -583,6 +632,7 @@ function submitTest(){
 	let remainQuizSubmit = document.querySelector('#remainQuizSubmit'); //남은 문제개수 출력부분
 	let modal = document.querySelector('.modal'); //모달창
 	let h3 = document.createElement('h3'); //텍스트 태그 생성
+	
 	let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
 	let quizCnt = quizCntVal.value; //문제 개수
 	let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤 문제번호
