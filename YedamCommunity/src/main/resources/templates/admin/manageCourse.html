@@ -62,6 +62,23 @@
 						tbody.appendChild(tr);
 					});
 					
+					document.querySelector(".deleteCourseBtn").addEventListener('click', function() {
+						if (confirm('과정을 삭제하시겠습니까?')) {
+							var xhr = new XMLHttpRequest();
+							xhr.open('GET', '/deleteCourse?curriculumId=' + curriculumId, true);
+							xhr.onreadystatechange = function() {
+								if (xhr.readyState == 4 && xhr.status == 200) {
+									var course = JSON.parse(xhr.responseText);
+									
+									document.querySelector('.courseModal').style.display = 'none';
+									location.reload();
+								}
+							};
+							xhr.send();
+							
+							alert('과정이 삭제되었습니다.');
+						} 
+					});
 				}
 			};
 			xhr.send();
@@ -147,6 +164,7 @@
 							</tbody>
 						</table>
 					</div>
+					<a href="#0" class="danger-btn btn-hover deleteCourseBtn" style="position: absolute; right: 10px; bottom: 10px; padding: 5px 20px;">삭제</a>
 				</div>
 			</div>
 		</div>

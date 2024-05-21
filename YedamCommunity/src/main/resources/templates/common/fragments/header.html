@@ -26,8 +26,8 @@
 				<div class="profile_image_btn">
 					<button id="myMenuBtn"><img th:src="@{${'images/' + session.userImage}}" style="width: 65px; height: 65px; border-radius: 50%;"></button>
 					<ul class="myMenuList" style="display: none">
-						<li class="myMenuItem" th:if="${session.logid != null && session.logid != 'admin'}"><a href="">프로필</a></li>
-						<li class="myMenuItem" th:if="${session.logid == 'admin'}"><a href="/adminMain">관리자페이지</a></li>
+						<li class="myMenuItem" th:if="${session.logid != null && session.logType != 'ROLE_ADMIN'}"><a href="">프로필</a></li>
+						<li class="myMenuItem" th:if="${session.logType == 'ROLE_ADMIN'}"><a href="/adminMain">관리자페이지</a></li>
 						<li class="myMenuItem" th:if="${session.logid != null}"><a href="/logout">로그아웃</a></li>
 					</ul>
 				</div>

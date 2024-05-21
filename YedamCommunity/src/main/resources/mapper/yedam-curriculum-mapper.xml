@@ -50,4 +50,10 @@
 	             ON (u.curriculum_id = c.curriculum_id)
 	WHERE c.curriculum_id = #{curriculumId}
   </select>
+  
+  <!-- 과정 삭제 -->
+  <delete id="removeCurriculum" parameterType="int">
+	DELETE curriculum
+	WHERE curriculum_id = #{curriculumId}	
+  </delete>
 </mapper>

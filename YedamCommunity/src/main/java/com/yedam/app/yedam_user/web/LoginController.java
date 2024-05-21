@@ -15,11 +15,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
+import com.yedam.app.yedam_user.upload.mapper.ProfileImageMapper;
+import com.yedam.app.yedam_user.upload.service.ProfileImageVO;
 
 @Controller
 public class LoginController {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	ProfileImageMapper profileImageMapper;
 	
 	@GetMapping("/")
 	public String loginPage(HttpServletRequest req) {
@@ -51,8 +56,15 @@ public class LoginController {
 	    	session.setAttribute("logPw", pw);
 	    	session.setAttribute("logName", userVO.getName());
 	    	session.setAttribute("logType", userVO.getUserType());
-	    	session.setAttribute("userImage", userVO.getUserImage());
-	    	System.out.println("유저 이미지: " + userVO.getUserImage());
+	    	
+	    	ProfileImageVO profileImageVO = profileImageMapper.getProfileImageByLogId(id);
+	    	if (profileImageVO != null) {
+                session.setAttribute("logImage", profileImageVO.getProfileImageName());
+                System.out.println("유저 이미지: " + profileImageVO.getProfileImageName());
+            } else {
+                session.setAttribute("logImage", null);
+                System.out.println("유저 이미지가 없습니다.");
+            }
 	    	
 	    	model.addAttribute("session", session);
 	    	

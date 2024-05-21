@@ -30,9 +30,16 @@ public class CurriculumServiceImpl implements CurriculumService {
 		}
 	}
 
+	// 과정클릭 시 모달창 띄우고 그 과정의 학생 출력
 	@Override
 	public List<UserVO> showCurriculumStd(int curriculumId) {
 		return curriculumMapper.selectCurriculumStd(curriculumId);
+	}
+
+	// 과정 삭제
+	@Override
+	public boolean removeCurriculum(int curriculumId) {
+		return curriculumMapper.removeCurriculum(curriculumId) == 1;
 	}
 
 }

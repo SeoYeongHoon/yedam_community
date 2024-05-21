@@ -297,10 +297,6 @@
 	left: 47%;
 }
 
-input[type=checkbox] {
-	zoom: 2;
-}
-
 .courseModal {
 	display: none;
 	position: absolute;
@@ -318,7 +314,7 @@ input[type=checkbox] {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background: #ffffff;
-	border-radius: 20px;
+	border-radius: 5px;
 	padding: 20px;
 	box-shadow: 0px 10px 40px 10px #00000040;
 }
