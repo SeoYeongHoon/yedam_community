@@ -123,8 +123,7 @@ li {
 				class="main-btn danger-btn-light square-btn btn-hover" id="testBtn">삭제</button>
 			<!-- ======= checkbox style end ======= -->
 		</div>
-		<form th:action="@{/subjectinsert}" method="post"
-			th:object="${teacherVO}">
+		<form th:action="@{/subjectinsert}" method="post" th:object="${teacherVO}">
 			<div>
 				<div class="input-style-1">
 					<input type="text" placeholder="과목명을 입력하세요" th:field=*{subjectName}></input>

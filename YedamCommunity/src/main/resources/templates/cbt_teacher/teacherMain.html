@@ -173,26 +173,25 @@ function classInfo(classId){
 				chartData.push(item.subjectAvg);
 			})
 			// 차트 그리기
-			
 			let myCt = document.getElementById('chart');
-			
+
 			myChart = new Chart(myCt, {
-			  type: 'bar',
-			  data: {
-			    labels: label,
-			    datasets: [
-			      {
-			        label: '평균점수',
-			        data: chartData,
-			      }
-			    ]
-			  },
+				type: 'bar',
+			   	data: {
+			    	labels: label,
+			    	datasets: [
+			      		{
+			        		label: '평균점수',
+			        		data: chartData,
+			      		}
+			    	]
+			  	},
 			});
 		},
 		error : function(err){
 			console.log('에러입니다');
 		}	
-	}); // 시험정보 end of ajax
+	}); // 평균점수 end of ajax
 }
 
 // 강의실 버튼 클릭시 정보 갱신
@@ -285,7 +284,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 		error : function(err){
 			console.log('에러입니다');
 		}	
-	}); // 시험정보 end of ajax
+	}); // 평균점수 end of ajax
 })// on click 함수 종료
 
 classInfo(classId);

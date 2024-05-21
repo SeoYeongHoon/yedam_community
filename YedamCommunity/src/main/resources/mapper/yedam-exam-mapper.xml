@@ -234,7 +234,7 @@
 		SELECT t.test_name
 		     , t.test_date
 		     , t.test_id
-		     , t.class_id
+		     , c.class_id
 		     , c.curriculum_name
 		     , c.curriculum_start_date
 			 , c.curriculum_end_date
@@ -247,7 +247,7 @@
 		SELECT t.test_name
 		     , t.test_date
 		     , t.test_id
-		     , t.class_id
+		     , c.class_id
 		     , c.curriculum_name
 		     , c.curriculum_start_date
 			 , c.curriculum_end_date

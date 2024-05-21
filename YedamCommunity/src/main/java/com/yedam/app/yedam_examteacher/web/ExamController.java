@@ -68,7 +68,7 @@ public class ExamController {
 
 		model.addAttribute("answerList", findVO);
 		model.addAttribute("subjectList", list3);
-		System.out.println(findVO);
+		System.out.println(list3);
 		return "cbt_teacher/quiz";
 	}
 	
@@ -99,9 +99,9 @@ public class ExamController {
 		int sId = examService.subjectInsert(teacherVO);
 		String uri = null;
 		if (sId > -1) {
-			uri = "quizlist";
+			uri = "redirect:quizlist";
 		} else {
-			uri = "quizinsert";
+			uri = "quizlist";
 		}
 		return uri;
 	}
@@ -127,7 +127,10 @@ public class ExamController {
 		return "cbt_teacher/testinfo";
 	}
 	
-	// 강의실별 시험 결과 확인
+	// 강의실별 학생 개인의 과목 성적
+	//@GetMapping("userTestInfo")
+	
+	// 강의실별 시험 결과(통과자,재시험자) 확인
 	@PostMapping("testresult")
 	@ResponseBody
 	public List<TeacherVO> testResult(@RequestParam("testId") int tId){
