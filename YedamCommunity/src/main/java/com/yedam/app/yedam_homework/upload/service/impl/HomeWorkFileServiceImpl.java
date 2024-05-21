@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.yedam_homework.service.HomeWorkTargetVO;
+import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_homework.upload.mapper.HomeWorkFileMapper;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileService;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
@@ -34,13 +36,17 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 	@Override
 	@PostMapping("uploadsAjax")
 	@ResponseBody
-	public List<String> uploadFile(@RequestPart MultipartFile[] uploadFiles) {
+	public List<String> uploadFile(@RequestPart MultipartFile[] uploadFiles, HomeWorkTargetVO homeworktargetVO) {
 
-		System.err.println("uploadFiles =" + uploadFiles);
+		
 
 		List<String> FileList = new ArrayList<>();
 
+		System.err.println(uploadFiles.length);
+		
 		for (MultipartFile uploadFile : uploadFiles) {
+			
+			System.err.println("uploadFiles =" + uploadFiles);
 
 			// 모든경로를 포함한 파일 이름
 			String originalName = uploadFile.getOriginalFilename();
@@ -65,6 +71,9 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			// 저장할 파일이름 중간에 "_"를 이용하여 구분
 			String uploadFileName = folderPath + File.separator + uuid + "_" + fileName;
 			System.err.println("파일 이름 중간에 _ 구분 = " + uploadFileName);
+			
+			//다운로드 파일 경로
+			String downloadFileName = uuid + "_" + fileName;
 
 			// 저장할때 이름 = 경로 + / + 랜덤한 파일 이름
 			String saveName = uploadPath + File.separator + uploadFileName;
@@ -92,10 +101,15 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			homeworkfileVO.setHomeworkfileSize((int) uploadFile.getSize());
 			//파일 확장자
 			homeworkfileVO.setHomeworkfileExt(fileExt);
+			//파일 다운로드 경로
+			homeworkfileVO.setDownloadLocation(downloadFileName);
+			//파일 과제번호
+			homeworkfileVO.setHomeworkId(homeworktargetVO.getHomeworkId());
 			
 			homeworkfileMapper.insertHomeWorkFile(homeworkfileVO);
 		}
-
+		
+		
 		return FileList;
 	}
 

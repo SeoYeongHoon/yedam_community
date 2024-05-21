@@ -10,15 +10,18 @@
      homeworkfile_name,
      homeworkfile_size,
      homeworkfile_location,
+     download_location,
      homeworkfile_ext,
-     reply_id)
+     homework_id
+     )
 VALUES
     (homeworkfile_id_seq.nextval,
      #{homeworkfileName},
      #{homeworkfileSize},
      #{homeworkfileLocation},
+     #{downloadLocation},
      #{homeworkfileExt},
-     #{replyId}
+     #{homeworkId}
     )
 	</insert>
   </mapper>

@@ -108,7 +108,7 @@
 				<textarea style="border: 1px solid black;" rows="8" cols="50"
 					placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
 				<div class="col-12" style="text-align: center;">
-				<input type="file" name="uploadFiles" mltiple>
+				<input type="file" name="uploadFiles" multiple>
 					<button id="insertBtn" class="main-btn primary-btn btn-hover"
 						type="button">등록</button>
 				</div>
@@ -127,7 +127,7 @@ console.log(values)
 		e.preventDefault();
 		      $('.reply_data').append(
 		    `<div>
-		        <form name="insertComment" method="post">
+		        <form name="insertComment" method="post" >
 		          <input name="hidden" type="hidden" >
 		         <textarea name="commentContent"style="border: 1px solid black;"rows="8" cols="50" placeholder="내용을 입력하세요" ></textarea>
 		         <div class="col-12" style="text-align: left;">
