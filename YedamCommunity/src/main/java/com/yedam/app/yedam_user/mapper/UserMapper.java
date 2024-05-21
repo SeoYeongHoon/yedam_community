@@ -1,6 +1,8 @@
 package com.yedam.app.yedam_user.mapper;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -42,8 +44,15 @@ public interface UserMapper {
 	@Select("SELECT * FROM users WHERE user_id = #{userId}")
 	UserVO getUserById(@Param("userId") String userId);
 
-	@Select("SELECT * FROM register WHERE register_id = #{registerId}")
-	RegisterVO getReqById(@Param("registerId") String registerId);
+	@Select("SELECT * FROM register WHERE id = #{id}")
+	RegisterVO getReqById(@Param("id") String registerId);
+	
+	// 아이디 찾기
+	UserVO getUserId(UserVO userVO);
+	
+	// 비밀번호 찾기
+	UserVO getUserPw(UserVO userVO);
+	
 
 //	회원가입 신청거절(삭제)
 	public int refuseUser(int registerId);

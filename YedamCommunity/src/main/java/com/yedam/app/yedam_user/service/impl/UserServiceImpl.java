@@ -20,17 +20,6 @@ public class UserServiceImpl implements UserService {
 	// 회원가입 신청
 	@Override
 	public void requestUser(RegisterVO registerVO) throws Exception {
-
-//		String imagePath = fileUploadService.uploadFile(userImage);
-//		registerVO.setUserImage(imagePath);
-		
-//		String encodedPassword = passwordEncoder.encode(registerVO.getPassword());
-//		registerVO.setPassword(encodedPassword);
-		
-//		byte[] userImageBytes = convertMultipartFileToByteArray(userImage);
-//		byte[] userImageBytes = userImage.getBytes();
-//        registerVO.setUserImage(userImage);
-		
 		userMapper.requestUser(registerVO);
 	}
 
@@ -60,22 +49,6 @@ public class UserServiceImpl implements UserService {
 		return userMapper.userLogin(userVO);
 	}
 
-//	@Override
-//	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-//		UserVO userVO = userMapper.getUserById(id);
-//		
-//		if (userVO == null) {
-//			throw new UsernameNotFoundException("No User Found");
-//		}
-//		
-//		return new LoginVO(userVO);
-//	}
-
-//	@Override
-//	public UserVO userLogin(UserVO userVO) {
-//		return userMapper.userLogin(userVO);
-//	}
-
 	@Override
 	public List<UserVO> userList() {
 		return userMapper.selectUserList();
@@ -97,8 +70,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public RegisterVO getReqById(String registerId) {
-		return userMapper.getReqById(registerId);
+	public RegisterVO getReqById(String id) {
+		return userMapper.getReqById(id);
 	}
 
 	@Override
@@ -119,10 +92,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// Spring Security용 인터페이스
-	@Override
-	public UserVO findByUsername(String id) {
-		return userMapper.findByUsername(id);
-	}
+//	@Override
+//	public UserVO findByUsername(String id) {
+//		return userMapper.findByUsername(id);
+//	}
 
 	@Override
 	public UserVO loginUser(String id, String password) {
@@ -136,4 +109,22 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
+	@Override
+	public boolean isUserExist(String id) {
+		RegisterVO registerVO = userMapper.getReqById(id);
+		return registerVO != null;
+	}
+
+	// 아이디 찾기
+	@Override
+	public UserVO findUserId(UserVO userVO) {
+		return userMapper.getUserId(userVO);
+	}
+
+	// 비밀번호 찾기
+	@Override
+	public UserVO findUserPw(UserVO userVO) {
+		return userMapper.getUserPw(userVO);
+	}
+	
 }

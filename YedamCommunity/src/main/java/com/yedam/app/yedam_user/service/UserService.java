@@ -1,6 +1,8 @@
 package com.yedam.app.yedam_user.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.transaction.annotation.Transactional;
 
 public interface UserService {
@@ -21,8 +23,14 @@ public interface UserService {
 //	public UserDetails loadUserByUsername(String id);
 	UserVO loginUser(String id, String password);
 	
+	// 아이디 찾기
+	UserVO findUserId(UserVO userVO);
+	
+	// 비밀번호 찾기
+	UserVO findUserPw(UserVO userVO);
+	
 	// Spring Security용 메소드
-	UserVO findByUsername(String id);
+//	UserVO findByUsername(String id);
 	
 	public List<UserVO> stdList();
 	
@@ -35,7 +43,7 @@ public interface UserService {
 	public List<UserVO> getUsersByFilter(String filter);
 
 	// 회원가입 신청 유저 상세정보
-	public RegisterVO getReqById(String registerId);
+	public RegisterVO getReqById(String id);
 	
 	// 유저 상세정보
 	public UserVO getUserById(String userId);
@@ -45,5 +53,6 @@ public interface UserService {
 	
 //	유저 삭제
 	public boolean removeUser(int userId);
-	
+
+	public boolean isUserExist(String id);
 }

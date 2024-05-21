@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,18 @@ public class AdminController {
 	// 어드민 메인 페이지 및 유저 전체조회
 	@GetMapping("/adminMain")
 	public String adminPage(Model model, HttpServletRequest req) {
+		HttpSession session = req.getSession();
+	    String logid = (String) session.getAttribute("logid");
+	    System.out.println("로그인 아이디: " + logid);
+	    
+	    if (logid == null) {
+	    	return "login/loginForm";
+	    }
 
+	    if (!logid.equals("admin")) {
+	        return "redirect:/home";
+	    }
+	    
 		// 관리자 최초 페이지. 수강생, 수료생 리스트 출력.
 		List<UserVO> requestList = userService.stdList();
 		List<UserVO> userList = userService.userList();

@@ -2,7 +2,9 @@
 <html xmlns:th="https://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head th:replace="common/configs/config :: ConfigFragment">
-</head>	  
+</head>
+<script>
+</script>
 <body>
 	<section class="tab-components">
 		<div class="container-fluid" style="padding-bottom: 100px;">
@@ -15,14 +17,14 @@
 				</div>
 				<div class="add-line">아이디 찾기에 필요한 정보들을 입력해주세요.</div>
 			</div>
-			<form id="login_form" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" method="post">
+			<form id="find_id_form" action="/showId" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" method="post">
 				<div class="row">
 					<div class="col-12">
 						<!-- input style start -->
 						<div class="card-style mb-30">
 							<div class="input-style-1">
 								<label>이름</label> 
-								<input id="nameInput" name="id" type="text" placeholder="이름을 입력하세요.">
+								<input id="nameInput" name="name" type="text" placeholder="이름을 입력하세요.">
 							</div>
 							<div class="input-style-1" style="position: relative">
 								<label>이메일</label> 
@@ -32,7 +34,8 @@
 						<p>회원이 아니신가요? <a href="/register">회원가입하기</a></p>
 						<p><a href="/findPw">비밀번호 찾기</a></p>
 						<div class="d-flex" style="margin-top: 10px; justify-content: center;">
-							<button type="submit" class="login_btn main-btn primary-btn btn-hover" style="padding: 8px 30px; margin-right: 10px;">아이디 찾기</button>
+							<button type="submit" class="login_btn main-btn primary-btn btn-hover" style="padding: 8px 15px; margin-right: 10px;">아이디 찾기</button>
+							<button type="button" class="main-btn light-btn btn-hover" style="padding: 8px 30px; margin-right: 10px;">뒤로가기</button>
 						</div>
 					</div>
 				</div>
