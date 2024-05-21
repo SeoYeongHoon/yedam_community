@@ -22,9 +22,10 @@ public class UploadController {
 	private String uploadPath;
 	
 	
-	@PostMapping("/uploadsAjax")
-	@ResponseBody
-	public List<String> uploadFile(@RequestPart MultipartFile[] uploadFiles){
-		return homeworkfileService.uploadFile(uploadFiles);
-	}
+	/*
+	 * @PostMapping("/uploadsAjax")
+	 * 
+	 * @ResponseBody public List<String> uploadFile(@RequestPart MultipartFile[]
+	 * uploadFiles){ return homeworkfileService.uploadFile(uploadFiles); }
+	 */
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_homework.service.CommentVO;
 import com.yedam.app.yedam_homework.service.HomeWorkReplyService;
@@ -15,6 +17,7 @@ import com.yedam.app.yedam_homework.service.HomeWorkService;
 import com.yedam.app.yedam_homework.service.HomeWorkTargetVO;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_homework.service.ReplyVO;
+import com.yedam.app.yedam_homework.upload.service.HomeWorkFileService;
 import com.yedam.app.yedam_subjects.service.SubjectService;
 
 @Controller
@@ -33,6 +36,9 @@ public class HomeWorkController {
 
 	@Autowired
 	HomeWorkReplyService homeworkReplyService;
+	
+	@Autowired
+	HomeWorkFileService homeworkfileService;
 
 	// 과제 전체조회
 	@GetMapping("homeworkList")
@@ -53,12 +59,14 @@ public class HomeWorkController {
 
 	// 과제 등록 -처리
 	@PostMapping("homeworkInsert")
-	public String homeworkInsertProcess(HomeWorkVO homeworkVO, HomeWorkTargetVO homeworktargetVO) {
+	public String homeworkInsertProcess(@RequestPart MultipartFile[] uploadFiles,  HomeWorkVO homeworkVO, HomeWorkTargetVO homeworktargetVO) {
 		homeworkService.homeworkInsert(homeworkVO);
 		HomeWorkTargetVO list = homeworkService.homeworktargetList(homeworkVO);
 		homeworktargetVO.setHomeworkId(list.getHomeworkId());
 		homeworktargetVO.setCurriculumId(list.getCurriculumId());
 		homeworkService.homeworkTargetInsert(homeworktargetVO);
+		homeworkfileService.uploadFile(uploadFiles, list);
+		
 		return "redirect:homeworkList";
 	}
 
@@ -79,7 +87,7 @@ public class HomeWorkController {
 		findVO.setReplyList(replyList);
 
 		model.addAttribute("homeworkList", findVO);
-
+		System.err.println("findVO = "+findVO);
 		return "homework/homeworkInfo";
 	}
 

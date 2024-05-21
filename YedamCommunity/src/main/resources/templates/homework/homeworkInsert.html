@@ -71,7 +71,7 @@
 				<h6>과제 등록</h6>
 			</div>
 			<!-- 입력시작 -->
-			<form method="post" name="InsertForm" th:object="${homeworkVO}"
+			<form method="post" id="InsertForm" name="InsertForm" th:object="${homeworkVO}"
 				enctype="multipart/form-data">
 				<div class="row">
 					<div class="col-12">
@@ -120,8 +120,6 @@
 						<!-- 파일 업로드 -->
 						<div id="file" style="padding: 50px;" class="card-style mb-30">
 							<input type="file" name="uploadFiles" multiple>
-							<button id="saveBtn" type="button"
-								class="main-btn primary-btn btn-hover">저장</button>
 						</div>
 					</div>
 					<!-- 등록 취소버튼 -->
@@ -270,10 +268,13 @@
 		$('#insertBtn').on('click', ajax);
 
 		function ajax() {
-			let formValues = $('form[name="InsertForm"]').serialize();
+			// 파일외 입력태그
 			let title = document.getElementById('homeworkTitle');
 			let date = document.getElementById('homeworkDate');
-
+			
+			// 파일 업로드
+			let formData = new FormData(document.getElementById('InsertForm'));
+	
 			if (title.value == '') {
 				$('#modalTitle').modal('show');
 				title.focus();
@@ -283,47 +284,25 @@
 				date.focus();
 				return;
 			}
-
-			$.ajax({
-				url : "homeworkInsert",
-				type : "POST",
-				data : formValues,
-				success : function(json) {
-					console.log(json);
-					$('#modal').modal('show');
-	
-				},
-				error : function(err) {
-					$('#modalError').modal('show');
-				}
-			})
-		};
-
-		$('#saveBtn').on('click', function(e){
-			let formData = new FormData();
-			
-			let fileInput = document.querySelector("input[type='file']");
-			let fileList = fileInput.files;
-			for(let file of fileList){
-				formData.append('uploadFiles', file);
-			}
 			
 			//ajax
 			$.ajax({
-				url:'uploadsAjax',
+				url:'homeworkInsert',
 				type:'POST',
-				processData: false,
-				contentType: false,
+				processData: false, // QueryString(key=value)로 자동변환 무시
+				contentType: false, // FormData가 가지고 있는 통신 정보를 사용
 				data: formData,
 				success:  function(result) {
-					$('#modalFile').modal('show');
+					$('#modal').modal('show');
 					
 				},
 				error: function(reject){	
 					$('#modalError').modal('show');
 	               }
 			})
-		});
+			
+		};
+
 	</script>
 </body>
 </html>

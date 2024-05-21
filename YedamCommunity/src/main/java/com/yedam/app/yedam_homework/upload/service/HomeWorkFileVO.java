@@ -10,5 +10,8 @@ public class HomeWorkFileVO {
 	private int homeworkfileSize;
 	private String homeworkfileLocation;
 	private String homeworkfileExt;
+	private String downloadLocation;
 	private int replyId;
+	private int homeworkId;
+	
 }
