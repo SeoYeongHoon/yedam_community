@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<style>
+.tresult_1 {
+	display: inline-block;
+}
+.tresult_2 {
+	text-align: center;
+}
+.tresult_3 {
+	width: 150px;
+}
+</style>
+<div class="row">
+	<div class="card-style col-lg-12"
+		style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">
+		<br> <br>
+		<h1 class="tresult_2">[ 시험결과 ]</h1>
+		<br> <br>
+		<div class="tresult_2">
+			<h3 class="tresult_1 tresult_2">응시자:</h3>
+			<h3 class="tresult_1 tresult_2">홍길동</h3>
+		</div>
+		<br> <br>
+		<table class="table">
+			<tr>
+				<th class="tresult_2"><h1>과목</h1></th>
+				<th class="tresult_2"><h1>응시시간</h1></th>
+				<th class="tresult_2"><h1>점수</h1></th>
+				<th class="tresult_2"><h1>재시험여부</h1></th>
+			</tr>
+			<tr>			
+				<td class="tresult_2"><h1>JAVA</h1></td>
+				<td class="tresult_2"><h1>23:25</h1></td>
+				<td class="tresult_2"><h1>90</h1></td>
+				<td class="tresult_2"><h1>X</h1></td>
+			</tr>
+		</table>
+		<br> <br>
+		<div style="text-align: center">
+			<button class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover"
+					th:onclick="|location.href='@{/testList2}'|">목록</button>
+			<form class="tresult_1 tresult_3" action="testStart" method="post">
+				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">오답확인</button>
+			</form>
+		</div>
+		<br> <br>
+	</div>
+	<div class="card-style col-lg-6"
+		style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">
+		<br> <br>
+		<h1 style="text-align: center;">시험결과</h1>
+		<br> <br>
+		<div class="tresult_2">
+			<h3 class="tresult_1 tresult_2">응시자:</h3>
+			<h3 class="tresult_1 tresult_2">홍길동</h3>
+		</div>
+		<br> <br>
+		<table class="table">
+			<tr>
+				<th class="tresult_2">과목</th>
+				<th class="tresult_2">응시시간</th>
+				<th class="tresult_2">점수</th>
+				<th class="tresult_2">재시험여부</th>
+			</tr>
+			<tr>			
+				<td class="tresult_2">JAVA</td>
+				<td class="tresult_2">23:25</td>
+				<td class="tresult_2">90</td>
+				<td class="tresult_2">X</td>
+			</tr>
+		</table>
+		<br> <br>
+	</div>
+	<div class="card-style col-lg-6"
+		style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">
+		<br> <br>
+		<h1 style="text-align: center;">시험결과</h1>
+		<br> <br>
+		<div class="tresult_2">
+			<h3 class="tresult_1 tresult_2">응시자:</h3>
+			<h3 class="tresult_1 tresult_2">홍길동</h3>
+		</div>
+		<br> <br>
+		<table class="table">
+			<tr>
+				<th class="tresult_2">과목</th>
+				<th class="tresult_2">응시시간</th>
+				<th class="tresult_2">점수</th>
+				<th class="tresult_2">재시험여부</th>
+			</tr>
+			<tr>			
+				<td class="tresult_2">JAVA</td>
+				<td class="tresult_2">23:25</td>
+				<td class="tresult_2">90</td>
+				<td class="tresult_2">X</td>
+			</tr>
+		</table>
+		<br> <br>
+	</div>
+</div>
+</html>

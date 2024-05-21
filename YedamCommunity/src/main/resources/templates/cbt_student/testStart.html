@@ -225,8 +225,6 @@ setInterval(function(){
 		}, 2000);
 	}
 	if(min == 0 && sec == 0){ //00:00인 경우
-		//min = 0;
-		//sec = 0;
 		//자동제출
 		let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
 		let quizCnt = quizCntVal.value; //문제 개수
@@ -250,6 +248,8 @@ setInterval(function(){
 		for(let i = 0; i < submitAnswerVal.length; i++){ //답안 길이만큼 반복		
 			submitAnswer[i] = submitAnswerVal[i].value //현재 선택된 답안들 배열에 저장
 		}
+		let testIdVal = document.querySelector('#testId');
+		let testId = testIdVal.value;
 		$.ajax({ //답안 저장 ajax
 			url: 'testStart1',
 			method: 'post',
@@ -264,6 +264,7 @@ setInterval(function(){
 			success: function(data){
 				console.log(data);
 				console.log(submitAnswer);
+				location.href = '/testResult?testId=' + testId;
 			},
 			error: function(){
 				console.log('error');
@@ -671,6 +672,8 @@ function submitTest(){
 		modal.classList.remove('on'); //모달창 닫기
 		let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출 답안 정의
 		let submitAnswer = []; //배열 생성
+		let testIdVal = document.querySelector('#testId');
+		let testId = testIdVal.value;
 		for(let i = 0; i < submitAnswerVal.length; i++){ //답안 길이만큼 반복		
 			submitAnswer[i] = submitAnswerVal[i].value //현재 선택된 답안들 배열에 저장
 		}
@@ -688,6 +691,7 @@ function submitTest(){
 			success: function(data){
 				console.log(data);
 				console.log(submitAnswer);
+				location.href = '/testResult?testId=' + testId;
 			},
 			error: function(){
 				console.log('error');

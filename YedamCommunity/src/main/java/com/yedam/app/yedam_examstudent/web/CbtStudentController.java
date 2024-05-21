@@ -2,6 +2,9 @@ package com.yedam.app.yedam_examstudent.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,11 +28,14 @@ public class CbtStudentController {
 	CbtStudentService cbtStudentService;
 	
 	//시험전체목록 조회
-	@GetMapping("testList")
-	public String testList(TestVO testVO, ExamResultVO examResultVO, Model model) {
+	@GetMapping("testList2")
+	public String testList(TestVO testVO, ExamResultVO examResultVO, HttpServletRequest req, Model model) {
 		List<TestVO> list1 = cbtStudentService.testListAll();
+		HttpSession session = req.getSession();
+	    String logid = (String) session.getAttribute("logid");
 		model.addAttribute("testList", list1); //시험전체목록
-		return "cbt_student/testMain";
+		model.addAttribute("logid", logid); //시험전체목록
+		return "cbt_student/testList2";
 	}
 	
 	//시험단건(상세)정보 조회
@@ -128,5 +134,12 @@ public class CbtStudentController {
 			a = cbtStudentService.testSubmit(testResultVO);
 		}
 		return a;
+	}
+	
+	
+	@GetMapping("testResult")
+	public String testResult(ExamResultVO examResultVO, int testId, Model model) {
+		System.out.println(testId);
+		return "cbt_student/testResult";
 	}
 }

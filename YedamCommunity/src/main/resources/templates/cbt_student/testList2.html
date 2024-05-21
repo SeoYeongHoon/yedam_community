@@ -75,9 +75,9 @@
 						<th class="tlist_2">피드백</th>
 					</tr>
 				</thead>
-				<tbody class="tbodyList">
+				<tbody id="tbody">
 					<th:block th:each="list, stat : ${testList}">
-						<tr class="trList">
+						<tr>
 							<td class="tlist_2">[[${stat.count}]]<input class="isReexam" type="hidden" value="${list.isReexam}"></td>
 							<td class="tlist_2">[[${list.testName}]]</td>
 							<td class="tlist_2">[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
@@ -179,77 +179,5 @@ $('.filterBtn').click(function(){
 		});
 	}
 });
-/*
-let allType = document.querySelector('#allBtn').innerText;
-let allNum;
-if(allType == "전체"){
-	allNum = 1;
-}
-$('#allBtn').on('click', function(){
-	$.ajax('testList?filterType='+allNum)
-	.done(function(){
-		alert(1);
-	})
-})
-/*
-function testListFilter(){
-	let allBtn = document.querySelector('#allBtn');
-	allBtn.addEventListener('click', function){
-		alert(1);
-	}
-}
-function allFilter(){
-	lef tbody = document.querySelector('#tbodyList');
-	$.ajax('testList')
-	.done(function(){	
-		tbody.innerHTML('');
-	})
-}*/
-
-/*
-// <<시험목록 필터링 관련 JS>
-function testListFilter(){
-	let isReexams = document.querySelectorAll('.isReexam').value;
-	const filter = document.querySelectorAll('.filterBtn');
-	for(let i = 0; i < isReexams.length; i++){
-		let isReexam = isReexams[i];
-		filter[i].addEventListener('click', function(){
-			$.ajax({
-				url: 'testList?isReexam=isReexam',
-				success: function(data){
-					alert(1);
-				},
-				error: function(){
-					alert(0);
-				}
-			});
-		})
-	}
-}*/
-// <<시험목록 필터링 관련 JS>
-	/*
-function testListFilter(){
-	const filter = document.querySelectorAll('.filterBtn');
-	const items = document.querySelectorAll('.filterItem');
-	
-	filter.forEach(function(e){
-		e.preventDefault();
-		const filerType = e.target.dataset.filter;
-		
-		items.forEach(function(item){
-			if(item == 'all'){
-				item.style.display.parentElement.parentElement = 'block';
-			}
-			else{
-				if(item.classList.contains(filterType)){
-					item.style.display.parentElement.parentElement = 'block';
-				}
-				else{
-					item.style.display.parentElement.parentElement = 'none';
-				}
-			}
-		});
-	});
-}	*/
 </script>
 </html>
