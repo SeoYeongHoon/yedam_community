@@ -8,6 +8,17 @@
 	display: inline-block;
 }
 </style>
+<!-- 
+testId
+testName
+testDate
+testTime
+curriculumName
+quizScore
+quizIdCnt?
+testContent
+subjectId
+ -->
 <div>
 	<div class="card-style"
 		style="border: 1px solid gray; border-radius: 20px; width: 700px; margin: 0 auto; margin-top: 100px; margin-bottom: 100px;">
@@ -50,7 +61,6 @@
 				th:onclick="|location.href='@{/testList2}'|">목록</button>
 			<form class="tdetail_1" action="testStart" method="post">
 				<input type="hidden" name="page" th:value="1">
-				<input type="hidden" name="quizCnt" th:value="${#lists.size(randRn)}">
 				<input type="hidden" name="testId" th:value="${testDetail.testId}">
 				<input type="hidden" name="subjectId" th:value="${testDetail.subjectId}">
  				<div th:each="quiz : ${randQuizId}">				
