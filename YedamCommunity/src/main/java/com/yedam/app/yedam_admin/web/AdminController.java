@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,18 +38,18 @@ public class AdminController {
 	// 어드민 메인 페이지 및 유저 전체조회
 	@GetMapping("/adminMain")
 	public String adminPage(Model model, HttpServletRequest req) {
-		HttpSession session = req.getSession();
-//	    String logid = (String) session.getAttribute("logid");
-	    String logType = (String) session.getAttribute("logType");
-	    System.out.println("로그인 타입: " + logType);
+//		HttpSession session = req.getSession();
+////	    String logid = (String) session.getAttribute("logid");
+//	    String logType = (String) session.getAttribute("logType");
+//	    System.out.println("로그인 타입: " + logType);
 	    
-	    if (logType == null) {
-	    	return "login/loginForm";
-	    }
-
-	    if (!logType.equals("ROLE_ADMIN")) {
-	        return "redirect:/home";
-	    }
+//	    if (logType == null) {
+//	    	return "login/loginForm";
+//	    }
+//
+//	    if (!logType.equals("ROLE_ADMIN")) {
+//	        return "redirect:/home";
+//	    }
 	    
 		// 관리자 최초 페이지. 수강생, 수료생 리스트 출력.
 		List<UserVO> requestList = userService.stdList();
@@ -74,7 +74,7 @@ public class AdminController {
 	@GetMapping("/reqDetails")
 	@ResponseBody
 	public RegisterVO getReqDetails(@RequestParam("registerId") String registerId) {
-		return userService.getReqById(registerId);
+		return userService.getReqInfoById(registerId);
 	}
 
 	// 회원 상세 정보
@@ -116,7 +116,7 @@ public class AdminController {
 	
 	
 //	과정 목록 출력
-	@GetMapping("/manageCourse")
+	@GetMapping("/course")
 	public String manageCourse(Model model) {
 		List<CurriculumVO> currList = curriculumService.CurriculumList();
 		model.addAttribute("class", currList);
@@ -125,8 +125,9 @@ public class AdminController {
 	}
 	
 //	과정 등록
-	@PostMapping("/manageCourse")
-	public String addCourse(@ModelAttribute CurriculumVO curriculumVO) {
+	@PostMapping("/course")
+	@ResponseBody
+	public String addCourse( CurriculumVO curriculumVO) {
 		System.out.println("전달된 데이터: " + curriculumVO);
 		
 		curriculumService.insertCurriculum(curriculumVO);
@@ -137,21 +138,18 @@ public class AdminController {
 //	모달창에 해당 과정의 학생 리스트 출력
 	@GetMapping("/showCourse")
 	@ResponseBody
-	public List<UserVO> showCourseStd(@RequestParam("curriculumId") int curriculumId, Model model, @ModelAttribute CurriculumVO curriculumVO) {
+	public List<UserVO> showCourseStd(@RequestParam("curriculumId") int curriculumId) {
 		System.out.println("아이디: " + curriculumId);
 		List<UserVO> students = curriculumService.showCurriculumStd(curriculumId);
-		String courseName = curriculumVO.getCurriculumName();
-		model.addAttribute("students", students);
-		System.out.println("학생정보: " + students);
-		System.out.println("과정정보: " + courseName);
+		System.out.println("학생정보: " + students);		
 		
 		return students;
 	}
 	
 	// 과정 삭제
-	@GetMapping("/deleteCourse")
+	@DeleteMapping("/course/{curriculumId}")
 	@ResponseBody
-	public boolean deleteCourse(@RequestParam("curriculumId") int curriculumId) {
+	public boolean deleteCourse(@PathVariable("curriculumId") int curriculumId) {
 		return curriculumService.removeCurriculum(curriculumId);
 	}
 	

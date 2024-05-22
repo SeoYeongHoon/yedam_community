@@ -16,18 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.yedam.app.yedam_user.upload.mapper.ProfileImageMapper;
 import com.yedam.app.yedam_user.upload.service.ProfileImageService;
-import com.yedam.app.yedam_user.upload.service.ProfileImageVO;
 
 @Service
 public class ProfileImageServiceImpl implements ProfileImageService {
 	
 	@Value("${file.upload.path}")
 	private String uploadPath;
-	
-	@Autowired
-	ProfileImageMapper profileImageMapper;
 
 	@Override
 	@ResponseBody
@@ -67,24 +62,15 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 			try {
 				// uploadFile에 파일을 업로드하는 메소드
 				uploadFile.transferTo(savePath);
+				imageList.add(setFilePath(uploadFileName));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
 			System.err.println("파일크기: " + uploadFile.getSize());
 			
-			imageList.add(setFilePath(uploadFileName));
 			System.err.println("이미지 리스트: " + imageList);
-			
-			// 생성자 만들어서 담기
-			ProfileImageVO profileImageVO = new ProfileImageVO();
-			profileImageVO.setProfileImageName(fileName);
-			profileImageVO.setProfileImageLocation(saveName);
-			profileImageVO.setProfileImageSize((int) uploadFile.getSize());
-			profileImageVO.setProfileImageExt(fileExt);
-			profileImageVO.setDownloadLocation(downloadFileName);
-			
-			profileImageMapper.insertProfileImage(profileImageVO);
+
 		}
 		
 		return imageList;
@@ -106,9 +92,9 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 		return uploadFileName.replace(File.separator, "/");
 	}
 
-	@Override
-	public ProfileImageVO getProfileImageByLogId(String id) {
-		return profileImageMapper.getProfileImageByLogId(id);
-	}
+//	@Override
+//	public ProfileImageVO getProfileImageByLogId(String id) {
+//		return profileImageMapper.getProfileImageByLogId(id);
+//	}
 
 }

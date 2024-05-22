@@ -18,10 +18,7 @@ public interface UserService {
 	public void insertCheckedUsers(List<String> registerIds);
 	
 	// 로그인
-//	public UserVO userLogin(UserVO userVO);
 	UserVO loginCheck(UserVO userVO);
-//	public UserDetails loadUserByUsername(String id);
-	UserVO loginUser(String id, String password);
 	
 	// 아이디 찾기
 	UserVO findUserId(UserVO userVO);
@@ -43,10 +40,12 @@ public interface UserService {
 	public List<UserVO> getUsersByFilter(String filter);
 
 	// 회원가입 신청 유저 상세정보
-	public RegisterVO getReqById(String id);
+	public RegisterVO getReqById(String registerId);
 	
 	// 유저 상세정보
 	public UserVO getUserById(String userId);
+	
+	public RegisterVO getReqInfoById(String registerId);
 
 //	회원가입 신청거절(삭제)
 	public boolean refuseUser(int registerId);

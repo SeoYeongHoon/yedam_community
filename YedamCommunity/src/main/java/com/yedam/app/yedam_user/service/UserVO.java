@@ -18,6 +18,10 @@ public class UserVO {
 	private String userType;
 	private Integer curriculumId;
 	private String curriculumName;
+
 	private String profileImageName;
-    private String profileImageLocation;
+	private double profileImageSize;
+	private String profileImageLocation;
+	private String downloadLocation;
+	private String profileImageExt;
 }
