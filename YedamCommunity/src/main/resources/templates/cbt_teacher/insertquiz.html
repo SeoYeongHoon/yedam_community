@@ -10,7 +10,7 @@
 	display : none;
 }
 </style>	
-
+<p th:value="${subjectList}"></p>
 <form th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
 	<!-- ======= 과목설정 select ======= -->
 	<div class="card-style mb-30">
@@ -160,8 +160,6 @@ $('#radio-2').change(function(e){
 	multi.style.display = "none";	
 	shor.style.display = "block";	
 })
-
-
 
 </script>
 </html>

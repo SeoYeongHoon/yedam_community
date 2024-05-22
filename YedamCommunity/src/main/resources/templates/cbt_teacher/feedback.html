@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<div class="row">
+	<div class="col-6">
+		<div class="address-item">
+			<input type="hidden"/>
+			<h1 th:text="${testInfo.classId}+'강의실'">n강의실</h1>
+			<br>
+			<h4 th:text="${testInfo.curriculumName}">과정명</h4>
+			<p class="text-sm">
+				<span class="text-medium" th:text="${#dates.format(testInfo.curriculumStartDate, 'yyyy.MM.dd')}+'~'+${#dates.format(testInfo.curriculumEndDate, 'yyyy.MM.dd')}">시험기간</span>
+			</p>
+		</div>
+		<div class="title mt-30 mb-30">
+			<h2 th:text="${testInfo.testName}+' '+${#dates.format(testInfo.testDate, 'yyyy.MM.dd')}">시험명 시작기간~종료기간</h2>
+		</div>
+		<div th:if="${userInfo.isReexam} == 0">
+			<h2 th:text="${userInfo.name}+' / '+${userInfo.resultScore}+'점 / 재시험 O'"></h2>
+		</div>
+		<div th:if="${userInfo.isReexam} == 1">
+			<h2 th:text="${userInfo.name}+' / '+${userInfo.resultScore}+'점 / 재시험 X'"></h2>
+		</div>
+	</div>
+	<!-- end col -->
+	<form th:action="@{/feedupdate}" method="post" th:object="${userInfo}">
+	<div class="col-12">
+		<h3>피드백 작성란</h3>
+		<input type="hidden" th:field="*{resultId}">
+		<textarea cols="55" rows="5" placeholder="피드백을 입력하세요" style="border:1px solid black;" th:field="*{feedback}"></textarea>
+		<ul class="buttons-group">
+			<li>
+				<button type="button" class="main-btn primary-btn square-btn btn-hover" id="updateBtn">저장</button>
+			</li>
+			<li>
+				<button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/teachermain}'|">처음화면</button>
+			</li>
+		</ul>
+	</div>
+	</form>
+</div>
+<script>
+$('#updateBtn').on('click', updateAjaxJq);
+
+function updateAjaxJq(event){
+	// Validation check
+	if(!validationCheck()) return;
+	
+	// 보낼 데이터 정리
+	let dataObj = getEmpObj();
+	console.log(dataObj);
+	// Ajax
+	$.ajax('feedupdate',{
+		type : 'post',
+		//data : dataObj	QueryString방식
+		contentType : 'application/json',	//json방식
+		data : JSON.stringify(dataObj)	//json방식
+	})
+	.done(result =>{
+		if(result != null){
+			alert('피드백이 등록(수정)되었습니다.')					
+		}else{
+			alert('등록(수정)되지 않았습니다.\n확인해주세요.')
+		}
+	})
+	.fail(err => console.log(err));
+};
+
+function validationCheck(){
+	let feed = $('#feedback');
+	if(feed.val() == ''){
+		alert('피드백 내용은 필수로 입력해야합니다.');
+		feed.focus();
+		return false;
+	}
+	
+	return true;
+}
+
+function getEmpObj(){
+	let formAry = $('form').serializeArray();	//시리얼라이즈는 폼태그만 작동함.
+	// [{ name : 'employeeId', value : '209' },
+	//	{ name : 'lastName', value : 'Kang'}, ...]
+	
+	let formObj = {};
+	formAry.forEach(inputTag => {
+		formObj[inputTag.name] = inputTag.value;
+	})
+	// {employeeId : '209', lastName : 'Kang', ...}
+	
+	return formObj;
+}
+</script>
+</html>
