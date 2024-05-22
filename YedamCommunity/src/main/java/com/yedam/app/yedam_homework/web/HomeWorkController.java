@@ -87,7 +87,6 @@ public class HomeWorkController {
 		findVO.setReplyList(replyList);
 
 		model.addAttribute("homeworkList", findVO);
-		System.err.println("findVO = "+findVO);
 		return "homework/homeworkInfo";
 	}
 
@@ -101,7 +100,6 @@ public class HomeWorkController {
 	// 대댓글 등록 - 처리
 	@PostMapping("insertComment")
 	public String insertComment(HomeWorkVO homeworkVO, Model model) {
-		System.err.println("과제번호 들고있니? " + homeworkVO);
 		homeworkReplyService.commentInsert(homeworkVO);
 		return "redirect:homeworkInfo?homeworkId=" + homeworkVO.getHomeworkId();
 	}
