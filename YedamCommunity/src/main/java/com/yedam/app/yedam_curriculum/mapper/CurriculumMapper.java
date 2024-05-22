@@ -21,4 +21,5 @@ public interface CurriculumMapper {
 	public List<UserVO> selectCurriculumStd(@Param("curriculumId") int curriculumId);
 
 	public int removeCurriculum(int curriculumId);
+	
 }

@@ -92,7 +92,7 @@
 			<p>[[${homeworkInfo.homeworkContent}]]</p>
 			<th:block th:each="file : ${files}">
 				<p>
-					파일 <a th:href="|@{/download}/${file.downloadLocation}|">[[${file.homeworkfileName}]]</a>
+					<a th:href="|@{/homeworkdownload}/${file.downloadLocation}|">[[${file.homeworkfileName}]]</a>
 				</p>
 			</th:block>
 		</div>
@@ -104,6 +104,11 @@
 					style="border: 1px solid black;">
 					<p>댓글 내용 : [[${reply.replyContent}]]</p>
 					<p>작성일자 : [[${#dates.format(reply.replyDate,'yyyy년MM월dd일')}]]</p>
+					<th:block th:each="replyfiles : ${replyfile}">
+						<p>
+							<a th:href="|@{/replydownload}/${replyfiles.downloadLocation}|">[[${replyfiles.replyfileName}]]</a>
+						</p>
+					</th:block>
 					<hr>
 					<!-- 대댓글 출력 -->
 					<div th:each="comment : ${reply.commentList}"
@@ -111,11 +116,7 @@
 						<p>대댓글 내용 : [[${comment.commentContent}]]</p>
 						<p>작성일자 :
 							[[${#dates.format(comment.commentDate,'yyyy년MM월dd일')}]]</p>
-						<th:block th:each="replyfiles : ${replyfile}">
-							<p>
-								파일 <a th:href="|@{/download}/${replyfiles.downloadLocation}|">[[${file.homeworkfileName}]]</a>
-							</p>
-						</th:block>
+
 					</div>
 					<!-- 대댓글 출력 끝-->
 					<!-- 댓글출력 끝 -->
