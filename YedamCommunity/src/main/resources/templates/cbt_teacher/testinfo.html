@@ -26,49 +26,43 @@
 		</div>
 	</div>
 	<!-- end col -->
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-		<div class="card-style-3 mb-30">
-			<div class="card-content">
-				<h4>시험 통과자</h4>
-				<br>
-				<div class="test row" >
-					<div class="col-8" id="passUser">
-					
-					</div>
-					<div class="col-4" id="passFeed">
-					
+
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+			<div class="card-style-3 mb-30">
+				<div class="card-content">
+					<h4>시험 통과자</h4>
+					<br>
+					<div class="test row ">
+						<div class="col-8" id="passUser"></div>
+						<div class="col-4" id="passFeed"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- end col -->
-	<div align="right" class="col-12">
-		<button type="button">재시험 출제</button>
-	</div>
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-		<div class="card-style-3 mb-30">
-			<div class="card-content">
-				<h4>재시험 명단</h4>
-				<br>
-				<div class="test row" >
-					<div class="col-8" id="failUser">
-					
-					</div>
-					<div class="col-4" id="failFeed">
-					
+		<!-- end col -->
+		<div align="right" class="col-12">
+			<button type="button">재시험 출제</button>
+		</div>
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+			<div class="card-style-3 mb-30">
+				<div class="card-content">
+					<h4>재시험 명단</h4>
+					<br>
+					<div class="test row">
+						<div class="col-8" id="failUser"></div>
+						<div class="col-4" id="failFeed"></div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<!-- end col -->
 	</div>
-	<!-- end col -->
-</div>
-<!-- end row -->
-<!-- ========= card-style-3 end ========= -->
-<button id="Btn">테스트</button>
-<script>
+	<!-- end row -->
+	<!-- ========= card-style-3 end ========= -->
+	<button id="Btn">테스트</button>
+	<script>
 var testId = 0;
+var userId = 0;
 
 function userList(testId){
 	testId = $('input').val();
@@ -86,15 +80,15 @@ function userList(testId){
 				}
 				
 				if(item.isReexam == 1){
-					item.isReexam = '재시험X';
+					item.isReexam = '재시험 X';
 					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam));
-					$('#passFeed').append($('<p/>').text(item.feedback));
+					$('#passFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
+					
 				} else {
-					item.isReexam = '재시험O';
+					item.isReexam = '재시험 O';
 					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam));
-					$('#failFeed').append($('<p/>').text(item.feedback));
+					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
 				}
-				
 				
 				
 			})
@@ -108,35 +102,7 @@ function userList(testId){
 userList(testId);
 
 $('#Btn').on('click', function(){
-	testId = $('input').val();
-	$.ajax({
-		url : "testresult",
-		type : "post", 
-		data : {testId : testId},
-				
-		success : function(data){
-			data.forEach((item,idx) => {
-				if(item.feedback == null){
-					item.feedback = "피드백 등록";
-				} else {
-					item.feedback = "피드백 완료";
-				}
-				
-				if(item.isReexam == 1){
-					item.isReexam = '재시험X';
-					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam));
-					$('#passFeed').append($('<p/>').text(item.feedback));
-				} else {
-					item.isReexam = '재시험O';
-					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam));
-					$('#failFeed').append($('<p/>').text(item.feedback));
-				}
-			})
-		},
-		error : function(err){
-			console.log('에러입니다');
-		}	
-	}); // 학생정보 end of ajax
+	
 })
 </script>
 </html>

@@ -1,12 +1,14 @@
 package com.yedam.app.yedam_examteacher.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,6 +21,7 @@ public class ExamController {
 	@Autowired
 	ExamService examService;
 	
+	// 시험 목록 페이지 관련 기능
 	// 등록된 시험리스트 출력
 	@GetMapping("testlist")
 	public String examList(Model model) {
@@ -36,10 +39,13 @@ public class ExamController {
 		return "cbt_teacher/insertTest";
 	}
 	
+	
+	// 문제 조회/등록 페이지 관련 기능
 	// 문제 등록 - 페이지
 	@GetMapping("quizinsert")
 	public String quizInsertForm(Model model) {
 		List<TeacherVO> list = examService.subjectList();
+		
 		model.addAttribute("subjectList", list);
 		model.addAttribute("teacherVO", new TeacherVO());
 		return "cbt_teacher/insertquiz";
@@ -62,13 +68,13 @@ public class ExamController {
 	// 문제 저장소 페이지
 	@GetMapping("quizlist")
 	public String quizList(TeacherVO teacherVO, Model model) {
-		
+		List<TeacherVO> list = examService.currList();
 		List<TeacherVO> findVO = examService.answerList1(teacherVO);
-		List<TeacherVO> list3 = examService.subjectList();
+		List<TeacherVO> list2 = examService.subjectList();
 
+		model.addAttribute("currList", list);
 		model.addAttribute("answerList", findVO);
-		model.addAttribute("subjectList", list3);
-		System.out.println(list3);
+		model.addAttribute("subjectList", list2);
 		return "cbt_teacher/quiz";
 	}
 	
@@ -113,6 +119,8 @@ public class ExamController {
 		return "redirect:quizlist";
 	}
 	
+	
+	// 교수님 메인페이지 관련 기능
 	// 교수님 메인페이지 (강의실별 평균점수,시험리스트,학생)
 	@GetMapping("teachermain")
 	public String teacherMain(Model model) {
@@ -149,6 +157,23 @@ public class ExamController {
 		return examService.userTestResult(tId);
 	}
 	
+	// 학생 개인 피드백 페이지
+	@GetMapping("feedback")
+	public String feedback(TeacherVO teacherVO, Model model) {
+		TeacherVO findVO = examService.userFeedInfo(teacherVO);
+		TeacherVO findVO2 = examService.testInfo(teacherVO);
+		model.addAttribute("userInfo", findVO);
+		model.addAttribute("testInfo", findVO2);
+		return "cbt_teacher/feedback";
+	}
+	
+	// 학생 피드백 등록
+	@PostMapping("feedupdate")
+	@ResponseBody
+	public Map<String, Object> feedUpdate(@RequestBody TeacherVO teacherVO){
+		return examService.feedUpdate(teacherVO);
+	}
+	
 	// 교수님 페이지 - 강의실에 따른 과정명 출력
 	@PostMapping("classinfo")
 	@ResponseBody
@@ -176,6 +201,5 @@ public class ExamController {
 	public List<TeacherVO> subjectAvg(@RequestParam("classId") int cId) {
 		return examService.subjectAvg(cId);
 	}
-	
 
 }

@@ -102,6 +102,15 @@ li {
 	<div id="modalBody2">
 		<div class="close-area">X</div>
 		<div class="input-style-1">
+			<!-- 과정 선택창 -->
+			<label>과정 선택</label>
+				<div class="select-position">
+					<select id="curr">
+						<th:block th:each="currInfo, idxStat : ${currList}">
+							<option class="typeSelec" th:value="${currInfo.curriculumId}">[[${currInfo.curriculumName}]]</option>
+						</th:block>
+					</select>
+				</div>
 			<!-- ======= checkbox style start ======= -->
 			<div class="card-style mb-30">
 				<h6 class="mb-25">과목 설정</h6>
