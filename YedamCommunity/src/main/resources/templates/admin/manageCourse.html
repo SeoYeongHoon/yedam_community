@@ -27,7 +27,9 @@
 	        });
 		}
 		
+		//--------------------------------------------
 		// 과정 클릭시 해당과정의 학생 목록 출력
+		//--------------------------------------------
 		function showCourseInfo(curriculumId) {
 			document.querySelector('.courseModal').style.display = 'block';
 			
@@ -62,27 +64,29 @@
 						tbody.appendChild(tr);
 					});
 					
-					document.querySelector(".deleteCourseBtn").addEventListener('click', function() {
-						if (confirm('과정을 삭제하시겠습니까?')) {
-							var xhr = new XMLHttpRequest();
-							xhr.open('GET', '/deleteCourse?curriculumId=' + curriculumId, true);
-							xhr.onreadystatechange = function() {
-								if (xhr.readyState == 4 && xhr.status == 200) {
-									var course = JSON.parse(xhr.responseText);
-									
-									document.querySelector('.courseModal').style.display = 'none';
-									location.reload();
-								}
-							};
-							xhr.send();
-							
-							alert('과정이 삭제되었습니다.');
-						} 
-					});
+
 				}
 			};
 			xhr.send();
 		}
+		
+		
+		document.querySelector(".deleteCourseBtn").addEventListener('click', function() {
+			if (confirm('과정을 삭제하시겠습니까?')) {
+				var xhr = new XMLHttpRequest();
+				xhr.open('DELETE', '/course/' + curriculumId, true);
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						var course = JSON.parse(xhr.responseText);
+						
+						alert('과정이 삭제되었습니다.');
+						//document.querySelector('.courseModal').style.display = 'none';
+						location.reload();
+					}
+				};							
+				xhr.send();							
+			} 
+		});
 	</script>
 	
 	<div id="manage-container">

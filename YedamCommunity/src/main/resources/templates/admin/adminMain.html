@@ -106,7 +106,7 @@
 	                document.getElementById('curriculumId').textContent = user.curriculumId;
 	                document.getElementById('userEmail').textContent = user.email;
 	                document.getElementById('userTel').textContent = user.tel;
-	                document.getElementById('userImage').src = '/images/' + user.userImage;
+	                document.getElementById('userImage').src = '/images/profile/' + user.profileImageLocation;
 	
 	                document.querySelector('.infoModal').style.display = 'block';
 	                document.querySelector('.approveUserBtn').style.display = 'none';
@@ -152,7 +152,7 @@
 	                document.getElementById('curriculumId').textContent = user.curriculumId;
 	                document.getElementById('userEmail').textContent = user.email;
 	                document.getElementById('userTel').textContent = user.tel;
-	                document.getElementById('userImage').src = '/images/' + user.userImage;
+	                document.getElementById('userImage').src = '/images/profile/' + user.profileImageLocation;
 	
 	                document.querySelector('.infoModal').style.display = 'block';
 	                document.querySelector('.approveUserBtn').style.display = 'inline-block';
@@ -198,6 +198,7 @@
 	        		        xhr.send();
 	        		        
 	                        alert('회원가입을 승인했습니다!');
+	                        location.reload();
 	        			} else {
 	        				return;
 	        			}

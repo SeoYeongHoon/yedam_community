@@ -6,7 +6,5 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProfileImageService {
-	public List<String> uploadFile(@RequestPart MultipartFile[] uploadFiles);
-	
-	public ProfileImageVO getProfileImageByLogId(String id);
+	public List<String> uploadFile(MultipartFile[] uploadFiles);
 }

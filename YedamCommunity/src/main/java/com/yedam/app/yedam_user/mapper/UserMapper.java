@@ -28,7 +28,7 @@ public interface UserMapper {
 //	UserVO selectUser(String id);
 	
 	// Spring Security용 메소드
-	UserVO findByUsername(String id);
+	UserVO getByUserId(String id);
 
 	// (회원가입 신청한) 수강생, 수료생 리스트 전체
 	public List<UserVO> selectStdList();
@@ -41,11 +41,16 @@ public interface UserMapper {
 
 	public List<UserVO> getUsersByFilter(@Param("filter") String filter);
 
+	// 회원 상세 정보
 	@Select("SELECT * FROM users WHERE user_id = #{userId}")
 	UserVO getUserById(@Param("userId") String userId);
 
+	// 회원가입 신청한 유저 상세 정보
 	@Select("SELECT * FROM register WHERE id = #{id}")
 	RegisterVO getReqById(@Param("id") String registerId);
+	
+	@Select("SELECT * FROM register WHERE register_id = #{registerId}")
+	RegisterVO getReqInfoById(@Param("registerId") String registerId);
 	
 	// 아이디 찾기
 	UserVO getUserId(UserVO userVO);

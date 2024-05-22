@@ -11,9 +11,14 @@ public class RegisterVO {
 	private String tel;
 	private String email;
 	private String address;
-//	private String userImage;
 	private String companyInfo;
 //	private Integer isComplete;
 	private String userType;
 	private Integer curriculumId;
+	
+	private String profileImageName;
+	private double profileImageSize;
+	private String profileImageLocation;
+	private String downloadLocation;
+	private String profileImageExt;
 }

@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.yedam_user.upload.mapper.ProfileImageMapper">
 	<!-- 프로필 사진 등록 -->
-	<insert id="insertProfileImage" parameterType="ProfileImageVO">
+	<!-- <insert id="insertProfileImage" parameterType="ProfileImageVO">
 		INSERT INTO profile_image_files (
 			profile_image_id,
 			profile_image_name,
@@ -25,7 +25,7 @@
 	
 	<select id="getProfileImageByLogId" parameterType="String" resultMap="userProfileResultMap">
         SELECT 
-            u.user_id,
+            u.register_id,
             u.id,
             u.name,
             u.email,
@@ -33,7 +33,7 @@
             p.profile_image_name,
             p.profile_image_location
         FROM 
-            users u
+            register u
         LEFT JOIN 
             profile_image_files p
         ON 
@@ -41,13 +41,13 @@
         WHERE 
             u.id = #{id}
     </select>
-    <resultMap id="userProfileResultMap" type="com.yedam.app.yedam_user.service.UserVO">
-        <result property="userId" column="user_id"/>
+    <resultMap id="userProfileResultMap" type="com.yedam.app.yedam_user.service.RegisterVO">
+        <result property="registerId" column="register_id"/>
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="email" column="email"/>
         <result property="tel" column="tel"/>
         <result property="profileImageName" column="profile_image_name"/>
         <result property="profileImageLocation" column="profile_image_location"/>
-    </resultMap>
+    </resultMap> -->
 </mapper>

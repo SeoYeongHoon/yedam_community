@@ -16,6 +16,11 @@
 					</div>
 				</div>
 				<div class="add-line">아이디 찾기에 필요한 정보들을 입력해주세요.</div>
+				<div class="alert alert-danger" role="alert"
+	                 th:if="${wrongInput}">
+	                <span th:text="${wrongInput}"></span>
+	                <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+	            </div>
 			</div>
 			<form id="find_id_form" action="/showId" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" method="post">
 				<div class="row">

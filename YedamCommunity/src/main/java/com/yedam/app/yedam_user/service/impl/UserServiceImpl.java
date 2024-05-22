@@ -3,10 +3,10 @@ package com.yedam.app.yedam_user.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_user.mapper.UserMapper;
-import com.yedam.app.yedam_user.service.PasswordEncoder;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
@@ -17,9 +17,15 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserMapper userMapper;
 	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 	// 회원가입 신청
 	@Override
 	public void requestUser(RegisterVO registerVO) throws Exception {
+		String encodedPw = passwordEncoder.encode(registerVO.getPassword());
+		registerVO.setPassword(encodedPw);
+		
 		userMapper.requestUser(registerVO);
 	}
 
@@ -36,11 +42,7 @@ public class UserServiceImpl implements UserService {
 	// 체크된 다수의 회원가입 요청 승인
 	@Override
 	public void insertCheckedUsers(List<String> registerIds) {
-
-		if (registerIds == null || registerIds.isEmpty()) {
-			throw new IllegalArgumentException("No register IDs provided");
-		}
-
+		// 화면단에서 체크 여부 확인
 		userMapper.insertCheckedUsers(registerIds);
 	}
 
@@ -70,8 +72,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public RegisterVO getReqById(String id) {
-		return userMapper.getReqById(id);
+	public RegisterVO getReqById(String registerId) {
+		return userMapper.getReqById(registerId);
 	}
 
 	@Override
@@ -91,24 +93,6 @@ public class UserServiceImpl implements UserService {
 		return userMapper.removeUser(userId) == 1;
 	}
 
-	// Spring Security용 인터페이스
-//	@Override
-//	public UserVO findByUsername(String id) {
-//		return userMapper.findByUsername(id);
-//	}
-
-	@Override
-	public UserVO loginUser(String id, String password) {
-		UserVO userVO = userMapper.getUserById(id);
-		
-		PasswordEncoder passwordEncoder = new PasswordEncoder();
-		
-		if (userVO != null && passwordEncoder.checkPassword(password, userVO.getEncryptedPassword())) {
-			return userVO;
-		}
-		return null;
-	}
-
 	@Override
 	public boolean isUserExist(String id) {
 		RegisterVO registerVO = userMapper.getReqById(id);
@@ -125,6 +109,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserVO findUserPw(UserVO userVO) {
 		return userMapper.getUserPw(userVO);
+	}
+
+	
+	@Override
+	public RegisterVO getReqInfoById(String registerId) {
+		return userMapper.getReqInfoById(registerId);
 	}
 	
 }
