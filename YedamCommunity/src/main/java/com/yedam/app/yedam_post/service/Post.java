@@ -26,6 +26,8 @@ public class Post {
     private List<Reply> replies;
     // 대댓글을 출력하기 위한 리스트
     private List<Comment> comments;
+    // 첨부 파일 리스트 추가
+    private List<BoardFiles> boardFiles;
     
     private int replyId;
     private String replyContent;
@@ -41,7 +43,7 @@ public class Post {
     
     private int boardfileId;
     private String boardfileName;
-    private int boardfileSize;
+    private long boardfileSize;
     private String boardfileLocation;
     private String boardfileExt;
     
@@ -178,11 +180,11 @@ public class Post {
 	public void setBoardfileName(String boardfileName) {
 		this.boardfileName = boardfileName;
 	}
-	public int getBoardfileSize() {
+	public long getBoardfileSize() {
 		return boardfileSize;
 	}
-	public void setBoardfileSize(int boardfileSize) {
-		this.boardfileSize = boardfileSize;
+	public void setBoardfileSize(long l) {
+		this.boardfileSize = l;
 	}
 	public String getBoardfileLocation() {
 		return boardfileLocation;

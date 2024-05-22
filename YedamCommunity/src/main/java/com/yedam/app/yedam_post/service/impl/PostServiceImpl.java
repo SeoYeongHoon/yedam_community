@@ -11,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.yedam.app.yedam_post.mapper.CommentMapper;
 import com.yedam.app.yedam_post.mapper.PostMapper;
 import com.yedam.app.yedam_post.mapper.ReplyMapper;
+import com.yedam.app.yedam_post.mapper.ReportMapper;
 import com.yedam.app.yedam_post.service.Comment;
 import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.Reply;
+import com.yedam.app.yedam_post.service.Report;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -27,6 +29,9 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	private CommentMapper commentMapper;
+	
+	@Autowired
+	private ReportMapper reportMapper;
 
 	// 게시글 등록
 	@Override
@@ -66,10 +71,12 @@ public class PostServiceImpl implements PostService {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			int postId = post.getPostId();
-			postMapper.deletePost1(postId);
-			postMapper.deletePost2(postId);
-			postMapper.deletePost3(postId);
-			postMapper.deletePost5(postId);
+			postMapper.deletePost1(postId); // 대댓글 삭제
+			postMapper.deletePost2(postId); // 댓글 삭제
+			postMapper.deletePost3(postId); // 파일 삭제
+			                                   
+			                                // 사이에 들어갈 삭제목록 자리들
+			postMapper.deletePost5(postId); // 게시글 삭제
 
 			resultMap.put("status", "success");
 		} catch (Exception e) {
@@ -187,6 +194,11 @@ public class PostServiceImpl implements PostService {
         map.put("postId", postId);
         map.put("userId", userId);
         return postMapper.likeCheck(map);
+	}
+
+	@Override
+	public int createReport(Report report) {
+		return reportMapper.insertReport(report);
 	}
 
 }

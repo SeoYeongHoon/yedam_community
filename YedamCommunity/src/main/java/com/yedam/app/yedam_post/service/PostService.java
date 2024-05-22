@@ -65,6 +65,11 @@ public interface PostService {
     
     // 대댓글 삭제
     public Map<String, Object> deleteComment(Comment comment);
+    
+    /*=====================================================*/
+    
+    // 게시글 신고 등록
+    public int createReport(Report report);
 
 }
 
