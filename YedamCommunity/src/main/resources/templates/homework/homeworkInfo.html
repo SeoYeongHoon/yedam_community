@@ -55,6 +55,31 @@
 		</div>
 	</div>
 
+	<!-- 대댓글 내용 확인 모달창 -->
+	<div id="commentCentent" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">등록 실패</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<p style="text-align: center;">대댓글을 입력해주세요!</p>
+					<div style="text-align: center;">
+						<img alt="등록완료버튼" th:src="@{/images/failed.png}">
+					</div>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button id='errBtn' type="button" class="btn btn-primary"
+						data-dismiss="modal">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div th:each="homeworkInfo : ${homeworkList}">
 		<div style="border: 1px solid black;">
 			<hr>
@@ -65,51 +90,67 @@
 			<h2>내용</h2>
 			<hr>
 			<p>[[${homeworkInfo.homeworkContent}]]</p>
-			<p>파일 <a href="/download/">파일 다운로드</a></p>
+			<th:block th:each="file : ${files}">
+				<p>
+					파일 <a th:href="|@{/download}/${file.downloadLocation}|">[[${file.homeworkfileName}]]</a>
+				</p>
+			</th:block>
 		</div>
 		<div style="border: 1px solid black;">
 			<h3>댓글</h3>
 			<div id="replyList">
+				<!-- 댓글출력 -->
 				<div th:each="reply : ${homeworkList.replyList}"
 					style="border: 1px solid black;">
 					<p>댓글 내용 : [[${reply.replyContent}]]</p>
 					<p>작성일자 : [[${#dates.format(reply.replyDate,'yyyy년MM월dd일')}]]</p>
 					<hr>
 					<!-- 대댓글 출력 -->
-					<div th:each="comment : ${reply.commentList}" style="border: 1px solid black;">
+					<div th:each="comment : ${reply.commentList}"
+						style="border: 1px solid black;">
 						<p>대댓글 내용 : [[${comment.commentContent}]]</p>
 						<p>작성일자 :
 							[[${#dates.format(comment.commentDate,'yyyy년MM월dd일')}]]</p>
+						<th:block th:each="replyfiles : ${replyfile}">
+							<p>
+								파일 <a th:href="|@{/download}/${replyfiles.downloadLocation}|">[[${file.homeworkfileName}]]</a>
+							</p>
+						</th:block>
 					</div>
 					<!-- 대댓글 출력 끝-->
-
+					<!-- 댓글출력 끝 -->
 					<div id="commentInsert" class="col-12 " style="text-align: right;">
-						<button class="main-btn primary-btn btn-hover commentBtn " type="button">답글</button>
-						<!-- <div class="reply_data"></div>  -->
-						
+						<button class="main-btn primary-btn btn-hover commentBtn "
+							type="button">답글</button>
+
 						<!-- 대댓글 등록 -->
-						<form name="insertComment" method="post" th:action="@{/insertComment}" th:object="${homeworkList}">
-							<input type="hidden"  name="replyId" th:value="${reply.replyId}">
-							<input type="hidden"  th:field="*{homeworkId}">
-							<textarea name="commentContent" style="border: 1px solid black;" rows="8" cols="50" placeholder="내용을 입력하세요" th:field="*{commentContent}" ></textarea>
+						<form class="insertComment" id="addComment" method="post"
+							th:action="@{/insertComment}" th:object="${homeworkList}">
+							<input type="hidden" name="replyId" th:value="${reply.replyId}">
+							<input type="hidden" th:field="*{homeworkId}">
+							<textarea name="commentContent" style="border: 1px solid black;"
+								rows="8" cols="50" placeholder="내용을 입력하세요"
+								th:field="*{commentContent}"></textarea>
 							<div class="col-12" style="text-align: left;">
-								<button id="commentInsertBtn" class="main-btn primary-btn btn-hover" type="submit">답글 등록</button>
+								<button class="main-btn primary-btn btn-hover commentInsertBtn"
+									type="submit">답글 등록</button>
 							</div>
 						</form>
 						<!-- 대댓글 등록 끝 -->
 					</div>
 				</div>
-
 			</div>
+
 			<!-- end reply  -->
 			<h3>댓글 작성</h3>
-			<form name="insertReply" method="post" th:object="${homeworkList}" enctype="multipart/form-data">
+			<form name="insertReply" id="addReply" method="post"
+				th:object="${homeworkList}" enctype="multipart/form-data">
 				<input type="hidden" th:field="*{homeworkTargetId}"> <input
 					type="hidden" th:field="*{homeworkId}">
 				<textarea style="border: 1px solid black;" rows="8" cols="50"
 					placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
 				<div class="col-12" style="text-align: center;">
-				<input type="file" name="uploadFiles" multiple>
+					<input type="file" name="uploadFiles" multiple>
 					<button id="insertBtn" class="main-btn primary-btn btn-hover"
 						type="button">등록</button>
 				</div>
@@ -119,63 +160,27 @@
 </main>
 
 <script>
-let values = $('input[name="replyId"]').val();
-console.log(values)
-	//대댓글 등록
-
-	// 답글 클릭 시 대댓글 입력창 생성
-	/* $('.commentBtn').on('click', function(e) {
-		e.preventDefault();
-		      $('.reply_data').append(
-		    `<div>
-		        <form name="insertComment" method="post" >
-		          <input name="hidden" type="hidden" >
-		         <textarea name="commentContent"style="border: 1px solid black;"rows="8" cols="50" placeholder="내용을 입력하세요" ></textarea>
-		         <div class="col-12" style="text-align: left;">
-		            <button id="commentInsertBtn" class="main-btn primary-btn btn-hover" type="button">답글 등록</button>
-		         </div>
-		      </form>
-		   </div>`
-		     ); 
-		let commentInsert = $('form[name="insertComment"]').serialize();
-		console.log("대댓글버튼 = " + commentInsert);
-
-		// 답글 등록 버튼으로 등록하기
-		$('.reply_data').on('click', '#commentInsertBtn', function() {
-			let commentInsert = $('input[name="hidden"]').val();
-			console.log("대댓글버튼 = " + commentInsert);
-
-			$.ajax({
-				url : "insertComment",
-				type : "POST",
-				data : commentInsert,
-				success : function(data) {
-					alert("성공");
-				},
-				error : function(err) {
-					alert("error");
-				}
-			});
-		});
-	}); */
-	//답글창 
-/* 	$("#commentInsert").css("display","none"); */
-	
 	//댓글 등록
 	$('#insertBtn').on('click', addReply);
 
 	function addReply() {
-		let formValues = $('form[name="insertReply"]').serialize();
-		let content = document.getElementById('replyContent');
+		// 댓글내용 없을 시 모달띄움
+		let replyCentent = document.getElementById('replyContent');
+		let commentContent = document.getElementById('commentContent');
 
-		if (content.value == '') {
+		//파일 업로드
+		let formData = new FormData(document.getElementById('addReply'))
+		if (replyCentent.value == '') {
 			$('#modalReply').modal('show');
+			replyCentent.focus();
 			return;
 		} else {
 			$.ajax({
 				url : "insertReply",
 				type : "POST",
-				data : formValues,
+				processData : false, // QueryString(key=value)로 자동변환 무시
+				contentType : false, // FormData가 가지고 있는 통신 정보를 사용
+				data : formData,
 				success : function(json) {
 					$('#modal').modal('show');
 				},
@@ -183,7 +188,34 @@ console.log(values)
 					alert("error");
 				}
 			});
+
 		}
 	}
+
+	// 대댓글 등록
+	/* $('.commentInsertBtn').on('click', addComment);
+
+	function addComment() {
+		let formValues = $('form[class="insertComment"]').serialize();
+
+		if (commentContent.value == '') {
+			$('#commentCentent').modal('show');
+			commentCentent.focus();
+			return;
+		} else {
+
+			$.ajax({
+				url : "insertComment",
+				type : "POST",
+				data : formValues,
+				success : function(json) {
+					$('#modal').modal('show');
+				},
+				error : function(err) {
+					$('#modalError').modal('show');
+				}
+			});
+		}
+	} */
 </script>
 </html>
