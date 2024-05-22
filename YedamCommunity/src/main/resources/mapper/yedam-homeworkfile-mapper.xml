@@ -24,4 +24,58 @@ VALUES
      #{homeworkId}
     )
 	</insert>
+	
+	<!-- 댓글 파일 등록 -->
+	<insert id="insertReplyfFile" parameterType="ReplyFileVO">
+	INSERT INTO replyfiles
+    		(replyfile_id,
+    		replyfile_name,
+    		replyfile_size,
+    		replyfile_location,
+    		download_location,
+    		replyfile_ext,
+    		reply_id)
+	VALUES
+		 (replyfile_id_seq.nextval,
+  	      #{replyfileName},
+  	      #{replyfileSize},
+  	      #{replyfileLocation},
+     	  #{downloadLocation},
+     	  #{replyfileExt},
+     	  #{replyId}
+    )
+	</insert>
+	<!-- 과제파일 조회 -->
+	<select id="selectHomeworkfile" parameterType="HomeWorkFileVO">
+	SELECT  homeworkfile_id,
+      		homeworkfile_name,
+        	homeworkfile_size,
+        	homeworkfile_location,
+        	download_location,
+        	homeworkfile_ext,
+        	homework_id
+	FROM    homeworkfiles
+	WHERE   homework_id= #{homeworkId}
+	</select>
+	
+	<!-- 댓글 파일 조회 -->
+	<select id="selectReplyfile" parameterType="ReplyFileVO">
+	SELECT  replyfile_id,
+      		replyfile_name,
+        	replyfile_size,
+        	replyfile_location,
+        	download_location,
+        	replyfile_ext,
+        	reply_id
+	FROM    replyfiles
+	WHERE   reply_id= #{replyId}
+	</select>
+	
+	
+	<!-- 파일 이름 조회 -->
+		<select id="selectFileName" parameterType="HomeWorkFileVO">
+	SELECT  homeworkfile_location
+	FROM    homeworkfiles
+	WHERE   download_location = #{downloadLocation}
+	</select>
   </mapper>

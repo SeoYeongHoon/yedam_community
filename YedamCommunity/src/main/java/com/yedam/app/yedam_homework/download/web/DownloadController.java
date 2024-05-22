@@ -16,9 +16,7 @@ public class DownloadController {
 	DownloadService downloadService;
 	
 	@GetMapping("/download/{downloadLocation}")
-	@ResponseBody
 	public ResponseEntity<Object> download (@PathVariable String downloadLocation){
-		
-		return null;
+		return downloadService.downloadFile(downloadLocation);
 	}
 }

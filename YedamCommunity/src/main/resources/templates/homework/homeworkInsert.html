@@ -70,7 +70,7 @@
 				<h6>과제 등록</h6>
 			</div>
 			<!-- 입력시작 -->
-			<form method="post" id="InsertForm" name="InsertForm" th:object="${homeworkVO}"
+			<form method="post" id="insertForm" name="insertForm" th:object="${homeworkVO}"
 				enctype="multipart/form-data">
 				<div class="row">
 					<div class="col-12">
@@ -272,7 +272,7 @@
 			let date = document.getElementById('homeworkDate');
 			
 			// 파일 업로드
-			let formData = new FormData(document.getElementById('InsertForm'));
+			let formData = new FormData(document.getElementById('insertForm'));
 	
 			if (title.value == '') {
 				$('#modalTitle').modal('show');

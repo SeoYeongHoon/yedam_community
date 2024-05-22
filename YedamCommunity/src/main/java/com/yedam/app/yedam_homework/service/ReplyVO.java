@@ -3,6 +3,8 @@ package com.yedam.app.yedam_homework.service;
 import java.util.Date;
 import java.util.List;
 
+import com.yedam.app.yedam_homework.upload.service.ReplyFileVO;
+
 import lombok.Data;
 
 @Data
@@ -14,4 +16,5 @@ public class ReplyVO {
 	private String replyWriter;
 	private int homeworkTargetId;
 	private List<CommentVO> commentList;
+	private List<ReplyFileVO> replyfileLIst;
 }
