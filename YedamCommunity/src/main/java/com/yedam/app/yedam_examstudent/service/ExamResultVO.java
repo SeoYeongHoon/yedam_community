@@ -9,6 +9,11 @@ public class ExamResultVO {
 	private int subjectId;
 	private int passScore;
 	private int testTargetId;
+	
+	//기타
+	private int testId;
+	private int userId;
+	private String name;
 	public int getResultId() {
 		return resultId;
 	}
@@ -56,6 +61,24 @@ public class ExamResultVO {
 	}
 	public void setTestTargetId(int testTargetId) {
 		this.testTargetId = testTargetId;
+	}
+	public int getTestId() {
+		return testId;
+	}
+	public void setTestId(int testId) {
+		this.testId = testId;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

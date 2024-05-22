@@ -93,6 +93,7 @@
 		<div>
 			<h3 class="tstart_2">제한시간:</h3>
 			<h3 id="testTimeMin" class="tstart_2">[[${testStart.testTime}]]</h3>
+			<input id="testTime" type="hidden" th:value="${testStart.testTime}">
 			<h3 class="tstart_2">:</h3>
 			<h3 id="testTimeSec" class="tstart_2">00</h3>
 		</div>
@@ -190,9 +191,8 @@ let testTimeMin = document.querySelector('#testTimeMin');
 let testTimeSec = document.querySelector('#testTimeSec');
 let toastMsg = document.querySelector('#toast_message');
 let testTime = testTimeMin.innerText; //서버에서 받아온 시험시간
-let min = testTime;
-//let min = 0;
-let sec = 0;
+let min = testTime; //분
+let sec = 0; //초
 setInterval(function(){
 	sec--;
 	if(sec < 0){ //초 리셋
@@ -248,23 +248,24 @@ setInterval(function(){
 		for(let i = 0; i < submitAnswerVal.length; i++){ //답안 길이만큼 반복		
 			submitAnswer[i] = submitAnswerVal[i].value //현재 선택된 답안들 배열에 저장
 		}
-		let testIdVal = document.querySelector('#testId');
+		let testIdVal = document.querySelector('#testId'); //파라미터용 시험번호 
 		let testId = testIdVal.value;
-		$.ajax({ //답안 저장 ajax
+		$.ajax({ //답안 저장 ajax, 제출 후 페이지 이동
 			url: 'testStart1',
 			method: 'post',
 			data: {
 				submitAnswer: submitAnswer,
 				randQuizId: randQuizId,
 				randRn: randRn,
-				randQuizScore: randQuizScore
+				randQuizScore: randQuizScore,
+				testId: testId
 			},
 			dataType: 'json',
 			traditional: true,
 			success: function(data){
-				console.log(data);
-				console.log(submitAnswer);
-				location.href = '/testResult?testId=' + testId;
+				//console.log(data);
+				//console.log(submitAnswer);
+				location.href = '/testResult?testId=' + testId + '&min=' + Number(testTime) + '&sec=' + 0;
 			},
 			error: function(){
 				console.log('error');
@@ -677,21 +678,36 @@ function submitTest(){
 		for(let i = 0; i < submitAnswerVal.length; i++){ //답안 길이만큼 반복		
 			submitAnswer[i] = submitAnswerVal[i].value //현재 선택된 답안들 배열에 저장
 		}
-		$.ajax({ //답안 저장 ajax
+		// 시간이 계속 흘러가는데 확인버튼 눌렀을때 전체 시간 - 현재 시간 = 응시 시간
+		let testTimeMin = document.querySelector('#testTimeMin'); //현재 분
+		let testTimeSec = document.querySelector('#testTimeSec'); //현재 초
+		let testTimeVal = document.querySelector('#testTime'); //서버에서 받아온 시험시간
+		let testTime = testTimeVal.value;
+		let min = 0;
+		let sec = 0;
+		if(Number(testTimeSec.innerText) > 0){ //지나간 분 계산
+			min = testTime - Number(testTimeMin.innerText) - 1;
+			sec = 60 - Number(testTimeSec.innerText);
+		}
+		else{
+			min = testTime - Number(testTimeMin.innerText);
+		}
+		$.ajax({ //답안 저장 ajax, 제출 후 페이지 이동
 			url: 'testStart1',
 			method: 'post',
 			data: {
 				submitAnswer: submitAnswer,
 				randQuizId: randQuizId,
 				randRn: randRn,
-				randQuizScore: randQuizScore
+				randQuizScore: randQuizScore,
+				testId: testId
 			},
 			dataType: 'json',
 			traditional: true,
 			success: function(data){
 				console.log(data);
 				console.log(submitAnswer);
-				location.href = '/testResult?testId=' + testId;
+				location.href = '/testResult?testId=' + testId + '&min=' + min + '&sec=' + sec;
 			},
 			error: function(){
 				console.log('error');

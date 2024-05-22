@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CbtStudentService {
 	//전체시험목록 조회
-	public List<TestVO> testListAll();
+	public List<TestVO> testListAll(String userId);
 	//시험상세정보 조회
 	public TestVO testDetail(TestVO testVO);
 	//시험문제랜덤
@@ -21,4 +21,10 @@ public interface CbtStudentService {
 	public int quizCnt(QuizboxVO quizboxVO);
 	//문제 제출
 	public boolean testSubmit(TestResultVO testResultVO);
+	//시험 결과 등록
+	public boolean testSubmit2(ExamResultVO examResultVO);
+	//시험 결괏 수정
+	public boolean testSubmit3(ExamResultVO examResultVO);
+	//시험 결과
+	public ExamResultVO testResult(ExamResultVO examResultVO);
 }

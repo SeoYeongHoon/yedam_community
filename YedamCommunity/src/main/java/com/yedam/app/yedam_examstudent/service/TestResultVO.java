@@ -9,6 +9,9 @@ public class TestResultVO {
 	private int quizId;
 	private int isCorrect;
 	private int userId;
+	//기타
+	private int testId;
+	private int resultId;
 	public int getTestResultId() {
 		return testResultId;
 	}
@@ -38,6 +41,18 @@ public class TestResultVO {
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	public int getTestId() {
+		return testId;
+	}
+	public void setTestId(int testId) {
+		this.testId = testId;
+	}
+	public int getResultId() {
+		return resultId;
+	}
+	public void setResultId(int resultId) {
+		this.resultId = resultId;
 	}
 	
 	
