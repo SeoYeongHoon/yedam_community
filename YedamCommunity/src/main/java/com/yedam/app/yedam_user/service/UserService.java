@@ -31,12 +31,10 @@ public interface UserService {
 	
 	public List<UserVO> stdList();
 	
-	// 어드민페이지 유저 리스트 전체(페이징)
-	public List<UserVO> userList();
-	
 	// 페이지네이션 카운트
 	int userTotalCnt();
 
+	// 회원가입 완료된 유저들 목록 출력
 	public List<UserVO> getUsersByFilter(String filter);
 
 	// 회원가입 신청 유저 상세정보

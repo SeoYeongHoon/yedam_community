@@ -12,6 +12,10 @@
 		}
 	</style>
 	<script>
+		window.onload = function() {
+			filterUsers();
+		};
+		
 		// SELECT 박스 코드
 		function filterUsers() {
 	        var filterValue = document.getElementById('userFilter').value;
@@ -363,7 +367,7 @@
 							<div class="select-style-1" style="position: relative; margin-top: 20px; margin-bottom: 10px;">
 								<div class="select-position" style="max-width: 300px;">
 									<select name="userFilter" id="userFilter" style="padding: 10px; color: white; background-color: #e96b56;" onchange="filterUsers()">
-										<option name="showAll" value="showAll">전체</option>
+										<option name="showAll" value="showAll" selected>전체</option>
 										<option name="showGrad" value="showGrad">수료생</option>
 										<option name="showLearn" value="showLearn">수강생</option>
 									</select>
