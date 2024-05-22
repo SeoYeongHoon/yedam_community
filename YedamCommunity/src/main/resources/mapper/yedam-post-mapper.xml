@@ -50,28 +50,31 @@
         VALUES (v_boardfile_id
               , #{boardId}
               , v_post_id
-              , #{boardfileName, jdbcType=VARCHAR}
-              , #{boardfileSize, jdbcType=BIGINT}
+              , #{boardfileName,     jdbcType=VARCHAR}
+              , #{boardfileSize,     jdbcType=BIGINT}
               , #{boardfileLocation, jdbcType=VARCHAR}
-              , #{boardfileExt, jdbcType=VARCHAR});
+              , #{boardfileExt,      jdbcType=VARCHAR});
     END;
     ]]>
     </insert>
 
 	<!-- 게시글 단건조회  수정 필요 -->
 	<select id="getPostDetails" parameterType="int" resultType="Post">
-		SELECT p.post_id
-		     , p.title
-		     , p.post_content
-		     , p.create_date AS post_create_date
-		     , p.writer AS post_writer
-		     , p.post_view
-		     , p.post_like
-		     , p.update_date AS post_update_date
-		     , b.boardfile_name
-		FROM posts p LEFT JOIN boardfiles b 
-		               ON p.post_id = b.post_id
-		WHERE p.post_id = #{postId}
+		SELECT p.post_id,
+               p.title,
+               p.post_content,
+               p.create_date,
+               p.writer,
+               p.update_date,
+               p.post_view,
+               p.post_like,
+               b.boardfile_id,
+               b.boardfile_name,
+               b.boardfile_location
+        FROM posts p
+        LEFT JOIN boardfiles b ON p.post_id = b.post_id
+        WHERE p.post_id = #{postId}
+
 	</select>
 
 	<!-- 게시글 전체 조회 -->
@@ -135,13 +138,23 @@
         WHERE post_id = #{postId}
     </update>
     
-    <!-- 추천수 조회 -->
+    <!-- 추천수 조회 likes 테이블 -->
      <select id="likeCheck" parameterType="map" resultType="Integer">
     	SELECT post_like
     	FROM likes
     	WHERE post_id = #{postId}
     	AND user_id = #{userId}
     </select> 
+    
+    <!-- 게시글 추천시 likes 테이블에 insert -->
+    <insert id="insertLike">
+    	INSERT INTO likes (like_id
+                         , post_id
+                         , user_id)	
+		VALUES (like_id_seq.nextval
+              , #{postId}
+              , #{userId})
+    </insert>
     
     <!-- 추천수 + 1 -->
     <update id="updatePostLikePlus" parameterType="int">

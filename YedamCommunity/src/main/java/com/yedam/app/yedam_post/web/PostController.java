@@ -19,6 +19,7 @@ import com.yedam.app.yedam_post.service.Comment;
 import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.Reply;
+import com.yedam.app.yedam_post.service.Report;
 
 @Controller
 public class PostController {
@@ -28,13 +29,12 @@ public class PostController {
 
 	/**
 	 * 게시글 리스트 조회
-	 * 
 	 * @param page     현재 페이지 번호, 기본값은 1
 	 * @param pageSize 한 페이지당 게시글 수, 기본값은 10
 	 * @param Model    객체
 	 * @return 게시글 리스트 페이지
 	 */
-	@GetMapping("postList")
+	@GetMapping("/postList")
 	public String postList(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int pageSize,
 			Model model) {
 		List<Post> list = postService.getAllPosts();
@@ -56,7 +56,7 @@ public class PostController {
 	 * @param Model  객체
 	 * @return 게시글 상세 페이지
 	 */
-	@GetMapping("postInfo")
+	@GetMapping("/postInfo")
 	public String getPostDetail(Post post, int postId, Model model) {
 		// 게시글단건 조회
 		postService.PostViewCnt(postId);
@@ -70,9 +70,8 @@ public class PostController {
 			reply.setComments(commentlist);
 		}
 		postfind.setReplies(replylist);
-
+		
 		model.addAttribute("postInfo", postfind);
-
 		return "posts/postInfo";
 	}
 
@@ -82,10 +81,10 @@ public class PostController {
 	 * @param model Spring MVC의 Model 객체
 	 * @return 게시글 등록 페이지
 	 */
-	@GetMapping("postInsert")
+	@GetMapping("/postInsert")
 	public String postInsertForm(Model model) {
 		Post post = new Post();
-		post.setBoardId(1); // 게시판 1번
+		post.setBoardId(1);; // 게시판 1번
 		post.setUserId(1); // 유저 1번
 		model.addAttribute("post", post);
 		return "posts/postinsert";
@@ -97,17 +96,17 @@ public class PostController {
 	 * @param post 등록할 게시글 객체
 	 * @return 게시글 리스트 페이지로 리다이렉트
 	 */
-	@PostMapping("postInsert")
+	@PostMapping("/postInsert")
 	public String postInsertProcess(Post post, @RequestParam("file") MultipartFile file) {
 		try {
 			if (!file.isEmpty()) {
 				String fileName = file.getOriginalFilename();
-				String filePath = "C:/upload/" + fileName;
+				String filePath = "C:/upload/picture/" + fileName;
 				File dest = new File(filePath);
 				file.transferTo(dest);
 
 				post.setBoardfileName(fileName);
-				//post.setBoardfileSize(file.getSize());
+				post.setBoardfileSize(file.getSize());
 				post.setBoardfileLocation(filePath);
 				post.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
 			}
@@ -128,7 +127,7 @@ public class PostController {
 	 * @param Model  객체
 	 * @return 게시글 리스트 페이지로 리다이렉트
 	 */
-	@GetMapping("postDelete")
+	@GetMapping("/postDelete")
 	public String postDelete(@RequestParam("postId") int postId, Model model) {
 		Post post = new Post();
 		post.setPostId(postId);
@@ -150,7 +149,7 @@ public class PostController {
 	 * @param Model  객체
 	 * @return 게시글 업데이트 페이지
 	 */
-	@GetMapping("postUpdate")
+	@GetMapping("/postUpdate")
 	public String postUpdateForm(Post post, Model model) {
 		if (post == null) {
 			return "redirect:postList";
@@ -169,16 +168,42 @@ public class PostController {
 	 * @param post 업데이트할 게시글 객체
 	 * @return 성공 또는 오류 메시지를 담은 Map 객체
 	 */
-	@PostMapping("postUpdate")
+	@PostMapping("/postUpdate")
 	@ResponseBody
 	public Map<String, Object> postUPdateProcess(@RequestBody Post post) {
 		post.setUpdateDate(new Date());
 		return postService.PostUpdate(post);
 	}
+	
+	/**
+     * 게시글 신고 처리
+     * @param postId 신고할 게시글 ID
+     * @param reportReason 신고 이유
+     * @param userId 신고한 사용자 ID
+     * @return 성공 메시지
+     * @throws Exception 예외 처리
+     */
+    @PostMapping("/reportPost")
+    @ResponseBody
+    public String reportPost(@RequestParam("postId") int postId,
+                             @RequestParam("reportType") int reportType,
+                             @RequestParam("boardId") int boardId,
+                             @RequestParam("reporter") String reporter
+                             ){
+        Report report = new Report();
+        report.setReporter(reporter);
+        report.setProcess(0);
+        report.setReportType(reportType);
+        report.setBoardId(1);
+        report.setPostId(postId);
+        postService.createReport(report);
+        return "success";
+    }
 
+	// 작업중
 	@PostMapping("")
 	@ResponseBody
-	public int updateLike(@RequestParam int postId, @RequestParam String userId) throws Exception {
+	public int updateLike(@RequestParam int postId, @RequestParam String userId){
 		int likeCheck = postService.likeCheck(postId, userId);
 		if (likeCheck == 0) {
 			// 좋아요 처음 누름

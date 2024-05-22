@@ -27,7 +27,8 @@ public class ReplyController {
      */
 	@PostMapping("addReply")
 	@ResponseBody
-	public String addReply(@RequestParam("postId") int postId, @RequestParam("replyContent") String replyContent) {
+	public String addReply(@RequestParam("postId") int postId, 
+			               @RequestParam("replyContent") String replyContent) {
 		Reply reply = new Reply();
 		reply.setPostId(postId);
 		reply.setBoardId(1); // 게시판 1번유형

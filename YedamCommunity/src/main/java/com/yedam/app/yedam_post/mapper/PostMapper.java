@@ -35,7 +35,6 @@ public interface PostMapper {
     
 	  // 게시글 등록
     public int insertPost(Post post);
-    
 	
 	  // 게시글 수정
     public int updatePost(Post post);
