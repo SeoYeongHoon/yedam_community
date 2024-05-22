@@ -16,6 +16,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 	@Autowired
 	CurriculumMapper curriculumMapper;
 	
+	//과정 전체조회
 	@Override
 	public List<CurriculumVO> CurriculumList() {
 		return curriculumMapper.cSelectAll();

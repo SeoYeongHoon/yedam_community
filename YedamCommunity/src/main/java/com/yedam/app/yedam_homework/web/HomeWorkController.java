@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumService;
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_homework.service.CommentVO;
 import com.yedam.app.yedam_homework.service.HomeWorkReplyService;
 import com.yedam.app.yedam_homework.service.HomeWorkService;
@@ -21,7 +23,6 @@ import com.yedam.app.yedam_homework.service.ReplyVO;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileService;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
 import com.yedam.app.yedam_homework.upload.service.ReplyFileVO;
-import com.yedam.app.yedam_post.service.Reply;
 import com.yedam.app.yedam_subjects.service.SubjectService;
 
 @Controller
@@ -43,6 +44,9 @@ public class HomeWorkController {
 
 	@Autowired
 	HomeWorkFileService homeworkfileService;
+	
+	@Autowired
+	CurriculumService curriculumService;
 
 	// ----------------
 	// 과제 목록(교수)
@@ -51,11 +55,19 @@ public class HomeWorkController {
 	public String homeworkList(Model model) {
 		// 과제 조회
 		List<HomeWorkVO> list = homeworkService.homeworkList();
-		System.err.println(list);
+		List<CurriculumVO> classList = curriculumService.CurriculumList();
+		
 		model.addAttribute("homeworklist", list);
+		model.addAttribute("classId",classList);
+		System.err.println(classList);
 		return "homework/homeworkList_t"; // 출력할 페이지
 	}
-
+	
+	@PostMapping("homeworkListT")
+	public String homeworkselectList(int classId) {
+		
+		return "homework/homeworkList_t";
+	}
 	// ----------------
 	// 과제 목록(학생)
 	// ----------------

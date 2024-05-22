@@ -1,40 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{common/layouts/admin_layout}"
-	  layout:fragment="Admin">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
 <head>
 <meta charset="UTF-8">
 <title>과제 목록 교수</title>
 <style>
- .row{
- 	width:100%;
- }
+.row {
+	width: 100%;
+}
 </style>
 </head>
 <h1>과제 목록 교수</h1>
 <div class="row">
-<div class="col-10">
-<div style='float: right;'>
-	<a href="selectClass" class=" primary-btn rounded-full btn-hover"style='padding:10px;'>
-		<font style="vertical-align: inherit;">
-			<font style="vertical-align: inherit;">+ 과제</font>
-		</font>
-	</a>
-</div>
-</div>
+	<div class="col-10">
+		<div style='float: right;'>
+			<a href="selectClass" class=" primary-btn rounded-full btn-hover"
+				style='padding: 10px;'> <font style="vertical-align: inherit;">
+					<font style="vertical-align: inherit;">+ 과제</font>
+			</font>
+			</a>
+		</div>
+	</div>
 </div>
 <div class="row">
 	<div class="col-10">
 		<div class="card-style mb-30">
 			<h1 class="mb-30">과제 목록</h1>
-			<div class="col-12">
-						<select th:field="*{subjectId}">
-							<option th:each="subjectList : ${subject}"
-								th:value="${subjectList.subjectId}">
-								[[${subjectList.subjectName}]]</option>
-						</select>
-					</div>
+				<select >
+					<option th:each="class : ${classId}" th:value="${class.classId}">[[${class.classId}]] 강의실</option>
+				</select>
 			<div class="table-wrapper table-responsive">
 				<table class="table">
 					<thead>
@@ -51,7 +47,7 @@
 							<th>
 								<h6>마감일</h6>
 							</th>
-							
+
 							<th>
 								<h6>진행상태</h6>
 							</th>
@@ -60,13 +56,16 @@
 					</thead>
 					<tbody>
 						<th:block th:each="homeworkinfo : ${homeworklist}">
-							<tr th:onclick="|location.href='@{/homeworkInfo(homeworkId=${homeworkinfo.homeworkId})}'|">
+							<tr
+								th:onclick="|location.href='@{/homeworkInfo(homeworkId=${homeworkinfo.homeworkId})}'|">
 								<td class="min-width">[[ ${homeworkinfo.classId} ]]강의실</td>
 								<td class="min-width">[[ ${homeworkinfo.homeworkTitle} ]]</td>
 								<td class="min-width">[[ ${homeworkinfo.subjectName} ]]</td>
-								<td class="min-width tDate" th:value="${#dates.format(homeworkinfo.homeworkDate,'yyyy-MM-dd')}"><td>[[${#dates.format(homeworkinfo.homeworkDate,'yyyy년MM월dd일')}]]</td>
-								<td class="min-width"><span class="status-btn active-btn process">진행중</span>
-								</td>
+								<td class="min-width tDate"
+									th:value="${#dates.format(homeworkinfo.homeworkDate,'yyyy-MM-dd')}">
+								<td>[[${#dates.format(homeworkinfo.homeworkDate,'yyyy년MM월dd일')}]]</td>
+								<td class="min-width"><span
+									class="status-btn active-btn process">진행중</span></td>
 							</tr>
 						</th:block>
 						<!-- end table row -->
@@ -81,32 +80,32 @@
 </div>
 
 <script>
-//날짜 포멧 변환 함수
-function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+	//날짜 포멧 변환 함수
+	function formatDate(date) {
+		var d = new Date(date), month = '' + (d.getMonth() + 1), day = ''
+				+ d.getDate(), year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+		if (month.length < 2)
+			month = '0' + month;
+		if (day.length < 2)
+			day = '0' + day;
 
-    return [year, month, day].join('-');
-} // 날짜 포멧 변환 end
-var today = new Date();
-console.log(today);
-var today1 = formatDate(today);
-console.log(today1);
-// 날짜 비교해서 시험진행 상태 변경
-var arry = [];
-$('.tDate').each(function (index, item) {
-    arry.push($('.tDate').attr("value"));
-    if(arry[index] < today1){
-    	$('.process').text('종료');
-    	$('.process').attr('class', 'status-btn close-btn process');
-    } else {
-    	$('.process').text('진행중');
-    }
-});	
+		return [ year, month, day ].join('-');
+	} // 날짜 포멧 변환 end
+	var today = new Date();
+	console.log(today);
+	var today1 = formatDate(today);
+	console.log(today1);
+	// 날짜 비교해서 시험진행 상태 변경
+	var arry = [];
+	$('.tDate').each(function(index, item) {
+		arry.push($('.tDate').attr("value"));
+		if (arry[index] < today1) {
+			$('.process').text('종료');
+			$('.process').attr('class', 'status-btn close-btn process');
+		} else {
+			$('.process').text('진행중');
+		}
+	});
 </script>
 </html>
