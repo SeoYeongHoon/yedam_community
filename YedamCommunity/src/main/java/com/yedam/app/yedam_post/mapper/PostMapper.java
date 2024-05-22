@@ -19,7 +19,7 @@ public interface PostMapper {
     public int updatePostViewCNT(int postId);
     
       // 추천확인
-    public int likeCheck(int postId);
+    public int likeCheck(Map<String, Object> map);
     
       // 개추 (추천수 증가)
     public int updatePostLikePlus(int postId);
@@ -35,6 +35,7 @@ public interface PostMapper {
     
 	  // 게시글 등록
     public int insertPost(Post post);
+    
 	
 	  // 게시글 수정
     public int updatePost(Post post);
@@ -45,10 +46,10 @@ public interface PostMapper {
     public int deletePost3(int postId);
     public int deletePost5(int postId);
     
-      // 페이지 네이션
+      // 페이지네이션
     public List<Post> getPosts(@Param("startRow") int startRow, @Param("endRow") int endRow);
       
       // 게시글 개수
     public int getPostCount();
-    
+
 }

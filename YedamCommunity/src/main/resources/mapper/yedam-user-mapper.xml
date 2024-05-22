@@ -64,7 +64,7 @@
 			, email
 			, tel
 			, address
-			, user_image
+			<!--, user_image-->
 			, company_info
 			, user_type
 			, curriculum_id
@@ -76,7 +76,7 @@
 			, #{email}
 			, #{tel}
 			, #{address}
-			, #{userImage}
+			<!--, #{userImage}-->
 			, #{companyInfo}
 			, #{userType}
 			, #{curriculumId}
@@ -141,7 +141,7 @@
 	            , tel
 	            , email
 	            , address
-	            , user_image
+	            <!--, user_image-->
 	            , company_info
 	            , user_type
 	            , curriculum_id
@@ -153,7 +153,7 @@
 	            , tel
 	            , email
 	            , address
-	            , user_image
+	            <!--, user_image-->
 	            , company_info
 	            , user_type
 	            , curriculum_id

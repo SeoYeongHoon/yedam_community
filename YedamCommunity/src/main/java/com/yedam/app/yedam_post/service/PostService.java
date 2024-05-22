@@ -7,7 +7,7 @@ public interface PostService {
 	
 	// 게시글 등록
 	public int createPost(Post post);
-    
+	
 	// 게시글 전체 조회
 	public List<Post> getAllPosts();
     
@@ -31,6 +31,8 @@ public interface PostService {
 	
 	/*=====================================================*/
 	
+	// 추천 확인
+	int likeCheck(int postId, String userId);
 	
 	// 추천수 + 1
 	public int updateLike(int postId);

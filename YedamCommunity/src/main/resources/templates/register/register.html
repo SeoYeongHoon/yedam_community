@@ -26,7 +26,7 @@
 	                <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
 	            </div>
 			</div>
-			<form id="register_form" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" method="post">
+			<form method="post" action="/register" id="register_form" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" enctype="multipart/form-data">
 				<div class="row">
 					<div class="col-12">
 						<!-- input style start -->
@@ -121,7 +121,7 @@
 									<input name="userImage" type="file" placeholder="현재 수강생 또는 취업 준비 중이면 공란">
 								</div>-->
 								<div>
-								    <input type="file" id="chooseFile" name="userImage" onchange="loadFile(this)" required="true" autofocus="">
+								    <input type="file" id="chooseFile" name="uploadFiles" onchange="loadFile(this)">
 						        </div>
 								<div class="col-md-12 mb-3 mt-4" style="max-width: 600px;">
 							    	<div class="image-show" id="image-show"></div>
