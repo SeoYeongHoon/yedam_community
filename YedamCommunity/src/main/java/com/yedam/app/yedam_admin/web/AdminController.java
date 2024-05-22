@@ -37,25 +37,7 @@ public class AdminController {
 
 	// 어드민 메인 페이지 및 유저 전체조회
 	@GetMapping("/adminMain")
-	public String adminPage(Model model, HttpServletRequest req) {
-//		HttpSession session = req.getSession();
-////	    String logid = (String) session.getAttribute("logid");
-//	    String logType = (String) session.getAttribute("logType");
-//	    System.out.println("로그인 타입: " + logType);
-	    
-//	    if (logType == null) {
-//	    	return "login/loginForm";
-//	    }
-//
-//	    if (!logType.equals("ROLE_ADMIN")) {
-//	        return "redirect:/home";
-//	    }
-	    
-		// 관리자 최초 페이지. 수강생, 수료생 리스트 출력.
-		List<UserVO> requestList = userService.stdList();
-		List<UserVO> userList = userService.userList();
-		model.addAttribute("requests", requestList);
-		model.addAttribute("users", userList);
+	public String adminPage() {
 
 		return "admin/adminMain";
 	}

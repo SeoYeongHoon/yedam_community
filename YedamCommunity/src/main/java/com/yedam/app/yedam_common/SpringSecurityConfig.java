@@ -23,21 +23,19 @@ public class SpringSecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
 		http
-			.authorizeHttpRequests()
+			.authorizeHttpRequests(requests ->requests
 				.antMatchers("/**").permitAll()
-				.antMatchers("/adminMain").hasRole("ADMIN")
+//				.antMatchers("/adminMain").hasRole("ADMIN")
 				.antMatchers("/home").authenticated()
-				.anyRequest().authenticated()
-			.and()
-			.formLogin()
+				.anyRequest().authenticated())
+			.formLogin(login ->login
 				.loginPage("/").permitAll()
-				.defaultSuccessUrl("/home", true)
-			.and()
-			.logout()
+				.defaultSuccessUrl("/home", true))
+			.logout(logout ->logout
 				.logoutSuccessUrl("/")
-				.permitAll();
+				.permitAll());
 		
-		http.csrf().disable();
+		http.csrf(csrf ->csrf.disable());
 		
 		return http.build();
 	}

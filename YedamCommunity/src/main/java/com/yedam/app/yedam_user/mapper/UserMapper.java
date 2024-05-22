@@ -33,9 +33,6 @@ public interface UserMapper {
 	// (회원가입 신청한) 수강생, 수료생 리스트 전체
 	public List<UserVO> selectStdList();
 
-	// (회원가입 승인된) 유저 리스트 전체(페이징)
-	public List<UserVO> selectUserList();
-
 	// 페이지네이션 카운트
 	int getTotalCnt();
 

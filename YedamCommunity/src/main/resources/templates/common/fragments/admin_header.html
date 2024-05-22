@@ -167,9 +167,9 @@
 	        var currentPage = getCurrentPage();
 	        var navLinks = document.querySelectorAll('.sidebar-nav ul li a');
 	        console.log("현재 페이지: ", currentPage);
+			console.log("네비게이션", navLinks);
 	        
 	        for (var i = 0; i < navLinks.length; i++) {
-            	console.log("네비게이션: ", navLinks[i]);
             	
 	            if (navLinks[i].getAttribute('href') === ("/" + currentPage)) {
 	                navLinks[i].classList.add('active');

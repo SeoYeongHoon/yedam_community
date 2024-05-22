@@ -52,11 +52,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserVO> userList() {
-		return userMapper.selectUserList();
-	}
-
-	@Override
 	public int userTotalCnt() {
 		return userMapper.getTotalCnt();
 	}
