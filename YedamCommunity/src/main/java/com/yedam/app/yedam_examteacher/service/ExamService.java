@@ -24,7 +24,7 @@ public interface ExamService {
 	public List<TeacherVO> getQuizFilter(String sName); // 문제 필터링 출력
 	public List<TeacherVO> getQuizInfo(int qId); // 문제 자세히보기 (단건조회)
 	public List<TeacherVO> currList(); // 과정명 출력(과목명 추가할때 사용)
-	public List<TeacherVO> subjectListOfCurr(TeacherVO teacherVO); // 과목명 출력(과목 추가/삭제시 사용)
+	public List<TeacherVO> subjectListOfCurr(int cId); // 과목명 출력(과목 추가/삭제시 사용)
 	
 	// 시험 대상자 출력
 	public List<TeacherVO> userList(TeacherVO teacherVO);

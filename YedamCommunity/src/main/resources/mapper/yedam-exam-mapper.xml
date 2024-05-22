@@ -185,12 +185,13 @@
 		FROM subjects
 		ORDER BY subject_name
 	</select>
-	<!-- 과목명 출력(과목명 추가를 위해) -->
-	<select id="subjectOfCurr" resultType="TeacherVO">
+	<!-- 과목명 출력(과목명 삭제를 위해) -->
+	<select id="subjectOfCurr" resultType="TeacherVO" parameterType="int">
 		SELECT subject_name 
 		     , subject_id
+		     , curriculum_id
 		FROM subjects
-		WHERE curriculum_id = #{curriculumId}
+		WHERE curriculum_id = #{curriId}
 	</select>
 	<!-- 과목명 추가 -->
 	<insert id="insertSubject" parameterType="TeacherVO">
