@@ -30,10 +30,10 @@ public class DownloadServiceImpl implements DownloadService{
 	private String uploadPath;
 	
 	@Override
-	public ResponseEntity<Object> downloadFile(String downloadLocation) {
+	public ResponseEntity<Object> homeworkfileDownloadFile(String downloadLocation) {
 		
 		// 업로드된 파일경로 가져오기
-		String path = homeworkfileMapper.selectFileName(downloadLocation);
+		String path = homeworkfileMapper.selectHomeworkFileName(downloadLocation);
 		try {
 			Path filePath = Paths.get(path);
 			Resource resource = new InputStreamResource(Files.newInputStream(filePath)); 
@@ -55,7 +55,32 @@ public class DownloadServiceImpl implements DownloadService{
 			return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
 		}
 	}
+
+	@Override
+	public ResponseEntity<Object> replyfileDownloadFile(String downloadLocation) {
+		// 업로드된 파일경로 가져오기
+				String path = homeworkfileMapper.selectReplyFileName(downloadLocation);
+				try {
+					Path filePath = Paths.get(path);
+					Resource resource = new InputStreamResource(Files.newInputStream(filePath)); 
+
+					File file = new File(path);
+					
+					//파일명에서 uuid 제거
+					String makeName = URLEncoder.encode(file.getName(),"UTF-8");
+					// _기준으로 짜르기
+					String NameAry[] = makeName.split("_");
+					String DownName = NameAry[1];
+					
+					//파일생성
+					HttpHeaders headers = new HttpHeaders();
+					headers.setContentDisposition(ContentDisposition.builder("attachment").filename(DownName).build());
+
+					return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
+				} catch (Exception e) {
+					return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
+				}
 		
 	}
 
-
+}

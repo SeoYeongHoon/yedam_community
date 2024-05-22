@@ -15,8 +15,14 @@ public class DownloadController {
 	@Autowired
 	DownloadService downloadService;
 	
-	@GetMapping("/download/{downloadLocation}")
-	public ResponseEntity<Object> download (@PathVariable String downloadLocation){
-		return downloadService.downloadFile(downloadLocation);
+	//과제 파일 다운로드
+	@GetMapping("/homeworkdownload/{downloadLocation}")
+	public ResponseEntity<Object> homeWorkFileDownload (@PathVariable String downloadLocation){
+		return downloadService.homeworkfileDownloadFile(downloadLocation);
+	}
+	
+	@GetMapping("/replydownload/{downloadLocation}")
+	public ResponseEntity<Object> replyFileDownload (@PathVariable String downloadLocation){
+		return downloadService.replyfileDownloadFile(downloadLocation);
 	}
 }

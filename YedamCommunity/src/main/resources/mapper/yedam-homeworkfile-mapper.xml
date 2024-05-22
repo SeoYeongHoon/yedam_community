@@ -71,11 +71,17 @@ VALUES
 	WHERE   reply_id= #{replyId}
 	</select>
 	
-	
-	<!-- 파일 이름 조회 -->
-		<select id="selectFileName" parameterType="HomeWorkFileVO">
+	<!-- 과제파일 이름 조회 -->
+		<select id="selectHomeworkFileName" parameterType="HomeWorkFileVO">
 	SELECT  homeworkfile_location
 	FROM    homeworkfiles
+	WHERE   download_location = #{downloadLocation}
+	</select>
+	
+	<!-- 댓글 파일 이름 조회 -->
+		<select id="selectReplyFileName" parameterType="ReplyFileVO">
+	SELECT  replyfile_location
+	FROM    replyfiles
 	WHERE   download_location = #{downloadLocation}
 	</select>
   </mapper>

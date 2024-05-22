@@ -44,16 +44,33 @@ public class HomeWorkController {
 	@Autowired
 	HomeWorkFileService homeworkfileService;
 
-	// 과제리스트
-	@GetMapping("homeworkList")
+	// ----------------
+	// 과제 목록(교수)
+	// ----------------
+	@GetMapping("homeworkListT")
 	public String homeworkList(Model model) {
 		// 과제 조회
 		List<HomeWorkVO> list = homeworkService.homeworkList();
+		System.err.println(list);
 		model.addAttribute("homeworklist", list);
 		return "homework/homeworkList_t"; // 출력할 페이지
 	}
 
+	// ----------------
+	// 과제 목록(학생)
+	// ----------------
+	@GetMapping("homeworkListS")
+	public String homeworksList(Model model) {
+		// 과제 조회
+		List<HomeWorkVO> list = homeworkService.homeworkList();
+		model.addAttribute("homeworklist", list);
+		System.err.println(list);
+		return "homework/homeworkList_s"; // 출력할 페이지
+	}
+
+	// ----------------
 	// 과제 등록 - 페이지
+	// ----------------
 	@GetMapping("homeworkInsert")
 	public String homeworkInsertForm(HomeWorkVO homeworkVO, Model model) {
 		// 과목 조회
@@ -63,7 +80,9 @@ public class HomeWorkController {
 		return "homework/homeworkInsert";
 	}
 
+	// ----------------
 	// 과제 등록 -처리
+	// ----------------
 	@PostMapping("homeworkInsert")
 	@ResponseBody
 	public String homeworkInsertProcess(@RequestPart MultipartFile[] uploadFiles, HomeWorkVO homeworkVO,
@@ -82,15 +101,15 @@ public class HomeWorkController {
 		return "redirect:homeworkList";
 	}
 
+	// ----------------
 	// 과제상세페이지
+	// ----------------
 	@GetMapping("homeworkInfo")
 	public String homeworkInfo(HomeWorkVO homeworkVO, Model model) {
 		// 과제 상세 조회
 		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
-
 		// 댓글조회
 		List<ReplyVO> replyList = homeworkReplyService.replyList(findVO);
-		
 
 		for (ReplyVO reply : replyList) {
 			// 대댓글 조회
@@ -98,21 +117,22 @@ public class HomeWorkController {
 			reply.setCommentList(commentList);
 			System.err.println("댓글번호 있니 findVO" + reply);
 			List<ReplyFileVO> replyfiles = homeworkfileService.replyfileList(reply);
-			model.addAttribute("replyfile",replyfiles);
-			
+			model.addAttribute("replyfile", replyfiles);
+
 		}
 		findVO.setReplyList(replyList);
-		
-		model.addAttribute("homeworkList", findVO);
 
+		model.addAttribute("homeworkList", findVO);
 		// 파일 조회
 		List<HomeWorkFileVO> file = homeworkfileService.homeworkfileList(homeworkVO);
-		
+
 		model.addAttribute("files", file);
 		return "homework/homeworkInfo";
 	}
 
+	// ----------------
 	// 댓글(파일) 등록 - 처리
+	// ----------------
 	@PostMapping("insertReply")
 	@ResponseBody
 	public String insertReply(@RequestPart MultipartFile[] uploadFiles, HomeWorkVO homeworkVO, Model model) {
@@ -126,7 +146,9 @@ public class HomeWorkController {
 		return "redirect:homeworkInfo?homeworkId=" + homeworkVO.getHomeworkId();
 	}
 
+	// ----------------
 	// 대댓글 등록 - 처리
+	// ----------------
 	@PostMapping("insertComment")
 	public String insertComment(HomeWorkVO homeworkVO, Model model) {
 		// 대댓글 등록
