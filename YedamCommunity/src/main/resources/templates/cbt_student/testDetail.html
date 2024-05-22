@@ -50,9 +50,9 @@
 				th:onclick="|location.href='@{/testList2}'|">목록</button>
 			<form class="tdetail_1" action="testStart" method="post">
 				<input type="hidden" name="page" th:value="1">
-				<input type="hidden" name="quizCnt" th:value="${quizCnt}">
-				<input type="hidden" name="testId" th:value="${testId}">
-				<input type="hidden" name="subjectId" th:value="${subjectId}">
+				<input type="hidden" name="quizCnt" th:value="${#lists.size(randRn)}">
+				<input type="hidden" name="testId" th:value="${testDetail.testId}">
+				<input type="hidden" name="subjectId" th:value="${testDetail.subjectId}">
  				<div th:each="quiz : ${randQuizId}">				
 					<input type="hidden" name="randQuizId" th:value="${quiz}">
 				</div>

@@ -24,7 +24,7 @@
 		        ON(a.test_id = b.test_id)
      		    JOIN exam_results c
      		    ON(b.test_target_id = c.test_target_id)
-		WHERE   b.user_id = 14
+		WHERE   b.user_id = #{userId}
 		ORDER BY a.test_id
 	</select>
 	<!-- 시험상세정보 조회 -->
@@ -40,11 +40,14 @@
 		        ,c.curriculum_name
 		        ,COUNT(quiz_id) as quizIdCnt
 		        ,SUM(quiz_score) as quizScore
-		FROM    tests a JOIN quizbox b
+		FROM    tests a 
+		        JOIN quizbox b
 		        ON(a.test_id = b.test_id)
 		        JOIN curriculum c
 		        ON(a.curriculum_id = c.curriculum_id)
+		        
 		WHERE   a.test_id = #{testId}
+		
 		GROUP BY a.test_id
 		         ,a.curriculum_id
 		         ,a.test_content
@@ -64,7 +67,7 @@
                          ,subject_id
                  FROM    quizbox
                  WHERE   test_id = #{testId}
-                 AND     subject_id = #{subjectId}
+             <!--     AND     subject_id = #{subjectId} -->
                  ORDER BY DBMS_RANDOM.VALUE) aa
 	</select>
 	<!-- 시험시작정보 조회 = 시험명, 제한시간, 응시자 -->
@@ -118,41 +121,152 @@
 		FROM    quizbox
 		WHERE   test_id = #{testId}
 	</select>
+	<!-- 문제 제출 답안 저장 - test_results 테이블 -->
 	<update id="insertTestSubmit" parameterType="TestResultVO">
 		DECLARE
-    		v_answer NUMBER(10);
-    		v_iscorrect NUMBER(10);
+    		v_answer NUMBER(10); <!-- 내 답안 -->
+    		v_iscorrect NUMBER(10); <!-- 답안 정답 유무 -->
 		BEGIN
-			<!-- 한 문제씩 제출 답안 저장하기 -->
-    		INSERT INTO test_results(test_result_id
-		                         	 ,test_answer
-		                         	 ,quiz_id
-		                         	 ,user_id)
-    		VALUES(test_result_id_seq.NEXTVAL
-		    	   ,#{testAnswer}
-		    	   ,#{quizId}
-		    	   ,14);
-    		COMMIT;
-    		
-    		<!-- 현재 문제의 원래 답안 가져오기 -->
+			<!-- 현재 문제의 원래 답안 가져오기 -->
     		SELECT  example_num
     		INTO    v_answer
     		FROM    answers
     		WHERE   quiz_id = #{quizId}
     		AND     example_answer = 1;
-    		
-    		<!-- 현재 문제 답안 비교하기 -->
-    		IF v_answer = #{testAnswer} THEN
+    		<!-- 정답 유무 비교 -->
+			IF v_answer = #{testAnswer} THEN
         		v_iscorrect := 1;
     		ELSE
         		v_iscorrect := 0;
     		END IF;
-    
-    		<!-- 정답유무 저장하기 -->
-    		UPDATE test_results
-    		SET is_correct = v_iscorrect
-    		WHERE quiz_id = #{quizId};
+			<!-- 한 문제씩 제출 답안 저장하기 -->
+    		INSERT INTO test_results(test_result_id
+		                         	 ,test_answer
+		                         	 ,quiz_id
+		                         	 ,is_correct
+		                         	 ,user_id)
+    		VALUES(test_result_id_seq.NEXTVAL
+		    	   ,#{testAnswer}
+		    	   ,#{quizId}
+		    	   ,v_iscorrect
+		    	   ,14);
     		COMMIT;
     	END;
+	</update>
+	<!-- 시험결과 정보 -->
+	<select id="selectTestResult" resultType="ExamResultVO">
+		SELECT  c.name
+       			,a.subject_id
+       			,a.result_score
+       			,a.is_reexam
+		FROM    exam_results a JOIN test_targets b 
+				ON(a.test_target_id = b.test_target_id)
+				JOIN users c 
+				ON(b.user_id = c.user_id)
+		WHERE   b.user_id = 8
+		AND     b.test_id = #{testId}
+	</select>
+	<!-- 시험 결과 정보 등록 - exam_results 테이블 -->
+	<update id="insertTestResult" parameterType="ExamResultVO">
+	<selectKey keyProperty="resultId" resultType="int" order="BEFORE">
+		SELECT  result_id_seq.NEXTVAL
+		FROM    DUAL
+	</selectKey>
+		DECLARE
+			v_sub NUMBER(10); <!-- 과목번호 -->
+    		v_target NUMBER(10); <!-- 시험대상자번호 -->
+    		v_qscore NUMBER(10); <!-- 문제 배점 -->
+    		v_rscore NUMBER(10); <!-- 시험 총점 -->
+    		v_pscore NUMBER(10); <!-- 합격 점수 -->
+		BEGIN
+			<!-- 현재 시험의 기준점수, 대상자번호, 과목번호, 배점 가져오기 -->
+			SELECT  a.pass_score, 
+			        b.test_target_id, 
+			        c.subject_id, 
+			        quiz_score
+			INTO    v_pscore, v_target, v_sub, v_qscore
+			FROM    exam_results a JOIN test_targets b
+					                 ON (a.test_target_id = b.test_target_id)
+					               JOIN quizbox c 
+					                 ON (b.test_id = c.test_id)
+			WHERE   b.test_id = #{testId}
+			AND     b.user_id = 8
+			AND     c.quiz_id = #{quizId};
+			<!-- 테이블에 시험결과 정보 등록하기 -->
+			INSERT INTO exam_results(result_id
+			                         ,result_score
+			                         ,subject_id
+			                         ,pass_score
+			                         ,test_target_id)
+			VALUES(#{resultId}
+			       ,0
+			       ,v_sub
+			       ,v_pscore
+			       ,v_target);
+			COMMIT;
+		END;
+	</update>
+	<!-- 시험 결과 정보 수정 - exam_results 테이블 -->
+	<update id="insertTestResultScore" parameterType="ExamResultVO">
+		DECLARE
+			v_iscorrect NUMBER(10); <!-- 정답 유무 -->
+			v_isreexam NUMBER(10); <!-- 재시험 유무 -->
+			v_rscore1 NUMBER(10); <!-- 시험 총점 -->
+			v_rscore2 NUMBER(10); <!-- 바뀐 총점 -->
+			v_pscore NUMBER(10); <!-- 기준 점수 -->
+			v_qscore NUMBER(10); <!-- 문제 배점 -->
+		BEGIN
+			<!-- 현재 문제 배점 가져오기 -->
+			SELECT  quiz_score
+			INTO    v_qscore
+			FROM    quizbox
+			WHERE   quiz_id = #{quizId}
+			AND     test_id = #{testId};
+			
+			<!-- 현재 시험 총점, 기준점수 가져오기 -->
+			SELECT  a.result_score, a.pass_score
+			INTO    v_rscore1, v_pscore
+			FROM    exam_results a JOIN test_targets b
+					ON(a.test_target_id = b.test_target_id)
+			WHERE   b.test_id = #{testId}
+			AND     b.user_id = 8;
+			
+			<!-- 현재 문제 정답 유무 가져오기 -->
+			SELECT  a.is_correct
+			INTO    v_iscorrect
+			FROM    test_results a JOIN test_targets b
+					ON(a.user_id = b.user_id)
+			WHERE   b.test_id = #{testId}
+			AND     a.quiz_id = #{quizId};
+			
+			<!-- 현재 문제 답안 비교해서 총점 누적 값 수정하기 -->
+    		IF v_iscorrect = 1 THEN
+        		v_rscore1 := v_rscore1 + v_qscore;
+        		UPDATE exam_results
+        		SET    result_score = v_rscore1
+        		WHERE  test_target_id = 2;
+        		COMMIT;
+    		END IF;
+    		
+    		<!-- 바뀐 시험 총점 가져오기 -->
+			SELECT  a.result_score
+			INTO    v_rscore2
+			FROM    exam_results a JOIN test_targets b
+					ON(a.test_target_id = b.test_target_id)
+			WHERE   b.test_id = #{testId}
+			AND     b.user_id = 8;
+			
+    		<!-- 재시험 유무 비교하기 -->
+    		IF v_rscore2 >= v_pscore THEN
+    			v_isreexam := 1;
+        	ELSE
+        		v_isreexam := 0;
+    		END IF;
+    		<!-- 재시험 유무 저장하기 -->
+    		UPDATE exam_results
+        	SET    is_reexam = v_isreexam
+        	WHERE  test_target_id = 2;
+        	COMMIT;
+		END;
 	</update>
 </mapper>

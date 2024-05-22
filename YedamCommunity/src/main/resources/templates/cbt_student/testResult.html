@@ -22,7 +22,7 @@
 		<br> <br>
 		<div class="tresult_2">
 			<h3 class="tresult_1 tresult_2">응시자:</h3>
-			<h3 class="tresult_1 tresult_2">홍길동</h3>
+			<h3 class="tresult_1 tresult_2">[[${testResult.name}]]</h3>
 		</div>
 		<br> <br>
 		<table class="table">
@@ -33,10 +33,20 @@
 				<th class="tresult_2"><h1>재시험여부</h1></th>
 			</tr>
 			<tr>			
-				<td class="tresult_2"><h1>JAVA</h1></td>
-				<td class="tresult_2"><h1>23:25</h1></td>
-				<td class="tresult_2"><h1>90</h1></td>
-				<td class="tresult_2"><h1>X</h1></td>
+				<td class="tresult_2"><h1>[[${testResult.subjectId}]]</h1></td>
+				<!-- 응시시간에 따른 구분 -->
+				<td th:if="${testMin == 0 && testSec == 0}" class="tresult_2"><h1>00:00</h1></td>
+				<td th:if="${testMin == 0 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>00:0[[${testSec}]]</h1></td>
+				<td th:if="${testMin == 0 && testSec > 9}" class="tresult_2"><h1>00:[[${testSec}]]</h1></td>
+				<td th:if="${testMin < 10 && testMin > 0 && testSec == 0}" class="tresult_2"><h1>0[[${testMin}]]:00</h1></td>
+				<td th:if="${testMin > 9 && testSec == 0}" class="tresult_2"><h1>[[${testMin}]]:00</h1></td>
+				<td th:if="${testMin < 10 && testMin > 0 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>0[[${testMin}]]:0[[${testSec}]]</h1></td>
+				<td th:if="${testMin < 10 && testMin > 0 && testSec > 9}" class="tresult_2"><h1>0[[${testMin}]]:[[${testSec}]]</h1></td>
+				<td th:if="${testMin > 9 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>[[${testMin}]]:0[[${testSec}]]</h1></td>
+				<td th:if="${testMin > 9 && testSec > 9}" class="tresult_2"><h1>[[${testMin}]]:[[${testSec}]]</h1></td>
+				<td class="tresult_2"><h1>[[${testResult.resultScore}]]</h1></td>
+				<td th:if="${testResult.isReexam == 1}" class="tresult_2"><h1 style="color: blue;">통과</h1></td>
+				<td th:unless="${testResult.isReexam == 1}" class="tresult_2"><h1 style="color: red;">재시험</h1></td>
 			</tr>
 		</table>
 		<br> <br>
