@@ -54,15 +54,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int userTotalCnt(String filter) {
-		return userMapper.getTotalCnt(filter);
+	public int userTotalCnt(String filter, String searchQuery) {
+		return userMapper.getTotalCnt(filter, searchQuery);
 	}
 
 	@Override
-    public List<UserVO> getUsersByFilter(String filter, int page) {
+    public List<UserVO> getUsersByFilter(String filter, int page, String searchQuery) {
         Map<String, Object> params = new HashMap<>();
         params.put("filter", filter);
         params.put("page", page);
+        params.put("searchQuery", searchQuery);
         return userMapper.getUsersByFilter(params);
     }
 
