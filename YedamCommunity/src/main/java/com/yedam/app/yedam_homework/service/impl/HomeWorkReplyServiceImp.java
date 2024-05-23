@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yedam.app.yedam_homework.mapper.HomeWorkReplyMapper;
 import com.yedam.app.yedam_homework.service.CommentVO;
@@ -18,13 +19,13 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 	HomeWorkReplyMapper homeworkReplyMapper;
 	//댓글 등록
 	@Override
-	public int replyInsert(HomeWorkVO homeworkVO) {
-		return homeworkReplyMapper.insertReply(homeworkVO);
+	public int replyInsert(ReplyVO replyVO) {
+		return homeworkReplyMapper.insertReply(replyVO);
 	}
 	//댓글 조회
 	@Override
-	public List<ReplyVO> replyList(HomeWorkVO homeworkVO) {
-		return homeworkReplyMapper.selectReplyAll(homeworkVO);
+	public List<ReplyVO> replyList(int homeworkTargetId) {
+		return homeworkReplyMapper.selectReplyAll(homeworkTargetId);
 	}
 	
 	//대댓글 조회

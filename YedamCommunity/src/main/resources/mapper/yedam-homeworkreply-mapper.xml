@@ -8,14 +8,23 @@
 
 	<!-- 댓글등록 -->
 	<insert id="insertReply" parameterType="HomeWorkVO">
+	<selectKey  keyProperty="replyId,replyDate" resultType="HomeWorkVO" order="BEFORE">
+	select reply_id_seq.nextval reply_id,sysdate reply_date
+	FROM	dual
+	</selectKey>
 		INSERT INTO replies
 		(reply_id,
 		reply_content,
-		homework_target_id)
+		homework_target_id,
+		reply_writer,
+		reply_date
+		)
 		VALUES
-		(reply_id_seq.nextval,
+		(#{replyId},
 		#{replyContent},
-		#{homeworkTargetId}
+		#{homeworkTargetId},
+		#{replyWriter},
+		#{replyDate}
 		)
 	</insert>
 

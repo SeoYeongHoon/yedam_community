@@ -17,7 +17,7 @@ public interface HomeWorkFileService {
 	public List<HomeWorkFileVO> homeworkfileList(HomeWorkVO homeworkVO);
 
 	// 댓글등록 파일 업로드
-	public List<String> replyUploadFile(@RequestPart MultipartFile[] uploadFiles, ReplyVO reply);
+	public List<String> replyUploadFile(@RequestPart MultipartFile[] uploadFiles, int replyId);
 	
 	// 댓글 파일 조회
 	public List<ReplyFileVO> replyfileList(ReplyVO reply);

@@ -47,9 +47,9 @@
 					</div>
 				</div>
 				<!-- 모달 푸터 -->
-				<div class="modal-footer" th:object="${homeworkInfoList}">
-					<button id='okBtn' type="button" class="btn btn-primary"
-						onclick="window.location.reload()">확인</button>
+				<div class="modal-footer">
+					<button id='okBtn' type="button" class="btn btn-primary close"
+						data-dismiss="modal">확인</button>
 				</div>
 			</div>
 		</div>
@@ -82,6 +82,11 @@
 
 	<div th:each="homeworkInfo : ${homeworkList}">
 		<div style="border: 1px solid black;">
+			<div id ="test"class="col-12" style="text-align: left;">
+			
+				<button class="main-btn primary-btn btn-hover commentInsertBtn"
+					type="button">test</button>
+			</div>
 			<hr>
 			<h1>제목</h1>
 			<p>[[${homeworkInfo.homeworkTitle}]]</p>
@@ -95,14 +100,17 @@
 					<a th:href="|@{/homeworkdownload}/${file.downloadLocation}|">[[${file.homeworkfileName}]]</a>
 				</p>
 			</th:block>
+			
 		</div>
 		<div style="border: 1px solid black;">
 			<h3>댓글</h3>
 			<div id="replyList">
+			<div id="replies"></div>
 				<!-- 댓글출력 -->
-				<div th:each="reply : ${homeworkList.replyList}"
+				<div id ="replyList" th:each="reply : ${homeworkList.replyList}"
 					style="border: 1px solid black;">
 					<p>댓글 내용 : [[${reply.replyContent}]]</p>
+					<p>작성자 : [[${reply.replyWriter}]]</p>
 					<p>작성일자 : [[${#dates.format(reply.replyDate,'yyyy년MM월dd일')}]]</p>
 					<th:block th:each="replyfiles : ${replyfile}">
 						<p>
@@ -146,7 +154,7 @@
 			<h3>댓글 작성</h3>
 			<form name="insertReply" id="addReply" method="post"
 				th:object="${homeworkList}" enctype="multipart/form-data">
-				<input type="hidden" th:field="*{homeworkTargetId}"> <input
+				<input id="targetId" type="hidden" th:field="*{homeworkTargetId}"> <input
 					type="hidden" th:field="*{homeworkId}">
 				<textarea style="border: 1px solid black;" rows="8" cols="50"
 					placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
@@ -161,10 +169,61 @@
 </main>
 
 <script>
+	//댓글 목록
+	replyList();
+	
+	function replyList(){
+		let targetId =  $('#targetId').val(); 
+		
+		console.log(targetId)
+		
+		$.ajax({
+			url : "replyList",
+			type : "GET",
+			data : {targetId:targetId} ,
+			success : function(data){
+				data.forEach(function(e){
+					let replyDate = formatDate(e.replyDate);
+					let replyList = 
+
+					`
+						<p>댓글 내용 : ${e.replyContent}</p>
+						<p>작성자 : ${e.replyWriter}</p>
+						<p class ="replyDate"></p>
+						
+					`
+					formatDate($(".replyDate").text(e.replyDate));
+					
+						$('#replyList').append(replyList);
+						$(".replyDate").text(replyDate);
+				})
+			},
+			error: function(err){
+				alert("실패");
+			}
+		});
+		
+	}
+	
+	//날짜 포멧 변환 함수
+	 function formatDate(date) {
+	     var d = new Date(date),
+	         month = '' + (d.getMonth() + 1),
+	         day = '' + d.getDate(),
+	         year = d.getFullYear();
+
+	     if (month.length < 2) month = '0' + month;
+	     if (day.length < 2) day = '0' + day;
+
+	     return [year, month, day].join('/');
+	 } 
+	
+	
 	//댓글 등록
-	$('#insertBtn').on('click', addReply);
+	$('#insertBtn').on('click', addReply); 
 
 	function addReply() {
+		
 		// 댓글내용 없을 시 모달띄움
 		let replyCentent = document.getElementById('replyContent');
 		let commentContent = document.getElementById('commentContent');
@@ -183,7 +242,19 @@
 				contentType : false, // FormData가 가지고 있는 통신 정보를 사용
 				data : formData,
 				success : function(json) {
+					let replyDate = formatDate(json.replyDate);
 					$('#modal').modal('show');
+					
+					let addReply = 
+					`
+						<div>
+							<p>댓글 내용 : ${json.replyContent}</p>
+							<p>작성자 : ${json.replyWriter} </p>
+							<p class="replyDate"></p>
+						</div>
+					`
+					$('#replies').append(addReply);
+					$('.replyDate').text(replyDate);
 				},
 				error : function(err) {
 					alert("error");
@@ -192,6 +263,10 @@
 
 		}
 	}
+	 $('#test').on('click',replyList);
+	 
+	
+	
 
 	// 대댓글 등록
 	/* $('.commentInsertBtn').on('click', addComment);
