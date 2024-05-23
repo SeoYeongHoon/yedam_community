@@ -103,7 +103,7 @@ function classInfo(classId){
 	// 학생정보 불러오기
 	$.ajax({
 		url : "userinfo",
-		type : "post", 
+		type : "get", 
 		data : {classId : classId},
 				
 		success : function(data){
@@ -118,7 +118,7 @@ function classInfo(classId){
 	// 강의실정보 불러오기
 	$.ajax({
 		url : "classinfo",
-		type : "post", 
+		type : "get", 
 		data : {classId : classId},
 				
 		success : function(data){
@@ -135,8 +135,8 @@ function classInfo(classId){
 	}); // 강의실정보 불러오기 end of ajax
 	// 강의실별 시험정보 불러오기
 	$.ajax({
-		url : "testinfo",
-		type : "post", 
+		url : "classTestinfo",
+		type : "get", 
 		data : {classId : classId},
 				
 		success : function(data){
@@ -164,7 +164,7 @@ function classInfo(classId){
 	// 평균점수 불러오기
 	$.ajax({
 		url : "subjectavg",
-		type : "post", 
+		type : "get", 
 		data : {classId : classId},
 					
 		success : function(data){
@@ -206,7 +206,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 	// 강의실별 학생정보 불러오기
 	$.ajax({
 		url : "userinfo",
-		type : "post", 
+		type : "get", 
 		data : {classId : classId},
 				
 		success : function(data){
@@ -222,7 +222,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 	// 강의실별 과정명 불러오기
 	$.ajax({
 		url : "classinfo",
-		type : "post", 
+		type : "get", 
 		data : {classId : classId},
 				
 		success : function(data){
@@ -241,7 +241,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 	// 강의실별 시험정보 불러오기
 	$.ajax({
 		url : "testinfo",
-		type : "post", 
+		type : "get", 
 		data : {classId : classId},
 				
 		success : function(data){
@@ -257,7 +257,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 	// 평균점수 불러오기
 	$.ajax({
 		url : "subjectavg",
-		type : "post", 
+		type : "get", 
 		data : {classId : classId},
 					
 		success : function(data){

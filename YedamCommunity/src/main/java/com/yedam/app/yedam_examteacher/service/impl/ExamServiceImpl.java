@@ -1,6 +1,5 @@
 package com.yedam.app.yedam_examteacher.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,18 +17,6 @@ public class ExamServiceImpl implements ExamService {
 	@Autowired
 	ExamMapper examMapper;
 	
-	//--------------------------------------------
-	// 전체 출력 - 연구중
-	//--------------------------------------------
-	@Override
-	public List<TeacherVO> allList(TeacherVO teacherVO) {
-		List<TeacherVO> list = new ArrayList<TeacherVO>();
-		list.addAll(examMapper.selectExamAll());
-		list.addAll(examMapper.selectQuizAll());
-		list.addAll(examMapper.selectSubjectAll());
-
-		return list;
-	}
 	
 	//--------------------------------------------
 	// 시험목록 페이지 기능 모음
@@ -72,7 +59,7 @@ public class ExamServiceImpl implements ExamService {
 	@Transactional
 	@Override
 	public void quizInsertJu(TeacherVO teacherVO) { // 주관식
-		examMapper.insertQuizJu(teacherVO);
+		examMapper.insertQuiz(teacherVO);
 		examMapper.insertAnswerJu(teacherVO);
 	}
 	//--------------------------------------------
@@ -135,15 +122,18 @@ public class ExamServiceImpl implements ExamService {
 	// 과목 삭제
 	//--------------------------------------------
 	@Override
-	public Map<String, Object> subjectDelete(TeacherVO teacherVO) {
-		Map<String, Object> map = new HashMap<>();
-		int result = examMapper.deleteSubject(teacherVO.getSubjectName());
-
-		if (result == 1) {
-			map.put("subjectName", teacherVO.getSubjectName());
-		}
-		return map;
+	public int subjectDelete(TeacherVO teacherVO) {
+		return examMapper.deleteSubject(teacherVO);
 	}
+	/* 테스트 중인 코드
+	 * public Map<String, Object> subjectDelete(TeacherVO teacherVO) { Map<String,
+	 * Object> map = new HashMap<>(); int result =
+	 * examMapper.deleteSubject(teacherVO.getSubjectName());
+	 * 
+	 * if (result == 1) { map.put("subjectName", teacherVO.getSubjectName()); }
+	 * return map; }
+	 */
+	
 	//--------------------------------------------
 	// 문제 필터링 출력
 	//--------------------------------------------
@@ -159,20 +149,24 @@ public class ExamServiceImpl implements ExamService {
 		return examMapper.infoQuiz(qId);
 	}
 
-	
+	//--------------------------------------------
 	// 시험 대상자 출력
+	//--------------------------------------------
 	@Override
 	public List<TeacherVO> userList(TeacherVO teacherVO) {
 		return examMapper.selectUserAll(teacherVO);
 	}
-
+	
+	//--------------------------------------------
 	// 강의실별 과목평균점수 조회
+	//--------------------------------------------
 	@Override
 	public List<TeacherVO> subjectAvg(int cId) {
 		return examMapper.subjectAvg(cId);
 	}
-
+	//--------------------------------------------
 	// 강의실별 시험리스트 조회
+	//--------------------------------------------
 	@Override
 	public List<TeacherVO> subTestList(int cId) {
 		return examMapper.testList(cId);
@@ -182,43 +176,53 @@ public class ExamServiceImpl implements ExamService {
 	public TeacherVO testInfo(TeacherVO teacherVO) {
 		return examMapper.testInfo(teacherVO);
 	}
-
+	//--------------------------------------------
 	// 강의실별 수강생 조회
+	//--------------------------------------------
 	@Override
 	public List<TeacherVO> subUserList(int cId) {
 		return examMapper.userList(cId);
 	}
-
+	//--------------------------------------------
 	// 강의실에 따른 과정명 조회
+	//--------------------------------------------
 	@Override
 	public List<TeacherVO> classList(int cId) {
 		return examMapper.currList(cId);
 	}
-
+	//--------------------------------------------
 	// 강의실별 시험결과 조회
+	//--------------------------------------------
 	@Override
 	public List<TeacherVO> userTestResult(int tId) {
 		return examMapper.testResult(tId);
 	}
-
+	//--------------------------------------------
 	// 수강생 개개인의 과정정보 단건조회
+	//--------------------------------------------
 	@Override
 	public TeacherVO userTestInfo(TeacherVO teacherVO) {
 		return examMapper.userTestInfo(teacherVO);
 	}
-
+	//--------------------------------------------
 	// 개개인의 시험 과목점수 리스트 조회
+	//--------------------------------------------
 	@Override
 	public List<TeacherVO> userScoreList(int uId) {
 		return examMapper.userScore(uId);
 	}
-
+	//--------------------------------------------
 	// 유저 피드백 작성페이지 기능 모음
+	//--------------------------------------------
+	// 유저 시험정보 확인
+	//--------------------------------------------
 	@Override
 	public TeacherVO userFeedInfo(TeacherVO teacherVO) {
 		return examMapper.userFeed(teacherVO);
 	}
-
+	//--------------------------------------------
+	// 피드백 작성
+	//--------------------------------------------
 	@Override
 	public Map<String, Object> feedUpdate(TeacherVO teacherVO) {
 		Map<String, Object> map = new HashMap<>();

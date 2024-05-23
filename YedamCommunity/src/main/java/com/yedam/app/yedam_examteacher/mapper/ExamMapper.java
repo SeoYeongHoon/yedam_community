@@ -28,7 +28,7 @@ public interface ExamMapper {
 	public TeacherVO selectQuiz(TeacherVO teacherVO); // 문제 단건 조회 -> 나중에 삭제
 	public List<TeacherVO> selectCurr(); // 과정명 출력(과목 등록할때 사용)
 	public int insertSubject(TeacherVO teacherVO); // 과목 등록
-	public int deleteSubject(String subjectName); // 과목 삭제
+	public int deleteSubject(TeacherVO teacherVO); // 과목 삭제
 	public List<TeacherVO> selectSubjectAll(); // 과목명 출력	(문제 필터링할때 사용)
 	public List<TeacherVO> subjectOfCurr(@Param("curriId") int cId); // 과목명 출력 (과목 추가/삭제때 사용)
 	public List<TeacherVO> filterQuiz(@Param("sName") String sName); // 등록된 문제 필터출력 

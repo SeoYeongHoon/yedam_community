@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ExamService {
-	// 전체조회-테스트중. 나중에 삭제
-	public List<TeacherVO> allList(TeacherVO teacherVO);
-	
+
 	// 시험목록조회 페이지 기능 모음
 	public List<TeacherVO> testList(); // 시험목록 조회
 	public int testInsert(TeacherVO teacherVO); // 시험 등록
@@ -20,7 +18,8 @@ public interface ExamService {
 	public TeacherVO quizInfo(TeacherVO teacherVO); // 문제 단건조회 => 나중에 삭제 (getQuizInfo로 진행함)
 	public List<TeacherVO> subjectList(); // 과목명 출력(문제 필터할때 사용)
 	public int subjectInsert(TeacherVO teacherVO); // 과목명 추가
-	public Map<String, Object> subjectDelete(TeacherVO teacherVO); // 과목명 삭제
+	public int subjectDelete(TeacherVO teacherVO); // 과목명 삭제
+	//public Map<String, Object> subjectDelete(TeacherVO teacherVO); // 과목명 삭제 테스트중인 고드
 	public List<TeacherVO> getQuizFilter(String sName); // 문제 필터링 출력
 	public List<TeacherVO> getQuizInfo(int qId); // 문제 자세히보기 (단건조회)
 	public List<TeacherVO> currList(); // 과정명 출력(과목명 추가할때 사용)

@@ -1,12 +1,16 @@
 package com.yedam.app.yedam_examteacher.web;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.yedam_examteacher.service.ExamService;
 import com.yedam.app.yedam_examteacher.service.TeacherVO;
 
+/**
+ * 시험관리/학생점수 확인
+ * @author 이택준 
+ * 05/23
+ */
 @Controller
 public class ExamController {
 
@@ -88,7 +97,7 @@ public class ExamController {
 	//--------------------------------------------
 	// 등록된 문제 필터링해서 출력
 	//--------------------------------------------
-	@PostMapping("quizlist")
+	@GetMapping("quizes")
 	@ResponseBody
 	public List<TeacherVO> quizList(@RequestParam("sName") String sName) {
 		return examService.getQuizFilter(sName);
@@ -96,31 +105,38 @@ public class ExamController {
 	//--------------------------------------------
 	// 문제에 대한 지문들 출력
 	//--------------------------------------------
-	@PostMapping("textcontent")
+	@GetMapping("quizes/{qId}/answers")
 	@ResponseBody
-	public List<TeacherVO> textContentList(@RequestParam("qId") int qId){
+	public List<TeacherVO> textContentList(@PathVariable("qId") int qId){
 		return examService.answerList(qId);
 	}
 	//--------------------------------------------
 	// 문제 단건조회
 	//--------------------------------------------
-	@PostMapping("quizinfo")
+	@GetMapping("quizes/{qId}")
 	@ResponseBody
-	public List<TeacherVO> quizInfo(@RequestParam("qId") int qId) {
+	public List<TeacherVO> quizInfo(@PathVariable("qId") int qId) {
 		return examService.getQuizInfo(qId);
 	}
 	//--------------------------------------------
 	// 과목 추가 - 처리
 	//--------------------------------------------
 	@PostMapping("subjectinsert")
-	public String subjectInsertProcess(TeacherVO teacherVO) {
-		int sId = examService.subjectInsert(teacherVO);
-		String uri = null;
-		if (sId > -1) {
-			uri = "redirect:quizlist";
-		} else {
-			uri = "quizlist";
-		}
+	public String subjectInsertProcess(TeacherVO teacherVO,HttpServletResponse resp)  {
+		String uri = "";
+		try {
+			int sId = examService.subjectInsert(teacherVO);
+			if (sId > -1) {
+				uri = "redirect:quizlist";
+			} else {
+			
+					resp.getWriter().append("<script>alert('error');history.back();</script>");
+				
+				uri = "";
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // 뒤로가기
 		return uri;
 	}
 	//--------------------------------------------
@@ -205,7 +221,7 @@ public class ExamController {
 	//--------------------------------------------
 	// 교수님 페이지 - 강의실에 따른 과정명 출력
 	//--------------------------------------------
-	@PostMapping("classinfo")
+	@GetMapping("classinfo")
 	@ResponseBody
 	public List<TeacherVO> classInfo(@RequestParam("classId") int cId) {
 		return examService.classList(cId);
@@ -213,7 +229,7 @@ public class ExamController {
 	//--------------------------------------------
 	// 교수님 페이지 - 강의실별 수강생 정보
 	//--------------------------------------------
-	@PostMapping("userinfo")
+	@GetMapping("userinfo")
 	@ResponseBody
 	public List<TeacherVO> userInfo(@RequestParam("classId") int cId) {
 		return examService.subUserList(cId);
@@ -221,7 +237,7 @@ public class ExamController {
 	//--------------------------------------------
 	// 교수님 페이지 - 강의실별 시험 정보
 	//--------------------------------------------
-	@PostMapping("testinfo")
+	@GetMapping("classTestinfo")
 	@ResponseBody
 	public List<TeacherVO> testInfo(@RequestParam("classId") int cId) {
 		return examService.subTestList(cId);
@@ -229,7 +245,7 @@ public class ExamController {
 	//--------------------------------------------
 	// 교수님 페이지 - 강의실별 시험 평균점수
 	//--------------------------------------------
-	@PostMapping("subjectavg")
+	@GetMapping("subjectavg")
 	@ResponseBody
 	public List<TeacherVO> subjectAvg(@RequestParam("classId") int cId) {
 		return examService.subjectAvg(cId);
