@@ -42,14 +42,14 @@
 					<!-- end table row-->
 				</thead>
 				<tbody id="tbody">
-					<th:block th:each="examInfo, idxStat : ${testList}">
+					<th:block th:each="examInfo, idx : ${testList}">
 						<tr>
 							<td><i class="mdi mdi-script-text-play-outline"></i></td>
 							<td class="min-width">[[ ${examInfo.testName} ]]</td>
-							<td class="min-width tDate" th:id="${examInfo.testId}" th:value="${#dates.format(examInfo.testDate,
+							<td class="min-width tDate" th:value="${#dates.format(examInfo.testDate,
 								'yyyy-MM-dd')}">[[ ${#dates.format(examInfo.testDate, 'yyyy-MM-dd')} ]]</td>
 							<td class="min-width">[[ ${examInfo.testTime} ]]</td>
-							<td class="min-width"><span class="status-btn active-btn process">진행중</span>
+							<td class="min-width"><span class="status-btn active-btn process" th:id="${idx.index}">진행중</span>
 							</td>
 						</tr>
 					</th:block>
@@ -73,16 +73,18 @@ function formatDate(date) {
 } // 날짜 포멧 변환 end
 var today = new Date();
 var today1 = formatDate(today);
-console.log(today1);
 // 날짜 비교해서 시험진행 상태 변경
 var arry = [];
 $('.tDate').each(function (index, item) {
-    arry.push($('.tDate').attr("value"));
+    arry.push($(item).text());
+    console.log(arry[index]);
+    console.log(today1);
     if(arry[index] < today1){
-    	$('.process').text('종료');
+    	$('#'+index).text('시험종료');
     	$('.process').attr('class', 'status-btn close-btn process');
-    } else {
-    	$('.process').text('진행중');
+    } else if(arry[index] > today1){
+    	$('#'+index).text('시험중');
+    	$('#'+index).attr('class', 'status-btn active-btn process');
     }
 });	
 </script>

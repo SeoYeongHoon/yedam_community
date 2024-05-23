@@ -100,6 +100,7 @@ li {
 <!-- 과목추가/삭제 모달창 -->
 <div id="modalWrap2" class="modal-overlay">
 	<div id="modalBody2">
+	
 		<div class="close-area">X</div>
 		<div class="input-style-1">
 			<!-- 과정 선택창 -->
@@ -107,25 +108,26 @@ li {
 				<div class="select-position">
 					<select id="curr">
 						<th:block th:each="currInfo, idxStat : ${currList}">
-							<option class="typeSelec" th:value="${currInfo.curriculumId}" th:name="${currInfo.curriculumId}">[[${currInfo.curriculumName}]] - [[${currInfo.curriculumId}]]강의실</option>
+							<option class="typeSelec" th:value="${currInfo.curriculumId}" th:name="${currInfo.curriculumId}">[[${currInfo.curriculumName}]] - [[${currInfo.classId}]]강의실</option>
 						</th:block>
 					</select>
 				</div>
-			<!-- ======= checkbox style start ======= -->
+		<form th:action="@{/subjectdelete}" id="delForm" name="delForm" method="get" th:object="${teacherVO}">
 			<div class="card-style mb-30">
 				<h6 class="mb-25">과목 설정</h6>
 				<div class="form-check checkbox-style mb-20 currSub">
-					
 				</div>
+				<input type="hidden" id="hidden" name="curriculumId"/>	
 			</div>
-			<button type="button"
-				class="main-btn danger-btn-light square-btn btn-hover" id="testBtn">삭제</button>
-			<!-- ======= checkbox style end ======= -->
+			<button type="submit"
+				class="main-btn danger-btn-light square-btn btn-hover" id="delBtn" formaction="subjectdelete">삭제</button>
+		</form>	
 		</div>
-		<form th:action="@{/subjectinsert}" method="post" th:object="${teacherVO}">
+		<form th:action="@{/subjectinsert}" id="insertForm" name="insertForm" method="post" th:object="${teacherVO}">
 			<div>
 				<div class="input-style-1">
-					<input type="text" placeholder="과목명을 입력하세요" th:field=*{subjectName}></input>
+					<input type="text" id="insertSubName" placeholder="과목명을 입력하세요" th:field=*{subjectName}></input>
+					<input type="hidden" id="insertSub"></input>
 				</div>
 				<button id="subAdd" class="main-btn primary-btn btn-hover"
 					type="submit">과목추가</button>
@@ -155,8 +157,8 @@ function quizContentList(sName){
 	$('#quizBox').html('');
 	// 문제 전체 조회 ajax
 	$.ajax({
-		url : "quizlist",
-		type : "post", 
+		url : "quizes",
+		type : "get", 
 		data : {sName : sName},
 				
 		success : function(data){
@@ -207,8 +209,8 @@ function quizContentList(sName){
 				// 지문 불러오기
 				answer = []; // 배열값 초기화
 				$.ajax({
-					url : "textcontent",
-					type : "post", 
+					url : "quizes/{qId}",
+					type : "get", 
 					data : {qId : qId},
 									
 					success : function(data){
@@ -224,8 +226,8 @@ function quizContentList(sName){
 								
 						// 문제,해설 불러오기
 						$.ajax({
-							url : "quizinfo",
-							type : "post", 
+							url : "quizes/{qId}/answers",
+							type : "get", 
 							data : {qId : qId},
 											
 							success : function(data){
@@ -284,9 +286,17 @@ function quizContentList(sName){
 }; // function quizContentList() 종료
 
 //테스트용 버튼 
-$('#subBtn').on('click', function test(){
+$('#subBtn').on('click', function(){
 	curriId = $('#curr').val();
-	
+})
+
+//--------------------------------------------
+// 과목 추가/삭제 모달창에서 과목창 띄워주는 함수
+//--------------------------------------------
+function subList(curriId){
+	curriId = $('#curr').val();
+	$('#insertSub').val(curriId);
+	$('#insertSub').attr('name','curriculumId');
 	$.ajax({
 		url : "subjectCurrList",
 		type : "post",
@@ -301,9 +311,9 @@ $('#subBtn').on('click', function test(){
 					<table>
 						<tr>
 							<th><input class="form-check-input checkbox"
-								th:id="${subjectName}" type="checkbox"
-								th:value="${subjectName}" th:name="chkBox" /> <label
-								th:for="${subjectName}" class="form-check-label">${subjectName}</label>
+								id="${subjectName}" type="checkbox"
+								value="${subjectName}" name="subjectName" /> <label
+								for="${subjectName}" class="form-check-label">${subjectName}</label>
 							</th>
 						</tr>
 					</table>`;
@@ -314,44 +324,62 @@ $('#subBtn').on('click', function test(){
 			console.log('에러입니다');
 		}
 	}); 
-})
+}
+subList(curriId);
+//--------------------------------------------
+//과목 추가/삭제 모달창에서 과정명이 바뀌면 과목명도 같이 바뀌는 필터, curriculumId값 자동 등록.
+//--------------------------------------------
 $('#curr').on('change', function(){
 		curriId = $(this).val();
-		console.log('셀렉트 바뀜')
+		$('#insertSub').val(curriId);
+		$('#insertSub').attr('name','curriculumId');
+		subList(curriId);
 });
 
-// 과목추가/삭제시 알림창 뜨는거 테스트
-$('#subAdd').on('click',function(){
-	if($('#subAdd').submit()){
-		alert('과목이 추가되었습니다.')
+// 과목추가/삭제모달 알림창 뜨는거
+document.querySelector('form[name="insertForm"]')
+				.addEventListener('submit', validationCheck);
+function validationCheck(event){
+	event.preventDefault();
+	if($('#insertSubName').val() == ''){
+		alert('과목명을 입력해 주세요.');
+		$('#insertSubName').focus();
+		return;
 	} else {
-		alert('오류 발생.')
+		alert('과목이 추가되었습니다');
+		$('#insertForm').submit();
 	}
-})
-$('#testBtn').on('click',function(){
-	if($('#testBtn').submit()){
-		alert('과목이 삭제되었습니다.')
-	} else {
-		alert('오류 발생.')
-	}
-})
+}
 
+
+$('#delBtn').on('click',function(){
+	if($('#delBtn').submit()){
+		//alert('과목이 삭제되었습니다.')
+	} else {
+		alert('오류 발생.')
+	}
+})
+//--------------------------------------------
 // 과목삭제에서 체크박스 누르고 삭제버튼 누를시 삭제되는 기능
+//--------------------------------------------
 $('.form-check').on('click', '.checkbox', function(){
 	var chkVal = $(this).val();
-	
-	$('input[type="checkbox"][name="chkBox"]').click(function(){
+	console.log(chkVal);
+	console.log(curriId);
+	$('input[type="checkbox"][name="subjectName"]').click(function(){
 		  if($(this).prop('checked')){
-		     $('input[type="checkbox"][name="chkBox"]').prop('checked',false);
+		     $('input[type="checkbox"][name="subjectName"]').prop('checked',false);
 		     $(this).prop('checked',true);
 		    }
 	});
 	if($(".checkbox").is(":checked")){
-		$("#testBtn").attr("onclick", "location.href='/subjectdelete?subjectName=" + chkVal +"'");
-	} else {
-		$("#testBtn").attr("th:onclick", "");
+		$('#hidden').val(curriId);
+		$("#delBtn").attr("onclick", "location.href='/subjectdelete?subjectName=" + chkVal + '&curriculumId='+ curriId +"'");
+		
+	} else if($(".checkbox").is(":checked") == false){
+		$("#delBtn").attr("onclick", "");
 	};
-})
+})															
 
 // 모달창 작업
 // 모달창 (과목 추가/삭제)
@@ -364,7 +392,7 @@ $('#subBtn').on('click', function(e){
 });
 
 // X버튼 누르면 모달창 닫기
-$('.modal-overlay').on('click', '.close-area',function (e){
+$('#modal-overlay').on('click', '.close-area',function (){
 	modal.style.display = "none";
 	modalSub.style.display = "none";
 });
@@ -404,7 +432,7 @@ $('#subject').on('change', function(){
 	}
 });
 
-quizContentList(sName)
+quizContentList(sName);
 
 
 </script>
