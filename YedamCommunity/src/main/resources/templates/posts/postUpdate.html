@@ -8,8 +8,9 @@
 <title>게시글 수정</title>
 </head>
 <body>
+<div class="container">
 	<h1>게시글 수정</h1>
-	<form th:action="@{/postUpdate}" th:object="${postInfo}" method="post">
+	<form th:action="@{/postUpdate}" th:object="${postInfo}" method="post" enctype="multipart/form-data">
 		<input type="hidden" th:field="*{postId}" />
 		<div>
 			<label for="title">제목:</label> 
@@ -19,11 +20,17 @@
 			<label for="postContent">내용:</label>
 			<textarea th:field="*{postContent}" id="postContent"></textarea>
 		</div>
+		
+		<!-- 파일 업로드 -->
+		<label for="file">파일 :</label> 
+		<input type="file" name="file" multiple="multiple"/><br />
+		
 		<div>
 			<button type="button" id="updateBtn">수정</button>
 		</div>
 	</form>
 	<a th:href="@{/postList}">목록으로 돌아가기</a>
+	</div>
     
 	<script>
     $('#updateBtn').on('click', updateAjax);

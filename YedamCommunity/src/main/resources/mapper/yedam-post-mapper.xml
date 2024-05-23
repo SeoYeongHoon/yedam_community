@@ -90,6 +90,7 @@
 		     , POST_LIKE
 		     , UPDATE_DATE
 		FROM posts
+		<!-- WHERE board_id = #{boardId} -->
 		ORDER BY post_id DESC
 	</select>
 
@@ -141,20 +142,27 @@
     <!-- 추천수 조회 likes 테이블 -->
      <select id="likeCheck" parameterType="map" resultType="Integer">
     	SELECT post_like
-    	FROM likes
+    	FROM boardlikes
     	WHERE post_id = #{postId}
     	AND user_id = #{userId}
     </select> 
     
     <!-- 게시글 추천시 likes 테이블에 insert -->
-    <insert id="insertLike">
-    	INSERT INTO likes (like_id
+    <insert id="insertLike" parameterType="Post">
+    	INSERT INTO boardlikes (like_id
                          , post_id
                          , user_id)	
 		VALUES (like_id_seq.nextval
               , #{postId}
               , #{userId})
     </insert>
+    
+    <!-- 게시글 추천 취소했을시 boardlikes 테이블에서 Delete -->
+    <delete id="deleteLike" parameterType="Post">
+    	DELETE FROM boardlikes
+        WHERE post_id = #{postId}
+        AND user_id = #{userId}
+    </delete>
     
     <!-- 추천수 + 1 -->
     <update id="updatePostLikePlus" parameterType="int">
@@ -169,22 +177,6 @@
 		SET post_like = post_like - 1
 		WHERE post_id = #{postId}
     </update>
-    
-    <!-- 게시글 추천 시 Check를 1로 만들어서 중복방지 -->
-    <update id="updatePostLikeOne">
-   		UPDATE posts
-   		SET post_like = 1
-		WHERE post_id = #{postId}
-		AND user_id = #{userId}
-	</update>
-	
-	<!-- 게시글 추천 시 Check를 0으로 만들어서 중복방지 -->
-    <update id="updatePostLikeZero">
-   		UPDATE posts
-   		SET post_like = 0
-		WHERE post_id = #{postId}
-		AND user_id = #{userId}
-	</update>
     
  	<!-- 페이지네이션 -->
  	 <select id="getPosts" resultType="Post">
@@ -210,7 +202,5 @@
         SELECT COUNT(*)
         FROM posts
     </select>
-
-	
 
 </mapper>
