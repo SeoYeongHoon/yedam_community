@@ -23,6 +23,7 @@ public class TeacherVO {
 	private String quizSolution;
 	private String quizSolutionJu;
 	private String quizAnswer;
+	private String quizAnswerJu;
 	
 	private String textContent;
 	private String textContent2;
