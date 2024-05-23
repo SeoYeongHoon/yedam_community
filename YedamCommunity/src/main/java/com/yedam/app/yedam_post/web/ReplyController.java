@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,16 +20,14 @@ public class ReplyController {
 	@Autowired
 	private PostService postService;
 
-	/**
-     * 댓글 추가 처리
-     * @param postId 게시글 ID
-     * @param replyContent 댓글 내용
-     * @return 성공 메시지
-     */
-	@PostMapping("addReply")
+	//--------------------------------------------
+    //댓글 추가 처리
+	//--------------------------------------------
+	@PostMapping("/Reply")
 	@ResponseBody
 	public String addReply(@RequestParam("postId") int postId, 
 			               @RequestParam("replyContent") String replyContent) {
+		
 		Reply reply = new Reply();
 		reply.setPostId(postId);
 		reply.setBoardId(1); // 게시판 1번유형
@@ -40,15 +39,13 @@ public class ReplyController {
 		return "success";
 	}
 	
-	/**
-     * 댓글 삭제 처리
-     * @param replyId 댓글 ID
-     * @param postId 게시글 ID
-     * @return 게시글 상세 페이지로 리다이렉트
-     */
-    @PostMapping("deleteReply")
+	//--------------------------------------------
+    //댓글 삭제 처리
+    //--------------------------------------------
+    @DeleteMapping("/Reply")
     @ResponseBody
     public String deleteReply(@RequestParam("replyId") int replyId) {
+    	
     	Reply reply = new Reply();
     	reply.setReplyId(replyId);
         Map<String, Object> result = postService.deleteReply(reply);
@@ -59,16 +56,14 @@ public class ReplyController {
         }
     }
     
-    /**
-     * 대댓글 추가 처리
-     * @param replyId 댓글 ID
-     * @param commentContent 대댓글 내용
-     * @param commentWriter 
-     * @return 성공 메시지
-     */
-    @PostMapping("addComment")
+    //--------------------------------------------
+    //대댓글 추가 처리
+    //--------------------------------------------
+    @PostMapping("/Comment")
     @ResponseBody
-    public String addComment(@RequestParam("replyId") int replyId, @RequestParam("commentContent") String commentContent) {
+    public String addComment(@RequestParam("replyId") int replyId,
+    		                 @RequestParam("commentContent") String commentContent) {
+    	
     	Comment comment = new Comment();
         comment.setReplyId(replyId);
         comment.setCommentContent(commentContent);
@@ -77,14 +72,13 @@ public class ReplyController {
         return "대댓글이 성공적으로 추가되었습니다.";
     }
     
-    /**
-     * 대댓글 삭제 처리
-     * @param commentId 대댓글 ID
-     * @return 성공 또는 오류 메시지
-     */
-    @PostMapping("deleteComment")
+    //--------------------------------------------
+    //대댓글 삭제 처리
+    //-------------------------------------------- 
+    @DeleteMapping("/Comment")
     @ResponseBody
     public String deleteComment(@RequestParam("commentId") int commentId) {
+    	
     	Comment comment = new Comment();
     	comment.setCommentId(commentId);
         Map<String, Object> result = postService.deleteComment(comment);

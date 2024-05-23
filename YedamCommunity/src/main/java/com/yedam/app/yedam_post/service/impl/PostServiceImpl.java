@@ -33,25 +33,33 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private ReportMapper reportMapper;
 
+	//--------------------------------------------
 	// 게시글 등록
+	//--------------------------------------------
 	@Override
 	public int createPost(Post post) {
 		return postMapper.insertPost(post);
 	}
-
+	
+	//--------------------------------------------
 	// 게시글 전체 조회
+	//--------------------------------------------
 	@Override
 	public List<Post> getAllPosts() {
 		return postMapper.getAllPosts();
 	}
 
+	//--------------------------------------------
 	// 게시글 단건조회
+	//--------------------------------------------
 	@Override                  
-	public Post getPostReplies(Post post) {
-		return postMapper.getPostDetails(post);
+	public Post getPostReplies(int postId) {
+		return postMapper.getPostDetails(postId);
 	}
-
+	
+	//--------------------------------------------
 	// 게시글 수정
+	//--------------------------------------------
 	@Override
 	public Map<String, Object> PostUpdate(Post post) {
 		Map<String, Object> result = new HashMap<>();
@@ -63,8 +71,10 @@ public class PostServiceImpl implements PostService {
 		}
 		return result;
 	}
-
+	
+	//--------------------------------------------
 	// 게시글 삭제
+	//--------------------------------------------
 	@Override
 	@Transactional
 	public Map<String, Object> PostDelete(Post post) {
@@ -86,27 +96,36 @@ public class PostServiceImpl implements PostService {
 		return resultMap;
 	}
 	
+	//--------------------------------------------
 	// 게시글 페이지 네이션
+	//--------------------------------------------
     @Override
     public List<Post> getPosts(int page, int pageSize) {
         int startRow = (page - 1) * pageSize;
         int endRow = page * pageSize;
         return postMapper.getPosts(startRow, endRow);
     }
-
+    
+    //--------------------------------------------
     // 게시글 개수
+    //--------------------------------------------
     @Override
     public int getPostCount() {
         return postMapper.getPostCount();
     }
-	
+    
+    //--------------------------------------------
 	// 댓글 등록
+    //--------------------------------------------
 	@Override
 	public int createReply(Reply reply) {
 		return replyMapper.insertReply(reply);
 	}
 	
+	
+	//--------------------------------------------
 	// 댓글 삭제
+	//--------------------------------------------
 	@Override
 	@Transactional
 	public Map<String, Object> deleteReply(Reply reply) {
@@ -124,13 +143,17 @@ public class PostServiceImpl implements PostService {
 		return resultMap;
 	}
 	
+	//--------------------------------------------
 	// 대댓글 등록
+	//--------------------------------------------
 	@Override
 	public int createComment(Comment comment) {
 		return commentMapper.insertComment(comment);
 	}
 	
+	//--------------------------------------------
 	// 대댓글 삭제
+	//--------------------------------------------
     @Override
     @Transactional
     public Map<String, Object> deleteComment(Comment comment) {
@@ -146,59 +169,102 @@ public class PostServiceImpl implements PostService {
         }
         return resultMap;
     }
-
+    
+    //--------------------------------------------
+    // 대글조회
+    //--------------------------------------------
 	@Override
-	public List<Reply> getPostReply(Post post) {
-		return replyMapper.getReplies(post);
+	public List<Reply> getPostReply(int postId) {
+		return replyMapper.getReplies(postId);
 	}
 
+	//--------------------------------------------
+	// 대댓글 조회
+	//--------------------------------------------
 	@Override
 	public List<Comment> getPostComment(Reply replyId) {
 		return commentMapper.getComments(replyId);
 	}
-
+	
+	//--------------------------------------------
+	// 조회수
+	//--------------------------------------------
 	@Override
 	public int PostViewCnt(int postId) {
 		return postMapper.updatePostViewCNT(postId);
 	}
 
+	//--------------------------------------------
+	// 추천수 + 1
+	//--------------------------------------------
 	@Override
 	public int updateLike(int postId){
 		return postMapper.updatePostLikePlus(postId);
 	}
-
+	
+	//--------------------------------------------
+	// 추천수 - 1 
+	//--------------------------------------------
 	@Override
 	public int updateLikeCancel(int postId){
 		return postMapper.updatePostLikeMinus(postId);
 	}
 
-	@Override
-	public int updateLikeCheck(int postId, String userId){
-		Map<String, Object> map = new HashMap<>();
-        map.put("postId", postId);
-        map.put("userId", userId);
-        return postMapper.updatePostLikeOne(map);
-	}
+//	//--------------------------------------------
+//	// 게시글 추천 시 Check를 1로 만들어서 중복방지
+//	//--------------------------------------------
+//	@Override
+//	public int updateLikeCheck(int postId, int userId){
+//		Map<String, Object> map = new HashMap<>();
+//        map.put("postId", postId);
+//        map.put("userId", userId);
+//        return postMapper.updatePostLikeOne(map);
+//	}
+//
+//	//--------------------------------------------
+//	// 게시글 추천 시 Check를 0로 만들어서 중복방지
+//	//--------------------------------------------
+//	@Override
+//	public int updateLikeCheckCancel(int postId, int userId){
+//		Map<String, Object> map = new HashMap<>();
+//        map.put("postId", postId);
+//        map.put("userId", userId);
+//        return postMapper.updatePostLikeZero(map);
+//	}
 
+	//--------------------------------------------
+	// 추천 확인
+	//--------------------------------------------
 	@Override
-	public int updateLikeCheckCancel(int postId, String userId){
-		Map<String, Object> map = new HashMap<>();
-        map.put("postId", postId);
-        map.put("userId", userId);
-        return postMapper.updatePostLikeZero(map);
-	}
-
-	@Override
-	public int likeCheck(int postId, String userId) {
+	public int likeCheck(int postId, int userId) {
 		Map<String, Object> map = new HashMap<>();
         map.put("postId", postId);
         map.put("userId", userId);
         return postMapper.likeCheck(map);
 	}
-
+	
+	//--------------------------------------------
+	// 신고 등록
+	//--------------------------------------------
 	@Override
 	public int createReport(Report report) {
 		return reportMapper.insertReport(report);
+	}
+
+	@Override
+	public int createLike(int postId, int userId) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("postId", postId);
+		return postMapper.insertLike(map);
+	}
+
+	@Override
+	public Map<String, Object> LikeDelete(int postId, int userId) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("postId", postId);
+		return postMapper.deleteLike(map);
 	}
 
 }
