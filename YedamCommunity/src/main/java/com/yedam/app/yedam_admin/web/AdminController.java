@@ -1,11 +1,19 @@
 package com.yedam.app.yedam_admin.web;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,11 +24,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
-//import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
@@ -34,59 +42,38 @@ public class AdminController {
 	
 	@Autowired
 	CurriculumService curriculumService;
-
-	// 어드민 메인 페이지 및 유저 전체조회
+	
+	// 어드민 메인 페이지 및 회원가입 요청 목록
 	@GetMapping("/adminMain")
-	public String adminPage(Model model, 
-							@RequestParam(defaultValue = "showAll") String filter
-							) {
-		// 회원가입 신청 유저 리스트
+	public String adminPage(Model model) {
 		List<UserVO> requestList = userService.stdList();
 		model.addAttribute("requests", requestList);
-		
-		PageDTO pageDTO = new PageDTO(1, userService.userTotalCnt(filter), 5);
-		model.addAttribute("page", pageDTO);
-		
-		System.out.println("전체 페이지 정보: " + pageDTO);
-		
-		return "admin/adminMain";
+	    
+	    return "admin/adminMain";
 	}
 	
 	// 유저 필터링 및 페이징
 	@GetMapping("/filterUsers")
 	@ResponseBody
-	public List<UserVO> filterUsers(@RequestParam(defaultValue = "1") int page, 
-									@RequestParam(defaultValue = "showAll") String filter, 
-									Model model) {
-		
-		List<UserVO> users = userService.getUsersByFilter(filter, page);
-		System.out.println("페이지 정보: " + page);
-		model.addAttribute("users", users);
-		
-		return users;
+	public Map<String, Object> filterUsers(@RequestParam(defaultValue = "1") int page, 
+	                                       @RequestParam(defaultValue = "showAll") String filter,
+	                                       @RequestParam(defaultValue = "") String searchQuery) {
+	    List<UserVO> users = userService.getUsersByFilter(filter, page, searchQuery);
+	    int totalCnt = userService.userTotalCnt(filter, searchQuery);
+	    
+	    PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
+
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("users", users);
+	    response.put("page", pageDTO);
+	    
+	    System.out.println("필터: " + filter);
+	    System.out.println("현재 페이지: " + page);
+	    System.out.println("현재 페이지 DTO: " + pageDTO);
+	    
+	    return response;
 	}
 
-	// 수강생 or 수료생 or 전체 필터링
-//	@GetMapping("/filterUsers")
-//	@ResponseBody
-//	public List<UserVO> filterUsers(String filter, Model model, HttpServletRequest req) {
-//		String page = req.getParameter("page");
-//		page = page == null ? "1" : page;
-//		
-//		int boardCountInPage = Integer.parseInt(page);
-//		
-//		PageDTO pageDTO = new PageDTO(Integer.parseInt(page), userService.userTotalCnt(), 5);
-//		
-//		List<UserVO> users = userService.getUsersByFilter(filter, boardCountInPage);
-//		model.addAttribute("users", users);
-//		req.setAttribute("page", pageDTO);
-//		
-//		System.out.println("유저 정보: " + users);
-//		System.out.println("페이지 정보: " + pageDTO);
-//
-//		return users;
-//	}
-	
 
 	// 회원가입 신청한 유저 상세 정보
 	@GetMapping("/reqDetails")
@@ -130,6 +117,31 @@ public class AdminController {
 		userService.insertCheckedUsers(registerIds);
 
 		return "admin/adminMain";
+	}
+	
+	// 과정 정보 CSV 파일 등록
+	@PostMapping("/uploadCsv")
+	public ResponseEntity<List<Map<String, String>>> handleFileUpload(@RequestParam("file") MultipartFile file) {
+		List<Map<String, String>> data = new ArrayList<>();
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+				CSVParser csvParser = CSVFormat.DEFAULT.builder()
+						.setHeader()
+						.setSkipHeaderRecord(true)
+						.build()
+						.parse(reader)) {
+
+			for (CSVRecord csvRecord : csvParser) {
+				Map<String, String> row = new HashMap<>();
+				row.put("courseName", csvRecord.get("과정명"));
+				row.put("studentsCount", csvRecord.get("인원"));
+				row.put("downloadLink", csvRecord.get("다운로드"));
+				data.add(row);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
+		return ResponseEntity.ok(data);
 	}
 	
 	

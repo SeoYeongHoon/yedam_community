@@ -97,8 +97,6 @@
 		ORDER BY register_id
 	</select>
 	
-	<!-- 관리자페이지 유저 리스트 출력 및 필터링 -->
-	<select id="getUsersByFilter" parameterType="map" resultType="UserVO">
 		<!-- SELECT * FROM users
 		<where>
 			<choose>
@@ -117,55 +115,53 @@
 			</choose>
 		</where>
 		ORDER BY user_id -->
-		
-		SELECT * 
-		FROM (SELECT /*+ INDEX_DESC(b PK_GOODS) */ rownum rn, b.*
-      		  FROM users b
-			  <where>
-				 <choose>
-					<when test="filter == 'showAll'">
-						<![CDATA[
-					    rownum <= (#{page} * 5)
-					    ]]>
-						AND (user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN')
-					</when>
-					<when test="filter == 'showGrad'">
-						<![CDATA[
-					    rownum <= (#{page} * 5)
-					    ]]>
-						AND user_type = 'ROLE_GRAD'
-					</when>
-					<when test="filter == 'showLearn'">
-						<![CDATA[
-					    rownum <= (#{page} * 5)
-					    ]]>
-						AND user_type = 'ROLE_LEARN'
-					</when>
-					<otherwise>
-						<![CDATA[
-					    rownum <= (#{page} * 5)
-					    ]]>
-						AND 1=1
-					</otherwise>
-				 </choose>
-			  </where>
-			  ) a
-		WHERE a.rn > (#{page} - 1) * 5
+	<!-- 관리자페이지 유저 리스트 출력 및 필터링 -->
+	<select id="getUsersByFilter" parameterType="map" resultType="UserVO">
+		 SELECT * 
+		    FROM (
+		        SELECT rownum rn, b.*
+		        FROM users b
+		        <where>
+		            <choose>
+		                <when test="filter == 'showAll'">
+		                    AND (user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN')
+		                    AND (name LIKE '%' || #{searchQuery} || '%')
+		                </when>
+		                <when test="filter == 'showGrad'">
+		                    AND user_type = 'ROLE_GRAD'
+		                    AND (name LIKE '%' || #{searchQuery} || '%')
+		                </when>
+		                <when test="filter == 'showLearn'">
+		                    AND user_type = 'ROLE_LEARN'
+		                    AND (name LIKE '%' || #{searchQuery} || '%')
+		                </when>
+		            </choose>
+		        </where>
+		        AND 
+		        <![CDATA[
+			    rownum <= (#{page} * 5)
+			    ]]>
+			    AND (name LIKE '%' || #{searchQuery} || '%')
+		    ) a
+		    WHERE a.rn > (#{page} - 1) * 5
 	</select>
 	
-	<select id="getTotalCnt" resultType="int">
+	<select id="getTotalCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
         FROM users
         <where>
             <choose>
                 <when test="filter == 'showAll'">
                     AND (user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN')
+                    AND (name LIKE '%' || #{searchQuery} || '%')
                 </when>
                 <when test="filter == 'showGrad'">
                     AND user_type = 'ROLE_GRAD'
+                    AND (name LIKE '%' || #{searchQuery} || '%')
                 </when>
                 <when test="filter == 'showLearn'">
                     AND user_type = 'ROLE_LEARN'
+                    AND (name LIKE '%' || #{searchQuery} || '%')
                 </when>
             </choose>
         </where>

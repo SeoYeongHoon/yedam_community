@@ -35,7 +35,7 @@ public interface UserMapper {
 	public List<UserVO> selectStdList();
 
 	// 페이지네이션 카운트
-	int getTotalCnt(String filter);
+	int getTotalCnt(String filter, String searchQuery);
 
 	public List<UserVO> getUsersByFilter(Map<String, Object> params);
 

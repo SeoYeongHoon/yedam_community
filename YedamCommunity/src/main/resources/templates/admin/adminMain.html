@@ -173,6 +173,8 @@
 			document.querySelector('.addModal').style.display = 'none';
 		}
 		
+		
+		
 		// 회원가입 승인
 		function approveRegister(registerId) {
 			if (confirm('회원가입을 승인하시겠습니까?')) {
@@ -220,7 +222,7 @@
 	        
 	    }
 		
-		// 체크박스 전체체크
+		// 회원가입 요청 체크박스 전체체크
 		function checkAll(item) {
 	        checkboxes = document.getElementsByName('checkReqItem');
 	        for (var i in checkboxes) {
@@ -315,7 +317,7 @@
 					<div class="card-style mb-30 request_wrapper" style="position: relative; max-height: 100%; padding: 0 0 30px 0;">
 						<div class="table-top-content">
 							<h2 class="mb-10" style="color: white">회원 관리</h6>
-							<div class="select-style-1" style="display: flex; position: relative; margin-top: 20px; margin-bottom: 10px;">
+							<div class="select-style-1" style="display: flex; position: relative; margin-top: 20px; margin-bottom: 10px; margin-left: -10px;">
 								<div class="select-position" style="min-width: 140px;">
 									<select name="userFilter" id="userFilter" style="padding: 10px; color: white; background-color: #e96b56;" onchange="filterUsers()">
 										<option name="showAll" value="showAll" selected>전체</option>
@@ -373,37 +375,24 @@
 								</tbody>
 							</table>
 							
-							<!-- <div class="center">
-							    <div class="adminPaging">
-							        <th:block th:if="${page.prev}">
-							            <a href="javascript:void(0)" th:onclick="filterUsers(${page.starPage - 1})">&laquo;</a>
-							        </th:block>
-							        <th:block th:each="p : ${#numbers.sequence(page.starPage, page.endPage)}">
-							            <a id="page_id" href="javascript:void(0)" th:onclick="'filterUsers(' + ${p} + ')'" th:class="${p == page.page} ? 'active'">[[${p}]]</a>
-							        </th:block>
-							        <th:block th:if="${page.next}">
-							            <a href="javascript:void(0)" th:onclick="filterUsers(${page.endPage + 1})">&raquo;</a>
-							        </th:block>
-							    </div>
-							</div> -->
-							
 							<div class="center">
 							    <div class="adminPaging">
-							        <th:block th:if="${page.prev}">
+							        <!--<th:block th:if="${page.prev}">
 							            <a href="javascript:void(0)" th:onclick="filterUsers(${page.starPage - 1})">&laquo;</a>
 							        </th:block>
 							        <th:block th:each="p : ${#numbers.sequence(page.starPage, page.endPage)}">
 							            <a id="page_id" href="javascript:void(0)" th:onclick="'filterUsers(' + ${p} + ')'">[[${p}]]</a>
+										<a id="page_id" href="javascript:void(0)" th:onclick="'filterUsers(' + ${p} + ')'" th:classappend="${p == page.page ? 'active' : 'none'}">[[${p}]]</a>
 							        </th:block>
 							        <th:block th:if="${page.next}">
 							            <a href="javascript:void(0)" th:onclick="filterUsers(${page.endPage + 1})">&raquo;</a>
-							        </th:block>
+							        </th:block>-->
 							    </div>
 							</div>
 			                
 			                <!-- 유저검색 -->
-							<div class="input-style-1" style="position: absolute; bottom: 5px; ">
-								<input name="id" type="text" placeholder="회원 검색" style="padding: 10px; width: 250px;">
+							<div class="input-style-1" style="position: absolute; bottom: -20px; left: 10px;">
+								<input name="id" id="searchInput" type="text" placeholder="회원 검색" style="padding: 10px; width: 250px;">
 								<img style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 							</div>
 						</div>
@@ -415,17 +404,17 @@
 		<!-- 일괄등록 모달 -->
 		<div class="addModal">
 			<div class="add_modal_popup" style="min-width: 800px; min-height: 300px;">
-				<div class="add_modal_title center">
+				<div class="add_modal_title">
 					<h4>수강생 일괄 등록 및 받기</h4>
 					<a href="" class="modal_close" onclick="closeAddModal()">X</a>
 				</div>
 				<input class="addStdBtn" type="file" name="file" id="file" accept=".csv">
     
-				<table class="table">
+				<table class="table" id="csv_table">
 					<thead>
 						<tr>
 							<th>
-								<input type="checkbox" value="checkAll" onclick="checkAll(this)">
+								<input type="checkbox" value="checkCsvAll" onclick="checkCsvAll(this)">
 							</th>
 							<th><h6>과정명</h6></th>
 							<th><h6>인원</h6></th>
@@ -483,7 +472,7 @@
 		<!-- 상세정보 모달 -->
 		<div class="infoModal">
 			<div class="info_modal_popup" style="min-width: 700px; min-height: 300px;">
-				<div class="add_modal_title center">
+				<div class="add_modal_title">
 					<h4>상세정보</h4>
 					<a href="#0" class="info_modal_close" onclick="closeInfoModal()">X</a>
 				</div>
@@ -532,81 +521,44 @@
 		const addModal = document.querySelector('.addModal');
 		const modalOpen = document.querySelector('.modal_btn');
 
-		document.getElementById('file').addEventListener('change', handleFileSelect, false);
-
-		function handleFileSelect(event) {
-			const file = event.target.files[0];
-			if (file) {
-				const reader = new FileReader();
-				reader.onload = function(e) {
-					const contents = e.target.result;
-					console.log("CSV file contents:", contents); // Log the CSV file contents
-					parseCSV(contents);
-				};
-				reader.onerror = function(e) {
-					console.error("File could not be read! Code " + e.target.error.code);
-				};
-				reader.readAsText(file);
-			}
-		}
-
-		function parseCSV(data) {
-			const rows = data.split('\n').map(row => row.split(','));
-			console.log("Parsed rows:", rows); // Log the parsed rows
-			const tableBody = document.getElementById('table-body');
-			tableBody.innerHTML = '';
-			rows.forEach((row, index) => {
-				console.log("row: ", row, " index: ", index);
-				if (row.length >= 2 && row[3].trim() && row[4].trim()) { // Ensure there are at least 2 columns and no empty rows
-					const tr = document.createElement('tr');
-					tr.innerHTML = `
-						<td><input type="checkbox" name="checkFileItem"></td>
-						<td><p>${row[3].trim()}</p></td>
-						<td><p>${row[4].trim()}</p></td>
-						<td><a href="#0" class="main-btn dark-btn-light btn-hover" style="padding: 7px 5px;" onclick="downloadRow(${index})">다운로드</a></td>
-					`;
-					tableBody.appendChild(tr);
-				}
-			});
-		}
-
-		/* function checkAll(source) {
-			const checkboxes = document.getElementsByName('checkFileItem');
-			for (let i = 0; i < checkboxes.length; i++) {
-				checkboxes[i].checked = source.checked;
-			}
-		} */
-
-		function downloadRow(index) {
-			const tableBody = document.getElementById('table-body');
-			const row = tableBody.rows[index];
-			const courseName = row.cells[1].innerText;
-			const participants = row.cells[2].innerText;
-			const csvContent = `과정명,인원\n${courseName},${participants}`;
-			const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-			const link = document.createElement('a');
-			link.href = URL.createObjectURL(blob);
-			link.download = `${courseName}.csv`;
-			link.click();
-		}
-
-		function downloadSelected() {
-			const checkboxes = document.getElementsByName('checkFileItem');
-			let csvContent = '과정명,인원\n';
-			for (let i = 0; i < checkboxes.length; i++) {
-				if (checkboxes[i].checked) {
-					const row = checkboxes[i].parentElement.parentElement;
-					const courseName = row.cells[1].innerText;
-					const participants = row.cells[2].innerText;
-					csvContent += `${courseName},${participants}\n`;
-				}
-			}
-			const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-			const link = document.createElement('a');
-			link.href = URL.createObjectURL(blob);
-			link.download = `selected_courses.csv`;
-			link.click();
-		}
-
+		// CSV 파일 등록
+		$(document).ready(function() {
+			$('#file').on('change', function(event) {
+	            var file = event.target.files[0];
+	            var formData = new FormData();
+	            formData.append('file', file);
+	
+	            $.ajax({
+	                url: '/admin/uploadCsv',
+	                type: 'POST',
+	                data: formData,
+	                contentType: false,
+	                processData: false,
+	                success: function(data) {
+	                    $('#table-body').empty();
+	                    data.forEach(function(row) {
+							console.log("과정명: " + row.courseName);
+	                        var template = '<tr>' +
+	                            '<td><input type="checkbox"></td>' +
+	                            '<td>' + row.courseName + '</td>' +
+	                            '<td>' + row.studentsCount + '</td>' +
+	                            '<td><a href="' + row.downloadLink + '">받기</a></td>' +
+	                            '</tr>';
+	                        $('#table-body').append(template);
+	                    });
+	                }
+	            });
+	        });
+		});
+		
+		// CSV 파일목록 체크박스 전체체크
+		function checkCsvAll(item) {
+            checkboxes = document.getElementsByTagName('input');
+            for(var i=0, n=checkboxes.length; i<n; i++) {
+                if(checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = item.checked;
+                }
+            }
+        }
 	</script>
 </html>

@@ -24,4 +24,7 @@ public class UserVO {
 	private String profileImageLocation;
 	private String downloadLocation;
 	private String profileImageExt;
+	
+	// 검색필드
+	private String searchQuery;
 }

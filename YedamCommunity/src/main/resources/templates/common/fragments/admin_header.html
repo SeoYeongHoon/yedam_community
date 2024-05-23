@@ -174,9 +174,8 @@
 	  	//--------------------------------------------
 		// 현재 유저 리스트(필터링)
 		//--------------------------------------------
-		function filterUsers(page = 1) {
+		/** function filterUsers(page = 1) {
 	        var filterValue = document.getElementById('userFilter').value || 'showAll';
-	        // var page = document.getElementById('pageId').value || 1;
 	        var pages = document.querySelectorAll('#page_id');
 			pages[0].className = 'active';
 	        // AJAX 요청
@@ -195,10 +194,6 @@
 	                		pages[i].className = 'none';
 	                	}
 	                }
-	                
-	                /* pages.forEach(pageItem => {
-	                	
-	                }) */
 	
 	                users.forEach(user => {
 	                    var tr = document.createElement('tr');
@@ -243,6 +238,150 @@
 	            }
 	        };
 	        xhr.send();
-	    }
+	    } **/
+		
+		var isRequestInProgress = false;
+		
+		//--------------------------------------------
+		// 현재 유저 리스트(필터링)
+		//--------------------------------------------
+		function filterUsers(page, searchQuery) {
+			// 중복 실행 원인 때문에 프로세스 중단 임의로 한 번만 실행되게 막아둠
+			if (isRequestInProgress) {
+		        return;
+		    }
+			isRequestInProgress = true;
+			
+		    var filter = $('#userFilter').val();
+			
+			// 검색 변수
+			searchQuery = searchQuery || $('#searchInput').val();
+			
+		    $.ajax({
+		        url: '/admin/filterUsers',
+		        type: 'GET',
+		        data: {
+		            page: page,
+		            filter: filter,
+					searchQuery: searchQuery
+		        },
+		        success: function(response) {
+		            updateUsers(response.users);
+		            updatePagination(response.page, page);
+		        },
+		        error: function(error) {
+		            console.error('에러: ', error);
+		        },
+				complete: function() {
+					isRequestInProgress = false;
+				}
+		    });
+		}
+		
+		//--------------------------------------------
+		// 필터링으로 인한 유저 리스트 변경(목록 업데이트)
+		//--------------------------------------------
+		function updateUsers(users) {
+			var tbody = document.getElementById('userInfoTable');
+            tbody.innerHTML = ''; // 이전 내용 지우기
+			
+			users.forEach(user => {
+                var tr = document.createElement('tr');
+                
+                var tdUserId = document.createElement('td');
+                tdUserId.textContent = user.userId;
+                tr.appendChild(tdUserId);
+
+                var tdType = document.createElement('td');
+                if (user.userType == 'ROLE_GRAD') {
+                	tdType.textContent = '수료생';
+                } else {
+                	tdType.textContent = '수강생';
+                }
+                tr.appendChild(tdType);
+                
+                var tdName = document.createElement('td');
+                tdName.textContent = user.name;
+                tr.appendChild(tdName);
+                
+                var tdTel = document.createElement('td');
+                tdTel.textContent = user.tel;
+                tr.appendChild(tdTel);
+                
+                var tdEmail = document.createElement('td');
+                tdEmail.textContent = user.email;
+                tr.appendChild(tdEmail);
+                
+                var makeBtnTd = document.createElement('td');
+                var tdInfoBtn = document.createElement('a');
+                tdInfoBtn.className = "main-btn light-btn btn-hover";
+                tdInfoBtn.style = "padding: 5px 10px;"
+                tdInfoBtn.innerText = "상세보기";
+                tdInfoBtn.onclick = function() {
+                	fetchUserDetails(user.userId);
+                }
+                makeBtnTd.appendChild(tdInfoBtn);
+                tr.appendChild(makeBtnTd);
+
+                tbody.appendChild(tr);
+            });
+		}
+		
+		//--------------------------------------------
+		// 필터링으로 인한 페이징 넘버링 업데이트
+		//--------------------------------------------
+		function updatePagination(pageDTO, currentPage) {
+			console.log("pageDTO:", JSON.stringify(pageDTO, null, 5), "현재페이지:", currentPage);
+			let arr = new Array();
+			arr.push(pageDTO);
+			console.log("현재 페이지: " + arr[0].page);
+			currentPage = arr[0].page;
+			
+		    var pagination = $('.adminPaging');
+		    pagination.empty();
+			
+		    if (pageDTO.prev) {
+				pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '" onclick="filterUsers(' + (pageDTO.starPage - 1) + ')">&laquo;</a>');
+		    }
+			
+		    for (var p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
+				console.log("p값: " + p);
+				
+				var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
+				
+		        if (p === currentPage) {
+		            pageLink.addClass('active');
+		        } else {
+		            pageLink.addClass('none');
+		        }
+				
+		        pageLink.attr('onclick', 'filterUsers(' + p + ')');
+		        pagination.append(pageLink);
+		    }
+		    if (pageDTO.next) {
+		        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '" onclick="filterUsers(' + (pageDTO.endPage + 1) + ')">&raquo;</a>');
+		    }
+		}
+
+		$(document).ready(function() {
+		    $('#userFilter').off('change').on('change', function() {
+		        filterUsers(1); // 필터 변경 시 1페이지부터 다시 시작
+		    });
+			
+			$('#searchIcon').off('click').on('click', function() {
+		        filterUsers(1); // 검색어 입력 후 검색 아이콘 클릭 시 1페이지부터 시작
+		    });
+
+		    $('#searchInput').off('keypress').on('keypress', function(e) {
+		        if (e.which == 13) { // Enter 키 눌렀을 때 검색 실행
+		            filterUsers(1); // 필터 변경 시 1페이지부터 다시 시작
+		        }
+		    });
+
+		    $('.adminPaging').off('click', 'a').on('click', 'a', function() {
+		        var page = $(this).data('page');
+		        filterUsers(page);
+		    });
+		});
     </script>
 </html>
