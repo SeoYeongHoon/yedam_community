@@ -5,7 +5,7 @@
 	layout:fragment="Admin">
 
 <main class="main-wrapper">
-	<!-- Error 모달창 -->
+	<!-- 댓글내용 확인 모달창 -->
 	<div id="modalReply" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -80,13 +80,9 @@
 		</div>
 	</div>
 
+	<!-- 과제 상세페이지 시작 -->
 	<div th:each="homeworkInfo : ${homeworkList}">
 		<div style="border: 1px solid black;">
-			<div id ="test"class="col-12" style="text-align: left;">
-			
-				<button class="main-btn primary-btn btn-hover commentInsertBtn"
-					type="button">test</button>
-			</div>
 			<hr>
 			<h1>제목</h1>
 			<p>[[${homeworkInfo.homeworkTitle}]]</p>
@@ -100,200 +96,160 @@
 					<a th:href="|@{/homeworkdownload}/${file.downloadLocation}|">[[${file.homeworkfileName}]]</a>
 				</p>
 			</th:block>
-			
 		</div>
 		<div style="border: 1px solid black;">
+			<!-- 댓글출력 -->
 			<h3>댓글</h3>
 			<div id="replyList">
-			<div id="replies"></div>
-				<!-- 댓글출력 -->
-				<div id ="replyList" th:each="reply : ${homeworkList.replyList}"
-					style="border: 1px solid black;">
-					<p>댓글 내용 : [[${reply.replyContent}]]</p>
-					<p>작성자 : [[${reply.replyWriter}]]</p>
-					<p>작성일자 : [[${#dates.format(reply.replyDate,'yyyy년MM월dd일')}]]</p>
-					<th:block th:each="replyfiles : ${replyfile}">
-						<p>
-							<a th:href="|@{/replydownload}/${replyfiles.downloadLocation}|">[[${replyfiles.replyfileName}]]</a>
-						</p>
-					</th:block>
-					<hr>
-					<!-- 대댓글 출력 -->
-					<div th:each="comment : ${reply.commentList}"
-						style="border: 1px solid black;">
-						<p>대댓글 내용 : [[${comment.commentContent}]]</p>
-						<p>작성일자 :
-							[[${#dates.format(comment.commentDate,'yyyy년MM월dd일')}]]</p>
-
-					</div>
-					<!-- 대댓글 출력 끝-->
-					<!-- 댓글출력 끝 -->
-					<div id="commentInsert" class="col-12 " style="text-align: right;">
-						<button class="main-btn primary-btn btn-hover commentBtn "
-							type="button">답글</button>
-
-						<!-- 대댓글 등록 -->
-						<form class="insertComment" id="addComment" method="post"
-							th:action="@{/insertComment}" th:object="${homeworkList}">
-							<input type="hidden" name="replyId" th:value="${reply.replyId}">
-							<input type="hidden" th:field="*{homeworkId}">
-							<textarea name="commentContent" style="border: 1px solid black;"
-								rows="8" cols="50" placeholder="내용을 입력하세요"
-								th:field="*{commentContent}"></textarea>
-							<div class="col-12" style="text-align: left;">
-								<button class="main-btn primary-btn btn-hover commentInsertBtn"
-									type="submit">답글 등록</button>
-							</div>
-						</form>
-						<!-- 대댓글 등록 끝 -->
-					</div>
-				</div>
+				<div id="replies"></div>
 			</div>
-
-			<!-- end reply  -->
-			<h3>댓글 작성</h3>
-			<form name="insertReply" id="addReply" method="post"
-				th:object="${homeworkList}" enctype="multipart/form-data">
-				<input id="targetId" type="hidden" th:field="*{homeworkTargetId}"> <input
-					type="hidden" th:field="*{homeworkId}">
-				<textarea style="border: 1px solid black;" rows="8" cols="50"
-					placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
-				<div class="col-12" style="text-align: center;">
-					<input type="file" name="uploadFiles" multiple>
-					<button id="insertBtn" class="main-btn primary-btn btn-hover"
-						type="button">등록</button>
-				</div>
-			</form>
 		</div>
 	</div>
+	<!-- end reply -->
+	<h3>댓글 작성</h3>
+	<form name="insertReply" id="addReply" method="post"
+		th:object="${homeworkList}" enctype="multipart/form-data">
+		<input id="targetId" type="hidden" th:field="*{homeworkTargetId}">
+		<input type="hidden" th:field="*{homeworkId}">
+		<textarea style="border: 1px solid black;" rows="8" cols="50"
+			placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
+		<div class="col-12" style="text-align: center;">
+			<input type="file" name="uploadFiles" multiple>
+			<button id="insertBtn" class="main-btn primary-btn btn-hover"
+				type="button">등록</button>
+		</div>
+	</form>
 </main>
 
 <script>
-	//댓글 목록
-	replyList();
-	
-	function replyList(){
-		let targetId =  $('#targetId').val(); 
-		
-		console.log(targetId)
-		
-		$.ajax({
-			url : "replyList",
-			type : "GET",
-			data : {targetId:targetId} ,
-			success : function(data){
-				data.forEach(function(e){
-					let replyDate = formatDate(e.replyDate);
-					let replyList = 
+	// 페이지 로드 시 댓글 목록 불러오기
+	$().ready(function(){
+   		replyList(); 
+	});
 
-					`
-						<p>댓글 내용 : ${e.replyContent}</p>
-						<p>작성자 : ${e.replyWriter}</p>
-						<p class ="replyDate"></p>
-						
-					`
-					formatDate($(".replyDate").text(e.replyDate));
-					
-						$('#replyList').append(replyList);
-						$(".replyDate").text(replyDate);
-				})
-			},
-			error: function(err){
-				alert("실패");
-			}
-		});
-		
-	}
-	
-	//날짜 포멧 변환 함수
-	 function formatDate(date) {
-	     var d = new Date(date),
-	         month = '' + (d.getMonth() + 1),
-	         day = '' + d.getDate(),
-	         year = d.getFullYear();
-
-	     if (month.length < 2) month = '0' + month;
-	     if (day.length < 2) day = '0' + day;
-
-	     return [year, month, day].join('/');
-	 } 
-	
-	
-	//댓글 등록
-	$('#insertBtn').on('click', addReply); 
-
-	function addReply() {
-		
-		// 댓글내용 없을 시 모달띄움
-		let replyCentent = document.getElementById('replyContent');
-		let commentContent = document.getElementById('commentContent');
-
-		//파일 업로드
-		let formData = new FormData(document.getElementById('addReply'))
-		if (replyCentent.value == '') {
-			$('#modalReply').modal('show');
-			replyCentent.focus();
-			return;
-		} else {
-			$.ajax({
-				url : "insertReply",
-				type : "POST",
-				processData : false, // QueryString(key=value)로 자동변환 무시
-				contentType : false, // FormData가 가지고 있는 통신 정보를 사용
-				data : formData,
-				success : function(json) {
-					let replyDate = formatDate(json.replyDate);
-					$('#modal').modal('show');
-					
-					let addReply = 
-					`
-						<div>
-							<p>댓글 내용 : ${json.replyContent}</p>
-							<p>작성자 : ${json.replyWriter} </p>
-							<p class="replyDate"></p>
-							<div class="replyFile"></div>
+   //댓글 목록 불러오기 함수
+   function replyList(){
+      let targetId = $('#targetId').val();
+      
+      $.ajax({
+         url : "replyList",
+         type : "GET",
+         data : {targetId:targetId},
+         success : function(data){
+            // 댓글 목록 초기화
+            $('#replyList').empty(); 
+            
+            data.forEach(function(e){
+            	alert("OK");
+               let replyDate = formatDate(e.replyDate);
+               let replyList = 
+            	   `
+            	   <div style="border: 1px solid black;">
+                   		<p>댓글 내용 : ${e.replyContent}</p>
+                   		<p>작성자 : ${e.replyWriter} ${e.commentContent}</p>
+                   		<p class="replyDate">작성일자 :${replyDate}</p>
+                   		<div class="col-12" style="text-align: right;">
+							<button class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
 						</div>
-					`
-					$('#replies').append(addReply);
-					$('.replyDate').text(replyDate);
-					$('.replyFile').append('<a>');
-				},
-				error : function(err) {
-					alert("error");
-				}
-			});
+						<div id="${e.replyId}" style="display: none; margin-top: 10px;">
+							<textarea id="comment-${e.replyId}" style="border: 1px solid black;" rows="4" cols="50" placeholder="답글 내용을 입력하세요"></textarea>
+							<div class="col-12" style="text-align: center; margin-top: 10px;">
+							<button class="main-btn primary-btn btn-hover commentInsertBtn" type="button" onclick="addComment(${e.replyId})">답글 등록</button>
+							</div>
+						</div>
+                	</div>`;
+               $('#replyList').append(replyList);
+               
+               
+            });
+         },
+         error: function(err){
+            alert("실패");
+         }
+      });
+   }
+   
+   //대댓글 등록
+   function addComment(replyId){
+	   let content = $('#comment-'+replyId).val(); 
+	   console.log(content);
+	    if (content.value =='') {
+	        alert('댓글 내용을 입력하세요.');
+	    } else{
+	   $.ajax({
+		   url: 'insertComment',
+		   type: 'post',
+		   data :{replyId:replyId , content:content} ,
+		   success: function(data){
+			 content.value='';
+			 replyList();
+		   },
+		   error : function(err){
+			   alert('실패');
+		   }
+	   });  
+	   }
+   } 
+   // 답글 입력 창 보이기 함수
+   function showReplyInput(replyId) {
+       let replyInput = document.getElementById(replyId); 
+      
+      if (replyInput.style.display === 'none') {
+         replyInput.style.display = 'block';
+      } else {
+         replyInput.style.display = 'none';
+      }
+   }
+   
+   // 날짜 포맷 변환 함수
+   function formatDate(date) {
+      var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
 
-		}
-	}
-	 $('#test').on('click',replyList);
-	 
-	
-	
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
 
-	// 대댓글 등록
-	/* $('.commentInsertBtn').on('click', addComment);
+      return [year, month, day].join('/');
+   } 
 
-	function addComment() {
-		let formValues = $('form[class="insertComment"]').serialize();
 
-		if (commentContent.value == '') {
-			$('#commentCentent').modal('show');
-			commentCentent.focus();
-			return;
-		} else {
 
-			$.ajax({
-				url : "insertComment",
-				type : "POST",
-				data : formValues,
-				success : function(json) {
-					$('#modal').modal('show');
-				},
-				error : function(err) {
-					$('#modalError').modal('show');
-				}
-			});
-		}
-	} */
+   // 댓글 등록 버튼 클릭 이벤트
+   $('#insertBtn').on('click', addReply); 
+   
+   //댓글 등록 함수
+   function addReply() {
+      // 댓글 내용 없을 시 모달 띄움
+      let replyContent = document.getElementById('replyContent');
+
+      // 파일 업로드
+      let formData = new FormData(document.getElementById('addReply'));
+      if (replyContent.value == '') {
+         $('#modalReply').modal('show');
+         replyContent.focus();
+         return;
+      } else {
+         $.ajax({
+            url : "insertReply",
+            type : "POST",
+            processData : false, // QueryString(key=value)로 자동변환 무시
+            contentType : false, // FormData가 가지고 있는 통신 정보를 사용
+            data : formData,
+            success : function(json) {
+               $('#modal').modal('show');
+               // 댓글 입력창 초기화
+               replyContent.value = '';
+               // 댓글 목록 새로고침
+               replyList();
+            },
+            error : function(err) {
+               alert("error");
+            }
+         });
+      }
+   }
+
 </script>
 </html>

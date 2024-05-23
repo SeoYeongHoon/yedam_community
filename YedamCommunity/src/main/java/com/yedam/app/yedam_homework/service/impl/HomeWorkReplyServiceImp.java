@@ -30,13 +30,13 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 	
 	//대댓글 조회
 	@Override
-	public List<CommentVO> commentList(ReplyVO replyId) {
+	public List<CommentVO> commentList(int replyId) {
 		return homeworkReplyMapper.selectComment(replyId);
 	}
 	//대댓글 등록
 	@Override
-	public int commentInsert(HomeWorkVO homeworkVO) {
-		return homeworkReplyMapper.insertComment(homeworkVO);
+	public int commentInsert(CommentVO comment) {
+		return homeworkReplyMapper.insertComment(comment);
 	}
 
 }
