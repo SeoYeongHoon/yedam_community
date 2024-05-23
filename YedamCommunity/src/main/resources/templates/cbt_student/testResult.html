@@ -45,7 +45,7 @@
 				<td th:if="${testMin < 10 && testMin > 0 && testSec > 9}" class="tresult_2"><h1>0[[${testMin}]]:[[${testSec}]]</h1></td>
 				<td th:if="${testMin > 9 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>[[${testMin}]]:0[[${testSec}]]</h1></td>
 				<td th:if="${testMin > 9 && testSec > 9}" class="tresult_2"><h1>[[${testMin}]]:[[${testSec}]]</h1></td>
-				<td class="tresult_2"><h1>[[${testResult.resultScore}]]</h1></td>
+				<td class="tresult_2"><h1>[[${testResult.resultScore}]]/[[${testResult.passScore}]]</h1></td>
 				<td th:if="${testResult.isReexam == 1}" class="tresult_2"><h1 style="color: blue;">통과</h1></td>
 				<td th:unless="${testResult.isReexam == 1}" class="tresult_2"><h1 style="color: red;">재시험</h1></td>
 			</tr>

@@ -126,6 +126,7 @@
     		v_target NUMBER(10); <!-- 시험대상자번호 -->
     		v_pscore NUMBER(10); <!-- 합격 점수 -->
     		v_rid_cnt NUMBER(10); <!-- 시험결과 개수 -->
+    		v_rid NUMBER(10); <!-- 시험결과 개수 -->
 		BEGIN
 			<!-- 현재 시험의 기준점수, 대상자번호, 과목번호, 총점 가져오기 -->
 			SELECT  DISTINCT a.pass_score, 
@@ -147,8 +148,16 @@
         			ON(a.test_target_id = b.test_target_id)
         	WHERE   b.test_id = #{testId}
         	AND     b.user_id = #{userId};
-        	<!-- 처음 응시하는 경우 -->
-        	IF v_rid_cnt = 0 THEN
+        	<!-- 시험결과식별번호 구하기 -->
+			SELECT  a.result_id
+			INTO    v_rid
+        	FROM    exam_results a 
+        			JOIN test_targets b 
+        			ON(a.test_target_id = b.test_target_id)
+        	WHERE   b.test_id = #{testId}
+        	AND     b.user_id = #{userId};
+        	<!-- 시험결과 존재여부 구하기 -->
+        	IF v_rid_cnt = 0 THEN <!-- 처음 응시하는 경우 -->
         		<!-- 테이블에 시험결과 정보 등록하기 -->
 				INSERT INTO exam_results(result_id
 			                         	 ,subject_id
@@ -158,6 +167,11 @@
 			       	   ,v_sub
 			      	   ,v_pscore
 			           ,v_target);
+				COMMIT;
+			ELSE <!-- 재시험인 경우 -->
+				UPDATE  exam_results
+				SET     result_score = 0
+				WHERE   result_id = v_rid;
 				COMMIT;
         	END IF;
 		END;
@@ -257,8 +271,10 @@
 		SELECT  c.name
        			,a.subject_id
        			,a.result_score
+       			,a.pass_score
        			,a.is_reexam
-		FROM    exam_results a JOIN test_targets b 
+		FROM    exam_results a 
+				JOIN test_targets b 
 				ON(a.test_target_id = b.test_target_id)
 				JOIN users c 
 				ON(b.user_id = c.user_id)
