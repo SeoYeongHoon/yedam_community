@@ -1,6 +1,8 @@
 package com.yedam.app.yedam_user.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,14 +54,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int userTotalCnt() {
-		return userMapper.getTotalCnt();
+	public int userTotalCnt(String filter) {
+		return userMapper.getTotalCnt(filter);
 	}
 
 	@Override
-	public List<UserVO> getUsersByFilter(String filter) {
-		return userMapper.getUsersByFilter(filter);
-	}
+    public List<UserVO> getUsersByFilter(String filter, int page) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("filter", filter);
+        params.put("page", page);
+        return userMapper.getUsersByFilter(params);
+    }
 
 	@Override
 	public List<UserVO> stdList() {

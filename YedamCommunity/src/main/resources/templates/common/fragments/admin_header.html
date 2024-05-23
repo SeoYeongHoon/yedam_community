@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="AdminHeaderFragment">
 	<aside class="sidebar-nav-wrapper" style="position:fixed;">
       <div class="navbar-logo">
-        <a href="index.html">
-          <img src="images/yedam_logo.png" alt="logo" style="width: 250px; margin: -50px -30px;" />
+        <a href="/admin/adminMain">
+          <img src="../images/yedam_logo.png" alt="logo" style="width: 250px; margin: -50px -30px;" />
         </a>
       </div>
-      <nav class="sidebar-nav" style="margin-left: 0; height: 100vh; width: 250px;">
+      <nav class="sidebar-nav" style="margin-left: 0; width: 250px;">
         <ul>
           <li class="nav-item nav-item-has-children">
             <a
@@ -28,13 +28,13 @@
             </a>
             <ul id="ddmenu_1" class="collapse show dropdown-nav">
               <li>
-                <a href="/adminMain"> 회원 관리 </a>
+                <a href="/admin/adminMain"> 회원 관리 </a>
               </li>
               <li>
-                <a href="/manageCourse"> 수강과정 관리 </a>
+                <a href="/admin/course"> 수강과정 관리 </a>
               </li>
               <li>
-                <a href="/manageReport"> 신고글 관리 </a>
+                <a href="/admin/manageReport"> 신고글 관리 </a>
               </li>
             </ul>
           </li>
@@ -143,18 +143,12 @@
           </li>
         </ul>
       </nav>
-      <div class="promo-box">
-        <div class="promo-icon">
-          <!--<img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">-->
-        </div>
-        <h3>Upgrade to PRO</h3>
-        <p>Improve your development process and start doing more with PlainAdmin PRO!</p>
-        <a href="https://plainadmin.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">
-          Upgrade to PRO
-        </a>
-      </div>
     </aside>
     <script>
+    	window.onload = function() {
+    		setActiveMenuItem();
+    		filterUsers();
+    	}
 	 	// 현재 페이지 URL
 	    function getCurrentPage() {
 	        var pathArray = window.location.pathname.split('/');
@@ -171,12 +165,84 @@
 	        
 	        for (var i = 0; i < navLinks.length; i++) {
             	
-	            if (navLinks[i].getAttribute('href') === ("/" + currentPage)) {
+	            if (navLinks[i].getAttribute('href') === ("/admin/" + currentPage)) {
 	                navLinks[i].classList.add('active');
 	            }
 	        }
 	    }
+	    
+	  	//--------------------------------------------
+		// 현재 유저 리스트(필터링)
+		//--------------------------------------------
+		function filterUsers(page = 1) {
+	        var filterValue = document.getElementById('userFilter').value || 'showAll';
+	        // var page = document.getElementById('pageId').value || 1;
+	        var pages = document.querySelectorAll('#page_id');
+			pages[0].className = 'active';
+	        // AJAX 요청
+	        var xhr = new XMLHttpRequest();
+	        xhr.open('GET', '/admin/filterUsers?filter=' + filterValue + '&page=' + page, true);
+	        xhr.onreadystatechange = function() {
+	            if (xhr.readyState == 4 && xhr.status == 200) {
+	                var users = JSON.parse(xhr.responseText);
+	                var tbody = document.getElementById('userInfoTable');
+	                tbody.innerHTML = ''; // 이전 내용 지우기
+	                
+	                for (let i = 0; i < pages.length; i++) {
+	                	if (i == (page-1)) {
+	                		pages[i].className = 'active';
+	                	} else {
+	                		pages[i].className = 'none';
+	                	}
+	                }
+	                
+	                /* pages.forEach(pageItem => {
+	                	
+	                }) */
 	
-	    window.onload = setActiveMenuItem;
+	                users.forEach(user => {
+	                    var tr = document.createElement('tr');
+	                    
+	                    var tdUserId = document.createElement('td');
+	                    tdUserId.textContent = user.userId;
+	                    tr.appendChild(tdUserId);
+	
+	                    var tdType = document.createElement('td');
+	                    if (user.userType == 'ROLE_GRAD') {
+	                    	tdType.textContent = '수료생';
+	                    } else {
+	                    	tdType.textContent = '수강생';
+	                    }
+	                    tr.appendChild(tdType);
+	                    
+	                    var tdName = document.createElement('td');
+	                    tdName.textContent = user.name;
+	                    tr.appendChild(tdName);
+	                    
+	                    var tdTel = document.createElement('td');
+	                    tdTel.textContent = user.tel;
+	                    tr.appendChild(tdTel);
+	                    
+	                    var tdEmail = document.createElement('td');
+	                    tdEmail.textContent = user.email;
+	                    tr.appendChild(tdEmail);
+	                    
+	                    var makeBtnTd = document.createElement('td');
+	                    var tdInfoBtn = document.createElement('a');
+	                    tdInfoBtn.className = "main-btn light-btn btn-hover";
+	                    tdInfoBtn.style = "padding: 5px 10px;"
+	                    tdInfoBtn.innerText = "상세보기";
+	                    tdInfoBtn.onclick = function() {
+	                    	fetchUserDetails(user.userId);
+	                    }
+	                    makeBtnTd.appendChild(tdInfoBtn);
+	                    tr.appendChild(makeBtnTd);
+	
+	                    tbody.appendChild(tr);
+	                });
+	            }
+	        };
+	        xhr.send();
+	    }
     </script>
 </html>

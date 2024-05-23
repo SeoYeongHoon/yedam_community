@@ -2,6 +2,7 @@ package com.yedam.app.yedam_user.mapper;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -34,9 +35,9 @@ public interface UserMapper {
 	public List<UserVO> selectStdList();
 
 	// 페이지네이션 카운트
-	int getTotalCnt();
+	int getTotalCnt(String filter);
 
-	public List<UserVO> getUsersByFilter(@Param("filter") String filter);
+	public List<UserVO> getUsersByFilter(Map<String, Object> params);
 
 	// 회원 상세 정보
 	@Select("SELECT * FROM users WHERE user_id = #{userId}")

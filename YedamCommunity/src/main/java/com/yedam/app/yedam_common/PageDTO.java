@@ -1,7 +1,5 @@
 package com.yedam.app.yedam_common;
 
-import lombok.Data;
-
 public class PageDTO {
 	private int page;
 	private int startPage, endPage;
