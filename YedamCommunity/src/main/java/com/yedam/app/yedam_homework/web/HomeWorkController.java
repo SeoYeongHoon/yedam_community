@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +27,15 @@ import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
 import com.yedam.app.yedam_homework.upload.service.ReplyFileVO;
 import com.yedam.app.yedam_subjects.service.SubjectService;
 
+/**
+ * 과제 관리
+ * 
+ * @author 전영재 개발 일자 202405-23
+ * 
+ */
+// /teacher/~~
 @Controller
+
 public class HomeWorkController {
 
 	// 로컬 저장 경로
@@ -44,7 +54,7 @@ public class HomeWorkController {
 
 	@Autowired
 	HomeWorkFileService homeworkfileService;
-	
+
 	@Autowired
 	CurriculumService curriculumService;
 
@@ -56,18 +66,18 @@ public class HomeWorkController {
 		// 과제 조회
 		List<HomeWorkVO> list = homeworkService.homeworkList();
 		List<CurriculumVO> classList = curriculumService.CurriculumList();
-		
+
 		model.addAttribute("homeworklist", list);
-		model.addAttribute("classId",classList);
-		System.err.println(classList);
+		model.addAttribute("classId", classList);
 		return "homework/homeworkList_t"; // 출력할 페이지
 	}
-	
+
 	@PostMapping("homeworkListT")
 	public String homeworkselectList(int classId) {
-		
+
 		return "homework/homeworkList_t";
 	}
+
 	// ----------------
 	// 과제 목록(학생)
 	// ----------------
@@ -76,7 +86,6 @@ public class HomeWorkController {
 		// 과제 조회
 		List<HomeWorkVO> list = homeworkService.homeworkList();
 		model.addAttribute("homeworklist", list);
-		System.err.println(list);
 		return "homework/homeworkList_s"; // 출력할 페이지
 	}
 
@@ -99,18 +108,20 @@ public class HomeWorkController {
 	@ResponseBody
 	public String homeworkInsertProcess(@RequestPart MultipartFile[] uploadFiles, HomeWorkVO homeworkVO,
 			HomeWorkTargetVO homeworktargetVO) {
+
 		// 과제등록
 		homeworkService.homeworkInsert(homeworkVO);
 
-		HomeWorkTargetVO list = homeworkService.homeworktargetList(homeworkVO);
-		homeworktargetVO.setHomeworkId(list.getHomeworkId());
-		homeworktargetVO.setCurriculumId(list.getCurriculumId());
 		// 타겟 등록
+		HomeWorkTargetVO targetVo = homeworkService.homeworktargetList(homeworkVO);
+		homeworktargetVO.setHomeworkId(targetVo.getHomeworkId());
+		homeworktargetVO.setCurriculumId(targetVo.getCurriculumId());
 		homeworkService.homeworkTargetInsert(homeworktargetVO);
-		// 과제 파일 업로드
-		homeworkfileService.homeworkUploadFile(uploadFiles, list);
 
-		return "redirect:homeworkList";
+		// 과제 파일 업로드
+		homeworkfileService.homeworkUploadFile(uploadFiles, targetVo);
+
+		return null;
 	}
 
 	// ----------------
@@ -120,26 +131,48 @@ public class HomeWorkController {
 	public String homeworkInfo(HomeWorkVO homeworkVO, Model model) {
 		// 과제 상세 조회
 		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
-		// 댓글조회
-		List<ReplyVO> replyList = homeworkReplyService.replyList(findVO);
-
-		for (ReplyVO reply : replyList) {
-			// 대댓글 조회
-			List<CommentVO> commentList = homeworkReplyService.commentList(reply);
-			reply.setCommentList(commentList);
-			System.err.println("댓글번호 있니 findVO" + reply);
-			List<ReplyFileVO> replyfiles = homeworkfileService.replyfileList(reply);
-			model.addAttribute("replyfile", replyfiles);
-
-		}
-		findVO.setReplyList(replyList);
-
 		model.addAttribute("homeworkList", findVO);
-		// 파일 조회
+		ReplyVO reply = new ReplyVO();
+		reply.setReplyId(findVO.getReplyId());
+		// 과제 파일 조회
 		List<HomeWorkFileVO> file = homeworkfileService.homeworkfileList(homeworkVO);
-
 		model.addAttribute("files", file);
+
+		/*
+		 * // 댓글조회 
+		 * List<ReplyVO> replyList = homeworkReplyService.replyList(reply);
+		 * findVO.setReplyList(replyList);
+		 * for (ReplyVO replyId : replyList) { 
+		 * // 대댓글 조회 
+		 * List<CommentVO> commentList = homeworkReplyService.commentList(replyId); reply.setCommentList(commentList);
+		 * // 첨부파일 
+		 * List<ReplyFileVO> replyfiles = homeworkfileService.replyfileList(replyId);
+		 * reply.setReplyfileList(replyfiles); 
+		 * }
+		 */
 		return "homework/homeworkInfo";
+	}
+
+	// ----------------
+	// 댓글 조회
+	// ----------------
+	@GetMapping("replyList")
+	@ResponseBody
+	public List<ReplyVO> replyList(@RequestParam("targetId") int homeworkTargetId) {
+
+		System.err.println("아무값도 없니?" + homeworkTargetId);
+		
+		
+		 //homeworkReplyService.replyList(targetId);
+		 //System.err.println("replyList="+replyList); 
+		  //findVO.setReplyList(replyList);
+		  //for (ReplyVO replyId : replyList) { 
+		  // 대댓글 조회 List<CommentVO> commentList  homeworkReplyService.commentList(replyId);
+		  //replyVO.setCommentList(commentList); 
+		  // 첨부파일 List<ReplyFileVO> replyfiles =  homeworkfileService.replyfileList(replyId);
+		  //replyVO.setReplyfileList(replyfiles); }
+		
+		return homeworkReplyService.replyList(homeworkTargetId);
 	}
 
 	// ----------------
@@ -147,24 +180,28 @@ public class HomeWorkController {
 	// ----------------
 	@PostMapping("insertReply")
 	@ResponseBody
-	public String insertReply(@RequestPart MultipartFile[] uploadFiles, HomeWorkVO homeworkVO, Model model) {
+	public ReplyVO insertReply(@RequestPart MultipartFile[] uploadFiles, ReplyVO replyVO, Model model) {
+		replyVO.setReplyWriter("dudwo");
+		System.err.println("뭘 가지고 있나" + replyVO);
 		// 댓글등록
-		homeworkReplyService.replyInsert(homeworkVO);
-		List<ReplyVO> replies = homeworkReplyService.replyList(homeworkVO);
-		for (ReplyVO reply : replies) {
-			// 댓글 파일 업로드
-			homeworkfileService.replyUploadFile(uploadFiles, reply);
-		}
-		return "redirect:homeworkInfo?homeworkId=" + homeworkVO.getHomeworkId();
+		homeworkReplyService.replyInsert(replyVO);
+		int replyId = replyVO.getReplyId();
+		
+		homeworkReplyService.replyList(replyId); 
+		homeworkfileService.replyUploadFile(uploadFiles, replyId); 
+		 
+
+		return replyVO;
 	}
 
 	// ----------------
 	// 대댓글 등록 - 처리
 	// ----------------
 	@PostMapping("insertComment")
+	@ResponseBody
 	public String insertComment(HomeWorkVO homeworkVO, Model model) {
 		// 대댓글 등록
 		homeworkReplyService.commentInsert(homeworkVO);
-		return "redirect:homeworkInfo?homeworkId=" + homeworkVO.getHomeworkId();
+		return "true";
 	}
 }

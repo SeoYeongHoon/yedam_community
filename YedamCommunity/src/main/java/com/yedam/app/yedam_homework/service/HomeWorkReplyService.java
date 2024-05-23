@@ -2,13 +2,14 @@ package com.yedam.app.yedam_homework.service;
 
 import java.util.List;
 
+
 public interface HomeWorkReplyService {
 
 	//댓글 등록
-	public int replyInsert(HomeWorkVO homeworkVO);
+	public int replyInsert(ReplyVO replyId);
 	
 	//댓글 조회
-	public List<ReplyVO> replyList(HomeWorkVO homeworkVO);
+	public List<ReplyVO> replyList(int homeworkTargetId);
 	
 	//대댓글 조회
 	public List<CommentVO> commentList(ReplyVO replyId);

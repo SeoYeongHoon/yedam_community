@@ -113,7 +113,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 	}
 
 	@Override
-	public List<String> replyUploadFile(MultipartFile[] uploadFiles, ReplyVO reply) {
+	public List<String> replyUploadFile(MultipartFile[] uploadFiles, int replyId) {
 
 		List<String> FileList = new ArrayList<>();
 
@@ -168,8 +168,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			replyfileVO.setReplyfileExt(fileExt);
 			// 파일 다운로드 경로
 			replyfileVO.setDownloadLocation(downloadFileName);
-			// 파일 과제번호
-			replyfileVO.setReplyId(reply.getReplyId());
+			replyfileVO.setReplyId(replyId);
 			if (!fileName.equals("") && !fileName.equals(null)) {
 				homeworkfileMapper.insertReplyfFile(replyfileVO);
 			}

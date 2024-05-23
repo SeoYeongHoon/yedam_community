@@ -15,9 +15,10 @@
 				h.curriculum_id,
 				s.subject_id,
 				s.subject_name
-		FROM homeworks h JOIN	curriculum c ON (h.curriculum_id = c.curriculum_id)
-						JOIN subjects s ON	(h.curriculum_id = s.curriculum_id)
+		 FROM homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
+						  JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
 		WHERE h.subject_id = s.subject_id
+	<!-- 	AND class_id = #{classId} -->
 		ORDER BY class_id 
 		
 	</select>
@@ -35,7 +36,7 @@
 		WHERE h.homework_id = #{homeworkId} 
 	</select>
 
-	<!-- 과제명 조회 -->
+	<!-- 과목명 조회 -->
 	<select id="selectSubjectName" resultType="HomeWorkVO">
 		SELECT subject_name,
 		subject_id
