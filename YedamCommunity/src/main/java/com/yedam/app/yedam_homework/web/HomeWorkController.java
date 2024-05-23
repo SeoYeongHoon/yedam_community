@@ -1,6 +1,8 @@
 package com.yedam.app.yedam_homework.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,7 +25,6 @@ import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_homework.service.ReplyVO;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileService;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
-import com.yedam.app.yedam_homework.upload.service.ReplyFileVO;
 import com.yedam.app.yedam_subjects.service.SubjectService;
 
 /**
@@ -138,41 +138,27 @@ public class HomeWorkController {
 		List<HomeWorkFileVO> file = homeworkfileService.homeworkfileList(homeworkVO);
 		model.addAttribute("files", file);
 
-		/*
-		 * // 댓글조회 
-		 * List<ReplyVO> replyList = homeworkReplyService.replyList(reply);
-		 * findVO.setReplyList(replyList);
-		 * for (ReplyVO replyId : replyList) { 
-		 * // 대댓글 조회 
-		 * List<CommentVO> commentList = homeworkReplyService.commentList(replyId); reply.setCommentList(commentList);
-		 * // 첨부파일 
-		 * List<ReplyFileVO> replyfiles = homeworkfileService.replyfileList(replyId);
-		 * reply.setReplyfileList(replyfiles); 
-		 * }
-		 */
 		return "homework/homeworkInfo";
 	}
 
 	// ----------------
-	// 댓글 조회
+	// 댓글,대댓글 조회
 	// ----------------
 	@GetMapping("replyList")
 	@ResponseBody
-	public List<ReplyVO> replyList(@RequestParam("targetId") int homeworkTargetId) {
+	public Map<String, Object> replyList(@RequestParam("targetId") int homeworkTargetId) {
+	    Map<String, Object> result = new HashMap<>();
 
-		System.err.println("아무값도 없니?" + homeworkTargetId);
-		
-		
-		 //homeworkReplyService.replyList(targetId);
-		 //System.err.println("replyList="+replyList); 
-		  //findVO.setReplyList(replyList);
-		  //for (ReplyVO replyId : replyList) { 
-		  // 대댓글 조회 List<CommentVO> commentList  homeworkReplyService.commentList(replyId);
-		  //replyVO.setCommentList(commentList); 
-		  // 첨부파일 List<ReplyFileVO> replyfiles =  homeworkfileService.replyfileList(replyId);
-		  //replyVO.setReplyfileList(replyfiles); }
-		
-		return homeworkReplyService.replyList(homeworkTargetId);
+	    List<ReplyVO> replies = homeworkReplyService.replyList(homeworkTargetId);
+	    for (ReplyVO reply : replies) {
+	        int replyId = reply.getReplyId();
+	        List<CommentVO> comments = homeworkReplyService.commentList(replyId);
+	        reply.setComments(comments);
+	    }
+
+	    result.put("replies", replies);
+	    System.err.println(result);
+	    return result;
 	}
 
 	// ----------------
@@ -182,15 +168,10 @@ public class HomeWorkController {
 	@ResponseBody
 	public ReplyVO insertReply(@RequestPart MultipartFile[] uploadFiles, ReplyVO replyVO, Model model) {
 		replyVO.setReplyWriter("dudwo");
-		System.err.println("뭘 가지고 있나" + replyVO);
 		// 댓글등록
 		homeworkReplyService.replyInsert(replyVO);
 		int replyId = replyVO.getReplyId();
-		
-		homeworkReplyService.replyList(replyId); 
 		homeworkfileService.replyUploadFile(uploadFiles, replyId); 
-		 
-
 		return replyVO;
 	}
 
@@ -199,9 +180,14 @@ public class HomeWorkController {
 	// ----------------
 	@PostMapping("insertComment")
 	@ResponseBody
-	public String insertComment(HomeWorkVO homeworkVO, Model model) {
-		// 대댓글 등록
-		homeworkReplyService.commentInsert(homeworkVO);
-		return "true";
+	public CommentVO insertComment(@RequestParam String content, 
+								@RequestParam int replyId) {
+		CommentVO comment = new CommentVO(); 
+		comment.setReplyId(replyId);
+		comment.setCommentContent(content); 
+		comment.setCommentWriter("dudwo");
+		  // 대댓글 등록
+		  homeworkReplyService.commentInsert(comment);
+		return comment;
 	}
 }

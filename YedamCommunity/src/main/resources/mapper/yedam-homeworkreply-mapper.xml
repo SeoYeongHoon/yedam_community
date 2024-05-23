@@ -37,6 +37,7 @@
        			reply_writer
 		FROM    replies
 		WHERE   homework_target_id = #{homeworkTargetId}
+		ORDER BY reply_id DESC
 	</select>
 
 	<!-- 대댓글 조회 -->
@@ -57,11 +58,15 @@
 		INSERT INTO comments
 		(comment_id,
 		reply_id,
-		comment_content)
+		comment_content,
+		comment_writer,
+		comment_date)
 		VALUES
 		(comment_id_seq.nextval,
 		#{replyId},
-		#{commentContent}
+		#{commentContent},
+		#{commentWriter},
+		sysdate
 		)
 	</insert>
 </mapper>
