@@ -87,7 +87,6 @@
 <!-- 
 testName
 testTime
-
  -->
 <div id="start" class="row">
 	<!-- 타이머 토스트 알림창 
@@ -104,7 +103,7 @@ testTime
 		</div>
 		<div>
 			<h3 class="tstart_2">응시자:</h3>
-			<h3 class="tstart_2">홍길동</h3>
+			<h3 class="tstart_2">[[${testStart.name}]]</h3>
 		</div>
 	</div>
 	<!-- 상단2 -->
@@ -120,9 +119,9 @@ testTime
 		<div>
 			<!-- 문제갱신 위한 ajax용 데이터 -->
 			<div>
-				<input id="page" type="hidden" name="page" th:value="${page}">
-				<input id="testId" type="hidden" name="testId" th:value="${testStart.testId}">
-				<input id="subjectId" type="hidden" name="subjectId" th:value="${testStart.subjectId}">
+				<input id="page" type="hidden" th:value="${page}">
+				<input id="testId" type="hidden" th:value="${testStart.testId}">
+				<input id="subjectId" type="hidden" th:value="${testStart.subjectId}">
 				<input id="quizCnt" type="hidden" th:value="${#lists.size(randRn)}">
  				<div th:each="quiz : ${randQuizId}">				
 					<input class="randQuizId" type="hidden" th:value="${quiz}">
@@ -154,8 +153,24 @@ testTime
 				<h3 style="color: blue;">답안을 제출하시겠습니까?</h3><br>
 				<h3 style="color: red;">(답안 제출 이후에는 답안 변경이 불가합니다.)</h3><br>
 				<div>
-					<button type="button" id="closeBtn">닫기</button>
-					<button type="button" id="confirmBtn">확인</button>
+					<button class="tstart_2" type="button" id="closeBtn">닫기</button>
+					<form id="resultForm" class="tstart_2" action="testResult" method="post">
+						<button id="testBtn" type="button">테스트</button>
+						<!-- 시험제출 위한 데이터 -->
+						<input id="testId2" type="hidden" name="testId" th:value="${testStart.testId}">
+						<input id="min" type="hidden" name="min">
+						<input id="sec" type="hidden" name="sec">
+						<div th:each="quiz : ${randQuizId}">				
+							<input class="randQuizId2" type="hidden" th:value="${quiz}">
+						</div>
+						<div th:each="rn : ${randRn}">				
+							<input class="randRn2" type="hidden" th:value="${rn}">
+						</div>
+						<div th:each="score : ${randQuizScore}">				
+							<input class="randQuizScore2" type="hidden" th:value="${score}">
+						</div>
+					</form>
+					<button type="submit" id="confirmBtn">확인</button>
 				</div>
 			</div>
 		</div>
@@ -191,6 +206,24 @@ testTime
 	</div>
 </div>
 <script>
+/*
+$(document).ready(function(){
+	$('#resultForm').submit(function(){	
+		e.preventDefault(); //서버전송 막기
+	})
+	
+	
+	let minVal = document.querySelector('#min');
+	let secVal = document.querySelector('#sec');
+	console.log($('#testId2').val());
+	console.log($('#min').val());
+	console.log($('#sec').val());
+	 
+	$('#resultForm').submit(); //서버전송 강제
+})
+*/
+
+
 //<<시험타이머 관련>>
 let testTimeMin = document.querySelector('#testTimeMin');
 let testTimeSec = document.querySelector('#testTimeSec');
@@ -204,8 +237,12 @@ setInterval(function(){
 		min--;
 		sec = 59;
 	}
-	testTimeMin.innerText = String(min).padStart(2,0); //타이머 분 2자리
-	testTimeSec.innerText = String(sec).padStart(2,0); //타이머 초 2자리
+	let minVal = document.querySelector('#min');
+	let secVal = document.querySelector('#sec');
+	testTimeMin.innerText = String(min).padStart(2,0); //현재 분 저장
+	testTimeSec.innerText = String(sec).padStart(2,0); //현재 초 저장
+	minVal.value = testTimeMin.innerText;
+	secVal.value = testTimeSec.innerText;
 	if(min == 10 && sec == 0){ //10:00인 경우
 		toastMsg.innerText = '시험시간이 10분 남았습니다.';
 		toastMsg.classList.add('active');
@@ -674,7 +711,8 @@ function submitTest(){
 		modal.classList.remove('on'); //모달창 닫기
 	});
 	//<모달창 확인 버튼>
-	$('#confirmBtn').on('click',function(){ //확인버튼을 클릭하면
+	$('#confirmBtn').on('click',function(e){ //확인버튼을 클릭하면
+		e.preventDefault(); //서버전송 막기
 		modal.classList.remove('on'); //모달창 닫기
 		let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출 답안 정의
 		let submitAnswer = []; //배열 생성
@@ -710,9 +748,10 @@ function submitTest(){
 			dataType: 'json',
 			traditional: true,
 			success: function(data){
-				console.log(data);
-				console.log(submitAnswer);
+				//console.log(data);
+				//console.log(submitAnswer);
 				location.href = '/testResult?testId=' + testId + '&min=' + min + '&sec=' + sec;
+				//$('#confirmBtn').submit();
 			},
 			error: function(){
 				console.log('error');

@@ -3,8 +3,11 @@ package com.yedam.app.yedam_examstudent.service;
 import java.util.List;
 
 public interface CbtStudentService {
-	//전체시험목록 조회
-	public List<TestVO> testListAll(String userId);
+	//시험목록 조회(시험결과 포함)
+	public List<TestVO> testListAll(int userId);
+
+	
+	
 	//시험상세정보 조회
 	public TestVO testDetail(TestVO testVO);
 	//시험문제랜덤
@@ -17,8 +20,6 @@ public interface CbtStudentService {
 	public QuizboxVO testQuiz1(QuizboxVO quizboxVO);
 	//시험시작정보 조회 = 문제보기
 	public List<AnswerVO> testQuiz2(AnswerVO answerVO);
-	//문제개수 구하기
-	public int quizCnt(QuizboxVO quizboxVO);
 	//문제 제출
 	public boolean testSubmit(TestResultVO testResultVO);
 	//시험 결과 등록
