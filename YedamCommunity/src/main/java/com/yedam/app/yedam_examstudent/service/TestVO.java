@@ -19,6 +19,9 @@ public class TestVO {
 	private int userId;
 	private int testTargetId;
 	
+	//users 테이블
+	private String name;
+	
 	//quizbox 테이블
 	private int quizScore;
 	private int subjectId;
@@ -186,6 +189,15 @@ public class TestVO {
 	}
 	public void setPage(int page) {
 		this.page = page;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setExampleNum(int exampleNum) {
+		this.exampleNum = exampleNum;
 	}
 	
 	

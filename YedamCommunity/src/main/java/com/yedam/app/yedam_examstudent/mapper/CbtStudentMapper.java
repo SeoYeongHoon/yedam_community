@@ -12,8 +12,11 @@ import com.yedam.app.yedam_examstudent.service.TestVO;
 
 @Mapper
 public interface CbtStudentMapper {
-	//전체시험목록 조회
-	public List<TestVO> selectTestListAll(String userId);
+
+	//시험목록 조회(시험결과 포함)
+	public List<TestVO> selectTestListAll(int userId);
+
+	
 	//시험상세정보 조회
 	public TestVO selectTestDetail(TestVO testVO);
 	//시험문제랜덤
@@ -26,8 +29,6 @@ public interface CbtStudentMapper {
 	public QuizboxVO selectTestQuiz1(QuizboxVO quizboxVO);
 	//시험시작정보 조회 = 문제보기
 	public List<AnswerVO> selectTestQuiz2(AnswerVO answerVO);
-	//문제개수 구하기
-	public int selectQuizCnt(QuizboxVO quizboxVO);
 	//문제 제출
 	public boolean insertTestSubmit(TestResultVO testResultVO);
 	//시험 결과 등록

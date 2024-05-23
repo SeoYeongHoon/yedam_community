@@ -20,11 +20,16 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Autowired
 	CbtStudentMapper cbtStudentMapper;
 	
-	//전체시험목록 조회
+	
+	//시험목록 조회(시험결과 포함)
 	@Override
-	public List<TestVO> testListAll(String userId) {
+	public List<TestVO> testListAll(int userId) {
 		return cbtStudentMapper.selectTestListAll(userId);
 	}
+	
+	
+	
+	
 	//시험상세정보 조회
 	@Override
 	public TestVO testDetail(TestVO testVO) {
@@ -55,11 +60,6 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public List<AnswerVO> testQuiz2(AnswerVO answerVO) {
 		return cbtStudentMapper.selectTestQuiz2(answerVO);
 	}
-	//문제개수
-	@Override
-	public int quizCnt(QuizboxVO quizboxVO) {
-		return cbtStudentMapper.selectQuizCnt(quizboxVO);
-	}
 	//문제제출
 	@Override
 	public boolean testSubmit(TestResultVO testResultVO) {
@@ -79,6 +79,8 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public ExamResultVO testResult(ExamResultVO examResultVO) {
 		return cbtStudentMapper.selectTestResult(examResultVO);
 	}
+	
+	
 	
 	
 	
