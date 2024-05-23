@@ -4,17 +4,17 @@
 	margin-right: 100px;
 }
 
-.table-wrapper::-webkit-scrollbar {
+.sidebar-nav-wrapper::-webkit-scrollbar {
     width: 5px;
 }
 
-.table-wrapper::-webkit-scrollbar-thumb {
+.sidebar-nav-wrapper::-webkit-scrollbar-thumb {
     height: 30%;
-    background: #e96b56;
+    background: white;
     border-radius: 5px;
 }
 
-.table-wrapper::-webkit-scrollbar-track {
+.sidebar-nav-wrapper::-webkit-scrollbar-track {
     background: white;
 }
 

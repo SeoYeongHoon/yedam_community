@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 //import com.yedam.app.yedam_common.PageDTO;
@@ -24,6 +26,7 @@ import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
 	@Autowired
@@ -31,26 +34,59 @@ public class AdminController {
 	
 	@Autowired
 	CurriculumService curriculumService;
-	
-//	@Autowired
-//	AdminService adminService;
 
 	// 어드민 메인 페이지 및 유저 전체조회
 	@GetMapping("/adminMain")
-	public String adminPage() {
-
+	public String adminPage(Model model, 
+							@RequestParam(defaultValue = "showAll") String filter
+							) {
+		// 회원가입 신청 유저 리스트
+		List<UserVO> requestList = userService.stdList();
+		model.addAttribute("requests", requestList);
+		
+		PageDTO pageDTO = new PageDTO(1, userService.userTotalCnt(filter), 5);
+		model.addAttribute("page", pageDTO);
+		
+		System.out.println("전체 페이지 정보: " + pageDTO);
+		
 		return "admin/adminMain";
+	}
+	
+	// 유저 필터링 및 페이징
+	@GetMapping("/filterUsers")
+	@ResponseBody
+	public List<UserVO> filterUsers(@RequestParam(defaultValue = "1") int page, 
+									@RequestParam(defaultValue = "showAll") String filter, 
+									Model model) {
+		
+		List<UserVO> users = userService.getUsersByFilter(filter, page);
+		System.out.println("페이지 정보: " + page);
+		model.addAttribute("users", users);
+		
+		return users;
 	}
 
 	// 수강생 or 수료생 or 전체 필터링
-	@GetMapping("/filterUsers")
-	@ResponseBody
-	public List<UserVO> filterUsers(@RequestParam("filter") String filter, Model model) {
-		List<UserVO> users = userService.getUsersByFilter(filter);
-		model.addAttribute("users", users);
-
-		return users;
-	}
+//	@GetMapping("/filterUsers")
+//	@ResponseBody
+//	public List<UserVO> filterUsers(String filter, Model model, HttpServletRequest req) {
+//		String page = req.getParameter("page");
+//		page = page == null ? "1" : page;
+//		
+//		int boardCountInPage = Integer.parseInt(page);
+//		
+//		PageDTO pageDTO = new PageDTO(Integer.parseInt(page), userService.userTotalCnt(), 5);
+//		
+//		List<UserVO> users = userService.getUsersByFilter(filter, boardCountInPage);
+//		model.addAttribute("users", users);
+//		req.setAttribute("page", pageDTO);
+//		
+//		System.out.println("유저 정보: " + users);
+//		System.out.println("페이지 정보: " + pageDTO);
+//
+//		return users;
+//	}
+	
 
 	// 회원가입 신청한 유저 상세 정보
 	@GetMapping("/reqDetails")

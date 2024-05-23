@@ -9,7 +9,7 @@
 			var formData = new FormData(document.getElementById('add_course_form'));
 	        
 	        $.ajax({
-	            url: '/manageCourse',
+	            url: '/admin/manageCourse',
 	            type: 'POST',
 	            data: formData,
 	            success: function(response) {
@@ -34,7 +34,7 @@
 			document.querySelector('.courseModal').style.display = 'block';
 			
 			var xhr = new XMLHttpRequest();
-			xhr.open('GET', '/showCourse?curriculumId=' + curriculumId, true);
+			xhr.open('GET', '/admin/showCourse?curriculumId=' + curriculumId, true);
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
 					var students = JSON.parse(xhr.responseText);
@@ -74,7 +74,7 @@
 		document.querySelector(".deleteCourseBtn").addEventListener('click', function() {
 			if (confirm('과정을 삭제하시겠습니까?')) {
 				var xhr = new XMLHttpRequest();
-				xhr.open('DELETE', '/course/' + curriculumId, true);
+				xhr.open('DELETE', '/admin/course/' + curriculumId, true);
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState == 4 && xhr.status == 200) {
 						var course = JSON.parse(xhr.responseText);

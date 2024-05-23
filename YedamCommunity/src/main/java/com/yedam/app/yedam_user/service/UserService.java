@@ -32,10 +32,10 @@ public interface UserService {
 	public List<UserVO> stdList();
 	
 	// 페이지네이션 카운트
-	int userTotalCnt();
+	int userTotalCnt(String filter);
 
 	// 회원가입 완료된 유저들 목록 출력
-	public List<UserVO> getUsersByFilter(String filter);
+	public List<UserVO> getUsersByFilter(String filter, int page);
 
 	// 회원가입 신청 유저 상세정보
 	public RegisterVO getReqById(String registerId);
