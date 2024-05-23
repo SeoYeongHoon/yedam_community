@@ -182,7 +182,6 @@ public class HomeWorkController {
 	@ResponseBody
 	public ReplyVO insertReply(@RequestPart MultipartFile[] uploadFiles, ReplyVO replyVO, Model model) {
 		replyVO.setReplyWriter("dudwo");
-		System.err.println("뭘 가지고 있나" + replyVO);
 		// 댓글등록
 		homeworkReplyService.replyInsert(replyVO);
 		int replyId = replyVO.getReplyId();

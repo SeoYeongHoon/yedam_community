@@ -20,5 +20,6 @@ public class ReplyVO {
 	private int homeworkTargetId;
 	private List<CommentVO> commentList;
 	private List<ReplyFileVO> replyfileList;
-	private int tergetId;
+	//다운로드 경로
+	private String downloadLocation;
 }

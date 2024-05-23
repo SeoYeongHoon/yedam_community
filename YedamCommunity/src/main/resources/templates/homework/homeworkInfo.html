@@ -251,10 +251,12 @@
 							<p>댓글 내용 : ${json.replyContent}</p>
 							<p>작성자 : ${json.replyWriter} </p>
 							<p class="replyDate"></p>
+							<div class="replyFile"></div>
 						</div>
 					`
 					$('#replies').append(addReply);
 					$('.replyDate').text(replyDate);
+					$('.replyFile').append('<a>');
 				},
 				error : function(err) {
 					alert("error");
