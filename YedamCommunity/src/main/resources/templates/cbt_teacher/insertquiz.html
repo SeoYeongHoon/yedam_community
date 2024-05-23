@@ -10,18 +10,19 @@
 	display : none;
 }
 </style>	
-<p th:value="${subjectList}"></p>
 <form th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
 	<!-- ======= 과목설정 select ======= -->
 	<div class="card-style mb-30">
 		<div class="select-style-1">
 			<h6 class="mb-25">과목 선택</h6>
 			<div class="select-position">
-				<select th:field="*{subjectId}">
+				<select name=subjectName>
 					<th:block th:each="subjectInfo, idxStat : ${subjectList}">
-						<option th:value="${subjectInfo.subjectId}">[[${subjectInfo.subjectName}]]</option>
+						<option th:value="${subjectInfo.subjectName}">[[${subjectInfo.subjectName}]]</option>
 					</th:block>
 				</select>
+				<input type="hidden" name="subjectId" value="10"/>
+				<input type="hidden" name="userId" value="2"/>
 			</div>
 		</div>
 	
@@ -52,38 +53,39 @@
 	<!-- ======= 정답 지문 입력 radio style start ======= -->
 		<h6 class="mb-25">정답 체크</h6>
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="1" >
+			<input class="form-check-input" type="radio"/>
+                    <label class="form-check-label" name="exampleNum" value="1" >
                       1.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent}"/>
+			<input class="correct" type="text" placeholder="지문을 입력하세요." name="textContent"/>
+			<input class="correct2" type="hidden" name="quizAnswer"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="2" >
+			<input class="form-check-input" type="radio"/>
+                    <label class="form-check-label" name="exampleNum" value="2" >
                       2.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent2}"/>
+			<input type="text" placeholder="지문을 입력하세요." name="textContent2"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="3" >
+			<input class="form-check-input" type="radio"/>
+                    <label class="form-check-label" name="exampleNum" value="3" >
                       3.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent3}"/>
+			<input type="text" placeholder="지문을 입력하세요." name="textContent3"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="4" >
+			<input class="form-check-input" type="radio"/>
+                    <label class="form-check-label" name="exampleNum" value="4" >
                       4.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent4}"/>
+			<input type="text" placeholder="지문을 입력하세요." name="textContent4"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="5" >
+			<input class="form-check-input" type="radio"/>
+                    <label class="form-check-label" name="exampleNum" value="5" >
                       5.</label>
-			<input type="text" placeholder="지문을 입력하세요." th:field="*{textContent5}"/>
+			<input type="text" placeholder="지문을 입력하세요." name="textContent5"/>
 		</div>
 		<!-- end radio -->
 	<!-- ======= 정답 지문 입력 radio style end ======= -->
@@ -96,7 +98,7 @@
 	<!-- ======= 문제 해설 style end ======= -->
 	<ul class="buttons-group">
 		<li>
-			<button type="submit" class="main-btn primary-btn square-btn btn-hover" id="addBtn">등록</button>
+			<button type="submit" class="main-btn primary-btn square-btn btn-hover addbt" id="addBtn">등록</button>
 		</li>
 		<li>
 	        <button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
@@ -117,10 +119,11 @@
 	<!-- ======= 정답 지문 입력 radio style start ======= -->
 		<h6 class="mb-25">정답 체크</h6>
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio" value="" id="radio-1" />
-                    <label class="form-check-label" for="radio-1" th:field="*{exampleNum}" th:value="1" >
+			<input class="form-check-input" type="radio"/>
+                    <label class="form-check-label" th:field="*{exampleNum}" th:value="1" >
                       1.</label>
-			<input type="text" placeholder="문제의 정답을 입력하세요." name="textContentJu"/>
+			<input type="text" placeholder="문제의 정답을 입력하세요." name="textContentJu" />
+			<input type="hidden" name="quizAnswerJu" value="aaa"/>
 		</div>
 		<!-- end radio -->
 		
@@ -133,7 +136,7 @@
 		<!-- end textarea -->
 	<ul class="buttons-group">
 		<li>
-			<button type="submit" class="main-btn primary-btn square-btn btn-hover" id="addBtnJu" formaction="quizinsertJu">등록</button>
+			<button type="submit" class="main-btn primary-btn square-btn btn-hover addbt" id="addBtnJu" formaction="quizinsertJu">등록</button>
 		</li>
 		<li>
 	        <button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
@@ -148,9 +151,7 @@
 <script>
 const multi = document.getElementById("multiple");
 const shor = document.getElementById("shortAnswer");
-
 var checkVal = $('input[name=qType]:checked').val(); // 데이터 확인용
-
 
 $('#radio-1').change(function(e){
 	multi.style.display = "block";
@@ -159,6 +160,11 @@ $('#radio-1').change(function(e){
 $('#radio-2').change(function(e){
 	multi.style.display = "none";	
 	shor.style.display = "block";	
+})
+$('.addbt').on('click',function(){
+	let cor = $('.correct').val();
+	$('.correct2').attr("value",cor);
+	console.log($('.correct2').val());
 })
 
 </script>
