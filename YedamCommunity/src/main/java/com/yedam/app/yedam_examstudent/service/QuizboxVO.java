@@ -13,6 +13,11 @@ public class QuizboxVO { //선택된문제 테이블
 	private int page; //문제페이지번호
 	private int quizCnt; //문제개수
 	private int rn; //문제랜덤 일련번호
+	//기타
+	private int userId;
+	private String quizSolution;
+	private int isCorrect;
+	private int testAnswer;
 	public int getQuizboxId() {
 		return quizboxId;
 	}
@@ -66,6 +71,30 @@ public class QuizboxVO { //선택된문제 테이블
 	}
 	public void setRn(int rn) {
 		this.rn = rn;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	public String getQuizSolution() {
+		return quizSolution;
+	}
+	public void setQuizSolution(String quizSolution) {
+		this.quizSolution = quizSolution;
+	}
+	public int getIsCorrect() {
+		return isCorrect;
+	}
+	public void setIsCorrect(int isCorrect) {
+		this.isCorrect = isCorrect;
+	}
+	public int getTestAnswer() {
+		return testAnswer;
+	}
+	public void setTestAnswer(int testAnswer) {
+		this.testAnswer = testAnswer;
 	}
 	
 	
