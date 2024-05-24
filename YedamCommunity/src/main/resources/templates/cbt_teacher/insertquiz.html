@@ -21,7 +21,7 @@
 						<option th:value="${subjectInfo.subjectName}">[[${subjectInfo.subjectName}]]</option>
 					</th:block>
 				</select>
-				<input type="hidden" name="subjectId" value="10"/>
+				<input type="hidden" name="subjectId" value="0"/>
 				<input type="hidden" name="userId" value="2"/>
 			</div>
 		</div>
@@ -51,38 +51,38 @@
 		<!-- end textarea -->
 	<!-- ======= 시험문제 입력 style end ======= -->
 	<!-- ======= 정답 지문 입력 radio style start ======= -->
-		<h6 class="mb-25">정답 체크</h6>
+		<h6 class="mb-25" style="color:red;">정답 체크. !!1번 입력창에 정답을 입력해주세요!!</h6>
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio"/>
+			<input class="form-check-input" type="radio" name="exampleAnswer" value="1" checked />
                     <label class="form-check-label" name="exampleNum" value="1" >
                       1.</label>
-			<input class="correct" type="text" placeholder="지문을 입력하세요." name="textContent"/>
-			<input class="correct2" type="hidden" name="quizAnswer"/>
+			<input class="correct" type="text" placeholder="정답인 지문을 입력하세요." name="textContent"/>
+			<input class="correct2" type="hidden" name="quizAnswer"/> <!-- 문제의 정답 자동등록 -->
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio"/>
+			<input class="form-check-input" type="hidden" name="exampleAnswer2" value="0"/>
                     <label class="form-check-label" name="exampleNum" value="2" >
                       2.</label>
 			<input type="text" placeholder="지문을 입력하세요." name="textContent2"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio"/>
+			<input class="form-check-input" type="hidden" name="exampleAnswer3" value="0"/>
                     <label class="form-check-label" name="exampleNum" value="3" >
                       3.</label>
 			<input type="text" placeholder="지문을 입력하세요." name="textContent3"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio"/>
+			<input class="form-check-input" type="hidden" name="exampleAnswer4" value="0"/>
                     <label class="form-check-label" name="exampleNum" value="4" >
                       4.</label>
 			<input type="text" placeholder="지문을 입력하세요." name="textContent4"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio"/>
+			<input class="form-check-input" type="hidden" name="exampleAnswer5" value="0"/>
                     <label class="form-check-label" name="exampleNum" value="5" >
                       5.</label>
 			<input type="text" placeholder="지문을 입력하세요." name="textContent5"/>
@@ -119,11 +119,11 @@
 	<!-- ======= 정답 지문 입력 radio style start ======= -->
 		<h6 class="mb-25">정답 체크</h6>
 		<div class="form-check radio-style mb-20">
-			<input class="form-check-input" type="radio"/>
+			<input class="form-check-input" type="radio" name="exampleAnswerJu" value="1" checked/>
                     <label class="form-check-label" th:field="*{exampleNum}" th:value="1" >
                       1.</label>
-			<input type="text" placeholder="문제의 정답을 입력하세요." name="textContentJu" />
-			<input type="hidden" name="quizAnswerJu" value="aaa"/>
+			<input type="text" class="correct" placeholder="문제의 정답을 입력하세요." name="textContentJu" />
+			<input type="hidden" class="correct2" name="quizAnswerJu"/>
 		</div>
 		<!-- end radio -->
 		

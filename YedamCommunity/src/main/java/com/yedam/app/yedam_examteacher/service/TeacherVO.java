@@ -32,6 +32,12 @@ public class TeacherVO {
 	private String textContent5;
 	private String textContentJu;
 	private int exampleNum;
+	private int exampleAnswer;
+	private int exampleAnswer2;
+	private int exampleAnswer3;
+	private int exampleAnswer4;
+	private int exampleAnswer5;
+	private int exampleAnswerJu;
 	
 	private int subjectId;
 	private String subjectName;
@@ -53,4 +59,5 @@ public class TeacherVO {
 	private int isReexam;
 	private int passScore;
 	private int testTargetId;
+	
 }
