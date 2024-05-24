@@ -29,6 +29,9 @@ public class DownloadServiceImpl implements DownloadService{
 	@Value("${file.upload.path}")
 	private String uploadPath;
 	
+	//-----------------------
+	// 과제 파일 다운로드
+	//-----------------------
 	@Override
 	public ResponseEntity<Object> homeworkfileDownloadFile(String downloadLocation) {
 		
@@ -56,6 +59,11 @@ public class DownloadServiceImpl implements DownloadService{
 		}
 	}
 
+	
+	//-----------------------
+	// 댓글 파일 다운로드
+	//-----------------------
+	
 	@Override
 	public ResponseEntity<Object> replyfileDownloadFile(String downloadLocation) {
 		// 업로드된 파일경로 가져오기

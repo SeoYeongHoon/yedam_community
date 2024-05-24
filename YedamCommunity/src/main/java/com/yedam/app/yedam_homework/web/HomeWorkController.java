@@ -1,8 +1,6 @@
 package com.yedam.app.yedam_homework.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,9 +23,8 @@ import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_homework.service.ReplyVO;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileService;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
+import com.yedam.app.yedam_homework.upload.service.ReplyFileVO;
 import com.yedam.app.yedam_subjects.service.SubjectService;
-
-import groovyjarjarpicocli.CommandLine.Parameters;
 
 /**
  * 과제 관리
@@ -85,7 +81,6 @@ public class HomeWorkController {
 		return homeworkList;
 	}
 
-	
 	
 	// ----------------
 	// 과제 목록(학생)
@@ -151,7 +146,7 @@ public class HomeWorkController {
 	}
 
 	// ----------------
-	// 대댓글 조회
+	// 댓글 조회
 	// ----------------
 	@GetMapping("replyList")
 	@ResponseBody
@@ -161,7 +156,18 @@ public class HomeWorkController {
 	    
 	    return replies;
 	}
-
+	
+	// ----------------
+	// 댓글 파일 다운로드
+	// ----------------
+	@GetMapping("replyfile")
+	@ResponseBody
+	public List<ReplyFileVO> replyfile (@RequestParam("replyId") int replyId){
+		List<ReplyFileVO> replyfile = homeworkfileService.replyfileList(replyId);
+		return replyfile;
+	}
+	
+	
 	// ----------------
 	// 대댓글 조회
 	// ----------------

@@ -21,8 +21,10 @@ public class DownloadController {
 		return downloadService.homeworkfileDownloadFile(downloadLocation);
 	}
 	
+	//댓글 파일 다운로드
 	@GetMapping("/replydownload/{downloadLocation}")
 	public ResponseEntity<Object> replyFileDownload (@PathVariable String downloadLocation){
+		System.err.println(downloadLocation);
 		return downloadService.replyfileDownloadFile(downloadLocation);
 	}
 }

@@ -18,7 +18,7 @@
 		FROM homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
 						  JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
 		WHERE h.subject_id = s.subject_id
-		ORDER BY class_id 
+		ORDER BY  h.homework_id DESC
 	
 	</select>
 
@@ -107,7 +107,7 @@
 		<if test = "classId != 0">
 		AND class_id = #{classId} 
 		</if>
-		ORDER BY class_id 
+		ORDER BY  h.homework_id DESC
 		
 	</select>
 </mapper>
