@@ -11,7 +11,7 @@ public interface PostMapper {
 	//--------------------------------------------
 	// 전체 조회
 	//--------------------------------------------
-    public List<Post> getAllPosts();
+    public List<Post> getAllPosts(int boardId);
     
     //--------------------------------------------
     // 단건조회 
@@ -81,11 +81,13 @@ public interface PostMapper {
     //--------------------------------------------
     // 페이지네이션
     //--------------------------------------------
-    public List<Post> getPosts(@Param("startRow") int startRow, @Param("endRow") int endRow);
-      
+    public List<Post> getPosts(@Param("boardId") int boardId
+    		                 , @Param("startRow") int startRow
+    		                 , @Param("endRow") int endRow);
+     
     //--------------------------------------------
     // 게시글 개수
     //--------------------------------------------
-    public int getPostCount();
+    public int getPostCount(int boardId);
 
 }

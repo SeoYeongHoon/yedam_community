@@ -66,6 +66,9 @@ public class LoginUserVO implements UserDetails {
 		return true;
 	}
 	
+	public Integer getuserId() {
+		return userVO.getUserId();
+	}
 	
 
 }
