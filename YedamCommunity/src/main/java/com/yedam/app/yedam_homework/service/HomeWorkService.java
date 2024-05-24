@@ -22,4 +22,6 @@ public interface HomeWorkService {
 	//과제 대상자 조회
 	public HomeWorkTargetVO homeworktargetList(HomeWorkVO homeworkVO);
 	
+	//강의실 카테고리
+	public List<HomeWorkVO> classCategory( int curriculumId);
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +27,8 @@ import com.yedam.app.yedam_homework.service.ReplyVO;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileService;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
 import com.yedam.app.yedam_subjects.service.SubjectService;
+
+import groovyjarjarpicocli.CommandLine.Parameters;
 
 /**
  * 과제 관리
@@ -61,31 +64,37 @@ public class HomeWorkController {
 	// ----------------
 	// 과제 목록(교수)
 	// ----------------
-	@GetMapping("homeworkListT")
-	public String homeworkList(Model model) {
-		// 과제 조회
-		List<HomeWorkVO> list = homeworkService.homeworkList();
+	@GetMapping("homeworkT")
+	public String homework(Model model) {
 		List<CurriculumVO> classList = curriculumService.CurriculumList();
-
-		model.addAttribute("homeworklist", list);
 		model.addAttribute("classId", classList);
-		return "homework/homeworkList_t"; // 출력할 페이지
-	}
-
-	@PostMapping("homeworkListT")
-	public String homeworkselectList(int classId) {
-
 		return "homework/homeworkList_t";
 	}
+	
+	@GetMapping("classCategoryT")
+	@ResponseBody
+	public List<HomeWorkVO> homeworks (@RequestParam("vals") int classId) {
+		List<HomeWorkVO> list = homeworkService.classCategory(classId);
+		return list;
+	}
+	
+	@GetMapping("homeworkListT")
+	@ResponseBody
+	public List<HomeWorkVO> homeworkList(@RequestParam("homeworkAll") String homeworkAll) {
+		List<HomeWorkVO> homeworkList	= homeworkService.homeworkList();
+		return homeworkList;
+	}
 
+	
+	
 	// ----------------
 	// 과제 목록(학생)
 	// ----------------
 	@GetMapping("homeworkListS")
 	public String homeworksList(Model model) {
 		// 과제 조회
-		List<HomeWorkVO> list = homeworkService.homeworkList();
-		model.addAttribute("homeworklist", list);
+		//List<HomeWorkVO> list = homeworkService.homeworkList();
+		//model.addAttribute("homeworklist", list);
 		return "homework/homeworkList_s"; // 출력할 페이지
 	}
 
@@ -142,25 +151,30 @@ public class HomeWorkController {
 	}
 
 	// ----------------
-	// 댓글,대댓글 조회
+	// 대댓글 조회
 	// ----------------
 	@GetMapping("replyList")
 	@ResponseBody
-	public Map<String, Object> replyList(@RequestParam("targetId") int homeworkTargetId) {
-	    Map<String, Object> result = new HashMap<>();
+	public List<ReplyVO> replyList(@RequestParam("targetId") int homeworkTargetId) {
 
 	    List<ReplyVO> replies = homeworkReplyService.replyList(homeworkTargetId);
-	    for (ReplyVO reply : replies) {
-	        int replyId = reply.getReplyId();
-	        List<CommentVO> comments = homeworkReplyService.commentList(replyId);
-	        reply.setComments(comments);
-	    }
-
-	    result.put("replies", replies);
-	    System.err.println(result);
-	    return result;
+	    
+	    return replies;
 	}
 
+	// ----------------
+	// 대댓글 조회
+	// ----------------
+	@GetMapping("commentList")
+	@ResponseBody
+	public List<CommentVO> commentList(@RequestParam("replyId") int replyId){
+		
+		 List<CommentVO> comments = homeworkReplyService.commentList(replyId); 
+		
+		return comments;
+	}
+	
+	
 	// ----------------
 	// 댓글(파일) 등록 - 처리
 	// ----------------
@@ -175,7 +189,7 @@ public class HomeWorkController {
 		return replyVO;
 	}
 
-	// ----------------
+	// ---------------- 
 	// 대댓글 등록 - 처리
 	// ----------------
 	@PostMapping("insertComment")

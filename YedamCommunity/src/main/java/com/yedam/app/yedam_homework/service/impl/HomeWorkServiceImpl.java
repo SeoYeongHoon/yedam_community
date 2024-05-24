@@ -17,10 +17,11 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	HomeWorkMapper homeworkMapper; //mapper 불러옴
 
 	// 과제 목록 조회
-	@Override
-	public List<HomeWorkVO> homeworkList() {
-		return homeworkMapper.selectHomeworkAll();
-	}
+	
+	 @Override public List<HomeWorkVO> homeworkList() { 
+		 return	 homeworkMapper.selectHomeworkAll(); 
+		 }
+	 
 	
 	// 과제 등록
 	@Override
@@ -49,5 +50,10 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	public HomeWorkTargetVO homeworktargetList(HomeWorkVO homeworkVO) {
 		return homeworkMapper.selectHomeworktarget(homeworkVO);
 	}
-
+	
+	//강의실 카테고리
+	@Override
+	public List<HomeWorkVO> classCategory(int curriculumId) {
+		return homeworkMapper.selectClass(curriculumId);
+	}
 }
