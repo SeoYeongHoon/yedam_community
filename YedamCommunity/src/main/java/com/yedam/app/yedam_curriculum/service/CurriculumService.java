@@ -18,4 +18,7 @@ public interface CurriculumService {
 
 	// 과정 삭제
 	public boolean removeCurriculum(int curriculumId);
+	
+	// 과정 선택 리스트(회원가입 때 사용)
+	public List<CurriculumVO> allCurriculumList();
 }

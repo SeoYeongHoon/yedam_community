@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+#mypage_container {
+	max-width: 1280px;
+	min-height: 800px;
+	margin: 0 auto;
+	padding-top: 40px;
+}
+
+.mypage_wrapper {
+	display: flex;
+}
+
+.mypage_info {
+	
+}
+
+.profile_change_btn {
+	position: relative;
+}
+
+.profile_change_label {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    color: white;
+    font-weight: bold;
+    font-size: 17pt;
+    border-radius: 50%;
+}
+
+.profile_change_label:hover {
+	background-color: black;
+	opacity: 0.5;
+	cursor: pointer;
+}
+
+.mypage_profile_image {
+	width: 250px;
+	height: 250px;
+	border-radius: 50%;
+}
+
+/* .mypage_profile_image:hover {
+	opacity: 0.5;
+} */

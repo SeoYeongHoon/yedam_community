@@ -98,23 +98,21 @@
 									<input name="companyInfo" type="text" placeholder="현재 수강생이거나 취업 준비 중이면 비워두기">
 								</div>
 							</div>
-							<div class="input-style-1" style="position: relative">
+							<!-- <div class="input-style-1" style="position: relative">
 								<label>과정입력</label> 
 								<div>
 									<input name="curriculumId" type="number" placeholder="과정명 입력" required="true" autofocus="">
 								</div>
-							</div>
-							<!-- <div class="select-style-1" style="position: relative">
+							</div> -->
+							<div class="select-style-1" style="position: relative">
 								<label>과정 선택</label>
 								<div class="select-position">
-									<select>
-										<option value="">과정을 선택하세요.</option>
-										<option value="">과정1</option>
-										<option value="">과정2</option>
-										<option value="">과정3</option>
+									<select th:name="courseSelect">
+										<option value="">====== 과정을 선택하세요. ======</option>
+										<option th:each="course : ${courses}" th:name="${course.curriculumName}" th:value="${course.curriculumName}" th:text="${course.curriculumName}"></option>
 									</select>
 								</div>
-							</div> -->
+							</div>
 							<div>
 								<label>프로필 사진</label> 
 								<!--<div>

@@ -69,7 +69,7 @@
 	                document.querySelector('.delUserBtn').addEventListener('click', function() {
 	                	if (confirm('삭제하시겠습니까?')) {
 	                		var xhr = new XMLHttpRequest();
-					        xhr.open('GET', '/removeUser?userId=' + userId, true);
+					        xhr.open('GET', '/admin/removeUser?userId=' + userId, true);
 					        xhr.onreadystatechange = function() {
 					            if (xhr.readyState == 4 && xhr.status == 200) {
 					                var user = JSON.parse(xhr.responseText);
@@ -229,6 +229,93 @@
 	            checkboxes[i].checked = item.checked;
 	        }
 	    }
+		
+		var isRequestInProgress = false;
+		
+		//--------------------------------------------
+		// 현재 유저 리스트(필터링)
+		//--------------------------------------------
+		function filterUsers(page, searchQuery) {
+			// 중복 실행 원인 때문에 프로세스 중단 임의로 한 번만 실행되게 막아둠
+			if (isRequestInProgress) {
+		        return;
+		    }
+			isRequestInProgress = true;
+			
+		    var filter = $('#userFilter').val();
+			
+			// 검색 변수
+			searchQuery = searchQuery || $('#searchInput').val();
+			
+		    $.ajax({
+		        url: '/admin/filterUsers',
+		        type: 'GET',
+		        data: {
+		            page: page,
+		            filter: filter,
+					searchQuery: searchQuery
+		        },
+		        success: function(response) {
+		            updateUsers(response.users);
+		            updatePagination(response.page, page);
+		        },
+		        error: function(error) {
+		            console.error('에러: ', error);
+		        },
+				complete: function() {
+					isRequestInProgress = false;
+				}
+		    });
+		}
+		
+		//--------------------------------------------
+		// 필터링으로 인한 유저 리스트 변경(목록 업데이트)
+		//--------------------------------------------
+		function updateUsers(users) {
+			var tbody = document.getElementById('userInfoTable');
+            tbody.innerHTML = ''; // 이전 내용 지우기
+			
+			users.forEach(user => {
+                var tr = document.createElement('tr');
+                
+                var tdUserId = document.createElement('td');
+                tdUserId.textContent = user.userId;
+                tr.appendChild(tdUserId);
+
+                var tdType = document.createElement('td');
+                if (user.userType == 'ROLE_GRAD') {
+                	tdType.textContent = '수료생';
+                } else {
+                	tdType.textContent = '수강생';
+                }
+                tr.appendChild(tdType);
+                
+                var tdName = document.createElement('td');
+                tdName.textContent = user.name;
+                tr.appendChild(tdName);
+                
+                var tdTel = document.createElement('td');
+                tdTel.textContent = user.tel;
+                tr.appendChild(tdTel);
+                
+                var tdEmail = document.createElement('td');
+                tdEmail.textContent = user.email;
+                tr.appendChild(tdEmail);
+                
+                var makeBtnTd = document.createElement('td');
+                var tdInfoBtn = document.createElement('a');
+                tdInfoBtn.className = "main-btn light-btn btn-hover";
+                tdInfoBtn.style = "padding: 5px 10px;"
+                tdInfoBtn.innerText = "상세보기";
+                tdInfoBtn.onclick = function() {
+                	fetchUserDetails(user.userId);
+                }
+                makeBtnTd.appendChild(tdInfoBtn);
+                tr.appendChild(makeBtnTd);
+
+                tbody.appendChild(tr);
+            });
+		}
 	</script>
 	
 	<!-- 어드민페이지 내부 컨텐트 -->
@@ -409,63 +496,23 @@
 					<a href="" class="modal_close" onclick="closeAddModal()">X</a>
 				</div>
 				<input class="addStdBtn" type="file" name="file" id="file" accept=".csv">
-    
-				<table class="table" id="csv_table">
-					<thead>
-						<tr>
-							<th>
-								<input type="checkbox" value="checkCsvAll" onclick="checkCsvAll(this)">
-							</th>
-							<th><h6>과정명</h6></th>
-							<th><h6>인원</h6></th>
-							<th><h6>다운로드</h6></th>
-						</tr>
-					</thead>
-					<tbody id="table-body">
-						
-					</tbody>
-				</table>
-				<div class="download_all">
-					<a href="#0" class="main-btn dark-btn btn-hover" style="padding: 7px 5px;" onclick="downloadSelected()">선택 다운로드</a>
-				</div>
-
-				<!-- <input type="file" name="file" id="file">
-				
-				<table class="table">
-					<thead>
-						<th>
-							<input type="checkbox" value="checkAll" onclick="checkAll(this)">
-						</th>
-						<th>
-						<h6>과정명</h6>
-						</th>
-						<th>
-						<h6>인원</h6>
-						</th>
-						<th>
-						<h6>다운로드</h6>
-						</th>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<input type="checkbox" name="checkFileItem">
-							</td>
-							<td>
-							<p>JAVA 기반 웹 프레임워크 양성과정 A</p>
-							</td>
-							<td>
-							<p>23</p>
-							</td>
-							<td>
-							<a href="#0" class="main-btn dark-btn-light btn-hover" style="padding: 7px 5px;">다운로드</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="download_all">
-					<a href="#0" class="main-btn dark-btn btn-hover" style="padding: 7px 5px;">선택 다운로드</a>
-				</div> -->
+    			<div class="add_table_wrapper" style="max-height: 400px; overflow-y: scroll; margin-bottom: 10px;">
+					<table class="table" id="csv_table">
+						<thead style="position: sticky; top: 0; background-color: white; box-shadow: 0 2px 8px 0 #00000040;">
+							<tr>
+								<!-- <th>
+									<input type="checkbox" value="checkCsvAll" onclick="checkCsvAll(this)">
+								</th> -->
+								<th><h6 style="font-weight: 700;">이름</h6></th>
+								<th><h6 style="font-weight: 700;">전화번호</h6></th>
+								<th><h6 style="font-weight: 700;">이메일</h6></th>
+							</tr>
+						</thead>
+						<tbody id="table-body">
+							
+						</tbody>
+					</table>
+    			</div>
 			</div>
 		</div>
 		
@@ -516,14 +563,19 @@
 	</div>
 		
 	<script>
-	
-		/* 일괄등록 모달 코드 */
+		//--------------------------------------------
+		// CSV 파일 등록 모달 출력
+		//--------------------------------------------
 		const addModal = document.querySelector('.addModal');
 		const modalOpen = document.querySelector('.modal_btn');
-
+		
+		//--------------------------------------------
 		// CSV 파일 등록
+		//--------------------------------------------
 		$(document).ready(function() {
 			$('#file').on('change', function(event) {
+				if (confirm('학생정보를 등록하시겠습니까?')) {
+					
 	            var file = event.target.files[0];
 	            var formData = new FormData();
 	            formData.append('file', file);
@@ -537,21 +589,29 @@
 	                success: function(data) {
 	                    $('#table-body').empty();
 	                    data.forEach(function(row) {
-							console.log("과정명: " + row.courseName);
-	                        var template = '<tr>' +
-	                            '<td><input type="checkbox"></td>' +
-	                            '<td>' + row.courseName + '</td>' +
-	                            '<td>' + row.studentsCount + '</td>' +
-	                            '<td><a href="' + row.downloadLink + '">받기</a></td>' +
+	                        var template = 
+	                        	'<tr>' +
+		                            '<td>' + row.stdName + '</td>' +
+		                            '<td>' + row.stdPhone + '</td>' +
+		                            '<td>' + row.stdEmail + '</td>' +
+		                            /* '<td><a href="' + row.downloadLink + '">받기</a></td>' + */
 	                            '</tr>';
 	                        $('#table-body').append(template);
 	                    });
+	                    var complete = 
+	                       	'<div class="table-top-content" style="width: 300px; text-align: center; margin-bottom: 0; height: 40px; padding: 8px 16px;">' +
+	                       		'<p style="color: white">학생 정보가 저장되었습니다!</p>' +
+	                       	'</div>';
+	                    $('.add_modal_popup').append(complete);
 	                }
 	            });
+				}
 	        });
 		});
 		
+		//--------------------------------------------
 		// CSV 파일목록 체크박스 전체체크
+		//--------------------------------------------
 		function checkCsvAll(item) {
             checkboxes = document.getElementsByTagName('input');
             for(var i=0, n=checkboxes.length; i<n; i++) {
@@ -560,5 +620,9 @@
                 }
             }
         }
+
+    	window.onload = function() {
+    		filterUsers();
+    	}
 	</script>
 </html>

@@ -1,18 +1,29 @@
 package com.yedam.app.yedam_user.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
 public interface UserService {
 
-	// 회원가입 신청
-//	public int requestUser(RegisterVO registerVO);
-	public void requestUser(RegisterVO registerVO) throws Exception;
+	// CSV 학생 데이터 tempusers 테이블에 저장
+	public void insertTempUsers(Map<String, String> row);
 	
-	// 회원가입 승인
-	public int insertUser(int registerId);
+	// 회원가입 프로세스
+	@Transactional
+	public void registerUser(UserVO userVO);
+
+//	// 회원가입 신청
+//	public void requestUser(RegisterVO registerVO);
+//	
+//	// 회원가입 승인
+//	public void insertUser(UserVO userVO);
+	
+	// 회원가입 수동 승인
+	public int approveUser(int id);
+	
 	// 다수 회원가입 요청 승인(체크된)
 	@Transactional
 	public void insertCheckedUsers(List<String> registerIds);

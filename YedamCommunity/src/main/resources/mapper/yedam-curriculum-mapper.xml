@@ -18,6 +18,12 @@
   	ORDER BY class_id
   </select>
   
+  <select id="selectAllCurriculums" resultType="CurriculumVO">
+  	SELECT *
+  	FROM curriculum
+  	ORDER BY curriculum_start_date
+  </select>
+  
   <insert id="insertCurriculum" parameterType="CurriculumVO">
   	INSERT INTO curriculum (curriculum_id
 				  		  , curriculum_name
@@ -44,10 +50,10 @@
   	SELECT u.id
   		 , u.name
   		 , u.email
-  		 , u.curriculum_id
+  		 , u.curriculum_name
   		 , c.curriculum_name
 	FROM users u JOIN curriculum c
-	             ON (u.curriculum_id = c.curriculum_id)
+	             ON (u.curriculum_name = c.curriculum_name)
 	WHERE c.curriculum_id = #{curriculumId}
   </select>
   
