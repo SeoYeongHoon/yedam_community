@@ -3,29 +3,34 @@ package com.yedam.app.yedam_examstudent.service;
 import java.util.List;
 
 public interface CbtStudentService {
-	//시험목록 조회(시험결과 포함)
+
+	//시험목록
 	public List<TestVO> testListAll(int userId);
 
-	
-	
-	//시험상세정보 조회
-	public TestVO testDetail(TestVO testVO);
-	//시험문제랜덤
+	//시험문제 랜덤
 	public List<QuizboxVO> testQuizRand(QuizboxVO quizboxVO);
-	//시험시작정보 조회
+	//시험상세
+	public TestVO testDetail(TestVO testVO);
+
+	//시험시작
 	public TestVO testStart(TestVO testVO);
-	//시험문제
+	//시험문제 (AJAX)
 	public List<TestVO> testQuiz(TestVO testVO);
-	//시험시작정보 조회 = 문제내용
+	//시험시작 문제정보
 	public QuizboxVO testQuiz1(QuizboxVO quizboxVO);
-	//시험시작정보 조회 = 문제보기
+	//시험시작 보기정보
 	public List<AnswerVO> testQuiz2(AnswerVO answerVO);
-	//문제 제출
-	public boolean testSubmit(TestResultVO testResultVO);
-	//시험 결과 등록
+	//시험결과 (AJAX)
 	public boolean testSubmit2(ExamResultVO examResultVO);
-	//시험 결괏 수정
+	//문제제출 (AJAX)
+	public boolean testSubmit(TestResultVO testResultVO);
+	//시험결과 (AJAX)
 	public boolean testSubmit3(ExamResultVO examResultVO);
-	//시험 결과
+	
+	//시험결과
 	public ExamResultVO testResult(ExamResultVO examResultVO);
+	//시험결과 문제정보
+	public List<QuizboxVO> testResultQuiz1(QuizboxVO quizboxVO);
+	//시험결과 보기정보
+	public List<AnswerVO> testResultQuiz2(AnswerVO answerVO);
 }

@@ -153,24 +153,14 @@ testTime
 				<h3 style="color: blue;">답안을 제출하시겠습니까?</h3><br>
 				<h3 style="color: red;">(답안 제출 이후에는 답안 변경이 불가합니다.)</h3><br>
 				<div>
-					<button class="tstart_2" type="button" id="closeBtn">닫기</button>
+					<button id="closeBtn" class="tstart_2" type="button">닫기</button>
 					<form id="resultForm" class="tstart_2" action="testResult" method="post">
-						<button id="testBtn" type="button">테스트</button>
 						<!-- 시험제출 위한 데이터 -->
-						<input id="testId2" type="hidden" name="testId" th:value="${testStart.testId}">
-						<input id="min" type="hidden" name="min">
-						<input id="sec" type="hidden" name="sec">
-						<div th:each="quiz : ${randQuizId}">				
-							<input class="randQuizId2" type="hidden" th:value="${quiz}">
-						</div>
-						<div th:each="rn : ${randRn}">				
-							<input class="randRn2" type="hidden" th:value="${rn}">
-						</div>
-						<div th:each="score : ${randQuizScore}">				
-							<input class="randQuizScore2" type="hidden" th:value="${score}">
-						</div>
+						<input type="hidden" name="testId" th:value="${testStart.testId}">
+						<input id="min" type="hidden" name="min" th:value="0">
+						<input id="sec" type="hidden" name="sec" th:value="0">
+						<button id="confirmBtn" class="tstart_2" type="submit">확인</button>
 					</form>
-					<button type="submit" id="confirmBtn">확인</button>
 				</div>
 			</div>
 		</div>
@@ -206,31 +196,14 @@ testTime
 	</div>
 </div>
 <script>
-/*
-$(document).ready(function(){
-	$('#resultForm').submit(function(){	
-		e.preventDefault(); //서버전송 막기
-	})
-	
-	
-	let minVal = document.querySelector('#min');
-	let secVal = document.querySelector('#sec');
-	console.log($('#testId2').val());
-	console.log($('#min').val());
-	console.log($('#sec').val());
-	 
-	$('#resultForm').submit(); //서버전송 강제
-})
-*/
-
-
 //<<시험타이머 관련>>
 let testTimeMin = document.querySelector('#testTimeMin');
 let testTimeSec = document.querySelector('#testTimeSec');
 let toastMsg = document.querySelector('#toast_message');
 let testTime = testTimeMin.innerText; //서버에서 받아온 시험시간
-let min = testTime; //분
-let sec = 0; //초
+//let min = testTime; //분
+let min = 0
+let sec = 5; //초
 setInterval(function(){
 	sec--;
 	if(sec < 0){ //초 리셋
@@ -266,53 +239,8 @@ setInterval(function(){
 			toastMsg.classList.remove('active');
 		}, 2000);
 	}
-	if(min == 0 && sec == 0){ //00:00인 경우
-		//자동제출
-		let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
-		let quizCnt = quizCntVal.value; //문제 개수
-		let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤 문제번호
-		let randQuizId = new Array(quizCnt); //랜덤 문제번호 배열 생성
-		for(let i = 0; i < randQuizIdVal.length; i++){
-			randQuizId[i] = randQuizIdVal[i].value;
-		}
-		let randRnVal = document.querySelectorAll('.randRn'); //랜덤 일련번호
-		const randRn = new Array(quizCnt); 
-		for(let i = 0; i < randRnVal.length; i++){
-			randRn[i] = randRnVal[i].value;
-		}
-		let randQuizScoreVal = document.querySelectorAll('.randQuizScore'); //문제 배점
-		let randQuizScore = new Array(quizCnt); //랜덤 문제번호 배열 생성
-		for(let i = 0; i < randQuizScoreVal.length; i++){
-			randQuizScore[i] = randQuizScoreVal[i].value;
-		}
-		let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출 답안 정의
-		let submitAnswer = []; //배열 생성
-		for(let i = 0; i < submitAnswerVal.length; i++){ //답안 길이만큼 반복		
-			submitAnswer[i] = submitAnswerVal[i].value //현재 선택된 답안들 배열에 저장
-		}
-		let testIdVal = document.querySelector('#testId'); //파라미터용 시험번호 
-		let testId = testIdVal.value;
-		$.ajax({ //답안 저장 ajax, 제출 후 페이지 이동
-			url: 'testStart1',
-			method: 'post',
-			data: {
-				submitAnswer: submitAnswer,
-				randQuizId: randQuizId,
-				randRn: randRn,
-				randQuizScore: randQuizScore,
-				testId: testId
-			},
-			dataType: 'json',
-			traditional: true,
-			success: function(data){
-				//console.log(data);
-				//console.log(submitAnswer);
-				location.href = '/testResult?testId=' + testId + '&min=' + Number(testTime) + '&sec=' + 0;
-			},
-			error: function(){
-				console.log('error');
-			}
-		})
+	if(min == 0 && sec == 0){ //00:00인 경우 자동 제출
+		testResult(); //시험제출 함수 호출, ajax 실행
 	}
 },1000)
 //<<답안제어 관련>>
@@ -676,24 +604,6 @@ function submitTest(){
 	let remainQuizSubmit = document.querySelector('#remainQuizSubmit'); //남은 문제개수 출력부분
 	let modal = document.querySelector('.modal'); //모달창
 	let h3 = document.createElement('h3'); //텍스트 태그 생성
-	
-	let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
-	let quizCnt = quizCntVal.value; //문제 개수
-	let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤 문제번호
-	let randQuizId = new Array(quizCnt); //랜덤 문제번호 배열 생성
-	for(let i = 0; i < randQuizIdVal.length; i++){
-		randQuizId[i] = randQuizIdVal[i].value;
-	}
-	let randRnVal = document.querySelectorAll('.randRn'); //랜덤 일련번호
-	const randRn = new Array(quizCnt); 
-	for(let i = 0; i < randRnVal.length; i++){
-		randRn[i] = randRnVal[i].value;
-	}
-	let randQuizScoreVal = document.querySelectorAll('.randQuizScore'); //문제 배점
-	let randQuizScore = new Array(quizCnt); //랜덤 문제번호 배열 생성
-	for(let i = 0; i < randQuizScoreVal.length; i++){
-		randQuizScore[i] = randQuizScoreVal[i].value;
-	}
 	//<시험제출 버튼>
 	$('#submitBtn').on('click',function(){ //제출버튼을 클릭하면
 		modal.classList.add('on'); //모달창 열기
@@ -711,53 +621,75 @@ function submitTest(){
 		modal.classList.remove('on'); //모달창 닫기
 	});
 	//<모달창 확인 버튼>
-	$('#confirmBtn').on('click',function(e){ //확인버튼을 클릭하면
-		e.preventDefault(); //서버전송 막기
+	$(document).on('click','#testBtn',function(e){ //확인버튼을 클릭하면
+		e.preventDefault(); //폼 전송 막기
 		modal.classList.remove('on'); //모달창 닫기
-		let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출 답안 정의
-		let submitAnswer = []; //배열 생성
-		let testIdVal = document.querySelector('#testId');
-		let testId = testIdVal.value;
-		for(let i = 0; i < submitAnswerVal.length; i++){ //답안 길이만큼 반복		
-			submitAnswer[i] = submitAnswerVal[i].value //현재 선택된 답안들 배열에 저장
-		}
-		// 시간이 계속 흘러가는데 확인버튼 눌렀을때 전체 시간 - 현재 시간 = 응시 시간
-		let testTimeMin = document.querySelector('#testTimeMin'); //현재 분
-		let testTimeSec = document.querySelector('#testTimeSec'); //현재 초
-		let testTimeVal = document.querySelector('#testTime'); //서버에서 받아온 시험시간
-		let testTime = testTimeVal.value;
-		let min = 0;
-		let sec = 0;
-		if(Number(testTimeSec.innerText) > 0){ //지나간 분 계산
-			min = testTime - Number(testTimeMin.innerText) - 1;
-			sec = 60 - Number(testTimeSec.innerText);
-		}
-		else{
-			min = testTime - Number(testTimeMin.innerText);
-		}
-		$.ajax({ //답안 저장 ajax, 제출 후 페이지 이동
-			url: 'testStart1',
-			method: 'post',
-			data: {
-				submitAnswer: submitAnswer,
-				randQuizId: randQuizId,
-				randRn: randRn,
-				randQuizScore: randQuizScore,
-				testId: testId
-			},
-			dataType: 'json',
-			traditional: true,
-			success: function(data){
-				//console.log(data);
-				//console.log(submitAnswer);
-				location.href = '/testResult?testId=' + testId + '&min=' + min + '&sec=' + sec;
-				//$('#confirmBtn').submit();
-			},
-			error: function(){
-				console.log('error');
-			}
-		})
+		testResult(); //시험제출 함수 호출, ajax 실행
 	});
+}
+//<<시험제출 ajax>>
+function testResult(){
+	let testIdVal = document.querySelector('#testId'); //시험 번호
+	let testId = testIdVal.value;
+	let quizCntVal = document.querySelector('#quizCnt'); //전체 문제개수
+	let quizCnt = quizCntVal.value;
+	let randQuizIdVal = document.querySelectorAll('.randQuizId'); //랜덤 문제번호
+	let randQuizId = new Array(quizCnt);
+	for(let i = 0; i < randQuizIdVal.length; i++){
+		randQuizId[i] = randQuizIdVal[i].value;
+	}
+	let randRnVal = document.querySelectorAll('.randRn'); //랜덤 일련번호
+	let randRn = new Array(quizCnt); 
+	for(let i = 0; i < randRnVal.length; i++){
+		randRn[i] = randRnVal[i].value;
+	}
+	let randQuizScoreVal = document.querySelectorAll('.randQuizScore'); //문제 배점
+	let randQuizScore = new Array(quizCnt);
+	for(let i = 0; i < randQuizScoreVal.length; i++){
+		randQuizScore[i] = randQuizScoreVal[i].value;
+	}
+	let submitAnswerVal = document.querySelectorAll('.submitAnswer'); //제출 답안
+	let submitAnswer = [];
+	for(let i = 0; i < submitAnswerVal.length; i++){
+		submitAnswer[i] = submitAnswerVal[i].value
+	}
+	let testTimeMin = document.querySelector('#testTimeMin'); //현재 분
+	let testTimeSec = document.querySelector('#testTimeSec'); //현재 초
+	let testTimeVal = document.querySelector('#testTime'); //시험시간
+	let testTime = testTimeVal.value;
+	let minVal = document.querySelector('#min'); //폼 전송시 보낼 분
+	let secVal = document.querySelector('#sec'); //폼 전송시 보낼 초
+	let min = 0; //변수 초기화
+	let sec = 0;
+	//응시 시간 계산
+	if(Number(testTimeSec.innerText) > 0){ //초가 0보다 큰 경우
+		minVal.value = testTime - Number(testTimeMin.innerText) - 1;
+		secVal.value = 60 - Number(testTimeSec.innerText);
+	}
+	else{ //초가 0인 경우
+		minVal.value = testTime - Number(testTimeMin.innerText);
+		secVal.value = 0;
+	}
+	//답안 및 시험결과 저장 ajax
+	$.ajax({ 
+		url: 'testStart1',
+		method: 'post',
+		data: {
+			submitAnswer: submitAnswer,
+			randQuizId: randQuizId,
+			randRn: randRn,
+			randQuizScore: randQuizScore,
+			testId: testId
+		},
+		dataType: 'json',
+		traditional: true,
+		success: function(data){
+			$('#resultForm').submit(); //폼 강제 실행
+		},
+		error: function(){
+			console.log('error');
+		}
+	})
 }
 </script>
 </html>

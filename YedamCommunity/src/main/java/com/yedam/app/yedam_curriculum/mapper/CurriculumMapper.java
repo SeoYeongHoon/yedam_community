@@ -22,4 +22,9 @@ public interface CurriculumMapper {
 
 	public int removeCurriculum(int curriculumId);
 	
+	// 과정 선택 리스트(회원가입 때 사용)
+	public List<CurriculumVO> selectAllCurriculums();
+	
+	
+	
 }

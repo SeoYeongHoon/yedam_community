@@ -35,122 +35,145 @@
 	<!-- 문제 등록 -->
 	<insert id="insertQuiz" parameterType="TeacherVO">
 		INSERT INTO quizes (quiz_id
-			  			  , subject_id
 			  			  , subject_name
 						  , quiz_content
 						  , quiz_solution
 						  , user_id
-						  , quiz_answer)
+						  , quiz_answer
+						  , subject_id)
 		VALUES (quiz_id_seq.nextval
-		 	  , #{subjectId}
 			  , #{subjectName}
 			  , #{quizContent}
 			  , #{quizSolution}
 			  , #{userId}
-			  , #{quizAnswer})
+			  , #{quizAnswer}
+			  , #{subjectId})
 	</insert>
 	<insert id="insertQuizJu" parameterType="TeacherVO">
 		INSERT INTO quizes (quiz_id
-			  			  , subject_id
 			  			  , subject_name
 						  , quiz_content
 						  , quiz_solution
 						  , user_id
-						  , quiz_answer)
+						  , quiz_answer
+						  , subject_id)
 		VALUES (quiz_id_seq.nextval
-			  , #{subjectId}
 			  , #{subjectName}
 			  , #{quizContentJu}
 			  , #{quizSolutionJu}
 			  , #{userId}
-			  , #{quizAnswerJu})
+			  , #{quizAnswerJu}
+			  , #{subjectId})
 	</insert>
 	<!-- 문제 지문 등록 -->
 	<insert id="insertAnswer" parameterType="TeacherVO">
 		INSERT INTO answers (text_id
 			  			  , example_num
 						  , text_content
+						  , example_answer
 						  , quiz_id
-						  , subject_id)
+						  , subject_id
+						  , quiz_answer)
 		VALUES (text_id_seq.nextval
 			  , 1
 			  , #{textContent}
+			  , #{exampleAnswer}
 			  , quiz_id_seq.currval
-			  , #{subjectId})
+			  , #{subjectId}
+			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswer2" parameterType="TeacherVO">
 		INSERT INTO answers (text_id
 			  			  , example_num
 						  , text_content
+						  , example_answer
 						  , quiz_id
-						  , subject_id)
+						  , subject_id
+						  , quiz_answer)
 		VALUES (text_id_seq.nextval
 			  , 2
 			  , #{textContent2}
+			  , #{exampleAnswer2}
 			  , quiz_id_seq.currval
-			  , #{subjectId})
+			  , #{subjectId}
+			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswer3" parameterType="TeacherVO">
 		INSERT INTO answers (text_id
 			  			  , example_num
 						  , text_content
+						  , example_answer
 						  , quiz_id
-						  , subject_id)
+						  , subject_id
+						  , quiz_answer)
 		VALUES (text_id_seq.nextval
 			  , 3
 			  , #{textContent3}
+			  , #{exampleAnswer3}
 			  , quiz_id_seq.currval
-			  , #{subjectId})
+			  , #{subjectId}
+			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswer4" parameterType="TeacherVO">
 		INSERT INTO answers (text_id
 			  			  , example_num
 						  , text_content
+						  , example_answer
 						  , quiz_id
-						  , subject_id)
+						  , subject_id
+						  , quiz_answer)
 		VALUES (text_id_seq.nextval
 			  , 4
 			  , #{textContent4}
+			  , #{exampleAnswer4}
 			  , quiz_id_seq.currval
-			  , #{subjectId})
+			  , #{subjectId}
+			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswer5" parameterType="TeacherVO">
 		INSERT INTO answers (text_id
 			  			  , example_num
 						  , text_content
+						  , example_answer
 						  , quiz_id
-						  , subject_id)
+						  , subject_id
+						  , quiz_answer)
 		VALUES (text_id_seq.nextval
 			  , 5
 			  , #{textContent5}
+			  , #{exampleAnswer5}
 			  , quiz_id_seq.currval
-			  , #{subjectId})
+			  , #{subjectId}
+			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswerJu" parameterType="TeacherVO">
 		INSERT INTO answers (text_id
 			  			  , example_num
 						  , text_content
+						  , example_answer
 						  , quiz_id
-						  , subject_id)
+						  , subject_id
+						  , quiz_answer)
 		VALUES (text_id_seq.nextval
 			  , 1
 			  , #{textContentJu}
+			  , #{exampleAnswerJu}
 			  , quiz_id_seq.currval
-			  , #{subjectId})
+			  , #{subjectId}
+			  , #{quizAnswer})
 	</insert>
 	<!-- 문제저장소에 문제 출력 -->
 	<select id="filterQuiz" resultType="TeacherVO" parameterType="String">
-		SELECT q.quiz_id
-       		 , s.subject_name
-       		 , q.quiz_content
-       		 , q.quiz_solution
-       		 , q.user_id
-       		 , q.quiz_answer
-       		 , s.subject_id
-		FROM quizes q JOIN subjects s 
-                        ON q.subject_name = s.subject_name
+		SELECT quiz_id
+       		 , subject_name
+       		 , quiz_content
+       		 , quiz_solution
+       		 , user_id
+       		 , quiz_answer
+       		 , subject_id
+		FROM quizes
         <if test="sName != null and !sName.equals('') and !sName.equals('all') ">
-        WHERE s.subject_name = #{sName}
+        WHERE subject_name = #{sName}
         </if>        
 		ORDER BY quiz_id
 	</select>

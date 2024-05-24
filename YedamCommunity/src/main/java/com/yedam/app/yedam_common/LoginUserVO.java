@@ -45,6 +45,14 @@ public class LoginUserVO implements UserDetails {
 	public String getUserType() {
 		return userVO.getUserType();
 	}
+	
+	public String getUserEmail() {
+		return userVO.getEmail();
+	}
+	
+	public String getUserTel() {
+		return userVO.getTel();
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -66,6 +74,9 @@ public class LoginUserVO implements UserDetails {
 		return true;
 	}
 	
+	public Integer getuserId() {
+		return userVO.getUserId();
+	}
 	
 
 }

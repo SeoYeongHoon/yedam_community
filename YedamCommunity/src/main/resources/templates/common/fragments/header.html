@@ -16,13 +16,14 @@
 					<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_ADMIN')">
 						<li class="mega-menu-item"><a href="category-02.html">LMS</a></li>
 					</th:block>
-					<li class="mega-menu-item"><a href="category-01.html">수료 과정별 게시판</a></li>
-					<li class="mega-menu-item"><a href="category-02.html">구인/구직 게시판</a></li>
-					<li class="mega-menu-item"><a href="category-01.html">정보 공유 게시판</a></li>
-					<li class="mega-menu-item"><a href="category-02.html">질문과 토론 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/postList/{boardId}(boardId=1)}">수료 과정별 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/postList/{boardId}(boardId=2)}">구인/구직 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/postList/{boardId}(boardId=3)}">정보 공유 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/postList/{boardId}(boardId=4)}">질문과 토론 게시판</a></li>
 				</ul>
 				<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD') or hasAuthority('ROLE_ADMIN')">
 					<div class="profile_my_info" style="position: absolute; right: 90px;">
+					
 						<p style="font-weight: bold">[[${#authentication.name}]] 님</p>
 						<p>환영합니다!</p>
 					</div>
@@ -31,7 +32,7 @@
 					<button id="myMenuBtn"><img th:src="@{${'/images/profile/' + #authentication.principal.profileImageLocation}}" style="width: 65px; height: 65px; border-radius: 50%;"></button>
 					<ul class="myMenuList" style="display: none">
 						<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD')">
-							<li class="myMenuItem"><a href="">프로필</a></li>
+							<li class="myMenuItem"><a href="/mypage">프로필</a></li>
 						</th:block>
 						<th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
 							<li class="myMenuItem"><a href="/admin/adminMain">관리자페이지</a></li>

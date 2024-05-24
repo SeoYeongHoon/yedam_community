@@ -13,28 +13,33 @@ import com.yedam.app.yedam_examstudent.service.TestVO;
 @Mapper
 public interface CbtStudentMapper {
 
-	//시험목록 조회(시험결과 포함)
+	//시험목록
 	public List<TestVO> selectTestListAll(int userId);
-
 	
-	//시험상세정보 조회
-	public TestVO selectTestDetail(TestVO testVO);
-	//시험문제랜덤
+	//시험문제 랜덤
 	public List<QuizboxVO> selectTestQuizRand(QuizboxVO quizboxVO);
-	//시험시작정보 조회
+	//시험상세
+	public TestVO selectTestDetail(TestVO testVO);
+
+	//시험시작
 	public TestVO selectTestStart(TestVO testVO);
-	//시험문제
+	//시험문제 (AJAX)
 	public List<TestVO> selectTestQuiz(TestVO testVO);
-	//시험시작정보 조회 = 문제내용
+	//시험시작 문제정보
 	public QuizboxVO selectTestQuiz1(QuizboxVO quizboxVO);
-	//시험시작정보 조회 = 문제보기
+	//시험시작 보기정보
 	public List<AnswerVO> selectTestQuiz2(AnswerVO answerVO);
-	//문제 제출
-	public boolean insertTestSubmit(TestResultVO testResultVO);
-	//시험 결과 등록
+	//시험결과 (AJAX)
 	public boolean insertTestResult(ExamResultVO examResultVO);
-	//시험 결과 수정
+	//문제제출 (AJAX)
+	public boolean insertTestSubmit(TestResultVO testResultVO);
+	//시험결과 (AJAX)
 	public boolean insertTestResultScore(ExamResultVO examResultVO);
-	//시험 결과 정보
+	
+	//시험결과 정보
 	public ExamResultVO selectTestResult(ExamResultVO examResultVO);
+	//시험결과 문제정보
+	public List<QuizboxVO> selectTestResultQuiz1(QuizboxVO quizboxVO);
+	//시험결과 보기 정보
+	public List<AnswerVO> selectTestResultQuiz2(AnswerVO answerVO);
 }

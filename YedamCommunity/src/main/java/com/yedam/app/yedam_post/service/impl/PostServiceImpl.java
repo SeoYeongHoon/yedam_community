@@ -45,15 +45,15 @@ public class PostServiceImpl implements PostService {
 	// 게시글 전체 조회
 	//--------------------------------------------
 	@Override
-	public List<Post> getAllPosts() {
-		return postMapper.getAllPosts();
+	public List<Post> getAllPosts(int boardId) {
+		return postMapper.getAllPosts(boardId);
 	}
 
 	//--------------------------------------------
 	// 게시글 단건조회
 	//--------------------------------------------
 	@Override                  
-	public Post getPostReplies(int postId) {
+	public Post getPostReplies(int postId, int boardId) {
 		return postMapper.getPostDetails(postId);
 	}
 	
@@ -100,18 +100,18 @@ public class PostServiceImpl implements PostService {
 	// 게시글 페이지 네이션
 	//--------------------------------------------
     @Override
-    public List<Post> getPosts(int page, int pageSize) {
+    public List<Post> getPosts(int boardId, int page, int pageSize) {
         int startRow = (page - 1) * pageSize;
         int endRow = page * pageSize;
-        return postMapper.getPosts(startRow, endRow);
+        return postMapper.getPosts(boardId, startRow, endRow);
     }
     
     //--------------------------------------------
     // 게시글 개수
     //--------------------------------------------
     @Override
-    public int getPostCount() {
-        return postMapper.getPostCount();
+    public int getPostCount(int boardId) {
+        return postMapper.getPostCount(boardId);
     }
     
     //--------------------------------------------
