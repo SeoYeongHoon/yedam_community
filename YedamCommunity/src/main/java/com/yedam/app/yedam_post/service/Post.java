@@ -49,5 +49,4 @@ public class Post {
     //--------------------------------------------
     private List<BoardFiles> boardFiles;
 
-
 }
