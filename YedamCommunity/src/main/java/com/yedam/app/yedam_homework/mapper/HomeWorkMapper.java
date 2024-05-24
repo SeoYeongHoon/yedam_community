@@ -24,4 +24,6 @@ public interface HomeWorkMapper {
 	
 	//과제 대상자 조회
 	public HomeWorkTargetVO selectHomeworktarget(HomeWorkVO homeworkVO);
+	//강의실 카테고리
+	public List<HomeWorkVO> selectClass(int curriculumId);
 }

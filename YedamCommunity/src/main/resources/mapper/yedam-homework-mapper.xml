@@ -15,12 +15,11 @@
 				h.curriculum_id,
 				s.subject_id,
 				s.subject_name
-		 FROM homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
+		FROM homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
 						  JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
 		WHERE h.subject_id = s.subject_id
-	<!-- 	AND class_id = #{classId} -->
 		ORDER BY class_id 
-		
+	
 	</select>
 
 	<!-- 상세조회 -->
@@ -39,7 +38,7 @@
 	<!-- 과목명 조회 -->
 	<select id="selectSubjectName" resultType="HomeWorkVO">
 		SELECT subject_name,
-		subject_id
+				subject_id
 		FROM subjects
 		WHERE curriculum_id = #{curriculumId}
 	</select>
@@ -91,5 +90,24 @@
 		WHERE homework_id = ( SELECT max(homework_id)
 								FROM homeworks
 								WHERE curriculum_id = #{curriculumId})
+	</select>
+	<!-- 강의실 카테고리 -->
+	<select id="selectClass" resultType="HomeWorkVO">
+	
+		
+		SELECT	c.class_id,
+				h.homework_id,
+				h.homework_content,
+				h.homework_date,
+				h.homework_title,
+				s.subject_name
+		 FROM homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
+						  JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
+		WHERE h.subject_id = s.subject_id 
+		<if test = "classId != 0">
+		AND class_id = #{classId} 
+		</if>
+		ORDER BY class_id 
+		
 	</select>
 </mapper>

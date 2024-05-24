@@ -124,7 +124,9 @@
 <script>
 	// 페이지 로드 시 댓글 목록 불러오기
 	$().ready(function(){
-   		replyList(); 
+		replyList();
+   		
+   		
 	});
 
    //댓글 목록 불러오기 함수
@@ -140,17 +142,21 @@
             $('#replyList').empty(); 
             
             data.forEach(function(e){
-            	alert("OK");
                let replyDate = formatDate(e.replyDate);
-               let replyList = 
+               let replies = 
             	   `
+            	   <input id="replyId" type="hidden" value="${e.replyId}">
             	   <div style="border: 1px solid black;">
                    		<p>댓글 내용 : ${e.replyContent}</p>
-                   		<p>작성자 : ${e.replyWriter} ${e.commentContent}</p>
+                   		<p>작성자 : ${e.replyWriter}</p>
                    		<p class="replyDate">작성일자 :${replyDate}</p>
                    		<div class="col-12" style="text-align: right;">
 							<button class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
 						</div>
+						<div id="comments-${e.replyId}">
+							<div id="commentsList"></div>
+						</div>
+						
 						<div id="${e.replyId}" style="display: none; margin-top: 10px;">
 							<textarea id="comment-${e.replyId}" style="border: 1px solid black;" rows="4" cols="50" placeholder="답글 내용을 입력하세요"></textarea>
 							<div class="col-12" style="text-align: center; margin-top: 10px;">
@@ -158,10 +164,11 @@
 							</div>
 						</div>
                 	</div>`;
-               $('#replyList').append(replyList);
-               
-               
+               $('#replyList').append(replies);
+             
+               $('#comments-'+e.replyId).append(commentList(e.replyId));
             });
+            //commentList();
          },
          error: function(err){
             alert("실패");
@@ -169,18 +176,53 @@
       });
    }
    
+    // 대댓글 리스트
+   function commentList(replyId){
+	      
+	      $.ajax({
+	         url : "commentList",
+	         type : "GET",
+	         data : {replyId : replyId},
+	         success : function(data){
+	        	 
+	        	 //console.log(data)
+	        	 data.forEach(function(e){
+	        		 let commentDate = formatDate(e.commentDate);
+	        		   let comments =
+	        			 `
+	        			 <p>작성자: ${e.commentWriter}</p>
+	        			 <p>대댓글 내용 : ${e.commentContent}</p>
+	        			 <p>대댓글 작성일자 : ${commentDate}</p>
+	        			 `
+	        	
+	        		 $('#comments-'+e.replyId).append(comments);
+	        	 });
+	            
+	         },
+	          error: function(err){
+	            alert("X");
+	         } 
+	      });
+	   } 
+   
    //대댓글 등록
    function addComment(replyId){
 	   let content = $('#comment-'+replyId).val(); 
-	   console.log(content);
+	   alert(content)
+	   
 	    if (content.value =='') {
 	        alert('댓글 내용을 입력하세요.');
+	        $('#modalReply').modal('show');
+	        replyContent.focus();
+	        return;
 	    } else{
+	    	
 	   $.ajax({
 		   url: 'insertComment',
 		   type: 'post',
 		   data :{replyId:replyId , content:content} ,
 		   success: function(data){
+			 $('#modal').modal('show');
 			 content.value='';
 			 replyList();
 		   },
