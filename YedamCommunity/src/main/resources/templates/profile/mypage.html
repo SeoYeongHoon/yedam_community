@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="Home">
+	
+	<div id="mypage_container">
+		<h1>마이페이지</h1>
+		<div class="mypage_wrapper">
+			
+			<div class="mypage_info">
+				<button class="profile_change_btn">
+					<label class="profile_change_label"><span>변경</span></label>
+					<img class="mypage_profile_image" th:src="@{${'/images/profile/' + #authentication.principal.profileImageLocation}}">
+				</button>
+				<div class="input-style-1">
+					<label>이름</label> 
+					<input id="username" type="text" th:value="${#authentication.name}">
+				</div>
+				<div class="input-style-1">
+					<label>비밀번호</label> 
+					<input id="userpassword" type="password" th:value="${#authentication.principal.password}">
+				</div>
+				<div class="input-style-1">
+					<label>비밀번호 확인</label> 
+					<input id="userpassword_confirm" type="password" th:value="${#authentication.principal.password}">
+				</div>
+				<!-- <div class="input-style-1">
+					<label>이메일</label> 
+					<input id="useremail" type="text" th:value="${#authentication.principal.email}">
+				</div>
+				<div class="input-style-1">
+					<label>연락처</label> 
+					<input id="usertel" type="text" th:value="${#authentication.principal.tel}">
+				</div> -->
+			</div>
+			
+			<div class="mypage_activity">
+				<p>def</p>
+			</div>
+		</div>
+	</div>	
+	
+</html>

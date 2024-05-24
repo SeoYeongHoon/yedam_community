@@ -1,9 +1,7 @@
 package com.yedam.app.yedam_user.mapper;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,12 +12,20 @@ import com.yedam.app.yedam_user.service.UserVO;
 
 @Mapper
 public interface UserMapper {
+	// CSV 학생 데이터 tempusers 테이블에 저장
+	public void insertTempUsers(Map<String, String> row);
 
-	// 회원가입 신청
-	public void requestUser(RegisterVO registerVO);
-
+	// 회원가입 정보 비교를 위한 조회
+	UserVO checkTempUser(UserVO userVO);
+	
 	// 회원가입 승인
-	public int insertUser(int registerId);
+	public void insertUser(UserVO userVO);
+	
+	// 회원가입 수동 승인
+	public int approveUser(int id);
+	
+	// 회원가입 보류 -> 요청 테이블에 저장
+	public void insertRegister(UserVO userVO);
 
 	// 체크된 다수의 회원가입 요청 승인
 	public void insertCheckedUsers(@Param("registerIds") List<String> registerIds);
@@ -56,11 +62,9 @@ public interface UserMapper {
 	// 비밀번호 찾기
 	UserVO getUserPw(UserVO userVO);
 	
-
 //	회원가입 신청거절(삭제)
 	public int refuseUser(int registerId);
 
 //	유저 삭제
 	public int removeUser(int userId);
-
 }

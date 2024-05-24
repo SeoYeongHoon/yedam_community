@@ -5,17 +5,16 @@
 	  layout:fragment="Admin">
 	  
 	<script>
-		function addCurriculum(event) {
+		/* function addCurriculum(event) {
 			var formData = new FormData(document.getElementById('add_course_form'));
-	        
+	        console.log("폼데이터: " + formData);
 	        $.ajax({
-	            url: '/admin/manageCourse',
+	            url: '/admin/course',
 	            type: 'POST',
 	            data: formData,
 	            success: function(response) {
 					if (response.status === "success") {
-                        alert(response.message);
-                        
+                        alert(response.message);	
                     } else {
                         alert(response.message);
                     }
@@ -25,7 +24,7 @@
 	                console.error(error);
 	            }
 	        });
-		}
+		} */
 		
 		//--------------------------------------------
 		// 과정 클릭시 해당과정의 학생 목록 출력
@@ -71,22 +70,7 @@
 		}
 		
 		
-		document.querySelector(".deleteCourseBtn").addEventListener('click', function() {
-			if (confirm('과정을 삭제하시겠습니까?')) {
-				var xhr = new XMLHttpRequest();
-				xhr.open('DELETE', '/admin/course/' + curriculumId, true);
-				xhr.onreadystatechange = function() {
-					if (xhr.readyState == 4 && xhr.status == 200) {
-						var course = JSON.parse(xhr.responseText);
-						
-						alert('과정이 삭제되었습니다.');
-						//document.querySelector('.courseModal').style.display = 'none';
-						location.reload();
-					}
-				};							
-				xhr.send();							
-			} 
-		});
+		
 	</script>
 	
 	<div id="manage-container">
@@ -96,7 +80,7 @@
 				<a class="open_add_course main-btn light-btn btn-hover" style="color: white; background-color: #e96b56; padding: 7px 20px; position: absolute; margin: 0; right: 14px; bottom: 14px;">수강 등록</a>
 				
 				<!-- 수강등록 버튼 클릭 시 display: flex -->
-				<form id="add_course_form" method="post">
+				<form id="add_course_form" action="/admin/course" method="post">
 					<div class="add_course">
 						<div class="input-style-1 add_course_item">
 							<label class="course_item_type" style="color: white;">과정명</label>
@@ -136,12 +120,12 @@
 										[[${#dates.format(curriculum.curriculumStartDate, 'yyyy년 MM월 dd일')}]] - [[${#dates.format(curriculum.curriculumEndDate, 'yyyy년 MM월 dd일')}]]
 									</p>
 									<p style="border-bottom: 2px solid #5d657b; padding: 20px; font-size: 13pt; color: black; font-weight: bold;">[[${curriculum.curriculumName}]]</p>
-									<img th:src="@{/images/{fileName}(fileName=${curriculum.curriculumImg})}" style="max-width: 100%;">					
+									<img th:src="@{/images/{fileName}(fileName=${curriculum.curriculumImg})}" style="max-width: 100%;">
+									
+									<!-- 삭제용 과정 ID -->
+									<input type="hidden" id="currId" th:value="${curriculum.curriculumId}">		
 								</a>
 							</td>
-							<!--<td>
-								<input class="deleteCheck" name="checkDelItem" type="checkbox" th:value="${curriculum.curriculumId}">
-							</td>-->
 						</tr>
 					</tbody>
 				</table>
@@ -168,7 +152,7 @@
 							</tbody>
 						</table>
 					</div>
-					<a href="#0" class="danger-btn btn-hover deleteCourseBtn" style="position: absolute; right: 10px; bottom: 10px; padding: 5px 20px;">삭제</a>
+					<a href="#0" id="deleteCourseBtn" class="danger-btn btn-hover" style="position: absolute; right: 10px; bottom: 10px; padding: 5px 20px;">삭제</a>
 				</div>
 			</div>
 		</div>
@@ -198,5 +182,24 @@
 		function closeCourseModal() {
 			document.querySelector('.courseModal').style.display = 'none';
 		}
+		
+		document.querySelector("#deleteCourseBtn").addEventListener('click', function() {
+			if (confirm('과정을 삭제하시겠습니까?')) {
+				var xhr = new XMLHttpRequest();
+				var curriculumId = document.getElementById('currId').value;
+				console.log(curriculumId);
+				xhr.open('DELETE', '/admin/course/' + curriculumId, true);
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						var course = JSON.parse(xhr.responseText);
+						
+						alert('과정이 삭제되었습니다.');
+						//document.querySelector('.courseModal').style.display = 'none';
+						location.reload();
+					}
+				};							
+				xhr.send();							
+			} 
+		});
 	</script>
 </html>

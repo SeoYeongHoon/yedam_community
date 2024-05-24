@@ -15,6 +15,7 @@
 	<link th:href="@{/css/main.css}" rel="stylesheet" />
 	<link th:href="@{/css/util.css}" rel="stylesheet" />
 	<link th:href="@{/css/home.css}" rel="stylesheet" />
+	<link th:href="@{/css/mypage.css}" rel="stylesheet" />
 	<link th:href="@{/css/util.min.css}" rel="stylesheet" />
 	<link th:href="@{/vendor/css-hamburgers/hamburgers.min.css}" rel="stylesheet" />
 	<link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
@@ -61,15 +62,21 @@
 	<!-- 로딩창 -->
 	<!-- <div id="load">
 		<img src="images/loading_book.gif" alt="loading">
-	</div>
+	</div> -->
 	
 	<script>
 		const loading_page = document.getElementById("load");
-		window.onload = function() {
+		/* window.onload = function() {
 			setTimeout(() => {
 				loading_page.style.display = 'none';
-			}, 500)
-		}
-	</script> -->
+			}, 100)
+		} */
+		
+		/* window.addEventListener('load', function() {
+			setTimeout(() => {
+				loading_page.style.display = 'none';
+			}, 1000)
+		}); */
+	</script>
 </html>
 	

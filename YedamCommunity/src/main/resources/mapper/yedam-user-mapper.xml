@@ -49,7 +49,7 @@
 	</delete>
 	
 	<!-- 회원가입 신청 -->
-	<insert id="requestUser" parameterType="RegisterVO">
+	<!-- <insert id="requestUser" parameterType="RegisterVO">
 		INSERT INTO register (
 			register_id
 			, id
@@ -83,7 +83,7 @@
 			, #{downloadLocation}
 			, #{profileImageExt}
 		)
-	</insert>
+	</insert> -->
 	
 	<!-- 관리자페이지 첫 페이지(회원가입 신청한 유저) -->
 	<select id="selectStdList" resultType="RegisterVO">
@@ -97,24 +97,6 @@
 		ORDER BY register_id
 	</select>
 	
-		<!-- SELECT * FROM users
-		<where>
-			<choose>
-				<when test="filter == 'showAll'">
-					user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN'
-				</when>
-				<when test="filter == 'showGrad'">
-					user_type = 'ROLE_GRAD'
-				</when>
-				<when test="filter == 'showLearn'">
-					user_type = 'ROLE_LEARN'
-				</when>
-				<otherwise>
-					1=1
-				</otherwise>
-			</choose>
-		</where>
-		ORDER BY user_id -->
 	<!-- 관리자페이지 유저 리스트 출력 및 필터링 -->
 	<select id="getUsersByFilter" parameterType="map" resultType="UserVO">
 		 SELECT * 
@@ -167,7 +149,7 @@
         </where>
 	</select>
 	
-	<update id="insertUser" parameterType="UserVO">
+	<update id="approveUser" parameterType="UserVO">
 	    BEGIN
 	        INSERT INTO users (
 	            user_id
@@ -179,7 +161,7 @@
 	            , address
 	            , company_info
 	            , user_type
-	            , curriculum_id
+	            , curriculum_name
 	            , profile_image_name
 				, profile_image_size
 				, profile_image_location
@@ -195,7 +177,7 @@
 	            , address
 	            , company_info
 	            , user_type
-	            , curriculum_id
+	            , curriculum_name
 	            , profile_image_name
 				, profile_image_size
 				, profile_image_location
@@ -212,15 +194,20 @@
 	<update id="insertCheckedUsers" parameterType="java.util.Map">
 	    BEGIN
 	        FOR i IN (SELECT register_id 
-	                , id
-	                , password
-	                , name
-	                , tel
-	                , email
-	                , address
-	                , company_info
-	                , user_type
-	                , curriculum_id
+			                , id
+			                , password
+			                , name
+			                , tel
+			                , email
+			                , address
+			                , company_info
+			                , user_type
+				            , curriculum_name
+				            , profile_image_name
+							, profile_image_size
+							, profile_image_location
+							, download_location
+							, profile_image_ext
 	                FROM register
 	                WHERE register_id IN
 	                <foreach item="registerId" collection="registerIds" open="(" separator="," close=")">
@@ -235,10 +222,14 @@
 	                             , tel
 	                             , email
 	                             , address
-	                             <!-- , user_image -->
 	                             , company_info
 	                             , user_type
-	                             , curriculum_id
+					             , curriculum_name
+					             , profile_image_name
+								 , profile_image_size
+								 , profile_image_location
+								 , download_location
+								 , profile_image_ext
 	                             )
 	            VALUES (user_id_seq.NEXTVAL
 	                  , i.id
@@ -250,7 +241,12 @@
 	                  <!-- , i.user_image -->
 	                  , i.company_info
 	                  , i.user_type
-	                  , i.curriculum_id
+		              , i.curriculum_name
+		              , i.profile_image_name
+					  , i.profile_image_size
+					  , i.profile_image_location
+					  , i.download_location
+					  , i.profile_image_ext
 	            );
 	            
 	            DELETE FROM register
@@ -260,5 +256,95 @@
 	</update>
 
 
+	<!-- 회원가입 프로세스 -->
+	<!-- 관리자가 csv파일을 기반으로 학생 정보 임시 저장 -->
+    <insert id="insertTempUsers" parameterType="map">
+        INSERT INTO tempusers (name, tel, email)
+        VALUES (#{stdName}, #{stdPhone}, #{stdEmail})
+    </insert>
 
+	<!-- 회원가입 시, 정보를 임시정보(tempusers)와 비교 -->
+    <select id="checkTempUser" parameterType="UserVO" resultType="UserVO">
+        SELECT * FROM tempusers
+        WHERE name  = #{name}
+        AND   tel   = #{tel}
+        AND   email = #{email}
+    </select>
+
+	<!-- 정보 일치 시, users 테이블에 저장 -->
+    <insert id="insertUser" parameterType="UserVO">
+        INSERT INTO users (user_id,
+		                   id,
+		                   password,
+		                   name,
+		                   tel,
+		                   email,
+		                   address,
+		                   company_info,
+		                   user_type,
+		                   curriculum_name,
+		                   profile_image_name,
+		                   profile_image_size,
+		                   profile_image_location,
+		                   download_location,
+		                   profile_image_ext)
+        VALUES (  user_id_seq.NEXTVAL
+				, #{id}
+				, #{password}
+				, #{name}
+				, #{email}
+				, #{tel}
+				, #{address}
+				, #{companyInfo}
+				, #{userType}
+				, #{curriculumName}
+				, #{profileImageName}
+				, #{profileImageSize}
+				, #{profileImageLocation}
+				, #{downloadLocation}
+				, #{profileImageExt}
+		)
+    </insert>
+
+	<!-- 정보 불일치 시, register 테이블에 저장 -->
+    <insert id="insertRegister" parameterType="UserVO">
+        INSERT INTO register (register_id
+							, id
+							, password
+							, name
+							, email
+							, tel
+							, address
+							, company_info
+							, user_type
+							, curriculum_name
+							, profile_image_name
+							, profile_image_size
+							, profile_image_location
+							, download_location
+							, profile_image_ext) 
+		VALUES (  user_id_seq.NEXTVAL
+				, #{id}
+				, #{password}
+				, #{name}
+				, #{email}
+				, #{tel}
+				, #{address}
+				, #{companyInfo}
+				, #{userType}
+				, #{curriculumName}
+				, #{profileImageName}
+				, #{profileImageSize}
+				, #{profileImageLocation}
+				, #{downloadLocation}
+				, #{profileImageExt}
+		)
+    </insert>
+
+	
+    <!-- <update id="updateRegisterStatus" parameterType="map">
+        UPDATE register
+        SET status = #{status}
+        WHERE id = #{id}
+    </update> -->
 </mapper>

@@ -22,6 +22,12 @@ public class CurriculumServiceImpl implements CurriculumService {
 		return curriculumMapper.cSelectAll();
 	}
 
+	// 과정 선택 리스트(회원가입 때 사용)
+	@Override
+	public List<CurriculumVO> allCurriculumList() {
+		return curriculumMapper.selectAllCurriculums();
+	}
+
 	@Override
 	public int insertCurriculum(CurriculumVO curriculumVO) {
 		if (curriculumMapper.insertCurriculum(curriculumVO) > 0) {

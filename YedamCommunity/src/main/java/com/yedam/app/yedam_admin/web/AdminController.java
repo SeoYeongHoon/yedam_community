@@ -67,10 +67,6 @@ public class AdminController {
 	    response.put("users", users);
 	    response.put("page", pageDTO);
 	    
-	    System.out.println("필터: " + filter);
-	    System.out.println("현재 페이지: " + page);
-	    System.out.println("현재 페이지 DTO: " + pageDTO);
-	    
 	    return response;
 	}
 
@@ -103,11 +99,11 @@ public class AdminController {
 		return userService.removeUser(userId);
 	}
 
-	// 회원가입 신청(Register 테이블에 임시등록)
+//	// 회원가입 신청(Register 테이블에 임시등록)
 	@GetMapping("/insertUser")
 	@ResponseBody
 	public int insertUser(@RequestParam("registerId") int registerId) {
-		return userService.insertUser(registerId);
+		return userService.approveUser(registerId);
 	}
 
 	// 신청한 유저들 중 승인한 것 Users 테이블로 이동
@@ -124,23 +120,27 @@ public class AdminController {
 	public ResponseEntity<List<Map<String, String>>> handleFileUpload(@RequestParam("file") MultipartFile file) {
 		List<Map<String, String>> data = new ArrayList<>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
-				CSVParser csvParser = CSVFormat.DEFAULT.builder()
-						.setHeader()
-						.setSkipHeaderRecord(true)
-						.build()
-						.parse(reader)) {
-
-			for (CSVRecord csvRecord : csvParser) {
-				Map<String, String> row = new HashMap<>();
-				row.put("courseName", csvRecord.get("과정명"));
-				row.put("studentsCount", csvRecord.get("인원"));
-				row.put("downloadLink", csvRecord.get("다운로드"));
-				data.add(row);
-			}
+			 CSVParser csvParser = CSVFormat.DEFAULT.builder()
+													.setHeader()
+													.setSkipHeaderRecord(true)
+													.build()
+													.parse(reader)) {
+			
+				for (CSVRecord csvRecord : csvParser) {
+					Map<String, String> row = new HashMap<>();
+					row.put("stdName", csvRecord.get("이름"));
+					row.put("stdPhone", csvRecord.get("전화번호"));
+					row.put("stdEmail", csvRecord.get("이메일"));
+					data.add(row);
+					System.out.println("ROW 데이터: " + row);
+					userService.insertTempUsers(row);
+				}
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
+		System.out.println("데이터: " + data);
 		return ResponseEntity.ok(data);
 	}
 	
@@ -156,22 +156,22 @@ public class AdminController {
 	
 //	과정 등록
 	@PostMapping("/course")
-	@ResponseBody
-	public String addCourse( CurriculumVO curriculumVO) {
-		System.out.println("전달된 데이터: " + curriculumVO);
-		
-		curriculumService.insertCurriculum(curriculumVO);
-		
-		return "redirect:/manageCourse";
+	public String addCourse(CurriculumVO curriculumVO, Model model) {
+	    try {
+	        curriculumService.insertCurriculum(curriculumVO);
+	        model.addAttribute("message", "과정이 성공적으로 등록되었습니다.");
+	        return "redirect:/admin/course";
+	    } catch (Exception e) {
+	        model.addAttribute("message", "과정 등록에 실패했습니다.");
+	        return "admin/course";
+	    }
 	}
 	
 //	모달창에 해당 과정의 학생 리스트 출력
 	@GetMapping("/showCourse")
 	@ResponseBody
 	public List<UserVO> showCourseStd(@RequestParam("curriculumId") int curriculumId) {
-		System.out.println("아이디: " + curriculumId);
 		List<UserVO> students = curriculumService.showCurriculumStd(curriculumId);
-		System.out.println("학생정보: " + students);		
 		
 		return students;
 	}

@@ -22,23 +22,27 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
-	// 회원가입 신청
+	// 회원가입 프로세스
 	@Override
-	public void requestUser(RegisterVO registerVO) throws Exception {
-		String encodedPw = passwordEncoder.encode(registerVO.getPassword());
-		registerVO.setPassword(encodedPw);
-		
-		userMapper.requestUser(registerVO);
+	public void registerUser(UserVO userVO) {
+		UserVO tempUser = userMapper.checkTempUser(userVO);
+        if (tempUser != null) {
+        	String encodedPw = passwordEncoder.encode(userVO.getPassword());
+    		userVO.setPassword(encodedPw);
+            // tempusers 테이블에 일치하는 사용자가 있을 경우 users 테이블에 삽입
+            userMapper.insertUser(userVO);
+        } else {
+        	String encodedPw = passwordEncoder.encode(userVO.getPassword());
+    		userVO.setPassword(encodedPw);
+            // 정보가 일치하지 않을 경우 register 테이블에 삽입
+            userMapper.insertRegister(userVO);
+        }
 	}
 
-	// 회원가입 승인
+	// 회원가입 수동 승인
 	@Override
-	public int insertUser(int registerId) {
-		if (userMapper.insertUser(registerId) > 0) {
-			return 1;
-		} else {
-			return -1;
-		}
+	public int approveUser(int id) {
+		return userMapper.approveUser(id);
 	}
 
 	// 체크된 다수의 회원가입 요청 승인
@@ -116,6 +120,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public RegisterVO getReqInfoById(String registerId) {
 		return userMapper.getReqInfoById(registerId);
+	}
+
+	@Override
+	public void insertTempUsers(Map<String, String> row) {
+		userMapper.insertTempUsers(row);
 	}
 	
 }
