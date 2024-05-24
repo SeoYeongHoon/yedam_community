@@ -129,9 +129,7 @@ public class ExamController {
 			if (sId > -1) {
 				uri = "redirect:quizlist";
 			} else {
-			
-					resp.getWriter().append("<script>alert('error');history.back();</script>");
-				
+				resp.getWriter().append("<script>alert('error');history.back();</script>");
 				uri = "";
 			}
 		} catch (IOException e) {
