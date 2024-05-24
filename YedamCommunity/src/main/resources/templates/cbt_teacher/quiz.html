@@ -152,6 +152,7 @@ var textContent4 = '';
 var textContent5 = '';
 var answerList = '${answerList}';
 var answer1 = '';
+var allList = [];
 
 // 퀴즈 문제 전체를 불러오는 AJAX
 function quizContentList(sName){
@@ -198,7 +199,14 @@ function quizContentList(sName){
 				rowTag.append(temp);
 			}); // forEach 종료
 			
-			console.log('아작스 영역');
+			let scr = 0;
+			// 인풋창에 값 입력하고 바로 value값 찾는 함수
+			$('.scInput').on('change',function(e){
+				scr = 0;
+				//console.log(e.target.value);
+				scr = e.target.value
+				console.log(scr);
+			})
 			
 			//--------------------------------------------
 			// 문제선택 체크박스 누르면 qId,qContent,배점값 빈배열에 넣기.
@@ -215,7 +223,8 @@ function quizContentList(sName){
 				    var bChecked = $(this).prop('checked');
 				    var id = $(this).attr('id');
 				    var value = $(this).val();
-				    arr.push('[' + index + ']('+ bChecked + ')' + id + ':' +  value);
+				    //var score = $('.quizChk').val();
+				    arr.push('[' + index + ']('+ bChecked + ')' + id + ':' +  value + '' + scr);
 				});
 				console.log(arr);
 			})
@@ -305,13 +314,17 @@ function quizContentList(sName){
 			$('#quizBox').on('click', '.infoBtn', function (e) {
 				modal.style.display = "flex"; // 버튼 클릭시 모달 보임
 			});
-			
 		},
 		error : function(){
 			alert('실패');
 		}
 	}); // 문제 전체 조회 ajax 종료 	
+	allList = $('.box');
+	for(let i=0; i<allList.length; i++){
+	}
+	
 }; // function quizContentList() 종료
+
 
 //테스트용 버튼 
 $('#subBtn').on('click', function(){
@@ -472,15 +485,11 @@ $('#updateBtn').on('click', function(){
 	console.log($('#info').val());
 	//localStorage.setItem('json', JSON.stringify({a: 1, b: 2}))
 })
-$('.name').on('change',function(e){
-	console.log(e);
-	console.log(e.target);
-	
-})
 
-$('.scInput').on('change',function(e){
+
+/* $('.scInput').on('change',function(e){
 	console.log(e.target.value);
-})
+}) */
 
 
 </script>
