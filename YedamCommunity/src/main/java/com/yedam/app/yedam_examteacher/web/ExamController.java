@@ -105,17 +105,17 @@ public class ExamController {
 	//--------------------------------------------
 	// 문제에 대한 지문들 출력
 	//--------------------------------------------
-	@GetMapping("quizes/{qId}/answers")
-	@ResponseBody
-	public List<TeacherVO> textContentList(@PathVariable("qId") int qId){
+	@GetMapping("answers") //("quizes/{qId}/answers")
+	@ResponseBody							//@PathVariable("qId")
+	public List<TeacherVO> textContentList(@RequestParam("qId") int qId){
 		return examService.answerList(qId);
 	}
 	//--------------------------------------------
 	// 문제 단건조회
 	//--------------------------------------------
-	@GetMapping("quizes/{qId}")
+	@GetMapping("quizinfo")
 	@ResponseBody
-	public List<TeacherVO> quizInfo(@PathVariable("qId") int qId) {
+	public List<TeacherVO> quizInfo(@RequestParam("qId") int qId) {
 		return examService.getQuizInfo(qId);
 	}
 	//--------------------------------------------

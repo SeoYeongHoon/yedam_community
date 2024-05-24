@@ -15,8 +15,8 @@ public interface HomeWorkReplyMapper {
 	public List<ReplyVO> selectReplyAll(int homeworkTargetId);
 
 	// 대댓글 조회
-	public List<CommentVO> selectComment(ReplyVO replyVO);
+	public List<CommentVO> selectComment(int replyId);
 
 	// 대댓글 등록
-	public int insertComment(HomeWorkVO homeworkVO);
+	public int insertComment(CommentVO comment);
 }

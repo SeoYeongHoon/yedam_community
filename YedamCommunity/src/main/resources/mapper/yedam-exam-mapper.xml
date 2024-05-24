@@ -52,12 +52,18 @@
 	<insert id="insertQuizJu" parameterType="TeacherVO">
 		INSERT INTO quizes (quiz_id
 			  			  , subject_id
+			  			  , subject_name
 						  , quiz_content
-						  , quiz_solution)
+						  , quiz_solution
+						  , user_id
+						  , quiz_answer)
 		VALUES (quiz_id_seq.nextval
 			  , #{subjectId}
+			  , #{subjectName}
 			  , #{quizContentJu}
-			  , #{quizSolutionJu})
+			  , #{quizSolutionJu}
+			  , #{userId}
+			  , #{quizAnswerJu})
 	</insert>
 	<!-- 문제 지문 등록 -->
 	<insert id="insertAnswer" parameterType="TeacherVO">

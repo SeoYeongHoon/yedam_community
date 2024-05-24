@@ -59,7 +59,7 @@ public class ExamServiceImpl implements ExamService {
 	@Transactional
 	@Override
 	public void quizInsertJu(TeacherVO teacherVO) { // 주관식
-		examMapper.insertQuiz(teacherVO);
+		examMapper.insertQuizJu(teacherVO);
 		examMapper.insertAnswerJu(teacherVO);
 	}
 	//--------------------------------------------
