@@ -36,7 +36,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 	// 과제등록 파일 업로드
 	@Override
 	public List<String> homeworkUploadFile(@RequestPart MultipartFile[] uploadFiles,
-			HomeWorkTargetVO homeworktargetVO) {
+														HomeWorkTargetVO homeworktargetVO) {
 
 		List<String> FileList = new ArrayList<>();
 
@@ -44,38 +44,29 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 
 		for (MultipartFile uploadFile : uploadFiles) {
 
-			System.err.println("uploadFiles =" + uploadFiles);
-
 			// 모든경로를 포함한 파일 이름
 			String originalName = uploadFile.getOriginalFilename();
-			System.err.println("오리지날 이름 = " + originalName);
 
 			// 모든 경로에서 마지막 / 부분으로부터 +1 해준 부분부터 출력하겠다.
 			String fileName = originalName.substring(originalName.lastIndexOf("//") + 1);
-			System.err.println("파일 이름 = " + fileName);
 
 			// 확장자
 			String fileExt = originalName.substring(originalName.lastIndexOf(".") + 1);
-			System.err.println(fileExt);
 
 			// 날짜 폴더 생성
 			String folderPath = makeFolder();
-			System.err.println("날짜 폴더 생성 = " + folderPath);
 
 			// UUID = 시간을 기준으로 랜덤한 값
 			String uuid = UUID.randomUUID().toString();
-			System.err.println("uuid = " + uuid);
 
 			// 저장할 파일이름 중간에 "_"를 이용하여 구분
 			String uploadFileName = folderPath + File.separator + uuid + "_" + fileName;
-			System.err.println("파일 이름 중간에 _ 구분 = " + uploadFileName);
 
 			// 다운로드 파일 경로
 			String downloadFileName = uuid + "_" + fileName;
 
 			// 저장할때 이름 = 경로 + / + 랜덤한 파일 이름
 			String saveName = uploadPath + File.separator + uploadFileName;
-			System.err.println("저장할 때 이름 = " + saveName);
 
 			// Paths.get() 매서드는 특정 경로의 파일 정보를 가져옴(경로 정의)
 			Path savePath = Paths.get(saveName);
@@ -85,10 +76,8 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.err.println("파일 사이즈" + uploadFile.getSize());
 
 			FileList.add(setFilepath(uploadFileName));
-			System.err.println("FileList = " + FileList);
 
 			HomeWorkFileVO homeworkfileVO = new HomeWorkFileVO();
 			// 파일이름
@@ -111,15 +100,17 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 
 		return FileList;
 	}
-
+	//---------------
+	// 댓글등록 파일 업로드
+	//----------------
 	@Override
-	public List<String> replyUploadFile(MultipartFile[] uploadFiles, int replyId) {
+	public List<String> replyUploadFile(MultipartFile[] uploadFiles, 
+														int replyId) {
 
 		List<String> FileList = new ArrayList<>();
 
 		for (MultipartFile uploadFile : uploadFiles) {
 
-			System.err.println("uploadFiles =" + uploadFiles);
 
 			// 모든경로를 포함한 파일 이름
 			String originalName = uploadFile.getOriginalFilename();
@@ -177,7 +168,11 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 
 		return FileList;
 	}
-
+	
+	
+	//---------------
+	// 폴더 생성
+	//---------------
 	private String makeFolder() {
 
 		// LocalDate를 문자열로 포맷
@@ -209,8 +204,8 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 	
 	//댓글 파일 조회
 	@Override
-	public List<ReplyFileVO> replyfileList(ReplyVO reply) {
-		return homeworkfileMapper.selectReplyfile(reply);
+	public List<ReplyFileVO> replyfileList(int replyId) {
+		return homeworkfileMapper.selectReplyfile(replyId);
 	}
 
 }

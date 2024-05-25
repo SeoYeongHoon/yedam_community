@@ -126,7 +126,6 @@
 	$().ready(function(){
 		replyList();
    		
-   		
 	});
 
    //댓글 목록 불러오기 함수
@@ -150,6 +149,7 @@
                    		<p>댓글 내용 : ${e.replyContent}</p>
                    		<p>작성자 : ${e.replyWriter}</p>
                    		<p class="replyDate">작성일자 :${replyDate}</p>
+                   		<div id="replyfiles-${e.replyId}"></div>
                    		<div class="col-12" style="text-align: right;">
 							<button class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
 						</div>
@@ -167,6 +167,7 @@
                $('#replyList').append(replies);
              
                $('#comments-'+e.replyId).append(commentList(e.replyId));
+               $('#replyfiles-'+e.replyId).append(replyFile(e.replyId));
             });
             //commentList();
          },
@@ -174,6 +175,29 @@
             alert("실패");
          }
       });
+   }
+   
+   //댓글 파일 
+   function replyFile(replyId){
+	   
+	   $.ajax({
+		   url : "replyfile",
+		   type : "GET",
+		   data : {replyId : replyId},
+		   success : function(data){
+			   data.forEach(function(e){
+				   console.log(e.replyId + "아아" +e.downloadLocation);
+				   let replyfile = 
+					   `
+					   <a href="/replydownload/${e.downloadLocation}">${e.replyfileName}</a>
+					   `
+					   $('#replyfiles-'+e.replyId).append(replyfile);
+			   })
+		   },
+		   error : function(err){
+			 alert("replyfile err")  
+		   }
+	   });
    }
    
     // 대댓글 리스트
@@ -185,7 +209,6 @@
 	         data : {replyId : replyId},
 	         success : function(data){
 	        	 
-	        	 //console.log(data)
 	        	 data.forEach(function(e){
 	        		 let commentDate = formatDate(e.commentDate);
 	        		   let comments =
@@ -208,7 +231,6 @@
    //대댓글 등록
    function addComment(replyId){
 	   let content = $('#comment-'+replyId).val(); 
-	   alert(content)
 	   
 	    if (content.value =='') {
 	        alert('댓글 내용을 입력하세요.');

@@ -60,6 +60,7 @@
 		homeworkList();
 	});
 	
+	// 과제목록
 	function homeworkList(){
 		let homeworkAll = '';
 		$.ajax({
@@ -70,7 +71,7 @@
 				data.forEach(function(e){
 					let homework =
 						`
-						<tr onclick="location.href='@{/homeworkInfo(homeworkId=${e.homeworkId})}'">
+						<tr onclick="location.href='homeworkInfo?homeworkId='+${e.homeworkId}">
 							<td>${e.classId}</td>
 							<td>${e.homeworkTitle}</td>
 							<td>${e.subjectName}</td>
@@ -96,10 +97,6 @@
 		$("#classSelect").change(function() {
 
 			let vals = $("#classSelect").val();
-			console.log(vals)
-			/* if(vlas.equal('all')){
-				return homeworkList();
-			} else { */
 				$.ajax({
 					url : "classCategoryT",
 					type : "get",
@@ -130,9 +127,6 @@
 						alert("err")
 					}
 				});
-			//}
-			
-		
 		});
 	}
 
