@@ -1,5 +1,6 @@
 package com.yedam.app.yedam_examstudent.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
+import com.yedam.app.yedam_user.service.UserVO;
 
 @Controller
 public class CbtStudentController {
@@ -26,7 +28,43 @@ public class CbtStudentController {
 	@Autowired
 	CbtStudentService cbtStudentService;
 	
+	//ㅡㅡㅡㅡㅡ
+	//마이페이지
+	//ㅡㅡㅡㅡㅡ
+	@GetMapping("myPage")
+	public String myPage(TestVO testVO,
+						 UserVO userVO,
+						 Model model) {
+		String logid ="14";
+		UserVO info = cbtStudentService.myPageInfo(Integer.parseInt(logid));
+		List<TestVO> list = cbtStudentService.recentTest(Integer.parseInt(logid));
+		model.addAttribute("userInfo", info);
+		model.addAttribute("recentTest", list);
+		return "cbt_student/myPage";
+	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	//내정보수정 AJAX
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	@PostMapping("updateInfo")
+	public boolean updateInfo() {
+		return true;
+	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡ
+	//회원탈퇴 AJAX
+	//ㅡㅡㅡㅡㅡㅡㅡㅡ
+	@PostMapping("deleteUser")
+	@ResponseBody
+	public boolean deleteUser(@RequestParam("userId") int userId) {
+		System.out.println(userId);
+		boolean result = cbtStudentService.unjoinUser(userId);
+		return result;
+	}
+	
+	
+	
+	//ㅡㅡㅡㅡ
 	//시험전체
+	//ㅡㅡㅡㅡ
 	@GetMapping("testList2")
 	public String testList(TestVO testVO,
 						   ExamResultVO examResultVO,
@@ -35,12 +73,34 @@ public class CbtStudentController {
 		//HttpSession session = req.getSession();
 		String logid ="14"; //(String) session.getAttribute("logid");
 		List<TestVO> list = cbtStudentService.testListAll(Integer.parseInt(logid)); //시험목록
+		int[] array1 = new int[list.size()];
+		int[] array2 = new int[list.size()];
+		int[] array3 = new int[list.size()];
+		for(int i = 0; i < list.size(); i++) {			
+			testVO.setUserId(Integer.parseInt(logid));
+			testVO.setTestId(list.get(i).getTestId());
+			array1[i] = (cbtStudentService.isTestResult(testVO));
+			System.out.println(array1[i]);
+			testVO.setUserId(Integer.parseInt(logid));
+			testVO.setTestId(list.get(i).getTestId());
+			array2[i] = cbtStudentService.isTestFeedback(testVO);
+			testVO.setUserId(Integer.parseInt(logid));
+			testVO.setTestId(list.get(i).getTestId());
+			array3[i] = cbtStudentService.isTestReexam(testVO);
+		}
 		model.addAttribute("testList", list); //시험목록
+		model.addAttribute("isResult", array1); //시험결과유무
+		model.addAttribute("isFeedback", array2); //피드백유무
+		model.addAttribute("isReexam", array3); //재시험유무
 		model.addAttribute("logId", logid); //로그인정보
 		return "cbt_student/testList2";
 	}
 	
-	//시험단건(상세)
+	
+	
+	//ㅡㅡㅡㅡ
+	//시험단건
+	//ㅡㅡㅡㅡ
 	@GetMapping("testDetail")
 	public String testDetail(TestVO testVO, 
 			                 QuizboxVO quizboxVO, 
@@ -64,7 +124,12 @@ public class CbtStudentController {
 		model.addAttribute("randQuizScore", randQuizScore); //문제 배점
 		return "cbt_student/testDetail";
 	}
+	
+	
+	
+	//ㅡㅡㅡㅡ
 	//시험시작
+	//ㅡㅡㅡㅡ
 	@PostMapping("testStart")
 	public String testStart(int page, 
 			                int[] randQuizId, 
@@ -94,7 +159,9 @@ public class CbtStudentController {
 		model.addAttribute("randQuizScore", randQuizScore); //문제 배저
 		return "cbt_student/testStart";
 	}
-	//문제갱신 ajax
+	//ㅡㅡㅡㅡㅡㅡㅡㅡ
+	//문제갱신 AJAX
+	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	@ResponseBody
 	@GetMapping("testStart")
 	public List<TestVO> testStart(@RequestParam("page") int page, 
@@ -110,7 +177,9 @@ public class CbtStudentController {
 		testVO.setSubjectId(subjectId); //해당 과목번호
 		return cbtStudentService.testQuiz(testVO);
 	}
-	//문제제출 ajax
+	//ㅡㅡㅡㅡㅡㅡㅡㅡ
+	//문제제출 AJAX
+	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	@ResponseBody
 	@PostMapping("testStart1")
 	public boolean testStart(@RequestParam("submitAnswer") int[] submitAnswer, 
@@ -136,11 +205,17 @@ public class CbtStudentController {
 		result = cbtStudentService.testSubmit3(examResultVO); //[3]총점 업데이트
 		return result;
 	}
+	
+	
+	
+	//ㅡㅡㅡㅡ
 	//시험결과
+	//ㅡㅡㅡㅡ
 	@PostMapping("testResult")
 	public String testResult(int testId,
 			                 int min, 
 			                 int sec,
+			                 int[] randQuizId,
 			                 ExamResultVO examResultVO,
 			                 QuizboxVO quizboxVO,
 			                 AnswerVO answerVO,
@@ -149,17 +224,26 @@ public class CbtStudentController {
 		examResultVO.setUserId(Integer.parseInt(logid));
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
-		quizboxVO.setSubjectId(info.getSubjectId());
-		quizboxVO.setTestId(testId);
-		List<QuizboxVO> quiz1 = cbtStudentService.testResultQuiz1(quizboxVO);
-		answerVO.setSubjectId(info.getSubjectId());
-		answerVO.setTestId(testId);
-		List<AnswerVO> quiz2 = cbtStudentService.testResultQuiz2(answerVO);
+		List<QuizboxVO> test = new ArrayList<>();
+		for(int i = 0; i < randQuizId.length; i++) {
+			quizboxVO.setSubjectId(info.getSubjectId());
+			quizboxVO.setTestId(testId);
+			quizboxVO.setQuizId(randQuizId[i]);
+			test.addAll(cbtStudentService.testTest(quizboxVO)); //매퍼 결과 전체 리스트에 추가
+		}
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("testMin", min); //응시시간 분
 		model.addAttribute("testSec", sec); //응시시간 초
-		model.addAttribute("testResultQuiz1", quiz1); //시험결과 문제정보
-		model.addAttribute("testResultQuiz2", quiz2); //시험결과 보기정보
+		model.addAttribute("randQuizId", randQuizId); //시험결과 문제정보
+		model.addAttribute("testTest", test); //시험결과 보기정보
 		return "cbt_student/testResult";
+	}
+	//ㅡㅡㅡㅡ
+	//오답확인
+	//ㅡㅡㅡㅡ
+	@GetMapping("testResult2")
+	public String testResult2(Model model) {
+		
+		return "cbt_student/testResult2";
 	}
 }

@@ -9,10 +9,25 @@ import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
+import com.yedam.app.yedam_user.service.UserVO;
 
 @Mapper
 public interface CbtStudentMapper {
 
+	//마이페이지 정보
+	public UserVO selectMyPageInfo(int userId);
+	//회원탈퇴
+	public int deleteUser(int userId);
+	//최근시험목록
+	public List<TestVO> selectRecentTest(int userId);
+	
+	
+	//시험결과유뮤
+	public int isTestResult(TestVO testVO);
+	//피드백유무
+	public int isTestFeedback(TestVO testVO);
+	//재시험유무
+	public int isTestReexam(TestVO testVO);
 	//시험목록
 	public List<TestVO> selectTestListAll(int userId);
 	
@@ -42,4 +57,6 @@ public interface CbtStudentMapper {
 	public List<QuizboxVO> selectTestResultQuiz1(QuizboxVO quizboxVO);
 	//시험결과 보기 정보
 	public List<AnswerVO> selectTestResultQuiz2(AnswerVO answerVO);
+	//테스트
+	public List<QuizboxVO> selectTest(QuizboxVO quizboxVO);
 }
