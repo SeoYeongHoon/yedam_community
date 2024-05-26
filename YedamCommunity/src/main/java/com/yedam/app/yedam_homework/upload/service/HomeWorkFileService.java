@@ -20,5 +20,5 @@ public interface HomeWorkFileService {
 	public List<String> replyUploadFile(@RequestPart MultipartFile[] uploadFiles, int replyId);
 	
 	// 댓글 파일 조회
-	public List<ReplyFileVO> replyfileList(ReplyVO reply);
+	public List<ReplyFileVO> replyfileList(int replyId);
 }
