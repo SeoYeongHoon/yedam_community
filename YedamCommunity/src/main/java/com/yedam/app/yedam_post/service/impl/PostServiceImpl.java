@@ -54,8 +54,16 @@ public class PostServiceImpl implements PostService {
 	//--------------------------------------------
 	@Override                  
 	public Post getPostReplies(int postId, int boardId) {
-		return postMapper.getPostDetails(postId);
+		return postMapper.getPostDetails(postId, boardId);
 	}
+	
+    //--------------------------------------------
+    // 게시글 검색
+    //--------------------------------------------
+    @Override
+    public List<Post> searchPosts(int boardId, String keyword) {
+        return postMapper.searchPosts(boardId, keyword);
+    }
 	
 	//--------------------------------------------
 	// 게시글 수정
@@ -171,7 +179,7 @@ public class PostServiceImpl implements PostService {
     }
     
     //--------------------------------------------
-    // 대글조회
+    // 댓글조회
     //--------------------------------------------
 	@Override
 	public List<Reply> getPostReply(int postId) {
@@ -190,8 +198,8 @@ public class PostServiceImpl implements PostService {
 	// 조회수
 	//--------------------------------------------
 	@Override
-	public int PostViewCnt(int postId) {
-		return postMapper.updatePostViewCNT(postId);
+	public int PostViewCnt(int postId, int boardId) {
+		return postMapper.updatePostViewCNT(postId, boardId);
 	}
 
 	//--------------------------------------------

@@ -40,10 +40,15 @@ public interface PostService {
     //--------------------------------------------
 	public Post getPostReplies(int postId, int boardId);
 	
+    //--------------------------------------------
+    // 게시글 검색
+    //--------------------------------------------
+    public List<Post> searchPosts(int boardId, String keyword);
+	
 	//--------------------------------------------
 	// 게시글 조회수
 	//--------------------------------------------
-	public int PostViewCnt(int post);
+	public int PostViewCnt(int post, int boardId);
 	
 	//--------------------------------------------
 	// 추천 확인
@@ -69,16 +74,6 @@ public interface PostService {
 	// 추천수 - 1
 	//--------------------------------------------
 	public int updateLikeCancel(int postId);
-
-//	//--------------------------------------------
-//  // 게시글 추천 시 Check를 1로 만들어서 중복방지
-//	//--------------------------------------------
-//	public int updateLikeCheck(int postId, int userId);
-//    
-//	//--------------------------------------------
-//  // 게시글 추천 시 Check를 0으로 만들어서 중복방지
-//	//--------------------------------------------
-//	public int updateLikeCheckCancel(int postId, int userId);
 	
 	//--------------------------------------------
 	// 댓글 조회
@@ -114,6 +109,7 @@ public interface PostService {
     // 게시글 신고 등록
     //--------------------------------------------
     public int createReport(Report report);
+
 
 
 
