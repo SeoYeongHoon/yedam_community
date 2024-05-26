@@ -347,4 +347,34 @@
         SET status = #{status}
         WHERE id = #{id}
     </update> -->
+    
+    <!-- 회원정보 수정 -->
+    <!--<update id="updateUserInfo" parameterType="UserVO">
+		UPDATE users
+		SET name = #{name},
+			password = #{password},
+			email = #{email},
+			tel = #{tel},
+			profile_image_name = #{profileImageName},
+			profile_image_location = #{profileImageLocation},
+			profile_image_size = #{profileImageSize},
+			download_location = #{downloadLocation},
+			profile_image_ext = #{profileImageExt}
+		WHERE id = #{id}
+	</update>-->
+	<update id="updateUserInfo" parameterType="UserVO">
+	    UPDATE users
+	    <set>
+	        <if test="name != null">name = #{name},</if>
+	        <if test="password != null">password = #{password},</if>
+	        <if test="email != null">email = #{email},</if>
+	        <if test="tel != null">tel = #{tel},</if>
+	        <if test="profileImageName != null">profile_image_name = #{profileImageName},</if>
+	        <if test="profileImageLocation != null">profile_image_location = #{profileImageLocation},</if>
+	        <if test="profileImageSize != null">profile_image_size = #{profileImageSize},</if>
+	        <if test="downloadLocation != null">download_location = #{downloadLocation},</if>
+	        <if test="profileImageExt != null">profile_image_ext = #{profileImageExt},</if>
+	    </set>
+	    WHERE id = #{id}
+	</update>
 </mapper>
