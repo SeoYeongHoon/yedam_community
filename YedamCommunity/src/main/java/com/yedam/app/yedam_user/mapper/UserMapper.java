@@ -67,4 +67,7 @@ public interface UserMapper {
 
 //	유저 삭제
 	public int removeUser(int userId);
+	
+	// 회원정보 수정
+	public void updateUserInfo(UserVO userVO);
 }

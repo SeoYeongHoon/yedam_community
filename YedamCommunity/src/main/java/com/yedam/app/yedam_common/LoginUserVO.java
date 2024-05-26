@@ -38,6 +38,10 @@ public class LoginUserVO implements UserDetails {
 		return userVO.getName();
 	}
 	
+	public String getUserId() {
+		return userVO.getId();
+	}
+	
 	public String getProfileImageLocation() {
 		return userVO.getProfileImageLocation();
 	}
@@ -52,6 +56,10 @@ public class LoginUserVO implements UserDetails {
 	
 	public String getUserTel() {
 		return userVO.getTel();
+	}
+	
+	public String getUserCurriculumName() {
+		return userVO.getCurriculumName();
 	}
 
 	@Override
