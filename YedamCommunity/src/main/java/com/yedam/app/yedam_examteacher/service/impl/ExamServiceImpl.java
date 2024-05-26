@@ -23,14 +23,27 @@ public class ExamServiceImpl implements ExamService {
 	//--------------------------------------------
 	// 시험목록 출력
 	//--------------------------------------------
-	@Override
-	public List<TeacherVO> testList() {
+	/*@Override
+	public List<TeacherVO> testList(int cId) {
 		return examMapper.selectExamAll();
+	}*/
+	@Override
+	public List<TeacherVO> testList(int cId, int page, String searchQuery) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("classId", cId);
+		params.put("page", page);
+		params.put("searchQuery", searchQuery);
+		return examMapper.selectExamAll(params);
 	}
+	@Override
+	public int testListCnt(int cId, String searchQuery) {
+		return examMapper.testTotalCnt(cId, searchQuery);
+	}
+	
 	//--------------------------------------------
 	// 시험 등록
 	//--------------------------------------------
-	@Override
+	@Override // 위에 트랜젝셔널 테스트 성공하면 삭제해야함.
 	public int testInsert(TeacherVO teacherVO) {
 		int result = examMapper.insertTest(teacherVO);
 
@@ -40,6 +53,28 @@ public class ExamServiceImpl implements ExamService {
 			return -1;
 		}
 	}
+	//--------------------------------------------
+	// 시험에 출제될 문제 등록
+	//--------------------------------------------
+	@Override
+	public int quizboxInsert(TeacherVO teacherVO) {
+		return examMapper.insertQuizbox(teacherVO);
+	}
+	//--------------------------------------------
+	// 시험 대상자 등록
+	//--------------------------------------------
+	@Override
+	public int testUserInsert(TeacherVO teacherVO) {
+		return examMapper.insertTestUser(teacherVO);
+	}
+	//--------------------------------------------
+	// 시험 대상자 출력
+	//--------------------------------------------
+	@Override
+	public List<TeacherVO> userList(TeacherVO teacherVO) {
+		return examMapper.selectUserAll(teacherVO);
+	}
+	
 	//--------------------------------------------
 	// 문제 조회/등록 페이지 기능 모음
 	//--------------------------------------------
@@ -55,7 +90,6 @@ public class ExamServiceImpl implements ExamService {
 		examMapper.insertAnswer4(teacherVO);
 		examMapper.insertAnswer5(teacherVO);
 	}
-
 	@Transactional
 	@Override
 	public void quizInsertJu(TeacherVO teacherVO) { // 주관식
@@ -148,15 +182,10 @@ public class ExamServiceImpl implements ExamService {
 	public List<TeacherVO> getQuizInfo(int qId) {
 		return examMapper.infoQuiz(qId);
 	}
-
-	//--------------------------------------------
-	// 시험 대상자 출력
-	//--------------------------------------------
-	@Override
-	public List<TeacherVO> userList(TeacherVO teacherVO) {
-		return examMapper.selectUserAll(teacherVO);
-	}
 	
+	//--------------------------------------------
+	// 교수님 메인페이지 기능 모음
+	//--------------------------------------------
 	//--------------------------------------------
 	// 강의실별 과목평균점수 조회
 	//--------------------------------------------
@@ -211,6 +240,7 @@ public class ExamServiceImpl implements ExamService {
 	public List<TeacherVO> userScoreList(int uId) {
 		return examMapper.userScore(uId);
 	}
+	
 	//--------------------------------------------
 	// 유저 피드백 작성페이지 기능 모음
 	//--------------------------------------------
