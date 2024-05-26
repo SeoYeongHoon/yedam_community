@@ -78,7 +78,7 @@ isReexam
 			<table class="table">
 				<thead>
 					<tr>
-						<th class="tlist_2">번호</th>
+						<th class="tlist_2">No.</th>
 						<th class="tlist_2">시험명</th>
 						<th class="tlist_2">마감일</th>
 						<th class="tlist_2">응시상태</th>
@@ -91,21 +91,23 @@ isReexam
 							<td class="tlist_2">[[${stat.count}]]<input class="isReexam" type="hidden" value="${list.isReexam}"></td>
 							<td class="tlist_2">[[${list.testName}]]</td>
 							<td class="tlist_2">[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
-							<td class="tlist_2" th:if="${#strings.isEmpty(list.resultId)}">
+							<td class="tlist_2" th:if="${isResult[stat.index] == 0}">
 								<button th:id="${list.testId}" data-category="proceed"
 									th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|"
 									class="filterItem tlist_3 main-btn primary-btn square-btn btn-hover">응시하기</button>
 							</td>
-							<td class="tlist_2" th:if="${not #strings.isEmpty(list.resultId) && list.resultScore >= list.passScore}">
+							<td class="tlist_2" th:if="${isResult[stat.index] != 0 && isReexam[stat.index] != 0}">
 								<button th:id="${list.testId}" data-category="success"
 									class="filterItem tlist_3 main-btn success-btn square-btn btn-hover">응시완료</button>
 							</td>
-							<td class="tlist_2" th:if="${not #strings.isEmpty(list.resultId) && list.resultScore < list.passScore}">
+							<td class="tlist_2" th:if="${isResult[stat.index] != 0 && isReexam[stat.index] == 0}">
 								<button th:id="${list.testId}" data-category="re"
 									th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|"
 									class="filterItem tlist_3 main-btn danger-btn square-btn btn-hover">재시험</button>
 							</td>
-							<td class="tlist_2" th:if="${not #strings.isEmpty(list.feedback)}">
+							<td th:if="${isResult[stat.index] == 0 && isFeedback[stat.index] == 0}">
+							</td>
+							<td class="tlist_2" th:if="${isResult[stat.index] != 0 && isFeedback[stat.index] != 0}">
 								<!-- 피드백내용 모달형식 -->
 								<div class="modal">
 									<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 380px;">
@@ -135,12 +137,10 @@ isReexam
 										</div>
 									</div>
 								</div>
-								<main>
-									<button type="button"
+								<button type="button"
 										class="feedbackOn main-btn success-btn square-btn btn-hover">피드백완료</button>
-								</main>
 							</td>
-							<td class="tlist_2" th:unless="${not #strings.isEmpty(list.feedback)}">
+							<td class="tlist_2" th:unless="${isResult[stat.index] != 0 && isFeedback[stat.index] == 0}">
 								<button type="button"
 									class="main-btn dark-btn square-btn btn-hover">피드백대기</button>
 							</td>
