@@ -78,6 +78,17 @@
         AND p.board_id = #{boardId}
 
 	</select>
+	
+	<!-- 게시글 검색 -->
+	<select id="searchPosts" resultType="Post">
+    	SELECT *
+    	FROM posts
+    	WHERE board_id = #{boardId}
+      	AND (title LIKE CONCAT('%', #{keyword}, '%')
+      	OR post_content LIKE CONCAT('%', #{keyword}, '%')
+      	OR writer LIKE CONCAT('%', #{keyword}, '%'))
+    	ORDER BY post_id DESC
+  </select>
 
 	<!-- boardId 값에 따라 게시글 전체 조회 -->
 	<select id="getAllPosts" resultType="Post">

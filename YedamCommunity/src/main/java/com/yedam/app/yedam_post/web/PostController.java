@@ -26,7 +26,7 @@ import com.yedam.app.yedam_post.service.Reply;
 import com.yedam.app.yedam_post.service.Report;
 /**
  * 게시판
- * 2024.05.24
+ * 2024.05.27
  * 임우열
  */
 @Controller
@@ -74,7 +74,7 @@ public class PostController {
 			                  , Model model) {
 
 		// 조회수 업데이트
-		postService.PostViewCnt(postId);
+		postService.PostViewCnt(postId, boardId);
 		
 		// 게시글 단건 조회
 		Post postfind = postService.getPostReplies(postId, boardId);
@@ -94,6 +94,20 @@ public class PostController {
 		
 		
 		return "posts/postInfo";
+	}
+	
+    //--------------------------------------------
+    // 게시글 검색
+    //--------------------------------------------
+	@GetMapping("/postList/{boardId}/search")
+	public String searchPosts(@PathVariable int boardId,
+	                          @RequestParam("keyword") String keyword,
+	                          Model model) {
+
+	    List<Post> list = postService.searchPosts(boardId, keyword);
+	    model.addAttribute("postList", list);
+	    model.addAttribute("boardId", boardId);
+	    return "posts/postlist";
 	}
 
 	// --------------------------------------------
