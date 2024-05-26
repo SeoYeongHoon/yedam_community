@@ -21,4 +21,7 @@ public interface CurriculumService {
 	
 	// 과정 선택 리스트(회원가입 때 사용)
 	public List<CurriculumVO> allCurriculumList();
+	
+	//해당 과정 과목명 조회
+	public List<CurriculumVO> subjectList(int userid);
 }

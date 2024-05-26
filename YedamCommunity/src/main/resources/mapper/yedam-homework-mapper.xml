@@ -19,7 +19,20 @@
 						  JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
 		WHERE h.subject_id = s.subject_id
 		ORDER BY  h.homework_id DESC
+	</select>
 	
+	<!-- 학생별 과제 조회 -->
+	<select id="selectUserHomework" resultType="HomeWorkVO">
+		SELECT  h.homework_title,
+        		h.homework_date,
+        		h.homework_id,
+        		c.class_id,
+        		s.subject_name
+		FROM    homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
+                			JOIN users u ON (c.curriculum_id = u.curriculum_id)
+        		        	JOIN subjects s ON (s.curriculum_id = c.curriculum_id)
+		WHERE   h.subject_id = s.subject_id AND user_id = #{userid}
+		ORDER BY  h.homework_id DESC
 	</select>
 
 	<!-- 상세조회 -->
@@ -64,22 +77,27 @@
 					#{subjectId}
 					)
 	</insert>
-
+	
+	<!-- 과제 삭제 -->
+	<delete id="deleteHomework" parameterType="HomeWorkVO">
+	DELETE FROM homeworks
+	WHERE homework_id = #{homeworkId}
+	</delete>
+	
 	<!-- 과제 대상자 등록 -->
 	<insert id="insertHomeworkTarget" parameterType="HomeWorkTargetVO">
-		INSERT INTO
-		homework_targets
-		(
-		homework_target_id,
-		homework_id,
-		curriculum_id
-		)
+		INSERT INTO homework_targets
+			(
+			homework_target_id,
+			homework_id,
+			curriculum_id
+			)
 		VALUES
-		(
-		homework_target_id_seq.nextval,
-		#{homeworkId},
-		#{curriculumId}
-		)
+			(
+			homework_target_id_seq.nextval,
+			#{homeworkId},
+			#{curriculumId}
+			)
 	</insert>
 	
 	<!-- 과제 대상자 조회 -->
@@ -91,10 +109,9 @@
 								FROM homeworks
 								WHERE curriculum_id = #{curriculumId})
 	</select>
+	
 	<!-- 강의실 카테고리 -->
 	<select id="selectClass" resultType="HomeWorkVO">
-	
-		
 		SELECT	c.class_id,
 				h.homework_id,
 				h.homework_content,
@@ -110,4 +127,23 @@
 		ORDER BY  h.homework_id DESC
 		
 	</select>
+	
+	<!-- 과목명 카테고리 -->
+	<select id="selectSubject" resultType="HomeWorkVO">
+		SELECT  c.class_id,
+       			h.homework_id,
+        		h.homework_title,
+        		s.subject_name,
+        		h.homework_date
+		FROM    homeworks h JOIN curriculum c ON(h.curriculum_id = c.curriculum_id)
+        		            JOIN subjects s ON(c.curriculum_id = s.curriculum_id)
+                    		JOIN users u ON (s.curriculum_id = u.curriculum_id) 
+		WHERE   h.subject_id = s.subject_id AND user_id = #{userId}
+		<if test="subjectId != 0">
+		 AND s.subject_id = #{subjectId}                     
+		</if>
+		ORDER BY  h.homework_id DESC
+	</select>
+	
+	
 </mapper>

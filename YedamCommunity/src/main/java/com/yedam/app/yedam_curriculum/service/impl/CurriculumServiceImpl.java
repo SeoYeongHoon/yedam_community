@@ -49,4 +49,9 @@ public class CurriculumServiceImpl implements CurriculumService {
 		return curriculumMapper.removeCurriculum(curriculumId) == 1;
 	}
 
+	@Override
+	public List<CurriculumVO> subjectList(int userid) {
+		return curriculumMapper.subjectSelectAll(userid);
+	}
+
 }

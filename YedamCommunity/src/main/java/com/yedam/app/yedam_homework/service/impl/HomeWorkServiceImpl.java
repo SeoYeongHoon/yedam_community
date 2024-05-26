@@ -56,4 +56,22 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	public List<HomeWorkVO> classCategory(int curriculumId) {
 		return homeworkMapper.selectClass(curriculumId);
 	}
+
+	//해당 학생 과제 조회
+	@Override
+	public List<HomeWorkVO> userHomeworkList(int userid) {
+		return homeworkMapper.selectUserHomework(userid);
+	}
+
+	//과목명 카테고리
+	@Override
+	public List<HomeWorkVO> subjectCategory(int subjectId, int userId) {
+		return homeworkMapper.selectSubject(subjectId, userId);
+	}
+
+	// 과제 삭제
+	@Override
+	public int homeworkDelete(int homeworkId) {
+		return homeworkMapper.deleteHomework(homeworkId);
+	}
 }
