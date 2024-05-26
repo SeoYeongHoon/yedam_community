@@ -19,6 +19,18 @@
 <div class="col-lg-12">
 	<div class="card-style mb-30">
 		<h1 class="mb-30">시험 목록</h1>
+			<select id="classSelect">
+				<option value="0">전체 강의실</option>
+				<option value="1">1강의실</option>
+				<option value="2">2강의실</option>
+				<option value="3">3강의실</option>
+				<option value="4">4강의실</option>
+				<option value="5">5강의실</option>
+			</select>
+		<div class="input-style-1" style="position: absolute; bottom: 330px; left: 700px;">	
+			<input name="testName" id="searchTest" type="text" placeholder="시험이름 검색" style="padding: 10px; width: 150px;">
+			<img style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+		</div>	
 		<div class="table-wrapper table-responsive">
 			<table class="table">
 				<thead>
@@ -30,36 +42,155 @@
 							<h6>시험명</h6>
 						</th>
 						<th>
+							<h6>출제 강의실</h6>
+						</th>
+						<th>
 							<h6>마감일</h6>
 						</th>
 						<th>
-							<h6>시험 시간</h6>
+							<h6>시험 시간(분)</h6>
 						</th>
 						<th>
 							<h6>진행상태</h6>
 						</th>
 					</tr>
-					<!-- end table row-->
 				</thead>
 				<tbody id="tbody">
-					<th:block th:each="examInfo, idx : ${testList}">
-						<tr>
-							<td><i class="mdi mdi-script-text-play-outline"></i></td>
-							<td class="min-width">[[ ${examInfo.testName} ]]</td>
-							<td class="min-width tDate" th:value="${#dates.format(examInfo.testDate,
-								'yyyy-MM-dd')}">[[ ${#dates.format(examInfo.testDate, 'yyyy-MM-dd')} ]]</td>
-							<td class="min-width">[[ ${examInfo.testTime} ]]</td>
-							<td class="min-width"><span class="status-btn active-btn process" th:id="${idx.index}">진행중</span>
-							</td>
-						</tr>
-					</th:block>
+					<!-- ajax로 태그 생성 -->		
 				</tbody>
 			</table>
+			
+			<div class="center">
+				<div class="testPaging">
+					<!-- <th:block th:if="${page.prev}">
+						<a href="javascript:void(0)" th:onclick="testList(${page.starPage - 1})">&laquo;</a>
+					</th:block>
+					<th:block th:each="p : ${#numbers.sequence(page.starPage, page.endPage)}">
+						<a id="page_id" href="javascript:void(0)" th:onclick="'testList(' + ${p} + ')'">[[${p}]]</a>
+						<a id="page_id" href="javascript:void(0)" th:onclick="'testList(' + ${p} + ')'" th:classappend="${p == page.page ? 'active' : 'none'}">[[${p}]]</a>
+					</th:block>
+					<th:block th:if="${page.next}">
+						<a href="javascript:void(0)" th:onclick="testList(${page.endPage + 1})">&raquo;</a>
+					</th:block> -->
+				</div>
+			</div>
+							
 		</div>
 	</div>
 </div>
 <script>
+var cId = 0;
+var page = 1;
+var searchQuery = "";
+var currentPage = 0;
+
+//--------------------------------------------
+// 시험 목록 출력 함수
+//--------------------------------------------
+var isRequestInProgress = false;
+
+function testList(cId, page, searchQuery){
+	//$('tbody').html('');
+	// 중복 실행 원인 때문에 프로세스 중단 임의로 한 번만 실행되게 막아둠
+	if (isRequestInProgress) {
+        return;
+    }
+	isRequestInProgress = true;
+	
+	// 검색 변수
+	searchQuery = searchQuery || $('#searchTest').val();
+	//--------------------------------------------
+	// 문제 전체 조회 ajax
+	//--------------------------------------------
+	$.ajax({
+		url : "test",
+		type : "get", 
+		data : {classId : cId, page : page, searchQuery : searchQuery},
+		async : false,
+		
+		success : function(data){
+			console.log('ajax 에서'+data.page+'page는'+page);
+			updateList(data.tests);
+			testPagination(data.page, page);
+			console.log('ajax 에서'+currentPage);
+			/*data.forEach((item,idx) => {
+				var tName = item.testName;
+				var tDate = formatDate(item.testDate);
+				var tTime = item.testTime;
+				var classId = 0;
+				var processIdx = idx;
+				
+				if(cId==0){
+					classId = item.classId
+				} else {
+					classId = cId
+				}
+				let temp = `
+					<tr>
+						<td ><i class="mdi mdi-script-text-play-outline"></i></td>
+						<td class="min-width">${tName}</td>
+						<td class="min-width">${classId}강의실</td>
+						<td class="min-width tDate">${tDate}</td>
+						<td class="min-width">${tTime}</td>
+						<td id="tProcess" class="min-width">
+							<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
+						</td>
+				</tr>
+				`;
+				$('#tbody').append(temp);
+			})*/
+		},
+		error : function(err){
+			console.log('에러입니다');
+		},
+		complete: function() {
+			isRequestInProgress = false;
+		}
+	})	
+}
+
+//--------------------------------------------
+//시험 목록 필터링으로 인한 리스트 업데이트
+//--------------------------------------------
+function updateList(tests){
+	$('tbody').html('');
+	
+	tests.forEach((test,idx) => {
+		var tName = test.testName;
+		var tDate = formatDate(test.testDate);
+		var tTime = test.testTime;
+		var classId = 0;
+		var processIdx = idx;
+		
+		if(cId==0){
+			classId = test.classId
+		} else {
+			classId = cId
+		}
+		let temp = `
+			<tr>
+				<td ><i class="mdi mdi-script-text-play-outline"></i></td>
+				<td class="min-width">${tName}</td>
+				<td class="min-width">${classId}강의실</td>
+				<td class="min-width tDate">${tDate}</td>
+				<td class="min-width">${tTime}</td>
+				<td id="tProcess" class="min-width">
+					<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
+				</td>
+		</tr>
+		`;
+		$('#tbody').append(temp);
+		
+	})
+}
+
+testList(cId, page, searchQuery);
+
+
+
+//--------------------------------------------
 //날짜 포멧 변환 함수
+//--------------------------------------------
 function formatDate(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -73,19 +204,43 @@ function formatDate(date) {
 } // 날짜 포멧 변환 end
 var today = new Date();
 var today1 = formatDate(today);
-// 날짜 비교해서 시험진행 상태 변경
+
+//--------------------------------------------
+// 시험목록 강의실 select 필터링
+//--------------------------------------------
+$('#classSelect').on('change', function(){
+	if($(this).val() == 0){
+		cId = 0;
+		testList(cId, page, searchQuery);
+	} else {
+		cId = $(this).val();
+		testList(cId, page, searchQuery);
+	}
+	
+	//--------------------------------------------
+	//날짜 비교해서 시험진행 상태 변경
+	//--------------------------------------------
+	arry = [];
+	process();
+});
+
+//--------------------------------------------
+//날짜 비교해서 시험진행 상태 변경
+//--------------------------------------------
 var arry = [];
-$('.tDate').each(function (index, item) {
-    arry.push($(item).text());
-    console.log(arry[index]);
-    console.log(today1);
-    if(arry[index] < today1){
-    	$('#'+index).text('시험종료');
-    	$('.process').attr('class', 'status-btn close-btn process');
-    } else if(arry[index] > today1){
-    	$('#'+index).text('시험중');
-    	$('#'+index).attr('class', 'status-btn active-btn process');
-    }
-});	
+function process(){
+	$('.tDate').each(function (index, item) {
+		 arry.push($(item).text());
+		 if(arry[index] < today1){
+		 	$('#'+index).text('시험종료');
+		 	$('#'+index).attr('class', 'status-btn close-btn process');
+		 } else {
+		 	$('#'+index).text('시험중');
+		 	$('#'+index).attr('class', 'status-btn active-btn process');
+		 }
+	});
+}
+process();
+
 </script>
 </html>

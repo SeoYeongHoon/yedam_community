@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_examteacher.web;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_examteacher.service.ExamService;
 import com.yedam.app.yedam_examteacher.service.TeacherVO;
 
@@ -32,14 +33,41 @@ public class ExamController {
 	//--------------------------------------------
 	// 시험 목록 페이지 관련 기능
 	//--------------------------------------------
-	// 등록된 시험리스트 출력
+	// 등록된 시험리스트 - 페이지
 	//--------------------------------------------
 	@GetMapping("testlist")
 	public String examList(Model model) {
-		List<TeacherVO> list = examService.testList();
-		model.addAttribute("testList", list);
+		//List<TeacherVO> list = examService.testList();
+		//model.addAttribute("testList", list);
 		return "cbt_teacher/testlist";
 	}
+	//--------------------------------------------
+	// 등록된 시험목록 필터링해서 출력
+	//--------------------------------------------
+	/*
+	@GetMapping("test")
+	@ResponseBody
+	public List<TeacherVO> testList(@RequestParam("classId") int cId) {
+		return examService.testList(cId);
+	}*/
+	@GetMapping("test")
+	@ResponseBody
+	public Map<String, Object> testList(@RequestParam(defaultValue = "1") int page, 
+										@RequestParam("classId") int cId,
+										@RequestParam(defaultValue = "") String searchQuery) {
+		List<TeacherVO> list = examService.testList(cId, page, searchQuery);
+		int totalCnt = examService.testListCnt(cId, searchQuery);
+		
+		PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("tests", list);
+	    response.put("page", pageDTO);
+	    
+		return response;
+	}
+	
+	
 	//--------------------------------------------
 	// 시험 등록 - 페이지
 	//--------------------------------------------
@@ -49,6 +77,33 @@ public class ExamController {
 		model.addAttribute("teacherVO", new TeacherVO());
 		model.addAttribute("userList", list);
 		return "cbt_teacher/insertTest";
+	}
+	//--------------------------------------------
+	// 시험 등록 - 처리
+	//--------------------------------------------
+	@PostMapping("testinsert")
+	@ResponseBody
+	public String testInsertProcess(TeacherVO teacherVO) {
+		examService.testInsert(teacherVO);
+		return "redirect:testlist";
+	}
+	//--------------------------------------------
+	// 시험에 출제될 문제 등록 - 처리
+	//--------------------------------------------
+	@PostMapping("quizboxinsert")
+	@ResponseBody
+	public String quizboxInsertProcess(TeacherVO teacherVO) {
+		examService.quizboxInsert(teacherVO);
+		return "redirect:testlist";
+	}
+	//--------------------------------------------
+	// 시험 대상자 등록 - 처리
+	//--------------------------------------------
+	@PostMapping("testuserinsert")
+	@ResponseBody
+	public String testUserInsertProcess(TeacherVO teacherVO) {
+		examService.testUserInsert(teacherVO);
+		return "redirect:testlist";
 	}
 	
 	//--------------------------------------------
