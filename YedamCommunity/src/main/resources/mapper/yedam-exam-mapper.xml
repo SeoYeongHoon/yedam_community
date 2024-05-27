@@ -23,10 +23,10 @@
 	             AND class_id = #{classId}
 	             </if> 
 	             <![CDATA[
-	             AND rownum <= (#{page} * 5)
+	             AND rownum <= (#{page} * 10)
 	             ]]>
 	             ORDER BY test_date DESC) a 
-	WHERE a.rn > (#{page} - 1) * 5
+	WHERE a.rn > (#{page} - 1) * 10
 	</select>
 	<select id="testTotalCnt" parameterType="map" resultType="int">
 		SELECT count(*)         				  
@@ -232,13 +232,13 @@
 			       		 , subject_id
 		            FROM quizes) b
 		            <![CDATA[
-		            Where rownum <= (#{page} * 9)     
+		            Where rownum <= (#{page} * 12)     
 		            ]]>
 		            <if test="subjectName != null and !subjectName.equals('') and !subjectName.equals('all') ">
 		            AND subject_name = #{subjectName}
 		            </if>
 		            ORDER BY quiz_id DESC) a
-		WHERE a.rn > (#{page} - 1) * 9
+		WHERE a.rn > (#{page} - 1) * 12
 	</select>
 	<!-- 문제 개수 count -->
 	<select id="getQuizCnt" resultType="int" parameterType="map">

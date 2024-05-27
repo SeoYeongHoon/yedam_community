@@ -10,7 +10,7 @@
 	display : none;
 }
 </style>	
-<form th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
+<form name="insertForm" th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
 	<!-- ======= 과목설정 select ======= -->
 	<div class="card-style mb-30">
 		<div class="select-style-1">
@@ -56,7 +56,7 @@
 			<input class="form-check-input" type="radio" name="exampleAnswer" value="1" checked />
                     <label class="form-check-label" name="exampleNum" value="1" >
                       1.</label>
-			<input class="correct" type="text" placeholder="정답인 지문을 입력하세요." name="textContent"/>
+			<input class="correct" type="text" placeholder="정답인 지문을 입력하세요." name="textContent" id="textContent"/>
 			<input class="correct2" type="hidden" name="quizAnswer"/> <!-- 문제의 정답 자동등록 -->
 		</div>
 		<!-- end radio -->
@@ -64,28 +64,28 @@
 			<input class="form-check-input" type="hidden" name="exampleAnswer2" value="0"/>
                     <label class="form-check-label" name="exampleNum" value="2" >
                       2.</label>
-			<input type="text" placeholder="지문을 입력하세요." name="textContent2"/>
+			<input type="text" placeholder="지문을 입력하세요." name="textContent2" id="textContent2"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
 			<input class="form-check-input" type="hidden" name="exampleAnswer3" value="0"/>
                     <label class="form-check-label" name="exampleNum" value="3" >
                       3.</label>
-			<input type="text" placeholder="지문을 입력하세요." name="textContent3"/>
+			<input type="text" placeholder="지문을 입력하세요." name="textContent3" id="textContent3"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
 			<input class="form-check-input" type="hidden" name="exampleAnswer4" value="0"/>
                     <label class="form-check-label" name="exampleNum" value="4" >
                       4.</label>
-			<input type="text" placeholder="지문을 입력하세요." name="textContent4"/>
+			<input type="text" placeholder="지문을 입력하세요." name="textContent4" id="textContent4"/>
 		</div>
 		<!-- end radio -->
 		<div class="form-check radio-style mb-20">
 			<input class="form-check-input" type="hidden" name="exampleAnswer5" value="0"/>
                     <label class="form-check-label" name="exampleNum" value="5" >
                       5.</label>
-			<input type="text" placeholder="지문을 입력하세요." name="textContent5"/>
+			<input type="text" placeholder="지문을 입력하세요." name="textContent5" id="textContent5"/>
 		</div>
 		<!-- end radio -->
 	<!-- ======= 정답 지문 입력 radio style end ======= -->
@@ -166,6 +166,64 @@ $('.addbt').on('click',function(){
 	$('.correct2').attr("value",cor);
 	console.log($('.correct2').val());
 })
+
+document.querySelector('form[name="insertForm"]')
+		.addEventListener('submit', validationCheck);
+
+function validationCheck(event){
+	event.preventDefault();
+	
+	let qContent = document.getElementById('quizContent');
+	if(qContent.value == ''){
+		alert('문제 내용을 입력해 주세요.');
+		qContent.focus();
+		return;
+	}
+	
+	let tContent = document.getElementById('textContent');
+	if(tContent.value == ''){
+		alert('정답 지문을 입력하세요.');
+		tContent.focus();
+		return;
+	}
+	
+	let tContent2 = document.getElementById('textContent2');
+	if(tContent2.value == ''){
+		alert('2번 지문을 입력하세요.');
+		tContent2.focus();
+		return;
+	}
+	
+	let tContent3 = document.getElementById('textContent3');
+	if(tContent3.value == ''){
+		alert('3번 지문을 입력하세요.');
+		tContent3.focus();
+		return;
+	}
+	
+	let tContent4 = document.getElementById('textContent4');
+	if(tContent4.value == ''){
+		alert('4번 지문을 입력하세요.');
+		tContent4.focus();
+		return;
+	}
+	
+	let tContent5 = document.getElementById('textContent5');
+	if(tContent5.value == ''){
+		alert('5번 지문을 입력하세요.');
+		tContent5.focus();
+		return;
+	}
+	
+	let qSolution = document.getElementById('quizSolution');
+	if(qSolution.value == ''){
+		alert('문제 해설을 입력하세요.');
+		qSolution.focus();
+		return;
+	}
+	
+	insertForm.submit();
+}
 
 </script>
 </html>
