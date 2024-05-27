@@ -12,9 +12,8 @@ public interface ExamMapper {
 	//--------------------------------------------
 	// 시험목록/등록 페이지 기능모음
 	//--------------------------------------------
-	//public List<TeacherVO> selectExamAll(@Param("classId") int cId); // 시험목록 전체조회
-	public List<TeacherVO> selectExamAll(Map<String, Object> params); // 페이징 리스트 테스트중
-	int testTotalCnt(int cId, String searchQuery);
+	public List<TeacherVO> selectExamAll(Map<String, Object> params); // 시험문제 조회(페이징)
+	int testTotalCnt(int cId, String searchQuery); // 시험문제 count
 	public int insertTest(TeacherVO teacherVO); // 시험 등록
 	public List<TeacherVO> selectUserAll(TeacherVO teacherVO); // 시험 대상자 조회
 	public int insertQuizbox(TeacherVO teacherVO); // 시험에 출제할 문제 등록
@@ -41,8 +40,8 @@ public interface ExamMapper {
 	public List<TeacherVO> selectSubjectAll(); // 과목명 출력	(문제 필터링할때 사용)
 	public List<TeacherVO> subjectOfCurr(@Param("curriId") int cId); // 과목명 출력 (과목 추가/삭제때 사용)
 	//public List<TeacherVO> filterQuiz(@Param("sName") String sName); // 등록된 문제 필터출력 
-	List<TeacherVO> filterQuiz(Map<String, Object> params);
-	int getQuizCnt(String subjectName);
+	List<TeacherVO> filterQuiz(Map<String, Object> params); // 문제 조회(페이징)
+	int getQuizCnt(String subjectName); // 문제 count
 	public List<TeacherVO> infoQuiz(@Param("qId") int qId); // 문제 자세히보기 단건조회
 	
 	//--------------------------------------------

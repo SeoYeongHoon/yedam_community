@@ -23,10 +23,6 @@ public class ExamServiceImpl implements ExamService {
 	//--------------------------------------------
 	// 시험목록 출력
 	//--------------------------------------------
-	/*@Override
-	public List<TeacherVO> testList(int cId) {
-		return examMapper.selectExamAll();
-	}*/
 	@Override
 	public List<TeacherVO> testList(int cId, int page, String searchQuery) {
 		Map<String, Object> params = new HashMap<>();
@@ -43,7 +39,7 @@ public class ExamServiceImpl implements ExamService {
 	//--------------------------------------------
 	// 시험 등록
 	//--------------------------------------------
-	@Override // 위에 트랜젝셔널 테스트 성공하면 삭제해야함.
+	@Override
 	public int testInsert(TeacherVO teacherVO) {
 		int result = examMapper.insertTest(teacherVO);
 
@@ -176,11 +172,11 @@ public class ExamServiceImpl implements ExamService {
 		return examMapper.filterQuiz(sName);
 	}*/
 	@Override
-	public List<TeacherVO> getQuizFilter(String subjectName, int page) {
+	public List<TeacherVO> getQuizFilter(int page, String subjectName) {
 		Map<String, Object> params = new HashMap<>();
         
+		params.put("page", page);
         params.put("subjectName", subjectName);
-        params.put("page", page);
 		return examMapper.filterQuiz(params);
 	}
 	@Override
