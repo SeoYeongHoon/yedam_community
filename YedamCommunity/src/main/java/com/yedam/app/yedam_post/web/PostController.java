@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.LoginUserVO;
+import com.yedam.app.yedam_post.service.BoardFiles;
 import com.yedam.app.yedam_post.service.Comment;
 import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.PostService;
@@ -70,31 +71,31 @@ public class PostController {
 	// 게시글 단건 조회
 	// --------------------------------------------
 	@GetMapping("/post/{boardId}/{postId}")
-	public String getPostDetail(@PathVariable int boardId
-			                  , @PathVariable int postId
-			                  , Model model) {
+	public String getPostDetail(@PathVariable int boardId,
+	                            @PathVariable int postId,
+	                            Model model) {
+	    // 조회수 업데이트
+	    postService.PostViewCnt(postId, boardId);
+	    
+	    // 게시글 단건 조회
+	    Post postfind = postService.getPostReplies(postId, boardId);
+	    
+	    // 댓글 조회
+	    List<Reply> replylist = postService.getPostReply(postId);
+	    for (Reply reply : replylist) {
+	        // 대댓글 조회
+	        List<Comment> commentlist = postService.getPostComment(reply);
+	        reply.setComments(commentlist);
+	    }
+	    postfind.setReplies(replylist);
 
-		// 조회수 업데이트
-		postService.PostViewCnt(postId, boardId);
-		
-		// 게시글 단건 조회
-		Post postfind = postService.getPostReplies(postId, boardId);
-		
-		// 댓글 조회
-		List<Reply> replylist = postService.getPostReply(postId);
-		for (Reply reply : replylist) {
-			
-			// 대댓글 조회
-			List<Comment> commentlist = postService.getPostComment(reply);
-			reply.setComments(commentlist);
-		}
-		postfind.setReplies(replylist);
-		
-		model.addAttribute("boardId", boardId);
-		model.addAttribute("postInfo", postfind);
-		
-		
-		return "posts/postInfo";
+	    List<BoardFiles> boardFiles = postService.getBoardFiles(postId, boardId);
+	    postfind.setBoardFiles(boardFiles);
+
+	    model.addAttribute("boardId", boardId);
+	    model.addAttribute("postInfo", postfind);
+
+	    return "posts/postInfo";
 	}
 	
 	// --------------------------------------------
@@ -111,6 +112,7 @@ public class PostController {
         // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
         LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
         post.setWriter(userVO.getNickname());
+        
         model.addAttribute("post", post);
         return "posts/postinsert";
     }

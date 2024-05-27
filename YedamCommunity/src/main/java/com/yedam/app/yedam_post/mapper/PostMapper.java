@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.app.yedam_post.service.BoardFiles;
 import com.yedam.app.yedam_post.service.Post;
 
 public interface PostMapper {
@@ -75,4 +76,10 @@ public interface PostMapper {
     // 게시글 개수
     //--------------------------------------------
     int getPostCount(Post post);
+
+    //--------------------------------------------
+    // 파일 불러오기
+    //--------------------------------------------
+	public List<BoardFiles> getBoardFiles(int postId,
+			                              int boardId);
 }

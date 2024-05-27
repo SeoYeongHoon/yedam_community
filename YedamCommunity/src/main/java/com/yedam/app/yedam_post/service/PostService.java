@@ -100,6 +100,8 @@ public interface PostService {
     //--------------------------------------------
     public int createReport(Report report);
 
+	public List<BoardFiles> getBoardFiles(int postId, int boardId);
+
 
 
 

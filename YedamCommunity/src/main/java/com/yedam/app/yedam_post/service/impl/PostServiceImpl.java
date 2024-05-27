@@ -12,6 +12,7 @@ import com.yedam.app.yedam_post.mapper.CommentMapper;
 import com.yedam.app.yedam_post.mapper.PostMapper;
 import com.yedam.app.yedam_post.mapper.ReplyMapper;
 import com.yedam.app.yedam_post.mapper.ReportMapper;
+import com.yedam.app.yedam_post.service.BoardFiles;
 import com.yedam.app.yedam_post.service.Comment;
 import com.yedam.app.yedam_post.service.Post;
 import com.yedam.app.yedam_post.service.PostService;
@@ -236,6 +237,11 @@ public class PostServiceImpl implements PostService {
 		map.put("userId", userId);
 		map.put("postId", postId);
 		return postMapper.deleteLike(map);
+	}
+	
+	public List<BoardFiles> getBoardFiles(int postId, int boardId) {
+		
+	    return postMapper.getBoardFiles(postId, boardId);
 	}
 
 }

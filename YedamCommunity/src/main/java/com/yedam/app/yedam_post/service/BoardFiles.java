@@ -11,6 +11,8 @@ public class BoardFiles {
 	private int boardfileSize;
 	private String boardfileLocation;
 	private String boardfileExt;
+	
+	
 	public int getBoardfileId() {
 		return boardfileId;
 	}
