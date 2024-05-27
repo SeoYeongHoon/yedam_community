@@ -4,7 +4,44 @@
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>	
-
+<style>
+		tr img {
+			width: 80px;
+		    max-width: 100%;
+		    overflow: hidden;
+		    margin-right: 15px;
+		}
+		
+		.center {
+		  text-align: center;
+		  width: 60%;
+		  margin: auto;
+		}
+		
+		.testPaging {
+		  display: inline-block;
+		}
+		
+		.testPaging a {
+		  color: black;
+		  float: left;
+		  padding: 8px 16px;
+		  text-decoration: none;
+		  transition: background-color .3s;
+		  /*border: 1px solid #ddd;*/
+		  /*margin: 0 4px;*/
+		}
+		
+		.testPaging a.active {
+		  background-color: #4CAF50;
+		  color: white;
+		  border: 1px solid #4CAF50;
+		}
+		
+		.testPaging a:hover:not(.active) {
+			background-color: #ddd;
+		}
+</style>
 <div class="row">
 	<div class="col-12">
 		<div style='float: right;'>
@@ -17,17 +54,17 @@
 	</div>
 </div>
 <div class="col-lg-12">
-	<div class="card-style mb-30">
+	<div class="card-style mb-30" style="position:relative;">
 		<h1 class="mb-30">시험 목록</h1>
-			<select id="classSelect">
-				<option value="0">전체 강의실</option>
-				<option value="1">1강의실</option>
-				<option value="2">2강의실</option>
-				<option value="3">3강의실</option>
-				<option value="4">4강의실</option>
-				<option value="5">5강의실</option>
-			</select>
-		<div class="input-style-1" style="position: absolute; bottom: 330px; left: 700px;">	
+		<select id="classSelect">
+			<option value="0">전체 강의실</option>
+			<option value="1">1강의실</option>
+			<option value="2">2강의실</option>
+			<option value="3">3강의실</option>
+			<option value="4">4강의실</option>
+			<option value="5">5강의실</option>
+		</select>
+		<div class="input-style-1" style="position: absolute; top: 50px; right: 30px;">	
 			<input name="testName" id="searchTest" type="text" placeholder="시험이름 검색" style="padding: 10px; width: 150px;">
 			<img style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 		</div>	
@@ -57,6 +94,9 @@
 				</thead>
 				<tbody id="tbody">
 					<!-- ajax로 태그 생성 -->		
+					<tr th:each="test : ${tests}">
+					
+					</tr>
 				</tbody>
 			</table>
 			
@@ -79,24 +119,69 @@
 	</div>
 </div>
 <script>
+$(document).ready(function() {
+	$('#classSelect').off('change').on('change', function() {
+		testList(1); // 필터 변경 시 1페이지부터 다시 시작
+    });
+	
+    $('#searchTest').off('keyup').on('keyup', function(e) {
+    	testList(1); // 검색어 입력하거나 지울 시 실시간으로 데이터 변경후 페이지 1로 고정
+    });
+
+    $('.testPaging').off('click', 'a').on('click', 'a', function() {
+    	var page = $(this).data('page');
+        testList(page);
+    });
+    
+});
+
+function testPagination(pageDTO, currentPage) {
+	console.log("pageDTO:", JSON.stringify(pageDTO, null, 5), "현재페이지:", currentPage);
+	let arr = new Array();
+	arr.push(pageDTO);
+	console.log("현재 페이지: " + arr[0].page);
+	currentPage = arr[0].page;
+			
+	var pagination = $('.testPaging');
+	pagination.empty();
+			
+	if (pageDTO.prev) {
+		pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '" onclick="testList(' + (pageDTO.starPage - 1) + ')">&laquo;</a>');
+	}
+			
+	for (var p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
+		console.log("p값: " + p);
+				
+		var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
+				
+		if (p === currentPage) {
+			pageLink.addClass('active');
+		} else {
+			pageLink.addClass('none');
+		}
+				
+		pageLink.attr('onclick', 'testList(' + p + ')');
+		pagination.append(pageLink);
+	}
+	if (pageDTO.next) {
+		pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '" onclick="testList(' + (pageDTO.endPage + 1) + ')">&raquo;</a>');
+	}
+}
+</script>
+<script>
 var cId = 0;
 var page = 1;
 var searchQuery = "";
-var currentPage = 0;
+var currentPage = 1;
 
 //--------------------------------------------
 // 시험 목록 출력 함수
 //--------------------------------------------
-var isRequestInProgress = false;
 
-function testList(cId, page, searchQuery){
+function testList(page, searchQuery){
 	//$('tbody').html('');
-	// 중복 실행 원인 때문에 프로세스 중단 임의로 한 번만 실행되게 막아둠
-	if (isRequestInProgress) {
-        return;
-    }
-	isRequestInProgress = true;
-	
+	cId = $('#classSelect').val();
+	console.log("cId값 : " + cId)
 	// 검색 변수
 	searchQuery = searchQuery || $('#searchTest').val();
 	//--------------------------------------------
@@ -105,14 +190,15 @@ function testList(cId, page, searchQuery){
 	$.ajax({
 		url : "test",
 		type : "get", 
-		data : {classId : cId, page : page, searchQuery : searchQuery},
-		async : false,
+		data : {
+			classId : cId, 
+			page : page, 
+			searchQuery : searchQuery
+		},
 		
 		success : function(data){
-			console.log('ajax 에서'+data.page+'page는'+page);
 			updateList(data.tests);
 			testPagination(data.page, page);
-			console.log('ajax 에서'+currentPage);
 			/*data.forEach((item,idx) => {
 				var tName = item.testName;
 				var tDate = formatDate(item.testDate);
@@ -143,9 +229,7 @@ function testList(cId, page, searchQuery){
 		error : function(err){
 			console.log('에러입니다');
 		},
-		complete: function() {
-			isRequestInProgress = false;
-		}
+		
 	})	
 }
 
@@ -153,7 +237,16 @@ function testList(cId, page, searchQuery){
 //시험 목록 필터링으로 인한 리스트 업데이트
 //--------------------------------------------
 function updateList(tests){
+	
 	$('tbody').html('');
+	
+	$('#classSelect').on('change', function(){
+		if($(this).val() == 0){
+			cId = 0;
+		} else {
+			cId = $(this).val();
+		}
+	});
 	
 	tests.forEach((test,idx) => {
 		var tName = test.testName;
@@ -167,6 +260,7 @@ function updateList(tests){
 		} else {
 			classId = cId
 		}
+		
 		let temp = `
 			<tr>
 				<td ><i class="mdi mdi-script-text-play-outline"></i></td>
@@ -179,12 +273,12 @@ function updateList(tests){
 				</td>
 		</tr>
 		`;
-		$('#tbody').append(temp);
 		
+		$('#tbody').append(temp);
 	})
 }
 
-testList(cId, page, searchQuery);
+//testList(cId, page, searchQuery);
 
 
 
@@ -208,7 +302,7 @@ var today1 = formatDate(today);
 //--------------------------------------------
 // 시험목록 강의실 select 필터링
 //--------------------------------------------
-$('#classSelect').on('change', function(){
+/* $('#classSelect').on('change', function(){
 	if($(this).val() == 0){
 		cId = 0;
 		testList(cId, page, searchQuery);
@@ -220,15 +314,15 @@ $('#classSelect').on('change', function(){
 	//--------------------------------------------
 	//날짜 비교해서 시험진행 상태 변경
 	//--------------------------------------------
-	arry = [];
-	process();
-});
+	//arry = [];
+	//process();
+}); */
 
 //--------------------------------------------
 //날짜 비교해서 시험진행 상태 변경
 //--------------------------------------------
-var arry = [];
 function process(){
+	var arry = [];
 	$('.tDate').each(function (index, item) {
 		 arry.push($(item).text());
 		 if(arry[index] < today1){
@@ -240,7 +334,10 @@ function process(){
 		 }
 	});
 }
-process();
+//process();
 
+window.onload = function() {
+	testList();
+}
 </script>
 </html>
