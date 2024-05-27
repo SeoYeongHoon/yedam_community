@@ -56,18 +56,21 @@
 		<br> <br>
 		<div style="text-align: center">
 			<button class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover"
-					th:onclick="|location.href='@{/testList2}'|">목록</button>
-			<form class="tresult_1 tresult_3" action="testResult2" method="get">
-				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">오답확인</button>
+					th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
+			<form class="tresult_1 tresult_3" action="testResult2" method="post">
+				<input type="hidden" name="testId" th:value="${testResult.testId}">
+				<div th:each="quiz : ${randQuizId}">				
+					<input type="hidden" name="randQuizId" th:value="${quiz}">
+				</div>
+				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
 			</form>
 		</div>
 		<br> <br>
 	</div>
 	<!-- 문제 확인 -->
 	<th:block th:each="quiz, idx : ${testTest}">
-		<div class="card-style col-lg-6" style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">						
-			<h1 class="tresult_1" th:if="${quiz.isCorrect == 1}" style="color: blue">[[${idx.count}]].</h1>
-			<h1 class="tresult_1" th:unless="${quiz.isCorrect == 1}" style="color: red">[[${idx.count}]].</h1>
+		<div th:if="${quiz.isCorrect == 0}" class="card-style col-lg-6" style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">						
+			<h1 class="tresult_1" style="color: red">[[${idx.count}]].</h1>
 			<h1 class="tresult_1">[[${quiz.quizContent}]]</h1>
 			<p class="tresult_1">([[${quiz.quizScore}]]점)</p>
 			<br> <br>

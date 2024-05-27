@@ -95,6 +95,14 @@
     	<![CDATA[
     	AND     a.rn <= #{page} * 5 ]]>
 	</select>
+	<!-- 시험과목 -->
+	<select id="selectUserSubject" resultType="TestVO">
+		SELECT  subject_name
+        FROM    users a
+        		JOIN subjects b
+        		ON(a.curriculum_id = b.curriculum_id)
+        WHERE   user_id = #{userId}
+	</select>
 	<!-- 시험상세 정보 -->
 	<select id="selectTestDetail" resultType="TestVO">
 		WITH b as (SELECT test_id
@@ -352,6 +360,7 @@
        			,a.pass_score
        			,a.is_reexam
        			,a.subject_id
+       			,b.test_id
        			,d.subject_name
 		FROM    exam_results a 
 				JOIN test_targets b 

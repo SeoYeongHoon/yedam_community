@@ -14,6 +14,12 @@
 .tlist_3 { /*버튼크기*/
 	width: 150px;
 }
+.tlist_4 {
+	font-size: 30px;
+	color: black;
+	border: 1px solid black;
+	width: 50px;
+}
 .sidebar-nav-wrapper {
 	position: fixed;
 }
@@ -74,6 +80,11 @@ isReexam
 			<button data-category="success" class="filterBtn tlist_1 status-btn success-btn">응시완료</button>
 			<button data-category="proceed" class="filterBtn tlist_1 status-btn active-btn">응시하기</button>
 			<button data-category="re" class="filterBtn tlist_1 status-btn close-btn">재시험</button>
+			<select id="selectedSub">
+				<th:block th:each="sub : ${userSubject}">
+					<option>[[${sub.subjectName}]]</option>
+				</th:block>
+			</select>
 			<br> <br>
 			<table class="table">
 				<thead>
@@ -152,11 +163,17 @@ isReexam
 					</th:block>
 				</tbody>
 			</table>
-			<th:block th:with="first=1, end=${(testList.size() / 5) + 1}, totalCnt=${testList.size()}, page=${page}">
-				<span th:if="${first < page]"><a th:href="@{/testList2(page=${page - 1})}" th:text="'<'"></a></span>
-				<th:block>
+			<!-- 목록 페이징 -->
+			<th:block th:with="page=${page}, size=${#lists.size(testList)}">
+			<div style="text-align: center;">
+				<a class="tlist_4" th:if="${page == 1}" th:text="'<'" href="#"></a>
+				<a class="tlist_4" th:unless="${page == 1}" th:text="'<'" th:href="@{/testList2(page=${page-1})}"></a>
+				<th:block th:each="num, stat : ${#numbers.sequence(1,(size / 5 + 1))}">
+					<a class="tlist_4" th:text="${stat.count}" th:href="@{/testList2(page=${stat.count})}"></a>
 				</th:block>
-				<span th:if="${page < end]"><a th:href="@{/testList2(page=${page + 1})}" th:text="'>'"></a></span>
+				<a class="tlist_4" th:if="${page == (size / 5 + 1)}" th:text="'>'" href="#"></a>
+				<a class="tlist_4" th:unless="${page == (size / 5 + 1)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
+			</div>
 			</th:block>
 		</div>
 	</div>
