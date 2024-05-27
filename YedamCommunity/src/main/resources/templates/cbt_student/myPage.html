@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<style>
+.mypage_1 {
+	display: inline-block;
+}
+.mypage_2 {
+	float: right;
+}
+/*모달*/
+.modal h1 {
+	text-align: center;
+}
+/*모달 팝업 영역 스타일링*/
+.modal1 {
+	display: none; /*평소에 숨김처리*/
+	position: fixed; /*모달창 화면전체*/
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+	background: rgba(0, 0, 0, 0.5);
+}
+.modal2 {
+	display: none; /*평소에 숨김처리*/
+	position: fixed; /*모달창 화면전체*/
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+	background: rgba(0, 0, 0, 0.5);
+}
+.modal1 .modal-dialog {
+	/*팝업*/
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 20px;
+	background: #ffffff;
+	border-radius: 10px;
+}
+.modal2 .modal-dialog {
+	/*팝업*/
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 20px;
+	background: #ffffff;
+	border-radius: 10px;
+}
+#closeBtn, #unjoinBtn2 {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: rgb(116, 0, 0);
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	cursor: pointer;
+	transition: box-shadow 0.2s;
+}
+.modal1.on {
+	display: block;
+}
+.modal2.on {
+	display: block;
+}
+
+
+.tab {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+}
+.tab li {
+	display: inline-block;
+}
+.tabcont {
+	display: none;
+	padding: 6px 12px;
+	color:black;
+}
+ul.tab li.on{
+	background-color: aqua;
+}
+.tabcont.on {
+	display: block;
+}
+</style>
+<div class="row" style="margin: 0 auto;">
+	<!-- 좌측 -->
+	<div class="card-style col-lg-3"
+		style="border: 1px solid gray; border-radius: 20px; width: 1000px; margin: 30px;">
+		<br> <br>
+		<h1 style="text-align: center;">내정보</h1>
+		<br> <br>
+		<div class="input-style-1">
+        	<label>과정명</label>
+            <input type="text" th:value="${userInfo.curriculumName}" disabled>
+        </div>
+        <div class="input-style-1">
+        	<label style="display: inline;">이름</label>
+        	<button class="updateBtn1" style="display: inline; border: 1px solid black" type="button">수정</button>
+        	<button class="confirmBtn1" style="display: inline; border: 1px solid black" type="button" disabled>확인</button>
+            <input id="nameUpdate" type="text" th:value="${userInfo.name}" disabled>
+            <input id="nameInfo" type="hidden" th:value="${userInfo.name}">
+        </div>
+        <div class="input-style-1">
+        	<label style="display: inline;">아이디</label>
+        	<button class="updateBtn1" style="display: inline; border: 1px solid black" type="button">수정</button>
+        	<button class="confirmBtn1" style="display: inline; border: 1px solid black" type="button" disabled>확인</button>
+            <input id="idUpdate" type="text" th:value="${userInfo.id}" disabled>
+            <input id="idInfo" type="hidden" th:value="${userInfo.id}">
+        </div>
+        <div class="input-style-1">
+        	<label style="display: inline;">비밀번호</label>
+        	<button class="updateBtn1" style="display: inline; border: 1px solid black" type="button">수정</button>
+        	<button class="confirmBtn1" style="display: inline; border: 1px solid black" type="button" disabled>확인</button>
+            <input id="pwUpdate" type="text" th:value="${userInfo.password}" disabled>
+            <input id="pwInfo" type="hidden" th:value="${userInfo.password}">
+        </div>
+        <div class="input-style-1">
+        	<label style="display: inline;">연락처</label>
+        	<button class="updateBtn1" style="display: inline; border: 1px solid black" type="button">수정</button>
+        	<button class="confirmBtn1" style="display: inline; border: 1px solid black" type="button" disabled>확인</button>
+            <input id="telUpdate" type="text" th:value="${userInfo.tel}" disabled>
+            <input id="telInfo" type="hidden" th:value="${userInfo.tel}">
+        </div>
+        <div class="input-style-1">
+        	<label style="display: inline;">이메일</label>
+        	<button class="updateBtn1" style="display: inline; border: 1px solid black" type="button">수정</button>
+        	<button class="confirmBtn1" style="display: inline; border: 1px solid black" type="button" disabled>확인</button>
+            <input id="emailUpdate" type="text" th:value="${userInfo.email}" disabled>
+            <input id="emailInfo" type="hidden" th:value="${userInfo.email}">
+        </div>
+        <div class="input-style-1">
+        	<label style="display: inline;">주소</label>
+        	<button class="updateBtn1" style="display: inline; border: 1px solid black" type="button">수정</button>
+        	<button class="confirmBtn1" style="display: inline; border: 1px solid black" type="button" disabled>확인</button>
+            <input id="addrUpdate" type="text" th:value="${userInfo.address}" disabled>
+            <input id="addrInfo" type="hidden" th:value="${userInfo.address}">
+        </div>
+        <div th:if="${userInfo.userType = 4}" class="input-style-1">
+        	<label style="display: inline;">취업정보</label>
+        	<button class="updateBtn1" style="display: inline; border: 1px solid black" type="button">수정</button>
+        	<button class="confirmBtn1" style="display: inline; border: 1px solid black" type="button" disabled>확인</button>
+            <input id="compUpdate" type="text" th:value="${userInfo.companyInfo}" disabled>
+            <input id="compInfo" type="hidden" th:value="${userInfo.companyInfo}">
+        </div>
+        <br><br>
+        <div style="text-align: center;">
+        	<button id="updateBtn2" class="mypage_1 main-btn dark-btn-outline square-btn btn-hover">정보수정</button>
+        	<button id="unjoinBtn1" class="mypage_1 main-btn dark-btn-outline square-btn btn-hover">회원탈퇴</button>
+        	<input id="userId" type="hidden" th:value="${userInfo.userId}">
+        </div>
+        <br><br>
+	</div>
+	<!-- 우측 -->
+	<div class="card-style col-lg-8" style="border: 1px solid gray; border-radius: 20px; width: 1000px; margin: 30px;">
+		<!-- 탭 -->
+		<div id="container">
+			<ul class="tab">
+				<li class="on" data-tab="menu1"><h3>게시글관리</h3></li>
+				<li> | </li>
+				<li data-tab="menu2"><h3>학습관리</h3></li>
+			</ul>
+			<hr>
+			<div id="menu1" class="tabcont on">
+				<h1 style="text-align: center">게시글관리</h1>
+				<p> This is menu1 content</p>
+			</div>
+			<div id="menu2" class="tabcont">
+				<br><br>
+				<h1 class="mypage_1">최근 시험정보</h1>
+				<p id="testPlus" class="mypage_2">더보기 ></p>
+				<br><br>
+				<table class="table">
+					<thead>
+						<tr>
+							<th style="text-align: center;">시험명</th>
+							<th style="text-align: center;">응시기한</th>
+							<th style="text-align: center;">응시여부</th>
+							<th style="text-align: center;">피드백여부</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="test : ${recentTest}">
+							<tr style="text-align: center;">
+								<td>[[${test.testName}]]</td>
+								<td>[[${#dates.format(test.testDate, 'yyyy년 MM월 dd일')}]]</td>
+								<th:block th:if="${#strings.isEmpty(test.resultId)}">
+									<td>응시하기</td>
+									<td></td>
+								</th:block>
+								<th:block th:if="${not #strings.isEmpty(test.resultId) && test.resultScore >= test.passScore}">
+									<td>응시완료</td>
+									<th:block>					
+										<td th:if="${not #strings.isEmpty(test.feedback)}">피드백완료</td>
+										<td th:unless="${not #strings.isEmpty(test.feedback)}">피드백대기</td>
+									</th:block>
+								</th:block>
+								<th:block th:if="${not #strings.isEmpty(test.resultId) && test.resultScore < test.passScore}">
+									<td>재시험</td>
+									<th:block>
+										<td th:if="${not #strings.isEmpty(test.feedback)}">피드백완료</td>
+										<td th:unless="${not #strings.isEmpty(test.feedback)}">피드백대기</td>
+									</th:block>
+								</th:block>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+				<br><hr><br>
+				<h1 class="mypage_1">최근 과제정보</h1>
+				<p class="mypage_2">더보기 ></p>
+				<br><br>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>과제명</th>
+							<th>과목</th>
+							<th>제출기한</th>
+							<th>제출여부</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>1</td>
+							<td>1</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>1</td>
+							<td>1</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>1</td>
+							<td>1</td>
+							<td>1</td>
+						</tr>
+					</tbody>
+				</table>
+				<br><br>
+			</div>
+		</div>
+	</div>
+	<!-- 수정관련 모달 -->
+	<div class="modal1">
+		<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 300px;">
+			<h1>내정보 수정</h1>
+			<br>
+			<h1>정말 탈퇴하시겠습니까?</h1>
+			<div>
+				<button type="button">닫기</button>
+			</div>
+		</div>
+	</div>
+	<!-- 탈퇴관련 모달 -->
+	<div class="modal2">
+		<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 250px; text-align: center">
+			<br>
+			<h1>회원탈퇴</h1>
+			<br>
+			<h1 style="color: red">정말 탈퇴하시겠습니까?</h1>
+			<br>
+			<div>
+				<button id="closeBtn" type="button">닫기</button>
+				<button id="unjoinBtn2" type="button">탈퇴</button>
+			</div>
+			<br>
+		</div>
+	</div>
+</div>
+<script>
+//<<정보수정 관련>>
+let updateBtn1 = document.querySelectorAll('.updateBtn1');
+updateBtn1.forEach(function(update1){
+	update1.addEventListener('click',function(e){
+		e.target.nextElementSibling.nextElementSibling.disabled = false; //입력창 활성화
+		e.target.nextElementSibling.disabled = false; //확인버튼 활성화
+		e.target.nextElementSibling.nextElementSibling.focus(); //입력창 커서이동
+	})
+})
+let confirmBtn1 = document.querySelectorAll('.confirmBtn1');
+confirmBtn1.forEach(function(confirm1){
+	confirm1.addEventListener('click',function(e){
+		let a = e.target.nextElementSibling;
+		let b = e.target.nextElementSibling.nextElementSibling
+		let name = document.querySelector('#nameUpdate').id;
+		let id = document.querySelector('#idUpdate').id;
+		let pw = document.querySelector('#pwUpdate').id;
+		let tel = document.querySelector('#telUpdate').id;
+		let email = document.querySelector('#emailUpdate').id;
+		let addr = document.querySelector('#addrUpdate').id;
+		let type = '';
+		if(a.value == b.value || a.value == ''){
+			alert('수정할 내용을 입력하세요.'); //알림창 띄우기
+			e.target.nextElementSibling.focus(); //입력창 커서이동
+		}
+		else{ //수정 유형 구분
+			if(a.id == name){
+				type = 'name';
+			}
+			else if(a.id == id){
+				type = 'id';
+			}
+			else if(a.id == pw){
+				type = 'pw';
+			}
+			else if(a.id == tel){
+				type = 'tel';
+			}
+			else if(a.id == email){
+				type = 'email';
+			}
+			else if(a.id == addr){
+				type = 'addr';
+			}
+			//alert(type);
+			$.ajax({
+				url: 'updateInfo',
+				method: 'post',
+				data: {
+					type: type,
+					value: a.value
+				},
+				dataType: 'json',
+				success: function(data){
+					console.log('성공');
+				},
+				error: function(){
+					console.log('error');
+				}
+			})
+			e.target.nextElementSibling.disabled = true; //입력창 비활성화
+			e.target.disabled = true; //확인버튼 비활성화
+		}
+	})
+})
+//<<탈퇴 관련>>
+let modal2 = document.querySelector('.modal2'); //모달창
+$('#unjoinBtn1').on('click',function(){ //탈퇴버튼 클릭하면
+	modal2.classList.add('on'); //모달창 열기
+});
+$('#closeBtn').on('click',function(){ //닫기버튼 클릭하면
+	modal2.classList.remove('on'); //모달창 닫기
+});
+$('#unjoinBtn2').on('click',function(){ //탈퇴버튼 클릭하면
+	//let userId = $('#userId').val();
+	let userId = 180;
+	$.ajax({
+		url: 'deleteUser',
+		method: 'post',
+		data: {userId: userId},
+		dataType: 'json',
+		success: function(data){
+			modal2.classList.remove('on'); //모달창 닫기
+			location.href = '/'; //로그인 페이지 이동
+		},
+		error: function(){
+			console.log('error');
+		}
+	})
+})
+//<<탭 관련>>
+$(function() {
+	$('ul.tab li').click(function() {
+		var activeTab = $(this).attr('data-tab');
+		$('ul.tab li').removeClass('on');
+		$('.tabcont').removeClass('on');
+		$(this).addClass('on');
+		$('#' + activeTab).addClass('on');
+	})
+});
+//<<더보기 관련>
+$('#testPlus').on('click',function(){
+	location.href = '/testList2';
+})
+</script>
+</html>

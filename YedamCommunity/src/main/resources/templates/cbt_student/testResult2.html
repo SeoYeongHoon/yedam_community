@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<style>
+.tdetail_1 {
+	display: inline-block;
+}
+</style>
+<div>
+	<div class="card-style"
+		style="border: 1px solid gray; border-radius: 20px; width: 1000px; margin: 0 auto; margin-top: 50px; margin-bottom: 50px;">
+		<br> <br>
+		<h1 style="text-align: center;">시험</h1>
+		<br> <br>
+		<table class="table">
+			<tr>
+				<th>과정명</th>
+				<td>1</td>
+			</tr>
+			<tr>
+				<th>시험명</th>
+				<td>2</td>
+			</tr>
+			<tr>
+				<th>응시기간</th>
+				<td>3</td>
+			</tr>
+			<tr>
+				<th>제한시간</th>
+				<td>4</td>
+			</tr>
+			<tr>
+				<th>총점</th>
+				<td>5</td>
+			</tr>
+			<tr>
+				<th>문제수</th>
+				<td>6</td>
+			</tr>
+			<tr>
+				<th>유의사항</th>
+				<td>7</td>
+			</tr>
+		</table>
+		<br> <br>
+		<div style="text-align: center">
+			<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
+				th:onclick="|location.href='@{/testList2}'|">목록</button>
+		</div>
+		<br> <br>
+	</div>
+</div>
+</html>
