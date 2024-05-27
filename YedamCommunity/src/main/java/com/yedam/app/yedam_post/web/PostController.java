@@ -2,6 +2,7 @@ package com.yedam.app.yedam_post.web;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,9 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,6 +98,7 @@ public class PostController {
 
 	    return "posts/postInfo";
 	}
+	
 	// --------------------------------------------
 	// 게시글 등록
 	// --------------------------------------------
@@ -195,12 +197,38 @@ public class PostController {
 	// --------------------------------------------
 	@PostMapping("/postUpdate")
 	@ResponseBody
-	public Map<String, Object> postUPdateProcess(@RequestBody Post post) {
+	public Map<String, Object> postUpdateProcess(@ModelAttribute Post post, 
+	                                             @RequestParam("file") MultipartFile file) {
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        if (!file.isEmpty()) {
+	            String fileName = file.getOriginalFilename();
+	            String filePath = uploadPath + "/" + fileName;
 
-		post.setUpdateDate(new Date());
-		return postService.PostUpdate(post);
+	            File directory = new File(uploadPath);
+	            if (!directory.exists()) {
+	                directory.mkdirs();
+	            }
+
+	            File dest = new File(filePath);
+	            file.transferTo(dest);
+
+	            post.setBoardfileName(fileName);
+	            post.setBoardfileSize(file.getSize());
+	            post.setBoardfileLocation(fileName);
+	            post.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
+	        }
+
+	        post.setUpdateDate(new Date());
+	        postService.PostUpdate(post);
+	        result.put("success", true);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        result.put("success", false);
+	        result.put("message", "File upload error: " + e.getMessage());
+	    }
+	    return result;
 	}
-
 	// --------------------------------------------
 	// 게시글 신고 처리
 	// --------------------------------------------
