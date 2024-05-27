@@ -87,6 +87,10 @@ public class LoginUserVO implements UserDetails {
 	public Integer getuserId() {
 		return userVO.getUserId();
 	}
+
+	public String getNickname() {
+		return userVO.getName();
+	}
 	
 
 }

@@ -1,38 +1,39 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Home">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Home">
 <head>
-<meta charset="UTF-8">
-<title>게시글 수정</title>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
 </head>
 <body>
 <div class="container">
-	<h1>게시글 수정</h1>
-	<form th:action="@{/postUpdate}" th:object="${postInfo}" method="post" enctype="multipart/form-data">
-		<input type="hidden" th:field="*{postId}" />
-		<div>
-			<label for="title">제목:</label> 
+    <h1>게시글 수정</h1>
+    <form th:action="@{/postUpdate}" th:object="${post}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{postId}" />
+        <input type="hidden" th:field="*{boardId}" />
+        <div>
+            <label for="title">제목:</label> 
             <input type="text" th:field="*{title}" id="title" />
-		</div>
-		<div>
-			<label for="postContent">내용:</label>
-			<textarea th:field="*{postContent}" id="postContent"></textarea>
-		</div>
-		
-		<!-- 파일 업로드 -->
-		<label for="file">파일 :</label> 
-		<input type="file" name="file" multiple="multiple"/><br />
-		
-		<div>
-			<button type="button" id="updateBtn">수정</button>
-		</div>
-	</form>
-	<a th:href="@{/postList}">목록으로 돌아가기</a>
-	</div>
+        </div>
+        <div>
+            <label for="postContent">내용:</label>
+            <textarea th:field="*{postContent}" id="postContent"></textarea>
+        </div>
+        
+        <!-- 파일 업로드 -->
+        <label for="file">파일 :</label> 
+        <input type="file" name="file" multiple="multiple"/><br />
+        
+        <div>
+            <button type="button" id="updateBtn">수정</button>
+        </div>
+    </form>
+    <a th:href="@{/post/{boardId}(boardId=${post.boardId})}">목록으로</a>
+</div>
     
-	<script>
+<script>
     $('#updateBtn').on('click', updateAjax);
 
     function updateAjax(event) {
@@ -83,7 +84,7 @@
         console.log(formObj);  
         return formObj;  
     }
-    </script>
+</script>
 
 </body>
 </html>
