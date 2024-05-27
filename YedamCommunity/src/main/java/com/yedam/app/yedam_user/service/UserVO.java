@@ -14,13 +14,13 @@ public class UserVO {
 	private String tel;
 	private String email;
 	private String address;
-//	private String userImage;
 	private String companyInfo;
 	private Integer isComplete;
 	private String userType;
 	private Integer curriculumId;
 	private String curriculumName;
 
+	// 이미지처리
 	private String profileImageName;
 	private double profileImageSize;
 	private String profileImageLocation;

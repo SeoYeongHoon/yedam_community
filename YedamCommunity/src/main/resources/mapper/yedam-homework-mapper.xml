@@ -125,7 +125,37 @@
 		AND class_id = #{classId} 
 		</if>
 		ORDER BY  h.homework_id DESC
-		
+	</select>
+	
+	<!-- 과제 페이징 -->
+	<select id="getHomeworksByFilter" parameterType="map" resultType="HomeWorkVO">
+		SELECT *
+		FROM (
+		    SELECT rownum rn, a.*
+		    FROM (
+		        SELECT c.class_id,
+		               h.homework_id,
+		               h.homework_content,
+		               h.homework_date,
+		               h.homework_title,
+		               s.subject_name
+		        FROM homeworks h
+		        JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
+		        JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
+		        WHERE h.subject_id = s.subject_id
+		        ORDER BY h.homework_id DESC
+		    ) a
+		    <![CDATA[
+		    WHERE rownum <= (#{page} * 5)
+		    ]]>
+		) b
+		WHERE b.rn > (#{page} - 1) * 5
+	</select>
+	
+	<!-- 페이징용 카운트 -->
+	<select id="getTotalCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM homeworks
 	</select>
 	
 	<!-- 과목명 카테고리 -->

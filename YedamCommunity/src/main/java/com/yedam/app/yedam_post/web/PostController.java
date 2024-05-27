@@ -62,7 +62,7 @@ public class PostController {
 	    model.addAttribute("pageSize", pageSize);
 	    model.addAttribute("boardId", boardId);
 
-	    return "posts/postlist";
+	    return "posts/postList";
 	}
 	
 	// --------------------------------------------
@@ -107,7 +107,7 @@ public class PostController {
 	    List<Post> list = postService.searchPosts(boardId, keyword);
 	    model.addAttribute("postList", list);
 	    model.addAttribute("boardId", boardId);
-	    return "posts/postlist";
+	    return "posts/postList";
 	}
 
 	// --------------------------------------------

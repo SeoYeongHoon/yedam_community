@@ -36,4 +36,11 @@ public interface HomeWorkService {
 	
 	// 최근 과제 출력
 	public List<HomeWorkVO> getRecentTest(int userId);
+	
+	// 과제 페이징 및 필터링
+	public List<HomeWorkVO> getHomeworksByFilter(String filter, int page, String searchQuery);
+	
+	// 페이징용 카운트
+	public int getTotalCnt(String filter, String searchQuery);
+	
 }

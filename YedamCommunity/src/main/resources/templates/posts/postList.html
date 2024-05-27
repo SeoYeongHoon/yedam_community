@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Home">
-<head>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Home">
   <style>
     .pagination {
       display: inline-block;
@@ -28,10 +27,8 @@
       text-align: right;
     }
   </style>
-  <title>게시글 목록</title>
-</head>
-<body>
-  <div class="container">
+  
+  <div id="post_container">
     <h3 th:text="'게시판 ' + ${boardId}">게시판</h3>
     <div class="insertBtn">
       <a th:href="@{/postInsert/{boardId}(boardId=${boardId})}">글쓰기</a>
@@ -83,9 +80,8 @@
   <script>
     function searchPosts() {
       const keyword = document.getElementById('searchKeyword').value;
-      const boardId = /* Get the boardId dynamically if needed, e.g., from URL */;
+      const boardId = /* Get the boardId dynamically if needed, e.g., from URL */
       location.href = `/postList/${boardId}/search?keyword=${keyword}`;
     }
   </script>
-</body>
 </html>

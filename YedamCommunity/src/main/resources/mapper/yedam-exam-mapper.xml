@@ -31,7 +31,7 @@
 	             FROM tests t JOIN curriculum c
 	                               ON t.curriculum_id = c.curriculum_id) b                     
 	             WHERE (test_name LIKE '%' || #{searchQuery} || '%')
-	             <if test=" classId!=0 ">
+	             <if test=" classId != 0 ">
 	             AND class_id = #{classId}
 	             </if> 
 	             <![CDATA[
@@ -41,9 +41,13 @@
 	ORDER BY test_date DESC
 	</select>
 	<select id="testTotalCnt" parameterType="map" resultType="int">
-		SELECT COUNT(*)
-		FROM tests
+		SELECT count(*)         				  
+		FROM tests t JOIN curriculum c
+		             ON t.curriculum_id = c.curriculum_id                   
 		WHERE (test_name LIKE '%' || #{searchQuery} || '%')
+		<if test="cId != 0">
+			AND c.class_id = #{cId}
+		</if>
 	</select>
 	<!-- 시험 등록 -->
 	<insert id="insertTest" parameterType="TeacherVO">

@@ -31,24 +31,24 @@ public class CbtStudentController {
 	//ㅡㅡㅡㅡㅡ
 	//마이페이지
 	//ㅡㅡㅡㅡㅡ
-	@GetMapping("myPage")
-	public String myPage(TestVO testVO,
-						 UserVO userVO,
-						 Model model) {
-		String logid ="14";
-		UserVO info = cbtStudentService.myPageInfo(Integer.parseInt(logid));
-		List<TestVO> list = cbtStudentService.recentTest(Integer.parseInt(logid));
-		model.addAttribute("userInfo", info);
-		model.addAttribute("recentTest", list);
-		return "cbt_student/myPage";
-	}
+//	@GetMapping("myPage")
+//	public String myPage(TestVO testVO,
+//						 UserVO userVO,
+//						 Model model) {
+//		String logid ="11";
+//		UserVO info = cbtStudentService.myPageInfo(Integer.parseInt(logid));
+//		List<TestVO> list = cbtStudentService.recentTest(Integer.parseInt(logid));
+//		model.addAttribute("userInfo", info);
+//		model.addAttribute("recentTest", list);
+//		return "cbt_student/myPage";
+//	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//내정보수정 AJAX
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	@PostMapping("updateInfo")
-	public boolean updateInfo() {
-		return true;
-	}
+//	@PostMapping("updateInfo")
+//	public boolean updateInfo() {
+//		return true;
+//	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	//회원탈퇴 AJAX
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
