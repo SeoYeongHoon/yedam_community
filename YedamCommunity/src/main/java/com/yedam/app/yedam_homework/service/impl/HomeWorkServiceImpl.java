@@ -22,7 +22,7 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	
 	 @Override public List<HomeWorkVO> homeworkList() { 
 		 return	 homeworkMapper.selectHomeworkAll(); 
-		 }
+		}
 	 
 	
 	// 과제 등록
@@ -85,7 +85,7 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 
 
 	@Override
-	public List<HomeWorkVO> getHomeworksByFilter(String filter, int page, String searchQuery) {
+	public List<HomeWorkVO> getHomeworksByFilter(int filter, int page, String searchQuery) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("filter", filter);
 		params.put("page", page);
@@ -96,7 +96,7 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 
 
 	@Override
-	public int getTotalCnt(String filter, String searchQuery) {
+	public int getTotalCnt(int filter, String searchQuery) {
 		return homeworkMapper.getTotalCnt(filter, searchQuery);
 	}
 	

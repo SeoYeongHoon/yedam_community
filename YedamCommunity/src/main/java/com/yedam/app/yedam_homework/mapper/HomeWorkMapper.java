@@ -45,5 +45,5 @@ public interface HomeWorkMapper {
 	public List<HomeWorkVO> getHomeworksByFilter(Map<String, Object> params);
 	
 	// 페이징용 카운트
-	int getTotalCnt(String filter, String searchQuery);
+	int getTotalCnt(int filter, String searchQuery);
 }
