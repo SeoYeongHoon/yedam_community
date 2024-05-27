@@ -10,13 +10,15 @@ import lombok.Data;
 public class TeacherVO {
 	private int userId;
 	
-	// 시험문제 출력
+	// tests 테이블
 	private int testId;
 	private String testName;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date testDate;
 	private int testTime;
-	// 문제저장소
+	private String testContent;
+	
+	// quizes 테이블
 	private int quizId;
 	private String quizContent;
 	private String quizContentJu;
@@ -25,6 +27,7 @@ public class TeacherVO {
 	private String quizAnswer;
 	private String quizAnswerJu;
 	
+	// answers 테이블
 	private String textContent;
 	private String textContent2;
 	private String textContent3;
@@ -39,12 +42,13 @@ public class TeacherVO {
 	private int exampleAnswer5;
 	private int exampleAnswerJu;
 	
+	// subjects 테이블
 	private int subjectId;
 	private String subjectName;
 	
+	// curriculum 테이블
 	private int curriculumId;
 	private String curriculumName;
-	private String name;
 	private int classId;
 	@DateTimeFormat(pattern = "yyyy.MM.dd")
 	private Date curriculumStartDate;
@@ -52,6 +56,8 @@ public class TeacherVO {
 	private Date curriculumEndDate;
 	private int isComplete;
 	
+	
+	private String name;	
 	private int subjectAvg;
 	private int resultId;
 	private int resultScore;
@@ -59,5 +65,6 @@ public class TeacherVO {
 	private int isReexam;
 	private int passScore;
 	private int testTargetId;
+	private int quizScore;
 	
 }

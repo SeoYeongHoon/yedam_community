@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_examteacher.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -8,12 +9,20 @@ import com.yedam.app.yedam_examteacher.service.TeacherVO;
 
 
 public interface ExamMapper {
-	
-	// 시험목록 페이지 기능모음
-	public List<TeacherVO> selectExamAll(); // 시험목록 전체조회
+	//--------------------------------------------
+	// 시험목록/등록 페이지 기능모음
+	//--------------------------------------------
+	//public List<TeacherVO> selectExamAll(@Param("classId") int cId); // 시험목록 전체조회
+	public List<TeacherVO> selectExamAll(Map<String, Object> params); // 페이징 리스트 테스트중
+	int testTotalCnt(int cId, String searchQuery);
 	public int insertTest(TeacherVO teacherVO); // 시험 등록
-		
+	public List<TeacherVO> selectUserAll(TeacherVO teacherVO); // 시험 대상자 조회
+	public int insertQuizbox(TeacherVO teacherVO); // 시험에 출제할 문제 등록
+	public int insertTestUser(TeacherVO teacherVO); // 시험 대상자 등록
+	
+	//--------------------------------------------
 	// 문제 등록/조회 페이지 기능 모음	
+	//--------------------------------------------
 	public List<TeacherVO> selectQuizAll(); // 문제 저장소에 문제 출력 => 필터출력으로 대체. 나중에 삭제.
 	public List<TeacherVO> selectAnswerAll(TeacherVO teacherVO); // 문제 저장소에 지문 출력 -> 나중에 삭제
 	public List<TeacherVO> quizAnswer(@Param("qId") int qId); // 문제 지문 출력
@@ -34,11 +43,9 @@ public interface ExamMapper {
 	public List<TeacherVO> filterQuiz(@Param("sName") String sName); // 등록된 문제 필터출력 
 	public List<TeacherVO> infoQuiz(@Param("qId") int qId); // 문제 자세히보기 단건조회
 	
-	
-	// 유저 정보 출력 (시험 출제시 필요)
-	public List<TeacherVO> selectUserAll(TeacherVO teacherVO);
-	
+	//--------------------------------------------
 	// 강의실 정보 출력(과목평균,시험리스트,수강생)
+	//--------------------------------------------
 	public List<TeacherVO> subjectAvg(@Param("classId") int cId); // 과목평균점수
 	public List<TeacherVO> testList(@Param("classId") int cId); // 강의실별 시험리스트
 	public List<TeacherVO> userList(@Param("classId") int cId); // 강의실별 수강생리스트
@@ -48,7 +55,9 @@ public interface ExamMapper {
 	public TeacherVO userTestInfo(TeacherVO teacherVO); // 시험본 학생 개개인의 수강정보 단건조회
 	public List<TeacherVO> userScore(@Param("userId") int uId); // 학생 개개인의 과목당 점수리스트
 	
+	//--------------------------------------------
 	// 학생 피드백 작성 페이지 기능모음
+	//--------------------------------------------
 	public TeacherVO userFeed(TeacherVO teacherVO); // 유저 시험 결과 조회
 	public int feedAdd(TeacherVO teacherVO);
 }

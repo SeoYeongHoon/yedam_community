@@ -29,4 +29,7 @@ public class UserVO {
 	
 	// 검색필드
 	private String searchQuery;
+
+	
+	
 }
