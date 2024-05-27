@@ -17,12 +17,15 @@
   <p>조회수: <span th:text="${postInfo.postView}"></span></p>
   <p>좋아요: <span th:text="${postInfo.postLike}"></span></p>
 
+ <!-- 디버깅을 위한 postInfo.boardFiles 출력 -->
+  <pre th:text="${#lists.size(postInfo.boardFiles)}">Board Files List Size</pre>
+  <pre th:text="${postInfo.boardFiles}">Board Files List</pre>
+
   <!-- 이미지 출력 -->
   <h2>이미지</h2>
   <div th:each="file : ${postInfo.boardFiles}">
-    <img th:src="@{'/files/' + ${file.boardfileLocation}}" style="width: 50%; height: auto;"/>
+    <img th:src="@{'/files/' + file.boardfileLocation}" style="width: 50%; height: auto;"/>
   </div>
-   
   <!-- boardId에 따라 다른 내용 표시 -->
   <!-- <div th:switch="${boardId}">
     <div th:case="1">
