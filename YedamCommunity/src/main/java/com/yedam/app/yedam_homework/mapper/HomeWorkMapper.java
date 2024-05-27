@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.yedam.app.yedam_homework.service.HomeWorkTargetVO;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
+import com.yedam.app.yedam_homework.service.ReplyVO;
 
 public interface HomeWorkMapper {
 
@@ -16,6 +17,8 @@ public interface HomeWorkMapper {
 
 	// 과제등록
 	public int insertHomework(HomeWorkVO homeworkVO);
+	// 과제 수정
+	public int updateHomework(HomeWorkVO homeworkVO);
 
 	// 과제 삭제
 	public int deleteHomework(int homeworkId);
