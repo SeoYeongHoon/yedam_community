@@ -102,16 +102,7 @@
 			
 			<div class="center">
 				<div class="testPaging">
-					<!-- <th:block th:if="${page.prev}">
-						<a href="javascript:void(0)" th:onclick="testList(${page.starPage - 1})">&laquo;</a>
-					</th:block>
-					<th:block th:each="p : ${#numbers.sequence(page.starPage, page.endPage)}">
-						<a id="page_id" href="javascript:void(0)" th:onclick="'testList(' + ${p} + ')'">[[${p}]]</a>
-						<a id="page_id" href="javascript:void(0)" th:onclick="'testList(' + ${p} + ')'" th:classappend="${p == page.page ? 'active' : 'none'}">[[${p}]]</a>
-					</th:block>
-					<th:block th:if="${page.next}">
-						<a href="javascript:void(0)" th:onclick="testList(${page.endPage + 1})">&raquo;</a>
-					</th:block> -->
+					<!-- ajax실행으로 태그 생성 -->
 				</div>
 			</div>
 							
@@ -177,11 +168,8 @@ var currentPage = 1;
 //--------------------------------------------
 // 시험 목록 출력 함수
 //--------------------------------------------
-
 function testList(page, searchQuery){
-	//$('tbody').html('');
 	cId = $('#classSelect').val();
-	console.log("cId값 : " + cId)
 	// 검색 변수
 	searchQuery = searchQuery || $('#searchTest').val();
 	//--------------------------------------------
@@ -199,32 +187,6 @@ function testList(page, searchQuery){
 		success : function(data){
 			updateList(data.tests);
 			testPagination(data.page, page);
-			/*data.forEach((item,idx) => {
-				var tName = item.testName;
-				var tDate = formatDate(item.testDate);
-				var tTime = item.testTime;
-				var classId = 0;
-				var processIdx = idx;
-				
-				if(cId==0){
-					classId = item.classId
-				} else {
-					classId = cId
-				}
-				let temp = `
-					<tr>
-						<td ><i class="mdi mdi-script-text-play-outline"></i></td>
-						<td class="min-width">${tName}</td>
-						<td class="min-width">${classId}강의실</td>
-						<td class="min-width tDate">${tDate}</td>
-						<td class="min-width">${tTime}</td>
-						<td id="tProcess" class="min-width">
-							<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
-						</td>
-				</tr>
-				`;
-				$('#tbody').append(temp);
-			})*/
 		},
 		error : function(err){
 			console.log('에러입니다');
@@ -271,16 +233,13 @@ function updateList(tests){
 				<td id="tProcess" class="min-width">
 					<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
 				</td>
-		</tr>
+			</tr>
+			
 		`;
-		
 		$('#tbody').append(temp);
+		process();
 	})
 }
-
-//testList(cId, page, searchQuery);
-
-
 
 //--------------------------------------------
 //날짜 포멧 변환 함수
@@ -300,25 +259,6 @@ var today = new Date();
 var today1 = formatDate(today);
 
 //--------------------------------------------
-// 시험목록 강의실 select 필터링
-//--------------------------------------------
-/* $('#classSelect').on('change', function(){
-	if($(this).val() == 0){
-		cId = 0;
-		testList(cId, page, searchQuery);
-	} else {
-		cId = $(this).val();
-		testList(cId, page, searchQuery);
-	}
-	
-	//--------------------------------------------
-	//날짜 비교해서 시험진행 상태 변경
-	//--------------------------------------------
-	//arry = [];
-	//process();
-}); */
-
-//--------------------------------------------
 //날짜 비교해서 시험진행 상태 변경
 //--------------------------------------------
 function process(){
@@ -334,10 +274,10 @@ function process(){
 		 }
 	});
 }
-//process();
 
 window.onload = function() {
 	testList();
 }
+
 </script>
 </html>
