@@ -38,6 +38,7 @@ import com.yedam.app.yedam_subjects.service.SubjectService;
  */
 // /teacher/~~
 @Controller
+
 public class HomeWorkController {
 
 	// 로컬 저장 경로
@@ -64,6 +65,7 @@ public class HomeWorkController {
 	// 과제 목록(교수)
 	// ----------------
 	@GetMapping("homeworkT")
+	
 	public String homework(Model model) {
 		List<CurriculumVO> classList = curriculumService.CurriculumList();
 		model.addAttribute("classId", classList);
@@ -197,18 +199,6 @@ public class HomeWorkController {
 	}
 
 	// ----------------
-	// 대댓글 조회
-	// ----------------
-	@GetMapping("commentList")
-	@ResponseBody
-	public List<CommentVO> commentList(@RequestParam("replyId") int replyId) {
-
-		List<CommentVO> comments = homeworkReplyService.commentList(replyId);
-
-		return comments;
-	}
-
-	// ----------------
 	// 댓글(파일) 등록 - 처리
 	// ----------------
 	@PostMapping("insertReply")
@@ -266,14 +256,28 @@ public class HomeWorkController {
 	@ResponseBody
 	public Map<String, Object> updateReply (@RequestParam("content")  String content,
 											@RequestParam("replyId") int replyId) {
-		System.err.println(content);
-		System.err.println(replyId);
-		
 		ReplyVO replyVO = new ReplyVO();
 		replyVO.setReplyContent(content);
 		replyVO.setReplyId(replyId);
 		return homeworkReplyService.replyUpdate(replyVO);
 	}
+	
+	// ----------------
+	// 대댓글 업데이트 - 처리
+	// ----------------
+	@PutMapping("updateComment")
+	@ResponseBody
+	public Map<String, Object> updateComment (@RequestParam("content")  String content,
+											@RequestParam("commentId") int commentId) {
+		System.err.println(content);
+		System.err.println(commentId);
+		
+		CommentVO commentVO = new CommentVO();
+		commentVO.setCommentContent(content);
+		commentVO.setCommentId(commentId);
+		return homeworkReplyService.commentUpdate(commentVO);
+	}
+	
 	
 
 }

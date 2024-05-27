@@ -24,6 +24,9 @@ public interface HomeWorkReplyMapper {
 
 	// 대댓글 등록
 	public int insertComment(CommentVO comment);
+	
+	// 대댓글 수정
+	public int updateComment(CommentVO commentVO);
 
 	// 대댓글 삭제
 	public int deleteComment(int comment);

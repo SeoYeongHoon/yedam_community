@@ -27,13 +27,12 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 	// 댓글 조회
 	@Override
 	public List<ReplyVO> replyList(int homeworkTargetId) {
-		return homeworkReplyMapper.selectReplyAll(homeworkTargetId);
-	}
-
-	// 대댓글 조회
-	@Override
-	public List<CommentVO> commentList(int replyId) {
-		return homeworkReplyMapper.selectComment(replyId);
+		List<ReplyVO> list =  homeworkReplyMapper.selectReplyAll(homeworkTargetId);
+		for(ReplyVO reply : list) {
+			reply.setComments(homeworkReplyMapper.selectComment(reply.getReplyId()));
+		}
+		
+		return list;
 	}
 
 	// 대댓글 등록
@@ -68,6 +67,23 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 		
 		map.put("result",isSuccessed);
 		map.put("reply", replyVO);
+		
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> commentUpdate(CommentVO commentVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		
+		int result = homeworkReplyMapper.updateComment(commentVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result",isSuccessed);
+		map.put("reply", commentVO);
 		
 		return map;
 	}
