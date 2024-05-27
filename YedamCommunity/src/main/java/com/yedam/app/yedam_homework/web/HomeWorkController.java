@@ -267,9 +267,14 @@ public class HomeWorkController {
 	// ----------------
 	@PutMapping("updateReply")
 	@ResponseBody
-	public Map<String, Object> updateReply (@RequestParam("replyVO")  ReplyVO replyVO) {
-		System.err.println(replyVO);
-		System.err.println(replyVO);
+	public Map<String, Object> updateReply (@RequestParam("content")  String content,
+											@RequestParam("replyId") int replyId) {
+		System.err.println(content);
+		System.err.println(replyId);
+		
+		ReplyVO replyVO = new ReplyVO();
+		replyVO.setReplyContent(content);
+		replyVO.setReplyId(replyId);
 		return homeworkReplyService.replyUpdate(replyVO);
 	}
 	

@@ -17,11 +17,11 @@ public interface CbtStudentService {
 	//시험결과유무
 	public int isTestResult(TestVO testVO);
 	//피드백유무
-	public int isTestFeedback(TestVO testVO);
+	public ExamResultVO isTestFeedback(TestVO testVO);
 	//재시험유무
 	public int isTestReexam(TestVO testVO);
 	//시험목록
-	public List<TestVO> testListAll(int userId);
+	public List<TestVO> testListAll(TestVO testVO);
 
 	
 	//시험문제 랜덤
@@ -48,10 +48,6 @@ public interface CbtStudentService {
 	
 	//시험결과
 	public ExamResultVO testResult(ExamResultVO examResultVO);
-	//시험결과 문제정보
-	public List<QuizboxVO> testResultQuiz1(QuizboxVO quizboxVO);
-	//시험결과 보기정보
-	public List<AnswerVO> testResultQuiz2(AnswerVO answerVO);
 	//테스트
-	public List<QuizboxVO> testTest(QuizboxVO quizboxVO);
+	public List<QuizboxVO> testResultQuiz(QuizboxVO quizboxVO);
 }

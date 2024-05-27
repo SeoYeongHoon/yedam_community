@@ -25,7 +25,7 @@ import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.Reply;
 import com.yedam.app.yedam_post.service.Report;
 /**
- * 게시판
+ * 게시판, 게시글
  * 2024.05.27
  * 임우열
  */
@@ -46,15 +46,16 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 리스트 조회
 	// --------------------------------------------
-	@GetMapping("/postList/{boardId}")
+	@GetMapping("/post/{boardId}")
 	public String postList(@PathVariable int boardId,
-	                       @RequestParam(defaultValue = "1") int page,
-	                       @RequestParam(defaultValue = "10") int pageSize,
+						   Post post,
+	                       @RequestParam(required = false, defaultValue = "1") int page,
+	                       @RequestParam(required = false, defaultValue = "10") int pageSize,
 	                       Model model) {
-
-	    List<Post> list = postService.getAllPosts(boardId);
-	    list = postService.getPosts(boardId , page, pageSize);
-	    int totalCount = postService.getPostCount(boardId);
+		
+	    post.setBoardId(boardId);
+	    List<Post> list = postService.getPosts(post , page, pageSize);
+	    int totalCount = postService.getPostCount(post);
 
 	    model.addAttribute("postList", list);
 	    model.addAttribute("totalCount", totalCount);
@@ -68,7 +69,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------
-	@GetMapping("/postInfo/{boardId}/{postId}")
+	@GetMapping("/post/{boardId}/{postId}")
 	public String getPostDetail(@PathVariable int boardId
 			                  , @PathVariable int postId
 			                  , Model model) {
@@ -95,28 +96,20 @@ public class PostController {
 		
 		return "posts/postInfo";
 	}
-	
-    //--------------------------------------------
-    // 게시글 검색
-    //--------------------------------------------
-	@GetMapping("/postList/{boardId}/search")
-	public String searchPosts(@PathVariable int boardId,
-	                          @RequestParam("keyword") String keyword,
-	                          Model model) {
-
-	    List<Post> list = postService.searchPosts(boardId, keyword);
-	    model.addAttribute("postList", list);
-	    model.addAttribute("boardId", boardId);
-	    return "posts/postList";
-	}
-
 	// --------------------------------------------
 	// 게시글 등록
 	// --------------------------------------------
 	@GetMapping("/postInsert/{boardId}")
-    public String postInsertForm(Model model, @PathVariable int boardId) {
+    public String postInsertForm(Model model
+    		                   , @PathVariable int boardId
+    		                   , Authentication authentication) {
         Post post = new Post();
         post.setBoardId(boardId);
+        
+        
+        // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
+        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+        post.setWriter(userVO.getNickname());
         model.addAttribute("post", post);
         return "posts/postinsert";
     }
@@ -124,38 +117,44 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록 처리
 	// --------------------------------------------
-    @PostMapping("/postInsert")
-    public String postInsertProcess(Post post
-    		                      , @RequestParam("file") MultipartFile file
-    		                      , Authentication authentication) {
+	@PostMapping("/postInsert")
+	public String postInsertProcess(Post post, 
+	                                @RequestParam("file") MultipartFile file, 
+	                                Authentication authentication) {
+	    try {
+	        if (!file.isEmpty()) {
+	            String fileName = file.getOriginalFilename();
+	            
+	            String filePath = uploadPath + "/" + fileName;
+	            
+	            File directory = new File(uploadPath);
+	            if (!directory.exists()) {
+	                directory.mkdirs();
+	            }
+	            
+	            File dest = new File(filePath);
+	            file.transferTo(dest);
+	            
+	            post.setBoardfileName(fileName);
+	            post.setBoardfileSize(file.getSize());
+	            post.setBoardfileLocation(fileName);
+	            post.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
+	        }
 
-        try {
-            if (!file.isEmpty()) {
-                String fileName = file.getOriginalFilename();
+	        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+	        post.setUserId(userVO.getuserId());
+	        post.setWriter(userVO.getNickname());
+	        
+	        post.setCreateDate(new Date());
+	        post.setUpdateDate(new Date());
+	        postService.createPost(post);
 
-                String filePath = uploadPath + fileName;
-                File dest = new File(filePath);
-                file.transferTo(dest);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return "redirect:/post/" + post.getBoardId();
+	}
 
-                post.setBoardfileName(fileName);
-                post.setBoardfileSize(file.getSize());
-                post.setBoardfileLocation(fileName);
-                post.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
-            }
-            LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-            post.setUserId(userVO.getuserId());
-            
-            // 주어진 게시판 ID 사용
-            post.setCreateDate(new Date());
-            post.setUpdateDate(new Date());
-            postService.createPost(post);
-            
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "redirect:/postList/"+ post.getBoardId() ;
-    }
 
 	// --------------------------------------------
 	// 게시글 삭제 처리
@@ -169,20 +168,23 @@ public class PostController {
 		post.setBoardId(boardId);
 		postService.PostDelete(post);
 
-		return "redirect:/postList/" + boardId;
+		return "redirect:/post/" + boardId;
 	}
 
 	// --------------------------------------------
 	// 게시글 업데이트
 	// --------------------------------------------
-	@GetMapping("/postUpdate/{boardId}")
-	public String postUpdateForm(Integer postId,Integer boardId , Model model) {
+	@GetMapping("/postUpdate/{boardId}/{postId}")
+	public String postUpdateForm(@PathVariable Integer boardId
+			                   , @PathVariable Integer postId
+			                   , Model model) {
 
 		if (postId == null) {
-			return "redirect:postList";
+			return "redirect:/post/" + boardId;
 		}
 		Post post = postService.getPostReplies(postId, boardId);
-		model.addAttribute("postInfo", post);
+		model.addAttribute("post", post);
+		model.addAttribute("boardId", boardId);
 		return "posts/postUpdate";
 	}
 

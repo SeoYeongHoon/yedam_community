@@ -25,11 +25,11 @@ public interface CbtStudentMapper {
 	//시험결과유뮤
 	public int isTestResult(TestVO testVO);
 	//피드백유무
-	public int isTestFeedback(TestVO testVO);
+	public ExamResultVO isTestFeedback(TestVO testVO);
 	//재시험유무
 	public int isTestReexam(TestVO testVO);
 	//시험목록
-	public List<TestVO> selectTestListAll(int userId);
+	public List<TestVO> selectTestListAll(TestVO testVO);
 	
 	//시험문제 랜덤
 	public List<QuizboxVO> selectTestQuizRand(QuizboxVO quizboxVO);
@@ -53,10 +53,6 @@ public interface CbtStudentMapper {
 	
 	//시험결과 정보
 	public ExamResultVO selectTestResult(ExamResultVO examResultVO);
-	//시험결과 문제정보
-	public List<QuizboxVO> selectTestResultQuiz1(QuizboxVO quizboxVO);
-	//시험결과 보기 정보
-	public List<AnswerVO> selectTestResultQuiz2(AnswerVO answerVO);
-	//테스트
-	public List<QuizboxVO> selectTest(QuizboxVO quizboxVO);
+	//시험결과 문제
+	public List<QuizboxVO> selectTestResultQuiz(QuizboxVO quizboxVO);
 }

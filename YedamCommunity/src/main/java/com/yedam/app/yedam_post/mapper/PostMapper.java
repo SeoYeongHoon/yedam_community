@@ -8,23 +8,12 @@ import org.apache.ibatis.annotations.Param;
 import com.yedam.app.yedam_post.service.Post;
 
 public interface PostMapper {
-	
-    //--------------------------------------------
-    // 전체 조회
-    //--------------------------------------------
-    List<Post> getAllPosts(@Param("boardId") int boardId);
 
     //--------------------------------------------
     // 단건조회
     //--------------------------------------------
     Post getPostDetails(@Param("postId") int postId
     		          , @Param("boardId") int boardId);
-    
-    //--------------------------------------------
-    // 게시글 검색
-    //--------------------------------------------
-    List<Post> searchPosts(@Param("boardId") int boardId
-    		             , @Param("keyword") String keyword);
 
     //--------------------------------------------
     // 조회수
@@ -70,20 +59,20 @@ public interface PostMapper {
     //--------------------------------------------
     // 게시글 삭제
     //--------------------------------------------
-    int deletePost1(int postId);
-    int deletePost2(int postId);
-    int deletePost3(int postId);
-    int deletePost5(int postId);
+    int deletePost1(int postId, int boardId);
+    int deletePost2(int postId, int boardId);
+    int deletePost3(int postId, int boardId);
+    int deletePost5(int postId, int boardId);
 
     //--------------------------------------------
     // 페이지네이션
     //--------------------------------------------
-    List<Post> getPosts(@Param("boardId") int boardId
+    List<Post> getPosts(Post post
     		          , @Param("startRow") int startRow
     		          , @Param("endRow") int endRow);
 
     //--------------------------------------------
     // 게시글 개수
     //--------------------------------------------
-    int getPostCount(@Param("boardId") int boardId);
+    int getPostCount(Post post);
 }

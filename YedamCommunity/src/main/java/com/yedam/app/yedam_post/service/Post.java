@@ -22,6 +22,7 @@ public class Post {
     private int postLike;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updateDate;
+    private String keyword;
     
     private int boardfileId;
     private String boardfileName;

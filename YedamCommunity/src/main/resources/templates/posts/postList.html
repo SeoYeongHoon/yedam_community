@@ -36,7 +36,7 @@
     <!-- 검색 폼 추가 -->
     <form id="searchForm">
       <input type="text" id="searchKeyword" placeholder="검색어를 입력하세요" />
-      <button type="button" onclick="searchPosts()">검색</button>
+      <button type="button" onclick="searchPosts()" >검색</button>
     </form>
     <table class="table">
       <thead>
@@ -50,7 +50,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr th:each="info : ${postList}" th:onclick="|location.href='@{/postInfo/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
+        <tr th:each="info : ${postList}" th:onclick="|location.href='@{/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
           <td th:text="${info.postId}">1</td>
           <td th:text="${info.title}">제목</td>
           <td th:text="${info.writer}">작성자</td>
@@ -63,25 +63,25 @@
     <div class="center">
       <div class="pagination col-lg-6">
         <div th:if="${currentPage > 1}">
-          <a th:href="@{/postList/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
+          <a th:href="@{/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
         </div>
         <div th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
-          <a th:href="@{/postList/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
+          <a th:href="@{/post/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
              th:text="${page}"
              th:classappend="${page == currentPage} ? 'active'"></a>
         </div>
         <div th:if="${currentPage < (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1)}">
-          <a th:href="@{/postList/{boardId}(boardId=${boardId}, page=${currentPage + 1}, pageSize=${pageSize})}">&raquo;</a>
+          <a th:href="@{/post/{boardId}(boardId=${boardId}, page=${currentPage + 1}, pageSize=${pageSize})}">&raquo;</a>
         </div>
       </div>
     </div>
   </div>
 
-  <script>
+  <script th:inline="javascript">
     function searchPosts() {
       const keyword = document.getElementById('searchKeyword').value;
-      const boardId = /* Get the boardId dynamically if needed, e.g., from URL */
-      location.href = `/postList/${boardId}/search?keyword=${keyword}`;
+      const boardId = [[${boardId}]];
+      location.href = `/post/${boardId}?keyword=${keyword}`;
     }
   </script>
 </html>
