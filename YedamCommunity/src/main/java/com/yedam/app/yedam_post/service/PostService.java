@@ -9,11 +9,6 @@ public interface PostService {
 	// 게시글 등록
 	//--------------------------------------------
 	public int createPost(Post post);
-	
-	//--------------------------------------------
-	// 게시글 전체 조회
-	//--------------------------------------------
-	public List<Post> getAllPosts(int boardId);
     
 	//--------------------------------------------
     // 게시글 삭제
@@ -28,22 +23,17 @@ public interface PostService {
     //--------------------------------------------
     // 게시글 페이지네이션
     //--------------------------------------------
-    public List<Post> getPosts(int boardId, int page, int pageSize);
+    public List<Post> getPosts(Post post, int page, int pageSize);
     
     //--------------------------------------------
     // 게시글 개수 체크
     //--------------------------------------------
-    public int getPostCount(int boardId);
+    public int getPostCount(Post post);
     
     //--------------------------------------------
     // 게시글 상세조회
     //--------------------------------------------
 	public Post getPostReplies(int postId, int boardId);
-	
-    //--------------------------------------------
-    // 게시글 검색
-    //--------------------------------------------
-    public List<Post> searchPosts(int boardId, String keyword);
 	
 	//--------------------------------------------
 	// 게시글 조회수

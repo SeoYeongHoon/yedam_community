@@ -42,28 +42,12 @@ public class PostServiceImpl implements PostService {
 	}
 	
 	//--------------------------------------------
-	// 게시글 전체 조회
-	//--------------------------------------------
-	@Override
-	public List<Post> getAllPosts(int boardId) {
-		return postMapper.getAllPosts(boardId);
-	}
-
-	//--------------------------------------------
 	// 게시글 단건조회
 	//--------------------------------------------
 	@Override                  
 	public Post getPostReplies(int postId, int boardId) {
 		return postMapper.getPostDetails(postId, boardId);
 	}
-	
-    //--------------------------------------------
-    // 게시글 검색
-    //--------------------------------------------
-    @Override
-    public List<Post> searchPosts(int boardId, String keyword) {
-        return postMapper.searchPosts(boardId, keyword);
-    }
 	
 	//--------------------------------------------
 	// 게시글 수정
@@ -89,12 +73,13 @@ public class PostServiceImpl implements PostService {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			int postId = post.getPostId();
-			postMapper.deletePost1(postId); // 대댓글 삭제
-			postMapper.deletePost2(postId); // 댓글 삭제
-			postMapper.deletePost3(postId); // 파일 삭제
+			int boardId = post.getBoardId();
+			postMapper.deletePost1(postId, boardId); // 대댓글 삭제
+			postMapper.deletePost2(postId, boardId); // 댓글 삭제
+			postMapper.deletePost3(postId, boardId); // 파일 삭제
 			                                   
-			                                // 사이에 들어갈 삭제목록 자리들
-			postMapper.deletePost5(postId); // 게시글 삭제
+			                                         // 사이에 들어갈 삭제목록 자리들
+			postMapper.deletePost5(postId, boardId); // 게시글 삭제
 
 			resultMap.put("status", "success");
 		} catch (Exception e) {
@@ -108,18 +93,18 @@ public class PostServiceImpl implements PostService {
 	// 게시글 페이지 네이션
 	//--------------------------------------------
     @Override
-    public List<Post> getPosts(int boardId, int page, int pageSize) {
+    public List<Post> getPosts(Post post, int page, int pageSize) {
         int startRow = (page - 1) * pageSize;
         int endRow = page * pageSize;
-        return postMapper.getPosts(boardId, startRow, endRow);
+        return postMapper.getPosts(post, startRow, endRow);
     }
     
     //--------------------------------------------
     // 게시글 개수
     //--------------------------------------------
     @Override
-    public int getPostCount(int boardId) {
-        return postMapper.getPostCount(boardId);
+    public int getPostCount(Post post) {
+        return postMapper.getPostCount(post);
     }
     
     //--------------------------------------------
@@ -217,28 +202,6 @@ public class PostServiceImpl implements PostService {
 	public int updateLikeCancel(int postId){
 		return postMapper.updatePostLikeMinus(postId);
 	}
-
-//	//--------------------------------------------
-//	// 게시글 추천 시 Check를 1로 만들어서 중복방지
-//	//--------------------------------------------
-//	@Override
-//	public int updateLikeCheck(int postId, int userId){
-//		Map<String, Object> map = new HashMap<>();
-//        map.put("postId", postId);
-//        map.put("userId", userId);
-//        return postMapper.updatePostLikeOne(map);
-//	}
-//
-//	//--------------------------------------------
-//	// 게시글 추천 시 Check를 0로 만들어서 중복방지
-//	//--------------------------------------------
-//	@Override
-//	public int updateLikeCheckCancel(int postId, int userId){
-//		Map<String, Object> map = new HashMap<>();
-//        map.put("postId", postId);
-//        map.put("userId", userId);
-//        return postMapper.updatePostLikeZero(map);
-//	}
 
 	//--------------------------------------------
 	// 추천 확인
