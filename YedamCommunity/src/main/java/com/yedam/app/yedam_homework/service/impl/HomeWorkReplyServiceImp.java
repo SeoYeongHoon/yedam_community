@@ -54,7 +54,7 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 		return homeworkReplyMapper.deleteReply(replyid);
 	}
 
-	// 과제 삭제
+	// 댓글 수정
 	@Override
 	public Map<String, Object> replyUpdate(ReplyVO replyVO) {
 		Map<String, Object> map = new HashMap<>();
