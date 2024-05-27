@@ -261,3 +261,10 @@ a.control_next {
 .myMenuItem > a:hover {
 	color: #0090f9;
 }
+
+#post_container {
+	max-width: 1280px;
+	padding-top: 30px;
+	margin: 0 auto;
+	position: relative;
+}

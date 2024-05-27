@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserVO;
 
@@ -43,6 +44,7 @@ public interface UserMapper {
 	// 페이지네이션 카운트
 	int getTotalCnt(String filter, String searchQuery);
 
+	// 유저리스트 페이징 및 필터링
 	public List<UserVO> getUsersByFilter(Map<String, Object> params);
 
 	// 회원 상세 정보
@@ -70,4 +72,5 @@ public interface UserMapper {
 	
 	// 회원정보 수정
 	public void updateUserInfo(UserVO userVO);
+	
 }

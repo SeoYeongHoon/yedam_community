@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_homework.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yedam.app.yedam_homework.service.HomeWorkTargetVO;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
@@ -39,4 +40,10 @@ public interface HomeWorkMapper {
 
 	// 최근 과제 출력
 	public List<HomeWorkVO> selectRecentHomework(int userId);
+	
+	// 과제 페이징 및 필터링
+	public List<HomeWorkVO> getHomeworksByFilter(Map<String, Object> params);
+	
+	// 페이징용 카운트
+	int getTotalCnt(String filter, String searchQuery);
 }

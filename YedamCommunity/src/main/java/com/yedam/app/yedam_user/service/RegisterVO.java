@@ -15,6 +15,7 @@ public class RegisterVO {
 //	private Integer isComplete;
 	private String userType;
 	private Integer curriculumId;
+	private String curriculumName;
 	
 	private String profileImageName;
 	private double profileImageSize;

@@ -222,7 +222,7 @@
 		        filterUsers(1); // 필터 변경 시 1페이지부터 다시 시작
 		    });
 
-		    $('#searchInput').off('keydown').on('keydown', function(e) {
+		    $('#searchInput').off('keyup').on('keyup', function(e) {
 		    	filterUsers(1); // 검색어 입력하거나 지울 시 실시간으로 데이터 변경후 페이지 1로 고정
 		    });
 		    

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yedam.app.yedam_common.LoginUserVO;
+import com.yedam.app.yedam_common.SecurityUtils;
+import com.yedam.app.yedam_examstudent.service.CbtStudentService;
+import com.yedam.app.yedam_examstudent.service.TestVO;
+import com.yedam.app.yedam_homework.service.HomeWorkService;
+import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
 import com.yedam.app.yedam_user.upload.service.ProfileImageService;
@@ -29,27 +35,46 @@ public class ProfileController {
 	UserService userService;
 	
 	@Autowired
+	HomeWorkService homeWorkService;
+	
+	@Autowired
 	ProfileImageService profileImageService;
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	CbtStudentService cbtStudentService;
+	
 	@GetMapping("/mypage")
-	public String myPage() {
+	public String myPage(TestVO testVO,
+						 HomeWorkVO homeWorkVO,
+						 Model model) {
+		System.out.println("유저정보: " + SecurityUtils.getCurrentLogId());
+		int logid = SecurityUtils.getCurrentLogId();
+		List<TestVO> testList = cbtStudentService.recentTest(logid);
+		model.addAttribute("recentTest", testList);
+		
+		List<HomeWorkVO> homeworkList = homeWorkService.getRecentTest(logid);
+		model.addAttribute("recentHomework", homeworkList);
+		System.out.println("과제 리스트:" + homeworkList);
+		
 		return "profile/mypage";
 	}
 	
+	// 개인정보 수정
 	@PostMapping("/updateUserInfo")
 	@ResponseBody
-	public ResponseEntity<String> updateUser(@RequestParam("id") String id,
-							 @RequestParam("username") String name,
-				             @RequestParam("userpassword") String password,
-				             @RequestParam("useremail") String email,
-				             @RequestParam("usertel") String tel,
-				             @RequestParam("userpassword_confirm") String passwordConfirm,
-				             MultipartFile[] uploadFiles,
-				             RedirectAttributes rttr,
-				             HttpServletRequest req) {
+	public ResponseEntity<String> updateUser(@RequestParam("logid") int userId,
+											 @RequestParam("id") String id,
+											 @RequestParam("username") String name,
+								             @RequestParam("userpassword") String password,
+								             @RequestParam("useremail") String email,
+								             @RequestParam("usertel") String tel,
+								             @RequestParam("userpassword_confirm") String passwordConfirm,
+								             MultipartFile[] uploadFiles,
+								             RedirectAttributes rttr,
+								             HttpServletRequest req) {
 		
 		UserVO userVO = new UserVO();
 		userVO.setId(id);
@@ -96,5 +121,13 @@ public class ProfileController {
         
         userService.updateUserInfo(userVO);
         return ResponseEntity.ok("Success");
+	}
+	
+	// 회원 탈퇴
+	@GetMapping("/quitUser")
+	public String quitUserRequest(int userId) {
+		userService.removeUser(userId);
+		
+		return "redirect:/";
 	}
 }

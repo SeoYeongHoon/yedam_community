@@ -28,45 +28,14 @@ public class CbtStudentController {
 	//service주입
 	@Autowired
 	CbtStudentService cbtStudentService;
-	
-	//ㅡㅡㅡㅡㅡ
-	//마이페이지
-	//ㅡㅡㅡㅡㅡ
-	@GetMapping("myPage")
-	public String myPage(TestVO testVO,
-						 UserVO userVO,
-						 Model model) {
-		String logid ="14";
-		UserVO info = cbtStudentService.myPageInfo(Integer.parseInt(logid));
-		List<TestVO> list = cbtStudentService.recentTest(Integer.parseInt(logid));
-		int[] array1 = new int[list.size()];
-		//int[] array2 = new int[list.size()];
-		int[] array3 = new int[list.size()];
-		for(int i = 0; i < list.size(); i++) {
-			testVO.setTestId(list.get(i).getTestId());
-			testVO.setTestId(Integer.parseInt(logid));
-			array1[i] = cbtStudentService.isTestResult(testVO);
-			testVO.setTestId(list.get(i).getTestId());
-			testVO.setTestId(Integer.parseInt(logid));
-			//array2[i] = cbtStudentService.isTestFeedback(testVO);
-			testVO.setTestId(list.get(i).getTestId());
-			testVO.setTestId(Integer.parseInt(logid));
-			array3[i] = cbtStudentService.isTestReexam(testVO);
-		}
-		model.addAttribute("userInfo", info);
-		model.addAttribute("recentTest", list);
-		model.addAttribute("isResult", array1);
-		//model.addAttribute("isFeedback", array2);
-		model.addAttribute("isReexam", array3);
-		return "cbt_student/myPage";
-	}
+
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//내정보수정 AJAX
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	@PostMapping("updateInfo")
-	public boolean updateInfo() {
-		return true;
-	}
+//	@PostMapping("updateInfo")
+//	public boolean updateInfo() {
+//		return true;
+//	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	//회원탈퇴 AJAX
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ

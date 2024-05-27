@@ -20,9 +20,17 @@ public class SecurityUtils {
         }
         return null;
     }
+    
+    // 유저 넘버링(user_id_seq.NEXTVAL 값 - int)
+    public static int getCurrentLogId() {
+    	LoginUserVO currentUser = getCurrentUser();
+    	return currentUser != null ? currentUser.getuserId() : null;
+    }
 
+    // 유저 로그인ID (문자열 id 값)
     public static String getCurrentUserId() {
         LoginUserVO currentUser = getCurrentUser();
         return currentUser != null ? currentUser.getUserId() : null;
     }
+    
 }

@@ -1,6 +1,8 @@
 package com.yedam.app.yedam_homework.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,6 +81,23 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	@Override
 	public List<HomeWorkVO> getRecentTest(int userId) {
 		return homeworkMapper.selectRecentHomework(userId);
+	}
+
+
+	@Override
+	public List<HomeWorkVO> getHomeworksByFilter(String filter, int page, String searchQuery) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("filter", filter);
+		params.put("page", page);
+		params.put("searchQuery", searchQuery);
+		
+		return homeworkMapper.getHomeworksByFilter(params);
+	}
+
+
+	@Override
+	public int getTotalCnt(String filter, String searchQuery) {
+		return homeworkMapper.getTotalCnt(filter, searchQuery);
 	}
 	
 }

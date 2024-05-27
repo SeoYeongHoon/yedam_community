@@ -63,7 +63,7 @@ public class PostController {
 	    model.addAttribute("pageSize", pageSize);
 	    model.addAttribute("boardId", boardId);
 
-	    return "posts/postlist";
+	    return "posts/postList";
 	}
 	
 	// --------------------------------------------
@@ -96,7 +96,6 @@ public class PostController {
 		
 		return "posts/postInfo";
 	}
-	
 	// --------------------------------------------
 	// 게시글 등록
 	// --------------------------------------------

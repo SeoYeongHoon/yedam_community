@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yedam.app.yedam_homework.service.HomeWorkVO;
+
 public interface UserService {
 
 	// CSV 학생 데이터 tempusers 테이블에 저장
