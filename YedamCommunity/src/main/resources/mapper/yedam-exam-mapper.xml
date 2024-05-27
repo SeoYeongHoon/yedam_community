@@ -19,6 +19,7 @@
 	                               ON t.curriculum_id = c.curriculum_id) b                     
 	             WHERE (LOWER(test_name) LIKE '%' || LOWER(#{searchQuery}) || '%')
 	             <if test=" classId!=0 ">
+
 	             AND class_id = #{classId}
 	             </if> 
 	             <![CDATA[

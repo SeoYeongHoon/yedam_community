@@ -220,7 +220,7 @@
         FROM posts
         WHERE board_id = #{boardId}
         <if test = 'keyword != null and ! "".equals(keyword)'>
-      		AND(title LIKE '%' || #{keyword}    ||'%'
+      		AND(title LIKE '%' || #{keyword} ||'%'
             OR post_content LIKE '%' || #{keyword} || '%'
             OR writer LIKE '%' || #{keyword} || '%' )
     	</if>
@@ -228,7 +228,7 @@
 
 	<sql id="condition">
 	 <if test = 'post.keyword != null and ! "".equals(post.keyword)'>
-      			AND(title LIKE '%' || #{post.keyword}    ||'%'
+      			AND(title LIKE '%' || #{post.keyword} ||'%'
                           OR post_content LIKE '%' || #{post.keyword} || '%'
                              OR writer LIKE '%' || #{post.keyword} || '%' )
     	        </if>

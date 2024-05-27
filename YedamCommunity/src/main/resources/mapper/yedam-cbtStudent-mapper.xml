@@ -35,17 +35,22 @@
         AND     a.test_id = #{testId}
 	</select>
 	<!-- 피드백유무 -->
-	<select id="isTestFeedback" resultType="int">
-		SELECT  COUNT(b.feedback)
+	<select id="isTestFeedback" resultType="ExamResultVO">
+		SELECT  NVL(MAX(c.test_name),0) AS test_name
+				,NVL(MAX(b.result_score),0) AS result_score
+				,NVL(MAX(b.pass_score),0) AS pass_score
+				,NVL(MAX(b.feedback),0) AS feedback
         FROM    test_targets a
                 JOIN exam_results b 
                 ON(a.test_target_id = b.test_target_id)
+                JOIN tests c
+                ON(a.test_id = c.test_id)
         WHERE   a.user_id = #{userId}
         AND     a.test_id = #{testId}
 	</select>
 	<!-- 재시험유무 -->
 	<select id="isTestReexam" resultType="int">
-		SELECT  COUNT(b.is_reexam)
+		SELECT  NVL(MAX(b.is_reexam),2)
         FROM    test_targets a
                 JOIN exam_results b 
                 ON(a.test_target_id = b.test_target_id)
@@ -70,21 +75,27 @@
 		<![CDATA[
 		WHERE   rn <= 5	]]>
 	</select>
-	<!-- 시험목록 -->
+	<!-- 시험목록 정보 -->
 	<select id="selectTestListAll" resultType="TestVO">
-		SELECT  a.test_id
-       			,a.test_date
-       			,a.test_name
-       			,d.name
-		FROM    tests a 
-		        JOIN test_targets b
-		        ON(a.test_id = b.test_id)
-     		    JOIN users d
-                ON(b.user_id = d.user_id)
-		WHERE   b.user_id = #{userId}
-		ORDER BY a.test_date desc
+		SELECT  a.*
+  		FROM    (SELECT  a.test_id
+       					 ,a.test_date
+       					 ,a.test_name
+       					 ,d.name
+                		 ,ROWNUM AS rn
+			 	 FROM    tests a 
+		        		 JOIN test_targets b
+		        		 ON(a.test_id = b.test_id)
+     		    		 JOIN users d
+                		 ON(b.user_id = d.user_id)
+				 WHERE   b.user_id = #{userId}
+				 ORDER BY a.test_date DESC
+				 		  ,a.test_id ASC) a
+    	WHERE   a.rn > (#{page} - 1) * 5 
+    	<![CDATA[
+    	AND     a.rn <= #{page} * 5 ]]>
 	</select>
-	<!-- 시험상세 -->
+	<!-- 시험상세 정보 -->
 	<select id="selectTestDetail" resultType="TestVO">
 		WITH b as (SELECT test_id
 		                  ,subject_id             
@@ -352,34 +363,8 @@
 		WHERE   b.user_id = #{userId}
 		AND     b.test_id = #{testId}
 	</select>
-	<!-- 시험결과 문제정보 -->
-	<select id="selectTestResultQuiz1" resultType="QuizboxVO">
-		SELECT  a.quiz_content
-                ,a.quiz_score
-                ,b.quiz_solution
-                ,c.test_answer
-                ,c.is_correct
-        FROM    quizbox a
-        		JOIN quizes b
-        		ON(a.quiz_id = b.quiz_id)
-        		JOIN test_results c
-        		ON(b.quiz_id = c.quiz_id)
-        WHERE   a.test_id = #{testId}
-        AND     a.subject_id = #{subjectId}
-	</select>
-	<!-- 시험결과 보기정보 -->
-	<select id="selectTestResultQuiz2" resultType="AnswerVO">
-		SELECT  a.example_num
-		        ,a.text_content
-		        ,a.example_answer
-        FROM    answers a JOIN quizbox b
-                ON(a.quiz_id = b.quiz_id)
-        WHERE   a.subject_id = #{subjectId} 
-        AND     b.test_id = #{testId}
-       	ORDER BY a.example_num
-	</select>
-	<!-- 시험결과 테스트 정보 -->
-	<select id="selectTest" resultType="QuizboxVO">
+	<!-- 시험결과 문제 정보 -->
+	<select id="selectTestResultQuiz" resultType="QuizboxVO">
 		<!-- 임시 테이블 정의 -->
 		WITH a AS(
         SELECT  a.example_num

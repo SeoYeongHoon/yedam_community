@@ -202,8 +202,6 @@ public class Post {
 	public void setBoardFiles(List<BoardFiles> boardFiles) {
 		this.boardFiles = boardFiles;
 	}
-
-    
     
     
 }
