@@ -18,4 +18,11 @@ public class CurriculumVO {
 	private int isComplete;
 	private int classId;
 	private String curriculumImg;
+	
+	//과목명
+	private int subjectId;
+	private String subjectName;
+	
+	//회원
+	private int userId;
 }

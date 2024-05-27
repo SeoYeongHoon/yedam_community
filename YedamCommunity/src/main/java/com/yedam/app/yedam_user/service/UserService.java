@@ -63,4 +63,9 @@ public interface UserService {
 	public boolean removeUser(int userId);
 
 	public boolean isUserExist(String id);
+	
+	// 회원정보 수정
+	public void updateUserInfo(UserVO userVO);
+
+	public UserVO getByUserId(String userId);
 }

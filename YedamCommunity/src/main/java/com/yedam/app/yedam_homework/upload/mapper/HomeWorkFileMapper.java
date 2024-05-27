@@ -22,7 +22,7 @@ public interface HomeWorkFileMapper {
 	public int insertReplyfFile(ReplyFileVO replyfileVO);
 
 	// 댓글 파일 조회
-	public List<ReplyFileVO> selectReplyfile(ReplyVO reply);
+	public List<ReplyFileVO> selectReplyfile(int replyId);
 
 	// 과제 파일 이름 조회
 	public String selectReplyFileName(String downloadLocation);

@@ -6,40 +6,53 @@
 <meta charset="UTF-8">
 <title>selectClass</title>
 <div class="container-fluid">
-          <div class="title-wrapper pt-30">
-            <div class="row align-items-center">
-              <div class="col-md-6">
-                <div class="title">
-                  <h2><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">강의실 선택</font></font></h2>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 강의실 항목 -->
-          <div class="cards-styles" >
-            <div class="row" >
-              <div class="col-4" th:each="classInfo : ${class}">
-                <div class="card-style-1 mb-30">
-                  <div class="card-content" th:onclick="|location.href='@{/testinsert(curriculumId=${classInfo.curriculumId})}'|">
-                    <h4>
-                    	<font style="vertical-align: inherit;">
-                    		<font style="vertical-align: inherit;">[[${classInfo.classId}]]강의실</font>
-                    	</font>
-                    </h4>
-                    <hr>
-                    <p>
-                    	<font style="vertical-align: inherit;">
-                    		<font style="vertical-align: inherit;">[[${classInfo.curriculumName}]]</font>
-                   		</font>
-                   		<font style="vertical-align: inherit;">
-                    		<font style="vertical-align: inherit;"><[[${#dates.format(classInfo.curriculumStartDate,'yyyy년MM월dd일')}]]~[[${#dates.format(classInfo.curriculumEndDate,'yyyy년MM월dd일')}]]></font>
-                   		</font>
-                   	</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 강의실 항목 end -->
-        </div>
+	<div class="title-wrapper pt-30">
+		<div class="row align-items-center">
+			<div class="col-md-6">
+				<div class="title">
+					<h2>
+						<font style="vertical-align: inherit;"><font
+							style="vertical-align: inherit;">강의실 선택</font></font>
+					</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 강의실 항목 -->
+	<div class="cards-styles">
+		<div class="row">
+			<div class="col-4 curri" th:each="classInfo, idx : ${class}">
+				<input type="hidden" th:id="${idx.index}" th:value="${classInfo.curriculumId}"/>
+				<div class="card-style-1 mb-30">
+					<div class="card-content"
+						th:onclick="|location.href='@{/testinsert(curriculumId=${classInfo.curriculumId})}'|">
+						<h4>
+							<font style="vertical-align: inherit;"> 
+								<font style="vertical-align: inherit;">[[${classInfo.classId}]]강의실</font>
+							</font>
+						</h4>
+						<hr>
+						<p>
+							<font style="vertical-align: inherit;"> 
+								<font style="vertical-align: inherit;">[[${classInfo.curriculumName}]]</font>
+							</font> 
+							<br>
+							<font style="vertical-align: inherit;"> 
+								<font style="vertical-align: inherit;"><[[${#dates.format(classInfo.curriculumStartDate,'yyyy년MM월dd일')}]]~[[${#dates.format(classInfo.curriculumEndDate,'yyyy년MM월dd일')}]]></font>
+							</font>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 강의실 항목 end -->
+</div>
+<script>
+var currId = 0;
+$('.curri').on('click', function(){
+	currId = $(this).children().val();
+	window.localStorage.setItem('curriculumId', currId);
+});
+</script>
 </html>

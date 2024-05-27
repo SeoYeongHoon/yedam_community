@@ -25,6 +25,7 @@ public interface CurriculumMapper {
 	// 과정 선택 리스트(회원가입 때 사용)
 	public List<CurriculumVO> selectAllCurriculums();
 	
-	
+	//해당 과정 과목명 조회
+	public List<CurriculumVO> subjectSelectAll(int userid);
 	
 }

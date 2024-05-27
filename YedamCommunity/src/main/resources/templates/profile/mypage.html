@@ -3,42 +3,374 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{common/layouts/default_layout}"
 	  layout:fragment="Home">
+	<script>
+		function showProfileForm() {
+			document.querySelector('.mypage_manage_container').style.display = 'none';
+			document.querySelector('.mypage_profile_container').style.display = 'block';
+			setActiveMenuItem('.mypage_profile_menu');
+		}
+		
+		function showManageForm() {
+			document.querySelector('.mypage_manage_container').style.display = 'block';
+			document.querySelector('.mypage_profile_container').style.display = 'none';
+			setActiveMenuItem('.mypage_manage_menu');
+		}
+		
+		function setActiveMenuItem(selector) {
+            document.querySelectorAll('.mypage_menu_item').forEach(item => {
+                item.classList.remove('form_active');
+            });
+            document.querySelector(selector).classList.add('form_active');
+        }
+		
+		function showBoardForm() {
+			document.querySelector('.mypage_exam_homework').style.display = 'none';
+			document.querySelector('.mypage_my_board').style.display = 'block';
+			setActiveMenuItem2('.manage_board_menu');
+		}
+		
+		function showExamHomeworkForm() {
+			document.querySelector('.mypage_exam_homework').style.display = 'block';
+			document.querySelector('.mypage_my_board').style.display = 'none';
+			setActiveMenuItem2('.manage_exam_homework_menu');
+		}
+		
+		function setActiveMenuItem2(selector) {
+			document.querySelectorAll('.manage_menu_item').forEach(item => {
+				item.classList.remove('menu_active');
+			});
+			document.querySelector(selector).classList.add('menu_active');
+		}
+
+
+		document.addEventListener('DOMContentLoaded', () => {
+		    showProfileForm();
+			showBoardForm();
+		});
+	</script>
 	
 	<div id="mypage_container">
-		<h1>마이페이지</h1>
+		<aside class="mypage_menu">
+			<nav>
+				<div style="color: black; font-weight: bold; font-size: 15pt; margin-bottom: 30px;">내 계정</div>
+				<div>
+					<a class="mypage_profile_menu mypage_menu_item" href="#" onclick="showProfileForm()">
+						<svg style="width: 40px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="text-gray-600 dark:text-gray-400 -ml-1 mr-3 h-6 w-6 shrink-0 group-hover:text-gray-800 dark:group-hover:text-gray-200">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"></path>
+						</svg>
+						<p style="font-weight: bold;">프로필</p>
+					</a>
+					<a class="mypage_manage_menu mypage_menu_item" href="#" onclick="showManageForm()">
+						<svg style="width: 40px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class=" text-gray-400 dark:text-gray-600 -ml-1 mr-3 h-6 w-6 shrink-0 group-hover:text-gray-800 dark:group-hover:text-gray-200">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path>
+						</svg>
+						<p style="font-weight: bold;">서비스 관리</p>
+					</a>
+				</div>
+			</nav>			
+		</aside>
 		<div class="mypage_wrapper">
-			
-			<div class="mypage_info">
-				<button class="profile_change_btn">
-					<label class="profile_change_label"><span>변경</span></label>
-					<img class="mypage_profile_image" th:src="@{${'/images/profile/' + #authentication.principal.profileImageLocation}}">
-				</button>
-				<div class="input-style-1">
-					<label>이름</label> 
-					<input id="username" type="text" th:value="${#authentication.name}">
-				</div>
-				<div class="input-style-1">
-					<label>비밀번호</label> 
-					<input id="userpassword" type="password" th:value="${#authentication.principal.password}">
-				</div>
-				<div class="input-style-1">
-					<label>비밀번호 확인</label> 
-					<input id="userpassword_confirm" type="password" th:value="${#authentication.principal.password}">
-				</div>
-				<!-- <div class="input-style-1">
-					<label>이메일</label> 
-					<input id="useremail" type="text" th:value="${#authentication.principal.email}">
-				</div>
-				<div class="input-style-1">
-					<label>연락처</label> 
-					<input id="usertel" type="text" th:value="${#authentication.principal.tel}">
-				</div> -->
+			<div class="mypage_profile_container">
+				<h2 class="mb-4">회원정보</h2>
+				
+				<form id="updateUser" action="/updateUserInfo" method="post" enctype="multipart/form-data">
+				    <input type="hidden" name="id" th:value="${#authentication.principal.userId}">
+				    <div class="mypage_info">
+				        <a class="profile_change_btn" onclick="document.getElementById('change_image').click();">
+				            <input id="change_image" name="uploadFiles" type="file" style="display:none;" onchange="displayUploadedImg(this);">
+				            <p class="change_image_text">변경</p>
+				            <img class="mypage_profile_image" th:src="@{'/images/profile/' + ${#authentication.principal.profileImageLocation}}">
+				        </a>
+				        <div class="input-style-1">
+				            <label>이름</label> 
+				            <input id="username" name="username" type="text" th:value="${#authentication.name}">
+				        </div>
+				        <div class="input-style-1">
+				            <label>비밀번호</label> 
+				            <input id="userpassword" name="userpassword" type="password" placeholder="비밀번호">
+				        </div>
+				        <div class="input-style-1">
+				            <label>비밀번호 확인</label> 
+				            <input id="userpassword_confirm" name="userpassword_confirm" type="password" placeholder="비밀번호">
+				        </div>
+				        <div class="input-style-1">
+				            <label>이메일</label> 
+				            <input id="useremail" name="useremail" type="text" th:value="${#authentication.principal.userEmail}">
+				        </div>
+				        <div class="input-style-1">
+				            <label>연락처</label> 
+				            <input id="usertel" name="usertel" type="text" th:value="${#authentication.principal.userTel}">
+				        </div>
+				        <button type="submit" class="main-btn dark-btn btn-hover" style="padding: 6px 25px;">저장</button>
+				    </div>
+				</form>
 			</div>
 			
-			<div class="mypage_activity">
-				<p>def</p>
+			<div class="mypage_manage_container">
+				<div class="">
+					<nav style="display: flex; justify-content: center;">
+						<a class="manage_board_menu manage_menu_item" href="#" onclick="showBoardForm()">
+							<p class="manage_menu_title">내가 쓴 글</p>
+							<p>작성한 게시글과 댓글을 확인하세요.</p>
+						</a>
+						<a class="manage_exam_homework_menu manage_menu_item" href="#" onclick="showExamHomeworkForm()">
+							<p class="manage_menu_title">내 시험 / 과제</p>
+							<p>시험과 과제를 확인하세요.</p>
+						</a>
+					</nav>
+				</div>
+				
+				<div class="mypage_manage_board">
+					
+					<div class="mypage_my_board mt-4">
+						
+						<div class="mypage_my_post mb-4" style="position: relative;">
+							<h4>내 게시글</h4>
+							<a href="#" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 5px; left: 80px;">
+								더 보기
+								<i class="fs-12 m-l-5 fa fa-caret-right"></i>
+							</a>
+							<table class="table mt-2" style="padding: 5px 10px;">
+								<thead>
+									<tr>
+										<th>
+											<h6>No</h6>
+										</th>
+										<th>
+											<h6>제목</h6>
+										</th>
+										<th>
+											<h6>게시판</h6>
+										</th>
+										<th>
+											<h6>작성일자</h6>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<p>10</p>
+										</td>
+										<td>
+											<p>자바랑 파이썬 중에 어떤 게 더 어렵나요?</p>
+										</td>
+										<td>
+											<p>질문과 토론</p>
+										</td>
+										<td>
+											<p>24.04.26</p>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<p>10</p>
+										</td>
+										<td>
+											<p>자바랑 파이썬 중에 어떤 게 더 어렵나요?</p>
+										</td>
+										<td>
+											<p>질문과 토론</p>
+										</td>
+										<td>
+											<p>24.04.26</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div class="mypage_my_comment mt-4" style="position: relative;">
+							<h4>내 댓글</h4>
+							<a href="#" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 5px; left: 60px;">
+								더 보기
+								<i class="fs-12 m-l-5 fa fa-caret-right"></i>
+							</a>
+							<table class="table mt-2" style="padding: 5px 10px;">
+								<thead>
+									<tr>
+										<th>
+											<h6>No</h6>
+										</th>
+										<th>
+											<h6>댓글 내용</h6>
+										</th>
+										<th>
+											<h6>게시판</h6>
+										</th>
+										<th>
+											<h6>작성일자</h6>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<p>5</p>
+										</td>
+										<td>
+											<p>안녕하세요. 댓글입니다.</p>
+										</td>
+										<td>
+											<p>정보 공유</p>
+										</td>
+										<td>
+											<p>24.04.26</p>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<p>6</p>
+										</td>
+										<td>
+											<p>안녕하세요. 댓글입니다.</p>
+										</td>
+										<td>
+											<p>질문과 토론</p>
+										</td>
+										<td>
+											<p>24.04.26</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+					<div class="mypage_exam_homework mt-4">
+						
+						<div class="mypage_exam_list">
+							<a href="#" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 10px; right: 140px;">
+								더 보기
+								<i class="fs-12 m-l-5 fa fa-caret-right"></i>
+							</a>
+							<h4>최근 시험 정보</h4>
+							<a href="#" class="mypage_exam_item">
+								<div>
+									<p>PL/SQL</p>
+									<p>점수: 80/100</p>
+									<p>재시험: X</p>
+									<p>응시날짜: 24.04.25</p>
+								</div>
+							</a>
+							<a href="#" class="mypage_exam_item">
+								<div>
+									<p>PL/SQL</p>
+									<p>점수: 80/100</p>
+									<p>재시험: X</p>
+									<p>응시날짜: 24.04.25</p>
+								</div>
+							</a>
+							<a href="#" class="mypage_exam_item">
+								<div>
+									<p>PL/SQL</p>
+									<p>점수: 80/100</p>
+									<p>재시험: X</p>
+									<p>응시날짜: 24.04.25</p>
+								</div>
+							</a>
+						</div>
+						
+						<div class="mypage_homework_list" style="position: relative;">
+							<h4 class="mt-4">과제 정보</h4>
+							<a href="#" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 3px; left: 80px;">
+								더 보기
+								<i class="fs-12 m-l-5 fa fa-caret-right"></i>
+							</a>
+							<div class="mypage_homework_table mt-2">
+								<table class="table" style="padding: 5px 10px;">
+									<thead>
+										<tr>
+											<th>
+												<h6>제출 유무</h6>
+											</th>
+											<th>
+												<h6>과제 이름</h6>
+											</th>
+											<th>
+												<h6>과목</h6>
+											</th>
+											<th>
+												<h6>제출 기한</h6>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<p>O</p>
+											</td>
+											<td>
+												<p>자바 24.08.22 과제</p>
+											</td>
+											<td>
+												<p>JAVA</p>
+											</td>
+											<td>
+												<p>24.08.26</p>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<p>X</p>
+											</td>
+											<td>
+												<p>자바랑 파이썬 중에 어떤 게 더 어렵나요?</p>
+											</td>
+											<td>
+												<p>질문과 토론</p>
+											</td>
+											<td>
+												<p>24.04.26</p>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>	
+	</div>
 	
+	<script>
+		function displayUploadedImg(input) {
+			document.getElementById('change_image').click();
+			
+	        if (input.files && input.files[0]) {
+	            var reader = new FileReader();
+
+	            reader.onload = function(e) {
+	                // 이미지 미리보기를 위해 업로드한 이미지 URL을 가져와서 img 출력
+	                document.querySelector('.mypage_profile_image').src = e.target.result;
+	            }
+
+	            reader.readAsDataURL(input.files[0]);
+	        }
+	    }
+		
+		$('#updateUser').submit(function(event) {
+			event.preventDefault();
+	        let formData = new FormData(document.getElementById('updateUser'));
+
+	        if (confirm("정보를 수정하시겠습니까?")) {
+	            $.ajax({
+	                url: '/updateUserInfo',
+	                type: 'POST',
+	                data: formData,
+					processData: false,
+					contentType: false,
+	                success: function(response) {
+	                    alert('정보가 성공적으로 업데이트되었습니다.');
+						window.location.href = '/home';
+	                },
+	                error: function(xhr, status, error) {
+	                    console.error(error);
+	                    alert('정보 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.');
+	                }
+	            });
+	        }
+	    });
+	</script>
 </html>

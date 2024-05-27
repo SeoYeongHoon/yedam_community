@@ -5,19 +5,12 @@
 	layout:fragment="Admin">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<style>
-#shortAnswer {
-	display: none;
-}
-</style>
 
-<p th:text="${TeacherVO}"></p>
-<form name="" th:action="@{/}" method="post"
-	th:object="${teacherVO}">
+<form th:action="@{/}" method="post" th:object="${teacherVO}">
 	<!-- ======= 시험 이름 입력 start ======= -->
 	<div class="input-style-1">
 		<h6 class="mb-25">시험 Title</h6>
-		<input type="text" placeholder="시험의 이름 입력" />
+		<input type="text" placeholder="시험의 이름 입력" th:field="*{testName}" />
 	</div>
 	<!-- ======= 시험 이름 입력 end ======= -->
 
@@ -25,14 +18,15 @@
 	<h6 class="mb-25">시험 안내사항</h6>
 	<div class="input-style-1">
 		<textarea placeholder="시험의 안내사항을 입력하세요." rows="8" cols="100"
-			th:field="*{quizContent}"></textarea>
+			th:field="*{testContent}"></textarea>
 	</div>
 	<!-- ======= 시험 안내사항 입력 start ======= -->
 
 	<!-- ======= 시험 제한시간 입력 start ======= -->
 	<div>
-		<label>제한시간</label><input type="checkbox" id="checkbox-0" /><input
-			type="text" placeholder="시간입력">
+		<h6 class="mb-25">제한 시간</h6>
+		<input type="text" placeholder="시간입력(분)" style="border: 1px solid"
+			name="testTime" id="testTime">
 
 	</div>
 	<br>
@@ -49,9 +43,9 @@
 		<!-- end checkbox -->
 		<th:block th:each="userInfo, idxStat : ${userList}">
 			<div class="form-check checkbox-style mb-20">
-				<input class="form-check-input checkbox" type="checkbox" th:value="${userInfo.userId}"
-					th:id="${userInfo.name}" /> <label class="form-check-label"
-					th:for="${userInfo.name}">[[${userInfo.name}]]</label>
+				<input class="form-check-input checkbox" type="checkbox"
+					th:value="${userInfo.userId}" th:id="user+${idxStat.index}" /> <label
+					class="form-check-label" th:for="user+${idxStat.index}">[[${userInfo.name}]]</label>
 			</div>
 		</th:block>
 		<!-- end checkbox -->
@@ -59,37 +53,187 @@
 	</div>
 	<ul class="buttons-group">
 		<li>
-			<button type="submit"
+			<button type="button"
 				class="main-btn primary-btn square-btn btn-hover" id="addBtn"
-				formaction="">다음</button>
+				th:onclick="|location.href='@{/testlist}'|">
+				시험 출제하기</button>
 		</li>
 		<li>
 			<button type="button"
 				class="main-btn deactive-btn square-btn btn-hover"
-				th:onclick="|location.href='@{/selectClassExam}'|">취소</button>
+				th:onclick="|location.href='@{/selectClassExam}'|">돌아가기</button>
 		</li>
 	</ul>
 </form>
 
 <script>
-var selectAllCheckbox = document.getElementById("checkbox-1");
-var checkboxes = document.querySelectorAll(".checkbox");
+	var tName = '';
+	var tContent = '';
+	var tTIme = 0;
+	var userId = 0;
+	var qContent = window.localStorage.getItem('quizContent');
+	var quizId = window.localStorage.getItem('quizId');
+	var quizScore = window.localStorage.getItem('quizScore');
+	var curriculumId = window.localStorage.getItem('curriculumId');
+	$('#testName').on('change', function() {
+		tName = $('#testName').val();
+		//window.localStorage.setItem('testName', tName);
+	});
 
-// 전체 선택/해제 체크박스의 상태에 따라 모든 항목 체크박스 선택/해제
-selectAllCheckbox.addEventListener("change", function() {
-  var isChecked = selectAllCheckbox.checked;
-  checkboxes.forEach(function(checkbox) {
-    checkbox.checked = isChecked;
-  });
-});
+	$('#testContent').on('change', function() {
+		tContent = $('#testContent').val();
+		//window.localStorage.setItem('testContent', tContent);
+	});
 
-// 항목 체크박스 중 하나라도 선택 취소될 경우, 전체 선택/해제 체크박스도 선택 취소
-checkboxes.forEach(function(checkbox) {
-  checkbox.addEventListener("change", function() {
-    if (!checkbox.checked) {
-      selectAllCheckbox.checked = false;
-    }
-  });
-});
+	$('#testTime').on('change', function() {
+		tTime = $('#testTime').val();
+		//window.localStorage.setItem('testTime', tTime);
+	});
+
+	// localstorage에 저장된 복수의 값을 배열 타입으로 변환
+	var arryQContent = JSON.parse(qContent); // 시험 문제가 모여있는 배열	
+	var arryQuizId = JSON.parse(quizId); // 시험 id값이 모여있는 배열 
+	var arryQuizScore = JSON.parse(quizScore); // 시험 배점이 모여있는 배열
+
+	var storageUser = []; // 시험 대상자가 모여있는 배열
+
+	//--------------------------------------------
+	// 대상자 개별의 체크박스 체크시 배열에 대상자 추가
+	//--------------------------------------------
+	$('.checkbox').on('change', function() {
+		storageUser = [];
+		for (let i = 0; i < $('.checkbox').length; i++) {
+			if ($('#user' + i).is(":checked")) {
+				storageUser.push($('#user' + i).val());
+			}
+			;
+		}
+		;
+	})
+	//--------------------------------------------
+	// 전체 추가 체크박스 체크시 배열에 전체 대상자 추가
+	//--------------------------------------------
+	$('#checkbox-1').on('change', function() {
+		storageUser = [];
+		for (let i = 0; i < $('.checkbox').length; i++) {
+			if ($('#checkbox-1').is(':checked')) {
+				storageUser.push($('#user' + i).val());
+			} else {
+				storageUser = [];
+			}
+		}
+	})
+	
+	//--------------------------------------------
+	// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능
+	// 1. tests 테이블에 최초 딱 한번만 insert 동작
+	// 2. quizbox 테이블에 선택된 문제들에 대한 숫자만큼 insert문 동작
+	// 3. test_targets 테이블에 선택된 학생들에 대한 숫자만큼 insert문 동작
+	//--------------------------------------------
+	$('#addBtn').on('click', function() {
+		//--------------------------------------------
+		// tests 테이블에 insert 동작.
+		//--------------------------------------------
+		let obj = {
+			"curriculumId" : curriculumId,
+			"testContent" : tContent,
+			"testTime" : tTime,
+			"testName" : tName
+		};
+
+		$.ajax({
+			url : "testinsert",
+			type : "post",
+			data : obj,
+			
+			success : function(data) {
+				
+			},
+			error : function(err) {
+				alert('시험 등록 실패');
+			}
+		});
+		//--------------------------------------------
+		// quizbox 테이블에 선택된 문제수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
+		//--------------------------------------------
+		setTimeout(function () {
+			for(let i=0; i<arryQContent.length; i++){
+				obj = {
+				        "quizContent": arryQContent[i],
+				        "quizId": arryQuizId[i],
+				        "quizScore": arryQuizScore[i]
+				      };
+				
+				$.ajax({
+					url : "quizboxinsert",
+					type : "post",
+					data : obj,
+					async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
+						
+					success : function(data){
+						
+					},
+					error : function(err){
+						alert('시험 등록 실패(문제 등록 실패)');
+					}
+				}); 
+			}
+		},100);
+		//--------------------------------------------
+		// test_targets 테이블에 선택된 학생수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
+		//--------------------------------------------
+		setTimeout(function () {
+			for(let i=0; i<storageUser.length; i++){
+				obj = {
+				        "userId": storageUser[i]
+				      };
+				
+				$.ajax({
+					url : "testuserinsert",
+					type : "post",
+					data : obj,
+					async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
+					
+					success : function(data){
+						
+					},
+					error : function(err){
+						alert('시험 등록 실패(시험 대상자 등록 실패)');
+					}
+				}); 
+			}
+		},50);
+	})
+	//--------------------------------------------
+	// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
+	//--------------------------------------------
+
+	//--------------------------------------------
+	// 유저 선택 체크박스 관련 기능 시작
+	//--------------------------------------------
+	var selectAllCheckbox = document.getElementById("checkbox-1");
+	var checkboxes = document.querySelectorAll(".checkbox");
+	//--------------------------------------------
+	// 전체 선택/해제 체크박스의 상태에 따라 모든 항목 체크박스 선택/해제
+	//--------------------------------------------
+	selectAllCheckbox.addEventListener("change", function() {
+		var isChecked = selectAllCheckbox.checked;
+		checkboxes.forEach(function(checkbox) {
+			checkbox.checked = isChecked;
+		});
+	});
+	//--------------------------------------------
+	// 항목 체크박스 중 하나라도 선택 취소될 경우, 전체 선택/해제 체크박스도 선택 취소
+	//--------------------------------------------
+	checkboxes.forEach(function(checkbox) {
+		checkbox.addEventListener("change", function() {
+			if (!checkbox.checked) {
+				selectAllCheckbox.checked = false;
+			}
+		});
+	});
+	//--------------------------------------------
+	//유저 선택 체크박스 관련 기능 종료
+	//--------------------------------------------
 </script>
 </html>

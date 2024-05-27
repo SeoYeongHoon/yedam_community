@@ -41,7 +41,7 @@
 				</div>
 				<!-- 모달 본문 -->
 				<div class="modal-body">
-					<p style="text-align: center;">등록이 완료되었습니다.</p>
+					<p style="text-align: center;">등록이 완료되었습니다!</p>
 					<div style="text-align: center;">
 						<img alt="등록완료버튼" th:src="@{/images/registration.png}">
 					</div>
@@ -79,9 +79,84 @@
 			</div>
 		</div>
 	</div>
+	<!-- 삭제 완료 모달창 -->
+	<div id="deleteOK" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">삭제 완료</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<p style="text-align: center;">댓글이 삭제되었습니다!</p>
+					<div style="text-align: center;">
+						<img alt="등록완료버튼" th:src="@{/images/registration.png}">
+					</div>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button id='okBtn' type="button" class="btn btn-primary close"
+						data-dismiss="modal">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 과제삭제 모달창 -->
+	<div id="deleteHomework" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">삭제 완료</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<p style="text-align: center;">과제가 삭제되었습니다.</p>
+					<div style="text-align: center;">
+						<img alt="등록완료버튼" th:src="@{/images/registration.png}">
+					</div>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button id='checkBtn' type="button" class="btn btn-primary"
+						onclick="location.href='homeworkT'">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 댓글 수정 모달 -->
+	<div id="updateReply" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">댓글 수정</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<form id="updatdReply">
+					<div class="modal-body ">
+						<textarea id="updateContent" style="border: 1px solid black;"
+							rows="8" cols="50" placeholder="내용을 입력하세요"></textarea>
+					</div>
+					<!-- 모달 푸터 -->
+					<div class="modal-footer">
+						<button id='updateBtn' type="button" class="btn btn-primary">수정</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 
 	<!-- 과제 상세페이지 시작 -->
 	<div th:each="homeworkInfo : ${homeworkList}">
+		<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
+			class="main-btn light-btn rounded-full btn-hover"
+			style="float: right;" type="button">과제 삭제</button>
 		<div style="border: 1px solid black;">
 			<hr>
 			<h1>제목</h1>
@@ -122,14 +197,34 @@
 </main>
 
 <script>
+$('#deleteHomeworks').on('click',function(){
+	let homeworkId = $('#deleteHomeworks').val();
+	$.ajax({
+		   url: "deleteHomeworks",
+		   type: "delete",
+		   data: {homeworkId : homeworkId},
+		   success: function(data){
+			   $('#deleteHomework').modal('show');
+		   },
+		   error: function(err){
+			   alert("deleteHomeworks err");
+		   }
+	   });
+	
+})
+
+	//--------------------------
 	// 페이지 로드 시 댓글 목록 불러오기
+	//--------------------------
 	$().ready(function(){
 		replyList();
-   		
-   		
+		//updateReply()
 	});
-
+	
+	
+   //--------------------------
    //댓글 목록 불러오기 함수
+   //--------------------------
    function replyList(){
       let targetId = $('#targetId').val();
       
@@ -147,11 +242,14 @@
             	   `
             	   <input id="replyId" type="hidden" value="${e.replyId}">
             	   <div style="border: 1px solid black;">
-                   		<p>댓글 내용 : ${e.replyContent}</p>
+                   		<p class="replyContent">댓글 내용 : ${e.replyContent}</p>
                    		<p>작성자 : ${e.replyWriter}</p>
                    		<p class="replyDate">작성일자 :${replyDate}</p>
+                   		<div id="replyfiles-${e.replyId}"></div>
                    		<div class="col-12" style="text-align: right;">
 							<button class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
+							<button class="main-btn light-btn rounded-full btn-hover " type="button" onclick="(deleteReply(${e.replyId}))">댓글 삭제</button>
+							<button class="main-btn warning-btn rounded-full btn-hover " id="updateBtn-${e.replyId}" type="button">댓글 수정</button>
 						</div>
 						<div id="comments-${e.replyId}">
 							<div id="commentsList"></div>
@@ -167,101 +265,27 @@
                $('#replyList').append(replies);
              
                $('#comments-'+e.replyId).append(commentList(e.replyId));
+               $('#replyfiles-'+e.replyId).append(replyFile(e.replyId));
+               $('#updateBtn-'+e.replyId).on('click', function() {
+            	    updateReply(e.replyId);
+            	});
             });
             //commentList();
          },
          error: function(err){
-            alert("실패");
+            alert("replyList 실패");
          }
       });
    }
-   
-    // 대댓글 리스트
-   function commentList(replyId){
-	      
-	      $.ajax({
-	         url : "commentList",
-	         type : "GET",
-	         data : {replyId : replyId},
-	         success : function(data){
-	        	 
-	        	 //console.log(data)
-	        	 data.forEach(function(e){
-	        		 let commentDate = formatDate(e.commentDate);
-	        		   let comments =
-	        			 `
-	        			 <p>작성자: ${e.commentWriter}</p>
-	        			 <p>대댓글 내용 : ${e.commentContent}</p>
-	        			 <p>대댓글 작성일자 : ${commentDate}</p>
-	        			 `
-	        	
-	        		 $('#comments-'+e.replyId).append(comments);
-	        	 });
-	            
-	         },
-	          error: function(err){
-	            alert("X");
-	         } 
-	      });
-	   } 
-   
-   //대댓글 등록
-   function addComment(replyId){
-	   let content = $('#comment-'+replyId).val(); 
-	   alert(content)
-	   
-	    if (content.value =='') {
-	        alert('댓글 내용을 입력하세요.');
-	        $('#modalReply').modal('show');
-	        replyContent.focus();
-	        return;
-	    } else{
-	    	
-	   $.ajax({
-		   url: 'insertComment',
-		   type: 'post',
-		   data :{replyId:replyId , content:content} ,
-		   success: function(data){
-			 $('#modal').modal('show');
-			 content.value='';
-			 replyList();
-		   },
-		   error : function(err){
-			   alert('실패');
-		   }
-	   });  
-	   }
-   } 
-   // 답글 입력 창 보이기 함수
-   function showReplyInput(replyId) {
-       let replyInput = document.getElementById(replyId); 
-      
-      if (replyInput.style.display === 'none') {
-         replyInput.style.display = 'block';
-      } else {
-         replyInput.style.display = 'none';
-      }
-   }
-   
-   // 날짜 포맷 변환 함수
-   function formatDate(date) {
-      var d = new Date(date),
-          month = '' + (d.getMonth() + 1),
-          day = '' + d.getDate(),
-          year = d.getFullYear();
-
-      if (month.length < 2) month = '0' + month;
-      if (day.length < 2) day = '0' + day;
-
-      return [year, month, day].join('/');
-   } 
-
-
-
+	
+   //--------------------------
    // 댓글 등록 버튼 클릭 이벤트
+   //--------------------------
    $('#insertBtn').on('click', addReply); 
    
+   //--------------------------
    //댓글 등록 함수
+   //--------------------------
    function addReply() {
       // 댓글 내용 없을 시 모달 띄움
       let replyContent = document.getElementById('replyContent');
@@ -287,11 +311,205 @@
                replyList();
             },
             error : function(err) {
-               alert("error");
+               alert("addReply err");
             }
          });
       }
    }
+   
+   //--------------------------
+   //댓글 파일 다운로드
+   //--------------------------
+   function replyFile(replyId){
+	   
+	   $.ajax({
+		   url : "replyfile",
+		   type : "GET",
+		   data : {replyId : replyId},
+		   success : function(data){
+			   data.forEach(function(e){
+				   let replyfile = 
+					   `
+					   <a href="/replydownload/${e.downloadLocation}">${e.replyfileName}</a>
+					   `
+					   $('#replyfiles-'+e.replyId).append(replyfile);
+			   })
+		   },
+		   error : function(err){
+			 alert("replyfile err")  
+		   }
+	   });
+   }
+ 	
+    //-------------------
+    // 대댓글 리스트
+    //-------------------
+   function commentList(replyId){
+	      
+	      $.ajax({
+	         url : "commentList",
+	         type : "GET",
+	         data : {replyId : replyId},
+	         success : function(data){
+	        	 
+	        	 data.forEach(function(e){
+	        		 
+	        		 let commentDate = formatDate(e.commentDate);
+	        		   let comments =
+	        			 `
+	        			 <p>작성자: ${e.commentWriter}</p>
+	        			 <p>대댓글 내용 : ${e.commentContent}</p>
+	        			 <p>대댓글 작성일자 : ${commentDate}</p>
+	        			 <button class="main-btn light-btn rounded-full btn-hover " type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
+	        			 <button class="main-btn warning-btn rounded-full btn-hover" type="button" onclick="(deleteReply(${e.replyId}))">답글 수정</button>
+	        			 `
+	        	
+	        		 $('#comments-'+e.replyId).append(comments);
+	        		   
+	        	 });
+	            
+	         },
+	          error: function(err){
+	            alert("commentList err");
+	         } 
+	      });
+	   } 
+   
+   //--------------------------
+   //대댓글 등록
+   //--------------------------
+   function addComment(replyId){
+	   let content = $('#comment-'+replyId).val(); 
+	   
+	    if (content.value =='') {
+	        alert('댓글 내용을 입력하세요.');
+	        $('#modalReply').modal('show');
+	        replyContent.focus();
+	        return;
+	    } else{
+	    	
+	   $.ajax({
+		   url: 'insertComment',
+		   type: 'post',
+		   data :{replyId:replyId , content:content} ,
+		   success: function(data){
+			 $('#modal').modal('show');
+			 content.value='';
+			 replyList();
+		   },
+		   error : function(err){
+			   alert('addComment err');
+		   }
+	   });  
+	   }
+   } 
+   
+   //--------------------------
+   //대댓글 삭제
+   //--------------------------
+   function deleteComment(commentId){
+	   
+	   $.ajax({
+		   url: "deleteComment",
+		   type: "delete",
+		   data: {commentId : commentId},
+		   success: function(data){
+			   $('#deleteOK').modal('show');
+			   //alert("deleteCommentOK");  
+			   //console.log(data);
+			   
+			   replyList();
+		   },
+		   error: function(err){
+			   alert("deleteComment err");
+		   }
+	   });
+   }
+   
+   //--------------------------
+   //댓글 삭제
+   //--------------------------
+ 	function deleteReply(replyId){
+ 		 $.ajax({
+ 			   url: "deleteReply",
+ 			   type: "delete",
+ 			   data: {replyId : replyId},
+ 			   success: function(data){
+ 				   $('#deleteOK').modal('show');
+ 				   //alert("deleteCommentOK");  
+ 				   //console.log(data);
+ 				   
+ 				   replyList();
+ 			   },
+ 			   error: function(err){
+ 				   alert("deleteReply err");
+ 			   }
+ 		   });
+   }
+ 	
+ 	//--------------------------
+    //댓글 수정 
+    //--------------------------
+    
+    		
+    function updateReply(replyId){
+    	$('#updateReply').modal('show');
+    	
+    	$('#updateBtn').on('click',function(){
+    		update(replyId)
+    	})
+    	
+    	 
+    }
+    function update(replyId){
+	    let content = $('#updateContent').val();
+		
+	    let replyVO = content + replyId;
+		$.ajax({
+			url:"updateReply",
+			type:'PUT',
+			data: {replyVO:replyVO},
+			success:function(data){
+				alert("update OK")
+			},
+			error : function(err){
+				alert("update err")
+			}
+		})
+	    }
+   
+   
+   //--------------------------
+   // 답글 입력 창 보이기 함수
+   //--------------------------
+   function showReplyInput(replyId) {
+       let replyInput = document.getElementById(replyId); 
+      
+      if (replyInput.style.display === 'none') {
+         replyInput.style.display = 'block';
+      } else {
+         replyInput.style.display = 'none';
+      }
+   }
+   
+ 	//--------------------------
+   // 날짜 포맷 변환 함수
+   //--------------------------
+   function formatDate(date) {
+      var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+      return [year, month, day].join('/');
+   } 
+
+
+
+  
 
 </script>
 </html>

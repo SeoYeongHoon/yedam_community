@@ -39,6 +39,11 @@ public class HomeWorkVO {
 	
 	//댓글목록
 	private List<ReplyVO> replyList;
+	
 	//대댓글목록
 	private List<CommentVO> commentList;
+	
+	//회원
+	private int userId;
+	
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{common/layouts/default_layout}"
-  layout:fragment="Home">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Home">
 <head>
   <style>
     .pagination {
@@ -36,6 +36,11 @@
     <div class="insertBtn">
       <a th:href="@{/postInsert/{boardId}(boardId=${boardId})}">글쓰기</a>
     </div>
+    <!-- 검색 폼 추가 -->
+    <form id="searchForm">
+      <input type="text" id="searchKeyword" placeholder="검색어를 입력하세요" />
+      <button type="button" onclick="searchPosts()">검색</button>
+    </form>
     <table class="table">
       <thead>
         <tr>
@@ -74,5 +79,13 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function searchPosts() {
+      const keyword = document.getElementById('searchKeyword').value;
+      const boardId = /* Get the boardId dynamically if needed, e.g., from URL */;
+      location.href = `/postList/${boardId}/search?keyword=${keyword}`;
+    }
+  </script>
 </body>
 </html>

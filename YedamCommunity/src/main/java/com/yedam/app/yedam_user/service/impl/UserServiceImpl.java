@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_user.mapper.UserMapper;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
@@ -125,6 +128,25 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void insertTempUsers(Map<String, String> row) {
 		userMapper.insertTempUsers(row);
+	}
+
+	@Override
+	public void updateUserInfo(UserVO userVO) {
+		userMapper.updateUserInfo(userVO);
+		
+		UserVO updatedUserVO = userMapper.getByUserId(userVO.getId());
+	    
+	    // 새로운 인증 토큰을 생성
+	    LoginUserVO updatedLoginUser = new LoginUserVO(updatedUserVO);
+	    UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(updatedLoginUser, null, updatedLoginUser.getAuthorities());
+	    
+	    // SecurityContextHolder를 사용하여 인증 정보를 업데이트
+	    SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+	}
+
+	@Override
+	public UserVO getByUserId(String userId) {
+		return userMapper.getByUserId(userId);
 	}
 	
 }

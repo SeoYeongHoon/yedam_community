@@ -16,4 +16,44 @@ public class BoardLike {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date likeDate;
     private int likeStatus;
+    
+    
+	public int getLikeId() {
+		return likeId;
+	}
+	public void setLikeId(int likeId) {
+		this.likeId = likeId;
+	}
+	public int getPostId() {
+		return postId;
+	}
+	public void setPostId(int postId) {
+		this.postId = postId;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	public int getPostLike() {
+		return postLike;
+	}
+	public void setPostLike(int postLike) {
+		this.postLike = postLike;
+	}
+	public Date getLikeDate() {
+		return likeDate;
+	}
+	public void setLikeDate(Date likeDate) {
+		this.likeDate = likeDate;
+	}
+	public int getLikeStatus() {
+		return likeStatus;
+	}
+	public void setLikeStatus(int likeStatus) {
+		this.likeStatus = likeStatus;
+	}
+    
+    
 }

@@ -18,6 +18,15 @@
   	ORDER BY class_id
   </select>
   
+  <!-- 해당과정 과목 조회 -->
+   <select id="subjectSelectAll" resultType="CurriculumVO">
+  	SELECT	subject_name,
+  			subject_id 
+	FROM 	subjects s	JOIN curriculum c ON (s.curriculum_id = c.curriculum_id)
+                		JOIN users u ON ( c.curriculum_id = u.curriculum_id)
+	WHERE  user_id = #{userId}
+  </select>
+  
   <!-- 과정 등록(영훈) -->
   <select id="selectAllCurriculums" resultType="CurriculumVO">
   	SELECT *
@@ -63,4 +72,6 @@
 	DELETE curriculum
 	WHERE curriculum_id = #{curriculumId}	
   </delete>
+  
+  
 </mapper>

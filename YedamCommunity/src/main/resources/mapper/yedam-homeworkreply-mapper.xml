@@ -13,18 +13,18 @@
 	FROM	dual
 	</selectKey>
 		INSERT INTO replies
-		(reply_id,
-		reply_content,
-		homework_target_id,
-		reply_writer,
-		reply_date
+			(reply_id,
+			reply_content,
+			homework_target_id,
+			reply_writer,
+			reply_date
 		)
 		VALUES
-		(#{replyId},
-		#{replyContent},
-		#{homeworkTargetId},
-		#{replyWriter},
-		#{replyDate}
+			(#{replyId},
+			#{replyContent},
+			#{homeworkTargetId},
+			#{replyWriter},
+			#{replyDate}
 		)
 	</insert>
 
@@ -55,18 +55,43 @@
 
 	<!-- 대댓글 등록 -->
 	<insert id="insertComment" parameterType="HomeWorkVO">
+
+	<selectKey  keyProperty="commentId,commentDate" resultType="CommentVO" order="BEFORE">
+	select comment_id_seq.nextval comment_id, sysdate comment_date
+	FROM	dual
+	</selectKey>
 		INSERT INTO comments
-		(comment_id,
-		reply_id,
-		comment_content,
-		comment_writer,
-		comment_date)
+			(comment_id,
+			reply_id,
+			comment_content,
+			comment_writer,
+			comment_date)
 		VALUES
-		(comment_id_seq.nextval,
-		#{replyId},
-		#{commentContent},
-		#{commentWriter},
-		sysdate
+			(comment_id_seq.nextval,
+			#{replyId},
+			#{commentContent},
+			#{commentWriter},
+			sysdate
 		)
 	</insert>
+	
+	<!-- 대댓글 삭제 -->
+	<delete id="deleteComment" parameterType="CommentVO">
+	DELETE FROM comments
+	WHERE comment_id = #{commentId}
+	</delete>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="ReplyVO">
+	DELETE FROM replies
+	WHERE reply_id = #{replyId}
+	</delete>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateReply" parameterType="ReplyVO">
+		UPDATE replies
+		SET reply_content = #{replyContent}, reply_date = SYSDATE
+		WHERE reply_id = #{replyId}
+	</update>
+	
 </mapper>
