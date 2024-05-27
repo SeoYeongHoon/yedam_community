@@ -154,9 +154,24 @@ public class ExamController {
 	//--------------------------------------------
 	@GetMapping("quizes")
 	@ResponseBody
-	public List<TeacherVO> quizList(@RequestParam("sName") String sName) {
-		return examService.getQuizFilter(sName);
+	public Map<String, Object> quizList(@RequestParam("subjectName") String subjectName
+									  , @RequestParam(required = false, defaultValue = "1") int page
+							          , @RequestParam(required = false, defaultValue = "10") int pageSize){
+		List<TeacherVO> list = examService.getQuizFilter(subjectName, page, pageSize);
+		int totalCnt = examService.getQuizCount(subjectName);
+		
+		PageDTO pageDTO = new PageDTO(page, totalCnt, 10);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("quizes", list);
+	    response.put("page", pageDTO);
+	    
+		return response;
 	}
+	/*
+	 * public List<TeacherVO> quizList(@RequestParam("sName") String sName) { return
+	 * examService.getQuizFilter(sName); }
+	 */
 	//--------------------------------------------
 	// 문제에 대한 지문들 출력
 	//--------------------------------------------

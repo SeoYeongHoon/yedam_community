@@ -171,10 +171,27 @@ public class ExamServiceImpl implements ExamService {
 	//--------------------------------------------
 	// 문제 필터링 출력
 	//--------------------------------------------
-	@Override
+	/*@Override
 	public List<TeacherVO> getQuizFilter(String sName) {
 		return examMapper.filterQuiz(sName);
+	}*/
+	@Override
+	public List<TeacherVO> getQuizFilter(String subjectName, int page, int pageSize) {
+		Map<String, Object> params = new HashMap<>();
+		
+		int starPage = (page - 1) * pageSize;
+        int endPage = page * pageSize;
+        
+        params.put("subjectName", subjectName);
+        params.put("starPage", starPage);
+        params.put("endRow", endPage);
+		return examMapper.filterQuiz(params);
 	}
+	@Override
+	public int getQuizCount(String subjectName) {
+		return examMapper.getQuizCnt(subjectName);
+	}
+	
 	//--------------------------------------------
 	// 문제 자세히보기 단건조회
 	//--------------------------------------------

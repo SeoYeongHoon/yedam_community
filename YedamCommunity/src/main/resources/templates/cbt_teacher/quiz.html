@@ -89,8 +89,12 @@ li {
 	</ul>
 </div>
 
-<div id="quizBox" class="container"></div>
-
+<div id="quizBox" class="container row"></div>
+<div class="center">
+	<div class="testPaging">
+		<!-- ajax실행으로 태그 생성 -->
+	</div>
+</div>
 
 
 <button id="updateBtn">아작스테스트</button>
@@ -138,13 +142,61 @@ li {
 </div>
 <!-- 과목추가 모달창 end -->
 <script>
+$(document).ready(function() {
+	$('#subject').off('change').on('change', function() {
+		quizContentList(1); // 필터 변경 시 1페이지부터 다시 시작
+    });
+
+    $('.testPaging').off('click', 'a').on('click', 'a', function() {
+    	var page = $(this).data('page');
+    	quizContentList(page);
+    });
+    
+});
+
+function testPagination(pageDTO, currentPage) {
+	console.log("pageDTO:", JSON.stringify(pageDTO, null, 5), "현재페이지:", currentPage);
+	let arr = new Array();
+	arr.push(pageDTO);
+	console.log("현재 페이지: " + arr[0].page);
+	currentPage = arr[0].page;
+			
+	var pagination = $('.testPaging');
+	pagination.empty();
+			
+	if (pageDTO.prev) {
+		pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '" onclick="quizContentList(' + (pageDTO.starPage - 1) + ')">&laquo;</a>');
+	}
+			
+	for (var p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
+		console.log("p값: " + p);
+				
+		var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
+				
+		if (p === currentPage) {
+			pageLink.addClass('active');
+		} else {
+			pageLink.addClass('none');
+		}
+				
+		pageLink.attr('onclick', 'quizContentList(' + p + ')');
+		pagination.append(pageLink);
+	}
+	if (pageDTO.next) {
+		pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '" onclick="quizContentList(' + (pageDTO.endPage + 1) + ')">&raquo;</a>');
+	}
+}
+</script>
+<script>
 var subName = ''; // 탬플릿문법안에 들어가있는 변수
 var qContent = '';
 var qId, sId= 0;
+var page = 1;
+var pageSize = 0;
 var curriId = 0;
 var solution = '';
 var answer = [];
-var sName = ''; // 필터링에 사용될 과목명
+var subjectName = ''; // 필터링에 사용될 과목명
 var textContent1 = '';
 var textContent2 = '';
 var textContent3 = '';
@@ -157,21 +209,28 @@ var storageQId = [];
 //--------------------------------------------
 // 퀴즈 문제 전체를 불러오는 함수
 //--------------------------------------------
-function quizContentList(sName){
-	$('#quizBox').html('');
+function quizContentList(subjectName,page,pageSize){
+	//$('#quizBox').html('');
 	//--------------------------------------------
 	// 문제 전체 조회 ajax (필터링)
 	//--------------------------------------------
 	$.ajax({
 		url : "quizes",
 		type : "get", 
-		data : {sName : sName},
-		async: false,		
+		data : {
+			subjectName : subjectName,
+			page : page,
+			pageSize : pageSize
+		},
+		//async: false,		
 		success : function(data){
+			console.log("quizes ajax : "+data);
+			updateList(data.quizes);
+			testPagination(data.page,page);
 			//--------------------------------------------
 			// 문제 전체 퀴즈박스 생성 forEach 시작
 			//--------------------------------------------
-			data.forEach((item,idx) => {
+			/* data.forEach((item,idx) => {
 				let rowTag = null;
 				if(idx%3==0){
 					rowTag = $(`<div id='row${idx}' class='row'></div>`);
@@ -199,14 +258,14 @@ function quizContentList(sName){
 							<div class="card-content">
 								<h4>${qContent}</h4>
 								<br>
-								<button type="button" class="infoBtn" name="${qId}">자세히 보기</button>
+								<button type="button" class="infoBtn" name="${qId}" value="${qId}">자세히 보기</button>
 							</div>
 						</div>
 					</div>
 					`;
 				//$("#quizBox").append(temp);
 				rowTag.append(temp);
-			});
+			}); */
 			//--------------------------------------------
 			// 문제 전체 퀴즈박스 생성 forEach 종료
 			//--------------------------------------------
@@ -300,12 +359,8 @@ function quizContentList(sName){
 				//--------------------------------------------
 			})
 			//--------------------------------------------	
-			// 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax 포함)
+			// 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax 포함) 종료
 			//--------------------------------------------
-			
-			/* $('.box').on('click', '.infoBtn', function(e) {
-				console.log(e.target.id);
-			}) */
 			
 			//--------------------------------------------	
 			// 자세히 보기 버튼 눌렀을때 모달창 띄우기
@@ -473,14 +528,14 @@ window.addEventListener("keyup", e => {
 $('#subject').on('change', function(){
 	if($(this).val() == 'all'){
 		sName = '';
-		quizContentList(sName);
+		quizContentList(subjectName);
 	} else {
 		sName = $(this).val();
-		quizContentList(sName);
+		quizContentList(subjectName);
 	}
 });
 
-quizContentList(sName);
+quizContentList(subjectName);
 
 //--------------------------------------------
 // 시험출제 버튼 누르면 선택된 문제들이 localstorage에 저장되고 페이지가 넘어감.
@@ -510,8 +565,44 @@ $('#testInsert').on('click', function(){
 	window.localStorage.setItem('quizId', arryQid);
 })
 
+//--------------------------------------------
+// 등록된 문제 필터링으로 인한 리스트 업데이트
+//--------------------------------------------
+function updateList(quizes){
+	$('#quizBox').html('');
+	quizes.forEach((quiz,idx) => {
+		console.log("for문 데이터값 : " + quiz)
+		subName = quiz.subjectName;				
+		qContent = quiz.quizContent;
+		qId = quiz.quizId;
+		sId = quiz.subjectId;
+		
+		let temp = `
+			<div style="color:gray;" class="col-3 box" id="${qId}">
+				<div class="card-style-3 mb-30 box2">
+					<div>
+						<label>문제선택
+							<input type="checkbox" class="quizChk " name="select"  id="qContent${idx}" value="${qContent}"></input>
+						</label>
+						<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}" style="border:1px solid black;">
+						<p>과목명 : ${subName}</p>
+						<input type="hidden" id="qId${idx}" value="${qId}" />
+					</div>
+					<div class="card-content">
+						<h4>${qContent}</h4>
+						<br>
+						<button type="button" class="infoBtn" name="${qId}" value="${qId}">자세히 보기</button>
+					</div>
+				</div>
+			</div>
+			`;
+		$("#quizBox").append(temp);
+	})
+}
 
-
+$('#updateBtn').on('click', function(){
+	updateList(quizes);
+})
 </script>
 
 </html>

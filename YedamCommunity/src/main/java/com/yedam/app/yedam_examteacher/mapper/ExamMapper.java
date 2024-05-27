@@ -40,7 +40,9 @@ public interface ExamMapper {
 	public int deleteSubject(TeacherVO teacherVO); // 과목 삭제
 	public List<TeacherVO> selectSubjectAll(); // 과목명 출력	(문제 필터링할때 사용)
 	public List<TeacherVO> subjectOfCurr(@Param("curriId") int cId); // 과목명 출력 (과목 추가/삭제때 사용)
-	public List<TeacherVO> filterQuiz(@Param("sName") String sName); // 등록된 문제 필터출력 
+	//public List<TeacherVO> filterQuiz(@Param("sName") String sName); // 등록된 문제 필터출력 
+	List<TeacherVO> filterQuiz(Map<String, Object> params);
+	int getQuizCnt(String subjectName);
 	public List<TeacherVO> infoQuiz(@Param("qId") int qId); // 문제 자세히보기 단건조회
 	
 	//--------------------------------------------
