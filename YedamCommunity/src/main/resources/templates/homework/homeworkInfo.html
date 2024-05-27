@@ -138,7 +138,7 @@
 				</div>
 				<!-- 모달 본문 -->
 					<div class="modal-body ">
-						<input type="hidden" name=replyId>
+						<input type="hidden" name="replyId">
 						<textarea class="updateContent" style="border: 1px solid black;"
 							rows="8" cols="50" placeholder="내용을 입력하세요"></textarea>
 					</div>
@@ -268,9 +268,11 @@ $('#deleteHomeworks').on('click',function(){
             	   `
             	   <input id="replyId" type="hidden" value="${e.replyId}">
             	   <div style="border: 1px solid black;">
-                   		<p>댓글 내용 : <p id="replyContent">${e.replyContent}</p></p>
+            	   	<div>
+                   		<p>댓글 내용 : <p id="replyContents">${e.replyContent}</p></p>
                    		<p>작성자 : ${e.replyWriter}</p>
                    		<p class="replyDate">작성일자 :${replyDate}</p>
+                   	</div>	
                    		<div id="replyfiles-${e.replyId}"></div>
                    		<div class="col-12" style="text-align: right;">
 							<button class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
@@ -298,6 +300,15 @@ $('#deleteHomeworks').on('click',function(){
             
             $('.updateBtn').on('click',function(e){
             	replyId = $(this).val();
+            	
+            	$('#updateReply').find('[name="replyId"]').val(replyId);
+            	$('#updateReply').find('.updateContent').val($(this).closest('div').find('#replyContents').html());
+            	let abc = $('#replyContents').html();
+            	let content = $('.updateContent').val();
+            	let cmt = $('.cUpdateContent').val();
+            	console.log("지금 적혀있는 내용 = "+ content)
+            	console.log("지금 적혀있는 abc = "+ abc)
+            	
             	$('#updateReply').modal('show');
             })
          },
@@ -310,13 +321,9 @@ $('#deleteHomeworks').on('click',function(){
    //--------------------------
    //댓글 수정 
    //--------------------------
-   $('#updateBtn').on('click',function(e){
-		update(replyId);
-	}) 
-	
-   function update(replyId){
-   	
-	   let content = $('.updateContent').val();
+   $('#updateBtn').on('click',function(data){
+		let replyId = $('[name="replyId"]').val();
+	  	let content = $('.updateContent').val();
 	    
 		$.ajax({
 			url:"updateReply",
@@ -332,7 +339,10 @@ $('#deleteHomeworks').on('click',function(){
 				alert("update err")
 			}
 		})
-	    }
+		
+	}) 
+	
+  
    
    //--------------------------
    // 댓글 등록 버튼 클릭 이벤트
@@ -422,6 +432,10 @@ $('#deleteHomeworks').on('click',function(){
 	             	commentId = $(this).val();
 	             	$('#updateComment').find('[name="commentId"]').val(commentId);
 	             	$('#updateComment').find('.cUpdateContent').val($(this).closest('div').find('#commentContent').html());
+	             	//let asd = $('#commentContent').html();
+	             	//console.log("내용 = " + asd);
+	             	let cmt = $('.cUpdateContent').val();
+	             	console.log("내용 = "+cmt)
 	             	$('#updateComment').modal('show');
 	             }) 
 	   } 
