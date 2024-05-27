@@ -91,23 +91,27 @@ isReexam
 							<td class="tlist_2">[[${stat.count}]]<input class="isReexam" type="hidden" value="${list.isReexam}"></td>
 							<td class="tlist_2">[[${list.testName}]]</td>
 							<td class="tlist_2">[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 0}">
+							<td class="tlist_2" th:if="${isResult[stat.index] == 0 && dateComp[stat.index] == 0}">
 								<button th:id="${list.testId}" data-category="proceed"
 									th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|"
 									class="filterItem tlist_3 main-btn primary-btn square-btn btn-hover">응시하기</button>
 							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] != 0 && isReexam[stat.index] != 0}">
+							<td class="tlist_2" th:if="${isResult[stat.index] == 0 && dateComp[stat.index] == 1}">
+								<button th:id="${list.testId}" data-category="proceed"
+									class="filterItem tlist_3 main-btn warning-btn square-btn btn-hover">미응시</button>
+							</td>
+							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isReexam[stat.index] == 1}">
 								<button th:id="${list.testId}" data-category="success"
 									class="filterItem tlist_3 main-btn success-btn square-btn btn-hover">응시완료</button>
 							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] != 0 && isReexam[stat.index] == 0}">
+							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isReexam[stat.index] == 0}">
 								<button th:id="${list.testId}" data-category="re"
 									th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|"
 									class="filterItem tlist_3 main-btn danger-btn square-btn btn-hover">재시험</button>
 							</td>
-							<td th:if="${isResult[stat.index] == 0 && isFeedback[stat.index] == 0}">
+							<td th:if="${isResult[stat.index] == 0}">
 							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] != 0 && isFeedback[stat.index] != 0}">
+							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isFeedback[stat.index].feedback != '0'}">
 								<!-- 피드백내용 모달형식 -->
 								<div class="modal">
 									<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 380px;">
@@ -116,19 +120,19 @@ isReexam
 										<table class="table">
 											<tr>
 												<th>시험명</th>
-												<td>[[${list.testName}]]</td>
+												<td>[[${isFeedback[stat.index].testName}]]</td>
 											</tr>
 											<tr>
 												<th>시험점수</th>
-												<td>[[${list.resultScore}]]</td>
+												<td>[[${isFeedback[stat.index].resultScore}]]</td>
 											</tr>
 											<tr>
 												<th>통과점수</th>
-												<td>[[${list.passScore}]]</td>
+												<td>[[${isFeedback[stat.index].passScore}]]</td>
 											</tr>
 											<tr>
 												<th>내용</th>
-												<td>[[${list.feedback}]]</td>
+												<td>[[${isFeedback[stat.index].feedback}]]</td>
 											</tr>
 										</table>
 										<br>
@@ -140,7 +144,7 @@ isReexam
 								<button type="button"
 										class="feedbackOn main-btn success-btn square-btn btn-hover">피드백완료</button>
 							</td>
-							<td class="tlist_2" th:unless="${isResult[stat.index] != 0 && isFeedback[stat.index] == 0}">
+							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isFeedback[stat.index].feedback == '0'}">
 								<button type="button"
 									class="main-btn dark-btn square-btn btn-hover">피드백대기</button>
 							</td>
@@ -148,6 +152,12 @@ isReexam
 					</th:block>
 				</tbody>
 			</table>
+			<th:block th:with="first=1, end=${(testList.size() / 5) + 1}, totalCnt=${testList.size()}, page=${page}">
+				<span th:if="${first < page]"><a th:href="@{/testList2(page=${page - 1})}" th:text="'<'"></a></span>
+				<th:block>
+				</th:block>
+				<span th:if="${page < end]"><a th:href="@{/testList2(page=${page + 1})}" th:text="'>'"></a></span>
+			</th:block>
 		</div>
 	</div>
 </div>

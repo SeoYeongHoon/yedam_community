@@ -15,6 +15,7 @@ public class ExamResultVO {
 	private int userId;
 	private String name;
 	private String subjectName;
+	private String testName;
 	public int getResultId() {
 		return resultId;
 	}
@@ -86,6 +87,12 @@ public class ExamResultVO {
 	}
 	public void setSubjectName(String subjectName) {
 		this.subjectName = subjectName;
+	}
+	public String getTestName() {
+		return testName;
+	}
+	public void setTestName(String testName) {
+		this.testName = testName;
 	}
 	
 	
