@@ -127,6 +127,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<!-- 댓글 수정 모달 -->
 	<div id="updateReply" class="modal fade">
 		<div class="modal-dialog">
@@ -197,6 +198,9 @@
 </main>
 
 <script>
+
+
+//과제 삭제
 $('#deleteHomeworks').on('click',function(){
 	let homeworkId = $('#deleteHomeworks').val();
 	$.ajax({
@@ -218,7 +222,7 @@ $('#deleteHomeworks').on('click',function(){
 	//--------------------------
 	$().ready(function(){
 		replyList();
-		//updateReply()
+		
 	});
 	
 	
@@ -242,14 +246,14 @@ $('#deleteHomeworks').on('click',function(){
             	   `
             	   <input id="replyId" type="hidden" value="${e.replyId}">
             	   <div style="border: 1px solid black;">
-                   		<p class="replyContent">댓글 내용 : ${e.replyContent}</p>
+                   		<p>댓글 내용 : ${e.replyContent}</p>
                    		<p>작성자 : ${e.replyWriter}</p>
                    		<p class="replyDate">작성일자 :${replyDate}</p>
                    		<div id="replyfiles-${e.replyId}"></div>
                    		<div class="col-12" style="text-align: right;">
 							<button class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
 							<button class="main-btn light-btn rounded-full btn-hover " type="button" onclick="(deleteReply(${e.replyId}))">댓글 삭제</button>
-							<button class="main-btn warning-btn rounded-full btn-hover " id="updateBtn-${e.replyId}" type="button">댓글 수정</button>
+							<button class="main-btn warning-btn rounded-full btn-hover " type="button" onclick="(updateReply(${e.replyId}))">댓글 수정</button>
 						</div>
 						<div id="comments-${e.replyId}">
 							<div id="commentsList"></div>
@@ -266,9 +270,7 @@ $('#deleteHomeworks').on('click',function(){
              
                $('#comments-'+e.replyId).append(commentList(e.replyId));
                $('#replyfiles-'+e.replyId).append(replyFile(e.replyId));
-               $('#updateBtn-'+e.replyId).on('click', function() {
-            	    updateReply(e.replyId);
-            	});
+            
             });
             //commentList();
          },
@@ -361,7 +363,7 @@ $('#deleteHomeworks').on('click',function(){
 	        			 <p>대댓글 내용 : ${e.commentContent}</p>
 	        			 <p>대댓글 작성일자 : ${commentDate}</p>
 	        			 <button class="main-btn light-btn rounded-full btn-hover " type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
-	        			 <button class="main-btn warning-btn rounded-full btn-hover" type="button" onclick="(deleteReply(${e.replyId}))">답글 수정</button>
+	        			 <button class="main-btn warning-btn rounded-full btn-hover" type="button" onclick="((${e.replyId}))">답글 수정</button>
 	        			 `
 	        	
 	        		 $('#comments-'+e.replyId).append(comments);
@@ -450,27 +452,42 @@ $('#deleteHomeworks').on('click',function(){
  	//--------------------------
     //댓글 수정 
     //--------------------------
-    
+    //댓글 수정 모달
+   let replyId = $().on('click', );
+ 	
+ 	function thisvalue(){
+ 		
+ 	}
     		
     function updateReply(replyId){
+	console.log("updateReply 1 = "+replyId)
     	$('#updateReply').modal('show');
-    	
-    	$('#updateBtn').on('click',function(){
-    		update(replyId)
-    	})
-    	
-    	 
-    }
-    function update(replyId){
-	    let content = $('#updateContent').val();
+	
+	$('#updateBtn').on('click',function(){
+		console.log("업데이트 = " + replyId);
+		let content = $('#updateContent').val();
+		content.value = '';
+		console.log("updateBtn 2 = "+replyId)
+		update(replyId);
 		
-	    let replyVO = content + replyId;
+		
+	})
+    }
+ 	
+    
+ 	
+    function update(replyId){
+    	
+	    let content = $('#updateContent').val();
+	    
 		$.ajax({
 			url:"updateReply",
 			type:'PUT',
-			data: {replyVO:replyVO},
+			data: {content : content, replyId :replyId},
 			success:function(data){
-				alert("update OK")
+				$('#updateReply').modal('hide');
+				$('#modal').modal('show');
+				replyList();
 			},
 			error : function(err){
 				alert("update err")
