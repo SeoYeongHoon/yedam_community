@@ -87,11 +87,18 @@
 	WHERE reply_id = #{replyId}
 	</delete>
 	
-	<!-- 게시글 수정 -->
+	<!-- 댓글 수정 -->
 	<update id="updateReply" parameterType="ReplyVO">
 		UPDATE replies
 		SET reply_content = #{replyContent}, reply_date = SYSDATE
 		WHERE reply_id = #{replyId}
+	</update>
+	
+	<!-- 대댓글 수정 -->
+	<update id="updateComment" parameterType="CommentVO">
+		UPDATE comments
+		SET comment_content = #{commentContent}, comment_date = SYSDATE
+		WHERE comment_id = #{commentId}
 	</update>
 	
 </mapper>

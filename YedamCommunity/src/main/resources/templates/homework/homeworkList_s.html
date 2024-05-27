@@ -70,7 +70,7 @@ function homeworkList(){
 	$.ajax({
 		url:"homeworkListS",
 		type: "get",
-		data: {userid,userid},
+		data: {userid:userid},
 		success:function(data){
 			let today = new Date();
 			let todayFormatted = formatDate(today);
