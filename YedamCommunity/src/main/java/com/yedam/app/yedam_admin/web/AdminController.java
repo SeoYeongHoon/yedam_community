@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.PageDTO;
+import com.yedam.app.yedam_common.SecurityUtils;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_user.service.RegisterVO;
@@ -46,6 +47,9 @@ public class AdminController {
 	// 어드민 메인 페이지 및 회원가입 요청 목록
 	@GetMapping("/adminMain")
 	public String adminPage(Model model) {
+//		if (!SecurityUtils.hasRole("ROLE_ADMIN")) {
+//            return "error/access";
+//        }
 		List<UserVO> requestList = userService.stdList();
 		model.addAttribute("requests", requestList);
 	    

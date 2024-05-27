@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.yedam.app.yedam_user.service.UserVO;
 
 public class LoginUserVO implements UserDetails {
+	private static final long serialVersionUID = 1L;
+	
 	@Autowired
 	UserVO userVO;
 	
