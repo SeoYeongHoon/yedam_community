@@ -146,4 +146,23 @@
 	</select>
 	
 	
+	<!-- 최근 과제 목록 -->
+	<select id="selectRecentHomework" resultType="HomeWorkVO">
+		SELECT a.*
+		FROM   (SELECT  a.homework_id
+       					,a.homework_title
+       					,a.subject_id
+       					,a.homework_date
+       					,d.name
+       					,ROWNUM AS rn
+				FROM    homeworks a 
+		        		JOIN homework_targets b
+		        		ON(a.homework_id = b.homework_id)
+     		    		JOIN users d
+                		ON(b.user_id = d.user_id)
+				WHERE   b.user_id = #{userId}
+				ORDER BY a.homework_date desc) a
+		<![CDATA[
+		WHERE   rn <= 5	]]>
+	</select>
 </mapper>

@@ -74,4 +74,11 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	public int homeworkDelete(int homeworkId) {
 		return homeworkMapper.deleteHomework(homeworkId);
 	}
+
+	// 최근 과제 출력
+	@Override
+	public List<HomeWorkVO> getRecentTest(int userId) {
+		return homeworkMapper.selectRecentHomework(userId);
+	}
+	
 }

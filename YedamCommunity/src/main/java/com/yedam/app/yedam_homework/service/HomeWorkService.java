@@ -33,4 +33,7 @@ public interface HomeWorkService {
 
 	// 과목명 카테고리
 	public List<HomeWorkVO> subjectCategory(int subjectId, int userId);
+	
+	// 최근 과제 출력
+	public List<HomeWorkVO> getRecentTest(int userId);
 }
