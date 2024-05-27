@@ -1,8 +1,10 @@
 package com.yedam.app.yedam_homework.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_homework.service.CommentVO;
@@ -280,4 +283,27 @@ public class HomeWorkController {
 	
 	
 
+
+	// 과제 필터링 및 페이징
+	// ----------------
+	@GetMapping("/filterHomeworks")
+	@ResponseBody
+	public Map<String, Object> filterHomeworks(@RequestParam(defaultValue = "1") int page,
+											   @RequestParam(defaultValue = "4") String filter,
+											   @RequestParam(defaultValue = "") String searchQuery) {
+		
+		List<HomeWorkVO> homeworks = homeworkService.getHomeworksByFilter(filter, page, searchQuery);
+		int totalCnt = homeworkService.getTotalCnt(filter, searchQuery);
+		
+		PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("homeworks", homeworks);
+		response.put("page", pageDTO);
+		
+		System.out.println("과제항목: " + homeworks);
+		
+		return response;
+	}
+	
 }

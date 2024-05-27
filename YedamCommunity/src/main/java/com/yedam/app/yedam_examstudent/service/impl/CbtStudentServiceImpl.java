@@ -45,7 +45,7 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	}
 	//피드백유무
 	@Override
-	public int isTestFeedback(TestVO testVO) {
+	public ExamResultVO isTestFeedback(TestVO testVO) {
 		return cbtStudentMapper.isTestFeedback(testVO);
 	}
 	//재시험유무
@@ -55,8 +55,8 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	}
 	//시험목록
 	@Override
-	public List<TestVO> testListAll(int userId) {
-		return cbtStudentMapper.selectTestListAll(userId);
+	public List<TestVO> testListAll(TestVO testVO) {
+		return cbtStudentMapper.selectTestListAll(testVO);
 	}
 	
 	
@@ -115,21 +115,10 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public ExamResultVO testResult(ExamResultVO examResultVO) {
 		return cbtStudentMapper.selectTestResult(examResultVO);
 	}
-	//시험결과 문제정보
+	//시험결과 문제
 	@Override
-	public List<QuizboxVO> testResultQuiz1(QuizboxVO quizboxVO) {
-		return cbtStudentMapper.selectTestResultQuiz1(quizboxVO);
-	}
-	//시험결과 보기정보
-	@Override
-	public List<AnswerVO> testResultQuiz2(AnswerVO answerVO) {
-		return cbtStudentMapper.selectTestResultQuiz2(answerVO);
-	}
-
-
-	@Override
-	public List<QuizboxVO> testTest(QuizboxVO quizboxVO) {
-		return cbtStudentMapper.selectTest(quizboxVO);
+	public List<QuizboxVO> testResultQuiz(QuizboxVO quizboxVO) {
+		return cbtStudentMapper.selectTestResultQuiz(quizboxVO);
 	}
 	
 	
