@@ -155,12 +155,11 @@ public class ExamController {
 	@GetMapping("quizes")
 	@ResponseBody
 	public Map<String, Object> quizList(@RequestParam("subjectName") String subjectName
-									  , @RequestParam(required = false, defaultValue = "1") int page
-							          , @RequestParam(required = false, defaultValue = "10") int pageSize){
-		List<TeacherVO> list = examService.getQuizFilter(subjectName, page, pageSize);
+							          , @RequestParam(defaultValue = "1") int page){
+		List<TeacherVO> list = examService.getQuizFilter(subjectName, page);
 		int totalCnt = examService.getQuizCount(subjectName);
 		
-		PageDTO pageDTO = new PageDTO(page, totalCnt, 10);
+		PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
 		
 		Map<String, Object> response = new HashMap<>();
 		response.put("quizes", list);

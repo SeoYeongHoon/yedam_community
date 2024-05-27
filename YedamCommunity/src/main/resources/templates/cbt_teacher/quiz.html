@@ -61,6 +61,42 @@
 li {
 	display: inline;
 }
+tr img {
+	width: 80px;
+    max-width: 100%;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.center {
+  	text-align: center;
+	  width: 60%;
+	  margin: auto;
+}
+
+.testPaging {
+  	
+}
+
+.testPaging a {
+	  color: black;
+	  float: left;
+	  padding: 8px 16px;
+	  text-decoration: none;
+	  transition: background-color .3s;
+	  /*border: 1px solid #ddd;*/
+	  /*margin: 0 4px;*/
+}
+
+.testPaging a.active {
+	  background-color: #4CAF50;
+	  color: white;
+	  border: 1px solid #4CAF50;
+}
+
+.testPaging a:hover:not(.active) {
+		
+}
 </style>
 <!-- <p th:text="${answerList}"></p>  -->
 <div>
@@ -145,6 +181,13 @@ li {
 $(document).ready(function() {
 	$('#subject').off('change').on('change', function() {
 		quizContentList(1); // 필터 변경 시 1페이지부터 다시 시작
+		if($(this).val() == 'all'){
+			subjectName = '';
+			quizContentList(subjectName);
+		} else {
+			subjectName = $(this).val();
+			quizContentList(subjectName);
+		}
     });
 
     $('.testPaging').off('click', 'a').on('click', 'a', function() {
@@ -192,7 +235,7 @@ var subName = ''; // 탬플릿문법안에 들어가있는 변수
 var qContent = '';
 var qId, sId= 0;
 var page = 1;
-var pageSize = 0;
+var currentPage = 1;
 var curriId = 0;
 var solution = '';
 var answer = [];
@@ -209,7 +252,7 @@ var storageQId = [];
 //--------------------------------------------
 // 퀴즈 문제 전체를 불러오는 함수
 //--------------------------------------------
-function quizContentList(subjectName,page,pageSize){
+function quizContentList(subjectName,page){
 	//$('#quizBox').html('');
 	//--------------------------------------------
 	// 문제 전체 조회 ajax (필터링)
@@ -219,8 +262,7 @@ function quizContentList(subjectName,page,pageSize){
 		type : "get", 
 		data : {
 			subjectName : subjectName,
-			page : page,
-			pageSize : pageSize
+			page : page
 		},
 		//async: false,		
 		success : function(data){
@@ -526,16 +568,17 @@ window.addEventListener("keyup", e => {
 // 과목명 필터링해서 문제 출력
 //--------------------------------------------
 $('#subject').on('change', function(){
+	console.log('셀렉트 바뀜');
 	if($(this).val() == 'all'){
-		sName = '';
-		quizContentList(subjectName);
+		console.log('과목선택이 전체선택')
+		subjectName = '';
+		quizContentList(subjectName,page);
 	} else {
-		sName = $(this).val();
-		quizContentList(subjectName);
+		console.log('과목선택이 다른것')
+		subjectName = $(this).val();
+		quizContentList(subjectName,page);
 	}
 });
-
-quizContentList(subjectName);
 
 //--------------------------------------------
 // 시험출제 버튼 누르면 선택된 문제들이 localstorage에 저장되고 페이지가 넘어감.
@@ -571,7 +614,6 @@ $('#testInsert').on('click', function(){
 function updateList(quizes){
 	$('#quizBox').html('');
 	quizes.forEach((quiz,idx) => {
-		console.log("for문 데이터값 : " + quiz)
 		subName = quiz.subjectName;				
 		qContent = quiz.quizContent;
 		qId = quiz.quizId;
@@ -600,9 +642,10 @@ function updateList(quizes){
 	})
 }
 
-$('#updateBtn').on('click', function(){
-	updateList(quizes);
-})
+window.onload = function() {
+	quizContentList(subjectName,page);
+}
+
 </script>
 
 </html>

@@ -176,15 +176,11 @@ public class ExamServiceImpl implements ExamService {
 		return examMapper.filterQuiz(sName);
 	}*/
 	@Override
-	public List<TeacherVO> getQuizFilter(String subjectName, int page, int pageSize) {
+	public List<TeacherVO> getQuizFilter(String subjectName, int page) {
 		Map<String, Object> params = new HashMap<>();
-		
-		int starPage = (page - 1) * pageSize;
-        int endPage = page * pageSize;
         
         params.put("subjectName", subjectName);
-        params.put("starPage", starPage);
-        params.put("endRow", endPage);
+        params.put("page", page);
 		return examMapper.filterQuiz(params);
 	}
 	@Override
