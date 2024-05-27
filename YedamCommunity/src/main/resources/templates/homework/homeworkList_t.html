@@ -7,114 +7,38 @@
 .row {
 	width: 100%;
 }
+.center {
+  text-align: center;
+  width: 60%;
+  margin: auto;
+}
+
+.homeworkPaging {
+  display: inline-block;
+}
+
+.homeworkPaging a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  /*border: 1px solid #ddd;*/
+  /*margin: 0 4px;*/
+}
+
+.homeworkPaging a.active {
+  background-color: #365CF5;
+  color: white;
+  border: 1px solid #365CF5;
+}
+
+.homeworkPaging a:hover:not(.active) {
+	background-color: #ddd;
+}
 </style>
 <script>
-	//--------------------------------------------
-	// 현재 과제 리스트(필터링)
-	//--------------------------------------------
-	function filterHomeworks(page, searchQuery) {
-		var filter = $('#classSelect').val();
-		
-		searchQuery = searchQuery || $('#searchInput').val();
-		
-		$.ajax({
-			url: '/filterHomeworks',
-			type: 'GET',
-			data: {
-				page: page,
-				filter: filter,
-				searchQuery: searchQuery
-			},
-			success: function(response) {
-				console.log("success");	
-				updateHomeworks(response.homeworks);
-				homeworkPagination(response.page, page);
-			},
-			error: function(error) {
-	            console.error('에러: ', error);
-	        }
-		})
-	}
 	
-	//--------------------------------------------
-	// 필터링으로 인한 과제 리스트 변경(목록 업데이트)
-	//--------------------------------------------
-	function updateHomeworks(homeworks) {
-		var tbody = document.getElementById('homeworkBody');
-		tbody.innerHTML = '';
-		
-		homeworks.forEach(homework => {
-			var tr = document.createElement('tr');
-			
-			var tdClassId = document.createElement('td');
-			tdClassId.textContent = homework.classId;
-			tr.appendChild(tdClassId);
-			
-			var tdTitle = document.createElement('td');
-			tdTitle.textContent = homework.homeworkTitle;
-			tr.appendChild(tdTitle);
-			
-			var tdSubject = document.createElement('td');
-			tdSubject.textContent = homework.subjectName;
-			tr.appendChild(tdSubject);
-			
-			var tdDate = document.createElement('td');
-			tdDate.textContent = homework.homeworkDate;
-			tr.appendChild(tdDate);
-			
-			tbody.appendChild(tr);
-			
-		});
-	}
-	
-	function homeworkPagination(pageDTO, currentPage) {
-		console.log("pageDTO:", JSON.stringify(pageDTO, null, 5), "현재페이지:", currentPage);
-		let arr = new Array();
-		arr.push(pageDTO);
-		console.log("현재 페이지: " + arr[0].page);
-		currentPage = arr[0].page;
-		
-	    var pagination = $('.homeworkPaging');
-	    pagination.empty();
-		
-	    if (pageDTO.prev) {
-			pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '" onclick="filterHomeworks(' + (pageDTO.starPage - 1) + ')">&laquo;</a>');
-	    }
-		
-	    for (var p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
-			console.log("p값: " + p);
-			
-			var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
-			
-	        if (p === currentPage) {
-	            pageLink.addClass('active');
-	        } else {
-	            pageLink.addClass('none');
-	        }
-			
-	        pageLink.attr('onclick', 'filterHomeworks(' + p + ')');
-	        pagination.append(pageLink);
-	    }
-	    if (pageDTO.next) {
-	        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '" onclick="filterHomeworks(' + (pageDTO.endPage + 1) + ')">&raquo;</a>');
-	    }
-	}
-	
-	$(document).ready(function() {
-	    /* $('#userFilter').off('change').on('change', function() {
-	        filterUsers(1); // 필터 변경 시 1페이지부터 다시 시작
-	    });
-
-	    $('#searchInput').off('keyup').on('keyup', function(e) {
-	    	filterUsers(1); // 검색어 입력하거나 지울 시 실시간으로 데이터 변경후 페이지 1로 고정
-	    }); */
-	    
-	    $('.homeworkPaging').off('click', 'a').on('click', 'a', function() {
-	        var page = $(this).data('page');
-	        filterHomeworks(page);
-	    });
-
-	});
 </script>
 <h1>과제 목록 교수</h1>
 <div class="row">
@@ -132,17 +56,24 @@
 	<div class="col-10">
 		<div class="card-style mb-30">
 			<h1 class="mb-30">과제 목록</h1>
-			<select id="classSelect" onchange="filterHomeworks()">
-				<option value="0">전체 강의실</option>
-				<option th:each="class : ${classId}"
-					th:value="${class.classId}">[[${class.classId}]] 강의실</option>
-			</select>
-			
-			<!-- 과제 검색 -->
-			<div class="input-style-1" style="position: absolute; bottom: -20px; left: 10px;">
-				<input name="id" id="searchInput" type="text" placeholder="회원 검색" style="padding: 10px; width: 250px;">
-				<img style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			<div class="select-style-1" style="position: relative; margin-bottom: 15px;">
+				<label>강의실 선택</label>
+				<div class="select-position" style="width: 250px;">
+					<select name="" id="chooseClass">
+						<option value="0">전체 강의실</option>
+						<th:block th:each="class : ${classId}">
+							<option th:value="${class.classId}" th:text="${class.classId + ' 강의실'}"></option>
+						</th:block>
+					</select>
+				</div>
+				<!-- 과제 검색 -->
+				<div class="input-style-1" style="position: absolute; top: 43px; right: 20px;">
+					<input name="id" id="searchHomework" type="text" placeholder="회원 검색" style="padding: 10px; width: 250px;">
+					<img style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+				</div>
 			</div>
+			
+			
 			
 			<div class="table-wrapper table-responsive">
 				<table class="table">
@@ -161,6 +92,7 @@
 				</table>
 				<div class="center">
 				    <div class="homeworkPaging">
+						
 				    </div>
 				</div>
 			</div>
@@ -171,106 +103,111 @@
 </div>
 
 <script>
-	// 출력
-	$().ready(function() {
-		homeworkList();
+	//날짜 포멧 변환 함수
+	function formatDate(dateString) {
+		var date = new Date(dateString);
+	    var year = date.getFullYear().toString().substr(2, 2); // 연도의 마지막 두 자리
+	    var month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 +1, 두 자리로 맞추기
+	    var day = date.getDate().toString().padStart(2, '0'); // 두 자리로 맞추기
+	    
+	    return `${year}.${month}.${day}`;
+	}
+	
+	//--------------------------------------------
+	// DOM 요소들이 전부 로드되고 나서 아래 이벤트들 실행
+	//--------------------------------------------
+	$(document).ready(function() {
+		$('#chooseClass').off('change').on('change', function() {
+			filterHomeworks(1);
+		});
+	
+	    $('#searchHomework').off('keyup').on('keyup', function(e) {
+	    	filterHomeworks(1); // 검색어 입력하거나 지울 시 실시간으로 데이터 변경후 페이지 1로 고정
+	    });
+		
+		filterHomeworks(1);	   
 	});
 	
-	// 과제목록
-	function homeworkList(){
-		let homeworkAll = '';
-		$.ajax({
-			url:"homeworkListT",
-			type: "get",
-			data: {homeworkAll,homeworkAll},
-			success:function(data){
-				let today = new Date();
-				let todayFormatted = formatDate(today);
-				data.forEach(function(e){
-					let homeworkDate = formatDate(e.homeworkDate);
-					let status = homeworkDate < todayFormatted ? '과제 제출 마감' : '과제 진행중';
-					let statusIcon = homeworkDate < todayFormatted ? 'close-btn' : 'active-btn';
-					
-					let homework =
-						`
-						<tr onclick="location.href='homeworkInfo?homeworkId='+${e.homeworkId}">
-							<td>${e.classId}</td>
-							<td>${e.homeworkTitle}</td>
-							<td>${e.subjectName}</td>
-							<td>${homeworkDate}</td>
-							<td >
-								<span class="status-btn ${statusIcon}">${status}</span>
-							</td>
-						</tr>
-						`
-					$('#body').append(homework)	;
-						
-				});
-				classCategory();
-			},
-			 error:function(err){
-				alert("homeworkList err")
-			} 
-		});
-	}
-	
-	//강의실 카테고리
-	function classCategory() {
-		$("#classSelect").change(function() {
+	//--------------------------------------------
+	// 현재 과제 리스트(필터링)
+	//--------------------------------------------
+	function filterHomeworks(page) {
+	    var filter = $('#chooseClass').val();
+	    var searchQuery = $('#searchHomework').val();
 
-			let vals = $("#classSelect").val();
-				$.ajax({
-					url : "classCategory",
-					type : "get",
-					data : {
-						vals : vals
-					},
-					success : function(data) {
-						 // 댓글 목록 초기화
-			            $('#body').empty(); 
-						 
-			            let today = new Date();
-						let todayFormatted = formatDate(today);
-						
-						data.forEach(function(e){
-							let homeworkDate = formatDate(e.homeworkDate);
-							let status = homeworkDate < todayFormatted ? '과제 제출 마감' : '과제 진행중';
-							let statusIcon = homeworkDate < todayFormatted ? 'close-btn' : 'active-btn';
-							
-							let classCategory =
-								`
-								<tr>
-									<td>${e.classId}</td>
-									<td>${e.homeworkTitle}</td>
-									<td>${e.subjectName}</td>
-									<td>${homeworkDate}</td>
-									<td>
-									<span class="status-btn ${statusIcon}">${status}</span>
-									</td>
-								</tr>
-								`
-							$('#body').append(classCategory);
-						});
-						
-					},
-					error : function(err) {
-						alert(" classCategory err")
-					}
-				});
-		});
+	    $.ajax({
+	        url: '/filterHomeworks',
+	        type: 'GET',
+	        data: {
+	            page: page,
+	            filter: filter,
+	            searchQuery: searchQuery
+	        },
+	        success: function(response) {
+	            updateHomeworks(response.homeworks);
+	            homeworkPagination(response.page, page);
+	        },
+	        error: function(error) {
+	            console.error('Error:', error);
+	        }
+	    });
 	}
 
-	//날짜 포멧 변환 함수
-	function formatDate(date) {
-		var d = new Date(date), month = '' + (d.getMonth() + 1), day = ''
-				+ d.getDate(), year = d.getFullYear();
+	//--------------------------------------------
+	// 필터링으로 인한 과제 리스트 변경(목록 업데이트)
+	//--------------------------------------------
+	function updateHomeworks(homeworks) {
+	    var tbody = $('#homeworkBody');
+	    tbody.empty();
 
-		if (month.length < 2)
-			month = '0' + month;
-		if (day.length < 2)
-			day = '0' + day;
+	    homeworks.forEach(function(homework) {
+			var tr = $('<tr></tr>');
 
-		return [ year, month, day ].join('-');
-	} 
+	        var tdClassId = $('<td></td>').text(homework.classId);
+	        tr.append(tdClassId);
+
+	        var tdTitle = $('<td></td>').text(homework.homeworkTitle);
+	        tr.append(tdTitle);
+
+	        var tdSubject = $('<td></td>').text(homework.subjectName);
+	        tr.append(tdSubject);
+
+	        var formattedDate = formatDate(homework.homeworkDate); // 날짜 포맷 변환
+	        var tdDate = $('<td></td>').text(formattedDate);
+	        tr.append(tdDate);
+
+	        $('#homeworkBody').append(tr);
+	    });
+	}
+
+	//--------------------------------------------
+	// 페이지네이션 함수
+	//--------------------------------------------
+	function homeworkPagination(pageDTO, currentPage) {
+	    var pagination = $('.homeworkPaging');
+	    pagination.empty();
+
+	    if (pageDTO.prev) {
+	        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '">&laquo;</a>');
+	    }
+
+	    for (let p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
+	        var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
+
+	        if (p === currentPage) {
+	            pageLink.addClass('active');
+	        }
+
+	        pageLink.on('click', function() {
+	            filterHomeworks(p);
+	        });
+
+	        pagination.append(pageLink);
+	    }
+
+	    if (pageDTO.next) {
+	        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '">&raquo;</a>');
+	    }
+	}
 </script>
 </html>
