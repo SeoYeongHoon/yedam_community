@@ -68,7 +68,6 @@ public class HomeWorkController {
 	// 과제 목록(교수)
 	// ----------------
 	@GetMapping("homeworkT")
-	
 	public String homework(Model model) {
 		List<CurriculumVO> classList = curriculumService.CurriculumList();
 		model.addAttribute("classId", classList);
@@ -283,13 +282,13 @@ public class HomeWorkController {
 	
 	
 
-
+	// ----------------
 	// 과제 필터링 및 페이징
 	// ----------------
 	@GetMapping("/filterHomeworks")
 	@ResponseBody
-	public Map<String, Object> filterHomeworks(@RequestParam(defaultValue = "1") int page,
-											   @RequestParam(defaultValue = "4") String filter,
+	public Map<String, Object> filterHomeworks(@RequestParam("filter") int filter,
+											   @RequestParam(defaultValue = "1") int page,
 											   @RequestParam(defaultValue = "") String searchQuery) {
 		
 		List<HomeWorkVO> homeworks = homeworkService.getHomeworksByFilter(filter, page, searchQuery);
@@ -301,7 +300,8 @@ public class HomeWorkController {
 		response.put("homeworks", homeworks);
 		response.put("page", pageDTO);
 		
-		System.out.println("과제항목: " + homeworks);
+		System.out.println("필터: " + filter);
+		System.out.println("페이지 DTO:" + pageDTO);
 		
 		return response;
 	}
