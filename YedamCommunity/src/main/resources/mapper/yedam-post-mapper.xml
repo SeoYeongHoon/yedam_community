@@ -80,7 +80,7 @@
 	</select>
 
 	<!-- boardId 값에 따라 게시글 전체 조회 -->
-	<select id="getAllPosts" resultType="Post">
+<!-- 	<select id="getAllPosts" resultType="Post">
 		SELECT POST_ID
 	   	     , BOARD_ID
 		     , USER_ID
@@ -100,7 +100,7 @@
     	</if>
     	
 		ORDER BY post_id DESC
-	</select>
+	</select> -->
 
 	<!-- 게시글 수정 -->
 	<update id="updatePost" parameterType="Post">

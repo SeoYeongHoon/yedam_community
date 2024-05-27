@@ -10,7 +10,7 @@
 <body>
 <div class="container">
     <h1>게시글 수정</h1>
-    <form th:action="@{/postUpdate}" th:object="${post}" method="post" enctype="multipart/form-data">
+    <form id="updateForm" th:object="${post}" enctype="multipart/form-data">
         <input type="hidden" th:field="*{postId}" />
         <input type="hidden" th:field="*{boardId}" />
         <div>
@@ -24,7 +24,7 @@
         
         <!-- 파일 업로드 -->
         <label for="file">파일 :</label> 
-        <input type="file" name="file" multiple="multiple"/><br />
+        <input type="file" id="file" name="file" multiple="multiple"/><br />
         
         <div>
             <button type="button" id="updateBtn">수정</button>
@@ -34,30 +34,29 @@
 </div>
     
 <script>
-    $('#updateBtn').on('click', updateAjax);
-
-    function updateAjax(event) {
+    $('#updateBtn').on('click', function(event) {
         if (!validationCheck()) return;
-        let dataObj = getPostObj();
+        let formData = new FormData($('#updateForm')[0]);
         $.ajax({
-            url: 'postUpdate',
+            url: '/postUpdate',
             type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(dataObj),
-            dataType: 'json'
-        })
-        .done(function(result) {
-            if (result != null) {
-                alert('정상적으로 수정되었습니다.');
-                console.log(result);
-            } else {
-                alert('수정되지 않았습니다.');
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                if (result.success) {
+                    alert('정상적으로 수정되었습니다.');
+                    window.location.href = '/post/' + formData.get('boardId');
+                } else {
+                    alert('수정되지 않았습니다. 오류 메시지: ' + result.message);
+                }
+            },
+            error: function(err) {
+                console.log('Error:', err);
+                alert('수정 중 오류가 발생했습니다.');
             }
-        })
-        .fail(function(err) {
-            console.log('Error:', err);
         });
-    }
+    });
 
     function validationCheck() {
         let title = $('#title');
@@ -73,16 +72,6 @@
             return false;
         }
         return true;
-    }
-
-    function getPostObj() {
-        let formAry = $('form').serializeArray();
-        let formObj = {};
-        formAry.forEach(inputTag => {
-            formObj[inputTag.name] = inputTag.value;
-        });
-        console.log(formObj);  
-        return formObj;  
     }
 </script>
 
