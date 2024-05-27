@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class UserVO {
+	private static final long serialVersionUID = 1L;
+	
 	private Integer userId;
 	private String id;
 	private String password;

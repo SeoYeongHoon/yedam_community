@@ -15,7 +15,7 @@ public class TeacherVO {
 	private String testName;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date testDate;
-	private Date testTime;
+	private int testTime;
 	// 문제저장소
 	private int quizId;
 	private String quizContent;
