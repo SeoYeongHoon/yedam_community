@@ -179,20 +179,25 @@
 		<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
 			class="main-btn light-btn rounded-full btn-hover"
 			style="float: right;" type="button">과제 삭제</button>
+			<button id="updateHomework"class="main-btn warning-btn rounded-full btn-hover " type="button">게시글 수정</button>
 		<div style="border: 1px solid black;">
 			<hr>
 			<h1>제목</h1>
 			<p>[[${homeworkInfo.homeworkTitle}]]</p>
+			<input id="title" class="homeworkUpdate" type="text" style="padding: 10px; width: 250px; border: 1px solid black;" th:value="${homeworkInfo.homeworkTitle}" readonly>
 			<p style="float: right;">[[${#dates.format(homeworkInfo.homeworkDate,'yyyy년MM월dd일')}]]</p>
+			<input id="date" class="homeworkUpdate" type="text" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="padding: 10px; width: 250px; border: 1px solid black;" readonly>
 			<hr>
 			<h2>내용</h2>
 			<hr>
 			<p>[[${homeworkInfo.homeworkContent}]]</p>
+			<input id="content" class="homeworkUpdate" type="text" th:value="${homeworkInfo.homeworkContent}" style="padding: 10px; width: 250px; border: 1px solid black;" readonly>
 			<th:block th:each="file : ${files}">
 				<p>
 					<a th:href="|@{/homeworkdownload}/${file.downloadLocation}|">[[${file.homeworkfileName}]]</a>
 				</p>
 			</th:block>
+			<button id=updateHomeworks class="main-btn primary-btn btn-hover" type="button" style="display: none;">등록</button>
 		</div>
 		<div style="border: 1px solid black;">
 			<!-- 댓글출력 -->
@@ -219,6 +224,33 @@
 </main>
 
 <script>
+
+$('#updateHomework').on('click',function(e){
+	$('.homeworkUpdate').prop('readonly',false);
+	$('#updateHomeworks').css('display', 'block');
+	
+	
+})
+
+$('#updateHomeworks').on('click',function(){
+	let title = $('#title').val();
+	let date = $('#date').val();
+	let content = $('#content').val();
+	let id = $('#deleteHomeworks').val();
+	$.ajax({
+		url:"/updateHomework",
+		type: "put",
+		data: {title : title, date : date , content : content, id : id},
+		success:function(data){
+			$('.homeworkUpdate').prop('readonly',true);
+			$('#updateHomeworks').css('display', 'none');
+			
+		},
+		error:function(err){
+			alert("updateHomework err")
+		}
+	})
+})
 
 
 //과제 삭제
@@ -250,7 +282,6 @@ $('#deleteHomeworks').on('click',function(){
    //--------------------------
    //댓글 목록 불러오기 함수
    //--------------------------
-   let replyId = 0;
    function replyList(){
       let targetId = $('#targetId').val();
       
@@ -267,8 +298,9 @@ $('#deleteHomeworks').on('click',function(){
                let replies = 
             	   `
             	   <input id="replyId" type="hidden" value="${e.replyId}">
-            	   <div style="border: 1px solid black;">
-                   		<p>댓글 내용 : <p id="replyContent">${e.replyContent}</p></p>
+            	   <div class ="replyDiv"style="border: 1px solid black;">
+            	   		<input type="text" value="${e.replyContent}" readonly >
+                   		<p>댓글 내용 : <p class="replyContent">${e.replyContent}</p></p>
                    		<p>작성자 : ${e.replyWriter}</p>
                    		<p class="replyDate">작성일자 :${replyDate}</p>
                    		<div id="replyfiles-${e.replyId}"></div>
@@ -298,6 +330,8 @@ $('#deleteHomeworks').on('click',function(){
             
             $('.updateBtn').on('click',function(e){
             	replyId = $(this).val();
+            	$('#updateReply').find('[name="replyId"]').val(replyId);
+            	$('#updateReply').find('.updateContent').val($(this).closest('.replyDiv').find('.replyContent').html());
             	$('#updateReply').modal('show');
             })
          },
@@ -363,6 +397,7 @@ $('#deleteHomeworks').on('click',function(){
                $('#modal').modal('show');
                // 댓글 입력창 초기화
                replyContent.value = '';
+              // $('.replyContent').val('');
                // 댓글 목록 새로고침
                replyList();
             },

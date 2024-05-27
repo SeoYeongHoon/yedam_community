@@ -99,5 +99,23 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 	public int getTotalCnt(int filter, String searchQuery) {
 		return homeworkMapper.getTotalCnt(filter, searchQuery);
 	}
+
+	//과제 수정
+	@Override
+	public Map<String, Object> homeworkUpdate(HomeWorkVO homeworkVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		
+		int result = homeworkMapper.updateHomework(homeworkVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result",isSuccessed);
+		map.put("reply", homeworkVO);
+		
+		return map;
+	}
 	
 }

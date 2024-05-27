@@ -212,4 +212,11 @@
 		<![CDATA[
 		WHERE   rn <= 5	]]>
 	</select>
+	
+	<!-- 과제 수정 -->
+	<update id="updateHomework" parameterType="HomeWorkVO">
+		UPDATE homeworks
+		SET homework_content = #{homeworkContent} , homework_date = #{homeworkDate} , homework_title = #{homeworkTitle}
+		WHERE homework_id = #{homeworkId}
+	</update>
 </mapper>
