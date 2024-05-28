@@ -174,15 +174,7 @@ public class HomeWorkController {
 	@PutMapping("/updateHomework")
 	@ResponseBody
 	//@RequestMapping("/admin")
-	public Map<String, Object> updateHomework(@RequestParam("title") String title,
-											  @RequestParam("date") Date date,
-											  @RequestParam("content") String content,
-											  @RequestParam("id") int id) {
-		HomeWorkVO homeworkVO = new HomeWorkVO();
-		homeworkVO.setHomeworkTitle(title);
-		homeworkVO.setHomeworkDate(date);
-		homeworkVO.setHomeworkContent(content);
-		homeworkVO.setHomeworkId(id);
+	public Map<String, Object> updateHomework(HomeWorkVO homeworkVO) {
 		
 		return homeworkService.homeworkUpdate(homeworkVO);
 	}
@@ -204,6 +196,7 @@ public class HomeWorkController {
 
 		return "homework/homeworkInfo";
 	}
+	
 	// 과제 파일 조회
 	@GetMapping("/homeworkFileList")
 	@ResponseBody
@@ -297,7 +290,6 @@ public class HomeWorkController {
 	@ResponseBody
 	//@RequestMapping("/all")
 	public Map<String, Object> updateReply (ReplyVO replyVO ){
-	
 		return homeworkReplyService.replyUpdate(replyVO);
 	}
 	
@@ -343,7 +335,7 @@ public class HomeWorkController {
 	
 
 	// ----------------
-	// 파일 삭제
+	// 과제 파일 삭제
 	// ----------------
 	@PostMapping("/deleteFile")
 	@ResponseBody
@@ -351,6 +343,20 @@ public class HomeWorkController {
 	public  Map<String, Object> fileDelete (HomeWorkFileVO homeworkfileVO) {
 		homeworkfileService.deleteFile(homeworkfileVO);
 		return null;
+	}
+	
+	// ----------------
+	// 댓글과제 파일 삭제
+	// ----------------
+	@PostMapping("/deleteReplyFile")
+	@ResponseBody
+	//@RequestMapping("/admin")
+	public  Map<String, Object> replyFileDelete (ReplyFileVO replyfileVO) {
+		System.err.println("댓글파일 아이디"+ replyfileVO.getReplyId());
+		Map<String, Object> map = new HashMap<>();
+		map.put("replyId", replyfileVO.getReplyId());
+		homeworkfileService.deleteReplyFile(replyfileVO);
+		return map;
 	}
 	
 }

@@ -211,10 +211,9 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 		return homeworkfileMapper.selectReplyfile(replyId);
 	}
 	
-	//파일 삭제
+	// 과제 파일 삭제
 	public Map<String, Object> deleteFile(HomeWorkFileVO homeworkfileVO) {
 		Map<String, Object> map = new HashMap<>();
-		//HomeWorkFileVO homeworkFile = homeworkfileMapper.selectHomeworkFileId(homeworkfileVO);
 		int result = homeworkfileMapper.fileDelete(homeworkfileVO);
 
 		if (result == 1) {
@@ -230,6 +229,29 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			}
 			map.put("downloadLocation",  homeworkfileVO.getDownloadLocation());
 		}
+		return null;
+	}
+	
+	// 댓글 파일 삭제
+	@Override
+	public Map<String, Object> deleteReplyFile(ReplyFileVO replyfileVO) {
+		Map<String, Object> map = new HashMap<>();
+		int result = homeworkfileMapper.replyFileDelete(replyfileVO);
+
+		if (result == 1) {
+			Path filePath = Paths.get(replyfileVO.getReplyfileLocation());
+			
+			try {
+				// 파일 삭제
+				Files.delete(filePath);
+			} catch (NoSuchFileException e) {
+				System.out.println("삭제하려는 파일/디렉토리가 없습니다");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			map.put("downloadLocation",  replyfileVO.getReplyfileLocation());
+		}
+		
 		return null;
 	}
 	

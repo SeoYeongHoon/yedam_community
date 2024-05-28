@@ -16,7 +16,7 @@ public interface HomeWorkFileMapper {
 	public List<HomeWorkFileVO> selectHomeworkfile(HomeWorkVO homeworkVO);
 
 	// 파일id로 파일 조회
-	//public HomeWorkFileVO selecthomeworkfileId(HomeWorkFileVO homeworkfileVO);
+	// public HomeWorkFileVO selecthomeworkfileId(HomeWorkFileVO homeworkfileVO);
 
 	// 과제 파일 이름 조회
 	public String selectHomeworkFileName(String downloadLocation);
@@ -30,6 +30,9 @@ public interface HomeWorkFileMapper {
 	// 과제 파일 이름 조회
 	public String selectReplyFileName(String downloadLocation);
 
-	// 과제 삭제
+	// 과제 파일 삭제
 	public int fileDelete(HomeWorkFileVO homeworkfileVO);
+
+	// 과제 파일 삭제
+	public int replyFileDelete(ReplyFileVO replyfileVO);
 }

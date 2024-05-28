@@ -139,8 +139,8 @@
 			<hr>
 			<h1>제목</h1>
 			<input id="title" class="homeworkUpdate" type="text" style="padding: 10px; width: 250px; border: 1px solid black;" th:value="${homeworkInfo.homeworkTitle}" readonly>
-			<h2>작성일자</h2>
-			<input id="homeworkDate" type="text" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="padding: 10px; width: 250px; border: 1px solid black;" readonly>
+			<h2>마감일자</h2>
+			<input id="homeworkDate" class="homeworkUpdate" type="text" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="padding: 10px; width: 250px; border: 1px solid black;" readonly>
 			<hr>
 			<h2>내용</h2>
 			<hr>
@@ -216,7 +216,7 @@ function fileList(){
 		}
 	})
 }
-//파일 삭제
+// 과제 파일 삭제
 function deleteFile(homeworkfileId){
 $('#deleteFile-'+ homeworkfileId).on('click',function(){
 	let path = $(this).val();
@@ -228,8 +228,7 @@ $('#deleteFile-'+ homeworkfileId).on('click',function(){
 		data:{homeworkfileLocation : path, homeworkfileId: homeworkfileId},
 		success:function(e){
 			 $('#homeworkFile').empty(); 
-			 $('.deleteFile').css('display', 'block');
-			fileList();
+			 fileList();
 		},
 		error:function(err){
 			alert('filedelete err')	
@@ -238,32 +237,33 @@ $('#deleteFile-'+ homeworkfileId).on('click',function(){
 	
 })
 }
+
+
 //과제 수정
 $('#updateHomework').on('click',function(e){
-	$('.homeworkUpdate').prop('readonly',false);
-	$('.homeworkUpdate').css('backgroundColor','yellow')
-	$('#updateHomeworks').css('display', 'block');
-	$('.deleteFile').css('display', 'block');
+	$('.homeworkUpdate').prop('readonly',false); // 수정할 input
+	$('.homeworkUpdate').css('backgroundColor','yellow') // 수정할 input
+	$('#updateHomeworks').css('display', 'block'); // 수정완료 버튼
+	$('.deleteFile').css('display', 'block'); // 파일삭제 버튼
+	$('#homeworkDate').prop('type','date'); // 마감일자 타입 변경
+	$('#homeworkDate').val('');// 변경한 마감일자
 })
 
-
-	
-
 $('#updateHomeworks').on('click',function(){
-	
-	let title = $('#title').val();
-	let date = formatDate(new Date());
-	let content = $('#content').val();
-	let id = $('#deleteHomeworks').val();
+	let homeworkDate = $('#homeworkDate').val()
+	let homeworkTitle = $('#title').val();
+	let homeworkContent = $('#content').val();
+	let homeworkId = $('#deleteHomeworks').val();
 	$.ajax({
 		url:"/admin/updateHomework",
 		type: "put",
-		data: {title : title, date : date , content : content, id : id},
+		data: {homeworkTitle : homeworkTitle, homeworkDate : homeworkDate , homeworkContent : homeworkContent, homeworkId : homeworkId},
 		success:function(data){
-			$('.homeworkUpdate').prop('readonly',true);
-			$('#updateHomeworks').css('display', 'none');
-			$('.homeworkUpdate').css('backgroundColor','transparent')
-			$('#homeworkDate').val(date);
+			console.log("날짜" == data)
+			$('.homeworkUpdate').prop('readonly',false); //수정하고 인풋 readonly
+			$('#updateHomeworks').css('display', 'none'); // 수정 등록버튼 
+			$('.homeworkUpdate').css('backgroundColor','transparent') // 배경색 무로 변경
+			$('#modal').modal('show'); // 등록완료 모달
 		},
 		error:function(err){
 			alert("updateHomework err")
@@ -280,7 +280,7 @@ $('#deleteHomeworks').on('click',function(){
 		   type: "delete",
 		   data: {homeworkId : homeworkId},
 		   success: function(data){
-			   $('#deleteHomework').modal('show');
+			   $('#deleteHomework').modal('show'); // 삭제완료 모달
 		   },
 		   error: function(err){
 			   alert("deleteHomeworks err");
@@ -317,7 +317,7 @@ $('#deleteHomeworks').on('click',function(){
                    		<h3>작성자</h3>
                    		<input  type="text" value="${e.replyWriter}" readonly >
                    		<h3>작성일자</h3>
-                   		<input class="replyDate-${e.replyId}"type="text" value="${replyDate}"  readonly >
+                   		<input class="replyDate-${e.replyId}" type="text" value="${replyDate}"  readonly >
                    	</div>	
                    		<div id="replyfiles-${e.replyId}"></div>
                    		<div class="col-12" style="text-align: right;">
@@ -347,6 +347,7 @@ $('#deleteHomeworks').on('click',function(){
             	$('.replyContent-'+replyId).prop('readonly',false);
             	$('.replyContent-'+replyId).css('backgroundColor','yellow');
             	$('.contentUpdate-'+replyId).css('display','block');
+            	$('.deleteReplyFile').css('display','block');
             	updateReply(replyId);
             }) 
              
@@ -370,10 +371,12 @@ $('#deleteHomeworks').on('click',function(){
 			type:'PUT',
 			data: {replyContent : content, replyId :replyId, date : date},
 			success:function(data){
-				
+				$('#modal').modal('show');
 				$('#replyUpdate-'+replyId).prop('readonly',true);
-				
+				console.log("댓글 수정 아이디 == "+replyId)
+				$('#replyfiles-'+ replyId).empty();
 				replyList();
+				replyFile(replyId);
 			},
 			error : function(err){
 				alert("update err")
@@ -438,10 +441,15 @@ $('#deleteHomeworks').on('click',function(){
 			   data.forEach(function(e){
 				   let replyfile = 
 					   `
+					   <input id="replyId" type="hidden" value="${e.replyId}">
+					   <input class="replyfileId" type="hidden" value="${e.replyfileId}">
 					   <a href="/replydownload/${e.downloadLocation}">${e.replyfileName}</a>
+					   <button id="deleteFile-${e.replyfileId}" value="${e.replyfileLocation}" type="button" class="close deleteReplyFile" style="float:left; display:none;" >&times;</button>
 					   `
 					   $('#replyfiles-'+e.replyId).append(replyfile);
 			   })
+			   let replyfileId = $('.replyfileId').val();
+			   deleteReplyFile(replyfileId)
 		   },
 		   error : function(err){
 			 alert("replyfile err")  
@@ -449,6 +457,27 @@ $('#deleteHomeworks').on('click',function(){
 	   });
    }
  	
+   
+// 댓글 파일 삭제
+   function deleteReplyFile(replyfileId){
+	let replyId = $('#replyId').val();
+   $('#deleteFile-'+ replyfileId).on('click',function(){
+   	let path = $(this).val();
+   	$.ajax({
+   		url: '/admin/deleteReplyFile',
+   		type:'post',
+   		data:{replyfileLocation : path, replyfileId: replyfileId, replyId : replyId},
+   		success:function(data){
+   			$('#replyfiles-'+data.replyId).empty();
+   			replyFile(data.replyId);
+   		},
+   		error:function(err){
+   			alert('filedelete err')	
+   		}
+   	})
+   	
+   })
+   }
     //-------------------
     // 대댓글 리스트
     //-------------------
@@ -461,7 +490,8 @@ $('#deleteHomeworks').on('click',function(){
 	        		   let comments =
 	        			 `<div>
 	        			 	<p>작성자: ${e.commentWriter}</p>
-	        			 	<p>대댓글 내용 : <p id="commentContent">${e.commentContent}</p></p>
+	        			 	<input class="commentContent-${e.commentId}" type="text" value="${e.commentContent}" readonly >
+	        			 	<button type="button" class="main-btn warning-btn rounded-full btn-hover replyContentUpdate-${e.commentId}" style="display: none;"	>수정</button>
 	        			 	<p>대댓글 작성일자 : ${commentDate}</p>
 	        			 	<button class="main-btn light-btn rounded-full btn-hover " type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
 	        			 	<button class="main-btn warning-btn rounded-full btn-hover cUpdateBtn" type="button" id="cUpdateBtn" value="${e.commentId}">답글 수정</button>
@@ -471,26 +501,26 @@ $('#deleteHomeworks').on('click',function(){
 	        	 });
 	        	 
 	        	  $('.cUpdateBtn').on('click',function(e){
-	             	commentId = $(this).val();
-	             	$('#updateComment').find('[name="commentId"]').val(commentId);
-	             	$('#updateComment').find('.cUpdateContent').val($(this).closest('div').find('#commentContent').html());
-	             	let cmt = $('.cUpdateContent').val();
-	             	$('#updateComment').modal('show');
+	        		  let commentId = $(this).val();
+	             	$('.commentContent-'+ commentId).prop('readonly',false);
+	             	$('.commentContent-'+commentId).css('backgroundColor','yellow');
+	            	$('.replyContentUpdate-'+commentId).css('display','block');
+	            	replyUpdate(commentId);
 	             }) 
 	   } 
    //--------------------------
    //대댓글 수정 
    //--------------------------
-  $('#cUpdateBtn').on('click', function(data){
-	   let commentId = $('[name="commentId"]').val();
-	   let content = $('.cUpdateContent').val();
-	   
+  function replyUpdate(commentId){
+	   console.log("대댓글 아이디 == "+ commentId)
+  $('.replyContentUpdate-'+commentId).on('click', function(data){
+	   let content = $('.commentContent-'+commentId).val();
+	   console.log("대댓글 내용 =="+content)
 	  $.ajax({
 			url:"/admin/updateComment",
 			type:'PUT',
 			data: {content : content, commentId : commentId},
 			success:function(data){
-				$('#updateComment').modal('hide');
 				$('#modal').modal('show');
 				$('.cUpdateContent').val('');
 				
@@ -501,6 +531,7 @@ $('#deleteHomeworks').on('click',function(){
 			}
 		})
    });
+   }
    
    //--------------------------
    //대댓글 등록

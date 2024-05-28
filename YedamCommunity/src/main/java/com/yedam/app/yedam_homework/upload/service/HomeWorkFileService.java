@@ -15,16 +15,19 @@ public interface HomeWorkFileService {
 
 	// 과제 파일 조회
 	public List<HomeWorkFileVO> homeworkfileList(HomeWorkVO homeworkVO);
-	
+
 	// 파일id로 파일 조회
-	//public HomeWorkFileVO homeworkfile(HomeWorkFileVO homeworkfileVO);
+	// public HomeWorkFileVO homeworkfile(HomeWorkFileVO homeworkfileVO);
 
 	// 댓글등록 파일 업로드
 	public List<String> replyUploadFile(@RequestPart MultipartFile[] uploadFiles, int replyId);
-	
+
 	// 댓글 파일 조회
 	public List<ReplyFileVO> replyfileList(int replyId);
-	
+
 	// 파일 삭제
 	public Map<String, Object> deleteFile(HomeWorkFileVO homeworkfileVO);
+
+	// 댓글 파일 삭제
+	public Map<String, Object> deleteReplyFile(ReplyFileVO replyfileVO);
 }
