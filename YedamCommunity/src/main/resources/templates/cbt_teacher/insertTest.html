@@ -10,7 +10,7 @@
 	<!-- ======= 시험 이름 입력 start ======= -->
 	<div class="input-style-1">
 		<h6 class="mb-25">시험 Title</h6>
-		<input type="text" placeholder="시험의 이름 입력" th:field="*{testName}" />
+		<input type="text" placeholder="시험의 이름 입력(최대 15자 입력)" th:field="*{testName}" maxlength="15" oninput="nameMaxLength(this);"/>
 	</div>
 	<!-- ======= 시험 이름 입력 end ======= -->
 
@@ -242,5 +242,11 @@
 	//--------------------------------------------
 	//유저 선택 체크박스 관련 기능 종료
 	//--------------------------------------------
+	
+	function nameMaxLength(e){
+        if(e.value.length > e.maxLength){
+            e.value = e.value.slice(0, e.maxLength);
+        }
+    }
 </script>
 </html>
