@@ -20,8 +20,6 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Autowired
 	CbtStudentMapper cbtStudentMapper;
 	
-	
-	
 	//시험결과유무
 	@Override
 	public int isTestResult(TestVO testVO) {

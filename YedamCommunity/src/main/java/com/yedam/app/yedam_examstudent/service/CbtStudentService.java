@@ -4,8 +4,6 @@ import java.util.List;
 
 
 public interface CbtStudentService {
-
-	
 	
 	//ㅡㅡㅡㅡㅡㅡ
 	//시험결과유무

@@ -52,8 +52,9 @@ public class ProfileController {
 						 Model model) {
 		System.out.println("유저정보: " + SecurityUtils.getCurrentLogId());
 		int logid = SecurityUtils.getCurrentLogId();
-		List<TestVO> testList = cbtStudentService.recentTest(logid);
+		List<TestVO> testList = cbtStudentService.testListAll(testVO);
 		model.addAttribute("recentTest", testList);
+		System.out.println("시험 리스트:" + testList);
 		
 		List<HomeWorkVO> homeworkList = homeWorkService.getRecentTest(logid);
 		model.addAttribute("recentHomework", homeworkList);
