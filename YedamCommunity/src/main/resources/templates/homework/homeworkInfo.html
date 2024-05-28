@@ -191,7 +191,7 @@ $().ready(function(){
 function fileList(){
 	let homeworkId = $('#deleteHomeworks').val();
 	$.ajax({
-		url: 'homeworkFileList',
+		url: '/admin/homeworkFileList',
 		type:'get',
 		data:{homeworkId : homeworkId},
 		success:function(data){
@@ -218,16 +218,17 @@ function fileList(){
 }
 //파일 삭제
 function deleteFile(homeworkfileId){
-$('.deleteFile').on('click',function(){
+$('#deleteFile-'+ homeworkfileId).on('click',function(){
 	let path = $(this).val();
 	console.log("경로 =="+path)
 	
 	$.ajax({
-		url: '/deleteFile',
+		url: '/admin/deleteFile',
 		type:'post',
 		data:{homeworkfileLocation : path, homeworkfileId: homeworkfileId},
 		success:function(e){
 			 $('#homeworkFile').empty(); 
+			 $('.deleteFile').css('display', 'block');
 			fileList();
 		},
 		error:function(err){
@@ -237,22 +238,16 @@ $('.deleteFile').on('click',function(){
 	
 })
 }
-
-
-// 과제 수정
+//과제 수정
 $('#updateHomework').on('click',function(e){
-				$('.homeworkUpdate').prop('readonly',false);
-				$('.homeworkUpdate').css('backgroundColor','yellow')
-				$('#updateHomeworks').css('display', 'block');
-				let homeworkfileId = $(this).val();
-				$('#deleteFile-'+ homeworkfileId).css('display', 'block');
-	})
-	
-/* $('#updateHomework').on('click',function(e){
 	$('.homeworkUpdate').prop('readonly',false);
 	$('.homeworkUpdate').css('backgroundColor','yellow')
 	$('#updateHomeworks').css('display', 'block');
-}) */
+	$('.deleteFile').css('display', 'block');
+})
+
+
+	
 
 $('#updateHomeworks').on('click',function(){
 	
@@ -261,7 +256,7 @@ $('#updateHomeworks').on('click',function(){
 	let content = $('#content').val();
 	let id = $('#deleteHomeworks').val();
 	$.ajax({
-		url:"/updateHomework",
+		url:"/admin/updateHomework",
 		type: "put",
 		data: {title : title, date : date , content : content, id : id},
 		success:function(data){
@@ -281,7 +276,7 @@ $('#updateHomeworks').on('click',function(){
 $('#deleteHomeworks').on('click',function(){
 	let homeworkId = $('#deleteHomeworks').val();
 	$.ajax({
-		   url: "deleteHomeworks",
+		   url: "/admin/deleteHomeworks",
 		   type: "delete",
 		   data: {homeworkId : homeworkId},
 		   success: function(data){
@@ -303,7 +298,7 @@ $('#deleteHomeworks').on('click',function(){
    function replyList(){
       let targetId = $('#targetId').val();
       $.ajax({
-         url : "replyList",
+         url : "/admin/replyList",
          type : "GET",
          data : {targetId:targetId},
          success : function(data){
@@ -371,7 +366,7 @@ $('#deleteHomeworks').on('click',function(){
 	  	let date = $('.replyDate-'+replyId).val();
 	  	
 		$.ajax({
-			url:"updateReply",
+			url:"/admin/updateReply",
 			type:'PUT',
 			data: {replyContent : content, replyId :replyId, date : date},
 			success:function(data){
@@ -410,7 +405,7 @@ $('#deleteHomeworks').on('click',function(){
          return;
       } else {
          $.ajax({
-            url : "insertReply",
+            url : "/admin/insertReply",
             type : "POST",
             processData : false, // QueryString(key=value)로 자동변환 무시
             contentType : false, // FormData가 가지고 있는 통신 정보를 사용
@@ -436,7 +431,7 @@ $('#deleteHomeworks').on('click',function(){
    function replyFile(replyId){
 	   
 	   $.ajax({
-		   url : "replyfile",
+		   url : "/admin/replyfile",
 		   type : "GET",
 		   data : {replyId : replyId},
 		   success : function(data){
@@ -491,7 +486,7 @@ $('#deleteHomeworks').on('click',function(){
 	   let content = $('.cUpdateContent').val();
 	   
 	  $.ajax({
-			url:"updateComment",
+			url:"/admin/updateComment",
 			type:'PUT',
 			data: {content : content, commentId : commentId},
 			success:function(data){
@@ -521,7 +516,7 @@ $('#deleteHomeworks').on('click',function(){
 	    } else{
 	    	
 	   $.ajax({
-		   url: 'insertComment',
+		   url: '/admin/insertComment',
 		   type: 'post',
 		   data :{replyId:replyId , content:content} ,
 		   success: function(data){
@@ -542,7 +537,7 @@ $('#deleteHomeworks').on('click',function(){
    function deleteComment(commentId){
 	   
 	   $.ajax({
-		   url: "deleteComment",
+		   url: "/admin/deleteComment",
 		   type: "delete",
 		   data: {commentId : commentId},
 		   success: function(data){
@@ -560,7 +555,7 @@ $('#deleteHomeworks').on('click',function(){
    //--------------------------
  	function deleteReply(replyId){
  		 $.ajax({
- 			   url: "deleteReply",
+ 			   url: "/admin/deleteReply",
  			   type: "delete",
  			   data: {replyId : replyId},
  			   success: function(data){

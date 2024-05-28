@@ -20,7 +20,7 @@
             <div class="row" >
               <div class="col-4" th:each="classInfo : ${class}">
                 <div class="card-style-1 mb-30">
-                  <div class="card-content" th:onclick="|location.href='@{/homeworkInsert(curriculumId=${classInfo.curriculumId})}'|">
+                  <div class="card-content" th:onclick="|location.href='@{/admin/homeworkInsert(curriculumId=${classInfo.curriculumId})}'|">
                     <h4>
                     	<font style="vertical-align: inherit;">
                     		<font style="vertical-align: inherit;">[[${classInfo.classId}]]강의실</font>
