@@ -122,56 +122,11 @@
 				<!-- 모달 푸터 -->
 				<div class="modal-footer">
 					<button id='checkBtn' type="button" class="btn btn-primary"
-						onclick="location.href='homeworkT'">확인</button>
+						onclick="location.href='homework_T'">확인</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- 댓글 수정 모달 -->
-	<div id="updateReply" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<!-- 모달 헤더 -->
-				<div class="modal-header">
-					<h5 class="modal-title">댓글 수정</h5>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-				<!-- 모달 본문 -->
-					<div class="modal-body ">
-						<input type="hidden" name="replyId">
-						<textarea class="updateContent" style="border: 1px solid black;"
-							rows="8" cols="50" placeholder="내용을 입력하세요"></textarea>
-					</div>
-					<!-- 모달 푸터 -->
-					<div class="modal-footer">
-						<button id='updateBtn' type="button" class="btn btn-primary" data-dismiss="modal">수정</button>
-					</div>
-			</div>
-		</div>
-	</div>
-	<!-- 대댓글 수정 모달 -->
-	<div id="updateComment" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<!-- 모달 헤더 -->
-				<div class="modal-header">
-					<h5 class="modal-title">대댓글 수정</h5>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-				<!-- 모달 본문 -->
-					<div class="modal-body ">
-					<input type="hidden" name="commentId">
-						<textarea class=cUpdateContent style="border: 1px solid black;"
-							rows="8" cols="50" placeholder="내용을 입력하세요"></textarea>
-					</div>
-					<!-- 모달 푸터 -->
-					<div class="modal-footer">
-						<button id='cUpdateBtn' type="button" class="btn btn-primary" data-dismiss="modal">수정</button>
-					</div>
-			</div>
-		</div>
-	</div>
-	
 
 
 	<!-- 과제 상세페이지 시작 -->
@@ -179,31 +134,29 @@
 		<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
 			class="main-btn light-btn rounded-full btn-hover"
 			style="float: right;" type="button">과제 삭제</button>
-			<button id="updateHomework"class="main-btn warning-btn rounded-full btn-hover " type="button">게시글 수정</button>
+			<button id="updateHomework"class="main-btn warning-btn rounded-full btn-hover " th:value="${homeworkInfo.homeworkId}" type="button">게시글 수정</button>
 		<div style="border: 1px solid black;">
 			<hr>
 			<h1>제목</h1>
-			<p>[[${homeworkInfo.homeworkTitle}]]</p>
 			<input id="title" class="homeworkUpdate" type="text" style="padding: 10px; width: 250px; border: 1px solid black;" th:value="${homeworkInfo.homeworkTitle}" readonly>
-			<p style="float: right;">[[${#dates.format(homeworkInfo.homeworkDate,'yyyy년MM월dd일')}]]</p>
-			<input id="date" class="homeworkUpdate" type="text" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="padding: 10px; width: 250px; border: 1px solid black;" readonly>
+			<h2>작성일자</h2>
+			<input id="homeworkDate" type="text" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="padding: 10px; width: 250px; border: 1px solid black;" readonly>
 			<hr>
 			<h2>내용</h2>
 			<hr>
-			<p>[[${homeworkInfo.homeworkContent}]]</p>
 			<input id="content" class="homeworkUpdate" type="text" th:value="${homeworkInfo.homeworkContent}" style="padding: 10px; width: 250px; border: 1px solid black;" readonly>
-			<th:block th:each="file : ${files}">
-				<p>
-					<a th:href="|@{/homeworkdownload}/${file.downloadLocation}|">[[${file.homeworkfileName}]]</a>
-				</p>
-			</th:block>
+			
+			<!-- 파일내역 출력 -->
+			<div id="homeworkFile">
+			
+			</div>
 			<button id=updateHomeworks class="main-btn primary-btn btn-hover" type="button" style="display: none;">등록</button>
 		</div>
 		<div style="border: 1px solid black;">
+			
 			<!-- 댓글출력 -->
 			<h3>댓글</h3>
 			<div id="replyList">
-				<div id="replies"></div>
 			</div>
 		</div>
 	</div>
@@ -225,16 +178,86 @@
 
 <script>
 
-$('#updateHomework').on('click',function(e){
-	$('.homeworkUpdate').prop('readonly',false);
-	$('#updateHomeworks').css('display', 'block');
+//--------------------------
+// 페이지 로드 시 댓글 목록 불러오기
+//--------------------------
+$().ready(function(){
+	replyList();
+	fileList()
+});
+
+//파일 목록
+
+function fileList(){
+	let homeworkId = $('#deleteHomeworks').val();
+	$.ajax({
+		url: 'homeworkFileList',
+		type:'get',
+		data:{homeworkId : homeworkId},
+		success:function(data){
+			data.forEach(function(e){
+				let file =
+					`
+					<div>
+						<p>
+						<a class="filePath" value="${e.homeworkfileId}"  href="/homeworkdownload/${e.downloadLocation}">${e.homeworkfileName}</a>
+							<button id="deleteFile-${e.homeworkfileId}" value="${e.homeworkfileLocation}" type="button" class="close deleteFile" style="float:left; display:none;" >&times;</button>
+						</p>
+					</div>
+					`
+					$('#homeworkFile').append(file);
+					 deleteFile(e.homeworkfileId);
+					 
+			})
+			
+		},
+		error:function(err){
+			alert("파일 리스트 오류")
+		}
+	})
+}
+//파일 삭제
+function deleteFile(homeworkfileId){
+$('.deleteFile').on('click',function(){
+	let path = $(this).val();
+	console.log("경로 =="+path)
 	
+	$.ajax({
+		url: '/deleteFile',
+		type:'post',
+		data:{homeworkfileLocation : path, homeworkfileId: homeworkfileId},
+		success:function(e){
+			 $('#homeworkFile').empty(); 
+			fileList();
+		},
+		error:function(err){
+			alert('filedelete err')	
+		}
+	})
 	
 })
+}
+
+
+// 과제 수정
+$('#updateHomework').on('click',function(e){
+				$('.homeworkUpdate').prop('readonly',false);
+				$('.homeworkUpdate').css('backgroundColor','yellow')
+				$('#updateHomeworks').css('display', 'block');
+				let homeworkfileId = $(this).val();
+				$('#deleteFile-'+ homeworkfileId).css('display', 'block');
+	})
+	
+/* $('#updateHomework').on('click',function(e){
+	$('.homeworkUpdate').prop('readonly',false);
+	$('.homeworkUpdate').css('backgroundColor','yellow')
+	$('#updateHomeworks').css('display', 'block');
+}) */
 
 $('#updateHomeworks').on('click',function(){
+	
 	let title = $('#title').val();
-	let date = $('#date').val();
+	let date = formatDate(new Date());
 	let content = $('#content').val();
 	let id = $('#deleteHomeworks').val();
 	$.ajax({
@@ -244,7 +267,8 @@ $('#updateHomeworks').on('click',function(){
 		success:function(data){
 			$('.homeworkUpdate').prop('readonly',true);
 			$('#updateHomeworks').css('display', 'none');
-			
+			$('.homeworkUpdate').css('backgroundColor','transparent')
+			$('#homeworkDate').val(date);
 		},
 		error:function(err){
 			alert("updateHomework err")
@@ -270,13 +294,7 @@ $('#deleteHomeworks').on('click',function(){
 	
 })
 
-	//--------------------------
-	// 페이지 로드 시 댓글 목록 불러오기
-	//--------------------------
-	$().ready(function(){
-		replyList();
-		
-	});
+
 	
 	
    //--------------------------
@@ -284,7 +302,6 @@ $('#deleteHomeworks').on('click',function(){
    //--------------------------
    function replyList(){
       let targetId = $('#targetId').val();
-      
       $.ajax({
          url : "replyList",
          type : "GET",
@@ -294,21 +311,18 @@ $('#deleteHomeworks').on('click',function(){
             $('#replyList').empty(); 
             
             data.forEach(function(e){
-               let replyDate = formatDate(e.replyDate);
+               let replyDate = formatDate(e.updateDate);
                let replies = 
             	   `
             	   <input id="replyId" type="hidden" value="${e.replyId}">
-<<<<<<< HEAD
             	   <div class ="replyDiv"style="border: 1px solid black;">
-            	   		<input type="text" value="${e.replyContent}" readonly >
-                   		<p>댓글 내용 : <p class="replyContent">${e.replyContent}</p></p>
-=======
-            	   <div style="border: 1px solid black;">
-            	   	<div>
-                   		<p>댓글 내용 : <p id="replyContents">${e.replyContent}</p></p>
->>>>>>> branch 'JYJ' of https://github.com/SeoYeongHoon/yedam_community.git
-                   		<p>작성자 : ${e.replyWriter}</p>
-                   		<p class="replyDate">작성일자 :${replyDate}</p>
+            	   		<h3>댓글내용</h3>
+            	   		<input class="replyContent-${e.replyId}" type="text" value="${e.replyContent}" readonly >
+                   		<button type="button" class="main-btn warning-btn rounded-full btn-hover contentUpdate-${e.replyId}" style="display: none;"	>수정</button>
+                   		<h3>작성자</h3>
+                   		<input  type="text" value="${e.replyWriter}" readonly >
+                   		<h3>작성일자</h3>
+                   		<input class="replyDate-${e.replyId}"type="text" value="${replyDate}"  readonly >
                    	</div>	
                    		<div id="replyfiles-${e.replyId}"></div>
                    		<div class="col-12" style="text-align: right;">
@@ -328,31 +342,19 @@ $('#deleteHomeworks').on('click',function(){
 						</div>
                 	</div>
                 	`;
-                	
                $('#replyList').append(replies);
              
                $('#comments-'+e.replyId).append(commentList(e.comments));
                $('#replyfiles-'+e.replyId).append(replyFile(e.replyId));
             });
-            
             $('.updateBtn').on('click',function(e){
             	replyId = $(this).val();
-<<<<<<< HEAD
-            	$('#updateReply').find('[name="replyId"]').val(replyId);
-            	$('#updateReply').find('.updateContent').val($(this).closest('.replyDiv').find('.replyContent').html());
-=======
-            	
-            	$('#updateReply').find('[name="replyId"]').val(replyId);
-            	$('#updateReply').find('.updateContent').val($(this).closest('div').find('#replyContents').html());
-            	let abc = $('#replyContents').html();
-            	let content = $('.updateContent').val();
-            	let cmt = $('.cUpdateContent').val();
-            	console.log("지금 적혀있는 내용 = "+ content)
-            	console.log("지금 적혀있는 abc = "+ abc)
-            	
->>>>>>> branch 'JYJ' of https://github.com/SeoYeongHoon/yedam_community.git
-            	$('#updateReply').modal('show');
-            })
+            	$('.replyContent-'+replyId).prop('readonly',false);
+            	$('.replyContent-'+replyId).css('backgroundColor','yellow');
+            	$('.contentUpdate-'+replyId).css('display','block');
+            	updateReply(replyId);
+            }) 
+             
          },
          error: function(err){
             alert("replyList 실패");
@@ -363,18 +365,19 @@ $('#deleteHomeworks').on('click',function(){
    //--------------------------
    //댓글 수정 
    //--------------------------
-   $('#updateBtn').on('click',function(data){
-		let replyId = $('[name="replyId"]').val();
-	  	let content = $('.updateContent').val();
-	    
+  function updateReply(replyId){
+     $('.contentUpdate-'+replyId).on('click',function(data){
+	  	let content = $('.replyContent-'+replyId).val();
+	  	let date = $('.replyDate-'+replyId).val();
+	  	
 		$.ajax({
 			url:"updateReply",
 			type:'PUT',
-			data: {content : content, replyId :replyId},
+			data: {replyContent : content, replyId :replyId, date : date},
 			success:function(data){
-				$('#updateReply').modal('hide');
-				$('#modal').modal('show');
-				$('.updateContent').val('');
+				
+				$('#replyUpdate-'+replyId).prop('readonly',true);
+				
 				replyList();
 			},
 			error : function(err){
@@ -382,7 +385,8 @@ $('#deleteHomeworks').on('click',function(){
 			}
 		})
 		
-	}) 
+	})   
+   }
 	
   
    
@@ -475,10 +479,7 @@ $('#deleteHomeworks').on('click',function(){
 	             	commentId = $(this).val();
 	             	$('#updateComment').find('[name="commentId"]').val(commentId);
 	             	$('#updateComment').find('.cUpdateContent').val($(this).closest('div').find('#commentContent').html());
-	             	//let asd = $('#commentContent').html();
-	             	//console.log("내용 = " + asd);
 	             	let cmt = $('.cUpdateContent').val();
-	             	console.log("내용 = "+cmt)
 	             	$('#updateComment').modal('show');
 	             }) 
 	   } 
@@ -598,7 +599,7 @@ $('#deleteHomeworks').on('click',function(){
       if (month.length < 2) month = '0' + month;
       if (day.length < 2) day = '0' + day;
 
-      return [year, month, day].join('/');
+      return [year, month, day].join('-');
    } 
 
 

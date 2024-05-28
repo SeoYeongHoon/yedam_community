@@ -2,12 +2,16 @@ package com.yedam.app.yedam_homework.upload.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_homework.service.HomeWorkTargetVO;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
-import com.yedam.app.yedam_homework.service.ReplyVO;
 import com.yedam.app.yedam_homework.upload.mapper.HomeWorkFileMapper;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileService;
 import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
@@ -207,5 +210,28 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 	public List<ReplyFileVO> replyfileList(int replyId) {
 		return homeworkfileMapper.selectReplyfile(replyId);
 	}
+	
+	//파일 삭제
+	public Map<String, Object> deleteFile(HomeWorkFileVO homeworkfileVO) {
+		Map<String, Object> map = new HashMap<>();
+		//HomeWorkFileVO homeworkFile = homeworkfileMapper.selectHomeworkFileId(homeworkfileVO);
+		int result = homeworkfileMapper.fileDelete(homeworkfileVO);
+
+		if (result == 1) {
+			Path filePath = Paths.get(homeworkfileVO.getHomeworkfileLocation());
+			
+			try {
+				// 파일 삭제
+				Files.delete(filePath);
+			} catch (NoSuchFileException e) {
+				System.out.println("삭제하려는 파일/디렉토리가 없습니다");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			map.put("downloadLocation",  homeworkfileVO.getDownloadLocation());
+		}
+		return null;
+	}
+	
 
 }

@@ -17,14 +17,14 @@
 			reply_content,
 			homework_target_id,
 			reply_writer,
-			reply_date
+			update_date
 		)
 		VALUES
 			(#{replyId},
 			#{replyContent},
 			#{homeworkTargetId},
 			#{replyWriter},
-			#{replyDate}
+			sysdate
 		)
 	</insert>
 
@@ -90,7 +90,7 @@
 	<!-- 댓글 수정 -->
 	<update id="updateReply" parameterType="ReplyVO">
 		UPDATE replies
-		SET reply_content = #{replyContent}, reply_date = SYSDATE
+		SET reply_content = #{replyContent}, update_date = SYSDATE
 		WHERE reply_id = #{replyId}
 	</update>
 	

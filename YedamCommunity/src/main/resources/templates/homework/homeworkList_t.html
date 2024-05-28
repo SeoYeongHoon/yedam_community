@@ -162,7 +162,7 @@
 
 	    homeworks.forEach(function(homework) {
 			var tr = $('<tr></tr>');
-
+			console.log(homework.homeworkId)
 	        var tdClassId = $('<td></td>').text(homework.classId);
 	        tr.append(tdClassId);
 
@@ -175,8 +175,9 @@
 	        var formattedDate = formatDate(homework.homeworkDate); // 날짜 포맷 변환
 	        var tdDate = $('<td></td>').text(formattedDate);
 	        tr.append(tdDate);
-
+			
 	        $('#homeworkBody').append(tr);
+	        $(tr).attr('onclick','location.href="/homeworkInfo?homeworkId='+ homework.homeworkId + '"')
 	    });
 	}
 
