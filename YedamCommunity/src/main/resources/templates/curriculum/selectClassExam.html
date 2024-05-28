@@ -22,7 +22,8 @@
 	<div class="cards-styles">
 		<div class="row">
 			<div class="col-4 curri" th:each="classInfo, idx : ${class}">
-				<input type="hidden" th:id="${idx.index}" th:value="${classInfo.curriculumId}"/>
+				<input type="hidden" th:id="curriId" th:value="${classInfo.curriculumId}"/>
+				<input type="hidden" th:id="classId" th:value="${classInfo.classId}"/>
 				<div class="card-style-1 mb-30">
 					<div class="card-content"
 						th:onclick="|location.href='@{/testinsert(curriculumId=${classInfo.curriculumId})}'|">
@@ -50,9 +51,14 @@
 </div>
 <script>
 var currId = 0;
+var classId = 0;
 $('.curri').on('click', function(){
-	currId = $(this).children().val();
+	currId = $(this).children('input#curriId').val();
+	classId = $(this).children('input#classId').val();
+	console.log(currId);
+	console.log(classId);
 	window.localStorage.setItem('curriculumId', currId);
+	window.localStorage.setItem('classId', classId);
 });
 </script>
 </html>

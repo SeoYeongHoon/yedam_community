@@ -71,10 +71,12 @@
 	var tContent = '';
 	var tTIme = 0;
 	var userId = 0;
+	var classId = window.localStorage.getItem('classId');
 	var qContent = window.localStorage.getItem('quizContent');
 	var quizId = window.localStorage.getItem('quizId');
 	var quizScore = window.localStorage.getItem('quizScore');
 	var curriculumId = window.localStorage.getItem('curriculumId');
+	var subName = window.localStorage.getItem('subjectName');
 	$('#testName').on('change', function() {
 		tName = $('#testName').val();
 		//window.localStorage.setItem('testName', tName);
@@ -94,6 +96,7 @@
 	var arryQContent = JSON.parse(qContent); // 시험 문제가 모여있는 배열	
 	var arryQuizId = JSON.parse(quizId); // 시험 id값이 모여있는 배열 
 	var arryQuizScore = JSON.parse(quizScore); // 시험 배점이 모여있는 배열
+	var arrySubName = JSON.parse(subName); // 문제 과목이름이 모여있는 배열
 
 	var storageUser = []; // 시험 대상자가 모여있는 배열
 
@@ -138,12 +141,14 @@
 			"curriculumId" : curriculumId,
 			"testContent" : tContent,
 			"testTime" : tTime,
-			"testName" : tName
+			"testName" : tName,
+			"classId" : classId
 		};
 
 		$.ajax({
 			url : "testinsert",
 			type : "post",
+			async : false,
 			data : obj,
 			
 			success : function(data) {
@@ -153,56 +158,54 @@
 				alert('시험 등록 실패');
 			}
 		});
+		
 		//--------------------------------------------
 		// quizbox 테이블에 선택된 문제수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
 		//--------------------------------------------
-		setTimeout(function () {
-			for(let i=0; i<arryQContent.length; i++){
-				obj = {
-				        "quizContent": arryQContent[i],
-				        "quizId": arryQuizId[i],
-				        "quizScore": arryQuizScore[i]
-				      };
+		obj = {
+		        "quizContent": arryQContent,
+		        "quizId": arryQuizId,
+		        "subjectName": arrySubName,
+		        "curriculumId": curriculumId,
+		        "quizScore": arryQuizScore
+		      };
+		
+		$.ajax({
+			url : "quizboxinsert",
+			type : "post",
+			contentType : 'application/json',
+			data : JSON.stringify(obj),
+			async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
 				
-				$.ajax({
-					url : "quizboxinsert",
-					type : "post",
-					data : obj,
-					async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
-						
-					success : function(data){
-						
-					},
-					error : function(err){
-						alert('시험 등록 실패(문제 등록 실패)');
-					}
-				}); 
+			success : function(data){
+				alert('quizbox 성공');
+			},
+			error : function(err){
+				alert('시험 등록 실패(문제 등록 실패)');
 			}
-		},100);
+		}); 
+
 		//--------------------------------------------
 		// test_targets 테이블에 선택된 학생수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
 		//--------------------------------------------
-		setTimeout(function () {
-			for(let i=0; i<storageUser.length; i++){
-				obj = {
-				        "userId": storageUser[i]
-				      };
-				
-				$.ajax({
-					url : "testuserinsert",
-					type : "post",
-					data : obj,
-					async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
-					
-					success : function(data){
-						
-					},
-					error : function(err){
-						alert('시험 등록 실패(시험 대상자 등록 실패)');
-					}
-				}); 
+		obj = {
+		        "userId": storageUser
+		      };
+		
+		$.ajax({
+			url : "testuserinsert",
+			type : "post",
+			contentType : 'application/json',
+			data : JSON.stringify(storageUser),
+			async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
+			
+			success : function(data){
+				alert('users 성공');
+			},
+			error : function(err){
+				alert('시험 등록 실패(시험 대상자 등록 실패)');
 			}
-		},50);
+		}); 
 	})
 	//--------------------------------------------
 	// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료

@@ -98,7 +98,7 @@ tr img {
 		
 }
 </style>
-<!-- <p th:text="${answerList}"></p>  -->
+<!-- <p th:text="${currList}"></p> -->
 <div style="margin:10px; padding:10px">
 	<button type="button" id="subBtn" style="margin-bottom: 10px;"
 		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
@@ -131,8 +131,6 @@ tr img {
 	</div>
 </div>
 
-
-<button id="updateBtn">아작스테스트</button>
 
 <!-- 문제 상세보기 모달창 -->
 <div id="modalWrap" class="modal-overlay"></div>
@@ -541,6 +539,7 @@ $('#testInsert').on('click', function(){
 	storageContent = [];
 	storageScore = [];
 	storageQId = [];
+	storageSubName = [];
 	let sum = 0;
 	window.localStorage.clear();
 	for(let i=0; i<$('.box').length; i++){
@@ -548,6 +547,7 @@ $('#testInsert').on('click', function(){
 			storageContent.push($('#qContent'+i).val());
 			storageScore.push($('#qScore'+i).val());
 			storageQId.push($('#qId'+i).val());
+			storageSubName.push($('#sName'+i).val());
 			
 			sum += parseInt($('#qScore'+i).val());
 		}
@@ -574,12 +574,14 @@ $('#testInsert').on('click', function(){
 	const arryContent = JSON.stringify(storageContent);
 	const arryScore = JSON.stringify(storageScore); 
 	const arryQid = JSON.stringify(storageQId);
+	const arrySName = JSON.stringify(storageSubName);
 	
 	// 위 작업 안하면 값 출력시 그냥 1,2,3 이런식으로 출력됨
 	// 위 작업을 하게 될 경우 ["1","2","3"] 이렇게 출력됨
 	window.localStorage.setItem('quizContent', arryContent);
 	window.localStorage.setItem('quizScore', arryScore);
 	window.localStorage.setItem('quizId', arryQid);
+	window.localStorage.setItem('subjectName', arrySName);
 })
 
 //--------------------------------------------
@@ -604,6 +606,7 @@ function updateList(quizes){
 						<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}" style="border:1px solid black; width: 70px;">
 						<p>과목명 : ${subName}</p>
 						<input type="hidden" id="qId${idx}" value="${qId}" />
+						<input type="hidden" id="sName${idx}" value="${subName}" />
 					</div>
 					<div class="card-content">
 						<h4>${qContent}</h4>
