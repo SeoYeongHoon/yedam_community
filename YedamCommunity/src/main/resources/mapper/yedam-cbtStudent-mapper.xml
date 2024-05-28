@@ -3,28 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.yedam_examstudent.mapper.CbtStudentMapper">
-	<!-- 내정보 -->
-	<select id="selectMyPageInfo" resultType="UserVO">
-		SELECT  a.user_id
-				,a.name
-				,a.id
-				,a.password
-				,a.tel
-				,a.email
-				,a.address
-				,a.user_type
-				,a.company_info
-				,b.curriculum_name
-		FROM    users a
-				JOIN curriculum b
-				ON(a.curriculum_id = b.curriculum_id)
-		WHERE   a.user_id = #{userId}
-	</select>
-	<!-- 회원탈퇴 -->
-	<delete id="deleteUser" parameterType="int">
-		DELETE FROM users
-		WHERE  user_id = #{userId}
-	</delete>
 	<!-- 시험결과유무 -->
 	<select id="isTestResult" resultType="int">
 		SELECT  COUNT(b.result_id)
@@ -57,25 +35,7 @@
         WHERE   a.user_id = #{userId}
         AND     a.test_id = #{testId}
 	</select>
-	<!-- 최근시험목록 -->
-	<select id="selectRecentTest" resultType="TestVO">
-		SELECT a.*
-		FROM   (SELECT  a.test_id
-       					,a.test_date
-       					,a.test_name
-       					,d.name
-       					,ROWNUM AS rn
-				FROM    tests a 
-		        		JOIN test_targets b
-		        		ON(a.test_id = b.test_id)
-     		    		JOIN users d
-                		ON(b.user_id = d.user_id)
-				WHERE   b.user_id = #{userId}
-				ORDER BY a.test_date desc) a
-		<![CDATA[
-		WHERE   rn <= 5	]]>
-	</select>
-	<!-- 시험목록 정보 -->
+	<!-- 시험목록 페이징 -->
 	<select id="selectTestListAll" resultType="TestVO">
 		SELECT  a.*
   		FROM    (SELECT  a.test_id
@@ -91,17 +51,27 @@
 				 WHERE   b.user_id = #{userId}
 				 ORDER BY a.test_date DESC
 				 		  ,a.test_id ASC) a
-    	WHERE   a.rn > (#{page} - 1) * 5 
+    	WHERE   a.rn > (#{page} - 1) * 6 
     	<![CDATA[
-    	AND     a.rn <= #{page} * 5 ]]>
+    	AND     a.rn <= #{page} * 6 ]]>
+	</select>
+	<!-- 시험개수 -->
+	<select id="selectTestListSize" resultType="int">
+		SELECT  COUNT(a.test_id)
+		FROM    tests a 
+		        JOIN test_targets b
+		        ON(a.test_id = b.test_id)
+     		    JOIN users d
+                ON(b.user_id = d.user_id)
+		WHERE   b.user_id = #{userId}
 	</select>
 	<!-- 시험과목 -->
 	<select id="selectUserSubject" resultType="TestVO">
-		SELECT  subject_name
+		SELECT  b.subject_name
         FROM    users a
         		JOIN subjects b
         		ON(a.curriculum_id = b.curriculum_id)
-        WHERE   user_id = #{userId}
+        WHERE   a.user_id = #{userId}
 	</select>
 	<!-- 시험상세 정보 -->
 	<select id="selectTestDetail" resultType="TestVO">

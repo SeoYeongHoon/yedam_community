@@ -16,61 +16,85 @@
 .tresult_4 {
 	display: block;
 }
+.true {
+	color: blue;
+}
+.false {
+	color: red;
+}
+
+#topBtn {
+	display:none;
+	position:fixed;
+	bottom:30px;
+	right:30px;
+	z-index:999;
+	border:1px solid #ccc;
+	outline:none;
+	background-color:white;
+	color:#333;
+	cursor:pointer;
+	padding:15px 20px;
+	border-radius:100%;
+}
 </style>
 <div class="row">
 	<!-- 시험결과 정보 -->
 	<div class="card-style col-lg-12"
 		style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">
-		<br> <br>
+		<br>
 		<h1 class="tresult_2">[ 문제풀이 ]</h1>
-		<br> <br>
+		<br>
 		<table class="table">
 			<tr>
-				<th class="tresult_2"><h1>과목</h1></th>
-				<th class="tresult_2"><h1>응시시간</h1></th>
-				<th class="tresult_2"><h1>점수</h1></th>
-				<th class="tresult_2"><h1>재시험여부</h1></th>
+				<th class="tresult_2"><h3>과목</h3></th>
+				<th class="tresult_2"><h3>기준점수</h3></th>
+				<th class="tresult_2"><h3>응시점수</h3></th>
+				<th class="tresult_2"><h3>맞힌개수</h3></th>
+				<th class="tresult_2"><h3>틀린개수</h3></th>
+				<th class="tresult_2"><h3>재시험여부</h3></th>
 			</tr>
 			<tr>			
-				<td class="tresult_2"><h1>[[${testResult.subjectName}]]</h1></td>
-				<!-- 응시시간에 따른 구분 -->
-				<td th:if="${testMin == 0 && testSec == 0}" class="tresult_2"><h1>00:00</h1></td>
-				<td th:if="${testMin == 0 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>00:0[[${testSec}]]</h1></td>
-				<td th:if="${testMin == 0 && testSec > 9}" class="tresult_2"><h1>00:[[${testSec}]]</h1></td>
-				<td th:if="${testMin < 10 && testMin > 0 && testSec == 0}" class="tresult_2"><h1>0[[${testMin}]]:00</h1></td>
-				<td th:if="${testMin > 9 && testSec == 0}" class="tresult_2"><h1>[[${testMin}]]:00</h1></td>
-				<td th:if="${testMin < 10 && testMin > 0 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>0[[${testMin}]]:0[[${testSec}]]</h1></td>
-				<td th:if="${testMin < 10 && testMin > 0 && testSec > 9}" class="tresult_2"><h1>0[[${testMin}]]:[[${testSec}]]</h1></td>
-				<td th:if="${testMin > 9 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>[[${testMin}]]:0[[${testSec}]]</h1></td>
-				<td th:if="${testMin > 9 && testSec > 9}" class="tresult_2"><h1>[[${testMin}]]:[[${testSec}]]</h1></td>
-				<td class="tresult_2"><h1>[[${testResult.resultScore}]]/[[${testResult.passScore}]]</h1></td>
-				<td th:if="${testResult.isReexam == 1}" class="tresult_2"><h1 style="color: blue;">통과</h1></td>
-				<td th:unless="${testResult.isReexam == 1}" class="tresult_2"><h1 style="color: red;">재시험</h1></td>
+				<td class="tresult_2"><h3>[[${testResult.subjectName}]]</h3></td>
+				<td class="tresult_2"><h3>[[${testResult.passScore}]]/100</h3></td>
+				<td class="tresult_2"><h3>[[${testResult.resultScore}]]/100</h3></td>
+				<td class="tresult_2"><h3>[[${trueCnt}]]/[[${#lists.size(quizList)}]]</h3></td>
+				<td class="tresult_2"><h3>[[${falseCnt}]]/[[${#lists.size(quizList)}]]</h3></td>
+				<td th:if="${testResult.isReexam == 1}" class="tresult_2"><h3 style="color: blue;">통과</h3></td>
+				<td th:unless="${testResult.isReexam == 1}" class="tresult_2"><h3 style="color: red;">재시험</h3></td>
 			</tr>
 		</table>
-		<br> <br>
+		<br>
 		<div style="text-align: center">
+			<a class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover" href="javascript:history.back()">이전</a>
 			<button class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover"
 					th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
-			<form class="tresult_1 tresult_3" action="testResult2" method="post">
-				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
-			</form>
 		</div>
-		<br> <br>
+		<br>
 	</div>
 	<!-- 문제 확인 -->
-	<th:block th:each="quiz, idx : ${testTest}">
-		<div th:if="${quiz.isCorrect == 0}" class="card-style col-lg-6" style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">						
-			<h1 class="tresult_1" style="color: red">[[${idx.count}]].</h1>
+	<th:block th:each="quiz, idx : ${quizList}">
+		<div class="card-style col-lg-6" style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">						
+			<th:block th:if="${quiz.isCorrect == 1}">
+				<h1 class="tresult_1">[[${idx.count}]].</h1>
+				<!-- 채점 이미지 -->
+				<img src="images/icons/true.png" style="position: absolute; left: -10px; top: 0px; width: 100px; height: 100px;">
+			</th:block>
+			<th:block th:unless="${quiz.isCorrect == 1}">
+				<h1 class="tresult_1">[[${idx.count}]].</h1>
+				<!-- 채점 이미지 -->
+				<img src="images/icons/false.png" style="position: absolute; left: -10px; top: -30px; width: 100px; height: 100px;">
+			</th:block>
 			<h1 class="tresult_1">[[${quiz.quizContent}]]</h1>
 			<p class="tresult_1">([[${quiz.quizScore}]]점)</p>
 			<br> <br>
 			<div>
-				<span class="tresult_4"> [[${quiz.one}]]</span>
-				<span class="tresult_4"> [[${quiz.two}]]</span>
-				<span class="tresult_4"> [[${quiz.three}]]</span>
-				<span class="tresult_4"> [[${quiz.four}]]</span>
-				<span class="tresult_4"> [[${quiz.five}]]</span>
+				<!-- 보기번호 정답/오답 표시 -->
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 1 ? 'true' : (quiz.exampleNum != 1 && quiz.testAnswer == 1)? 'false':_}">[[${quiz.one}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 2 ? 'true' : (quiz.exampleNum != 2 && quiz.testAnswer == 2)? 'false':_}">[[${quiz.two}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 3 ? 'true' : (quiz.exampleNum != 3 && quiz.testAnswer == 3)? 'false':_}">[[${quiz.three}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 4 ? 'true' : (quiz.exampleNum != 4 && quiz.testAnswer == 4)? 'false':_}">[[${quiz.four}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 5 ? 'true' : (quiz.exampleNum != 5 && quiz.testAnswer == 5)? 'false':_}">[[${quiz.five}]]</span>
 			</div>
 			<hr>
 			<h3>풀이</h3>	
@@ -78,6 +102,23 @@
 			<br>
 			<p>[[${quiz.quizSolution}]]</p>	
 		</div>
-	</th:block>	
+	</th:block>
+	<a href="#" id="topBtn">
+  		<span class="glyphicon glyphicon-chevron-up" th:text="TOP"></span>
+	</a>		
 </div>
+<script>
+//<<탑 스크롤 관련>>
+$(window).scroll(function(){
+	if ($(this).scrollTop() > 300){
+		$('#topBtn').show();
+	} else{
+		$('#topBtn').hide();
+	}
+});
+$('#topBtn').click(function(){
+	$('html, body').animate({scrollTop:0},100);
+	return false;
+});
+</script>
 </html>
