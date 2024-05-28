@@ -21,6 +21,10 @@
           , #{boardId}
           , #{postId})
   </insert>
-  
+	  
+  <select id="selectReportList" resultType="ReportVO">
+  	SELECT *
+  	FROM reports
+  </select>
   
   </mapper>

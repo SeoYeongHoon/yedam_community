@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,7 +41,7 @@ import com.yedam.app.yedam_subjects.service.SubjectService;
  */
 // /teacher/~~
 @Controller
-
+@RequestMapping("/admin")
 public class HomeWorkController {
 
 	// 로컬 저장 경로
@@ -66,7 +67,7 @@ public class HomeWorkController {
 	// ----------------
 	// 과제 목록(교수)
 	// ----------------
-	@GetMapping("homework_T")
+	@GetMapping("/homework_T")
 	public String homework(Model model) {
 		List<CurriculumVO> classList = curriculumService.CurriculumList();
 		model.addAttribute("classId", classList);
@@ -74,7 +75,7 @@ public class HomeWorkController {
 	}
 
 	// 과제 목록 출력
-	@GetMapping("homeworkList_T")
+	@GetMapping("/homeworkList_T")
 	@ResponseBody
 	public List<HomeWorkVO> homeworkList(@RequestParam("homeworkAll") String homeworkAll) {
 		List<HomeWorkVO> homeworkList = homeworkService.homeworkList();
@@ -82,7 +83,7 @@ public class HomeWorkController {
 	}
 
 	// 강의실 카테고리
-	@GetMapping("classCategory")
+	@GetMapping("/classCategory")
 	@ResponseBody
 	public List<HomeWorkVO> classs(@RequestParam("vals") int classId) {
 		List<HomeWorkVO> list = homeworkService.classCategory(classId);
@@ -90,7 +91,7 @@ public class HomeWorkController {
 	}
 
 	// 과제 삭제
-	@DeleteMapping("deleteHomeworks")
+	@DeleteMapping("/deleteHomeworks")
 	@ResponseBody
 	public int deleteHomeworks(@RequestParam int homeworkId) {
 		System.err.println("대댓글" + homeworkId);
@@ -100,7 +101,7 @@ public class HomeWorkController {
 	// ----------------
 	// 과제 목록(학생)
 	// ----------------
-	@GetMapping("homework_S")
+	@GetMapping("/homework_S")
 	public String homeworksList(Model model) {
 		int userId = 60;
 		List<CurriculumVO> subjects = curriculumService.subjectList(userId);
@@ -109,7 +110,7 @@ public class HomeWorkController {
 	}
 
 	// 과제 목록 출력
-	@GetMapping("homeworkList_S")
+	@GetMapping("/homeworkList_S")
 	@ResponseBody
 	public List<HomeWorkVO> homeworkListS(@RequestParam("userid") int userid) {
 		List<HomeWorkVO> userhomework = homeworkService.userHomeworkList(userid);
@@ -117,7 +118,7 @@ public class HomeWorkController {
 	}
 
 	// 과목 카테고리
-	@GetMapping("subjectCategory")
+	@GetMapping("/subjectCategory")
 	@ResponseBody
 	public List<HomeWorkVO> subjects(@RequestParam("vals") int classId, @RequestParam("userid") int userId) {
 		List<HomeWorkVO> list = homeworkService.subjectCategory(classId, userId);
@@ -127,7 +128,7 @@ public class HomeWorkController {
 	// ----------------
 	// 과제 등록 - 페이지
 	// ----------------
-	@GetMapping("homeworkInsert")
+	@GetMapping("/homeworkInsert")
 
 	public String homeworkInsertForm(HomeWorkVO homeworkVO, Model model) {
 		// 과목 조회
@@ -140,7 +141,7 @@ public class HomeWorkController {
 	// ----------------
 	// 과제 등록 -처리
 	// ----------------
-	@PostMapping("homeworkInsert")
+	@PostMapping("/homeworkInsert")
 	@ResponseBody
 	public String homeworkInsertProcess(@RequestPart MultipartFile[] uploadFiles, HomeWorkVO homeworkVO,
 			HomeWorkTargetVO homeworktargetVO) {
@@ -183,7 +184,7 @@ public class HomeWorkController {
 	// ----------------
 	// 과제상세페이지
 	// ----------------
-	@GetMapping("homeworkInfo")
+	@GetMapping("/homeworkInfo")
 	public String homeworkInfo(HomeWorkVO homeworkVO, Model model) {
 		// 과제 상세 조회
 		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
@@ -200,7 +201,7 @@ public class HomeWorkController {
 	// ----------------
 	// 댓글 조회
 	// ----------------
-	@GetMapping("replyList")
+	@GetMapping("/replyList")
 	@ResponseBody
 	public List<ReplyVO> replyList(@RequestParam("targetId") int homeworkTargetId) {
 
@@ -212,7 +213,7 @@ public class HomeWorkController {
 	// ----------------
 	// 댓글 파일 다운로드
 	// ----------------
-	@GetMapping("replyfile")
+	@GetMapping("/replyfile")
 	@ResponseBody
 	public List<ReplyFileVO> replyfile(@RequestParam("replyId") int replyId) {
 		List<ReplyFileVO> replyfile = homeworkfileService.replyfileList(replyId);
@@ -222,7 +223,7 @@ public class HomeWorkController {
 	// ----------------
 	// 댓글(파일) 등록 - 처리
 	// ----------------
-	@PostMapping("insertReply")
+	@PostMapping("/insertReply")
 	@ResponseBody
 	public ReplyVO insertReply(@RequestPart MultipartFile[] uploadFiles, ReplyVO replyVO, Model model) {
 		replyVO.setReplyWriter("dudwo");
@@ -236,7 +237,7 @@ public class HomeWorkController {
 	// ----------------
 	// 대댓글 등록 - 처리
 	// ----------------
-	@PostMapping("insertComment")
+	@PostMapping("/insertComment")
 	@ResponseBody
 	public CommentVO insertComment(@RequestParam String content, @RequestParam int replyId) {
 		CommentVO comment = new CommentVO();
@@ -251,7 +252,7 @@ public class HomeWorkController {
 	// ----------------
 	// 대댓글 삭제 - 처리
 	// ----------------
-	@DeleteMapping("deleteComment")
+	@DeleteMapping("/deleteComment")
 	@ResponseBody
 	public int deleteComment(@RequestParam int commentId) {
 		System.err.println("대댓글" + commentId);
@@ -262,7 +263,7 @@ public class HomeWorkController {
 	// ----------------
 	// 댓글 삭제 - 처리
 	// ----------------
-	@DeleteMapping("deleteReply")
+	@DeleteMapping("/deleteReply")
 	@ResponseBody
 	public int deleteReply(@RequestParam int replyId) {
 		System.err.println("대댓글" + replyId);
@@ -273,7 +274,7 @@ public class HomeWorkController {
 	// ----------------
 	// 댓글 업데이트 - 처리
 	// ----------------
-	@PutMapping("updateReply")
+	@PutMapping("/updateReply")
 	@ResponseBody
 	public Map<String, Object> updateReply (@RequestParam("content")  String content,
 											@RequestParam("replyId") int replyId) {
@@ -286,7 +287,7 @@ public class HomeWorkController {
 	// ----------------
 	// 대댓글 업데이트 - 처리
 	// ----------------
-	@PutMapping("updateComment")
+	@PutMapping("/updateComment")
 	@ResponseBody
 	public Map<String, Object> updateComment (@RequestParam("content")  String content,
 											@RequestParam("commentId") int commentId) {
