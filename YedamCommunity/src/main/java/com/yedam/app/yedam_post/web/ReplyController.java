@@ -4,15 +4,17 @@ import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.app.yedam_post.service.Comment;
+import com.yedam.app.yedam_common.LoginUserVO;
+import com.yedam.app.yedam_post.service.PostCommentVO;
 import com.yedam.app.yedam_post.service.PostService;
-import com.yedam.app.yedam_post.service.Reply;
+import com.yedam.app.yedam_post.service.PostReplyVO;
 
 @Controller
 public class ReplyController {
@@ -25,17 +27,23 @@ public class ReplyController {
 	//--------------------------------------------
 	@PostMapping("/Reply")
 	@ResponseBody
-	public String addReply(@RequestParam("postId") int postId, 
-			               @RequestParam("replyContent") String replyContent) {
+	public String addReply(
+			               @RequestParam("boardId") int boardId,
+			               @RequestParam("postId") int postId, 
+			               @RequestParam("replyContent") String replyContent,
+			               Authentication authentication) {
 		
-		Reply reply = new Reply();
-		reply.setPostId(postId);
-		reply.setBoardId(1); // 게시판 1번유형
-		reply.setReplyContent(replyContent);
-		reply.setReplyDate(new Date());
-		reply.setUpdateDate(new Date());
-		reply.setReplyWriter("익명");
-		postService.createReply(reply);
+		
+		PostReplyVO postreplyVO = new PostReplyVO();
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+		postreplyVO.setReplyWriter(userVO.getNickname());
+		
+		postreplyVO.setPostId(postId);
+		postreplyVO.setBoardId(boardId); 
+		postreplyVO.setReplyContent(replyContent);
+		postreplyVO.setReplyDate(new Date());
+		postreplyVO.setUpdateDate(new Date());
+		postService.createReply(postreplyVO);
 		return "success";
 	}
 	
@@ -46,9 +54,9 @@ public class ReplyController {
     @ResponseBody
     public String deleteReply(@RequestParam("replyId") int replyId) {
     	
-    	Reply reply = new Reply();
-    	reply.setReplyId(replyId);
-        Map<String, Object> result = postService.deleteReply(reply);
+    	PostReplyVO postreplyVO = new PostReplyVO();
+    	postreplyVO.setReplyId(replyId);
+        Map<String, Object> result = postService.deleteReply(postreplyVO);
         if ("success".equals(result.get("status"))) {
             return "댓글이 성공적으로 삭제되었습니다.";
         } else {
@@ -62,13 +70,17 @@ public class ReplyController {
     @PostMapping("/Comment")
     @ResponseBody
     public String addComment(@RequestParam("replyId") int replyId,
-    		                 @RequestParam("commentContent") String commentContent) {
+    		                 @RequestParam("commentContent") String commentContent,
+    		                 Authentication authentication) {
     	
-    	Comment comment = new Comment();
-        comment.setReplyId(replyId);
-        comment.setCommentContent(commentContent);
-		comment.setCommentWriter("익명대댓글");
-        postService.createComment(comment);
+    	PostCommentVO postcommentVO = new PostCommentVO();
+    	
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+		postcommentVO.setCommentWriter(userVO.getNickname());
+    	
+        postcommentVO.setReplyId(replyId);
+        postcommentVO.setCommentContent(commentContent);
+        postService.createComment(postcommentVO);
         return "대댓글이 성공적으로 추가되었습니다.";
     }
     
@@ -79,9 +91,9 @@ public class ReplyController {
     @ResponseBody
     public String deleteComment(@RequestParam("commentId") int commentId) {
     	
-    	Comment comment = new Comment();
-    	comment.setCommentId(commentId);
-        Map<String, Object> result = postService.deleteComment(comment);
+    	PostCommentVO postcommentVO = new PostCommentVO();
+    	postcommentVO.setCommentId(commentId);
+        Map<String, Object> result = postService.deleteComment(postcommentVO);
         if ("success".equals(result.get("status"))) {
             return "대댓글이 성공적으로 삭제되었습니다.";
         } else {

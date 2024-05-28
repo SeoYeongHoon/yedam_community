@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 @Data
-public class BoardLike {
+public class BoardLikeVO {
 	
 	private int likeId;
 	private int postId;

@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 @Data
-public class Comment {
+public class PostCommentVO {
 	
 	private int commentId;
     private int replyId;

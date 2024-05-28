@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_admin.service.AdminService;
 import com.yedam.app.yedam_post.mapper.ReportMapper;
-import com.yedam.app.yedam_post.service.Report;
+import com.yedam.app.yedam_post.service.ReportVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -15,7 +15,7 @@ public class AdminServiceImpl implements AdminService {
 	ReportMapper reportMapper;
 	
 	@Override
-	public List<Report> getReportList() {
+	public List<ReportVO> getReportList() {
 		return reportMapper.selectReportList();
 	}
 	

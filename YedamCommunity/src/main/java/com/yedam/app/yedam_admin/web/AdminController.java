@@ -29,7 +29,7 @@ import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_common.SecurityUtils;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
-import com.yedam.app.yedam_post.service.Report;
+import com.yedam.app.yedam_post.service.ReportVO;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
@@ -194,7 +194,7 @@ public class AdminController {
 //	신고목록 페이지 및 항목 출력
 	@GetMapping("/manageReport")
 	public String manageReport(Model model) {
-		List<Report> reportList = adminService.getReportList();
+		List<ReportVO> reportList = adminService.getReportList();
 		model.addAttribute("reports", reportList);
 		
 		return "admin/manageReport";

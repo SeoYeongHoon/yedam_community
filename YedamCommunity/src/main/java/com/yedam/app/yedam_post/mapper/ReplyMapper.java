@@ -2,15 +2,14 @@ package com.yedam.app.yedam_post.mapper;
 
 import java.util.List;
 
-import com.yedam.app.yedam_post.service.Post;
-import com.yedam.app.yedam_post.service.Reply;
+import com.yedam.app.yedam_post.service.PostReplyVO;
 
 public interface ReplyMapper {
 
 	//--------------------------------------------
 	// 댓글 등록
 	//--------------------------------------------
-	public int insertReply(Reply reply);
+	public int insertReply(PostReplyVO postreplyVO);
 	
 	//--------------------------------------------
 	// 댓글 삭제
@@ -21,5 +20,5 @@ public interface ReplyMapper {
 	//--------------------------------------------
 	// 댓글 조회
 	//--------------------------------------------
-	public List<Reply> getReplies(int postId);
+	public List<PostReplyVO> getReplies(int postId);
 }

@@ -8,42 +8,42 @@ public interface PostService {
 	//--------------------------------------------
 	// 게시글 등록
 	//--------------------------------------------
-	public int createPost(Post post);
+	public int createPost(PostVO postVO);
     
 	//--------------------------------------------
     // 게시글 삭제
 	//--------------------------------------------
-    public Map<String, Object> PostDelete(Post post);
+    public Map<String, Object> PostDelete(PostVO postVO);
     
     //--------------------------------------------
     // 게시글 수정
     //--------------------------------------------
-    public Map<String, Object> PostUpdate(Post post);
+    public Map<String, Object> PostUpdate(PostVO postVO);
     
     //--------------------------------------------
     // 게시글 페이지네이션
     //--------------------------------------------
-    public List<Post> getPosts(Post post, int page, int pageSize);
+    public List<PostVO> getPosts(PostVO postVO, int page, int pageSize);
     
     //--------------------------------------------
     // 게시글 개수 체크
     //--------------------------------------------
-    public int getPostCount(Post post);
+    public int getPostCount(PostVO postVO);
     
     //--------------------------------------------
     // 게시글 상세조회
     //--------------------------------------------
-	public Post getPostReplies(int postId, int boardId);
+	public PostVO getPostReplies(int postId, int boardId);
 	
 	//--------------------------------------------
 	// 게시글 조회수
 	//--------------------------------------------
-	public int PostViewCnt(int post, int boardId);
+	public int PostViewCnt(int postVO, int boardId);
 	
 	//--------------------------------------------
 	// 추천 확인
 	//--------------------------------------------
-	public int likeCheck(int postId, int userId);
+	public Integer likeCheck(int postId, int userId);
 	
 	//--------------------------------------------
 	// 추천 등록
@@ -68,39 +68,42 @@ public interface PostService {
 	//--------------------------------------------
 	// 댓글 조회
 	//--------------------------------------------
-	public List<Reply> getPostReply(int postId);
+	public List<PostReplyVO> getPostReply(int postId);
 	
 	//--------------------------------------------
 	// 대댓글 조회
 	//--------------------------------------------
-	public List<Comment> getPostComment(Reply replyId);
+	public List<PostCommentVO> getPostComment(PostReplyVO replyId);
 	
 	//--------------------------------------------
     // 댓글 등록
 	//--------------------------------------------
-    public int createReply(Reply reply);
+    public int createReply(PostReplyVO postreplyVO);
     
     //--------------------------------------------
     // 댓글 삭제
     //--------------------------------------------
-    public Map<String, Object> deleteReply(Reply reply);
+    public Map<String, Object> deleteReply(PostReplyVO postreplyVO);
     
     //--------------------------------------------
     // 대댓글 등록
     //--------------------------------------------
-    public int createComment(Comment comment);
+    public int createComment(PostCommentVO postcommentVO);
     
     //--------------------------------------------
     // 대댓글 삭제
     //--------------------------------------------
-    public Map<String, Object> deleteComment(Comment comment);
+    public Map<String, Object> deleteComment(PostCommentVO postcommentVO);
     
     //--------------------------------------------
     // 게시글 신고 등록
     //--------------------------------------------
-    public int createReport(Report report);
+    public int createReport(ReportVO reportVO);
 
-	public List<BoardFiles> getBoardFiles(int postId, int boardId);
+    //--------------------------------------------
+    // 파일 조회
+    //--------------------------------------------
+	public List<BoardFilesVO> getBoardFiles(int postId, int boardId);
 
 
 

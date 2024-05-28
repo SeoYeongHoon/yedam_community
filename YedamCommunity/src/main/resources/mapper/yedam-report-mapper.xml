@@ -5,7 +5,7 @@
   <mapper namespace="com.yedam.app.yedam_post.mapper.ReportMapper">
   
   <!-- 신고접수 -->
-  <insert id="insertReport" parameterType="Report" useGeneratedKeys="true" keyProperty="reportId">
+  <insert id="insertReport" parameterType="ReportVO" useGeneratedKeys="true" keyProperty="reportId">
   	INSERT INTO reports (report_id
                        , reporter
                        , process
@@ -22,7 +22,7 @@
           , #{postId})
   </insert>
 	  
-  <select id="selectReportList" resultType="Report">
+  <select id="selectReportList" resultType="ReportVO">
   	SELECT *
   	FROM reports
   </select>
