@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_homework.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface HomeWorkService {
 
@@ -12,7 +13,10 @@ public interface HomeWorkService {
 
 	// 과제 등록
 	public int homeworkInsert(HomeWorkVO homeworkVO);
-	
+
+	// 과제 수정
+	public Map<String, Object> homeworkUpdate(HomeWorkVO homeworkVO);
+
 	// 과제 삭제
 	public int homeworkDelete(int homeworkId);
 
@@ -33,14 +37,14 @@ public interface HomeWorkService {
 
 	// 과목명 카테고리
 	public List<HomeWorkVO> subjectCategory(int subjectId, int userId);
-	
+
 	// 최근 과제 출력
 	public List<HomeWorkVO> getRecentTest(int userId);
-	
+
 	// 과제 페이징 및 필터링
-	public List<HomeWorkVO> getHomeworksByFilter(String filter, int page, String searchQuery);
-	
+	public List<HomeWorkVO> getHomeworksByFilter(int filter, int page, String searchQuery);
+
 	// 페이징용 카운트
-	public int getTotalCnt(String filter, String searchQuery);
-	
+	public int getTotalCnt(int filter, String searchQuery);
+
 }

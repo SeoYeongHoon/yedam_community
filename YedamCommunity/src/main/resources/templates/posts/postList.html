@@ -83,5 +83,14 @@
       const boardId = [[${boardId}]];
       location.href = `/post/${boardId}?keyword=${keyword}`;
     }
+    
+    $(document).ready(function() {
+        $('#searchKeyword').on('keypress', function(event) {
+          if (event.which === 13) {
+            event.preventDefault();
+            searchPosts();
+          }
+        });
+      });
   </script>
 </html>

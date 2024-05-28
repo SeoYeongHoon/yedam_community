@@ -44,12 +44,6 @@ public class ExamController {
 	//--------------------------------------------
 	// 등록된 시험목록 필터링해서 출력
 	//--------------------------------------------
-	/*
-	@GetMapping("test")
-	@ResponseBody
-	public List<TeacherVO> testList(@RequestParam("classId") int cId) {
-		return examService.testList(cId);
-	}*/
 	@GetMapping("test")
 	@ResponseBody
 	public Map<String, Object> testList(@RequestParam(defaultValue = "1") int page, 
@@ -58,7 +52,7 @@ public class ExamController {
 		List<TeacherVO> list = examService.testList(cId, page, searchQuery);
 		int totalCnt = examService.testListCnt(cId, searchQuery);
 		
-		PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
+		PageDTO pageDTO = new PageDTO(page, totalCnt, 10);
 		
 		Map<String, Object> response = new HashMap<>();
 		response.put("tests", list);
@@ -66,7 +60,6 @@ public class ExamController {
 	    
 		return response;
 	}
-	
 	
 	//--------------------------------------------
 	// 시험 등록 - 페이지
@@ -154,13 +147,12 @@ public class ExamController {
 	//--------------------------------------------
 	@GetMapping("quizes")
 	@ResponseBody
-	public Map<String, Object> quizList(@RequestParam("subjectName") String subjectName
-									  , @RequestParam(required = false, defaultValue = "1") int page
-							          , @RequestParam(required = false, defaultValue = "10") int pageSize){
-		List<TeacherVO> list = examService.getQuizFilter(subjectName, page, pageSize);
+	public Map<String, Object> quizList(@RequestParam(defaultValue = "1") int page,
+									  	@RequestParam("subjectName") String subjectName){
+		List<TeacherVO> list = examService.getQuizFilter(page, subjectName);
 		int totalCnt = examService.getQuizCount(subjectName);
 		
-		PageDTO pageDTO = new PageDTO(page, totalCnt, 10);
+		PageDTO pageDTO = new PageDTO(page, totalCnt, 12);
 		
 		Map<String, Object> response = new HashMap<>();
 		response.put("quizes", list);

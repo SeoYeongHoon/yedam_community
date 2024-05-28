@@ -137,7 +137,7 @@ function testPagination(pageDTO, currentPage) {
 	// console.log("pageDTO:", JSON.stringify(pageDTO, null, 5), "현재페이지:", currentPage);
 	let arr = new Array();
 	arr.push(pageDTO);
-	console.log("현재 페이지: " + arr[0].page);
+	//console.log("현재 페이지: " + arr[0].page);
 	currentPage = arr[0].page;
 			
 	var pagination = $('.testPaging');
@@ -148,7 +148,7 @@ function testPagination(pageDTO, currentPage) {
 	}
 			
 	for (var p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
-		console.log("p값: " + p);
+		//console.log("p값: " + p);
 				
 		var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
 				
@@ -192,7 +192,7 @@ function testList(page, searchQuery){
 		},
 		
 		success : function(data){
-			console.log("페이지DTO: " + JSON.stringify(data.page, null, 5), "페이지: " + page);
+			//console.log("페이지DTO: " + JSON.stringify(data.page, null, 5), "페이지: " + page);
 			updateList(data.tests);
 			testPagination(data.page, page);
 		},

@@ -2,7 +2,7 @@ package com.yedam.app.yedam_common;
 
 public class PageDTO {
 	private int page;
-	private int startPage, endPage;
+	private int starPage, endPage;
 	private boolean prev, next;
 
 	public int getPage() {
@@ -14,11 +14,11 @@ public class PageDTO {
 	}
 
 	public int getStarPage() {
-		return startPage;
+		return starPage;
 	}
 
 	public void setStarPage(int starPage) {
-		this.startPage = starPage;
+		this.starPage = starPage;
 	}
 
 	public int getEndPage() {
@@ -51,17 +51,17 @@ public class PageDTO {
 		int realEnd = (int) Math.ceil(_totalCnt * 1.0/ _pageForPaging);
 		
 		this.endPage = (int) (Math.ceil(page * 1.0/ _pageForPaging) * _pageForPaging);
-		this.startPage = this.endPage - (_pageForPaging - 1);
+		this.starPage = this.endPage - (_pageForPaging - 1);
 		
 		this.endPage = this.endPage > realEnd ? realEnd : this.endPage;
 		
-		this.prev = this.startPage > 1;
+		this.prev = this.starPage > 1;
 		this.next = this.endPage < realEnd;
 	}
 
 	@Override
 	public String toString() {
-		return "PageDTO [page=" + page + ", startPage=" + startPage + ", endPage=" + endPage + ", prev=" + prev
+		return "PageDTO [page=" + page + ", starPage=" + starPage + ", endPage=" + endPage + ", prev=" + prev
 				+ ", next=" + next + "]";
 	}
 	

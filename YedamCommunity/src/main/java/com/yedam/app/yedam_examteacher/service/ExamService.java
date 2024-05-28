@@ -29,8 +29,8 @@ public interface ExamService {
 	public int subjectDelete(TeacherVO teacherVO); // 과목명 삭제
 	//public Map<String, Object> subjectDelete(TeacherVO teacherVO); // 과목명 삭제 테스트중인 코드
 	//public List<TeacherVO> getQuizFilter(String sName); // 문제 필터링 출력
-	public List<TeacherVO> getQuizFilter(String subjectName, int page, int pageSize); // 문제 필터링 페이징 출력
-	public int getQuizCount(String subjectName);
+	public List<TeacherVO> getQuizFilter(int page, String subjectName); // 문제 필터링 페이징 출력
+	int getQuizCount(String subjectName); // 문제 수 count
 	public List<TeacherVO> getQuizInfo(int qId); // 문제 자세히보기 (단건조회)
 	public List<TeacherVO> currList(); // 과정명 출력(과목명 추가할때 사용)
 	public List<TeacherVO> subjectListOfCurr(int cId); // 과목명 출력(과목 추가/삭제시 사용)

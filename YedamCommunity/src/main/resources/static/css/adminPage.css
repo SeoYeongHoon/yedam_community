@@ -233,13 +233,13 @@
 	box-shadow: 0 2px 5px 0 #00000040;
 }
 
-.select-style-1 .select-position select:focus {
+/*.select-style-1 .select-position select:focus {
 	border-color: white !important;
 }
 .select-style-1 .select-position::after {
 	border-bottom: 2px solid white !important;
     border-right: 2px solid white !important;
-}
+}*/
 
 #manage-container {
 	min-height: 500px;

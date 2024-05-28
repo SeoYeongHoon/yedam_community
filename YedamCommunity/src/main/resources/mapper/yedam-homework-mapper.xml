@@ -127,35 +127,52 @@
 		ORDER BY  h.homework_id DESC
 	</select>
 	
-	<!-- 과제 페이징 -->
+	<!-- 과제 페이징 및 출력 -->
 	<select id="getHomeworksByFilter" parameterType="map" resultType="HomeWorkVO">
 		SELECT *
-		FROM (
-		    SELECT rownum rn, a.*
-		    FROM (
-		        SELECT c.class_id,
-		               h.homework_id,
-		               h.homework_content,
-		               h.homework_date,
-		               h.homework_title,
-		               s.subject_name
-		        FROM homeworks h
-		        JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
-		        JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
-		        WHERE h.subject_id = s.subject_id
-		        ORDER BY h.homework_id DESC
-		    ) a
-		    <![CDATA[
-		    WHERE rownum <= (#{page} * 5)
+	    FROM (
+	        SELECT b.*, ROWNUM rnum
+	        FROM (
+	            SELECT c.class_id,
+	                   h.homework_id,
+	                   h.homework_content,
+	                   h.homework_date,
+	                   h.homework_title,
+	                   s.subject_name
+	            FROM homeworks h
+	            JOIN curriculum c ON h.curriculum_id = c.curriculum_id
+	            JOIN subjects s ON h.subject_id = s.subject_id
+	            WHERE (#{filter} = 0 OR c.class_id = #{filter})
+	            AND LOWER(h.homework_title) LIKE '%' || #{searchQuery} || '%'
+	            ORDER BY h.homework_id DESC
+	        ) b
+	        <![CDATA[
+		    WHERE ROWNUM <= #{page} * 5
 		    ]]>
-		) b
-		WHERE b.rn > (#{page} - 1) * 5
+	    )
+	    WHERE rnum > (#{page} - 1) * 5
 	</select>
 	
 	<!-- 페이징용 카운트 -->
 	<select id="getTotalCnt" parameterType="map" resultType="int">
+		<!--SELECT COUNT(*)
+		FROM homeworks h 
+		JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
+		JOIN subjects s ON (h.curriculum_id = s.curriculum_id)
+		WHERE h.subject_id = s.subject_id
+		AND (homework_title LIKE '%' || #{searchQuery} || '%')
+		<if test="filter != 0">
+		AND c.curriculum_id = #{filter}
+		</if>-->
+		
 		SELECT COUNT(*)
-		FROM homeworks
+	    FROM homeworks h
+	    JOIN curriculum c ON h.curriculum_id = c.curriculum_id
+	    JOIN subjects s ON h.subject_id = s.subject_id
+	    WHERE LOWER(h.homework_title) LIKE '%' || #{searchQuery} || '%'
+	    <if test="filter != 0">
+	        AND c.class_id = #{filter}
+	    </if>
 	</select>
 	
 	<!-- 과목명 카테고리 -->
@@ -195,4 +212,11 @@
 		<![CDATA[
 		WHERE   rn <= 5	]]>
 	</select>
+	
+	<!-- 과제 수정 -->
+	<update id="updateHomework" parameterType="HomeWorkVO">
+		UPDATE homeworks
+		SET homework_content = #{homeworkContent} , homework_date = #{homeworkDate} , homework_title = #{homeworkTitle}
+		WHERE homework_id = #{homeworkId}
+	</update>
 </mapper>

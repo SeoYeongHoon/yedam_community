@@ -1,10 +1,10 @@
 package com.yedam.app.yedam_homework.web;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -67,8 +66,7 @@ public class HomeWorkController {
 	// ----------------
 	// 과제 목록(교수)
 	// ----------------
-	@GetMapping("homeworkT")
-	
+	@GetMapping("homework_T")
 	public String homework(Model model) {
 		List<CurriculumVO> classList = curriculumService.CurriculumList();
 		model.addAttribute("classId", classList);
@@ -76,7 +74,7 @@ public class HomeWorkController {
 	}
 
 	// 과제 목록 출력
-	@GetMapping("homeworkListT")
+	@GetMapping("homeworkList_T")
 	@ResponseBody
 	public List<HomeWorkVO> homeworkList(@RequestParam("homeworkAll") String homeworkAll) {
 		List<HomeWorkVO> homeworkList = homeworkService.homeworkList();
@@ -102,7 +100,7 @@ public class HomeWorkController {
 	// ----------------
 	// 과제 목록(학생)
 	// ----------------
-	@GetMapping("homeworkS")
+	@GetMapping("homework_S")
 	public String homeworksList(Model model) {
 		int userId = 60;
 		List<CurriculumVO> subjects = curriculumService.subjectList(userId);
@@ -111,7 +109,7 @@ public class HomeWorkController {
 	}
 
 	// 과제 목록 출력
-	@GetMapping("homeworkListS")
+	@GetMapping("homeworkList_S")
 	@ResponseBody
 	public List<HomeWorkVO> homeworkListS(@RequestParam("userid") int userid) {
 		List<HomeWorkVO> userhomework = homeworkService.userHomeworkList(userid);
@@ -162,6 +160,26 @@ public class HomeWorkController {
 		return null;
 	}
 
+	// ----------------
+	// 과제 수정페이지
+	// ----------------
+	@PutMapping("/updateHomework")
+	@ResponseBody
+	public Map<String, Object> updateHomework(@RequestParam("title") String title,
+											  @RequestParam("date") Date date,
+											  @RequestParam("content") String content,
+											  @RequestParam("id") int id) {
+		HomeWorkVO homeworkVO = new HomeWorkVO();
+		homeworkVO.setHomeworkTitle(title);
+		homeworkVO.setHomeworkDate(date);
+		homeworkVO.setHomeworkContent(content);
+		homeworkVO.setHomeworkId(id);
+		
+		return homeworkService.homeworkUpdate(homeworkVO);
+	}
+	
+	
+	
 	// ----------------
 	// 과제상세페이지
 	// ----------------
@@ -283,13 +301,13 @@ public class HomeWorkController {
 	
 	
 
-
+	// ----------------
 	// 과제 필터링 및 페이징
 	// ----------------
 	@GetMapping("/filterHomeworks")
 	@ResponseBody
-	public Map<String, Object> filterHomeworks(@RequestParam(defaultValue = "1") int page,
-											   @RequestParam(defaultValue = "4") String filter,
+	public Map<String, Object> filterHomeworks(@RequestParam("filter") int filter,
+											   @RequestParam(defaultValue = "1") int page,
 											   @RequestParam(defaultValue = "") String searchQuery) {
 		
 		List<HomeWorkVO> homeworks = homeworkService.getHomeworksByFilter(filter, page, searchQuery);
@@ -301,7 +319,8 @@ public class HomeWorkController {
 		response.put("homeworks", homeworks);
 		response.put("page", pageDTO);
 		
-		System.out.println("과제항목: " + homeworks);
+		System.out.println("필터: " + filter);
+		System.out.println("페이지 DTO:" + pageDTO);
 		
 		return response;
 	}

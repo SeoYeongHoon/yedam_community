@@ -61,35 +61,70 @@
 li {
 	display: inline;
 }
+tr img {
+	width: 80px;
+    max-width: 100%;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.center {
+  	text-align: center;
+	  width: 60%;
+	  margin: auto;
+}
+
+.testPaging {
+  	
+}
+
+.testPaging a {
+	  color: black;
+	  float: left;
+	  padding: 8px 16px;
+	  text-decoration: none;
+	  transition: background-color .3s;
+	  /*border: 1px solid #ddd;*/
+	  /*margin: 0 4px;*/
+}
+
+.testPaging a.active {
+	  background-color: #4CAF50;
+	  color: white;
+	  border: 1px solid #4CAF50;
+}
+
+.testPaging a:hover:not(.active) {
+		
+}
 </style>
 <!-- <p th:text="${answerList}"></p>  -->
-<div>
-	<button type="button" id="subBtn"
+<div style="margin:10px; padding:10px">
+	<button type="button" id="subBtn" style="margin-bottom: 10px;"
 		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
+		<li><a href="selectClassExam" id="testInsert"
+			class="main-btn danger-btn-light btn-hover">다음</a></li>
+		<li><a href="quizinsert"
+			class="main-btn primary-btn-light btn-hover">새문제</a></li>
+		<li><a href="#0" class="main-btn primary-btn-light btn-hover"
+			id="quizSelect">문제선택</a></li>
 		<li>
-			<div id="subSelec">
+			<div id="subSelec" style="padding-top:10px;">
 				<label>과목선택</label>
 				<div class="select-position">
-					<select id="subject">
-						<option value="all">전체보기</option>
+					<select id="subject" style="width:auto; height:30px;">
+						<option value="all">문제 전체보기</option>
 						<th:block th:each="subjectInfo, idxStat : ${subjectList}">
 							<option class="typeSelec" th:value="${subjectInfo.subjectName}">[[${subjectInfo.subjectName}]]</option>
 						</th:block>
 					</select>
 				</div>
 			</div>
-		</li>
-		<li><a href="selectClassExam" id="testInsert"
-			class="main-btn danger-btn-light btn-hover">시험출제</a></li>
-		<li><a href="quizinsert"
-			class="main-btn primary-btn-light btn-hover">새문제</a></li>
-		<li><a href="#0" class="main-btn primary-btn-light btn-hover"
-			id="quizSelect">문제선택</a></li>
+		</li>	
 	</ul>
 </div>
-
-<div id="quizBox" class="container row"></div>
+<div id="quizBox" class="container row" ></div>
 <div class="center">
 	<div class="testPaging">
 		<!-- ajax실행으로 태그 생성 -->
@@ -155,10 +190,10 @@ $(document).ready(function() {
 });
 
 function testPagination(pageDTO, currentPage) {
-	console.log("pageDTO:", JSON.stringify(pageDTO, null, 5), "현재페이지:", currentPage);
+	//console.log("pageDTO:", JSON.stringify(pageDTO, null, 12), "현재페이지:", currentPage);
 	let arr = new Array();
 	arr.push(pageDTO);
-	console.log("현재 페이지: " + arr[0].page);
+	//console.log("현재 페이지: " + arr[0].page);
 	currentPage = arr[0].page;
 			
 	var pagination = $('.testPaging');
@@ -169,7 +204,7 @@ function testPagination(pageDTO, currentPage) {
 	}
 			
 	for (var p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
-		console.log("p값: " + p);
+		//console.log("p값: " + p);
 				
 		var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
 				
@@ -192,7 +227,7 @@ var subName = ''; // 탬플릿문법안에 들어가있는 변수
 var qContent = '';
 var qId, sId= 0;
 var page = 1;
-var pageSize = 0;
+var currentPage = 1;
 var curriId = 0;
 var solution = '';
 var answer = [];
@@ -209,8 +244,9 @@ var storageQId = [];
 //--------------------------------------------
 // 퀴즈 문제 전체를 불러오는 함수
 //--------------------------------------------
-function quizContentList(subjectName,page,pageSize){
+function quizContentList(page, subjectName){
 	//$('#quizBox').html('');
+	subjectName = $('#subject').val();
 	//--------------------------------------------
 	// 문제 전체 조회 ajax (필터링)
 	//--------------------------------------------
@@ -218,57 +254,13 @@ function quizContentList(subjectName,page,pageSize){
 		url : "quizes",
 		type : "get", 
 		data : {
-			subjectName : subjectName,
 			page : page,
-			pageSize : pageSize
+			subjectName : subjectName
 		},
-		//async: false,		
+			
 		success : function(data){
-			console.log("quizes ajax : "+data);
 			updateList(data.quizes);
 			testPagination(data.page,page);
-			//--------------------------------------------
-			// 문제 전체 퀴즈박스 생성 forEach 시작
-			//--------------------------------------------
-			/* data.forEach((item,idx) => {
-				let rowTag = null;
-				if(idx%3==0){
-					rowTag = $(`<div id='row${idx}' class='row'></div>`);
-					$("#quizBox").append(rowTag);
-				}else{
-					let num = Math.floor(idx/3) * 3;
-					rowTag = $('#row' + num );
-				}
-				subName = item.subjectName;				
-				qContent = item.quizContent;
-				qId = item.quizId;
-				sId = item.subjectId;
-				
-				let temp = `
-					<div style="color:gray;" class="col-4 box" id="${qId}">
-						<div class="card-style-3 mb-30 box2">
-							<div>
-								<label>문제선택
-									<input type="checkbox" class="quizChk " name="select"  id="qContent${idx}" value="${qContent}"></input>
-								</label>
-								<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}" style="border:1px solid black;">
-								<p>과목명 : ${subName}</p>
-								<input type="hidden" id="qId${idx}" value="${qId}" />
-							</div>
-							<div class="card-content">
-								<h4>${qContent}</h4>
-								<br>
-								<button type="button" class="infoBtn" name="${qId}" value="${qId}">자세히 보기</button>
-							</div>
-						</div>
-					</div>
-					`;
-				//$("#quizBox").append(temp);
-				rowTag.append(temp);
-			}); */
-			//--------------------------------------------
-			// 문제 전체 퀴즈박스 생성 forEach 종료
-			//--------------------------------------------
 			
 			//--------------------------------------------
 			// 문제 체크박스 버튼 누르고 문제선택 누를시 문제박스 색상 변경.
@@ -333,13 +325,17 @@ function quizContentList(subjectName,page,pageSize){
 											<div>
 												<h4>해설</h4><input type="text">${solution}</input>
 											</div>
-											<div style="text-align: center;">
-												<button id="closeBtn" class="main-btn primary-btn btn-hover"
-													type="button" onclick="location.href='quizlist'">확인</button>
+											<div style="text-align: center;" class="btnDiv">
+												<button id="closeBtn" class="main-btn primary-btn btn-hover okBtn"
+													type="button">확인</button>
 											</div>
 										</div>
 										`;
 									$("#modalWrap").append(qInfo);
+									// 확인버튼 누르면 모달창 닫기
+									$('.btnDiv').on('click', '.okBtn', function(){
+										modal.style.display = "none";
+									});
 								})
 							},
 							error : function(err){
@@ -482,7 +478,6 @@ $('.form-check').on('click', '.checkbox', function(){
 const modalSub = document.getElementById("modalWrap2"); // 과목추가 모달창 요소 가져오기
 const modal = document.getElementById("modalWrap"); // 자세히보기 모달창 요소 가져오기
 
-
 $('#subBtn').on('click', function(e){
 	modalSub.style.display = "flex"; // 과목추가/삭제 버튼 클릭시 모달창 보이기
 });
@@ -493,6 +488,7 @@ $('.modal-overlay').on('click', '.close-area',function (){
 	modal.style.display = "none";
 	modalSub.style.display = "none";
 });
+
 //--------------------------------------------
 // 모달창 밖에 화면 누르면 모달창 닫는 기능
 //--------------------------------------------
@@ -526,16 +522,17 @@ window.addEventListener("keyup", e => {
 // 과목명 필터링해서 문제 출력
 //--------------------------------------------
 $('#subject').on('change', function(){
+	console.log('셀렉트 바뀜');
 	if($(this).val() == 'all'){
-		sName = '';
-		quizContentList(subjectName);
+		console.log('과목선택이 전체선택')
+		subjectName = '';
+		quizContentList(page, subjectName);
 	} else {
-		sName = $(this).val();
-		quizContentList(subjectName);
+		console.log('과목선택이 다른것')
+		subjectName = $(this).val();
+		quizContentList(page, subjectName);
 	}
 });
-
-quizContentList(subjectName);
 
 //--------------------------------------------
 // 시험출제 버튼 누르면 선택된 문제들이 localstorage에 저장되고 페이지가 넘어감.
@@ -544,15 +541,35 @@ $('#testInsert').on('click', function(){
 	storageContent = [];
 	storageScore = [];
 	storageQId = [];
+	let sum = 0;
 	window.localStorage.clear();
-	//console.log($('.quizChk').is(":checked"));
 	for(let i=0; i<$('.box').length; i++){
 		if($('#qContent'+i).is(":checked")){
 			storageContent.push($('#qContent'+i).val());
 			storageScore.push($('#qScore'+i).val());
 			storageQId.push($('#qId'+i).val());
+			
+			sum += parseInt($('#qScore'+i).val());
 		}
 	}
+	// 배점 총합이 0점일때 NaN 뜨는거 0으로 변경.
+	if(isNaN(sum)){
+		sum = 0;
+	}
+	// 문제를 선택(체크) 하지 않은 경우 알람창
+	if($('input[name="select"]:checked').length == 0){
+		alert('문제가 선택되지 않았습니다.\n문제를 선택해주세요.')
+		return false;
+	}
+	// 배점의 총합이 100이 됐는지 체크
+	if(sum == 100){
+		alert('배점의 합이 100점입니다.\n다음창에서 출제할 강의실을 선택해주세요.')
+		
+	} else {
+		alert('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum)
+		return false;
+	}
+	
 	// 값 저장시 ["","",""] 배열타입으로 저장하기 위해 변환작업.
 	const arryContent = JSON.stringify(storageContent);
 	const arryScore = JSON.stringify(storageScore); 
@@ -570,8 +587,8 @@ $('#testInsert').on('click', function(){
 //--------------------------------------------
 function updateList(quizes){
 	$('#quizBox').html('');
+	
 	quizes.forEach((quiz,idx) => {
-		console.log("for문 데이터값 : " + quiz)
 		subName = quiz.subjectName;				
 		qContent = quiz.quizContent;
 		qId = quiz.quizId;
@@ -581,10 +598,10 @@ function updateList(quizes){
 			<div style="color:gray;" class="col-3 box" id="${qId}">
 				<div class="card-style-3 mb-30 box2">
 					<div>
-						<label>문제선택
-							<input type="checkbox" class="quizChk " name="select"  id="qContent${idx}" value="${qContent}"></input>
-						</label>
-						<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}" style="border:1px solid black;">
+							<input type="checkbox" class="quizChk " name="select"  id="qContent${idx}" value="${qContent}" style="zoom : 1.3"></input>
+						<label>문제선택</label>
+						
+						<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}" style="border:1px solid black; width: 70px;">
 						<p>과목명 : ${subName}</p>
 						<input type="hidden" id="qId${idx}" value="${qId}" />
 					</div>
@@ -597,12 +614,15 @@ function updateList(quizes){
 			</div>
 			`;
 		$("#quizBox").append(temp);
-	})
+	}) // for문 종료
+} // 함수 종료
+
+window.onload = function() {
+	quizContentList(page, subjectName);
 }
 
-$('#updateBtn').on('click', function(){
-	updateList(quizes);
-})
+
+
 </script>
 
 </html>
