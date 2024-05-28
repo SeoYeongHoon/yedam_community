@@ -12,12 +12,12 @@ import com.yedam.app.yedam_post.mapper.CommentMapper;
 import com.yedam.app.yedam_post.mapper.PostMapper;
 import com.yedam.app.yedam_post.mapper.ReplyMapper;
 import com.yedam.app.yedam_post.mapper.ReportMapper;
-import com.yedam.app.yedam_post.service.BoardFiles;
-import com.yedam.app.yedam_post.service.Comment;
-import com.yedam.app.yedam_post.service.Post;
+import com.yedam.app.yedam_post.service.BoardFilesVO;
+import com.yedam.app.yedam_post.service.PostCommentVO;
+import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.PostService;
-import com.yedam.app.yedam_post.service.Reply;
-import com.yedam.app.yedam_post.service.Report;
+import com.yedam.app.yedam_post.service.PostReplyVO;
+import com.yedam.app.yedam_post.service.ReportVO;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -38,15 +38,15 @@ public class PostServiceImpl implements PostService {
 	// 게시글 등록
 	//--------------------------------------------
 	@Override
-	public int createPost(Post post) {
-		return postMapper.insertPost(post);
+	public int createPost(PostVO postVO) {
+		return postMapper.insertPost(postVO);
 	}
 	
 	//--------------------------------------------
 	// 게시글 단건조회
 	//--------------------------------------------
 	@Override                  
-	public Post getPostReplies(int postId, int boardId) {
+	public PostVO getPostReplies(int postId, int boardId) {
 		return postMapper.getPostDetails(postId, boardId);
 	}
 	
@@ -54,10 +54,10 @@ public class PostServiceImpl implements PostService {
 	// 게시글 수정
 	//--------------------------------------------
 	@Override
-	public Map<String, Object> PostUpdate(Post post) {
+	public Map<String, Object> PostUpdate(PostVO postVO) {
 		Map<String, Object> result = new HashMap<>();
 		try {
-			postMapper.updatePost(post);
+			postMapper.updatePost(postVO);
 			result.put("success", true);
 		} catch (Exception e) {
 			result.put("success", false);
@@ -70,11 +70,11 @@ public class PostServiceImpl implements PostService {
 	//--------------------------------------------
 	@Override
 	@Transactional
-	public Map<String, Object> PostDelete(Post post) {
+	public Map<String, Object> PostDelete(PostVO postVO) {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
-			int postId = post.getPostId();
-			int boardId = post.getBoardId();
+			int postId = postVO.getPostId();
+			int boardId = postVO.getBoardId();
 			postMapper.deletePost1(postId, boardId); // 대댓글 삭제
 			postMapper.deletePost2(postId, boardId); // 댓글 삭제
 			postMapper.deletePost3(postId, boardId); // 파일 삭제
@@ -94,26 +94,26 @@ public class PostServiceImpl implements PostService {
 	// 게시글 페이지 네이션
 	//--------------------------------------------
     @Override
-    public List<Post> getPosts(Post post, int page, int pageSize) {
+    public List<PostVO> getPosts(PostVO postVO, int page, int pageSize) {
         int startRow = (page - 1) * pageSize;
         int endRow = page * pageSize;
-        return postMapper.getPosts(post, startRow, endRow);
+        return postMapper.getPosts(postVO, startRow, endRow);
     }
     
     //--------------------------------------------
     // 게시글 개수
     //--------------------------------------------
     @Override
-    public int getPostCount(Post post) {
-        return postMapper.getPostCount(post);
+    public int getPostCount(PostVO postVO) {
+        return postMapper.getPostCount(postVO);
     }
     
     //--------------------------------------------
 	// 댓글 등록
     //--------------------------------------------
 	@Override
-	public int createReply(Reply reply) {
-		return replyMapper.insertReply(reply);
+	public int createReply(PostReplyVO postreplyVO) {
+		return replyMapper.insertReply(postreplyVO);
 	}
 	
 	
@@ -122,10 +122,10 @@ public class PostServiceImpl implements PostService {
 	//--------------------------------------------
 	@Override
 	@Transactional
-	public Map<String, Object> deleteReply(Reply reply) {
+	public Map<String, Object> deleteReply(PostReplyVO postreplyVO) {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
-			int replyId = reply.getReplyId();
+			int replyId = postreplyVO.getReplyId();
 			replyMapper.deleteReply1(replyId);
 			replyMapper.deleteReply2(replyId);
 
@@ -141,8 +141,8 @@ public class PostServiceImpl implements PostService {
 	// 대댓글 등록
 	//--------------------------------------------
 	@Override
-	public int createComment(Comment comment) {
-		return commentMapper.insertComment(comment);
+	public int createComment(PostCommentVO postcommentVO) {
+		return commentMapper.insertComment(postcommentVO);
 	}
 	
 	//--------------------------------------------
@@ -150,10 +150,10 @@ public class PostServiceImpl implements PostService {
 	//--------------------------------------------
     @Override
     @Transactional
-    public Map<String, Object> deleteComment(Comment comment) {
+    public Map<String, Object> deleteComment(PostCommentVO postcommentVO) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-        	int commentId = comment.getCommentId();
+        	int commentId = postcommentVO.getCommentId();
             commentMapper.deleteComment(commentId);
             
             resultMap.put("status", "success");
@@ -168,7 +168,7 @@ public class PostServiceImpl implements PostService {
     // 댓글조회
     //--------------------------------------------
 	@Override
-	public List<Reply> getPostReply(int postId) {
+	public List<PostReplyVO> getPostReply(int postId) {
 		return replyMapper.getReplies(postId);
 	}
 
@@ -176,7 +176,7 @@ public class PostServiceImpl implements PostService {
 	// 대댓글 조회
 	//--------------------------------------------
 	@Override
-	public List<Comment> getPostComment(Reply replyId) {
+	public List<PostCommentVO> getPostComment(PostReplyVO replyId) {
 		return commentMapper.getComments(replyId);
 	}
 	
@@ -208,7 +208,7 @@ public class PostServiceImpl implements PostService {
 	// 추천 확인
 	//--------------------------------------------
 	@Override
-	public int likeCheck(int postId, int userId) {
+	public Integer likeCheck(int postId, int userId) {
 		Map<String, Object> map = new HashMap<>();
         map.put("postId", postId);
         map.put("userId", userId);
@@ -219,8 +219,8 @@ public class PostServiceImpl implements PostService {
 	// 신고 등록
 	//--------------------------------------------
 	@Override
-	public int createReport(Report report) {
-		return reportMapper.insertReport(report);
+	public int createReport(ReportVO reportVO) {
+		return reportMapper.insertReport(reportVO);
 	}
 
 	@Override
@@ -239,8 +239,7 @@ public class PostServiceImpl implements PostService {
 		return postMapper.deleteLike(map);
 	}
 	
-	public List<BoardFiles> getBoardFiles(int postId, int boardId) {
-		
+	public List<BoardFilesVO> getBoardFiles(int postId, int boardId) {
 	    return postMapper.getBoardFiles(postId, boardId);
 	}
 

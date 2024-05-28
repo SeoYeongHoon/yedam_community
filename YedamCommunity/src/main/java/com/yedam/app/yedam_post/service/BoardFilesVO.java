@@ -3,7 +3,7 @@ package com.yedam.app.yedam_post.service;
 import lombok.Data;
 
 @Data
-public class BoardFiles {
+public class BoardFilesVO {
 	private int boardfileId;
 	private int boardId;
 	private int postId;

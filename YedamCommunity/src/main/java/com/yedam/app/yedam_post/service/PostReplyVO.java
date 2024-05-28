@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 @Data
-public class Reply {
+public class PostReplyVO {
 	
 	private int replyId;
 	private int boardId;
@@ -20,7 +20,7 @@ public class Reply {
     private Date updateDate;
     
     // 대댓글을 끌고올려는곳
-    private List<Comment> comments;
+    private List<PostCommentVO> comments;
 
 	public int getReplyId() {
 		return replyId;
@@ -78,14 +78,14 @@ public class Reply {
 		this.updateDate = updateDate;
 	}
 
-	public List<Comment> getComments() {
+	public List<PostCommentVO> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(List<PostCommentVO> comments) {
 		this.comments = comments;
 	}
-    
+
     
     
 }
