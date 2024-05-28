@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class Report {
+public class ReportVO {
 	 private int reportId;
 	 private String reporter;
 	 private int process;

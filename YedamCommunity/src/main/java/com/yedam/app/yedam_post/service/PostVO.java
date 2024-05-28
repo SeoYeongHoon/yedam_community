@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 @Data
-public class Post {
+public class PostVO {
 	
 	private int postId;
     private int boardId;
@@ -33,22 +33,22 @@ public class Post {
     //--------------------------------------------
     // 추천 출력을 위한 리스트
     //--------------------------------------------
-    private List<BoardLike> boardlike;
+    private List<BoardLikeVO> boardlike;
     
     //--------------------------------------------
     // 댓글 출력을 위한 리스트
     //--------------------------------------------
-    private List<Reply> replies;
+    private List<PostReplyVO> replies;
     
     //--------------------------------------------
     // 대댓글을 출력하기 위한 리스트
     //--------------------------------------------
-    private List<Comment> comments;
+    private List<PostCommentVO> comments;
     
     //--------------------------------------------
     // 첨부 파일 리스트 추가
     //--------------------------------------------
-    private List<BoardFiles> boardFiles;
+    private List<BoardFilesVO> boardFiles;
     
 
 	public int getPostId() {
@@ -171,35 +171,35 @@ public class Post {
 		this.boardfileExt = boardfileExt;
 	}
 
-	public List<BoardLike> getBoardlike() {
+	public List<BoardLikeVO> getBoardlike() {
 		return boardlike;
 	}
 
-	public void setBoardlike(List<BoardLike> boardlike) {
+	public void setBoardlike(List<BoardLikeVO> boardlike) {
 		this.boardlike = boardlike;
 	}
 
-	public List<Reply> getReplies() {
+	public List<PostReplyVO> getReplies() {
 		return replies;
 	}
 
-	public void setReplies(List<Reply> replies) {
+	public void setReplies(List<PostReplyVO> replies) {
 		this.replies = replies;
 	}
 
-	public List<Comment> getComments() {
+	public List<PostCommentVO> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(List<PostCommentVO> comments) {
 		this.comments = comments;
 	}
 
-	public List<BoardFiles> getBoardFiles() {
+	public List<BoardFilesVO> getBoardFiles() {
 		return boardFiles;
 	}
 
-	public void setBoardFiles(List<BoardFiles> boardFiles) {
+	public void setBoardFiles(List<BoardFilesVO> boardFiles) {
 		this.boardFiles = boardFiles;
 	}
     

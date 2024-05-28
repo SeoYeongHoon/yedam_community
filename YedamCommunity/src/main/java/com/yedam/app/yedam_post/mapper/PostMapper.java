@@ -5,15 +5,15 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.yedam.app.yedam_post.service.BoardFiles;
-import com.yedam.app.yedam_post.service.Post;
+import com.yedam.app.yedam_post.service.BoardFilesVO;
+import com.yedam.app.yedam_post.service.PostVO;
 
 public interface PostMapper {
 
     //--------------------------------------------
     // 단건조회
     //--------------------------------------------
-    Post getPostDetails(@Param("postId") int postId
+    PostVO getPostDetails(@Param("postId") int postId
     		          , @Param("boardId") int boardId);
 
     //--------------------------------------------
@@ -25,7 +25,7 @@ public interface PostMapper {
     //--------------------------------------------
     // 추천확인
     //--------------------------------------------
-    int likeCheck(Map<String, Object> map);
+    Integer likeCheck(Map<String, Object> map);
 
     //--------------------------------------------
     // 추천등록
@@ -50,12 +50,12 @@ public interface PostMapper {
     //--------------------------------------------
     // 게시글 등록
     //--------------------------------------------
-    int insertPost(Post post);
+    int insertPost(PostVO postVO);
 
     //--------------------------------------------
     // 게시글 수정
     //--------------------------------------------
-    int updatePost(Post post);
+    int updatePost(PostVO postVO);
 
     //--------------------------------------------
     // 게시글 삭제
@@ -68,18 +68,18 @@ public interface PostMapper {
     //--------------------------------------------
     // 페이지네이션
     //--------------------------------------------
-    List<Post> getPosts(Post post
+    List<PostVO> getPosts(PostVO postVO
     		          , @Param("startRow") int startRow
     		          , @Param("endRow") int endRow);
 
     //--------------------------------------------
     // 게시글 개수
     //--------------------------------------------
-    int getPostCount(Post post);
+    int getPostCount(PostVO postVO);
 
     //--------------------------------------------
     // 파일 불러오기
     //--------------------------------------------
-	public List<BoardFiles> getBoardFiles(int postId,
+	public List<BoardFilesVO> getBoardFiles(int postId,
 			                              int boardId);
 }

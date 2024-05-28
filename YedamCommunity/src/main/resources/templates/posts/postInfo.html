@@ -11,21 +11,18 @@
 <body>
 <div class="container">
   <h1 th:text="${postInfo.title}">Post Title</h1>
-  <p th:text="${postInfo.postContent}">Post Content</p>
-  <p th:text="${postInfo.writer}">Post Writer</p>
-  <p th:text="${#dates.format(postInfo.createDate, 'yyyy-MM-dd')}">Post Date</p>
   <p>조회수: <span th:text="${postInfo.postView}"></span></p>
   <p>좋아요: <span th:text="${postInfo.postLike}"></span></p>
+  <p th:text="${#dates.format(postInfo.createDate, 'yyyy-MM-dd')}">Post Date</p>
+  <p th:text="${postInfo.writer}">Post Writer</p>
+  <p th:text="${postInfo.postContent}">Post Content</p>
 
- <!-- 디버깅을 위한 postInfo.boardFiles 출력 -->
-  <pre th:text="${#lists.size(postInfo.boardFiles)}">Board Files List Size</pre>
-  <pre th:text="${postInfo.boardFiles}">Board Files List</pre>
-
-  <!-- 이미지 출력 -->
   <h2>이미지</h2>
   <div th:each="file : ${postInfo.boardFiles}">
-    <img th:src="@{'/files/' + file.boardfileLocation}" style="width: 50%; height: auto;"/>
-  </div>
+    <!-- <img th:src="@{/files/{file}(file= ${file.boardfileLocation})}" style="width: 50%; height: auto;"/> -->
+     <img th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
+  </div> 
+  
   <!-- boardId에 따라 다른 내용 표시 -->
   <!-- <div th:switch="${boardId}">
     <div th:case="1">
@@ -78,6 +75,7 @@
       <form class="comment-form">
         <input type="hidden" name="replyId" th:value="${reply.replyId}" />
         <input type="hidden" name="postId" th:value="${postInfo.postId}" />
+        <input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
         <textarea name="commentContent"></textarea>
         <button type="button" class="comment-submit">대댓글 작성</button>
       </form>
@@ -87,6 +85,7 @@
   <h3>댓글 작성</h3>
   <form id="reply-form">
     <input type="hidden" name="postId" th:value="${postInfo.postId}" />
+    <input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
     <textarea name="replyContent"></textarea>
     <button type="button" id="reply-submit">댓글 작성</button>
   </form>
@@ -130,14 +129,13 @@
     $("#reply-submit").on("click", function () {
       let formData = $("#reply-form").serialize();
       $.ajax({
-        url: "Reply",
+        url: "/Reply",
         type: "POST",
         data: formData,
         success: function (response) {
           alert("댓글이 등록되었습니다.");
         },
         error: function (error) {
-          location.reload();
         },
       });
     });
@@ -184,10 +182,11 @@
       let commentId = $(this).data("comment-id");
       if (confirm("대댓글을 삭제하시겠습니까?")) {
         $.ajax({
-          url: "Comment",
+          url: "/Comment",
           type: "DELETE",
           data: { commentId: commentId },
           success: function (response) {
+        	  alert("대댓글이 삭제되었습니다.");
             location.reload();
           },
           error: function (error) {
@@ -211,7 +210,7 @@
         alert("통신 에러");
       },
       success: function (likeCheck) {
-        if (likeCheck == null) {
+        if (likeCheck == 0) {
           alert("추천완료");
         } else {
           alert("추천취소");
@@ -231,7 +230,7 @@
     $("#report-submit").on("click", function () {
       let formData = $("#report-form").serialize();
       $.ajax({
-        url: "reportPost",
+        url: "/reportPost",
         type: "POST",
         data: formData,
         success: function (response) {

@@ -6,7 +6,7 @@
   
   
   <!-- 대댓글 조회 -->
-  <select id="getComments" parameterType="int" resultType="Comment">
+  <select id="getComments" parameterType="int" resultType="PostCommentVO">
   		SELECT COMMENT_ID ,
                REPLY_ID ,
                COMMENT_WRITER ,
@@ -16,7 +16,7 @@
         WHERE reply_id = #{replyId}
   </select>
   
-  <insert id="insertComment" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentId">
+  <insert id="insertComment" parameterType="PostCommentVO" useGeneratedKeys="true" keyProperty="commentId">
   	INSERT INTO comments (comment_id
                         , reply_id
                         , comment_writer

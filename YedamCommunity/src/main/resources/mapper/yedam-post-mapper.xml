@@ -5,7 +5,7 @@
 <mapper namespace="com.yedam.app.yedam_post.mapper.PostMapper">
 
 	<!-- 게시글 등록 - PL/SQL - -->
-    <insert id="insertPost" parameterType="Post" statementType="CALLABLE">
+    <insert id="insertPost" parameterType="PostVO" statementType="CALLABLE">
         <![CDATA[
     DECLARE
         v_post_id NUMBER;
@@ -59,7 +59,7 @@
     </insert>
 
 	<!-- 게시글 단건조회  수정 필요 -->
-	<select id="getPostDetails" parameterType="int" resultType="Post">
+	<select id="getPostDetails" parameterType="int" resultType="PostVO">
 		SELECT p.post_id,
 		       p.board_id,
                p.title,
@@ -72,12 +72,23 @@
                b.boardfile_id,
                b.boardfile_name,
                b.boardfile_location
-        FROM posts p
-        LEFT JOIN boardfiles b ON p.post_id = b.post_id
+        FROM posts p LEFT JOIN boardfiles b 
+        ON p.post_id = b.post_id
         WHERE p.post_id = #{postId}
         AND p.board_id = #{boardId}
-
 	</select>
+	
+	<!-- 첨부 파일 조회 -->
+  <select id="getBoardFiles" parameterType="map" resultType="com.yedam.app.yedam_post.service.BoardFilesVO">
+    	SELECT b.boardfile_id,
+               b.boardfile_name,
+               b.boardfile_location,
+               b.boardfile_size,
+               b.boardfile_ext
+    	FROM boardfiles b
+   	 	WHERE b.post_id = #{postId}
+      	AND b.board_id = #{boardId}
+  </select>
 
 	<!-- boardId 값에 따라 게시글 전체 조회 -->
 <!-- 	<select id="getAllPosts" resultType="Post">
@@ -103,7 +114,7 @@
 	</select> -->
 
 	<!-- 게시글 수정 -->
-	<update id="updatePost" parameterType="Post">
+	<update id="updatePost" parameterType="PostVO">
 		UPDATE posts
 		SET title =	#{title}
 		  , post_content = #{postContent}
@@ -146,7 +157,7 @@
 	</delete>
 	
 	<!-- 조회수 -->
-	<update id="updatePostViewCNT" parameterType="Post">
+	<update id="updatePostViewCNT" parameterType="PostVO">
 		UPDATE posts
         SET    post_view = post_view + 1
         WHERE post_id = #{postId}
@@ -155,26 +166,27 @@
     
     <!-- 추천수 조회 likes 테이블 -->
      <select id="likeCheck" parameterType="map" resultType="Integer">
-    	SELECT post_like
-    	FROM boardlikes
+    	SELECT count(post_like)
+    	FROM board_likes
     	WHERE post_id = #{postId}
     	AND user_id = #{userId}
-    	
     </select> 
     
     <!-- 게시글 추천시 likes 테이블에 insert -->
-    <insert id="insertLike" parameterType="Post">
-    	INSERT INTO boardlikes (like_id
+    <insert id="insertLike" parameterType="PostVO">
+    	INSERT INTO board_likes (like_id
+    	                 , post_like 
                          , post_id
                          , user_id)	
 		VALUES (like_id_seq.nextval
+		      , 1
               , #{postId}
               , #{userId})
     </insert>
     
     <!-- 게시글 추천 취소했을시 boardlikes 테이블에서 Delete -->
-    <delete id="deleteLike" parameterType="Post">
-    	DELETE FROM boardlikes
+    <delete id="deleteLike" parameterType="PostVO">
+    	DELETE FROM board_likes
         WHERE post_id = #{postId}
         AND user_id = #{userId}
     </delete>
@@ -194,7 +206,7 @@
     </update>
     
  	<!-- 페이지네이션 -->
- 	 <select id="getPosts" resultType="Post">
+ 	 <select id="getPosts" resultType="PostVO">
         SELECT * 
         FROM (
             SELECT
@@ -203,7 +215,7 @@
             FROM (
                 SELECT *
                 FROM posts
-                WHERE board_id = #{post.boardId, jdbcType=INTEGER}
+                WHERE board_id = #{postVO.boardId, jdbcType=INTEGER}
 	<include refid="condition"></include>
                 ORDER BY post_id DESC
             ) p
@@ -227,10 +239,10 @@
     </select>
 
 	<sql id="condition">
-	 <if test = 'post.keyword != null and ! "".equals(post.keyword)'>
-      			AND(title LIKE '%' || #{post.keyword} ||'%'
-                          OR post_content LIKE '%' || #{post.keyword} || '%'
-                             OR writer LIKE '%' || #{post.keyword} || '%' )
+	 <if test = 'postVO.keyword != null and ! "".equals(postVO.keyword)'>
+      			AND(title LIKE '%' || #{postVO.keyword} ||'%'
+                    OR post_content LIKE '%' || #{postVO.keyword} || '%'
+                    OR writer LIKE '%' || #{postVO.keyword} || '%' )
     	        </if>
 	</sql>
 </mapper>

@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.LoginUserVO;
-import com.yedam.app.yedam_post.service.BoardFiles;
-import com.yedam.app.yedam_post.service.Comment;
-import com.yedam.app.yedam_post.service.Post;
+import com.yedam.app.yedam_post.service.BoardFilesVO;
+import com.yedam.app.yedam_post.service.PostCommentVO;
+import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.PostService;
-import com.yedam.app.yedam_post.service.Reply;
-import com.yedam.app.yedam_post.service.Report;
+import com.yedam.app.yedam_post.service.PostReplyVO;
+import com.yedam.app.yedam_post.service.ReportVO;
 /**
  * 게시판, 게시글
  * 2024.05.27
@@ -50,14 +50,14 @@ public class PostController {
 	// --------------------------------------------
 	@GetMapping("/post/{boardId}")
 	public String postList(@PathVariable int boardId,
-						   Post post,
+						   PostVO postVO,
 	                       @RequestParam(required = false, defaultValue = "1") int page,
 	                       @RequestParam(required = false, defaultValue = "10") int pageSize,
 	                       Model model) {
 		
-	    post.setBoardId(boardId);
-	    List<Post> list = postService.getPosts(post , page, pageSize);
-	    int totalCount = postService.getPostCount(post);
+		postVO.setBoardId(boardId);
+	    List<PostVO> list = postService.getPosts(postVO , page, pageSize);
+	    int totalCount = postService.getPostCount(postVO);
 
 	    model.addAttribute("postList", list);
 	    model.addAttribute("totalCount", totalCount);
@@ -79,20 +79,22 @@ public class PostController {
 	    postService.PostViewCnt(postId, boardId);
 	    
 	    // 게시글 단건 조회
-	    Post postfind = postService.getPostReplies(postId, boardId);
+	    PostVO postfind = postService.getPostReplies(postId, boardId);
 	    
 	    // 댓글 조회
-	    List<Reply> replylist = postService.getPostReply(postId);
-	    for (Reply reply : replylist) {
+	    List<PostReplyVO> replylist = postService.getPostReply(postId);
+	    for (PostReplyVO postreplyVO : replylist) {
 	        // 대댓글 조회
-	        List<Comment> commentlist = postService.getPostComment(reply);
-	        reply.setComments(commentlist);
+	        List<PostCommentVO> commentlist = postService.getPostComment(postreplyVO);
+	        postreplyVO.setComments(commentlist);
 	    }
 	    postfind.setReplies(replylist);
 
-	    List<BoardFiles> boardFiles = postService.getBoardFiles(postId, boardId);
-	    postfind.setBoardFiles(boardFiles);
+	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
+	    postfind.setBoardFiles(boardFilesVO);
 
+	    postfind.setBoardId(boardId);
+	    postfind.setPostId(postId);
 	    model.addAttribute("boardId", boardId);
 	    model.addAttribute("postInfo", postfind);
 
@@ -106,15 +108,15 @@ public class PostController {
     public String postInsertForm(Model model
     		                   , @PathVariable int boardId
     		                   , Authentication authentication) {
-        Post post = new Post();
-        post.setBoardId(boardId);
+        PostVO postVO = new PostVO();
+        postVO.setBoardId(boardId);
         
         
         // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
         LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-        post.setWriter(userVO.getNickname());
+        postVO.setWriter(userVO.getNickname());
         
-        model.addAttribute("post", post);
+        model.addAttribute("post", postVO);
         return "posts/postinsert";
     }
 
@@ -122,7 +124,7 @@ public class PostController {
 	// 게시글 등록 처리
 	// --------------------------------------------
 	@PostMapping("/postInsert")
-	public String postInsertProcess(Post post, 
+	public String postInsertProcess(PostVO postVO, 
 	                                @RequestParam("file") MultipartFile file, 
 	                                Authentication authentication) {
 	    try {
@@ -139,24 +141,24 @@ public class PostController {
 	            File dest = new File(filePath);
 	            file.transferTo(dest);
 	            
-	            post.setBoardfileName(fileName);
-	            post.setBoardfileSize(file.getSize());
-	            post.setBoardfileLocation(fileName);
-	            post.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
+	            postVO.setBoardfileName(fileName);
+	            postVO.setBoardfileSize(file.getSize());
+	            postVO.setBoardfileLocation(fileName);
+	            postVO.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
 	        }
 
 	        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-	        post.setUserId(userVO.getuserId());
-	        post.setWriter(userVO.getNickname());
+	        postVO.setUserId(userVO.getuserId());
+	        postVO.setWriter(userVO.getNickname());
 	        
-	        post.setCreateDate(new Date());
-	        post.setUpdateDate(new Date());
-	        postService.createPost(post);
+	        postVO.setCreateDate(new Date());
+	        postVO.setUpdateDate(new Date());
+	        postService.createPost(postVO);
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    return "redirect:/post/" + post.getBoardId();
+	    return "redirect:/post/" + postVO.getBoardId();
 	}
 
 
@@ -167,10 +169,10 @@ public class PostController {
 	public String postDelete(@PathVariable int boardId
 			               , @PathVariable int postId) {
 
-		Post post = new Post();
-		post.setPostId(postId);
-		post.setBoardId(boardId);
-		postService.PostDelete(post);
+		PostVO postVO = new PostVO();
+		postVO.setPostId(postId);
+		postVO.setBoardId(boardId);
+		postService.PostDelete(postVO);
 
 		return "redirect:/post/" + boardId;
 	}
@@ -186,7 +188,7 @@ public class PostController {
 		if (postId == null) {
 			return "redirect:/post/" + boardId;
 		}
-		Post post = postService.getPostReplies(postId, boardId);
+		PostVO post = postService.getPostReplies(postId, boardId);
 		model.addAttribute("post", post);
 		model.addAttribute("boardId", boardId);
 		return "posts/postUpdate";
@@ -197,7 +199,7 @@ public class PostController {
 	// --------------------------------------------
 	@PostMapping("/postUpdate")
 	@ResponseBody
-	public Map<String, Object> postUpdateProcess(@ModelAttribute Post post, 
+	public Map<String, Object> postUpdateProcess(@ModelAttribute PostVO postVO, 
 	                                             @RequestParam("file") MultipartFile file) {
 	    Map<String, Object> result = new HashMap<>();
 	    try {
@@ -213,14 +215,14 @@ public class PostController {
 	            File dest = new File(filePath);
 	            file.transferTo(dest);
 
-	            post.setBoardfileName(fileName);
-	            post.setBoardfileSize(file.getSize());
-	            post.setBoardfileLocation(fileName);
-	            post.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
+	            postVO.setBoardfileName(fileName);
+	            postVO.setBoardfileSize(file.getSize());
+	            postVO.setBoardfileLocation(fileName);
+	            postVO.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
 	        }
 
-	        post.setUpdateDate(new Date());
-	        postService.PostUpdate(post);
+	        postVO.setUpdateDate(new Date());
+	        postService.PostUpdate(postVO);
 	        result.put("success", true);
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -234,33 +236,43 @@ public class PostController {
 	// --------------------------------------------
 	@PostMapping("/reportPost")
 	@ResponseBody
-	public String reportPost(Report report) {
+	public String reportPost(ReportVO reportVO,
+			                 Authentication authentication) {
 		try {
-			report.setProcess(0);
-			postService.createReport(report);
+			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+			reportVO.setReporter(userVO.getNickname());
+			reportVO.setProcess(0);
+			postService.createReport(reportVO);
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
 		return "success";
 	}
 
+	
+	
 	// --------------------------------------------
 	// 추천버튼 작업중
 	// --------------------------------------------
 	@PostMapping("/boardLike")
 	@ResponseBody
-	public int updateLike(@RequestParam("postId") int postId, 
-			              @RequestParam("userId") int userId) {
+	public boolean updateLike(@RequestParam("postId") int postId, 
+			              Authentication authentication) {
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		
+		PostVO postVO = new PostVO();
+		postVO.setUserId(userVO.getuserId());
+	    int userId = userVO.getuserId();
 		Integer likeCheck = postService.likeCheck(postId, userId);
-		if (likeCheck == null) {
+		
+		if (likeCheck == 0) {
 			postService.createLike(postId, userId); // 게시판의 추천을 눌렀을시 boardlikes 테이블에 insert
 			postService.updateLike(postId); // 게시판 테이블 +1
 		} else {
-			postService.LikeDelete(postId, userId); // boardlikes 테이블에 DELETE
 			postService.updateLikeCancel(postId); // 게시판 테이블 -1
+			postService.LikeDelete(postId, userId); // boardlikes 테이블에 DELETE
 		}
-		return likeCheck;
+		return likeCheck==1? true : false;
 	}
 
 }
