@@ -58,7 +58,7 @@ subjectId
 		<br> <br>
 		<div style="text-align: center">
 			<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
-				th:onclick="|location.href='@{/testList2}'|">목록</button>
+				th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
 			<form class="tdetail_1" action="testStart" method="post">
 				<input type="hidden" name="page" th:value="1">
 				<input type="hidden" name="testId" th:value="${testDetail.testId}">

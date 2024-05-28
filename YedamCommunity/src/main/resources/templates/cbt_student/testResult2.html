@@ -4,52 +4,80 @@
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
 <style>
-.tdetail_1 {
+.tresult_1 {
 	display: inline-block;
 }
+.tresult_2 {
+	text-align: center;
+}
+.tresult_3 {
+	width: 150px;
+}
+.tresult_4 {
+	display: block;
+}
 </style>
-<div>
-	<div class="card-style"
-		style="border: 1px solid gray; border-radius: 20px; width: 1000px; margin: 0 auto; margin-top: 50px; margin-bottom: 50px;">
+<div class="row">
+	<!-- 시험결과 정보 -->
+	<div class="card-style col-lg-12"
+		style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">
 		<br> <br>
-		<h1 style="text-align: center;">시험</h1>
+		<h1 class="tresult_2">[ 문제풀이 ]</h1>
 		<br> <br>
 		<table class="table">
 			<tr>
-				<th>과정명</th>
-				<td>1</td>
+				<th class="tresult_2"><h1>과목</h1></th>
+				<th class="tresult_2"><h1>응시시간</h1></th>
+				<th class="tresult_2"><h1>점수</h1></th>
+				<th class="tresult_2"><h1>재시험여부</h1></th>
 			</tr>
-			<tr>
-				<th>시험명</th>
-				<td>2</td>
-			</tr>
-			<tr>
-				<th>응시기간</th>
-				<td>3</td>
-			</tr>
-			<tr>
-				<th>제한시간</th>
-				<td>4</td>
-			</tr>
-			<tr>
-				<th>총점</th>
-				<td>5</td>
-			</tr>
-			<tr>
-				<th>문제수</th>
-				<td>6</td>
-			</tr>
-			<tr>
-				<th>유의사항</th>
-				<td>7</td>
+			<tr>			
+				<td class="tresult_2"><h1>[[${testResult.subjectName}]]</h1></td>
+				<!-- 응시시간에 따른 구분 -->
+				<td th:if="${testMin == 0 && testSec == 0}" class="tresult_2"><h1>00:00</h1></td>
+				<td th:if="${testMin == 0 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>00:0[[${testSec}]]</h1></td>
+				<td th:if="${testMin == 0 && testSec > 9}" class="tresult_2"><h1>00:[[${testSec}]]</h1></td>
+				<td th:if="${testMin < 10 && testMin > 0 && testSec == 0}" class="tresult_2"><h1>0[[${testMin}]]:00</h1></td>
+				<td th:if="${testMin > 9 && testSec == 0}" class="tresult_2"><h1>[[${testMin}]]:00</h1></td>
+				<td th:if="${testMin < 10 && testMin > 0 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>0[[${testMin}]]:0[[${testSec}]]</h1></td>
+				<td th:if="${testMin < 10 && testMin > 0 && testSec > 9}" class="tresult_2"><h1>0[[${testMin}]]:[[${testSec}]]</h1></td>
+				<td th:if="${testMin > 9 && testSec < 10 && testSec > 0}" class="tresult_2"><h1>[[${testMin}]]:0[[${testSec}]]</h1></td>
+				<td th:if="${testMin > 9 && testSec > 9}" class="tresult_2"><h1>[[${testMin}]]:[[${testSec}]]</h1></td>
+				<td class="tresult_2"><h1>[[${testResult.resultScore}]]/[[${testResult.passScore}]]</h1></td>
+				<td th:if="${testResult.isReexam == 1}" class="tresult_2"><h1 style="color: blue;">통과</h1></td>
+				<td th:unless="${testResult.isReexam == 1}" class="tresult_2"><h1 style="color: red;">재시험</h1></td>
 			</tr>
 		</table>
 		<br> <br>
 		<div style="text-align: center">
-			<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
-				th:onclick="|location.href='@{/testList2}'|">목록</button>
+			<button class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover"
+					th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
+			<form class="tresult_1 tresult_3" action="testResult2" method="post">
+				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
+			</form>
 		</div>
 		<br> <br>
 	</div>
+	<!-- 문제 확인 -->
+	<th:block th:each="quiz, idx : ${testTest}">
+		<div th:if="${quiz.isCorrect == 0}" class="card-style col-lg-6" style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">						
+			<h1 class="tresult_1" style="color: red">[[${idx.count}]].</h1>
+			<h1 class="tresult_1">[[${quiz.quizContent}]]</h1>
+			<p class="tresult_1">([[${quiz.quizScore}]]점)</p>
+			<br> <br>
+			<div>
+				<span class="tresult_4"> [[${quiz.one}]]</span>
+				<span class="tresult_4"> [[${quiz.two}]]</span>
+				<span class="tresult_4"> [[${quiz.three}]]</span>
+				<span class="tresult_4"> [[${quiz.four}]]</span>
+				<span class="tresult_4"> [[${quiz.five}]]</span>
+			</div>
+			<hr>
+			<h3>풀이</h3>	
+			<p>정답: [[${quiz.exampleNum}]]</p>
+			<br>
+			<p>[[${quiz.quizSolution}]]</p>	
+		</div>
+	</th:block>	
 </div>
 </html>
