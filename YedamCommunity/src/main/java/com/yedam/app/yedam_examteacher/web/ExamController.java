@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_examteacher.service.ExamService;
+import com.yedam.app.yedam_examteacher.service.QuizVO;
 import com.yedam.app.yedam_examteacher.service.TeacherVO;
 
 /**
@@ -78,25 +81,25 @@ public class ExamController {
 	@ResponseBody
 	public String testInsertProcess(TeacherVO teacherVO) {
 		examService.testInsert(teacherVO);
-		return "redirect:testlist";
+		return "true";
 	}
 	//--------------------------------------------
 	// 시험에 출제될 문제 등록 - 처리
 	//--------------------------------------------
 	@PostMapping("quizboxinsert")
 	@ResponseBody
-	public String quizboxInsertProcess(TeacherVO teacherVO) {
-		examService.quizboxInsert(teacherVO);
-		return "redirect:testlist";
+	public String quizboxInsertProcess(@RequestBody QuizVO quizVO) {
+		examService.quizboxInsert(quizVO);
+		return "true";
 	}
 	//--------------------------------------------
 	// 시험 대상자 등록 - 처리
 	//--------------------------------------------
 	@PostMapping("testuserinsert")
 	@ResponseBody
-	public String testUserInsertProcess(TeacherVO teacherVO) {
-		examService.testUserInsert(teacherVO);
-		return "redirect:testlist";
+	public String testUserInsertProcess(@RequestBody int[] userId) {
+		examService.testUserInsert(userId);
+		return "true";
 	}
 	
 	//--------------------------------------------
@@ -119,11 +122,22 @@ public class ExamController {
 	// 문제 등록 - 페이지
 	//--------------------------------------------
 	@GetMapping("quizinsert")
-	public String quizInsertForm(Model model) {
+	public String quizInsertForm(Model model,
+							     Authentication authentication) {
 		List<TeacherVO> list = examService.subjectList();
+		TeacherVO teacherVO = new TeacherVO();
+		
+		// 현재 로그인한 사용자의 원하는 정보 가져오기
+		try {
+			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+			teacherVO.setUserId(userVO.getuserId());
+		} catch(NullPointerException e) {
+			System.out.println(e);
+			return "redirect:/";	// 로그인 풀리면 로그인 페이지로 이동.
+		}
 		
 		model.addAttribute("subjectList", list);
-		model.addAttribute("teacherVO", new TeacherVO());
+		model.addAttribute("teacherVO", teacherVO);
 		return "cbt_teacher/insertquiz";
 	}
 	//--------------------------------------------
@@ -160,10 +174,7 @@ public class ExamController {
 	    
 		return response;
 	}
-	/*
-	 * public List<TeacherVO> quizList(@RequestParam("sName") String sName) { return
-	 * examService.getQuizFilter(sName); }
-	 */
+	
 	//--------------------------------------------
 	// 문제에 대한 지문들 출력
 	//--------------------------------------------
@@ -239,14 +250,18 @@ public class ExamController {
 	//--------------------------------------------
 	@GetMapping("userTestInfo")
 	public String userTestInfo(TeacherVO teacherVO, Model model) {
-		TeacherVO findVO = examService.userTestInfo(teacherVO);
-		model.addAttribute("userTestInfo", findVO);
+		try {
+			TeacherVO findVO = examService.userTestInfo(teacherVO);
+			model.addAttribute("userTestInfo", findVO);
+		} catch (Exception e){
+			return "redirect:teachermain";
+		}
 		return "cbt_teacher/userTestInfo";
 	}
 	//--------------------------------------------
 	// 학생 개개인의 과목별 점수 조회 기능
 	//--------------------------------------------
-	@PostMapping("userScore")
+	@GetMapping("userScore")
 	@ResponseBody
 	public List<TeacherVO> userScore(@RequestParam("userId") int uId){
 		return examService.userScoreList(uId);

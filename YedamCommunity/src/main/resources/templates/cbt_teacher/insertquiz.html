@@ -22,7 +22,7 @@
 					</th:block>
 				</select>
 				<input type="hidden" name="subjectId" value="0"/>
-				<input type="hidden" name="userId" value="2"/>
+				<input type="hidden" th:field="*{userId}"/>
 			</div>
 		</div>
 	
@@ -223,6 +223,7 @@ function validationCheck(event){
 	}
 	
 	insertForm.submit();
+	
 }
 
 </script>

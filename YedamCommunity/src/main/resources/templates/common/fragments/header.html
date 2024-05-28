@@ -14,7 +14,7 @@
 					</div>
 					<li class="main-menu-active"><a href="/home">Home</a>
 					<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_ADMIN')">
-						<li class="mega-menu-item"><a href="category-02.html">LMS</a></li>
+						<li class="mega-menu-item"><a href="teachermain">LMS</a></li>
 					</th:block>
 					<li class="mega-menu-item"><a th:href="@{/post/1}">수료 과정별 게시판</a></li>
 					<li class="mega-menu-item"><a th:href="@{/post/2}">구인/구직 게시판</a></li>

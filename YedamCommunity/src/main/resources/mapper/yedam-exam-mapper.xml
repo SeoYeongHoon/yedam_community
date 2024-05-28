@@ -44,24 +44,31 @@
 						  , test_content
 						  , test_time
 						  , test_date
-						  , test_name)
+						  , test_name
+						  , class_id)
 		VALUES (test_id_seq.nextval
 				, #{curriculumId}
 				, #{testContent}
 				, #{testTime}
 				, sysdate
-				, #{testName})				  
+				, #{testName}
+				, #{classId})				  
 	</insert>
 	<!-- 시험에 출제되는 문제 등록 -->
 	<insert id="insertQuizbox" parameterType="TeacherVO">
 		INSERT INTO quizbox(quizbox_id
                   , quiz_content
                   , quiz_id
+                  , subject_id
                   , test_id
                   , quiz_score)
 		VALUES(quizbox_id_seq.nextval
 		     , #{quizContent}
 		     , #{quizId}
+		     , (SELECT subject_id 
+		        FROM subjects 
+		        WHERE subject_name = #{subjectName} 
+		        AND curriculum_id = #{curriculumId})
 		     , test_id_seq.currval
 		     , #{quizScore})
 	</insert>
@@ -110,14 +117,14 @@
 	</insert>
 	<!-- 문제 지문 등록 -->
 	<insert id="insertAnswer" parameterType="TeacherVO">
-		INSERT INTO answers (text_id
+		INSERT INTO answers (test_id
 			  			  , example_num
 						  , text_content
 						  , example_answer
 						  , quiz_id
 						  , subject_id
 						  , quiz_answer)
-		VALUES (text_id_seq.nextval
+		VALUES (test_id_seq.nextval
 			  , 1
 			  , #{textContent}
 			  , #{exampleAnswer}
@@ -126,14 +133,14 @@
 			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswer2" parameterType="TeacherVO">
-		INSERT INTO answers (text_id
+		INSERT INTO answers (test_id
 			  			  , example_num
 						  , text_content
 						  , example_answer
 						  , quiz_id
 						  , subject_id
 						  , quiz_answer)
-		VALUES (text_id_seq.nextval
+		VALUES (test_id_seq.nextval
 			  , 2
 			  , #{textContent2}
 			  , #{exampleAnswer2}
@@ -142,14 +149,14 @@
 			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswer3" parameterType="TeacherVO">
-		INSERT INTO answers (text_id
+		INSERT INTO answers (test_id
 			  			  , example_num
 						  , text_content
 						  , example_answer
 						  , quiz_id
 						  , subject_id
 						  , quiz_answer)
-		VALUES (text_id_seq.nextval
+		VALUES (test_id_seq.nextval
 			  , 3
 			  , #{textContent3}
 			  , #{exampleAnswer3}
@@ -158,14 +165,14 @@
 			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswer4" parameterType="TeacherVO">
-		INSERT INTO answers (text_id
+		INSERT INTO answers (test_id
 			  			  , example_num
 						  , text_content
 						  , example_answer
 						  , quiz_id
 						  , subject_id
 						  , quiz_answer)
-		VALUES (text_id_seq.nextval
+		VALUES (test_id_seq.nextval
 			  , 4
 			  , #{textContent4}
 			  , #{exampleAnswer4}
@@ -174,14 +181,14 @@
 			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswer5" parameterType="TeacherVO">
-		INSERT INTO answers (text_id
+		INSERT INTO answers (test_id
 			  			  , example_num
 						  , text_content
 						  , example_answer
 						  , quiz_id
 						  , subject_id
 						  , quiz_answer)
-		VALUES (text_id_seq.nextval
+		VALUES (test_id_seq.nextval
 			  , 5
 			  , #{textContent5}
 			  , #{exampleAnswer5}
@@ -190,14 +197,14 @@
 			  , #{quizAnswer})
 	</insert>
 	<insert id="insertAnswerJu" parameterType="TeacherVO">
-		INSERT INTO answers (text_id
+		INSERT INTO answers (test_id
 			  			  , example_num
 						  , text_content
 						  , example_answer
 						  , quiz_id
 						  , subject_id
 						  , quiz_answer)
-		VALUES (text_id_seq.nextval
+		VALUES (test_id_seq.nextval
 			  , 1
 			  , #{textContentJu}
 			  , #{exampleAnswerJu}
@@ -323,11 +330,11 @@
 		     , tel
 		     , email
 		     , address
-		     , user_image
 		     , company_info
 		     , user_type
 		     , curriculum_id
-		FROM users
+		FROM users u JOIN curriculum c
+		               ON u.curriculum_name = c.curriculum_name
 		WHERE curriculum_id = #{curriculumId}
 	</select>
 	
@@ -339,7 +346,7 @@
 		        from quizbox q JOIN exam_results e
 		                         ON q.quizbox_id = e.quizbox_id
 		                       JOIN test_results t
-		                         ON t.quiz_id = e.quiz_id) AS subject_avg
+		                         ON t.result_id = e.result_id) AS subject_avg
 		FROM subjects s JOIN curriculum c 
 		                  ON s.curriculum_id = c.curriculum_id
 		WHERE class_id = #{classId}
@@ -378,7 +385,7 @@
 		     , class_id
 		     , user_id
 		FROM users u JOIN curriculum c
-		               ON u.curriculum_id = c.curriculum_id
+		               ON u.curriculum_name = c.curriculum_name
 		WHERE class_id = #{classId}
 		AND is_complete = 2
 	</select>
@@ -413,8 +420,7 @@
 	<select id="userTestInfo" resultType="TeacherVO">
 		SELECT name
 			 , user_id
-		     , user_image
-		     , curriculum_name
+		     , c.curriculum_name
 		     , curriculum_start_date
 		     , curriculum_end_date
 		FROM users u JOIN curriculum c

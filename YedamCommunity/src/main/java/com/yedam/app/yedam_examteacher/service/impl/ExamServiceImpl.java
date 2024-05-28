@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yedam.app.yedam_examteacher.mapper.ExamMapper;
 import com.yedam.app.yedam_examteacher.service.ExamService;
+import com.yedam.app.yedam_examteacher.service.QuizVO;
 import com.yedam.app.yedam_examteacher.service.TeacherVO;
 
 @Service
@@ -53,15 +54,33 @@ public class ExamServiceImpl implements ExamService {
 	// 시험에 출제될 문제 등록
 	//--------------------------------------------
 	@Override
-	public int quizboxInsert(TeacherVO teacherVO) {
-		return examMapper.insertQuizbox(teacherVO);
+	public int quizboxInsert(QuizVO quizVO) {
+		TeacherVO teacherVO = new TeacherVO();
+		int quizSize = quizVO.getQuizContent().length;
+		for(int i=0; i<quizSize; i++) {
+			teacherVO.setQuizContent(quizVO.getQuizContent()[i]);
+			teacherVO.setQuizId(quizVO.getQuizId()[i]);
+			teacherVO.setQuizScore(quizVO.getQuizScore()[i]);
+			teacherVO.setSubjectName(quizVO.getSubjectName()[i]);
+			teacherVO.setCurriculumId(quizVO.getCurriculumId());
+			
+			examMapper.insertQuizbox(teacherVO);
+		}
+		return 1;
 	}
 	//--------------------------------------------
 	// 시험 대상자 등록
 	//--------------------------------------------
 	@Override
-	public int testUserInsert(TeacherVO teacherVO) {
-		return examMapper.insertTestUser(teacherVO);
+	public int testUserInsert(int[] userId) {
+		TeacherVO teacherVO = new TeacherVO();
+		int userSize = userId.length;
+		for(int i=0; i<userSize; i++) {
+			teacherVO.setUserId(userId[i]);
+			
+			examMapper.insertTestUser(teacherVO);
+		}
+		return 1;
 	}
 	//--------------------------------------------
 	// 시험 대상자 출력

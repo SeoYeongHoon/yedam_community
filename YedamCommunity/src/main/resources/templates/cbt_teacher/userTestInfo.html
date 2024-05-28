@@ -27,8 +27,8 @@ table {
 		</tr>
 		<tr>
 			<th>수강 기간</th>
-			<td
-				th:text="${#dates.format(userTestInfo.curriculumStartDate, 'yyyy.MM.dd')}+' ~ '+${#dates.format(userTestInfo.curriculumEndDate, 'yyyy.MM.dd')}">123</td>
+			<td th:text="${#dates.format(userTestInfo.curriculumStartDate, 'yyyy.MM.dd')}
+			+' ~ '+${#dates.format(userTestInfo.curriculumEndDate, 'yyyy.MM.dd')}">123</td>
 		</tr>
 	</table>
 </div>
@@ -52,7 +52,7 @@ function showPage(userId){
 	userId = $('#uId').val();
 	$.ajax({
 		url : "userScore",
-		type : "post", 
+		type : "get", 
 		data : {userId : userId},
 				
 		success : function(data){
