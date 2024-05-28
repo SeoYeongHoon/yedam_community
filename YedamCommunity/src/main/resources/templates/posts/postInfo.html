@@ -21,10 +21,8 @@
   <div th:each="file : ${postInfo.boardFiles}">
      <img th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
   </div> 
-  
-    <!-- <img th:src="@{/files/{file}(file= ${file.boardfileLocation})}" style="width: 50%; height: auto;"/> -->
-  <!-- boardId에 따라 다른 내용 표시 -->
- <div th:switch="${boardId}">
+
+  <div th:switch="${boardId}">
     <div th:case="1">
       <h3>게시판 1</h3>
       게시판 1의 내용
@@ -54,7 +52,7 @@
 
   <h2>댓글</h2>
   <ul id="reply-list">
-    <li th:each="reply : ${postInfo.replies}">
+    <li th:each="reply : ${postInfo.replies}" th:id="|'reply-' + ${reply.replyId}|">
       <p th:text="${reply.replyContent}">Reply Content</p>
       <p th:text="${reply.replyWriter}">Reply Writer</p>
       <p th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd')}">Reply Date</p>
@@ -62,13 +60,11 @@
 
       <h3>대댓글</h3>
       <ul>
-        <li th:each="comment : ${reply.comments}">
+        <li th:each="comment : ${reply.comments}" th:id="|'comment-' + ${comment.commentId}|">
           <p th:text="${comment.commentContent}">Comment Content</p>
           <p th:text="${comment.commentWriter}">Comment Writer</p>
           <p th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd')}">Comment Date</p>
-          <button type="button" class="delete-comment" th:data-comment-id="${comment.commentId}">
-            대댓글 삭제
-          </button>
+          <button type="button" class="delete-comment" th:data-comment-id="${comment.commentId}">대댓글 삭제</button>
         </li>
       </ul>
 
@@ -126,7 +122,9 @@
 </div>
 <script>
   $(document).ready(function () {
+	// --------------------------------------------
     // 댓글 작성
+    // --------------------------------------------
     $("#reply-submit").on("click", function () {
       let formData = $("#reply-form").serialize();
       $.ajax({
@@ -135,13 +133,18 @@
         data: formData,
         success: function (response) {
           alert("댓글이 등록되었습니다.");
+          // 댓글 리스트만 리로딩
+          loadReplies();
         },
         error: function (error) {
+          console.log("Error:", error);
+          alert("댓글이 등록실패되었습니다.");
         },
       });
     });
-
+    // --------------------------------------------
     // 댓글 삭제
+    // --------------------------------------------
     $(".delete-reply").on("click", function () {
       let replyId = $(this).data("reply-id");
       if (confirm("댓글을 삭제하시겠습니까?")) {
@@ -150,6 +153,9 @@
           type: "DELETE",
           data: { replyId: replyId },
           success: function (response) {
+            alert("댓글이 삭제되었습니다.");
+            // 댓글 리스트만 리로딩
+            loadReplies();
           },
           error: function (error) {
             alert("댓글 삭제에 실패하였습니다.");
@@ -157,9 +163,10 @@
         });
       }
     });
-
+    // --------------------------------------------
     // 대댓글 작성
-    $(".comment-submit").on("click", function () {
+    // --------------------------------------------
+    $(document).on("click", ".comment-submit", function () {
       let formData = $(this).closest("form").serialize();
       $.ajax({
         url: "/Comment",
@@ -167,21 +174,26 @@
         data: formData,
         success: function (response) {
           alert("대댓글이 등록되었습니다.");
+          loadReplies();
         },
         error: function (error) {
+          alert("대댓글 등록에 실패하였습니다.");
         },
       });
     });
-
+    // --------------------------------------------
     // 대댓글 삭제
-    $(".delete-comment").on("click", function () {
+    // --------------------------------------------
+    $(document).on("click", ".delete-comment", function () {
       let commentId = $(this).data("comment-id");
       if (confirm("대댓글을 삭제하시겠습니까?")) {
         $.ajax({
-          url: "/Comment",
+          url: "Comment",
           type: "DELETE",
           data: { commentId: commentId },
           success: function (response) {
+            alert("대댓글이 삭제되었습니다.");
+            loadReplies();
           },
           error: function (error) {
             console.log("Error:", error);
@@ -191,8 +203,9 @@
       }
     });
   });
-
-  // 추천 추가
+  //--------------------------------------------
+  // 추천 추가 함수
+  // --------------------------------------------
   $(".Good-submit").on("click", function () {
     let formData = $(".Good-form").serialize();
     $.ajax({
@@ -206,14 +219,17 @@
         } else {
           alert("추천취소");
         }
+        // 좋아요 수 업데이트
+        loadLikes();
       },
       error: function () {
         alert("통신 에러");
       },
     });
   });
-
+  //-------------------------------------------- 
   // 신고관련
+  // --------------------------------------------
   $(document).ready(function () {
     // 신고 버튼 클릭 시 폼 표시
     $("#reportBtn").on("click", function () {
@@ -239,6 +255,38 @@
       });
     });
   });
+
+  function loadReplies() {
+    $.ajax({
+      url: window.location.pathname,
+      type: "GET",
+      success: function (response) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(response, 'text/html');
+        const newReplies = $(doc).find("#reply-list").html();
+        $("#reply-list").html(newReplies);
+      },
+      error: function (error) {
+        console.log("Error:", error);
+      },
+    });
+  }
+
+  function loadLikes() {
+    $.ajax({
+      url: window.location.pathname,
+      type: "GET",
+      success: function (response) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(response, 'text/html');
+        const newLikes = $(doc).find(".Good-form").html();
+        $(".Good-form").html(newLikes);
+      },
+      error: function (error) {
+        console.log("Error:", error);
+      },
+    });
+  }
 </script>
 </body>
 </html>
