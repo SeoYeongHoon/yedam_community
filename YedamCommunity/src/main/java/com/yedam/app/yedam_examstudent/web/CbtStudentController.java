@@ -94,6 +94,7 @@ public class CbtStudentController {
 			                 Model model) {
 		TestVO info = cbtStudentService.testDetail(testVO); //시험상세
 		List<QuizboxVO> list = cbtStudentService.testQuizRand(quizboxVO); //랜덤문제
+		int logid = 14;
 		int quizCnt = list.size(); //문제개수
 		int[] randQuizId = new int[quizCnt]; //랜덤 문제 번호 배열
 		int[] randRn = new int[quizCnt]; //랜덤 문제 일련번호 배열
@@ -105,10 +106,29 @@ public class CbtStudentController {
 			randQuizScore[i] = quiz.getQuizScore(); //랜덤으로 생성된 문제의 배점 저장
 			i++;
 		}
+		int isResult = 0;
+		int isReexam = 0;
+		int dateComp = 0;
+		Date date = new Date();
+		testVO.setUserId(logid);
+		testVO.setTestId(info.getTestId());
+		isResult = (cbtStudentService.isTestResult(testVO));
+		testVO.setUserId(logid);
+		testVO.setTestId(info.getTestId());
+		isReexam = cbtStudentService.isTestReexam(testVO);
+		if(date.after(info.getTestDate())) {
+			dateComp = 1;
+		}
+		else {
+			dateComp = 0;
+		}
 		model.addAttribute("testDetail", info); //상세정보
 		model.addAttribute("randQuizId", randQuizId); //문제 번호
 		model.addAttribute("randRn", randRn); //문제 일련번호
 		model.addAttribute("randQuizScore", randQuizScore); //문제 배점
+		model.addAttribute("isResult", isResult); //시험결과 유무
+		model.addAttribute("isReexam", isReexam); //재시험 유무
+		model.addAttribute("dateComp", dateComp); //날짜 비교
 		return "cbt_student/testDetail";
 	}
 	
@@ -132,13 +152,13 @@ public class CbtStudentController {
 		quizboxVO.setQuizId(randQuizId[0]);
 		quizboxVO.setTestId(info.getTestId());
 		quizboxVO.setSubjectId(info.getSubjectId());
+		QuizboxVO quiz1 = cbtStudentService.testQuiz3(quizboxVO); //시험문제
 		answerVO.setQuizId(randQuizId[0]);
 		answerVO.setTestId(info.getTestId());
 		answerVO.setSubjectId(info.getSubjectId());
-		QuizboxVO quiz1 = cbtStudentService.testQuiz1(quizboxVO); //시험문제
 		List<AnswerVO> quiz2 = cbtStudentService.testQuiz2(answerVO); //문제보기
 		model.addAttribute("testStart", info); //응시정보
-		model.addAttribute("testQuiz1", quiz1); //시험문제 내용정보
+		model.addAttribute("testQuiz", quiz1); //시험문제 내용정보
 		model.addAttribute("testQuiz2", quiz2); //시험문제 보기정보
 		model.addAttribute("page", page); //현재 페이지번호
 		model.addAttribute("randQuizId", randQuizId); //문제번호 전달
@@ -151,18 +171,18 @@ public class CbtStudentController {
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	@ResponseBody
 	@GetMapping("testStart")
-	public List<TestVO> testStart(@RequestParam("page") int page, 
+	public QuizboxVO testStart(@RequestParam("page") int page, 
 								  @RequestParam("testId") int testId, 
 								  @RequestParam("subjectId") int subjectId,
 								  @RequestParam("quizCnt") int quizCnt, 
 								  @RequestParam("randQuizId") int[] randQuizId, 
 								  @RequestParam("randRn") int[] randRn,
-								  TestVO testVO){
+								  QuizboxVO quizboxVO){
 		int i = page - 1;
-		testVO.setQuizId(randQuizId[i]); //해당 문제번호
-		testVO.setTestId(testId); //해당 시험번호
-		testVO.setSubjectId(subjectId); //해당 과목번호
-		return cbtStudentService.testQuiz(testVO);
+		quizboxVO.setQuizId(randQuizId[i]); //해당 문제번호
+		quizboxVO.setTestId(testId); //해당 시험번호
+		quizboxVO.setSubjectId(subjectId); //해당 과목번호
+		return cbtStudentService.testQuiz3(quizboxVO);
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	//문제제출 AJAX
@@ -198,11 +218,10 @@ public class CbtStudentController {
 	//ㅡㅡㅡㅡ
 	//시험결과
 	//ㅡㅡㅡㅡ
-	@PostMapping("testResult")
+	@GetMapping("testResult")
 	public String testResult(int testId,
 			                 int min, 
 			                 int sec,
-			                 int[] randQuizId,
 			                 ExamResultVO examResultVO,
 			                 QuizboxVO quizboxVO,
 			                 Model model) {
@@ -211,16 +230,12 @@ public class CbtStudentController {
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
 		List<QuizboxVO> list = new ArrayList<>();
-		for(int i = 0; i < randQuizId.length; i++) {
-			quizboxVO.setSubjectId(info.getSubjectId());
-			quizboxVO.setTestId(testId);
-			quizboxVO.setQuizId(randQuizId[i]);
-			list.addAll(cbtStudentService.testResultQuiz(quizboxVO)); //매퍼 결과 전체 리스트에 추가
-		}
+		quizboxVO.setSubjectId(info.getSubjectId());
+		quizboxVO.setTestId(testId);
+		list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("testMin", min); //응시시간 분
 		model.addAttribute("testSec", sec); //응시시간 초
-		model.addAttribute("randQuizId", randQuizId); //시험결과 문제정보
 		model.addAttribute("quizList", list); //시험결과 문제+보기 정보
 		return "cbt_student/testResult";
 	}
@@ -229,9 +244,8 @@ public class CbtStudentController {
 	//ㅡㅡㅡㅡ
 	//오답확인
 	//ㅡㅡㅡㅡ
-	@PostMapping("testResult2")
+	@GetMapping("testResult2")
 	public String testResult2(int testId,
-							  int[] randQuizId,
 							  ExamResultVO examResultVO,
 				              QuizboxVO quizboxVO,
 							  Model model) {
@@ -242,11 +256,10 @@ public class CbtStudentController {
 		List<QuizboxVO> list = new ArrayList<>();
 		int trueCnt = 0;
 		int falseCnt = 0;
-		for(int i = 0; i < randQuizId.length; i++) {
-			quizboxVO.setSubjectId(info.getSubjectId());
-			quizboxVO.setTestId(testId);
-			quizboxVO.setQuizId(randQuizId[i]);
-			list.addAll(cbtStudentService.testResultQuiz(quizboxVO)); //매퍼 결과 전체 리스트에 추가
+		quizboxVO.setSubjectId(info.getSubjectId());
+		quizboxVO.setTestId(testId);
+		list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
+		for(int i = 0; i < list.size(); i++) {
 			if(list.get(i).getIsCorrect() == 1) {
 				trueCnt++;
 			}

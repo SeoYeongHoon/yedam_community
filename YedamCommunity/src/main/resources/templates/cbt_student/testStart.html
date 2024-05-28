@@ -25,7 +25,7 @@
 }
 .tstart_6 {
  	line-height: 50px;
- }
+}
  /*토스트 메시지*/
 #toast_message {
     opacity: 0;
@@ -84,10 +84,6 @@
 	display: block;
 }
 </style>
-<!-- 
-testName
-testTime
- -->
 <div id="start" class="row">
 	<!-- 타이머 토스트 알림창 
 	<div id="toast_message"></div>-->
@@ -154,14 +150,11 @@ testTime
 				<h3 style="color: red;">(답안 제출 이후에는 답안 변경이 불가합니다.)</h3><br>
 				<div>
 					<button id="closeBtn" class="tstart_2" type="button">닫기</button>
-					<form id="resultForm" class="tstart_2" action="testResult" method="post">
-						<!-- 시험제출 위한 데이터 -->
-						<input type="hidden" name="testId" th:value="${testStart.testId}">
+					<!-- 시험제출 위한 데이터 -->
+					<form id="resultForm" class="tstart_2" action="testResult" method="get">
 						<input id="min" type="hidden" name="min" th:value="0">
 						<input id="sec" type="hidden" name="sec" th:value="0">
-						<div th:each="quiz : ${randQuizId}">				
-							<input type="hidden" name="randQuizId" th:value="${quiz}">
-						</div>
+						<input type="hidden" name="testId" th:value="${testStart.testId}">
 						<button id="confirmBtn" class="tstart_2" type="submit">확인</button>
 					</form>
 				</div>
@@ -187,14 +180,30 @@ testTime
 	</div>
 	<!-- 우측 -->
 	<!-- 문제갱신되는 부분 -->
-	<div id="quiz" class="card-style col-lg-10" style="height: 800px">
-		<h1>[[${page}]]. [[${testQuiz1.quizContent}]]</h1>
-		<p class="tstart_5">( </p>
-		<p class="tstart_5">[[${testQuiz1.quizScore}]]</p>
-		<p class="tstart_5"> 점 )</p>
-		<br> <br>
-		<div th:each="list2, idx: ${testQuiz2}">
-			<span class="selectedContent tstart_6" style="background: white;">[[${list2.exampleNum}]]. [[${list2.textContent}]]</span>
+	<div th:each="quiz : ${testQuiz}" id="quiz" class="card-style col-lg-10" style="height: 800px">
+		<h1>[[${page}]]. [[${testQuiz.quizContent}]]</h1>
+		<p class="tstart_5">([[${testQuiz.quizScore}]]점)</p>
+		<br> <br> <br>
+		<div th:if="${not #strings.isEmpty(quiz.two)}">
+			<div>
+				<span class="selectedContent tstart_6" style="background: white;">1. [[${quiz.one}]]</span>
+			</div>
+			<div>
+				<span class="selectedContent tstart_6" style="background: white;">2. [[${quiz.two}]]</span>
+			</div>
+			<div>
+				<span class="selectedContent tstart_6" style="background: white;">3. [[${quiz.three}]]</span>
+			</div>
+			<div>			
+				<span class="selectedContent tstart_6" style="background: white;">4. [[${quiz.four}]]</span>
+			</div>
+			<div>
+				<span class="selectedContent tstart_6" style="background: white;">5. [[${quiz.five}]]</span>
+			</div>
+		</div>
+		<div th:if="${#strings.isEmpty(quiz.two)}">
+			<!-- <span class="selectedContent tstart_6" style="background: white;">(      )</span>-->
+			<input class="selectedCotent2" type="text">
 		</div>
 	</div>
 </div>
@@ -262,7 +271,7 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 	//<보기 선택시 보기 색상 및 답안 색상 변경>
 	//<전체 문제개수 및 남은 문제개수 변경>
 	for(let i = 0; i < thisAnswer.length; i++){ //0~문제개수
-		if(thisAnswer[i].value == page.value){
+		if(thisAnswer[i].value == page.value){ //현재 답안란과 페이지가 같은 경우
 			let remainQuizCnt = document.querySelector('#remainQuizCnt'); //남은 문제개수
 			let quizCnt = document.querySelector('#quizCnt'); //전체 문제개수
 			if(clicked == 1){
@@ -508,10 +517,10 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 	//<html 제어 관련>
 	let quiz = document.querySelector('#quiz'); //문제가 나타나는 요소
 	let start = document.querySelector('#start'); //화면 시작 요소
-	let div1 = document.createElement('div'); //div1 태그 생성 >> 카드형식 문제 공강
-	div1.setAttribute('id', 'quiz');
-	div1.setAttribute('class', 'card-style col-lg-10');
-	div1.setAttribute('style', 'width: 800px');
+	let div = document.createElement('div'); //div1 태그 생성 >> 카드형식 문제 공강
+	div.setAttribute('id', 'quiz');
+	div.setAttribute('class', 'card-style col-lg-10');
+	div.setAttribute('style', 'width: 800px');
 	let h1 = document.createElement('h1'); //h1태그 생성 >> 문제내용
 	h1.innerText = null;
 	let p = document.createElement('p'); //p태그 생성 >> 문제배점
@@ -533,38 +542,77 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 		dataType: 'json',
 		traditional: true,
 		success: function(data){
-			data.forEach(function(item, idx){
-				if(idx == 0){ //보기 5개 중 첫번째 보기인 경우
-					h1.innerText = page + '. ' + item.quizContent; //문제내용
-					p.innerText = '(' + item.quizScore + '점)'; //문제배점
-					div1.append(h1);
-					div1.append(p);
-					div1.append(br1);
-					div1.append(br2);
-					let span = document.createElement('span'); //첫번째 보기
-					let div2 = document.createElement('div'); //첫번째 보기 감싸기
-					span.classList.add('selectedContent');
-					span.classList.add('tstart_6');
-					span.setAttribute('data-index', idx + 1);
-					span.setAttribute('style', 'background: white');
-					span.innerText = item.exampleNum + '. ' + item.textContent;
-					div2.append(span);
-					div1.append(div2);
-				}
-				else { //보기 5개 중 나머지 4개인 경우
-					let span = document.createElement('span'); //나머지 보기
-					let div2 = document.createElement('div'); //나머지 보기 감싸기
-					span.classList.add('selectedContent');
-					span.classList.add('tstart_6');
-					span.setAttribute('data-index', idx + 1);
-					span.setAttribute('style', 'background: white');
-					span.innerText = item.exampleNum + '. ' + item.textContent;
-					div2.append(span);
-					div1.append(div2);
-				}
-			});
+			h1.innerText = page + '. ' + data.quizContent; //문제내용
+			p.innerText = '(' + data.quizScore + '점)'; //문제배점
+			div.append(h1);
+			div.append(p);
+			div.append(br1);
+			div.append(br2);
+			if(data.two != null){
+				let span1 = document.createElement('span'); //첫번째 보기
+				let div1 = document.createElement('div'); //첫번째 보기 감싸기
+				span1.classList.add('selectedContent');
+				span1.classList.add('tstart_6');
+				//span.setAttribute('data-index', idx + 1);
+				span1.setAttribute('style', 'background: white');
+				span1.innerText = 1 + '. ' + data.one;
+				div1.append(span1);
+				div.append(div1);
+				
+				let span2 = document.createElement('span'); //첫번째 보기
+				let div2 = document.createElement('div'); //첫번째 보기 감싸기
+				span2.classList.add('selectedContent');
+				span2.classList.add('tstart_6');
+				//span.setAttribute('data-index', idx + 1);
+				span2.setAttribute('style', 'background: white');
+				span2.innerText = 2 + '. ' + data.two;
+				div2.append(span2);
+				div.append(div2);
+				
+				let span3 = document.createElement('span'); //첫번째 보기
+				let div3 = document.createElement('div'); //첫번째 보기 감싸기
+				span3.classList.add('selectedContent');
+				span3.classList.add('tstart_6');
+				//span.setAttribute('data-index', idx + 1);
+				span3.setAttribute('style', 'background: white');
+				span3.innerText = 3 + '. ' + data.three;
+				div3.append(span3);
+				div.append(div3);
+				
+				let span4 = document.createElement('span'); //첫번째 보기
+				let div4 = document.createElement('div'); //첫번째 보기 감싸기
+				span4.classList.add('selectedContent');
+				span4.classList.add('tstart_6');
+				//span.setAttribute('data-index', idx + 1);
+				span4.setAttribute('style', 'background: white');
+				span4.innerText = 4 + '. ' + data.four;
+				div4.append(span4);
+				div.append(div4);
+				
+				let span5 = document.createElement('span'); //첫번째 보기
+				let div5 = document.createElement('div'); //첫번째 보기 감싸기
+				span5.classList.add('selectedContent');
+				span5.classList.add('tstart_6');
+				//span.setAttribute('data-index', idx + 1);
+				span5.setAttribute('style', 'background: white');
+				span5.innerText = 5 + '. ' + data.five;
+				div5.append(span5);
+				div.append(div5);
+				
+			}
+			else {
+				let span = document.createElement('span'); //나머지 보기
+				let div2 = document.createElement('div'); //나머지 보기 감싸기
+				span.classList.add('selectedContent');
+				span.classList.add('tstart_6');
+				//span.setAttribute('data-index', idx + 1);
+				span.setAttribute('style', 'background: white');
+				span.innerText = data.one;
+				div2.append(span);
+				div.append(div2);
+			}
 			quiz.remove(); //현재 문제 지우기
-			start.append(div1); //새로운 문제 붙이기
+			start.append(div); //새로운 문제 붙이기
 			//<문제 재생성시 답안 색상에 따른 보기 색상 유지>
 			let thisAnswer = document.querySelectorAll('.thisAnswer'); //1~총문제개수 답안
 			let selectedContent = document.querySelectorAll('.selectedContent'); //선택된 보기

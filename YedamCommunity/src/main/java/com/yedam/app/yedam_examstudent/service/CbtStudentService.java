@@ -52,7 +52,7 @@ public interface CbtStudentService {
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험문제 (AJAX)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	public List<TestVO> testQuiz(TestVO testVO);
+	public QuizboxVO testQuiz(QuizboxVO quizboxVO);
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험시작 문제정보
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -61,6 +61,7 @@ public interface CbtStudentService {
 	//시험시작 보기정보
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	public List<AnswerVO> testQuiz2(AnswerVO answerVO);
+	public QuizboxVO testQuiz3(QuizboxVO quizboxVO);
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험결과 (AJAX)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
