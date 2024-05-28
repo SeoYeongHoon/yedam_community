@@ -333,8 +333,7 @@
 		     , company_info
 		     , user_type
 		     , curriculum_id
-		FROM users u JOIN curriculum c
-		               ON u.curriculum_name = c.curriculum_name
+		FROM users
 		WHERE curriculum_id = #{curriculumId}
 	</select>
 	

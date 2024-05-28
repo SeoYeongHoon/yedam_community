@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class TeacherVO {
 	private int userId;
-	
+	private String companyInfo;
 	// tests 테이블
 	private int testId;
 	private String testName;
