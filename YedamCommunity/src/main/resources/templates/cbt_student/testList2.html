@@ -163,6 +163,7 @@ isReexam
 					</th:block>
 				</tbody>
 			</table>
+<<<<<<< HEAD
 			<!-- 목록 페이징 -->
 			<th:block th:with="page=${page}, size=${#lists.size(testList)}">
 			<div style="text-align: center;">
@@ -170,11 +171,22 @@ isReexam
 				<a class="tlist_4" th:unless="${page == 1}" th:text="'<'" th:href="@{/testList2(page=${page-1})}"></a>
 				<th:block th:each="num, stat : ${#numbers.sequence(1,(size / 5 + 1))}">
 					<a class="tlist_4" th:text="${stat.count}" th:href="@{/testList2(page=${stat.count})}"></a>
+=======
+			<!-- 
+			<th:block th:with="first=1, end=${(testList.size() / 5) + 1}, totalCnt=${testList.size()}, page=${page}">
+				<span th:if="${first < page]"><a th:href="@{/testList2(page=${page - 1})}" th:text="'<'"></a></span>
+				<th:block>
+>>>>>>> branch 'cwy' of https://github.com/SeoYeongHoon/yedam_community.git
 				</th:block>
+<<<<<<< HEAD
 				<a class="tlist_4" th:if="${page == (size / 5 + 1)}" th:text="'>'" href="#"></a>
 				<a class="tlist_4" th:unless="${page == (size / 5 + 1)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
 			</div>
 			</th:block>
+=======
+				<span th:if="${page < end]"><a th:href="@{/testList2(page=${page + 1})}" th:text="'>'"></a></span>
+			</th:block> -->
+>>>>>>> branch 'cwy' of https://github.com/SeoYeongHoon/yedam_community.git
 		</div>
 	</div>
 </div>
