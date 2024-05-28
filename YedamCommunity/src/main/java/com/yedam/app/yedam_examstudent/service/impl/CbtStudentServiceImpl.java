@@ -72,8 +72,8 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	}
 	//시험문제 (AJAX)
 	@Override
-	public List<TestVO> testQuiz(TestVO testVO) {
-		return cbtStudentMapper.selectTestQuiz(testVO);
+	public QuizboxVO testQuiz(QuizboxVO quizboxVO) {
+		return cbtStudentMapper.selectTestQuiz(quizboxVO);
 	}
 	//시험시작 문제정보
 	@Override
@@ -84,6 +84,11 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Override
 	public List<AnswerVO> testQuiz2(AnswerVO answerVO) {
 		return cbtStudentMapper.selectTestQuiz2(answerVO);
+	}
+	//
+	@Override
+	public QuizboxVO testQuiz3(QuizboxVO quizboxVO) {
+		return cbtStudentMapper.selectTestQuiz3(quizboxVO);
 	}
 	//시험결과 (AJAX)
 	@Override
@@ -112,6 +117,7 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public List<QuizboxVO> testResultQuiz(QuizboxVO quizboxVO) {
 		return cbtStudentMapper.selectTestResultQuiz(quizboxVO);
 	}
+	
 	
 	
 	

@@ -59,7 +59,7 @@ public interface CbtStudentMapper {
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험문제 (AJAX)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	public List<TestVO> selectTestQuiz(TestVO testVO);
+	public QuizboxVO selectTestQuiz(QuizboxVO quizboxVO);
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험시작 문제정보
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -68,6 +68,7 @@ public interface CbtStudentMapper {
 	//시험시작 보기정보
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	public List<AnswerVO> selectTestQuiz2(AnswerVO answerVO);
+	public QuizboxVO selectTestQuiz3(QuizboxVO quizboxVO);
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험결과 (AJAX)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ

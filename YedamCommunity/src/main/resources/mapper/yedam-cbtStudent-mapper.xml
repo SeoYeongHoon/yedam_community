@@ -149,8 +149,39 @@
         AND     b.quiz_id = #{quizId}
         ORDER BY a.example_num
 	</select>
+	<!-- 시험시작 퀴즈 -->
+	<select id="selectTestQuiz3" resultType="QuizboxVO">
+		WITH a AS(
+        SELECT  b.quiz_id
+                ,b.quiz_content
+                ,b.quiz_score
+                ,a.text_content
+                ,a.example_num
+                ,b.subject_id
+        FROM    answers a
+        		JOIN quizbox b
+                ON(a.quiz_id = b.quiz_id)
+        WHERE   a.subject_id = #{subjectId} 
+        AND     b.test_id = #{testId}
+        AND     b.quiz_id = #{quizId}
+        ORDER BY a.example_num)
+        SELECT  quiz_id
+                ,quiz_content
+                ,quiz_score
+                ,subject_id
+                ,MAX(DECODE(example_num, 1, text_content)) AS one
+                ,MAX(DECODE(example_num, 2, text_content)) AS two
+                ,MAX(DECODE(example_num, 3, text_content)) AS three
+                ,MAX(DECODE(example_num, 4, text_content)) AS four
+                ,MAX(DECODE(example_num, 5, text_content)) AS five
+        FROM    a
+        GROUP BY quiz_id
+        		 ,quiz_content
+        		 ,quiz_score
+        		 ,subject_id
+	</select>
 	<!-- 시험문제 -->
-	<select id="selectTestQuiz" resultType="TestVO">
+	<select id="selectTestQuiz" resultType="QuizboxVO">
 		SELECT  b.quiz_id
        		    ,b.quiz_content
        		    ,b.quiz_score
@@ -355,6 +386,7 @@
                 ,c.quiz_solution
                 ,d.test_answer
                 ,d.is_correct
+                ,d.test_result_id
         FROM    answers a 
         		JOIN quizbox b
                 ON(a.quiz_id = b.quiz_id)
@@ -363,11 +395,11 @@
                 JOIN test_results d
                 ON(b.quiz_id = d.quiz_id)
         WHERE   a.subject_id = #{subjectId}
-        AND     b.test_id = #{testId}
-        AND		b.quiz_id = #{quizId})
+        AND     b.test_id = #{testId})
         <!-- 문제 보기 열 > 행 바꾸기 -->
         SELECT 
-        	quiz_id
+        	test_result_id
+        	,quiz_id
             ,quiz_content
             ,quiz_score
             ,quiz_solution
@@ -380,9 +412,11 @@
             ,MAX(DECODE(example_num, 4, text_content)) AS four
             ,MAX(DECODE(example_num, 5, text_content)) AS five
         FROM a
-        GROUP BY quiz_id
+        GROUP BY test_result_id
+        		 ,quiz_id
         		 ,quiz_content
         		 ,quiz_score
         		 ,quiz_solution
+        ORDER BY a.test_result_id
 	</select>
 </mapper>

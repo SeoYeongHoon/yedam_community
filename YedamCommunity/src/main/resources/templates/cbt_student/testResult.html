@@ -78,11 +78,8 @@
 		<div style="text-align: center">
 			<button class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover"
 					th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
-			<form class="tresult_1 tresult_3" th:action="testResult2" method="post">
+			<form class="tresult_1 tresult_3" th:action="testResult2" method="get">
 				<input type="hidden" name="testId" th:value="${testResult.testId}">
-				<div th:each="quiz : ${randQuizId}">				
-					<input type="hidden" name="randQuizId" th:value="${quiz}">
-				</div>
 				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
 			</form>
 		</div>

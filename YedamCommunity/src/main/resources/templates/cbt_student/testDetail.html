@@ -6,24 +6,17 @@
 <style>
 .tdetail_1 {
 	display: inline-block;
+	width: 150px;
 }
 </style>
-<!-- 
-testId
-testName
-testDate
-testTime
-curriculumName
-quizScore
-quizIdCnt?
-testContent
-subjectId
- -->
 <div>
 	<div class="card-style"
-		style="border: 1px solid gray; border-radius: 20px; width: 700px; margin: 0 auto; margin-top: 100px; margin-bottom: 100px;">
+		style="border: 1px solid gray; border-radius: 20px; width: 900px; margin: 0 auto; margin-top: 100px; margin-bottom: 100px;">
 		<br> <br>
-		<h1 style="text-align: center;">시험</h1>
+		<h1 style="text-align: center;" th:if="${isResult == 0 && dateComp == 0}">시험</h1>
+		<h1 style="text-align: center;" th:if="${isResult == 1 && isReexam == 0}">시험(재시험)</h1>
+		<h1 style="text-align: center;" th:if="${isResult == 1 && isReexam == 1}">시험(응시완료)</h1>
+		<h1 style="text-align: center;" th:if="${isResult == 0 && dateComp == 1}">시험(미응시)</h1>
 		<br> <br>
 		<table class="table">
 			<tr>
@@ -59,21 +52,29 @@ subjectId
 		<div style="text-align: center">
 			<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
 				th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
-			<form class="tdetail_1" action="testStart" method="post">
-				<input type="hidden" name="page" th:value="1">
-				<input type="hidden" name="testId" th:value="${testDetail.testId}">
-				<input type="hidden" name="subjectId" th:value="${testDetail.subjectId}">
- 				<div th:each="quiz : ${randQuizId}">				
-					<input type="hidden" name="randQuizId" th:value="${quiz}">
-				</div>
-				<div th:each="rn : ${randRn}">				
-					<input type="hidden" name="randRn" th:value="${rn}">
-				</div>
-				<div th:each="score : ${randQuizScore}">				
-					<input type="hidden" name="randQuizScore" th:value="${score}">
-				</div>
-				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">시작</button>
-			</form>
+			<th:block th:if="${(isResult == 0 && dateComp == 0) || (isResult == 1 && isReexam == 0)}">
+				<form class="tdetail_1" action="testStart" method="post">
+					<input type="hidden" name="page" th:value="1">
+					<input type="hidden" name="testId" th:value="${testDetail.testId}">
+					<input type="hidden" name="subjectId" th:value="${testDetail.subjectId}">
+	 				<div th:each="quiz : ${randQuizId}">				
+						<input type="hidden" name="randQuizId" th:value="${quiz}">
+					</div>
+					<div th:each="rn : ${randRn}">				
+						<input type="hidden" name="randRn" th:value="${rn}">
+					</div>
+					<div th:each="score : ${randQuizScore}">				
+						<input type="hidden" name="randQuizScore" th:value="${score}">
+					</div>
+					<button type="submit" class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover">시작</button>
+				</form>
+			</th:block>
+			<th:block th:if="${(isResult == 1 && isReexam == 1) || (isResult == 0 && dateComp == 1)}">
+				<form class="tdetail_1" action="testResult2" method="get">
+					<input type="hidden" name="testId" th:value="${testDetail.testId}">
+					<button type="submit" class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
+				</form>
+			</th:block>
 		</div>
 		<br> <br>
 	</div>
