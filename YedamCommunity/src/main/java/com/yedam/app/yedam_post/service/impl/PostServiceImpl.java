@@ -232,7 +232,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Map<String, Object> LikeDelete(int postId, int userId) {
+	public int LikeDelete(int postId, int userId) {
 		Map<String,Object> map = new HashMap<>();
 		map.put("userId", userId);
 		map.put("postId", postId);

@@ -19,12 +19,12 @@
 
   <h2>이미지</h2>
   <div th:each="file : ${postInfo.boardFiles}">
-    <!-- <img th:src="@{/files/{file}(file= ${file.boardfileLocation})}" style="width: 50%; height: auto;"/> -->
      <img th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
   </div> 
   
+    <!-- <img th:src="@{/files/{file}(file= ${file.boardfileLocation})}" style="width: 50%; height: auto;"/> -->
   <!-- boardId에 따라 다른 내용 표시 -->
-  <!-- <div th:switch="${boardId}">
+ <div th:switch="${boardId}">
     <div th:case="1">
       <h3>게시판 1</h3>
       게시판 1의 내용
@@ -50,7 +50,7 @@
       기본 게시판의 내용
       추가 콘텐츠를 여기에 추가
     </div>
-  </div> -->
+  </div>
 
   <h2>댓글</h2>
   <ul id="reply-list">
@@ -116,11 +116,12 @@
       <button type="button" id="report-submit">신고 제출</button>
     </form>
   </div>
-
+<div th:if="${isOwner}">
   <a th:href="@{/postUpdate/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}">수정</a>
   <form th:action="@{/postDelete/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}" method="get">
     <button type="submit">삭제</button>
   </form>
+  </div>
   <a th:href="@{/post/{boardId}(boardId=${boardId})}">목록으로</a>
 </div>
 <script>
@@ -149,12 +150,9 @@
           type: "DELETE",
           data: { replyId: replyId },
           success: function (response) {
-            alert("댓글이 삭제되었습니다.");
-            location.reload();
           },
           error: function (error) {
             alert("댓글 삭제에 실패하였습니다.");
-            location.reload();
           },
         });
       }
@@ -169,10 +167,8 @@
         data: formData,
         success: function (response) {
           alert("대댓글이 등록되었습니다.");
-          location.reload();
         },
         error: function (error) {
-          location.reload();
         },
       });
     });
@@ -186,8 +182,6 @@
           type: "DELETE",
           data: { commentId: commentId },
           success: function (response) {
-        	  alert("대댓글이 삭제되었습니다.");
-            location.reload();
           },
           error: function (error) {
             console.log("Error:", error);
@@ -198,7 +192,7 @@
     });
   });
 
-  // 추천 추가 함수
+  // 추천 추가
   $(".Good-submit").on("click", function () {
     let formData = $(".Good-form").serialize();
     $.ajax({
@@ -206,15 +200,15 @@
       url: "/boardLike",
       dataType: "json",
       data: formData,
-      error: function () {
-        alert("통신 에러");
-      },
       success: function (likeCheck) {
         if (likeCheck == 0) {
           alert("추천완료");
         } else {
           alert("추천취소");
         }
+      },
+      error: function () {
+        alert("통신 에러");
       },
     });
   });
