@@ -68,7 +68,7 @@ function homeworkList(){
 	let userid = 60;
 	
 	$.ajax({
-		url:"homeworkList_S",
+		url:"/admin/homeworkList_S",
 		type: "get",
 		data: {userid:userid},
 		success:function(data){
@@ -109,7 +109,7 @@ function classCategory() {
 			let userid = 60;
 			let vals = $("#subjectSelect").val();
 				$.ajax({
-					url : "subjectCategory",
+					url : "/admin/subjectCategory",
 					type : "get",
 					data : {
 						vals : vals,
