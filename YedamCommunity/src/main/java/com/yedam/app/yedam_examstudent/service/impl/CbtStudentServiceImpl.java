@@ -58,6 +58,11 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public List<TestVO> testListAll(TestVO testVO) {
 		return cbtStudentMapper.selectTestListAll(testVO);
 	}
+	//시험과목
+	@Override
+	public List<TestVO> userSubject(int userId) {
+		return cbtStudentMapper.selectUserSubject(userId);
+	}
 	
 	
 	
@@ -120,6 +125,7 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public List<QuizboxVO> testResultQuiz(QuizboxVO quizboxVO) {
 		return cbtStudentMapper.selectTestResultQuiz(quizboxVO);
 	}
+	
 	
 	
 	
