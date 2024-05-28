@@ -41,6 +41,7 @@ public class TestVO {
 	private String feedback;
 	private int isReexam;
 	private int passScore;
+	private String subjectName;
 	
 	//기타 필드
 	private int quizIdCnt; //시험문제개수
@@ -199,9 +200,15 @@ public class TestVO {
 	public void setExampleNum(int exampleNum) {
 		this.exampleNum = exampleNum;
 	}
+	public String getSubjectName() {
+		return subjectName;
+	}
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
 	
 	
-	//getter,setter
+	
 	
 	
 	

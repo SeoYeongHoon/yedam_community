@@ -20,7 +20,6 @@ import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
-import com.yedam.app.yedam_user.service.UserVO;
 
 @Controller
 public class CbtStudentController {
@@ -29,41 +28,23 @@ public class CbtStudentController {
 	@Autowired
 	CbtStudentService cbtStudentService;
 
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	//내정보수정 AJAX
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-//	@PostMapping("updateInfo")
-//	public boolean updateInfo() {
-//		return true;
-//	}
-	//ㅡㅡㅡㅡㅡㅡㅡㅡ
-	//회원탈퇴 AJAX
-	//ㅡㅡㅡㅡㅡㅡㅡㅡ
-	@PostMapping("deleteUser")
-	@ResponseBody
-	public boolean deleteUser(@RequestParam("userId") int userId) {
-		System.out.println(userId);
-		boolean result = cbtStudentService.unjoinUser(userId);
-		return result;
-	}
-	
-	
 	
 	//ㅡㅡㅡㅡ
 	//시험전체
 	//ㅡㅡㅡㅡ
 	@GetMapping("testList2")
-	public String testList(TestVO testVO,
+	public String testList(int page,
+						   TestVO testVO,
 						   ExamResultVO examResultVO,
 			               HttpSession session, 
 			               Model model) {
 		//HttpSession session = req.getSession();
 		String logid ="14"; //(String) session.getAttribute("logid");
-		int page = 1;
 		testVO.setUserId(Integer.parseInt(logid));
 		testVO.setPage(page);
 		List<TestVO> list1 = cbtStudentService.testListAll(testVO); //시험목록
 		List<ExamResultVO> list2 = new ArrayList<>();
+		List<TestVO> list3 = cbtStudentService.userSubject(Integer.parseInt(logid)); //시험과목
 		int[] array1 = new int[list1.size()];
 		int[] array2 = new int[list1.size()];
 		int[] array3 = new int[list1.size()];
@@ -86,11 +67,11 @@ public class CbtStudentController {
 			}
 		}
 		model.addAttribute("testList", list1); //시험목록
-		model.addAttribute("testList", list1); //시험목록
 		model.addAttribute("isResult", array1); //시험결과유무
 		model.addAttribute("isFeedback", list2); //피드백유무
 		model.addAttribute("isReexam", array2); //재시험유무
 		model.addAttribute("dateComp", array3); //응시기간 유효성
+		model.addAttribute("userSubject", list3); //시험과목
 		model.addAttribute("page", page); //페이지
 		model.addAttribute("logId", logid); //로그인정보
 		return "cbt_student/testList2";
@@ -239,12 +220,16 @@ public class CbtStudentController {
 		model.addAttribute("testTest", test); //시험결과 문제+보기 정보
 		return "cbt_student/testResult";
 	}
+	
+	
 	//ㅡㅡㅡㅡ
 	//오답확인
 	//ㅡㅡㅡㅡ
-	@GetMapping("testResult2")
-	public String testResult2(Model model) {
-		
+	@PostMapping("testResult2")
+	public String testResult2(int testId,
+							  int[] randQuizId,
+							  Model model) {
+		System.out.println(testId);
 		return "cbt_student/testResult2";
 	}
 }

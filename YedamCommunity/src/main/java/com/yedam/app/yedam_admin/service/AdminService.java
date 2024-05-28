@@ -1,8 +1,11 @@
 package com.yedam.app.yedam_admin.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Service
+import com.yedam.app.yedam_post.service.ReportVO;
+
 public interface AdminService {
-//	public List<CsvFileVO> readCsv(String filePath);
+
+	// 신청목록 출력
+	public List<ReportVO> getReportList();
 }
