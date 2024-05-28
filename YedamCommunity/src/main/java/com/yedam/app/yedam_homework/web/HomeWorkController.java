@@ -94,7 +94,6 @@ public class HomeWorkController {
 	@DeleteMapping("/deleteHomeworks")
 	@ResponseBody
 	public int deleteHomeworks(@RequestParam int homeworkId) {
-		System.err.println("대댓글" + homeworkId);
 		return homeworkService.homeworkDelete(homeworkId);
 	}
 	
@@ -188,15 +187,21 @@ public class HomeWorkController {
 	public String homeworkInfo(HomeWorkVO homeworkVO, Model model) {
 		// 과제 상세 조회
 		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
+		System.err.println(findVO);
 		model.addAttribute("homeworkList", findVO);
 		ReplyVO reply = new ReplyVO();
 		reply.setReplyId(findVO.getReplyId());
-		// 과제 파일 조회
-		List<HomeWorkFileVO> file = homeworkfileService.homeworkfileList(homeworkVO);
-		model.addAttribute("files", file);
 
 		return "homework/homeworkInfo";
 	}
+	// 과제 파일 조회
+	@GetMapping("/homeworkFileList")
+	@ResponseBody
+	public List<HomeWorkFileVO> homeworkInfoFile(HomeWorkVO homeworkVO) {
+		return homeworkfileService.homeworkfileList(homeworkVO);
+	}
+	
+	
 
 	// ----------------
 	// 댓글 조회
@@ -204,7 +209,6 @@ public class HomeWorkController {
 	@GetMapping("/replyList")
 	@ResponseBody
 	public List<ReplyVO> replyList(@RequestParam("targetId") int homeworkTargetId) {
-
 		List<ReplyVO> replies = homeworkReplyService.replyList(homeworkTargetId);
 
 		return replies;
@@ -255,7 +259,6 @@ public class HomeWorkController {
 	@DeleteMapping("/deleteComment")
 	@ResponseBody
 	public int deleteComment(@RequestParam int commentId) {
-		System.err.println("대댓글" + commentId);
 		return homeworkReplyService.commentDelete(commentId);
 	}
 	
@@ -266,7 +269,6 @@ public class HomeWorkController {
 	@DeleteMapping("/deleteReply")
 	@ResponseBody
 	public int deleteReply(@RequestParam int replyId) {
-		System.err.println("대댓글" + replyId);
 		return homeworkReplyService.replyDelete(replyId);
 	}
 	
@@ -276,11 +278,8 @@ public class HomeWorkController {
 	// ----------------
 	@PutMapping("/updateReply")
 	@ResponseBody
-	public Map<String, Object> updateReply (@RequestParam("content")  String content,
-											@RequestParam("replyId") int replyId) {
-		ReplyVO replyVO = new ReplyVO();
-		replyVO.setReplyContent(content);
-		replyVO.setReplyId(replyId);
+	public Map<String, Object> updateReply (ReplyVO replyVO ){
+	
 		return homeworkReplyService.replyUpdate(replyVO);
 	}
 	
@@ -291,8 +290,6 @@ public class HomeWorkController {
 	@ResponseBody
 	public Map<String, Object> updateComment (@RequestParam("content")  String content,
 											@RequestParam("commentId") int commentId) {
-		System.err.println(content);
-		System.err.println(commentId);
 		
 		CommentVO commentVO = new CommentVO();
 		commentVO.setCommentContent(content);
@@ -320,10 +317,19 @@ public class HomeWorkController {
 		response.put("homeworks", homeworks);
 		response.put("page", pageDTO);
 		
-		System.out.println("필터: " + filter);
-		System.out.println("페이지 DTO:" + pageDTO);
 		
 		return response;
+	}
+	
+
+	// ----------------
+	// 파일 삭제
+	// ----------------
+	@PostMapping("/deleteFile")
+	@ResponseBody
+	public  Map<String, Object> fileDelete (HomeWorkFileVO homeworkfileVO) {
+		homeworkfileService.deleteFile(homeworkfileVO);
+		return null;
 	}
 	
 }

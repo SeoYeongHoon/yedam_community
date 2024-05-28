@@ -58,6 +58,19 @@ VALUES
 	WHERE   homework_id= #{homeworkId}
 	</select>
 	
+	<!-- 과제파일(ID) 조회 -->
+	<select id="selectHomeworkFileId" parameterType="HomeWorkFileVO">
+	SELECT  homeworkfile_id,
+        	homeworkfile_name,
+        	homeworkfile_size,
+        	homeworkfile_location,
+       		download_location,
+        	homeworkfile_ext,
+        	homeworkfile_id
+	FROM    homeworkfiles
+	WHERE   homeworkfile_id = #{#homeworkfileId}
+	</select>
+	
 	<!-- 댓글 파일 조회 -->
 	<select id="selectReplyfile" parameterType="ReplyFileVO">
 	SELECT  replyfile_id,
@@ -84,4 +97,9 @@ VALUES
 	FROM    replyfiles
 	WHERE   download_location = #{downloadLocation}
 	</select>
+	<!-- 과제파일 삭제 -->
+	<delete id="fileDelete" parameterType="HomeWorkFileVO">
+	DELETE homeworkfiles
+	WHERE  homeworkfile_location = #{homeworkfileLocation}
+	</delete>
   </mapper>

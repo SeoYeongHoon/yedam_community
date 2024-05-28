@@ -216,7 +216,7 @@
 	<!-- 과제 수정 -->
 	<update id="updateHomework" parameterType="HomeWorkVO">
 		UPDATE homeworks
-		SET homework_content = #{homeworkContent} , homework_date = #{homeworkDate} , homework_title = #{homeworkTitle}
+		SET homework_content = #{homeworkContent} , homework_date = sysdate , homework_title = #{homeworkTitle}
 		WHERE homework_id = #{homeworkId}
 	</update>
 </mapper>
