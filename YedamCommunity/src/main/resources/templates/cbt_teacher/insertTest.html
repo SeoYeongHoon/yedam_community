@@ -144,7 +144,6 @@
 			"testName" : tName,
 			"classId" : classId
 		};
-
 		$.ajax({
 			url : "testinsert",
 			type : "post",
@@ -152,10 +151,15 @@
 			data : obj,
 			
 			success : function(data) {
-				
+				console.log(data);
+				if(data != 'true' && data == null){
+					return;
+				}
 			},
 			error : function(err) {
 				alert('시험 등록 실패');
+				return;
+				
 			}
 		});
 		
