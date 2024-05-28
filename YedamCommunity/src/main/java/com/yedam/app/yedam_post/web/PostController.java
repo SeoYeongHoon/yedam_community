@@ -74,6 +74,7 @@ public class PostController {
 	@GetMapping("/post/{boardId}/{postId}")
 	public String getPostDetail(@PathVariable int boardId,
 	                            @PathVariable int postId,
+	                            Authentication authentication,
 	                            Model model) {
 	    // 조회수 업데이트
 	    postService.PostViewCnt(postId, boardId);
@@ -89,7 +90,12 @@ public class PostController {
 	        postreplyVO.setComments(commentlist);
 	    }
 	    postfind.setReplies(replylist);
-
+	    
+	    // 현재 로그인한 유저와 작성자 비교
+	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+	    boolean isOwner = userVO.getNickname().equals(postfind.getWriter());
+	    
+	    // 파일 조회
 	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
 	    postfind.setBoardFiles(boardFilesVO);
 
@@ -97,6 +103,8 @@ public class PostController {
 	    postfind.setPostId(postId);
 	    model.addAttribute("boardId", boardId);
 	    model.addAttribute("postInfo", postfind);
+	    // 작성자 여부 추가
+	    model.addAttribute("isOwner", isOwner);
 
 	    return "posts/postInfo";
 	}
@@ -249,7 +257,6 @@ public class PostController {
 		return "success";
 	}
 
-	
 	
 	// --------------------------------------------
 	// 추천버튼 작업중

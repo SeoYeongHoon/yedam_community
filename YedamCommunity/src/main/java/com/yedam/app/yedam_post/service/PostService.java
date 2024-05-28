@@ -53,7 +53,7 @@ public interface PostService {
 	//--------------------------------------------
 	// 추천 삭제
 	//--------------------------------------------
-	public Map<String, Object> LikeDelete(int postId, int userId);
+	public int LikeDelete(int postId, int userId);
 	
 	//--------------------------------------------
 	// 추천수 + 1

@@ -35,7 +35,7 @@ public interface PostMapper {
     //--------------------------------------------
     // 추천 삭제
     //--------------------------------------------
-    Map<String, Object> deleteLike(Map<String, Object> map);
+    int deleteLike(Map<String, Object> map);
 
     //--------------------------------------------
     // 개추 (추천수 증가)
