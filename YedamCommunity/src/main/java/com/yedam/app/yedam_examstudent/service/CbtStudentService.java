@@ -2,23 +2,9 @@ package com.yedam.app.yedam_examstudent.service;
 
 import java.util.List;
 
-import com.yedam.app.yedam_user.service.UserVO;
 
 public interface CbtStudentService {
 
-	//ㅡㅡㅡㅡㅡㅡㅡㅡ
-	//마이페이지 정보
-	//ㅡㅡㅡㅡㅡㅡㅡㅡ
-	public UserVO myPageInfo(int userId);
-	//ㅡㅡㅡㅡ
-	//회원탈퇴
-	//ㅡㅡㅡㅡ
-	public boolean unjoinUser(int userId);
-	//ㅡㅡㅡㅡㅡㅡ
-	//최근시험목록
-	//ㅡㅡㅡㅡㅡㅡ
-	public List<TestVO> recentTest(int userId);
-	
 	
 	
 	//ㅡㅡㅡㅡㅡㅡ
@@ -41,6 +27,10 @@ public interface CbtStudentService {
 	//시험과목
 	//ㅡㅡㅡㅡ
 	public List<TestVO> userSubject(int userId);
+	//ㅡㅡㅡㅡ
+	//시험개수
+	//ㅡㅡㅡㅡ
+	public int testListSize(int userId);
 
 	
 	

@@ -47,6 +47,7 @@ public class TestVO {
 	private int quizIdCnt; //시험문제개수
 	private int quizCnt;
 	private int page;
+	private int rn;
 	public int getTestId() {
 		return testId;
 	}
@@ -205,6 +206,12 @@ public class TestVO {
 	}
 	public void setSubjectName(String subjectName) {
 		this.subjectName = subjectName;
+	}
+	public int getRn() {
+		return rn;
+	}
+	public void setRn(int rn) {
+		this.rn = rn;
 	}
 	
 	

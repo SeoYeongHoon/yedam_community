@@ -12,7 +12,6 @@ import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
-import com.yedam.app.yedam_user.service.UserVO;
 
 @Service
 public class CbtStudentServiceImpl implements CbtStudentService{
@@ -21,21 +20,6 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Autowired
 	CbtStudentMapper cbtStudentMapper;
 	
-	//마이페이지 정보
-	@Override
-	public UserVO myPageInfo(int userId) {
-		return cbtStudentMapper.selectMyPageInfo(userId);
-	}
-	//회원탈퇴
-	@Override
-	public boolean unjoinUser(int userId) {
-		return cbtStudentMapper.deleteUser(userId) == 1;
-	}
-	//최근시험목록
-	@Override
-	public List<TestVO> recentTest(int userId) {
-		return cbtStudentMapper.selectRecentTest(userId);
-	}
 	
 	
 	//시험결과유무
@@ -62,6 +46,11 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Override
 	public List<TestVO> userSubject(int userId) {
 		return cbtStudentMapper.selectUserSubject(userId);
+	}
+	//시험개수
+	@Override
+	public int testListSize(int userId) {
+		return cbtStudentMapper.selectTestListSize(userId);
 	}
 	
 	
@@ -125,6 +114,7 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public List<QuizboxVO> testResultQuiz(QuizboxVO quizboxVO) {
 		return cbtStudentMapper.selectTestResultQuiz(quizboxVO);
 	}
+	
 	
 	
 	
