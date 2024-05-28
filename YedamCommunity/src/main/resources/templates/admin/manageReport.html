@@ -9,21 +9,24 @@
 		<div class="course_wrapper">
 			<div class="content-top">
 				<h2 class="mb-10" style="color: white">신고글 관리</h2>
-				<a class="open_add_course main-btn light-btn btn-hover" style="color: white; background-color: #e96b56; padding: 7px 20px; position: absolute; margin: 0; right: 14px; bottom: 14px;">수강 등록</a>
 			</div>
 			
 			<div class="report_item">
 				<table class="table">
 					<thead>		
 						<tr>
-							<th>abc</th>
-							<th>abc</th>
+							<td>신고자</td>
+							<td>게시판</td>
+							<td>신고 유형</td>
+							<td>신고 일자</td>
 						</tr>	
 					</thead>
 					<tbody id="reportTable">
-						<tr class="report_row" style="max-width: 300px; min-height: 400px; border: 2px solid #5d657b; margin: 20px; border-radius: 5px; position: relative;">
-							<td><p>asdf</p></td>
-							<td><p>asdf</p></td>
+						<tr th:each="report : ${reports}" class="report_row" style="max-width: 300px; min-height: 400px; border: 2px solid #5d657b; margin: 20px; border-radius: 5px; position: relative;">
+							<td>[[${report.reporter}]]</td>
+							<td>[[${report.boardId}]]</td>
+							<td>[[${report.reportType}]]</td>
+							<td>[[${report.reportDate}]]</td>
 						</tr>
 					</tbody>
 				</table>

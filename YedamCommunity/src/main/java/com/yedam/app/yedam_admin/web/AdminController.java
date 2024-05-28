@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -26,10 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.yedam_admin.service.AdminService;
 import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_common.SecurityUtils;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
+import com.yedam.app.yedam_post.service.Report;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
@@ -40,6 +40,9 @@ public class AdminController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	AdminService adminService;
 	
 	@Autowired
 	CurriculumService curriculumService;
@@ -188,9 +191,12 @@ public class AdminController {
 	}
 	
 	
-//	신고목록 페이지
+//	신고목록 페이지 및 항목 출력
 	@GetMapping("/manageReport")
-	public String manageReport() {
+	public String manageReport(Model model) {
+		List<Report> reportList = adminService.getReportList();
+		model.addAttribute("reports", reportList);
+		
 		return "admin/manageReport";
 	}
 }
