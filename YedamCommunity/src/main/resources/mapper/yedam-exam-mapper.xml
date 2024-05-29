@@ -445,6 +445,7 @@
 			 , e.is_reexam
 			 , e.feedback
 			 , u.name
+			 , u.user_id
 	         , test_id
 	         , e.subject_id
 	         , e.result_id
