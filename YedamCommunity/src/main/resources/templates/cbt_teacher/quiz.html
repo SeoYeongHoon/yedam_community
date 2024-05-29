@@ -326,6 +326,8 @@ function quizContentList(page, subjectName){
 											<div style="text-align: center;" class="btnDiv">
 												<button id="closeBtn" class="main-btn primary-btn btn-hover okBtn"
 													type="button">확인</button>
+												<button id="del${qId}" value="${qId}" class="main-btn primary-btn btn-hover quizDelBtn"
+													type="button">삭제</button>	
 											</div>
 										</div>
 										`;
@@ -632,10 +634,25 @@ if(reCurriculumId == null || reCurriculumId == ""){
 	console.log("reCurriculumId 값이 없다 : " + reCurriculumId)
 	$('#testInsert').attr('href', 'admin/selectClassExam')
 } else {
-	console.log("reCurriculumId 값이 있다 : " + reCurriculumId)
 	$('#testInsert').attr('href', 'retestinsert')
-};
-	
+};	
+
+$('#modalWrap').on('click', '.quizDelBtn', function(){
+	console.log($(this).val());
+	let quizId = $(this).val();
+	$.ajax({
+		url : "quizdelete",
+		type : "get",
+		data : {quizId : quizId},
+		
+		success : function(data){
+			location.reload();
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}
+	}); 
+})
 
 </script>
 

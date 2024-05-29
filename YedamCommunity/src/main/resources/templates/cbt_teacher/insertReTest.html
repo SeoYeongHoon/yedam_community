@@ -5,7 +5,6 @@
 	layout:fragment="Admin">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
 <form th:action="@{/}" method="post" th:object="${teacherVO}">
 	<!-- ======= 시험 이름 입력 start ======= -->
 	<div class="input-style-1">
@@ -41,13 +40,13 @@
 				전체 추가</label>
 		</div>
 		<!-- end checkbox -->
-		<th:block th:each="userInfo, idxStat : ${userList}">
-			<div class="form-check checkbox-style mb-20">
+		<div id="reUser">
+			<!-- <div class="form-check checkbox-style mb-20">
 				<input class="form-check-input checkbox" type="checkbox"
-					th:value="${userInfo.userId}" th:id="user+${idxStat.index}" /> <label
-					class="form-check-label" th:for="user+${idxStat.index}">[[${userInfo.name}]]</label>
-			</div>
-		</th:block>
+					value="" id="" /> <label
+					class="form-check-label" for=""></label>
+			</div> -->
+		</div>	
 		<!-- end checkbox -->
 		<!-- ======= 시험 대상 선택 end ======= -->
 	</div>
@@ -61,7 +60,7 @@
 		<li>
 			<button type="button"
 				class="main-btn deactive-btn square-btn btn-hover"
-				th:onclick="|location.href='@{/selectClassExam}'|">돌아가기</button>
+				th:onclick="|location.href='@{/quizlist}'|">돌아가기</button>
 		</li>
 	</ul>
 </form>
@@ -71,6 +70,7 @@ var tName = '';
 var tContent = '';
 var tTIme = 0;
 var userId = 0;
+var testId = window.localStorage.getItem('reTestId');
 var classId = window.localStorage.getItem('classId');
 var qContent = window.localStorage.getItem('quizContent');
 var quizId = window.localStorage.getItem('quizId');
@@ -96,18 +96,28 @@ $('#testTime').on('change', function() {
 // 재시험 대상자 리스트 출력
 //--------------------------------------------
 function reTest(){
+	let uName = '';
+	let uIndex = 0;
 	$.ajax({
-		url : "testresult",
+		url : "retestuser",
 		type : "get", 
 		data : {testId : testId},
+		async : false,
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				
-				if(item.isReexam == 1){
-					
-				} else {
-					
+				uName = item.name;	
+				uIndex = idx;
+				userId = item.userId
+				let temp = `
+					<div class="form-check checkbox-style mb-20">
+					<input class="form-check-input checkbox" type="checkbox"
+						value="${userId}" id="u${uIndex}" /> <label
+						class="form-check-label" for="u${uIndex}">${uName}</label>
+					</div>
+				`;
+				if(item.isReexam == 0){
+					$('#reUser').append(temp);
 				}
 			})
 			
@@ -117,7 +127,7 @@ function reTest(){
 		}	
 	}); // 학생정보 end of ajax
 } // 재시험 대상자 리스트 함수 종료
-
+reTest();
 
 // localstorage에 저장된 복수의 값을 배열 타입으로 변환
 var arryQContent = JSON.parse(qContent); // 시험 문제가 모여있는 배열	
@@ -133,8 +143,8 @@ var storageUser = []; // 시험 대상자가 모여있는 배열
 $('.checkbox').on('change', function() {
 	storageUser = [];
 	for (let i = 0; i < $('.checkbox').length; i++) {
-		if ($('#user' + i).is(":checked")) {
-			storageUser.push($('#user' + i).val());
+		if ($('#u' + i).is(":checked")) {
+			storageUser.push($('#u' + i).val());
 		};
 	};
 })
@@ -145,7 +155,7 @@ $('#checkbox-1').on('change', function() {
 	storageUser = [];
 	for (let i = 0; i < $('.checkbox').length; i++) {
 		if ($('#checkbox-1').is(':checked')) {
-			storageUser.push($('#user' + i).val());
+			storageUser.push($('#u' + i).val());
 		} else {
 			storageUser = [];
 		}
@@ -268,7 +278,6 @@ function nameMaxLength(e){
     	e.value = e.value.slice(0, e.maxLength);
 	}
 }
-console.log("재시험자 ID값 : " + window.localStorage.getItem('reUserId'))	
 
 </script>
 </html>

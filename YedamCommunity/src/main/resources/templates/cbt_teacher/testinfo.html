@@ -65,12 +65,14 @@
 var testId = 0;
 var userId = 0;
 var reUserId = [];
+
 function userList(testId){
 	testId = $('#tId').val();
 	$.ajax({
 		url : "testresult",
 		type : "get", 
 		data : {testId : testId},
+		async : false,
 				
 		success : function(data){
 			data.forEach((item,idx) => {
@@ -94,11 +96,6 @@ function userList(testId){
 					reUserId.push($('#u'+idx).val());
 				}
 			})
-			console.log("재시험자 : " + reUserId);
-			const arryReUserId = JSON.stringify(reUserId);
-			console.log("재시험자 : " + arryReUserId)
-			window.localStorage.setItem('reUserId', arryReUserId);
-			window.localStorage.setItem('reTestId', testId);
 		},
 		error : function(err){
 			console.log('에러입니다');
@@ -107,8 +104,28 @@ function userList(testId){
 }
 userList(testId);
 
+//--------------------------------------------
+// 재시험 명단에 아무도 없을경우 재시험 출제 버튼 display = none
+//--------------------------------------------
+let pTagNum = $('#failUser').children($('<p/>')).length;
+const btn1 = document.getElementById('reTest');
+if(pTagNum == 0){
+	console.log('p태그가 없음')
+	btn1.style.display = 'none';
+} else {
+	console.log('p태그가 존재함')
+}
+
 $('#reTest').on('click', function(){
+	const arryReUserId = JSON.stringify(reUserId);
+	
 	window.localStorage.setItem('reCurriculumId', $('#currId').val());
+	window.localStorage.setItem('reUserId', arryReUserId);
+	window.localStorage.setItem('reTestId', $('#tId').val());
+})
+
+$(function(){
+	window.localStorage.clear();
 })
 </script>
 </html>

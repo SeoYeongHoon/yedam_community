@@ -82,13 +82,21 @@ public class ExamController {
 		model.addAttribute("userList", list);
 		return "cbt_teacher/insertTest";
 	}
+	//--------------------------------------------
 	// 재시험 등록 - 페이지
+	//--------------------------------------------
 	@GetMapping("retestinsert")
 	public String reTestInsertForm(TeacherVO teacherVO, Model model) {
-		List<TeacherVO> list = examService.reTestUserList(teacherVO);
 		model.addAttribute("teacherVO", new TeacherVO());
-		model.addAttribute("reTestUserList", list);
 		return "cbt_teacher/insertReTest";
+	}
+	//--------------------------------------------
+	// 재시험 유저 목록 출력
+	//--------------------------------------------
+	@GetMapping("retestuser")
+	@ResponseBody
+	public List<TeacherVO> reTestUserList(@RequestParam("testId") int tId) {
+		return examService.reTestUserList(tId);
 	}
 	//--------------------------------------------
 	// 시험 등록 - 처리
@@ -206,6 +214,15 @@ public class ExamController {
 	@ResponseBody
 	public List<TeacherVO> quizInfo(@RequestParam("qId") int qId) {
 		return examService.getQuizInfo(qId);
+	}
+	//--------------------------------------------
+	// 문제 삭제
+	//--------------------------------------------
+	@GetMapping("quizdelete")
+	@ResponseBody
+	public String quizDelete(@RequestParam("quizId") int qId) {
+		examService.quizDelete(qId);
+		return "redirect:quizlist";
 	}
 	//--------------------------------------------
 	// 과목 추가 - 처리
