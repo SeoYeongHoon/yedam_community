@@ -60,10 +60,9 @@ public class PostController {
 	    int totalCount = postService.getPostCount(postVO);
 
 	    // 파일 조회
-//	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
-//	    for (BoardFilesVO file : boardFilesVO) {
-//	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
-//	        file.setExists(find.exists());
+//	    for (PostVO postVO : list) {
+//	        List<BoardFilesVO> boardFiles = postService.getBoardFiles(post.getPostId(), boardId);
+//          post.setFiles(boardFiles);
 //	    }
 	    
 	    model.addAttribute("postList", list);

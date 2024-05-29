@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container">
-  <input type="text" name="userId" th:value="${postInfo.userId}" />
+  <input type="hidden" name="userId" th:value="${postInfo.userId}" />
   <h1 th:text="${postInfo.title}">Post Title</h1>
   <p>조회수: <span th:text="${postInfo.postView}"></span></p>
   <p>좋아요: <span id="post-like-count" th:text="${postInfo.postLike}"></span></p>
