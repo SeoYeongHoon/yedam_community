@@ -165,7 +165,7 @@
 	<!-- 답안표기 부분 -->
 	<div id="tstart_4" class="card-style col-lg-2 tstart_2" style="height: 800px">
 		<h3 style="text-align: center; background-color: #A6A6A6; color: white">답안표기란</h3>
-		<th:block th:each="num, idx : ${#numbers.sequence(1,#lists.size(randRn))}">
+		<th:block th:each="quiz, idx : ${#numbers.sequence(1,#lists.size(randRn))}">
 			<div class="selectedQuiz tstart_3">
 				<h3 class="tstart_2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
 				<input class="thisAnswer" type="hidden" th:value="${idx.count}">
@@ -180,30 +180,26 @@
 	</div>
 	<!-- 우측 -->
 	<!-- 문제갱신되는 부분 -->
-	<div th:each="quiz : ${testQuiz}" id="quiz" class="card-style col-lg-10" style="height: 800px">
+	<div id="quiz" class="card-style col-lg-10" style="height: 800px">
 		<h1>[[${page}]]. [[${testQuiz.quizContent}]]</h1>
 		<p class="tstart_5">([[${testQuiz.quizScore}]]점)</p>
 		<br> <br> <br>
-		<div th:if="${not #strings.isEmpty(quiz.two)}">
+		<div th:if="${not #strings.isEmpty(testQuiz.two)}">
 			<div>
-				<span class="selectedContent tstart_6" style="background: white;">1. [[${quiz.one}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">1. [[${testQuiz.one}]]</span>
 			</div>
 			<div>
-				<span class="selectedContent tstart_6" style="background: white;">2. [[${quiz.two}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">2. [[${testQuiz.two}]]</span>
 			</div>
 			<div>
-				<span class="selectedContent tstart_6" style="background: white;">3. [[${quiz.three}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">3. [[${testQuiz.three}]]</span>
 			</div>
 			<div>			
-				<span class="selectedContent tstart_6" style="background: white;">4. [[${quiz.four}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">4. [[${testQuiz.four}]]</span>
 			</div>
 			<div>
-				<span class="selectedContent tstart_6" style="background: white;">5. [[${quiz.five}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">5. [[${testQuiz.five}]]</span>
 			</div>
-		</div>
-		<div th:if="${#strings.isEmpty(quiz.two)}">
-			<!-- <span class="selectedContent tstart_6" style="background: white;">(      )</span>-->
-			<input class="selectedCotent2" type="text">
 		</div>
 	</div>
 </div>
@@ -548,69 +544,52 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			div.append(p);
 			div.append(br1);
 			div.append(br2);
-			if(data.two != null){
-				let span1 = document.createElement('span'); //첫번째 보기
-				let div1 = document.createElement('div'); //첫번째 보기 감싸기
-				span1.classList.add('selectedContent');
-				span1.classList.add('tstart_6');
-				//span.setAttribute('data-index', idx + 1);
-				span1.setAttribute('style', 'background: white');
-				span1.innerText = 1 + '. ' + data.one;
-				div1.append(span1);
-				div.append(div1);
+			
+			let span1 = document.createElement('span'); //첫번째 보기
+			let div1 = document.createElement('div'); //첫번째 보기 감싸기
+			span1.classList.add('selectedContent');
+			span1.classList.add('tstart_6');
+			span1.setAttribute('style', 'background: white');
+			span1.innerText = 1 + '. ' + data.one;
+			div1.append(span1);
+			div.append(div1);
+			
+			let span2 = document.createElement('span'); //두번째 보기
+			let div2 = document.createElement('div'); //두번째 보기 감싸기
+			span2.classList.add('selectedContent');
+			span2.classList.add('tstart_6');
+			span2.setAttribute('style', 'background: white');
+			span2.innerText = 2 + '. ' + data.two;
+			div2.append(span2);
+			div.append(div2);
+			
+			let span3 = document.createElement('span'); //세번째 보기
+			let div3 = document.createElement('div'); //세번째 보기 감싸기
+			span3.classList.add('selectedContent');
+			span3.classList.add('tstart_6');
+			span3.setAttribute('style', 'background: white');
+			span3.innerText = 3 + '. ' + data.three;
+			div3.append(span3);
+			div.append(div3);
+			
+			let span4 = document.createElement('span'); //네번째 보기
+			let div4 = document.createElement('div'); //네번째 보기 감싸기
+			span4.classList.add('selectedContent');
+			span4.classList.add('tstart_6');
+			span4.setAttribute('style', 'background: white');
+			span4.innerText = 4 + '. ' + data.four;
+			div4.append(span4);
+			div.append(div4);
+			
+			let span5 = document.createElement('span'); //다섯번째 보기
+			let div5 = document.createElement('div'); //다섯번째 보기 감싸기
+			span5.classList.add('selectedContent');
+			span5.classList.add('tstart_6');
+			span5.setAttribute('style', 'background: white');
+			span5.innerText = 5 + '. ' + data.five;
+			div5.append(span5);
+			div.append(div5);
 				
-				let span2 = document.createElement('span'); //첫번째 보기
-				let div2 = document.createElement('div'); //첫번째 보기 감싸기
-				span2.classList.add('selectedContent');
-				span2.classList.add('tstart_6');
-				//span.setAttribute('data-index', idx + 1);
-				span2.setAttribute('style', 'background: white');
-				span2.innerText = 2 + '. ' + data.two;
-				div2.append(span2);
-				div.append(div2);
-				
-				let span3 = document.createElement('span'); //첫번째 보기
-				let div3 = document.createElement('div'); //첫번째 보기 감싸기
-				span3.classList.add('selectedContent');
-				span3.classList.add('tstart_6');
-				//span.setAttribute('data-index', idx + 1);
-				span3.setAttribute('style', 'background: white');
-				span3.innerText = 3 + '. ' + data.three;
-				div3.append(span3);
-				div.append(div3);
-				
-				let span4 = document.createElement('span'); //첫번째 보기
-				let div4 = document.createElement('div'); //첫번째 보기 감싸기
-				span4.classList.add('selectedContent');
-				span4.classList.add('tstart_6');
-				//span.setAttribute('data-index', idx + 1);
-				span4.setAttribute('style', 'background: white');
-				span4.innerText = 4 + '. ' + data.four;
-				div4.append(span4);
-				div.append(div4);
-				
-				let span5 = document.createElement('span'); //첫번째 보기
-				let div5 = document.createElement('div'); //첫번째 보기 감싸기
-				span5.classList.add('selectedContent');
-				span5.classList.add('tstart_6');
-				//span.setAttribute('data-index', idx + 1);
-				span5.setAttribute('style', 'background: white');
-				span5.innerText = 5 + '. ' + data.five;
-				div5.append(span5);
-				div.append(div5);
-				
-			}
-			else {
-				let span = document.createElement('span'); //나머지 보기
-				let div2 = document.createElement('div'); //나머지 보기 감싸기
-				span.classList.add('selectedContent');
-				span.classList.add('tstart_6');
-				//span.setAttribute('data-index', idx + 1);
-				span.setAttribute('style', 'background: white');
-				span.innerText = data.one;
-				div2.append(span);
-				div.append(div2);
-			}
 			quiz.remove(); //현재 문제 지우기
 			start.append(div); //새로운 문제 붙이기
 			//<문제 재생성시 답안 색상에 따른 보기 색상 유지>
