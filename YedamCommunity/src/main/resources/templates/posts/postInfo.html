@@ -10,42 +10,26 @@
 </head>
 <body>
 <div class="container">
+  <input type="text" name="userId" th:value="${postInfo.userId}" />
   <h1 th:text="${postInfo.title}">Post Title</h1>
   <p>조회수: <span th:text="${postInfo.postView}"></span></p>
-  <p>좋아요: <span th:text="${postInfo.postLike}"></span></p>
+  <p>좋아요: <span id="post-like-count" th:text="${postInfo.postLike}"></span></p>
   <p th:text="${#dates.format(postInfo.createDate, 'yyyy-MM-dd')}">Post Date</p>
   <p th:text="${postInfo.writer}">Post Writer</p>
   <p th:text="${postInfo.postContent}">Post Content</p>
 
-  <h2>이미지</h2>
-  <div th:each="file : ${postInfo.boardFiles}">
-     <img th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
-  </div> 
 
+  <h2 th:if="${#lists.size(postInfo.boardFiles) > 0}"></h2>
+    <div th:each="file : ${postInfo.boardFiles}">
+     <img th:if="${file.exists}" th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
+    </div>
   <div th:switch="${boardId}">
-    <div th:case="1">
-      <h3>게시판 1</h3>
-      게시판 1의 내용
-      추가 콘텐츠를 여기에 추가
-    </div>
     <div th:case="2">
-      <h3>게시판 2</h3>
-      게시판 2의 내용
-      추가 콘텐츠를 여기에 추가
-    </div>
-    <div th:case="3">
-      <h3>게시판 3</h3>
-      게시판 3의 내용
+      <h3>구인구직 게시판 전용</h3>
       추가 콘텐츠를 여기에 추가
     </div>
     <div th:case="4">
-      <h3>게시판 4</h3>
-      게시판 4의 내용
-      추가 콘텐츠를 여기에 추가
-    </div>
-    <div th:case="*">
-      <h3>기본 게시판</h3>
-      기본 게시판의 내용
+      <h3>질문과 토론게시판 전용</h3>
       추가 콘텐츠를 여기에 추가
     </div>
   </div>
@@ -122,10 +106,11 @@
 </div>
 <script>
   $(document).ready(function () {
+	  
 	// --------------------------------------------
     // 댓글 작성
     // --------------------------------------------
-    $("#reply-submit").on("click", function () {
+    $(document).on("click", "#reply-submit", function () {
       let formData = $("#reply-form").serialize();
       $.ajax({
         url: "/Reply",
@@ -133,19 +118,17 @@
         data: formData,
         success: function (response) {
           alert("댓글이 등록되었습니다.");
-          // 댓글 리스트만 리로딩
-          loadReplies();
         },
         error: function (error) {
-          console.log("Error:", error);
-          alert("댓글이 등록실패되었습니다.");
+          loadReplies();
         },
       });
     });
+	
     // --------------------------------------------
     // 댓글 삭제
     // --------------------------------------------
-    $(".delete-reply").on("click", function () {
+    $(document).on("click", ".delete-reply", function () {
       let replyId = $(this).data("reply-id");
       if (confirm("댓글을 삭제하시겠습니까?")) {
         $.ajax({
@@ -153,34 +136,34 @@
           type: "DELETE",
           data: { replyId: replyId },
           success: function (response) {
-            alert("댓글이 삭제되었습니다.");
-            // 댓글 리스트만 리로딩
-            loadReplies();
+        	  loadReplies();
           },
           error: function (error) {
+        	  console.log("Error:", error);
             alert("댓글 삭제에 실패하였습니다.");
           },
         });
       }
     });
+    
     // --------------------------------------------
     // 대댓글 작성
     // --------------------------------------------
     $(document).on("click", ".comment-submit", function () {
       let formData = $(this).closest("form").serialize();
+      console.log(this);
       $.ajax({
         url: "/Comment",
         type: "POST",
         data: formData,
         success: function (response) {
-          alert("대댓글이 등록되었습니다.");
-          loadReplies();
         },
         error: function (error) {
-          alert("대댓글 등록에 실패하였습니다.");
+        	loadReplies();
         },
       });
     });
+    
     // --------------------------------------------
     // 대댓글 삭제
     // --------------------------------------------
@@ -188,11 +171,10 @@
       let commentId = $(this).data("comment-id");
       if (confirm("대댓글을 삭제하시겠습니까?")) {
         $.ajax({
-          url: "Comment",
+          url: "/Comment",
           type: "DELETE",
           data: { commentId: commentId },
           success: function (response) {
-            alert("대댓글이 삭제되었습니다.");
             loadReplies();
           },
           error: function (error) {
@@ -203,6 +185,7 @@
       }
     });
   });
+  
   //--------------------------------------------
   // 추천 추가 함수
   // --------------------------------------------
@@ -216,18 +199,19 @@
       success: function (likeCheck) {
         if (likeCheck == 0) {
           alert("추천완료");
+          loadLikes();
         } else {
           alert("추천취소");
+          loadLikes();
         }
-        // 좋아요 수 업데이트
-        loadLikes();
       },
       error: function () {
         alert("통신 에러");
       },
     });
   });
-  //-------------------------------------------- 
+  
+  //---------------------------------------------
   // 신고관련
   // --------------------------------------------
   $(document).ready(function () {
@@ -255,7 +239,10 @@
       });
     });
   });
-
+  
+  //---------------------------------------------
+  // 댓글 로드
+  //---------------------------------------------
   function loadReplies() {
     $.ajax({
       url: window.location.pathname,
@@ -271,22 +258,26 @@
       },
     });
   }
-
-  function loadLikes() {
-    $.ajax({
-      url: window.location.pathname,
-      type: "GET",
-      success: function (response) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(response, 'text/html');
-        const newLikes = $(doc).find(".Good-form").html();
-        $(".Good-form").html(newLikes);
-      },
-      error: function (error) {
-        console.log("Error:", error);
-      },
-    });
-  }
+  
+  //---------------------------------------------
+  // 추천 로드
+  //---------------------------------------------
+ function loadLikes() {
+      $.ajax({
+        url: window.location.pathname,
+        type: "GET",
+        success: function (response) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(response, 'text/html');
+          const newLikesCount = $(doc).find("#post-like-count").text();
+          $("#post-like-count").text(newLikesCount);
+        },
+        error: function (error) {
+          console.log("Error:", error);
+        },
+      });
+    }
+  
 </script>
 </body>
 </html>

@@ -56,6 +56,7 @@ public class ReplyController {
     	
     	PostReplyVO postreplyVO = new PostReplyVO();
     	postreplyVO.setReplyId(replyId);
+    	
         Map<String, Object> result = postService.deleteReply(postreplyVO);
         if ("success".equals(result.get("status"))) {
             return "댓글이 성공적으로 삭제되었습니다.";

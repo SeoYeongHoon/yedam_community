@@ -17,8 +17,20 @@
         WHERE post_id = #{postId}
     </select>
   
+  <!-- 댓글 단건 조회 -->
+   <select id="tPostReplyId" resultType="PostReplyVO">
+       SELECT reply_id,
+              board_id,
+              post_id,
+              reply_content,
+              reply_date,
+              reply_writer,
+              homework_target_id
+        FROM replies
+        WHERE reply_id = #{replyId}
+   </select>
   
-  
+  <!-- 댓글 등록 -->
    <insert id="insertReply" parameterType="PostReplyVO" useGeneratedKeys="true" keyProperty="replyId">
         INSERT INTO replies (reply_id
                            , post_id
@@ -36,7 +48,7 @@
               , #{updateDate})
     </insert>
 
-
+	<!-- 댓글 삭제 -->
     <delete id="deleteReply1" parameterType="int">
         DELETE 
         FROM comments
@@ -48,6 +60,5 @@
         FROM replies 
         WHERE reply_id = #{replyId}
     </delete>
-
    
   </mapper>

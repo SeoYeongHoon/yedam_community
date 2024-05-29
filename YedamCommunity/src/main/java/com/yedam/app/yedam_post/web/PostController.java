@@ -28,7 +28,7 @@ import com.yedam.app.yedam_post.service.PostReplyVO;
 import com.yedam.app.yedam_post.service.ReportVO;
 /**
  * 게시판, 게시글
- * 2024.05.27
+ * 2024.05.29
  * 임우열
  */
 @Controller
@@ -59,6 +59,13 @@ public class PostController {
 	    List<PostVO> list = postService.getPosts(postVO , page, pageSize);
 	    int totalCount = postService.getPostCount(postVO);
 
+	    // 파일 조회
+//	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
+//	    for (BoardFilesVO file : boardFilesVO) {
+//	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
+//	        file.setExists(find.exists());
+//	    }
+	    
 	    model.addAttribute("postList", list);
 	    model.addAttribute("totalCount", totalCount);
 	    model.addAttribute("currentPage", page);
@@ -80,8 +87,7 @@ public class PostController {
 	    postService.PostViewCnt(postId, boardId);
 	    
 	    // 게시글 단건 조회
-	    PostVO postfind = postService.getPostReplies(postId, boardId);
-	    
+	    PostVO postVO = postService.getPostReplies(postId, boardId);
 	    // 댓글 조회
 	    List<PostReplyVO> replylist = postService.getPostReply(postId);
 	    for (PostReplyVO postreplyVO : replylist) {
@@ -89,20 +95,26 @@ public class PostController {
 	        List<PostCommentVO> commentlist = postService.getPostComment(postreplyVO);
 	        postreplyVO.setComments(commentlist);
 	    }
-	    postfind.setReplies(replylist);
+	    postVO.setReplies(replylist);
 	    
 	    // 현재 로그인한 유저와 작성자 비교
+//	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+//	    boolean isOwner = userVO.getuserId().equals(postVO.getUserId());
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-	    boolean isOwner = userVO.getNickname().equals(postfind.getWriter());
+	    boolean isOwner = userVO.getuserId().equals(postVO.getUserId());
 	    
 	    // 파일 조회
 	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
-	    postfind.setBoardFiles(boardFilesVO);
-
-	    postfind.setBoardId(boardId);
-	    postfind.setPostId(postId);
+	    for (BoardFilesVO file : boardFilesVO) {
+	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
+	        file.setExists(find.exists());
+	    }
+	    
+	    postVO.setBoardFiles(boardFilesVO);	    
+	    postVO.setBoardId(boardId);
+	    postVO.setPostId(postId);
 	    model.addAttribute("boardId", boardId);
-	    model.addAttribute("postInfo", postfind);
+	    model.addAttribute("postInfo", postVO);
 	    // 작성자 여부 추가
 	    model.addAttribute("isOwner", isOwner);
 
@@ -191,6 +203,7 @@ public class PostController {
 	@GetMapping("/postUpdate/{boardId}/{postId}")
 	public String postUpdateForm(@PathVariable Integer boardId
 			                   , @PathVariable Integer postId
+			                   , @PathVariable int userId
 			                   , Model model) {
 
 		if (postId == null) {
