@@ -58,10 +58,11 @@
     ]]>
     </insert>
 
-	<!-- 게시글 단건조회  수정 필요 -->
+	<!-- 게시글 단건조회 -->
 	<select id="getPostDetails" parameterType="int" resultType="PostVO">
 		SELECT p.post_id,
 		       p.board_id,
+		       p.user_id,
                p.title,
                p.post_content,
                p.create_date,
@@ -91,7 +92,7 @@
   </select>
 
 	<!-- boardId 값에 따라 게시글 전체 조회 -->
-<!-- 	<select id="getAllPosts" resultType="Post">
+	<select id="getAllPosts" resultType="PostVO">
 		SELECT POST_ID
 	   	     , BOARD_ID
 		     , USER_ID
@@ -103,15 +104,8 @@
 		     , POST_LIKE
 		     , UPDATE_DATE
 		FROM posts
-		WHERE board_id = #{boardId, jdbcType=INTEGER}
-		<if test = 'keyword != null and ! "".equals(keyword)'>
-      	AND (title LIKE CONCAT('%', #{keyword}, '%')
-      	OR post_content LIKE CONCAT('%', #{keyword}, '%')
-      	OR writer LIKE CONCAT('%', #{keyword}, '%'))
-    	</if>
-    	
 		ORDER BY post_id DESC
-	</select> -->
+	</select> 
 
 	<!-- 게시글 수정 -->
 	<update id="updatePost" parameterType="PostVO">
@@ -239,10 +233,10 @@
     </select>
 
 	<sql id="condition">
-	 <if test = 'postVO.keyword != null and ! "".equals(postVO.keyword)'>
-      			AND(title LIKE '%' || #{postVO.keyword} ||'%'
-                    OR post_content LIKE '%' || #{postVO.keyword} || '%'
-                    OR writer LIKE '%' || #{postVO.keyword} || '%' )
-    	        </if>
+	  <if test = 'postVO.keyword != null and ! "".equals(postVO.keyword)'>
+      		AND(title LIKE '%' || #{postVO.keyword} ||'%'
+            OR post_content LIKE '%' || #{postVO.keyword} || '%'
+            OR writer LIKE '%' || #{postVO.keyword} || '%' )
+      </if>
 	</sql>
 </mapper>

@@ -12,6 +12,14 @@ public class BoardFilesVO {
 	private String boardfileLocation;
 	private String boardfileExt;
 	
+    private boolean exists;
+
+    public boolean isExists() {
+        return exists;
+    }
+    public void setExists(boolean exists) {
+        this.exists = exists;
+    }
 	
 	public int getBoardfileId() {
 		return boardfileId;

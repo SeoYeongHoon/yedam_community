@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/admin_layout}"
+	layout:fragment="Admin">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<form th:action="@{/}" method="post" th:object="${teacherVO}">
+	<!-- ======= 시험 이름 입력 start ======= -->
+	<div class="input-style-1">
+		<h6 class="mb-25">재시험 Title</h6>
+		<input type="text" placeholder="시험의 이름 입력(최대 15자 입력)" th:field="*{testName}" maxlength="15" oninput="nameMaxLength(this);"/>
+	</div>
+	<!-- ======= 시험 이름 입력 end ======= -->
+
+	<!-- ======= 시험 안내사항 입력 start ======= -->
+	<h6 class="mb-25">시험 안내사항</h6>
+	<div class="input-style-1">
+		<textarea placeholder="시험의 안내사항을 입력하세요." rows="8" cols="100"
+			th:field="*{testContent}"></textarea>
+	</div>
+	<!-- ======= 시험 안내사항 입력 start ======= -->
+
+	<!-- ======= 시험 제한시간 입력 start ======= -->
+	<div>
+		<h6 class="mb-25">제한 시간</h6>
+		<input type="text" placeholder="시간입력(분)" style="border: 1px solid"
+			name="testTime" id="testTime">
+
+	</div>
+	<br>
+	<!-- ======= 시험 제한시간 입력 end ======= -->
+
+	<!-- ======= 시험 대상 선택 start ======= -->
+	<div class="card-style mb-30">
+		<h6 class="mb-25">재시험 대상</h6>
+		<div class="form-check checkbox-style mb-20">
+			<input class="form-check-input" type="checkbox" value=""
+				id="checkbox-1" /> <label class="form-check-label" for="checkbox-1">
+				전체 추가</label>
+		</div>
+		<!-- end checkbox -->
+		<th:block th:each="userInfo, idxStat : ${userList}">
+			<div class="form-check checkbox-style mb-20">
+				<input class="form-check-input checkbox" type="checkbox"
+					th:value="${userInfo.userId}" th:id="user+${idxStat.index}" /> <label
+					class="form-check-label" th:for="user+${idxStat.index}">[[${userInfo.name}]]</label>
+			</div>
+		</th:block>
+		<!-- end checkbox -->
+		<!-- ======= 시험 대상 선택 end ======= -->
+	</div>
+	<ul class="buttons-group">
+		<li>
+			<button type="button"
+				class="main-btn primary-btn square-btn btn-hover" id="addBtn"
+				th:onclick="|location.href='@{/testlist}'|">
+				시험 출제하기</button>
+		</li>
+		<li>
+			<button type="button"
+				class="main-btn deactive-btn square-btn btn-hover"
+				th:onclick="|location.href='@{/selectClassExam}'|">돌아가기</button>
+		</li>
+	</ul>
+</form>
+
+<script>
+var tName = '';
+var tContent = '';
+var tTIme = 0;
+var userId = 0;
+var classId = window.localStorage.getItem('classId');
+var qContent = window.localStorage.getItem('quizContent');
+var quizId = window.localStorage.getItem('quizId');
+var quizScore = window.localStorage.getItem('quizScore');
+var curriculumId = window.localStorage.getItem('ReCurriculumId');
+var subName = window.localStorage.getItem('subjectName');
+$('#testName').on('change', function() {
+	tName = $('#testName').val();
+	//window.localStorage.setItem('testName', tName);
+});
+
+$('#testContent').on('change', function() {
+	tContent = $('#testContent').val();
+	//window.localStorage.setItem('testContent', tContent);
+});
+
+$('#testTime').on('change', function() {
+	tTime = $('#testTime').val();
+	//window.localStorage.setItem('testTime', tTime);
+});
+
+//--------------------------------------------
+// 재시험 대상자 리스트 출력
+//--------------------------------------------
+function reTest(){
+	$.ajax({
+		url : "testresult",
+		type : "get", 
+		data : {testId : testId},
+				
+		success : function(data){
+			data.forEach((item,idx) => {
+				
+				if(item.isReexam == 1){
+					
+				} else {
+					
+				}
+			})
+			
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}	
+	}); // 학생정보 end of ajax
+} // 재시험 대상자 리스트 함수 종료
+
+
+// localstorage에 저장된 복수의 값을 배열 타입으로 변환
+var arryQContent = JSON.parse(qContent); // 시험 문제가 모여있는 배열	
+var arryQuizId = JSON.parse(quizId); // 시험 id값이 모여있는 배열 
+var arryQuizScore = JSON.parse(quizScore); // 시험 배점이 모여있는 배열
+var arrySubName = JSON.parse(subName); // 문제 과목이름이 모여있는 배열
+
+var storageUser = []; // 시험 대상자가 모여있는 배열
+
+//--------------------------------------------
+// 대상자 개별의 체크박스 체크시 배열에 대상자 추가
+//--------------------------------------------
+$('.checkbox').on('change', function() {
+	storageUser = [];
+	for (let i = 0; i < $('.checkbox').length; i++) {
+		if ($('#user' + i).is(":checked")) {
+			storageUser.push($('#user' + i).val());
+		};
+	};
+})
+//--------------------------------------------
+// 전체 추가 체크박스 체크시 배열에 전체 대상자 추가
+//--------------------------------------------
+$('#checkbox-1').on('change', function() {
+	storageUser = [];
+	for (let i = 0; i < $('.checkbox').length; i++) {
+		if ($('#checkbox-1').is(':checked')) {
+			storageUser.push($('#user' + i).val());
+		} else {
+			storageUser = [];
+		}
+	}
+})
+
+//--------------------------------------------
+// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능
+// 1. tests 테이블에 최초 딱 한번만 insert 동작
+// 2. quizbox 테이블에 선택된 문제들에 대한 숫자만큼 insert문 동작
+// 3. test_targets 테이블에 선택된 학생들에 대한 숫자만큼 insert문 동작
+//--------------------------------------------
+$('#addBtn').on('click', function() {
+	//--------------------------------------------
+	// tests 테이블에 insert 동작.
+	//--------------------------------------------
+	let obj = {
+		"curriculumId" : curriculumId,
+		"testContent" : tContent,
+		"testTime" : tTime,
+		"testName" : tName,
+		"classId" : classId
+	};
+	$.ajax({
+		url : "testinsert",
+		type : "post",
+		async : false,
+		data : obj,
+		
+		success : function(data) {
+			console.log(data);
+			if(data != 'true' && data == null){
+				return;
+			}
+		},
+		error : function(err) {
+			alert('시험 등록 실패');
+			return;
+			
+		}
+	});
+	
+	//--------------------------------------------
+	// quizbox 테이블에 insert 동작
+	//--------------------------------------------
+	obj = {
+	        "quizContent": arryQContent,
+	        "quizId": arryQuizId,
+	        "subjectName": arrySubName,
+	        "curriculumId": curriculumId,
+	        "quizScore": arryQuizScore
+	      };
+	
+	$.ajax({
+		url : "quizboxinsert",
+		type : "post",
+		contentType : 'application/json',
+		data : JSON.stringify(obj),
+		async : false,
+			
+		success : function(data){
+			alert('quizbox 성공');
+		},
+		error : function(err){
+			alert('시험 등록 실패(문제 등록 실패)');
+		}
+	}); 
+
+	//--------------------------------------------
+	// test_targets 테이블에 insert 동작
+	//--------------------------------------------
+	obj = {
+	        "userId": storageUser
+	      };
+	
+	$.ajax({
+		url : "testuserinsert",
+		type : "post",
+		contentType : 'application/json',
+		data : JSON.stringify(storageUser),
+		async : false,
+		
+		success : function(data){
+			alert('users 성공');
+			window.localStorage.clear();
+		},
+		error : function(err){
+			alert('시험 등록 실패(시험 대상자 등록 실패)');
+		}
+	}); 
+}) // 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
+
+//--------------------------------------------
+// 유저 선택 체크박스 관련 기능 시작
+//--------------------------------------------
+var selectAllCheckbox = document.getElementById("checkbox-1");
+var checkboxes = document.querySelectorAll(".checkbox");
+//--------------------------------------------
+// 전체 선택/해제 체크박스의 상태에 따라 모든 항목 체크박스 선택/해제
+//--------------------------------------------
+selectAllCheckbox.addEventListener("change", function() {
+	var isChecked = selectAllCheckbox.checked;
+	checkboxes.forEach(function(checkbox) {
+		checkbox.checked = isChecked;
+	});
+});
+//--------------------------------------------
+// 항목 체크박스 중 하나라도 선택 취소될 경우, 전체 선택/해제 체크박스도 선택 취소
+//--------------------------------------------
+checkboxes.forEach(function(checkbox) {
+	checkbox.addEventListener("change", function() {
+		if (!checkbox.checked) {
+			selectAllCheckbox.checked = false;
+		}
+	});
+}); //유저 선택 체크박스 관련 기능 종료
+
+function nameMaxLength(e){
+	if(e.value.length > e.maxLength){
+    	e.value = e.value.slice(0, e.maxLength);
+	}
+}
+console.log("재시험자 ID값 : " + window.localStorage.getItem('reUserId'))	
+
+</script>
+</html>

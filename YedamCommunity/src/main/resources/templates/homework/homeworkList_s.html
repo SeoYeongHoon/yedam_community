@@ -65,10 +65,10 @@ $().ready(function() {
 //과제목록
 function homeworkList(){
 	// 유저정보
-	let userid = 60;
+	let userid = 10;
 	
 	$.ajax({
-		url:"/admin/homeworkList_S",
+		url:"/all/homeworkList_S",
 		type: "get",
 		data: {userid:userid},
 		success:function(data){
@@ -109,7 +109,7 @@ function classCategory() {
 			let userid = 60;
 			let vals = $("#subjectSelect").val();
 				$.ajax({
-					url : "/admin/subjectCategory",
+					url : "/all/subjectCategory",
 					type : "get",
 					data : {
 						vals : vals,

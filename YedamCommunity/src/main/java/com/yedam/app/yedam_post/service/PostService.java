@@ -5,6 +5,7 @@ import java.util.Map;
 
 public interface PostService {
 	
+	
 	//--------------------------------------------
 	// 게시글 등록
 	//--------------------------------------------
@@ -105,7 +106,7 @@ public interface PostService {
     //--------------------------------------------
 	public List<BoardFilesVO> getBoardFiles(int postId, int boardId);
 
-
+	
 
 
 

@@ -374,6 +374,7 @@
 		     , c.curriculum_name
 		     , c.curriculum_start_date
 			 , c.curriculum_end_date
+			 , c.curriculum_id
 		FROM tests t JOIN curriculum c
 		               ON t.curriculum_id = c.curriculum_id
 		WHERE test_id = #{testId}
@@ -444,6 +445,7 @@
 			 , e.is_reexam
 			 , e.feedback
 			 , u.name
+			 , u.user_id
 	         , test_id
 	         , e.subject_id
 	         , e.result_id
@@ -452,6 +454,7 @@
 			                JOIN users u
 			                  ON t.user_id = u.user_id
 		WHERE u.user_id = #{userId}
+		AND t.test_id = #{testId}
 	</select>
 	<!-- 피드백 내용 삽입(수정) -->
 	<update id="feedAdd" parameterType="TeacherVO">

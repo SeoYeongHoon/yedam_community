@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_examteacher.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_common.PageDTO;
+import com.yedam.app.yedam_examstudent.service.CbtStudentService;
+import com.yedam.app.yedam_examstudent.service.ExamResultVO;
+import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examteacher.service.ExamService;
 import com.yedam.app.yedam_examteacher.service.QuizVO;
 import com.yedam.app.yedam_examteacher.service.TeacherVO;
@@ -33,6 +37,10 @@ public class ExamController {
 
 	@Autowired
 	ExamService examService;
+	
+	@Autowired
+	CbtStudentService cbtStudentService;
+	
 	//--------------------------------------------
 	// 시험 목록 페이지 관련 기능
 	//--------------------------------------------
@@ -73,6 +81,14 @@ public class ExamController {
 		model.addAttribute("teacherVO", new TeacherVO());
 		model.addAttribute("userList", list);
 		return "cbt_teacher/insertTest";
+	}
+	
+	@GetMapping("retestinsert")
+	public String reTestInsertForm(TeacherVO teacherVO, Model model) {
+		List<TeacherVO> list = examService.userList(teacherVO);
+		model.addAttribute("teacherVO", new TeacherVO());
+		model.addAttribute("userList", list);
+		return "cbt_teacher/insertReTest";
 	}
 	//--------------------------------------------
 	// 시험 등록 - 처리
@@ -269,7 +285,7 @@ public class ExamController {
 	//--------------------------------------------
 	// 강의실별 시험 결과(통과자,재시험자) 확인
 	//--------------------------------------------
-	@PostMapping("testresult")
+	@GetMapping("testresult")
 	@ResponseBody
 	public List<TeacherVO> testResult(@RequestParam("testId") int tId){
 		return examService.userTestResult(tId);
@@ -278,11 +294,40 @@ public class ExamController {
 	// 학생 개인 피드백 페이지
 	//--------------------------------------------
 	@GetMapping("feedback")
-	public String feedback(TeacherVO teacherVO, Model model) {
+	public String feedback(TeacherVO teacherVO, 
+						   Model model,
+						   ExamResultVO examResultVO,
+						   QuizboxVO quizboxVO) {
 		TeacherVO findVO = examService.userFeedInfo(teacherVO);
 		TeacherVO findVO2 = examService.testInfo(teacherVO);
+		
+		// 해당 학생 정보
+		examResultVO.setUserId(findVO.getUserId());
+		examResultVO.setTestId(findVO2.getTestId());
+		
+		List<QuizboxVO> quizResultList = new ArrayList<>();
+		ExamResultVO stdInfo = cbtStudentService.testResult(examResultVO);
+		
+		int trueCnt = 0;
+		int falseCnt = 0;
+		
+		quizboxVO.setSubjectId(stdInfo.getSubjectId());
+		quizboxVO.setTestId(findVO2.getTestId());
+		quizResultList = cbtStudentService.testResultQuiz(quizboxVO);
+		
+		for (int i = 0; i < quizResultList.size(); i++) {
+			if (quizResultList.get(i).getIsCorrect() == 1) {
+				trueCnt++;
+			} else {
+				falseCnt++;
+			}
+		}
+		
+		
 		model.addAttribute("userInfo", findVO);
 		model.addAttribute("testInfo", findVO2);
+		model.addAttribute("quizResultList", quizResultList);
+		System.out.println("해당학생이 푼 문제리스트: " + quizResultList);
 		return "cbt_teacher/feedback";
 	}
 	//--------------------------------------------

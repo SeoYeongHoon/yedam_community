@@ -15,22 +15,80 @@
 				<table class="table">
 					<thead>		
 						<tr>
+							<td>No</td>
 							<td>신고자</td>
 							<td>게시판</td>
 							<td>신고 유형</td>
 							<td>신고 일자</td>
+							<td>확인하기</td>
+							<td>처리유무</td>
 						</tr>	
 					</thead>
 					<tbody id="reportTable">
-						<tr th:each="report : ${reports}" class="report_row" style="max-width: 300px; min-height: 400px; border: 2px solid #5d657b; margin: 20px; border-radius: 5px; position: relative;">
+						<tr th:each="report, idx : ${reports}" class="report_row" style="max-width: 300px; min-height: 400px; border: 2px solid #5d657b; margin: 20px; border-radius: 5px; position: relative;">
+							<td>[[${idx.count}]]</td>
 							<td>[[${report.reporter}]]</td>
 							<td>[[${report.boardId}]]</td>
 							<td>[[${report.reportType}]]</td>
-							<td>[[${report.reportDate}]]</td>
+							<td class="report_date">[[${report.reportDate}]]</td>
+							<td><a href="#" th:onclick="'moveToBoard(' + ${report.boardId} + ',' + ${report.postId} + ')'" class="main-btn dark-btn btn-hover" style="padding: 5px 10px;">확인하기</a> </td>
+							<td class="notSolvedBtn"><a href="#" onclick="isSolved()" class="main-btn danger-btn btn-hover" style="padding: 5px 10px;">처리하기</a></td>
+							<td class="solvedBtn" style="display: none;"><a href="#" class="main-btn success-btn btn-hover" style="padding: 5px 10px;">처리완료</a></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
+	
+	<script>
+		function moveToBoard(boardId, postId) {
+			// location.href="/post/" + boardId + "/" + postId;
+			
+			// 새 창에 띄우기
+			window.open("/post/" + boardId + "/" + postId);
+		}
+	
+		//날짜 포멧 변환 함수
+		function formatDate(inputDateStr) {
+		    // 입력 문자열을 분해
+		    const parts = inputDateStr.split(' ');
+		    
+		    // 각 부분 추출 (Tue May 28 11:20:03 KST 2024)
+		    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		    const day = parts[2];
+		    const month = monthNames.indexOf(parts[1]) + 1; // 월 이름을 인덱스로 변환 (0부터 시작하므로 +1)
+		    const year = parts[5].slice(2); // 연도의 마지막 두 자리
+		    
+		    // 월과 일을 2자리 형식으로 변환
+		    const formattedMonth = String(month).padStart(2, '0');
+		    const formattedDay = String(day).padStart(2, '0');
+		    
+		    return `${year}/${formattedMonth}/${formattedDay}`;
+		}
+		
+		
+		$(document).ready(function() {
+			var reportDate = document.querySelectorAll('.report_date');
+			
+			for (let i = 0; i < reportDate.length; i++) {
+			    console.log(formatDate(reportDate[i].innerText));
+			    
+			    reportDate[i].innerText = formatDate(reportDate[i].innerText);
+			}
+		});
+		
+		//--------------------------------------------
+		// 신고 처리 유무
+		//--------------------------------------------
+		function isSolved() {
+			var notSolvedBtn = document.querySelector('.notSolvedBtn');
+			var solvedBtn = document.querySelector('.solvedBtn');
+			
+			if (confirm("처리를 완료하시겠습니까?")) {
+				solvedBtn.style.display = 'block';
+				notSolvedBtn.style.display = 'none';
+			}
+		}
+	</script>
 </html>

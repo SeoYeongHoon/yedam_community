@@ -153,7 +153,7 @@ function classInfo(classId){
 
 				    return [year, month, day].join('/');
 				} // 날짜 포멧 변환 end
-				$('.test').append($('<p />').text(item.testName + ' ' + formatDate(item.testDate)).attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
+				$('.test').append($('<p class="testInfoItem" />').text(item.testName + ' ' + formatDate(item.testDate)).attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
 			})
 		},
 		error : function(err){
