@@ -30,7 +30,7 @@ import com.yedam.app.yedam_user.upload.service.ProfileImageService;
 
 
 @Controller
-public class ProfileController {
+public class MyPageController {
 	@Autowired
 	UserService userService;
 	
@@ -52,6 +52,8 @@ public class ProfileController {
 						 Model model) {
 		System.out.println("유저정보: " + SecurityUtils.getCurrentLogId());
 		int logid = SecurityUtils.getCurrentLogId();
+		testVO.setUserId(logid);
+		testVO.setPage(1);
 		List<TestVO> testList = cbtStudentService.testListAll(testVO);
 		model.addAttribute("recentTest", testList);
 		System.out.println("시험 리스트:" + testList);
@@ -60,7 +62,7 @@ public class ProfileController {
 		model.addAttribute("recentHomework", homeworkList);
 		System.out.println("과제 리스트:" + homeworkList);
 		
-		return "profile/mypage";
+		return "mypage/mypage";
 	}
 	
 	// 개인정보 수정

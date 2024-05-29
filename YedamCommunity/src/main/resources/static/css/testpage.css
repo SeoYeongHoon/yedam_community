@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.testInfoItem {
+	cursor: pointer;
+	margin-bottom: 5px;
+}
+
+.testInfoItem:hover {
+	color: black;
+    background-color: rgb(229 231 235);
+}

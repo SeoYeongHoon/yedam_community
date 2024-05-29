@@ -25,22 +25,25 @@
 		<div th:if="${userInfo.isReexam} == 1">
 			<h2 th:text="${userInfo.name}+' / '+${userInfo.resultScore}+'점 / 재시험 X'"></h2>
 		</div>
+		
+		<!-- 해당학생의 틀린 문제 리스트 -->
+		
 	</div>
 	<!-- end col -->
 	<form th:action="@{/feedupdate}" method="post" th:object="${userInfo}">
-	<div class="col-12">
-		<h3>피드백 작성란</h3>
-		<input type="hidden" th:field="*{resultId}">
-		<textarea cols="55" rows="5" placeholder="피드백을 입력하세요" style="border:1px solid black;" th:field="*{feedback}"></textarea>
-		<ul class="buttons-group">
-			<li>
-				<button type="button" class="main-btn primary-btn square-btn btn-hover" id="updateBtn">저장</button>
-			</li>
-			<li>
-				<button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/teachermain}'|">처음화면</button>
-			</li>
-		</ul>
-	</div>
+		<div class="col-12">
+			<h3>피드백 작성란</h3>
+			<input type="hidden" th:field="*{resultId}">
+			<textarea cols="55" rows="5" placeholder="피드백을 입력하세요" style="border:1px solid black;" th:field="*{feedback}"></textarea>
+			<ul class="buttons-group">
+				<li>
+					<button type="button" class="main-btn primary-btn square-btn btn-hover" id="updateBtn">저장</button>
+				</li>
+				<li>
+					<button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/teachermain}'|">처음화면</button>
+				</li>
+			</ul>
+		</div>
 	</form>
 </div>
 <script>

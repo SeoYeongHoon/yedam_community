@@ -42,26 +42,26 @@ public class CbtStudentController {
 			               Authentication authentication,
 			               Model model) {
 		//HttpSession session = req.getSession();
-		int logid = 14;
-		//LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
-		testVO.setUserId(logid);
+		// int logid = 14;
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		testVO.setUserId(userVO.getuserId());
 		testVO.setPage(page);
 		List<TestVO> list1 = cbtStudentService.testListAll(testVO); //시험목록
 		List<ExamResultVO> list2 = new ArrayList<>();
 		//List<TestVO> list3 = cbtStudentService.userSubject(userVO.getuserId()); //시험과목
-		int size = cbtStudentService.testListSize(logid); //시험개수
+		int size = cbtStudentService.testListSize(userVO.getuserId()); //시험개수
 		int[] array1 = new int[list1.size()];
 		int[] array2 = new int[list1.size()];
 		int[] array3 = new int[list1.size()];
 		Date date = new Date();
 		for(int i = 0; i < list1.size(); i++) {			
-			testVO.setUserId(logid);
+			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
 			array1[i] = (cbtStudentService.isTestResult(testVO));
-			testVO.setUserId(logid);
+			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
 			list2.add(cbtStudentService.isTestFeedback(testVO));
-			testVO.setUserId(logid);
+			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
 			array2[i] = cbtStudentService.isTestReexam(testVO);
 			if(date.after(list1.get(i).getTestDate())) {
@@ -71,6 +71,7 @@ public class CbtStudentController {
 				array3[i] = 0;
 			}
 		}
+		
 		model.addAttribute("testList", list1); //시험목록
 		model.addAttribute("isResult", array1); //시험결과유무
 		model.addAttribute("isFeedback", list2); //피드백유무
@@ -79,7 +80,7 @@ public class CbtStudentController {
 		//model.addAttribute("userSubject", list3); //시험과목
 		model.addAttribute("page", page); //페이지
 		model.addAttribute("size", size); //시험개수
-		model.addAttribute("logId", logid); //로그인정보
+		// model.addAttribute("logId", logid); //로그인정보
 		return "cbt_student/testList2";
 	}
 	
@@ -145,8 +146,10 @@ public class CbtStudentController {
 			                TestVO testVO, 
 			                QuizboxVO quizboxVO, 
 			                AnswerVO answerVO, 
+				            Authentication authentication,
 			                Model model) {
-		String logid ="14";
+//		String logid ="14";
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		testVO.setUserId(Integer.parseInt(logid));
 		TestVO info = cbtStudentService.testStart(testVO); //응시정보
 		quizboxVO.setQuizId(randQuizId[0]);
@@ -224,9 +227,11 @@ public class CbtStudentController {
 			                 int sec,
 			                 ExamResultVO examResultVO,
 			                 QuizboxVO quizboxVO,
+				             Authentication authentication,
 			                 Model model) {
-		String logid ="14";
-		examResultVO.setUserId(Integer.parseInt(logid));
+		// String logid ="14";
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
 		List<QuizboxVO> list = new ArrayList<>();
@@ -248,9 +253,12 @@ public class CbtStudentController {
 	public String testResult2(int testId,
 							  ExamResultVO examResultVO,
 				              QuizboxVO quizboxVO,
+				              Authentication authentication,
 							  Model model) {
-		String logid ="14";
-		examResultVO.setUserId(Integer.parseInt(logid));
+//		String logid ="14";
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		examResultVO.setUserId(userVO.getuserId());
+//		examResultVO.setUserId(Integer.parseInt(logid));
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
 		List<QuizboxVO> list = new ArrayList<>();

@@ -356,11 +356,11 @@
 	<!-- 시험결과 기본정보 -->
 	<select id="selectTestResult" resultType="ExamResultVO">
 		SELECT  c.name
-       			,a.subject_id
+       			,d.subject_id
        			,a.result_score
        			,a.pass_score
        			,a.is_reexam
-       			,a.subject_id
+       			,d.subject_id
        			,b.test_id
        			,d.subject_name
 		FROM    exam_results a 
