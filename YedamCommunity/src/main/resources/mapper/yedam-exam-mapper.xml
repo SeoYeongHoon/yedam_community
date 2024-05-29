@@ -374,6 +374,7 @@
 		     , c.curriculum_name
 		     , c.curriculum_start_date
 			 , c.curriculum_end_date
+			 , c.curriculum_id
 		FROM tests t JOIN curriculum c
 		               ON t.curriculum_id = c.curriculum_id
 		WHERE test_id = #{testId}

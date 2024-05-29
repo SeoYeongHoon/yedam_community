@@ -82,6 +82,14 @@ public class ExamController {
 		model.addAttribute("userList", list);
 		return "cbt_teacher/insertTest";
 	}
+	
+	@GetMapping("retestinsert")
+	public String reTestInsertForm(TeacherVO teacherVO, Model model) {
+		List<TeacherVO> list = examService.userList(teacherVO);
+		model.addAttribute("teacherVO", new TeacherVO());
+		model.addAttribute("userList", list);
+		return "cbt_teacher/insertReTest";
+	}
 	//--------------------------------------------
 	// 시험 등록 - 처리
 	//--------------------------------------------
@@ -277,7 +285,7 @@ public class ExamController {
 	//--------------------------------------------
 	// 강의실별 시험 결과(통과자,재시험자) 확인
 	//--------------------------------------------
-	@PostMapping("testresult")
+	@GetMapping("testresult")
 	@ResponseBody
 	public List<TeacherVO> testResult(@RequestParam("testId") int tId){
 		return examService.userTestResult(tId);
