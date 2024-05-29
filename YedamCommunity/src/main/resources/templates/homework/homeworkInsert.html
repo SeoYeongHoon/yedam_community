@@ -155,7 +155,7 @@
 				<!-- 모달 푸터 -->
 				<div class="modal-footer">
 					<button id='checkBtn' type="button" class="btn btn-primary"
-						onclick="location.href='homework_T'">확인</button>
+						onclick="location.href='/admin/homework_T'">확인</button>
 				</div>
 			</div>
 		</div>
@@ -286,7 +286,7 @@
 			
 			//ajax
 			$.ajax({
-				url:'homeworkInsert',
+				url:'/admin/homeworkInsert',
 				type:'POST',
 				processData: false, // QueryString(key=value)로 자동변환 무시
 				contentType: false, // FormData가 가지고 있는 통신 정보를 사용

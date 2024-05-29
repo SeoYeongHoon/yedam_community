@@ -97,9 +97,15 @@ VALUES
 	FROM    replyfiles
 	WHERE   download_location = #{downloadLocation}
 	</select>
-	<!-- 과제파일 삭제 -->
+	<!-- 과제 파일 삭제 -->
 	<delete id="fileDelete" parameterType="HomeWorkFileVO">
 	DELETE homeworkfiles
 	WHERE  homeworkfile_location = #{homeworkfileLocation}
+	</delete>
+	
+	<!-- 과제 파일 삭제 -->
+	<delete id="replyFileDelete" parameterType="ReplyFileVO">
+	DELETE replyfiles
+	WHERE  replyfile_location = #{replyfileLocation}
 	</delete>
   </mapper>
