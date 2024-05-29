@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_post.web;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostCommentVO;
-import com.yedam.app.yedam_post.service.PostVO;
-import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostReplyVO;
+import com.yedam.app.yedam_post.service.PostService;
+import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.ReportVO;
 /**
  * 게시판, 게시글
@@ -50,30 +51,49 @@ public class PostController {
 	// --------------------------------------------
 	@GetMapping("/post/{boardId}")
 	public String postList(@PathVariable int boardId,
-						   PostVO postVO,
+	                       PostVO postVO,
 	                       @RequestParam(required = false, defaultValue = "1") int page,
-	                       @RequestParam(required = false, defaultValue = "10") int pageSize,
+	                       @RequestParam(required = false, defaultValue = "6") int pageSize,
+	                       @RequestParam(required = false) String keyword,
 	                       Model model) {
-		
-		postVO.setBoardId(boardId);
-	    List<PostVO> list = postService.getPosts(postVO , page, pageSize);
-	    int totalCount = postService.getPostCount(postVO);
+	    try {
+	        postVO.setBoardId(boardId);
 
-	    // 파일 조회
-//	    for (PostVO postVO : list) {
-//	        List<BoardFilesVO> boardFiles = postService.getBoardFiles(post.getPostId(), boardId);
-//          post.setFiles(boardFiles);
-//	    }
-	    
-	    model.addAttribute("postList", list);
-	    model.addAttribute("totalCount", totalCount);
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("pageSize", pageSize);
-	    model.addAttribute("boardId", boardId);
+	        if (keyword != null && !keyword.isEmpty()) {
+	            postVO.setKeyword(keyword);
+	        }
+
+	        List<PostVO> list = postService.getPosts(postVO, page, pageSize);
+	        int totalCount = postService.getPostCount(postVO);
+	        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+
+	        // 게시글 리스트에서 파일 정보 가져오기
+	        for (PostVO post : list) {
+	            List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(post.getPostId(), boardId);
+	            for (BoardFilesVO file : boardFilesVO) {
+	                File find = new File(uploadPath + "/" + file.getBoardfileLocation());
+	                file.setExists(find.exists());
+	            }
+	            post.setBoardFiles(boardFilesVO);
+	        }
+
+	        model.addAttribute("postList", list);
+	        model.addAttribute("totalCount", totalCount);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("pageSize", pageSize);
+	        model.addAttribute("boardId", boardId);
+	        model.addAttribute("keyword", keyword);
+	        model.addAttribute("totalPages", totalPages);
+
+	    } catch (Exception e) {
+	        model.addAttribute("errorMessage", "게시글 목록을 불러오는 중 오류가 발생했습니다.");
+	        e.printStackTrace();
+	    }
 
 	    return "posts/postList";
 	}
-	
+
+
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------
@@ -97,8 +117,6 @@ public class PostController {
 	    postVO.setReplies(replylist);
 	    
 	    // 현재 로그인한 유저와 작성자 비교
-//	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-//	    boolean isOwner = userVO.getuserId().equals(postVO.getUserId());
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	    boolean isOwner = userVO.getuserId().equals(postVO.getUserId());
 	    
