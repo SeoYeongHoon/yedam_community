@@ -11,7 +11,7 @@ import com.yedam.app.yedam_homework.service.HomeWorkVO;
 
 public interface HomeWorkFileService {
 	// 과제등록 파일 업로드
-	public List<String> homeworkUploadFile(@RequestPart MultipartFile[] uploadFiles, HomeWorkTargetVO homeworktargetVO);
+	public List<String> homeworkUploadFile(@RequestPart MultipartFile[] uploadFiles, int homeworkId);
 
 	// 과제 파일 조회
 	public List<HomeWorkFileVO> homeworkfileList(HomeWorkVO homeworkVO);
