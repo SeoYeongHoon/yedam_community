@@ -226,14 +226,14 @@ public class HomeWorkStudentController {
 		//--------------
 			@PostMapping("/updateReplyFile")
 			@ResponseBody
-			public String updateReplyFile(@RequestPart MultipartFile[] uploadFiles,
-										 @RequestParam("replyid") int replyId) {
+			public String updateReplyFile(@RequestPart MultipartFile[] uploadReplyFile,
+										 @RequestParam("replyId") int replyId) {
 				
-				System.err.println("파일1 == "+ uploadFiles);
+				System.err.println("파일1 == "+ uploadReplyFile);
 				System.err.println("과제 아이디1 == "+ replyId);
 				
 				// 과제 파일 업로드
-				homeworkfileService.replyUploadFile(uploadFiles, replyId);
+				homeworkfileService.replyUploadFile(uploadReplyFile, replyId);
 				return null;
 			}
 }
