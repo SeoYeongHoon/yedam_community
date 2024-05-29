@@ -25,6 +25,7 @@
   <select id="selectReportList" resultType="ReportVO">
   	SELECT *
   	FROM reports
+  	ORDER BY report_date DESC
   </select>
   
   </mapper>

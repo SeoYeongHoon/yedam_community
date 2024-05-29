@@ -27,10 +27,10 @@ public class CurriculumController {
 	}
 	
 	//강의실 전체 조회 - 문제등록
-		@GetMapping("selectClassExam")
-		public String classListExam(Model model) {
-			List<CurriculumVO> list = curriculumService.CurriculumList();
-			model.addAttribute("class",list);
-			return "curriculum/selectClassExam";
-		}
+	@GetMapping("/selectClassExam")
+	public String classListExam(Model model) {
+		List<CurriculumVO> list = curriculumService.CurriculumList();
+		model.addAttribute("class",list);
+		return "curriculum/selectClassExam";
+	}
 }
