@@ -29,4 +29,7 @@ public class UserVO {
 	
 	// 검색필드
 	private String searchQuery;
+	
+	// 비밀번호 초기화용 메일 토큰
+	private String resetToken;
 }

@@ -234,7 +234,9 @@
             	
 	            if (navLinks[i].getAttribute('href') === ("/admin/" + currentPage)) {
 	                navLinks[i].classList.add('active');
-	            } else {
+	            } else if (navLinks[i].getAttribute('href') === ("/all/" + currentPage)) {
+					navLinks[i].classList.add('active');
+				} else {
 	            	navLinks[i].classList.remove('active');
 	            }
 	        }

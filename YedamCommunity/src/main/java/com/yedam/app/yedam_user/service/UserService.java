@@ -70,4 +70,7 @@ public interface UserService {
 	public void updateUserInfo(UserVO userVO);
 
 	public UserVO getByUserId(String userId);
+	
+	// 비밀번호 초기화용 메일 전송 
+	public void sendPasswordResetEmail(String id, String name, String email);
 }
