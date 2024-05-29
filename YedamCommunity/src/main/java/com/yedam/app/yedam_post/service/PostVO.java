@@ -24,9 +24,9 @@ public class PostVO {
     private Date updateDate;
     private String keyword;
     
-    private String id;
-    
-    private int boardfileId;
+
+
+	private int boardfileId;
     private String boardfileName;
     private long boardfileSize;
     private String boardfileLocation;
@@ -204,6 +204,12 @@ public class PostVO {
 	public void setBoardFiles(List<BoardFilesVO> boardFiles) {
 		this.boardFiles = boardFiles;
 	}
-    
+    public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
     
 }
