@@ -10,7 +10,7 @@
                 JOIN exam_results b 
                 ON(a.test_target_id = b.test_target_id)
         WHERE   a.user_id = #{userId}
-        AND     a.test_id = #{testId}
+        AND     a.test_id = #{testId} 
 	</select>
 	<!-- 피드백유무 -->
 	<select id="isTestFeedback" resultType="ExamResultVO">
@@ -161,7 +161,7 @@
         FROM    answers a
         		JOIN quizbox b
                 ON(a.quiz_id = b.quiz_id)
-        WHERE   a.subject_id = #{subjectId} 
+        WHERE   b.subject_id = #{subjectId} 
         AND     b.test_id = #{testId}
         AND     b.quiz_id = #{quizId}
         ORDER BY a.example_num)
@@ -229,13 +229,13 @@
         	WHERE   b.test_id = #{testId}
         	AND     b.user_id = #{userId};
         	<!-- 시험결과식별번호 구하기 -->
-			SELECT  a.result_id
+			<!-- SELECT  a.result_id
 			INTO    v_rid
         	FROM    exam_results a 
         			JOIN test_targets b 
         			ON(a.test_target_id = b.test_target_id)
         	WHERE   b.test_id = #{testId}
-        	AND     b.user_id = #{userId};
+        	AND     b.user_id = #{userId}; -->
         	<!-- 시험결과 존재여부 구하기 -->
         	IF v_rid_cnt = 0 THEN <!-- 처음 응시하는 경우 -->
         		<!-- 테이블에 시험결과 정보 등록하기 -->
@@ -394,7 +394,7 @@
                 ON(b.quiz_id = c.quiz_id)
                 JOIN test_results d
                 ON(b.quiz_id = d.quiz_id)
-        WHERE   a.subject_id = #{subjectId}
+        WHERE   b.subject_id = #{subjectId}
         AND     b.test_id = #{testId})
         <!-- 문제 보기 열 > 행 바꾸기 -->
         SELECT 
