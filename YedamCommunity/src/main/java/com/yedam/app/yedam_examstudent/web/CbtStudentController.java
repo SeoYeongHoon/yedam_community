@@ -7,7 +7,10 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +26,19 @@ import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
+@Component
+@EnableScheduling
 @Controller
 public class CbtStudentController {
 	
 	//service주입
 	@Autowired
 	CbtStudentService cbtStudentService;
-
+	
+	@Scheduled(cron = "*/5 * * * * *")
+	public void schedule() {
+		System.out.println(1);
+	}
 	
 	//ㅡㅡㅡㅡ
 	//시험전체
