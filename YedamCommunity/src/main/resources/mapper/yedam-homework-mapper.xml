@@ -127,7 +127,7 @@
 		ORDER BY  h.homework_id DESC
 	</select>
 	
-	<!-- 과제 페이징 및 출력 -->
+	<!-- 과제 페이징 및 출력(교수) -->
 	<select id="getHomeworksByFilter" parameterType="map" resultType="HomeWorkVO">
 		SELECT *
 	    FROM (
@@ -139,9 +139,8 @@
 	                   h.homework_date,
 	                   h.homework_title,
 	                   s.subject_name
-	            FROM homeworks h
-	            JOIN curriculum c ON h.curriculum_id = c.curriculum_id
-	            JOIN subjects s ON h.subject_id = s.subject_id
+	            FROM homeworks h JOIN curriculum c ON h.curriculum_id = c.curriculum_id
+	            				 JOIN subjects s ON h.subject_id = s.subject_id
 	            WHERE (#{filter} = 0 OR c.class_id = #{filter})
 	            AND LOWER(h.homework_title) LIKE '%' || #{searchQuery} || '%'
 	            ORDER BY h.homework_id DESC
@@ -151,6 +150,33 @@
 		    ]]>
 	    )
 	    WHERE rnum > (#{page} - 1) * 5
+	</select>
+	
+	<!-- 과제 페이징 및 출력(학생) -->
+	<select id="getHomeworksByFilterStudent" parameterType="map" resultType="HomeWorkVO">
+		SELECT *
+		FROM (
+    			SELECT b.*, ROWNUM rnum
+    			FROM (
+        				SELECT c.class_id,
+               				   h.homework_id,
+               				   h.homework_content,
+               				   h.homework_date,
+			                   h.homework_title,
+               				   s.subject_name
+        				FROM homeworks h	JOIN curriculum c ON h.curriculum_id = c.curriculum_id
+        									JOIN subjects s ON h.subject_id = s.subject_id
+        									JOIN users u ON c.curriculum_id = u.curriculum_id
+        				WHERE (#{filter} = 0 OR s.subject_id = #{filter})
+        				AND LOWER(h.homework_title) LIKE '%' || #{searchQuery} || '%'
+        				AND u.user_id = #{userId}
+        				ORDER BY h.homework_id DESC
+    					) b
+    					<![CDATA[
+    					WHERE ROWNUM <= #{page} * 5
+    					]]>
+			)
+			WHERE rnum > (#{page} - 1) * 5
 	</select>
 	
 	<!-- 페이징용 카운트 -->
@@ -166,9 +192,8 @@
 		</if>-->
 		
 		SELECT COUNT(*)
-	    FROM homeworks h
-	    JOIN curriculum c ON h.curriculum_id = c.curriculum_id
-	    JOIN subjects s ON h.subject_id = s.subject_id
+	    FROM homeworks h JOIN curriculum c ON h.curriculum_id = c.curriculum_id
+	    				 JOIN subjects s ON h.subject_id = s.subject_id
 	    WHERE LOWER(h.homework_title) LIKE '%' || #{searchQuery} || '%'
 	    <if test="filter != 0">
 	        AND c.class_id = #{filter}
