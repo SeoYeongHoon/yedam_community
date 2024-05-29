@@ -85,7 +85,7 @@
 				<tbody id="tbody">
 					<th:block th:each="list, stat : ${testList}">
 						<tr>
-							<td class="tlist_2">[[${list.rn}]]<input class="isReexam" type="hidden" value="${list.isReexam}"></td>
+							<td class="tlist_2">[[${list.rn}]]</td>
 							<td class="tlist_2">[[${list.testName}]]</td>
 							<td class="tlist_2">[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
 							<td class="tlist_2" th:if="${isResult[stat.index] == 0 && dateComp[stat.index] == 0}">
@@ -95,20 +95,17 @@
 							</td>
 							<td class="tlist_2" th:if="${isResult[stat.index] == 0 && dateComp[stat.index] == 1}">
 								<button th:id="${list.testId}" data-category="proceed"
-									th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|"
+									th:onclick="|location.href='@{/testResult2(testId=${list.testId})}'|"
 									class="filterItem tlist_3 main-btn warning-btn square-btn btn-hover">미응시</button>
 							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isReexam[stat.index] == 1}">
+							<td class="tlist_2" th:if="${isResult[stat.index] == 1}">
 								<button th:id="${list.testId}" data-category="success"
-									th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|"
+									th:onclick="|location.href='@{/testResult2(testId=${list.testId})}'|"
 									class="filterItem tlist_3 main-btn success-btn square-btn btn-hover">응시완료</button>
 							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isReexam[stat.index] == 0}">
-								<button th:id="${list.testId}" data-category="re"
-									th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|"
-									class="filterItem tlist_3 main-btn danger-btn square-btn btn-hover">재시험</button>
-							</td>
-							<td th:if="${isResult[stat.index] == 0}">
+							<td class="tlist_2" th:if="${isResult[stat.index] == 0}">
+								<button type="button"
+									class="tlist_3 main-btn warning-btn square-btn btn-hover">응시전</button>
 							</td>
 							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isFeedback[stat.index].feedback != '0'}">
 								<!-- 피드백내용 모달형식 -->
@@ -141,11 +138,11 @@
 									</div>
 								</div>
 								<button type="button"
-										class="feedbackOn main-btn success-btn square-btn btn-hover">피드백완료</button>
+										class="tlist_3 feedbackOn main-btn success-btn square-btn btn-hover">피드백완료</button>
 							</td>
 							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isFeedback[stat.index].feedback == '0'}">
 								<button type="button"
-									class="main-btn dark-btn square-btn btn-hover">피드백대기</button>
+									class="tlist_3 main-btn dark-btn square-btn btn-hover">피드백대기</button>
 							</td>
 						</tr>
 					</th:block>
@@ -156,23 +153,23 @@
 			<div style="text-align: center;">
 				<a class="tlist_4" th:if="${page == 1}" th:text="'<'" href="#"></a>
 				<a class="tlist_4" th:unless="${page == 1}" th:text="'<'" th:href="@{/testList2(page=${page-1})}"></a>
-				<th:block th:if="${size % 6 == 0}">
-					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 6 - 1))}">
+				<th:block th:if="${size % 5 == 0}">
+					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 5 - 1))}">
 						<a class="tlist_4" th:text="${stat.count}" th:href="@{/testList2(page=${stat.count})}"></a>
 					</th:block>
 				</th:block>
-				<th:block th:unless="${size % 6 == 0}">
-					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 6))}">
+				<th:block th:unless="${size % 5 == 0}">
+					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 5))}">
 						<a class="tlist_4" th:text="${stat.count}" th:href="@{/testList2(page=${stat.count})}"></a>
 					</th:block>
 				</th:block>
-				<th:block th:if="${size % 6 == 0}">
-					<a class="tlist_4" th:if="${page == (size / 6)}" th:text="'>'" href="#"></a>
-					<a class="tlist_4" th:unless="${page == (size / 6)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
+				<th:block th:if="${size % 5 == 0}">
+					<a class="tlist_4" th:if="${page == (size / 5)}" th:text="'>'" href="#"></a>
+					<a class="tlist_4" th:unless="${page == (size / 5)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
 				</th:block>
-				<th:block th:unless="${size % 6 == 0}">
-					<a class="tlist_4" th:if="${page == (size / 6 + 1)}" th:text="'>'" href="#"></a>
-					<a class="tlist_4" th:unless="${page == (size / 6 + 1)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
+				<th:block th:unless="${size % 5 == 0}">
+					<a class="tlist_4" th:if="${page == (size / 5 + 1)}" th:text="'>'" href="#"></a>
+					<a class="tlist_4" th:unless="${page == (size / 5 + 1)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
 				</th:block>
 			</div>
 			</th:block>

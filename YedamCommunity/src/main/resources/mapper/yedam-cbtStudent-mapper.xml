@@ -37,23 +37,23 @@
 	</select>
 	<!-- 시험목록 페이징 -->
 	<select id="selectTestListAll" resultType="TestVO">
-		SELECT  a.*
-  		FROM    (SELECT  a.test_id
-       					 ,a.test_date
-       					 ,a.test_name
-       					 ,d.name
-                		 ,ROWNUM AS rn
-			 	 FROM    tests a 
-		        		 JOIN test_targets b
-		        		 ON(a.test_id = b.test_id)
-     		    		 JOIN users d
-                		 ON(b.user_id = d.user_id)
-				 WHERE   b.user_id = #{userId}
-				 ORDER BY a.test_date DESC
-				 		  ,a.test_id ASC) a
-    	WHERE   a.rn > (#{page} - 1) * 6 
+		SELECT  b.*
+  		FROM    (SELECT  a.* 
+  						 ,ROWNUM AS rn
+			  	 FROM    (SELECT  a.test_id
+                				  ,a.test_date
+                				  ,a.test_name
+                				  ,c.name
+        				  FROM    tests a 
+                				  JOIN test_targets b
+                				  ON(a.test_id = b.test_id)
+                				  JOIN users c
+                				  ON(b.user_id = c.user_id)
+        				  WHERE   b.user_id = #{userId}
+        				  ORDER BY a.test_date DESC , a.test_id ASC) a ) b
+    	WHERE   b.rn > (#{page} - 1) * 5 
     	<![CDATA[
-    	AND     a.rn <= #{page} * 6 ]]>
+    	AND     b.rn <= #{page} * 5 ]]>
 	</select>
 	<!-- 시험개수 -->
 	<select id="selectTestListSize" resultType="int">
@@ -65,14 +65,11 @@
                 ON(b.user_id = d.user_id)
 		WHERE   b.user_id = #{userId}
 	</select>
-	<!-- 시험과목 -->
-	<select id="selectUserSubject" resultType="TestVO">
-		SELECT  b.subject_name
-        FROM    users a
-        		JOIN subjects b
-        		ON(a.curriculum_id = b.curriculum_id)
-        WHERE   a.user_id = #{userId}
-	</select>
+	
+	
+	
+	
+	
 	<!-- 시험상세 정보 -->
 	<select id="selectTestDetail" resultType="TestVO">
 		WITH b as (SELECT test_id
@@ -110,6 +107,11 @@
                  WHERE   test_id = #{testId}
                  ORDER BY DBMS_RANDOM.VALUE) aa
 	</select>
+	
+	
+	
+	
+	
 	<!-- 시험시작 기본정보 -->
 	<select id="selectTestStart" resultType="TestVO">
 		SELECT  DISTINCT a.test_id
@@ -127,30 +129,8 @@
 		WHERE   a.test_id = #{testId}
 		AND     d.user_id = #{userId}
 	</select>
-	<!-- 시험시작 문제정보 -->
-	<select id="selectTestQuiz1" resultType="QuizboxVO">
-		SELECT  quiz_content
-                ,quiz_id
-                ,quiz_score
-                ,subject_id
-        FROM    quizbox
-        WHERE   test_id = #{testId}
-        AND     subject_id = #{subjectId}
-        AND     quiz_id = #{quizId}
-	</select>
-	<!-- 시험시작 보기정보 -->
-	<select id="selectTestQuiz2" resultType="AnswerVO">
-		SELECT  a.example_num
-		        ,a.text_content
-        FROM    answers a JOIN quizbox b
-                ON(a.quiz_id = b.quiz_id)
-        WHERE   a.subject_id = #{subjectId} 
-        AND     b.test_id = #{testId} 
-        AND     b.quiz_id = #{quizId}
-        ORDER BY a.example_num
-	</select>
 	<!-- 시험시작 퀴즈 -->
-	<select id="selectTestQuiz3" resultType="QuizboxVO">
+	<select id="selectTestQuiz" resultType="QuizboxVO">
 		WITH a AS(
         SELECT  b.quiz_id
                 ,b.quiz_content
@@ -180,21 +160,11 @@
         		 ,quiz_score
         		 ,subject_id
 	</select>
-	<!-- 시험문제 -->
-	<select id="selectTestQuiz" resultType="QuizboxVO">
-		SELECT  b.quiz_id
-       		    ,b.quiz_content
-       		    ,b.quiz_score
-       		    ,b.subject_id
-       		    ,a.example_num
-       		    ,a.text_content
-		FROM    answers a JOIN quizbox b
-		        ON(a.quiz_id = b.quiz_id)
-		WHERE   a.subject_id = #{subjectId}
-		AND     b.test_id = #{testId}
-		AND     b.quiz_id = #{quizId}
-		ORDER BY a.example_num
-	</select>
+	
+	
+	
+	
+	
 	<!-- 시험 결과 정보 등록 - exam_results 테이블 -->
 	<update id="insertTestResult" parameterType="ExamResultVO">
 	<selectKey keyProperty="resultId" resultType="int" order="BEFORE">
@@ -228,14 +198,6 @@
         			ON(a.test_target_id = b.test_target_id)
         	WHERE   b.test_id = #{testId}
         	AND     b.user_id = #{userId};
-        	<!-- 시험결과식별번호 구하기 -->
-			SELECT  a.result_id
-			INTO    v_rid
-        	FROM    exam_results a 
-        			JOIN test_targets b 
-        			ON(a.test_target_id = b.test_target_id)
-        	WHERE   b.test_id = #{testId}
-        	AND     b.user_id = #{userId};
         	<!-- 시험결과 존재여부 구하기 -->
         	IF v_rid_cnt = 0 THEN <!-- 처음 응시하는 경우 -->
         		<!-- 테이블에 시험결과 정보 등록하기 -->
@@ -249,6 +211,14 @@
 			           ,v_target);
 				COMMIT;
 			ELSE <!-- 재시험인 경우 -->
+				<!-- 시험결과식별번호 구하기 -->
+				SELECT  a.result_id
+				INTO    v_rid
+	        	FROM    exam_results a 
+	        			JOIN test_targets b 
+	        			ON(a.test_target_id = b.test_target_id)
+	        	WHERE   b.test_id = #{testId}
+	        	AND     b.user_id = #{userId};
 				<!-- 이전 총점 바꾸기 -->
 				UPDATE  exam_results
 				SET     result_score = 0
@@ -328,8 +298,6 @@
 					ON(a.test_target_id = b.test_target_id)
 			WHERE   b.test_id = #{testId}
 			AND		b.user_id = #{userId};
-			<!-- 전 총점 초기화 -->
-			v_rscore1 := 0;
 			<!-- 현 총점 가져오기 -->
 			SELECT  SUM(CASE WHEN is_correct = 1 THEN b.quiz_score
 			                                     ELSE 0 
@@ -337,8 +305,9 @@
 			INTO    v_rscore2
 			FROM    test_results a 
      				JOIN quizbox b 
-     				ON(a.quiz_id = b.quizbox_id)
-			WHERE   a.result_id = v_rid;
+     				ON(a.quiz_id = b.quiz_id)
+			WHERE   a.result_id = v_rid
+			AND		b.test_id = #{testId};
 			<!-- 재시험유무 확인 -->
 			IF v_rscore2 >= v_pscore THEN
 				v_isreexam := 1;
@@ -353,6 +322,11 @@
 			COMMIT;
 		END;
 	</update>
+	
+	
+	
+	
+	
 	<!-- 시험결과 기본정보 -->
 	<select id="selectTestResult" resultType="ExamResultVO">
 		SELECT  c.name

@@ -22,10 +22,6 @@ public interface CbtStudentService {
 	//ㅡㅡㅡㅡ
 	public List<TestVO> testListAll(TestVO testVO);
 	//ㅡㅡㅡㅡ
-	//시험과목
-	//ㅡㅡㅡㅡ
-	public List<TestVO> userSubject(int userId);
-	//ㅡㅡㅡㅡ
 	//시험개수
 	//ㅡㅡㅡㅡ
 	public int testListSize(int userId);
@@ -48,18 +44,9 @@ public interface CbtStudentService {
 	//ㅡㅡㅡㅡ
 	public TestVO testStart(TestVO testVO);
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	//시험문제 (AJAX)
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	public QuizboxVO testQuiz(QuizboxVO quizboxVO);
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험시작 문제정보
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	public QuizboxVO testQuiz1(QuizboxVO quizboxVO);
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	//시험시작 보기정보
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	public List<AnswerVO> testQuiz2(AnswerVO answerVO);
-	public QuizboxVO testQuiz3(QuizboxVO quizboxVO);
+	public QuizboxVO testQuiz(QuizboxVO quizboxVO);
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험결과 (AJAX)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
