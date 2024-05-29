@@ -39,7 +39,6 @@ import com.yedam.app.yedam_subjects.service.SubjectService;
  * @author 전영재 개발 일자 202405-23
  * 
  */
-// /teacher/~~
 @Controller
 @RequestMapping("/admin")
 public class HomeWorkController {
@@ -102,36 +101,6 @@ public class HomeWorkController {
 	}
 	
 	// ----------------
-	// 과제 목록(학생)
-	// ----------------
-	@GetMapping("/homework_S")
-	//@RequestMapping("/all")
-	public String homeworksList(Model model) {
-		int userId = 60;
-		List<CurriculumVO> subjects = curriculumService.subjectList(userId);
-		model.addAttribute("subject", subjects);
-		return "homework/homeworkList_s"; // 출력할 페이지
-	}
-
-	// 과제 목록 출력
-	@GetMapping("/homeworkList_S")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public List<HomeWorkVO> homeworkListS(@RequestParam("userid") int userid) {
-		List<HomeWorkVO> userhomework = homeworkService.userHomeworkList(userid);
-		return userhomework;
-	}
-
-	// 과목 카테고리
-	@GetMapping("/subjectCategory")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public List<HomeWorkVO> subjects(@RequestParam("vals") int classId, @RequestParam("userid") int userId) {
-		List<HomeWorkVO> list = homeworkService.subjectCategory(classId, userId);
-		return list;
-	}
-
-	// ----------------
 	// 과제 등록 - 페이지
 	// ----------------
 	@GetMapping("/homeworkInsert")
@@ -173,149 +142,16 @@ public class HomeWorkController {
 	// ----------------
 	@PutMapping("/updateHomework")
 	@ResponseBody
-	//@RequestMapping("/admin")
 	public Map<String, Object> updateHomework(HomeWorkVO homeworkVO) {
 		
 		return homeworkService.homeworkUpdate(homeworkVO);
 	}
 	
-	
-	
-	// ----------------
-	// 과제상세페이지
-	// ----------------
-	@GetMapping("/homeworkInfo")
-	//@RequestMapping("/all")
-	public String homeworkInfo(HomeWorkVO homeworkVO, Model model) {
-		// 과제 상세 조회
-		HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
-		System.err.println(findVO);
-		model.addAttribute("homeworkList", findVO);
-		ReplyVO reply = new ReplyVO();
-		reply.setReplyId(findVO.getReplyId());
-
-		return "homework/homeworkInfo";
-	}
-	
-	// 과제 파일 조회
-	@GetMapping("/homeworkFileList")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public List<HomeWorkFileVO> homeworkInfoFile(HomeWorkVO homeworkVO) {
-		return homeworkfileService.homeworkfileList(homeworkVO);
-	}
-	
-	
-
-	// ----------------
-	// 댓글 조회
-	// ----------------
-	@GetMapping("/replyList")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public List<ReplyVO> replyList(@RequestParam("targetId") int homeworkTargetId) {
-		List<ReplyVO> replies = homeworkReplyService.replyList(homeworkTargetId);
-
-		return replies;
-	}
-
-	// ----------------
-	// 댓글 파일 다운로드
-	// ----------------
-	@GetMapping("/replyfile")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public List<ReplyFileVO> replyfile(@RequestParam("replyId") int replyId) {
-		List<ReplyFileVO> replyfile = homeworkfileService.replyfileList(replyId);
-		return replyfile;
-	}
-
-	// ----------------
-	// 댓글(파일) 등록 - 처리
-	// ----------------
-	@PostMapping("/insertReply")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public ReplyVO insertReply(@RequestPart MultipartFile[] uploadFiles, ReplyVO replyVO, Model model) {
-		replyVO.setReplyWriter("dudwo");
-		// 댓글등록
-		homeworkReplyService.replyInsert(replyVO);
-		int replyId = replyVO.getReplyId();
-		homeworkfileService.replyUploadFile(uploadFiles, replyId);
-		return replyVO;
-	}
-
-	// ----------------
-	// 대댓글 등록 - 처리
-	// ----------------
-	@PostMapping("/insertComment")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public CommentVO insertComment(@RequestParam String content, @RequestParam int replyId) {
-		CommentVO comment = new CommentVO();
-		comment.setReplyId(replyId);
-		comment.setCommentContent(content);
-		comment.setCommentWriter("dudwo");
-		// 대댓글 등록
-		homeworkReplyService.commentInsert(comment);
-		return comment;
-	}
-
-	// ----------------
-	// 대댓글 삭제 - 처리
-	// ----------------
-	@DeleteMapping("/deleteComment")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public int deleteComment(@RequestParam int commentId) {
-		return homeworkReplyService.commentDelete(commentId);
-	}
-	
-
-	// ----------------
-	// 댓글 삭제 - 처리
-	// ----------------
-	@DeleteMapping("/deleteReply")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public int deleteReply(@RequestParam int replyId) {
-		return homeworkReplyService.replyDelete(replyId);
-	}
-	
-	
-	// ----------------
-	// 댓글 업데이트 - 처리
-	// ----------------
-	@PutMapping("/updateReply")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public Map<String, Object> updateReply (ReplyVO replyVO ){
-		return homeworkReplyService.replyUpdate(replyVO);
-	}
-	
-	// ----------------
-	// 대댓글 업데이트 - 처리
-	// ----------------
-	@PutMapping("/updateComment")
-	@ResponseBody
-	//@RequestMapping("/all")
-	public Map<String, Object> updateComment (@RequestParam("content")  String content,
-											@RequestParam("commentId") int commentId) {
-		
-		CommentVO commentVO = new CommentVO();
-		commentVO.setCommentContent(content);
-		commentVO.setCommentId(commentId);
-		return homeworkReplyService.commentUpdate(commentVO);
-	}
-	
-	
-
 	// ----------------
 	// 과제 필터링 및 페이징
 	// ----------------
 	@GetMapping("/filterHomeworks")
 	@ResponseBody
-	//@RequestMapping("/admin")
 	public Map<String, Object> filterHomeworks(@RequestParam("filter") int filter,
 											   @RequestParam(defaultValue = "1") int page,
 											   @RequestParam(defaultValue = "") String searchQuery) {
@@ -334,29 +170,6 @@ public class HomeWorkController {
 	}
 	
 
-	// ----------------
-	// 과제 파일 삭제
-	// ----------------
-	@PostMapping("/deleteFile")
-	@ResponseBody
-	//@RequestMapping("/admin")
-	public  Map<String, Object> fileDelete (HomeWorkFileVO homeworkfileVO) {
-		homeworkfileService.deleteFile(homeworkfileVO);
-		return null;
-	}
 	
-	// ----------------
-	// 댓글과제 파일 삭제
-	// ----------------
-	@PostMapping("/deleteReplyFile")
-	@ResponseBody
-	//@RequestMapping("/admin")
-	public  Map<String, Object> replyFileDelete (ReplyFileVO replyfileVO) {
-		System.err.println("댓글파일 아이디"+ replyfileVO.getReplyId());
-		Map<String, Object> map = new HashMap<>();
-		map.put("replyId", replyfileVO.getReplyId());
-		homeworkfileService.deleteReplyFile(replyfileVO);
-		return map;
-	}
 	
 }
