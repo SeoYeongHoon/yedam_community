@@ -42,7 +42,7 @@ public class CbtStudentController {
 			               Authentication authentication,
 			               Model model) {
 		//HttpSession session = req.getSession();
-		// int logid = 14;
+		//int logid = 14;
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
 		testVO.setUserId(userVO.getuserId());
 		testVO.setPage(page);
@@ -71,7 +71,6 @@ public class CbtStudentController {
 				array3[i] = 0;
 			}
 		}
-		
 		model.addAttribute("testList", list1); //시험목록
 		model.addAttribute("isResult", array1); //시험결과유무
 		model.addAttribute("isFeedback", list2); //피드백유무
@@ -80,7 +79,7 @@ public class CbtStudentController {
 		//model.addAttribute("userSubject", list3); //시험과목
 		model.addAttribute("page", page); //페이지
 		model.addAttribute("size", size); //시험개수
-		// model.addAttribute("logId", logid); //로그인정보
+		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testList2";
 	}
 	
@@ -92,10 +91,12 @@ public class CbtStudentController {
 	@GetMapping("testDetail")
 	public String testDetail(TestVO testVO, 
 			                 QuizboxVO quizboxVO, 
-			                 Model model) {
+			                 Model model,
+			                 Authentication authentication) {
 		TestVO info = cbtStudentService.testDetail(testVO); //시험상세
 		List<QuizboxVO> list = cbtStudentService.testQuizRand(quizboxVO); //랜덤문제
-		int logid = 14;
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//int logid = 14;
 		int quizCnt = list.size(); //문제개수
 		int[] randQuizId = new int[quizCnt]; //랜덤 문제 번호 배열
 		int[] randRn = new int[quizCnt]; //랜덤 문제 일련번호 배열
@@ -111,10 +112,10 @@ public class CbtStudentController {
 		int isReexam = 0;
 		int dateComp = 0;
 		Date date = new Date();
-		testVO.setUserId(logid);
+		testVO.setUserId(userVO.getuserId());
 		testVO.setTestId(info.getTestId());
 		isResult = (cbtStudentService.isTestResult(testVO));
-		testVO.setUserId(logid);
+		testVO.setUserId(userVO.getuserId());
 		testVO.setTestId(info.getTestId());
 		isReexam = cbtStudentService.isTestReexam(testVO);
 		if(date.after(info.getTestDate())) {
@@ -146,11 +147,11 @@ public class CbtStudentController {
 			                TestVO testVO, 
 			                QuizboxVO quizboxVO, 
 			                AnswerVO answerVO, 
-				            Authentication authentication,
-			                Model model) {
-//		String logid ="14";
-		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		testVO.setUserId(Integer.parseInt(logid));
+			                Model model,
+			                Authentication authentication) {
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//String logid ="14";
+		testVO.setUserId(userVO.getuserId());
 		TestVO info = cbtStudentService.testStart(testVO); //응시정보
 		quizboxVO.setQuizId(randQuizId[0]);
 		quizboxVO.setTestId(info.getTestId());
@@ -198,17 +199,19 @@ public class CbtStudentController {
 							@RequestParam("randQuizScore") int[] randQuizScore,
 							int testId, 
 							TestResultVO testResultVO,
-							ExamResultVO examResultVO) {
+							ExamResultVO examResultVO,
+							Authentication authentication) {
 		boolean result = false;
-		String logid ="14";
-		examResultVO.setUserId(Integer.parseInt(logid));
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//String logid ="14";
+		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		cbtStudentService.testSubmit2(examResultVO); //[1]시험결과 정보등록
 		for(int i = 0; i < randRn.length; i++) { //전체 문제 개수만큼 반복
 			testResultVO.setTestAnswer(submitAnswer[i]);
 			testResultVO.setQuizId(randQuizId[i]);
 			testResultVO.setTestId(testId);
-			testResultVO.setUserId(Integer.parseInt(logid));
+			testResultVO.setUserId(userVO.getuserId());
 			testResultVO.setResultId(examResultVO.getResultId());
 			cbtStudentService.testSubmit(testResultVO); //[2]문제 등록
 		}
@@ -227,10 +230,10 @@ public class CbtStudentController {
 			                 int sec,
 			                 ExamResultVO examResultVO,
 			                 QuizboxVO quizboxVO,
-				             Authentication authentication,
-			                 Model model) {
-		// String logid ="14";
-		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+			                 Model model,
+			                 Authentication authentication) {
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//String logid ="14";
 		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
@@ -253,12 +256,11 @@ public class CbtStudentController {
 	public String testResult2(int testId,
 							  ExamResultVO examResultVO,
 				              QuizboxVO quizboxVO,
-				              Authentication authentication,
-							  Model model) {
-//		String logid ="14";
+							  Model model,
+							  Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//String logid ="14";
 		examResultVO.setUserId(userVO.getuserId());
-//		examResultVO.setUserId(Integer.parseInt(logid));
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
 		List<QuizboxVO> list = new ArrayList<>();
