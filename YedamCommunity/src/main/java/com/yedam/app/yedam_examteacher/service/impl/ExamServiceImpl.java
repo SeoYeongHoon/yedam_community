@@ -89,6 +89,11 @@ public class ExamServiceImpl implements ExamService {
 	public List<TeacherVO> userList(TeacherVO teacherVO) {
 		return examMapper.selectUserAll(teacherVO);
 	}
+	// 재시험 대상자 출력
+	@Override
+	public List<TeacherVO> reTestUserList(TeacherVO teacherVO) {
+		return examMapper.reTestUser(teacherVO);
+	}
 	
 	//--------------------------------------------
 	// 문제 조회/등록 페이지 기능 모음

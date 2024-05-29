@@ -82,12 +82,12 @@ public class ExamController {
 		model.addAttribute("userList", list);
 		return "cbt_teacher/insertTest";
 	}
-	
+	// 재시험 등록 - 페이지
 	@GetMapping("retestinsert")
 	public String reTestInsertForm(TeacherVO teacherVO, Model model) {
-		List<TeacherVO> list = examService.userList(teacherVO);
+		List<TeacherVO> list = examService.reTestUserList(teacherVO);
 		model.addAttribute("teacherVO", new TeacherVO());
-		model.addAttribute("userList", list);
+		model.addAttribute("reTestUserList", list);
 		return "cbt_teacher/insertReTest";
 	}
 	//--------------------------------------------

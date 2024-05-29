@@ -336,7 +336,18 @@
 		FROM users
 		WHERE curriculum_id = #{curriculumId}
 	</select>
-	
+	<!-- 재시험 대상자 출력 -->
+	<select id="reTestUser" resultType="TeacherVO">
+		SELECT u.user_id
+    		 , u.name
+		     , u.curriculum_id
+		FROM users u JOIN test_targets t 
+		               ON u.user_id = t.user_id
+		             JOIN exam_results e
+		               ON e.test_target_id = t.test_target_id
+		WHERE t.test_id = #{testId}
+		AND e.is_reexam = 0;
+	</select>
 	<!-- 강의실별 과목평균점수 조회 -->
 	<select id="subjectAvg" resultType="TeacherVO" parameterType="int">
 		SELECT s.subject_name
