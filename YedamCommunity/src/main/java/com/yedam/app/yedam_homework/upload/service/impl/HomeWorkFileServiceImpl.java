@@ -39,7 +39,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 	// 과제등록 파일 업로드
 	@Override
 	public List<String> homeworkUploadFile(@RequestPart MultipartFile[] uploadFiles,
-														HomeWorkTargetVO homeworktargetVO) {
+														int homeworkId) {
 
 		List<String> FileList = new ArrayList<>();
 
@@ -94,7 +94,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			// 파일 다운로드 경로
 			homeworkfileVO.setDownloadLocation(downloadFileName);
 			// 파일 과제번호
-			homeworkfileVO.setHomeworkId(homeworktargetVO.getHomeworkId());
+			homeworkfileVO.setHomeworkId(homeworkId);
 
 			if (!fileName.equals("") && !fileName.equals(null)) {
 				homeworkfileMapper.insertHomeWorkFile(homeworkfileVO);
@@ -213,6 +213,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 	
 	// 과제 파일 삭제
 	public Map<String, Object> deleteFile(HomeWorkFileVO homeworkfileVO) {
+		System.err.println("삭제 서비스 = " + homeworkfileVO);
 		Map<String, Object> map = new HashMap<>();
 		int result = homeworkfileMapper.fileDelete(homeworkfileVO);
 

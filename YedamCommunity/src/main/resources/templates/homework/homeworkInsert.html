@@ -273,8 +273,8 @@
 			
 			// 파일 업로드
 			let formData = new FormData(document.getElementById('insertForm'));
-	
-			if (title.value == '') {
+			
+			 if (title.value == '') {
 				$('#modalTitle').modal('show');
 				title.focus();
 				return;
@@ -282,7 +282,7 @@
 				$('#modalDate').modal('show');
 				date.focus();
 				return;
-			}
+			} 
 			
 			//ajax
 			$.ajax({

@@ -67,7 +67,6 @@ public class HomeWorkController {
 	// 과제 목록(교수)
 	// ----------------
 	@GetMapping("/homework_T")
-	//@RequestMapping("/admin")
 	public String homework(Model model) {
 		List<CurriculumVO> classList = curriculumService.CurriculumList();
 		model.addAttribute("classId", classList);
@@ -77,7 +76,6 @@ public class HomeWorkController {
 	// 과제 목록 출력
 	@GetMapping("/homeworkList_T")
 	@ResponseBody
-	//@RequestMapping("/admin")
 	public List<HomeWorkVO> homeworkList(@RequestParam("homeworkAll") String homeworkAll) {
 		List<HomeWorkVO> homeworkList = homeworkService.homeworkList();
 		return homeworkList;
@@ -86,7 +84,6 @@ public class HomeWorkController {
 	// 강의실 카테고리
 	@GetMapping("/classCategory")
 	@ResponseBody
-	//@RequestMapping("/admin")
 	public List<HomeWorkVO> classs(@RequestParam("vals") int classId) {
 		List<HomeWorkVO> list = homeworkService.classCategory(classId);
 		return list;
@@ -95,7 +92,6 @@ public class HomeWorkController {
 	// 과제 삭제
 	@DeleteMapping("/deleteHomeworks")
 	@ResponseBody
-	//@RequestMapping("/admin")
 	public int deleteHomeworks(@RequestParam int homeworkId) {
 		return homeworkService.homeworkDelete(homeworkId);
 	}
@@ -104,7 +100,6 @@ public class HomeWorkController {
 	// 과제 등록 - 페이지
 	// ----------------
 	@GetMapping("/homeworkInsert")
-	//@RequestMapping("/admin")
 	public String homeworkInsertForm(HomeWorkVO homeworkVO, Model model) {
 		// 과목 조회
 		List<HomeWorkVO> subjectNameList = homeworkService.subjectNameList(homeworkVO);
@@ -118,25 +113,28 @@ public class HomeWorkController {
 	// ----------------
 	@PostMapping("/homeworkInsert")
 	@ResponseBody
-	//@RequestMapping("/admin")
-	public String homeworkInsertProcess(@RequestPart MultipartFile[] uploadFiles, HomeWorkVO homeworkVO,
-			HomeWorkTargetVO homeworktargetVO) {
+	public String homeworkInsertProcess(@RequestPart MultipartFile[] uploadFiles, 
+													 HomeWorkVO homeworkVO) {
+		System.err.println("홈워크 == "+ homeworkVO);
+		System.err.println("파일 == "+ uploadFiles);
 
 		// 과제등록
 		homeworkService.homeworkInsert(homeworkVO);
 
 		// 타겟 등록
 		HomeWorkTargetVO targetVo = homeworkService.homeworktargetList(homeworkVO);
-		homeworktargetVO.setHomeworkId(targetVo.getHomeworkId());
-		homeworktargetVO.setCurriculumId(targetVo.getCurriculumId());
-		homeworkService.homeworkTargetInsert(homeworktargetVO);
+		//targetVo.setHomeworkId(targetVo.getHomeworkId());
+		//targetVo.setCurriculumId(targetVo.getCurriculumId());
+		homeworkService.homeworkTargetInsert(targetVo);
+		System.err.println(targetVo.getHomeworkId());
 
 		// 과제 파일 업로드
-		homeworkfileService.homeworkUploadFile(uploadFiles, targetVo);
+		homeworkfileService.homeworkUploadFile(uploadFiles, targetVo.getHomeworkId());
 
 		return null;
 	}
-
+	
+	
 	// ----------------
 	// 과제 수정페이지
 	// ----------------
@@ -146,6 +144,21 @@ public class HomeWorkController {
 		
 		return homeworkService.homeworkUpdate(homeworkVO);
 	}
+	
+	// 과제 파일 업로드
+	@PostMapping("/updateFile")
+	@ResponseBody
+	public String updateFile(@RequestPart MultipartFile[] uploadFiles,
+							@RequestParam("homeworkId") int homeworkId) {
+		
+		System.err.println("파일1 == "+ uploadFiles);
+		System.err.println("과제 아이디1 == "+ homeworkId);
+		
+		// 과제 파일 업로드
+		homeworkfileService.homeworkUploadFile(uploadFiles, homeworkId);
+		return null;
+	}
+	
 	
 	// ----------------
 	// 과제 필터링 및 페이징

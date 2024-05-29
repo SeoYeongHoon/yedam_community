@@ -59,7 +59,7 @@ public class HomeWorkStudentController {
 		// ----------------
 		@GetMapping("/homework_S")
 		public String homeworksList(Model model) {
-			int userId = 60;
+			int userId = 10;
 			List<CurriculumVO> subjects = curriculumService.subjectList(userId);
 			model.addAttribute("subject", subjects);
 			return "homework/homeworkList_s"; // 출력할 페이지
@@ -70,6 +70,7 @@ public class HomeWorkStudentController {
 		@ResponseBody
 		public List<HomeWorkVO> homeworkListS(@RequestParam("userid") int userid) {
 			List<HomeWorkVO> userhomework = homeworkService.userHomeworkList(userid);
+			System.err.println(userhomework);
 			return userhomework;
 		}
 
@@ -214,10 +215,25 @@ public class HomeWorkStudentController {
 		@PostMapping("/deleteReplyFile")
 		@ResponseBody
 		public  Map<String, Object> replyFileDelete (ReplyFileVO replyfileVO) {
-			System.err.println("댓글파일 아이디"+ replyfileVO.getReplyId());
 			Map<String, Object> map = new HashMap<>();
 			map.put("replyId", replyfileVO.getReplyId());
 			homeworkfileService.deleteReplyFile(replyfileVO);
 			return map;
 		}
+		
+		//--------------
+		// 댓글 파일 업로드
+		//--------------
+			@PostMapping("/updateReplyFile")
+			@ResponseBody
+			public String updateReplyFile(@RequestPart MultipartFile[] uploadFiles,
+										 @RequestParam("replyid") int replyId) {
+				
+				System.err.println("파일1 == "+ uploadFiles);
+				System.err.println("과제 아이디1 == "+ replyId);
+				
+				// 과제 파일 업로드
+				homeworkfileService.replyUploadFile(uploadFiles, replyId);
+				return null;
+			}
 }
