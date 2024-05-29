@@ -103,7 +103,7 @@ tr img {
 	<button type="button" id="subBtn" style="margin-bottom: 10px;"
 		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
-		<li><a href="selectClassExam" id="testInsert"
+		<li><a href="admin/selectClassExam" id="testInsert"
 			class="main-btn danger-btn-light btn-hover">다음</a></li>
 		<li><a href="quizinsert"
 			class="main-btn primary-btn-light btn-hover">새문제</a></li>
@@ -541,7 +541,6 @@ $('#testInsert').on('click', function(){
 	storageQId = [];
 	storageSubName = [];
 	let sum = 0;
-	window.localStorage.clear();
 	for(let i=0; i<$('.box').length; i++){
 		if($('#qContent'+i).is(":checked")){
 			storageContent.push($('#qContent'+i).val());
@@ -563,7 +562,7 @@ $('#testInsert').on('click', function(){
 	}
 	// 배점의 총합이 100이 됐는지 체크
 	if(sum == 100){
-		alert('배점의 합이 100점입니다.\n다음창에서 출제할 강의실을 선택해주세요.')
+		alert('배점의 합이 100점입니다.\n다음으로 넘어갑니다.')
 		
 	} else {
 		alert('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum)
@@ -624,7 +623,19 @@ window.onload = function() {
 	quizContentList(page, subjectName);
 }
 
+//--------------------------------------------
+// 재시험 출력 페이지에서 넘어오면 다음 버튼 눌렀을때 reCurriculumId값을 가져오게 된다.
+//--------------------------------------------
+let reCurriculumId = window.localStorage.getItem('reCurriculumId')
 
+if(reCurriculumId == null || reCurriculumId == ""){
+	console.log("reCurriculumId 값이 없다 : " + reCurriculumId)
+	$('#testInsert').attr('href', 'admin/selectClassExam')
+} else {
+	console.log("reCurriculumId 값이 있다 : " + reCurriculumId)
+	$('#testInsert').attr('href', 'retestinsert')
+};
+	
 
 </script>
 

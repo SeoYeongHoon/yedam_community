@@ -7,10 +7,11 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <!-- ========= card-style-3 start ========= -->
-<div class="row testInfo" th:value="${testInfo.testId}">
+<div class="row testInfo">
 	<div class="col-12">
 		<div class="address-item">
-			<input type="hidden" th:value="${testInfo.testId}" />
+			<input type="hidden" id="tId" th:value="${testInfo.testId}"/>
+			<input type="hidden" id="currId" th:value="${testInfo.curriculumId}"/>
 			<h1 th:text="${testInfo.classId}+강의실">n강의실</h1>
 			<br>
 			<h4 th:text="${testInfo.curriculumName}">과정명</h4>
@@ -27,48 +28,48 @@
 	</div>
 	<!-- end col -->
 
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-			<div class="card-style-3 mb-30">
-				<div class="card-content">
-					<h4>시험 통과자</h4>
-					<br>
-					<div class="test row ">
-						<div class="col-8" id="passUser"></div>
-						<div class="col-4" id="passFeed"></div>
-					</div>
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+		<div class="card-style-3 mb-30">
+			<div class="card-content">
+				<h4>시험 통과자</h4>
+				<br>
+				<div class="test row ">
+					<div class="col-8" id="passUser"></div>
+					<div class="col-4" id="passFeed"></div>
 				</div>
 			</div>
 		</div>
-		<!-- end col -->
-		<div align="right" class="col-12">
-			<button type="button">재시험 출제</button>
-		</div>
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-			<div class="card-style-3 mb-30">
-				<div class="card-content">
-					<h4>재시험 명단</h4>
-					<br>
-					<div class="test row">
-						<div class="col-8" id="failUser"></div>
-						<div class="col-4" id="failFeed"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- end col -->
 	</div>
-	<!-- end row -->
-	<!-- ========= card-style-3 end ========= -->
-	<button id="Btn">테스트</button>
-	<script>
+	<!-- end col -->
+	
+	<div align="right" class="col-12">
+		<button type="button" id="reTest" class="tlist_1 status-btn close-btn" onclick="location.href='quizlist'">재시험 출제</button>
+	</div>
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+		<div class="card-style-3 mb-30">
+			<div class="card-content">
+				<h4>재시험 명단</h4>
+				<br>
+				<div class="test row">
+					<div class="col-8" id="failUser"></div>
+					<div class="col-4" id="failFeed"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end col -->
+</div>
+<!-- end row -->
+<!-- ========= card-style-3 end ========= -->
+<script>
 var testId = 0;
 var userId = 0;
-
+var reUserId = [];
 function userList(testId){
-	testId = $('input').val();
+	testId = $('#tId').val();
 	$.ajax({
 		url : "testresult",
-		type : "post", 
+		type : "get", 
 		data : {testId : testId},
 				
 		success : function(data){
@@ -86,23 +87,28 @@ function userList(testId){
 					
 				} else {
 					item.isReexam = '재시험 O';
-					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam));
+					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam),
+									      $('<input type="hidden">').attr({value : item.userId, id : "u"+idx}));
 					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
+					console.log("input태그 val값" + $('#u'+idx).val());
+					reUserId.push($('#u'+idx).val());
 				}
-				
-				
 			})
+			console.log("재시험자 : " + reUserId);
+			const arryReUserId = JSON.stringify(reUserId);
+			console.log("재시험자 : " + arryReUserId)
+			window.localStorage.setItem('reUserId', arryReUserId);
+			window.localStorage.setItem('reTestId', testId);
 		},
 		error : function(err){
 			console.log('에러입니다');
 		}	
 	}); // 학생정보 end of ajax
 }
-
 userList(testId);
 
-$('#Btn').on('click', function(){
-	
+$('#reTest').on('click', function(){
+	window.localStorage.setItem('reCurriculumId', $('#currId').val());
 })
 </script>
 </html>
