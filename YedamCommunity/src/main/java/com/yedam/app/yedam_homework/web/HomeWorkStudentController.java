@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_homework.service.CommentVO;
@@ -59,7 +60,7 @@ public class HomeWorkStudentController {
 		// ----------------
 		@GetMapping("/homework_S")
 		public String homeworksList(Model model) {
-			int userId = 10;
+			int userId = 24;
 			List<CurriculumVO> subjects = curriculumService.subjectList(userId);
 			model.addAttribute("subject", subjects);
 			return "homework/homeworkList_s"; // 출력할 페이지
@@ -235,5 +236,27 @@ public class HomeWorkStudentController {
 				// 과제 파일 업로드
 				homeworkfileService.replyUploadFile(uploadReplyFile, replyId);
 				return null;
+			}
+			
+			// ----------------
+			// 과제 필터링 및 페이징
+			// ----------------
+			@GetMapping("/filterHomeworkStudent")
+			@ResponseBody
+			public Map<String, Object> filterHomeworks(@RequestParam("filter") int filter,
+													   @RequestParam(defaultValue = "1") int page,
+													   @RequestParam(defaultValue = "") String searchQuery,
+													   @RequestParam("userId") int userId) {
+				List<HomeWorkVO> homeworks = homeworkService.getHomeworksByFilterStudent(filter, page, searchQuery,userId);
+				int totalCnt = homeworkService.getTotalCnt(filter, searchQuery);
+				
+				PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
+				
+				Map<String, Object> response = new HashMap<>();
+				response.put("homeworks", homeworks);
+				response.put("page", pageDTO);
+				
+				
+				return response;
 			}
 }
