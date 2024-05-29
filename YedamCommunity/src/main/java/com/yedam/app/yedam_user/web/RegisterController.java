@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -22,6 +23,7 @@ import com.yedam.app.yedam_user.upload.service.ProfileImageService;
 
 // 작성자: 서영훈, 작성일자: 05/22, 회원가입 컨트롤러
 @Controller
+@RequestMapping("/all")
 public class RegisterController {
 	
 	@Autowired

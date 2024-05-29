@@ -3,8 +3,13 @@ package com.yedam.app.yedam_user.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +30,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	JavaMailSender javaMailSender;
+	
+	@Value("${spring.mail.username}")
+	private String emailFrom;
 	
 	// 회원가입 프로세스
 	@Override
@@ -148,5 +159,27 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserVO getByUserId(String userId) {
 		return userMapper.getByUserId(userId);
+	}
+	
+	// 비밀번호 초기화용 메일 전송 
+	@Override
+	public void sendPasswordResetEmail(String id, String name, String email) {
+		Optional<UserVO> userOptional = userMapper.findPassword(id, name, email);
+		
+		if (userOptional.isPresent()) {
+			UserVO userVO = userOptional.get();
+			String resetToken = UUID.randomUUID().toString();
+			userMapper.updateResetToken(userVO.getUserId(), resetToken);
+			
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setTo(userVO.getEmail());
+			mailMessage.setSubject("패스워드 초기화 요청");
+			mailMessage.setText("패스워드 초기화를 위해, 링크를 클릭해주세요: \n" + "http://localhost:8080/resetPw?token=" + resetToken);
+			mailMessage.setFrom(emailFrom);
+			
+			javaMailSender.send(mailMessage);
+		} else {
+			throw new RuntimeException("회원님의 이메일: " + email + " 을 찾을 수 없습니다.");
+		}
 	}
 }
