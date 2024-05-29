@@ -5,6 +5,27 @@
 	layout:fragment="Admin">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	
+<style>
+	.tresult_1 {
+		display: inline-block;
+	}
+	.tresult_2 {
+		text-align: center;
+	}
+	.tresult_3 {
+		width: 150px;
+	}
+	.tresult_4 {
+		display: block;
+	}
+	.true {
+		color: blue;
+	}
+	.false {
+		color: red;
+	}
+</style>	
 <div class="row">
 	<div class="col-6">
 		<div class="address-item">
@@ -17,6 +38,7 @@
 			</p>
 		</div>
 		<div class="title mt-30 mb-30">
+			<input id="testIdInfo" type="hidden" th:value="${testInfo.testId}">
 			<h2 th:text="${testInfo.testName}+' '+${#dates.format(testInfo.testDate, 'yyyy.MM.dd')}">시험명 시작기간~종료기간</h2>
 		</div>
 		<div th:if="${userInfo.isReexam} == 0">
@@ -25,29 +47,60 @@
 		<div th:if="${userInfo.isReexam} == 1">
 			<h2 th:text="${userInfo.name}+' / '+${userInfo.resultScore}+'점 / 재시험 X'"></h2>
 		</div>
-		
-		<!-- 해당학생의 틀린 문제 리스트 -->
-		
 	</div>
 	<!-- end col -->
+</div>
+<!-- 피드백 작성폼 -->
+<div class="feedback_form">
 	<form th:action="@{/feedupdate}" method="post" th:object="${userInfo}">
 		<div class="col-12">
-			<h3>피드백 작성란</h3>
+			<h3 style="color: white; margin-bottom: 10px;">피드백 작성란</h3>
 			<input type="hidden" th:field="*{resultId}">
-			<textarea cols="55" rows="5" placeholder="피드백을 입력하세요" style="border:1px solid black;" th:field="*{feedback}"></textarea>
+			<textarea cols="100" rows="6" placeholder="피드백을 입력하세요" th:field="*{feedback}"></textarea>
 			<ul class="buttons-group">
 				<li>
-					<button type="button" class="main-btn primary-btn square-btn btn-hover" id="updateBtn">저장</button>
+					<button type="button" style="background-color: #e96b56; padding: 8px 25px;" class="main-btn primary-btn btn-hover" id="updateBtn">저장</button>
 				</li>
 				<li>
-					<button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/teachermain}'|">처음화면</button>
+					<button type="button" style="color: black; padding: 8px 16px;" id="backToTest" class="main-btn deactive-btn btn-hover">뒤로가기</button>
 				</li>
 			</ul>
 		</div>
 	</form>
 </div>
+<!-- 해당학생의 틀린 문제 리스트 -->
+<div style="display: flex; flex-wrap: wrap;">
+	<th:block th:each="quiz, idx : ${quizResultList}" th:if="${quiz.isCorrect == 0}">
+		<div class="feedback_std_test">
+			<h1 class="tresult_1">[[${idx.count}]].</h1>
+			<img src="images/icons/false.png" style="position: absolute; left: -10px; top: -30px; width: 100px; height: 100px;">
+			<h1 class="tresult_1">[[${quiz.quizContent}]]</h1>
+			<p class="tresult_1">([[${quiz.quizScore}]]점)</p>
+			<div>
+				<p>보기번호 정답/오답 표시</p>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 1 ? 'true' : (quiz.exampleNum != 1 && quiz.testAnswer == 1)? 'false':_}">[[${quiz.one}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 2 ? 'true' : (quiz.exampleNum != 2 && quiz.testAnswer == 2)? 'false':_}">[[${quiz.two}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 3 ? 'true' : (quiz.exampleNum != 3 && quiz.testAnswer == 3)? 'false':_}">[[${quiz.three}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 4 ? 'true' : (quiz.exampleNum != 4 && quiz.testAnswer == 4)? 'false':_}">[[${quiz.four}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 5 ? 'true' : (quiz.exampleNum != 5 && quiz.testAnswer == 5)? 'false':_}">[[${quiz.five}]]</span>
+			</div>
+			<hr>
+			<h3>풀이</h3>	
+			<p>정답: [[${quiz.exampleNum}]]</p>
+			<br>
+			<p>[[${quiz.quizSolution}]]</p>
+		</div>
+	</th:block>
+</div>
+
 <script>
 $('#updateBtn').on('click', updateAjaxJq);
+
+var testIdInfo = $('#testIdInfo').val();
+
+$('#backToTest').on('click', () => {
+	location.href = "/testinfo?testId=" + testIdInfo;
+})
 
 function updateAjaxJq(event){
 	// Validation check
@@ -65,9 +118,10 @@ function updateAjaxJq(event){
 	})
 	.done(result =>{
 		if(result != null){
-			alert('피드백이 등록(수정)되었습니다.')					
+			alert('피드백이 등록(수정)되었습니다.');
+			location.href="/testinfo?testId=" + testIdInfo;
 		}else{
-			alert('등록(수정)되지 않았습니다.\n확인해주세요.')
+			alert('등록(수정)되지 않았습니다.\n확인해주세요.');
 		}
 	})
 	.fail(err => console.log(err));

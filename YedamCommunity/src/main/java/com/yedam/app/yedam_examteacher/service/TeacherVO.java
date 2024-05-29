@@ -56,7 +56,6 @@ public class TeacherVO {
 	private Date curriculumEndDate;
 	private int isComplete;
 	
-	
 	private String name;	
 	private int subjectAvg;
 	private int resultId;
