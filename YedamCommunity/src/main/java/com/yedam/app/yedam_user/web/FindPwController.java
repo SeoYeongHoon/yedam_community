@@ -11,12 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
 
 @Controller
+@RequestMapping("/all")
 public class FindPwController {
 	@Autowired
 	UserService userService;
@@ -37,7 +39,7 @@ public class FindPwController {
 		
 		try {
 			userService.sendPasswordResetEmail(id, name, email);
-			String uri = "http://localhost:8080/mailSuccess";
+			String uri = "http://localhost:8080/all/mailSuccess";
 			res.sendRedirect(uri);
 			return ResponseEntity.ok().build();
 //			return ResponseEntity.ok("패스워드 초기화 메일을 보냈습니다");
