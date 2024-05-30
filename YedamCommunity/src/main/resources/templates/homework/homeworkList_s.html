@@ -98,7 +98,7 @@
 		</div>
 	</div>
 </div>
-
+<input id="userId" type="hidden" th:value="${userId}">
 <script>
 //--------------------------------------------
 // DOM 요소들이 전부 로드되고 나서 아래 이벤트들 실행
@@ -120,7 +120,8 @@ $(document).ready(function() {
 function filterHomeworks(page) {
     var filter = $('#subjectSelect').val();
     var searchQuery = $('#searchHomework').val();
-	let userId = 24;
+	//let userId = 24;
+	let userId = $('#userId').val();
     $.ajax({
         url: '/all/filterHomeworkStudent',
         type: 'GET',

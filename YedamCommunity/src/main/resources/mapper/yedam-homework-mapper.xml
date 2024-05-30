@@ -22,7 +22,7 @@
 	</select>
 	
 	<!-- 학생별 과제 조회 -->
-	<select id="selectUserHomework" resultType="HomeWorkVO">
+	<!-- <select id="selectUserHomework" resultType="HomeWorkVO">
 		SELECT  h.homework_title,
         		h.homework_date,
         		h.homework_id,
@@ -33,7 +33,7 @@
         		        	JOIN subjects s ON (s.curriculum_id = c.curriculum_id)
 		WHERE   h.subject_id = s.subject_id AND user_id = #{userid}
 		ORDER BY  h.homework_id DESC
-	</select>
+	</select> -->
 
 	<!-- 상세조회 -->
 	<select id="selectHomework" resultType="HomeWorkVO">
