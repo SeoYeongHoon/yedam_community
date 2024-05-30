@@ -156,14 +156,14 @@ public class CbtStudentController {
 		quizboxVO.setQuizId(randQuizId[0]);
 		quizboxVO.setTestId(info.getTestId());
 		quizboxVO.setSubjectId(info.getSubjectId());
-		QuizboxVO quiz1 = cbtStudentService.testQuiz3(quizboxVO); //시험문제
+		QuizboxVO quiz1 = cbtStudentService.testQuiz(quizboxVO); //시험문제
 		answerVO.setQuizId(randQuizId[0]);
 		answerVO.setTestId(info.getTestId());
 		answerVO.setSubjectId(info.getSubjectId());
-		List<AnswerVO> quiz2 = cbtStudentService.testQuiz2(answerVO); //문제보기
+		//List<AnswerVO> quiz2 = cbtStudentService.testQuiz2(answerVO); //문제보기
 		model.addAttribute("testStart", info); //응시정보
 		model.addAttribute("testQuiz", quiz1); //시험문제 내용정보
-		model.addAttribute("testQuiz2", quiz2); //시험문제 보기정보
+		//model.addAttribute("testQuiz2", quiz2); //시험문제 보기정보
 		model.addAttribute("page", page); //현재 페이지번호
 		model.addAttribute("randQuizId", randQuizId); //문제번호 전달
 		model.addAttribute("randRn", randRn); //문제 일련번호
@@ -186,7 +186,7 @@ public class CbtStudentController {
 		quizboxVO.setQuizId(randQuizId[i]); //해당 문제번호
 		quizboxVO.setTestId(testId); //해당 시험번호
 		quizboxVO.setSubjectId(subjectId); //해당 과목번호
-		return cbtStudentService.testQuiz3(quizboxVO);
+		return cbtStudentService.testQuiz(quizboxVO);
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	//문제제출 AJAX
