@@ -35,10 +35,10 @@ public class CbtStudentController {
 	@Autowired
 	CbtStudentService cbtStudentService;
 	
-	@Scheduled(cron = "*/5 * * * * *")
-	public void schedule() {
-		System.out.println(1);
-	}
+//	@Scheduled(cron = "*/5 * * * * *")
+//	public void schedule() {
+//		System.out.println(1);
+//	}
 	
 	//ㅡㅡㅡㅡ
 	//시험전체

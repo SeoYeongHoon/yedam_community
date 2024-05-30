@@ -16,8 +16,8 @@
 				</div>
 				<div class="add-line"><p>로그인에 필요한 정보를 입력해주세요.</p></div>
 				<div class="alert alert-danger" role="alert"
-	                 th:if="${loginError}">
-	                <span th:text="${loginError}"></span>
+	                 th:if="${wrongInput}">
+	                <span th:text="${wrongInput}"></span>
 	                <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
 	            </div>
 			</div>

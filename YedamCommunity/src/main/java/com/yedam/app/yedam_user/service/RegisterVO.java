@@ -22,4 +22,6 @@ public class RegisterVO {
 	private String profileImageLocation;
 	private String downloadLocation;
 	private String profileImageExt;
+	
+	private String code;
 }
