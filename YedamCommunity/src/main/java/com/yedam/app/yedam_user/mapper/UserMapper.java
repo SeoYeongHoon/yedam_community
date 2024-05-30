@@ -82,4 +82,14 @@ public interface UserMapper {
 	// 비밀번호 초기화 후 변경
 	@Update("UPDATE users SET reset_token = #{resetToken} where user_id = #{userId}")
 	public void updateResetToken(int userId, String resetToken);
+	
+	// 초기화용 Token 찾기
+	@Select("SELECT * FROM users WHERE reset_token = #{resetToken}")
+	public Optional<UserVO> findByResetToken(@Param("resetToken") String resetToken);
+	
+	// 비밀번호 초기화
+	@Update("UPDATE users SET password = #{password}, reset_token = NULL WHERE id = #{id}")
+	public void updatePassword(@Param("id") String id, @Param("password") String password);
+
+	// 회원가입 시 이메일 인증 확인
 }

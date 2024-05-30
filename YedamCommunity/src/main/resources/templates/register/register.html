@@ -8,7 +8,7 @@
 		<div class="container-fluid" style="padding-bottom: 100px;">
 			<div class="title-wrapper pt-30" style="max-width: 720px; margin: 0 auto; text-align: center;">
 				<div class="">
-					<img src="images/yedam_logo.png" style="width: 300px; margin: -40px;">
+					<img src="/images/yedam_logo.png" style="width: 300px; margin: -40px;">
 					<div class="title">
 						<h2>예담 커뮤니티에 오신 것을 환영합니다.</h2>
 						<p>예담 커뮤니티는 예담 출신의 수료생과 현재 수강하고 있는 학생을 위한 플랫폼입니다.</p>
@@ -70,13 +70,19 @@
 							</div>
 							<div class="input-style-1">
 								<label>이메일</label> 
-								<input name="email" type="text" placeholder="이메일을 입력하세요." required="true" autofocus="">
+								<input id="email" name="email" type="text" placeholder="이메일을 입력하세요." required="true" autofocus="">
+								<a th:onclick="sendVerificationCode()" href="javascript:void(0)" class="main-btn light-btn btn-hover" style="padding: 8px 8px; position: absolute; right: 10px; top: 38px;">인증메일 전송</a>
+								<div id="verificationCodeForm" style="display: none; position: relative;">
+									<input id="verificationCode" name="verificationCode" type="text" placeholder="인증번호를 입력하세요" style="width: 200px; margin-top: 10px;" required="true" autofocus="">
+									<a id="verificationCodeBtn" href="javascript:void(0)" th:onclick="verifyCode()" class="main-btn dark-btn-outline btn-hover" style="padding: 8px 30px; position: absolute; left: 215px; bottom: 7px;">확인</a>
+								</div>
+								<div id="verifySuccess" style="color: #219653; display: none;"><p>인증 성공!</p></div>
+								<div id="verifyFailed" style="color: #d50100; display: none;"><p>인증 실패! 다시 입력해주세요!</p></div>
 							</div>
 							<div class="input-style-1" style="position: relative">
 								<label>연락처</label> 
 								<div>
-									<input name="tel" type="text" placeholder="휴대폰 번호 (-제외)" required="true" autofocus="">
-									<button th:onclick="openPass()" href="#0" class="main-btn dark-btn-outline btn-hover" style="padding: 8px 30px; position: absolute; right: 10px; top: 38px;">본인인증</button>
+									<input id="phoneNumber" name="tel" type="text" placeholder="휴대폰 번호 (-제외)" required="true" autofocus="">
 								</div>
 							</div>
 							<div class="input-style-1" style="position: relative">
@@ -89,7 +95,6 @@
 									<input style="margin-bottom: 5px;" type="text" id="address-1" placeholder="도로명 주소">
 									<input style="margin-bottom: 5px;" type="text" id="address-1-1" placeholder="지번 주소">
 									<input type="text" id="address-2" placeholder="상세 주소">
-									<a href="#0" class="main-btn dark-btn-outline btn-hover" style="padding: 8px 30px; position: absolute; right: 10px; top: 38px;">주소찾기</a>
 								</div>
 							</div>
 							<div class="input-style-1" style="position: relative">
@@ -137,23 +142,6 @@
 		</div>
 	</section>
 </body>
-<script>
-	// 가입하기 이벤트 호출
-	/* $(document).ready(function(){
-	//회원가입 버튼(회원가입 기능 작동)
-	$(".register_btn").click(function(){
-		$("#register_form").attr("action", "/user/register");
-		$("#register_form").submit();
-		});
-	}); */
-
-
-	// 비밀번호 보이기 함수
-	
-	
-	// 휴대폰 본인인증 호출 함수
-	
-</script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	function execDaumPostcode() {
@@ -166,5 +154,71 @@
 			}
 		}).open();
 	}
+	
+	//--------------------------------------------
+	// 이메일 인증 함수
+	//--------------------------------------------
+	
+	function sendVerificationCode() {
+		var email = $('#email').val();
+		console.log("이메일: " + email);
+		
+		document.querySelector("#verificationCodeForm").style.display = 'block';
+		
+		$.ajax({
+			url: '/all/sendVerificationEmail',
+			type: 'POST',
+			data: {
+				email: email
+			},
+			success: function(response) {
+				console.log("전송완료");
+			},
+			error: function(error) {
+				console.log("에러!: " + error);
+			}
+		});
+	}
+	
+	function verifyCode() {
+		var code = $('#verificationCode').val();
+		var email = $('#email').val();
+		
+		var verifySuccess = document.querySelector('#verifySuccess');
+		var verifyFailed = document.querySelector('#verifyFailed');
+		
+		var codeInput = document.querySelector('#verificationCode');
+		var codeInputBtn = document.querySelector('#verificationCodeBtn');
+		
+		if (code) {
+			$.ajax({
+				url: '/all/verifyCode',
+				type: 'POST',
+				data: {
+					email: email,
+					code: code
+				},
+				async: false,
+				success: function(response) {
+					console.log("인증완료");
+					verifySuccess.style.display = "block";
+					codeInput.setAttribute("disabled", true);
+					codeInputBtn.style.display = 'none';
+					verifyFailed.style.display = "none";
+				},
+				error: function(error) {
+					console.log("인증실패: " + error);
+					verifyFailed.style.display = "block";
+				}
+			});
+		} else {
+			alert("코드를 입력해주세요!");
+		}
+	}
+	
+	/* $(document).ready(function() {
+		sendVerificationCode();
+		verifyCode();
+	}); */
 </script>
-</html>
+</h>
