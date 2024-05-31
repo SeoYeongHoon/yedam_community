@@ -12,6 +12,7 @@
 		<div class="address-item">
 			<input type="hidden" id="tId" th:value="${testInfo.testId}"/>
 			<input type="hidden" id="currId" th:value="${testInfo.curriculumId}"/>
+			<input type="hidden" id="classId" th:value="${testInfo.classId}"/>
 			<h1 th:text="${testInfo.classId}+강의실">n강의실</h1>
 			<br>
 			<h4 th:text="${testInfo.curriculumName}">과정명</h4>
@@ -83,13 +84,13 @@ function userList(testId){
 				}
 				
 				if(item.isReexam == 1){
-					item.isReexam = '재시험 X';
-					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam));
+					//item.isReexam = '재시험 X';
+					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'));
 					$('#passFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
 					
 				} else {
-					item.isReexam = '재시험 O';
-					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + ' / ' + item.isReexam),
+					//item.isReexam = '재시험 O';
+					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'),
 									      $('<input type="hidden">').attr({value : item.userId, id : "u"+idx}));
 					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
 					console.log("input태그 val값" + $('#u'+idx).val());
@@ -120,6 +121,7 @@ $('#reTest').on('click', function(){
 	const arryReUserId = JSON.stringify(reUserId);
 	
 	window.localStorage.setItem('reCurriculumId', $('#currId').val());
+	window.localStorage.setItem('reClassId', $('#classId').val());
 	window.localStorage.setItem('reUserId', arryReUserId);
 	window.localStorage.setItem('reTestId', $('#tId').val());
 })

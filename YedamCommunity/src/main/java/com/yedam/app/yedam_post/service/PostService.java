@@ -105,10 +105,11 @@ public interface PostService {
     // 파일 조회
     //--------------------------------------------
 	public List<BoardFilesVO> getBoardFiles(int postId, int boardId);
-
 	
-
-
+	//--------------------------------------------
+    // 메인페이지 조회
+    //--------------------------------------------
+	public List<PostVO> getPostAll();
 
 }
 

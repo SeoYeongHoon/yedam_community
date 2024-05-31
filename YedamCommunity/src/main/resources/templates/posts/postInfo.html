@@ -105,12 +105,12 @@
     </form>
   </div>
 <div th:if="${isOwner}">
-  <a th:href="@{/postUpdate/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}">수정</a>
-  <form th:action="@{/postDelete/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}" method="get">
+  <a th:href="@{/all/postUpdate/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}">수정</a>
+  <form th:action="@{/all/postDelete/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}" method="get">
     <button type="submit">삭제</button>
   </form>
   </div>
-  <a th:href="@{/post/{boardId}(boardId=${boardId})}">목록으로</a>
+  <a th:href="@{/all/post/{boardId}(boardId=${boardId})}">목록으로</a>
 </div>
 <script>
   $(document).ready(function () {
@@ -121,7 +121,7 @@
     $(document).on("click", "#reply-submit", function () {
       let formData = $("#reply-form").serialize();
       $.ajax({
-        url: "/Reply",
+        url: "/all/Reply",
         type: "POST",
         data: formData,
         success: function (response) {
@@ -140,7 +140,7 @@
       let replyId = $(this).data("reply-id");
       if (confirm("댓글을 삭제하시겠습니까?")) {
         $.ajax({
-          url: "/Reply",
+          url: "/all/Reply",
           type: "DELETE",
           data: { replyId: replyId },
           success: function (response) {
@@ -161,7 +161,7 @@
       let formData = $(this).closest("form").serialize();
       console.log(this);
       $.ajax({
-        url: "/Comment",
+        url: "/all/Comment",
         type: "POST",
         data: formData,
         success: function (response) {
@@ -179,7 +179,7 @@
       let commentId = $(this).data("comment-id");
       if (confirm("대댓글을 삭제하시겠습니까?")) {
         $.ajax({
-          url: "/Comment",
+          url: "/all/Comment",
           type: "DELETE",
           data: { commentId: commentId },
           success: function (response) {
@@ -201,7 +201,7 @@
     let formData = $(".Good-form").serialize();
     $.ajax({
       type: "POST",
-      url: "/boardLike",
+      url: "/all/boardLike",
       dataType: "json",
       data: formData,
       success: function (likeCheck) {
@@ -232,7 +232,7 @@
     $("#report-submit").on("click", function () {
       let formData = $("#report-form").serialize();
       $.ajax({
-        url: "/reportPost",
+        url: "/all/reportPost",
         type: "POST",
         data: formData,
         success: function (response) {
@@ -243,7 +243,9 @@
             alert("신고 접수에 실패하였습니다.");
           }
         },
-        error: function () {},
+        error: function (err) {
+        	alert("에러");
+        },
       });
     });
   });

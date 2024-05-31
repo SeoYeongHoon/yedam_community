@@ -29,6 +29,7 @@ import com.yedam.app.yedam_examstudent.service.TestVO;
 @Component
 @EnableScheduling
 @Controller
+
 public class CbtStudentController {
 	
 	//service주입
@@ -139,6 +140,7 @@ public class CbtStudentController {
 		model.addAttribute("isResult", isResult); //시험결과 유무
 		model.addAttribute("isReexam", isReexam); //재시험 유무
 		model.addAttribute("dateComp", dateComp); //날짜 비교
+		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testDetail";
 	}
 	
@@ -171,6 +173,7 @@ public class CbtStudentController {
 		model.addAttribute("randQuizId", randQuizId); //문제번호 전달
 		model.addAttribute("randRn", randRn); //문제 일련번호
 		model.addAttribute("randQuizScore", randQuizScore); //문제 배저
+		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testStart";
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -241,19 +244,20 @@ public class CbtStudentController {
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
 		List<QuizboxVO> list = new ArrayList<>();
-		quizboxVO.setSubjectId(info.getSubjectId());
+		quizboxVO.setUserId(userVO.getuserId());
 		quizboxVO.setTestId(testId);
 		list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("testMin", min); //응시시간 분
 		model.addAttribute("testSec", sec); //응시시간 초
 		model.addAttribute("quizList", list); //시험결과 문제+보기 정보
+		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testResult";
 	}
 	
 	
 	//ㅡㅡㅡㅡ
-	//오답확인
+	//문제풀이
 	//ㅡㅡㅡㅡ
 	@GetMapping("testResult2")
 	public String testResult2(int testId,
@@ -269,7 +273,7 @@ public class CbtStudentController {
 		List<QuizboxVO> list = new ArrayList<>();
 		int trueCnt = 0;
 		int falseCnt = 0;
-		quizboxVO.setSubjectId(info.getSubjectId());
+		quizboxVO.setUserId(userVO.getuserId());
 		quizboxVO.setTestId(testId);
 		list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
 		for(int i = 0; i < list.size(); i++) {
@@ -280,10 +284,12 @@ public class CbtStudentController {
 				falseCnt++;
 			}
 		}
+		System.out.println();
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("quizList", list); //시험결과 문제+보기 정보
 		model.addAttribute("trueCnt", trueCnt); //맞은개수
 		model.addAttribute("falseCnt", falseCnt); //틀린개수
+		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testResult2";
 	}
 }

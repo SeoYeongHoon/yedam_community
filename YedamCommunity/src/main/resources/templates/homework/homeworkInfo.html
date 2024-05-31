@@ -206,6 +206,7 @@
 </main>
 
 <script>
+let userName = $('#logName').val() // 로그인한 Name
 
 //--------------------------
 // 페이지 로드 시 댓글 목록 불러오기
@@ -416,20 +417,16 @@ $('#deleteHomeworks').on('click',function(){
                
             });
             //댓글 작성자 수정
-       	 let userName = $('#logName').val() // 로그인한 Name
+       	 //let userName = $('#logName').val() // 로그인한 Name
          let replyName = $('#logName').val()
-         let console = $(".logName-"+userName).val()
+         //let console = $(".logName-"+userName).val()
          if(userName == replyName){
          $(".logName-"+userName).css('display','block');
          }
 		 
-       //대댓글 작성자 확인
-    	 //let userName = $('#logName').val() // 로그인한 Name
-          let commentName = $('.commentLogName').val()
-          alert(commentName)
-          if(userName == commentName){
-          $(".commentLogName-"+userName).css('display','block');
-          }
+       
+       
+       
             /* 댓글 파일 업로드 */
             $('.updateBtn').on('click',function(e){
             	replyId = $(this).val();
@@ -621,7 +618,14 @@ $('#deleteHomeworks').on('click',function(){
 	        		 $('#comments-'+e.replyId).append(comments);
 	        	 });
 	        	 
+	        	//대댓글 작성자 확인
+	        	 //let userName = $('#logName').val() // 로그인한 Name
 	        	 
+	              let commentName = $('.commentLogName').val()
+	              alert("대댓글 작성자 이름 = " + commentName)
+	              if(userName == commentName){
+	              $(".commentLogName-"+userName).css('display','block');
+	              }
 	              
 	              // 답글 수정
 	        	  $('.cUpdateBtn').on('click',function(e){

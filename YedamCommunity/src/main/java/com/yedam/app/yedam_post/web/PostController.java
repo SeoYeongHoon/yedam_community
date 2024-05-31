@@ -1,7 +1,6 @@
 package com.yedam.app.yedam_post.web;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +33,7 @@ import com.yedam.app.yedam_post.service.ReportVO;
  * 임우열
  */
 @Controller
+@RequestMapping("/all")
 public class PostController {
 	
 	
@@ -154,7 +155,7 @@ public class PostController {
         postVO.setWriter(userVO.getNickname());
         
         model.addAttribute("post", postVO);
-        return "posts/postinsert";
+        return "posts/postInsert";
     }
 
 	// --------------------------------------------
@@ -167,8 +168,9 @@ public class PostController {
 	    try {
 	        if (!file.isEmpty()) {
 	            String fileName = file.getOriginalFilename();
-	            
-	            String filePath = uploadPath + "/" + fileName;
+	            System.err.println("fileName :" + fileName);
+	            String filePath = uploadPath + fileName;
+	            System.err.println("filePath :" + filePath);
 	            
 	            File directory = new File(uploadPath);
 	            if (!directory.exists()) {
@@ -177,7 +179,6 @@ public class PostController {
 	            
 	            File dest = new File(filePath);
 	            file.transferTo(dest);
-	            
 	            postVO.setBoardfileName(fileName);
 	            postVO.setBoardfileSize(file.getSize());
 	            postVO.setBoardfileLocation(fileName);
@@ -187,7 +188,6 @@ public class PostController {
 	        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	        postVO.setUserId(userVO.getuserId());
 	        postVO.setWriter(userVO.getNickname());
-	        
 	        postVO.setCreateDate(new Date());
 	        postVO.setUpdateDate(new Date());
 	        postService.createPost(postVO);
@@ -195,7 +195,7 @@ public class PostController {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    return "redirect:/post/" + postVO.getBoardId();
+	    return "redirect:/all/post/" + postVO.getBoardId();
 	}
 
 
@@ -211,7 +211,7 @@ public class PostController {
 		postVO.setBoardId(boardId);
 		postService.PostDelete(postVO);
 
-		return "redirect:/post/" + boardId;
+		return "redirect:/all/post/" + boardId;
 	}
 
 	// --------------------------------------------
@@ -220,15 +220,15 @@ public class PostController {
 	@GetMapping("/postUpdate/{boardId}/{postId}")
 	public String postUpdateForm(@PathVariable Integer boardId
 			                   , @PathVariable Integer postId
-			                   , @PathVariable int userId
 			                   , Model model) {
 
 		if (postId == null) {
 			return "redirect:/post/" + boardId;
 		}
-		PostVO post = postService.getPostReplies(postId, boardId);
-		model.addAttribute("post", post);
+		PostVO postVO = postService.getPostReplies(postId, boardId);
+		model.addAttribute("post", postVO);
 		model.addAttribute("boardId", boardId);
+		model.addAttribute(postVO);
 		return "posts/postUpdate";
 	}
 
@@ -243,7 +243,7 @@ public class PostController {
 	    try {
 	        if (!file.isEmpty()) {
 	            String fileName = file.getOriginalFilename();
-	            String filePath = uploadPath + "/" + fileName;
+	            String filePath = uploadPath + fileName;
 
 	            File directory = new File(uploadPath);
 	            if (!directory.exists()) {
@@ -296,7 +296,6 @@ public class PostController {
 	public boolean updateLike(@RequestParam("postId") int postId, 
 			              Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		
 		PostVO postVO = new PostVO();
 		postVO.setUserId(userVO.getuserId());
 	    int userId = userVO.getuserId();

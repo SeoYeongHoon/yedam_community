@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,6 +18,7 @@ import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostReplyVO;
 
 @Controller
+@RequestMapping("/all")
 public class ReplyController {
 
 	@Autowired

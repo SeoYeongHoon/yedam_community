@@ -16,10 +16,10 @@
 					<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_ADMIN')">
 						<li class="mega-menu-item"><a href="/teachermain">LMS</a></li>
 					</th:block>
-					<li class="mega-menu-item"><a th:href="@{/post/1}">수료 과정별 게시판</a></li>
-					<li class="mega-menu-item"><a th:href="@{/post/2}">구인/구직 게시판</a></li>
-					<li class="mega-menu-item"><a th:href="@{/post/3}">정보 공유 게시판</a></li>
-					<li class="mega-menu-item"><a th:href="@{/post/4}">질문과 토론 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/post/1}">수료 과정별 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/post/2}">구인/구직 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/post/3}">정보 공유 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/post/4}">질문과 토론 게시판</a></li>
 				</ul>
 				<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD') or hasAuthority('ROLE_ADMIN')">
 					<div class="profile_my_info" style="position: absolute; right: 90px; color: black;">
