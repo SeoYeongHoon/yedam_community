@@ -32,9 +32,9 @@
 		}
 		
 		.adminPaging a.active {
-		  background-color: #4CAF50;
+		  background-color: #1A2142;
 		  color: white;
-		  border: 1px solid #4CAF50;
+		  border: 1px solid #1A2142;
 		}
 		
 		.adminPaging a:hover:not(.active) {
@@ -42,6 +42,19 @@
 		}
 	</style>
 	<script>
+		function formatDate(date) {
+			var d = new Date(date), month = '' + (d.getMonth() + 1), day = ''
+					+ d.getDate(), year = d.getFullYear();
+	
+			if (month.length < 2)
+				month = '0' + month;
+			if (day.length < 2)
+				day = '0' + day;
+	
+			return [ year, month, day ].join('-');
+		} 
+		var today = new Date();
+		var today1 = formatDate(today);
 		
 		//--------------------------------------------
 		// 유저 정보 모달창에 출력
@@ -294,13 +307,20 @@
                 tdName.textContent = user.name;
                 tr.appendChild(tdName);
                 
-                var tdTel = document.createElement('td');
+                /* var tdTel = document.createElement('td');
                 tdTel.textContent = user.tel;
-                tr.appendChild(tdTel);
+                tr.appendChild(tdTel); */
+                var tdCourse = document.createElement('td');
+                tdCourse.textContent = user.curriculumName;
+                tr.appendChild(tdCourse);
                 
                 var tdEmail = document.createElement('td');
                 tdEmail.textContent = user.email;
                 tr.appendChild(tdEmail);
+                
+                /* var tdDate = document.createElement('td');
+                tdDate.textContent = formatDate(user.curriculumStartDate) + ' ~ ' + formatDate(user.curriculumEndDate);
+                tr.appendChild(tdDate); */
                 
                 var makeBtnTd = document.createElement('td');
                 var tdInfoBtn = document.createElement('a');
@@ -406,10 +426,16 @@
 							<h2 class="mb-10" style="color: white">회원 관리</h6>
 							<div class="select-style-1" style="display: flex; position: relative; margin-top: 20px; margin-bottom: 10px; margin-left: -10px;">
 								<div class="select-position" style="min-width: 140px;">
-									<select name="userFilter" id="userFilter" style="padding: 10px; color: white; background-color: #e96b56;" onchange="filterUsers()">
+									<!-- <select name="userFilter" id="userFilter" style="padding: 10px; color: white; background-color: #e96b56;" onchange="filterUsers()">
 										<option name="showAll" value="showAll" selected>전체</option>
 										<option name="showGrad" value="showGrad">수료생</option>
 										<option name="showLearn" value="showLearn">수강생</option>
+									</select> -->
+									<select name="userFilter" id="userFilter" style="padding: 10px; color: black; background-color: white;" onchange="filterUsers()">
+										<option value="showAll" name="showAll">전체 과정</option>
+										<th:block th:each="class : ${class}">
+											<option th:value="${class.curriculumId}" th:name="${class.curriculumId}" th:text="${class.curriculumName + ' | ' + class.curriculumStartDate + ' ~ ' + class.curriculumEndDate}"></option>
+										</th:block>
 									</select>
 								</div>
 							</div>
@@ -428,7 +454,7 @@
 										<h6>이름</h6>
 									</th>
 									<th>
-										<h6>연락처</h6>
+										<h6>수강명</h6>
 									</th>
 									<th>
 										<h6>이메일</h6>
@@ -440,24 +466,24 @@
 								</thead>
 								<tbody id="userInfoTable">
 									<tr th:each="user : ${users}">
-									<td>
-										<p>[[${user.userId}]]</p>
-									</td>
-									<td>
-										<p>[[${user.userType}]]</p>
-									</td>
-									<td>
-										<p>[[${user.name}]]</p>
-									</td>
-									<td>
-										<p>[[${user.tel}]]</p>
-									</td>
-									<td>
-										<p>[[${user.email}]]</p>
-									</td>
-									<td>
-										<a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchUserDetails(' + ${user.userId} + ')'">상세보기</a>
-									</td>
+										<td>
+											<p>[[${user.userId}]]</p>
+										</td>
+										<td>
+											<p>[[${user.userType}]]</p>
+										</td>
+										<td>
+											<p>[[${user.name}]]</p>
+										</td>
+										<td>
+											<p>[[${user.tel}]]</p>
+										</td>
+										<td>
+											<p>[[${user.email}]]</p>
+										</td>
+										<td>
+											<a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchUserDetails(' + ${user.userId} + ')'">상세보기</a>
+										</td>
 									</tr>
 								</tbody>
 							</table>

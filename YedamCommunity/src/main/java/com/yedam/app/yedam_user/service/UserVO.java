@@ -1,5 +1,9 @@
 package com.yedam.app.yedam_user.service;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -15,10 +19,13 @@ public class UserVO {
 	private String email;
 	private String address;
 	private String companyInfo;
-	private Integer isComplete;
 	private String userType;
 	private Integer curriculumId;
 	private String curriculumName;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date curriculumStartDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date curriculumEndDate;
 
 	// 이미지처리
 	private String profileImageName;

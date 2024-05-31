@@ -24,11 +24,11 @@
 	position: fixed;
 }
 /*모달*/
-.modal h1, .closeBtn {
+.modal h1, .closeBtn, .closeBtn2 {
 	text-align: center;
 }
 /*모달 팝업 영역 스타일링*/
-.modal {
+.modal, .modal2 {
 	display: none; /*평소에 숨김처리*/
 	position: fixed; /*모달창 화면전체*/
 	top: 0;
@@ -38,7 +38,8 @@
 	overflow: hidden;
 	background: rgba(0, 0, 0, 0.5);
 }
-.modal .modal-dialog {
+.modal .modal-dialog,
+.modal2 .modal-dialog {
 	/*팝업*/
 	position: absolute;
 	top: 50%;
@@ -48,7 +49,8 @@
 	background: #ffffff;
 	border-radius: 10px;
 }
-.modal .closeBtn {
+.modal .closeBtn,
+.modal2 .closeBtn2 {
 	display: block;
 	padding: 10px 20px;
 	background-color: rgb(116, 0, 0);
@@ -58,7 +60,8 @@
 	cursor: pointer;
 	transition: box-shadow 0.2s;
 }
-.modal.on {
+.modal.on,
+.modal2.on {
 	display: block;
 }
 </style>
@@ -94,9 +97,17 @@
 									class="filterItem tlist_3 main-btn primary-btn square-btn btn-hover">응시하기</button>
 							</td>
 							<td class="tlist_2" th:if="${isResult[stat.index] == 0 && dateComp[stat.index] == 1}">
-								<button th:id="${list.testId}" data-category="proceed"
-									th:onclick="|location.href='@{/testResult2(testId=${list.testId})}'|"
-									class="filterItem tlist_3 main-btn warning-btn square-btn btn-hover">미응시</button>
+								<!-- 피드백내용 모달형식 -->
+								<div class="modal2">
+									<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 380px;">
+										<h1>피드백</h1>
+										<div>
+											<button type="button" class="closeBtn2">닫기</button>
+										</div>
+									</div>
+								</div>
+								<button data-category="proceed"
+									class="noTestBtn filterItem tlist_3 main-btn warning-btn square-btn btn-hover">미응시</button>
 							</td>
 							<td class="tlist_2" th:if="${isResult[stat.index] == 1}">
 								<button th:id="${list.testId}" data-category="success"
@@ -177,7 +188,7 @@
 	</div>
 </div>
 <script>
-//<<모달 관련>>
+//<<피드백 모달 관련>>
 feedbackModal();
 function feedbackModal(){
 	const modalContent = document.querySelectorAll('.modal');
@@ -192,6 +203,24 @@ function feedbackModal(){
 	for(let i = 0; i < modalClose.length; i++){
 		modalClose[i].addEventListener('click', function() { //닫기버튼을 클릭하면
 			modalContent[i].classList.remove('on'); //모달창 닫기
+		});
+	}
+}
+//<<미응시 모달 관련>>
+noTestModal();
+function noTestModal(){
+	let modal = document.querySelectorAll('.modal2');
+	let noTestBtn = document.querySelectorAll('.noTestBtn');
+	let clostBtn = document.querySelectorAll('.closeBtn2');
+	
+	for(let i = 0; i < modal.length; i++){
+		noTestBtn[i].addEventListener('click', function() { //미응시버튼을 클릭하면
+			modal[i].classList.add('on'); //모달창 열기
+		});
+	}
+	for(let i = 0; i < closeBtn.length; i++){
+		closeBtn[i].addEventListener('click', function() { //닫기버튼을 클릭하면
+			modal[i].classList.remove('on'); //모달창 닫기
 		});
 	}
 }
