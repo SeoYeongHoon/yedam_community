@@ -12,6 +12,7 @@ public interface ExamService {
 	int testListCnt(int cId, String searchQuery); 
 	public int testInsert(TeacherVO teacherVO); // 시험 등록
 	public List<TeacherVO> userList(TeacherVO teacherVO); // 시험 대상자 출력
+	public List<TeacherVO> reTestUserList(int tId); // 재시험 대상자 출력
 	public int quizboxInsert(QuizVO quizVO); // 시험에 출제될 문제 등록
 	public int testUserInsert(int[] userId); // 시험 대상자 등록
 	
@@ -34,6 +35,7 @@ public interface ExamService {
 	public List<TeacherVO> getQuizInfo(int qId); // 문제 자세히보기 (단건조회)
 	public List<TeacherVO> currList(); // 과정명 출력(과목명 추가할때 사용)
 	public List<TeacherVO> subjectListOfCurr(int cId); // 과목명 출력(과목 추가/삭제시 사용)
+	public int quizDelete(int qId); // 문제 삭제
 	
 	
 	//--------------------------------------------

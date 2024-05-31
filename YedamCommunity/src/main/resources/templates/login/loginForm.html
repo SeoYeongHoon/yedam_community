@@ -16,8 +16,8 @@
 				</div>
 				<div class="add-line"><p>로그인에 필요한 정보를 입력해주세요.</p></div>
 				<div class="alert alert-danger" role="alert"
-	                 th:if="${loginError}">
-	                <span th:text="${loginError}"></span>
+	                 th:if="${wrongInput}">
+	                <span th:text="${wrongInput}"></span>
 	                <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
 	            </div>
 			</div>
@@ -40,7 +40,7 @@
 								</div>
 							</div>
 						</div>
-						<p>회원이 아니신가요? <a href="/register">회원가입하기</a></p>
+						<p>회원이 아니신가요? <a href="/all/register">회원가입하기</a></p>
 						<p><a href="/findId">아이디 찾기</a> 또는 <a href="/findPw">비밀번호 찾기</a></p>
 						<div class="d-flex" style="margin-top: 10px; justify-content: center;">
 							<button type="submit" class="login_btn main-btn primary-btn btn-hover" style="padding: 8px 30px; margin-right: 10px;">로그인</button>

@@ -168,7 +168,9 @@ public class HomeWorkController {
 	public Map<String, Object> filterHomeworks(@RequestParam("filter") int filter,
 											   @RequestParam(defaultValue = "1") int page,
 											   @RequestParam(defaultValue = "") String searchQuery) {
-		
+		System.err.println("filter--"+filter);
+		System.err.println("page--"+page);
+		System.err.println("searchQuery--"+searchQuery);
 		List<HomeWorkVO> homeworks = homeworkService.getHomeworksByFilter(filter, page, searchQuery);
 		int totalCnt = homeworkService.getTotalCnt(filter, searchQuery);
 		

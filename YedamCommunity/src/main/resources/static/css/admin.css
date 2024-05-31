@@ -2091,7 +2091,7 @@ h6,
   padding: 16px;
   color: black;
   resize: none;
-  transition: all 0.3s;
+  /* transition: all 0.3s; */
 }
 @media (max-width: 767px) {
   .input-style-1 input,
@@ -2101,7 +2101,7 @@ h6,
 }
 .input-style-1 input:focus,
 .input-style-1 textarea:focus {
-  border-color: #365CF5;
+  border: 2px solid #365CF5;
   background: #fff;
 }
 .input-style-1 input[type=date], .input-style-1 input[type=time],
@@ -2254,14 +2254,14 @@ h6,
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  -webkit-transition: all 0.3s ease-out 0s;
+  /* -webkit-transition: all 0.3s ease-out 0s;
   -moz-transition: all 0.3s ease-out 0s;
   -ms-transition: all 0.3s ease-out 0s;
   -o-transition: all 0.3s ease-out 0s;
-  transition: all 0.3s ease-out 0s;
+  transition: all 0.3s ease-out 0s; */
 }
 .select-style-1 .select-position select:focus {
-  border-color: #365CF5;
+  border: 2px solid #365CF5;
   outline: none;
 }
 .select-style-1 .select-position select.light-bg {
@@ -3622,7 +3622,7 @@ h6,
 .sidebar-nav-wrapper {
   background: #fff;
   width: 250px;
-  padding: 20px 0px;
+  /* padding: 20px 0px; */
   height: 100vh;
   /* position: fixed; */
   overflow-y: scroll;

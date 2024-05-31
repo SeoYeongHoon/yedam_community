@@ -210,13 +210,14 @@
                 SELECT *
                 FROM posts
                 WHERE board_id = #{postVO.boardId, jdbcType=INTEGER}
-	<include refid="condition"></include>
+	            <include refid="condition"></include>
                 ORDER BY post_id DESC
             ) p
             <![CDATA[
             WHERE ROWNUM <= #{endRow, jdbcType=INTEGER}
             ]]>
-        )
+        ) p
+        LEFT JOIN boardfiles f ON p.post_id = f.post_id
         WHERE rnum > #{startRow, jdbcType=INTEGER}
     </select> 
     

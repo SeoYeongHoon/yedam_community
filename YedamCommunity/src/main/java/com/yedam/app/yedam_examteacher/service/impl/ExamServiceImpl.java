@@ -89,6 +89,11 @@ public class ExamServiceImpl implements ExamService {
 	public List<TeacherVO> userList(TeacherVO teacherVO) {
 		return examMapper.selectUserAll(teacherVO);
 	}
+	// 재시험 대상자 출력 
+	@Override
+	public List<TeacherVO> reTestUserList(int tId) {
+		return examMapper.reTestUser(tId);
+	}
 	
 	//--------------------------------------------
 	// 문제 조회/등록 페이지 기능 모음
@@ -174,22 +179,17 @@ public class ExamServiceImpl implements ExamService {
 	public int subjectDelete(TeacherVO teacherVO) {
 		return examMapper.deleteSubject(teacherVO);
 	}
-	/* 테스트 중인 코드
-	 * public Map<String, Object> subjectDelete(TeacherVO teacherVO) { Map<String,
-	 * Object> map = new HashMap<>(); int result =
-	 * examMapper.deleteSubject(teacherVO.getSubjectName());
-	 * 
-	 * if (result == 1) { map.put("subjectName", teacherVO.getSubjectName()); }
-	 * return map; }
-	 */
+	//--------------------------------------------
+	// 문제 삭제
+	//--------------------------------------------
+	@Override
+	public int quizDelete(int qId) {
+		return examMapper.deleteQuiz(qId);
+	}
 	
 	//--------------------------------------------
 	// 문제 필터링 출력
 	//--------------------------------------------
-	/*@Override
-	public List<TeacherVO> getQuizFilter(String sName) {
-		return examMapper.filterQuiz(sName);
-	}*/
 	@Override
 	public List<TeacherVO> getQuizFilter(int page, String subjectName) {
 		Map<String, Object> params = new HashMap<>();

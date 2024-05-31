@@ -3,8 +3,16 @@ package com.yedam.app.yedam_user.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +33,16 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	JavaMailSender javaMailSender;
+	
+	@Value("${spring.mail.username}")
+	private String emailFrom;
+	
+	private final Map<String, String> verificationCodes = new HashMap<>();
+	
+	
 	
 	// 회원가입 프로세스
 	@Override
@@ -148,5 +166,75 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserVO getByUserId(String userId) {
 		return userMapper.getByUserId(userId);
+	}
+	
+	// 비밀번호 초기화용 메일 전송 
+	@Override
+	public void sendPasswordResetEmail(String id, String name, String email) {
+		Optional<UserVO> userOptional = userMapper.findPassword(id, name, email);
+		
+		if (userOptional.isPresent()) {
+			UserVO userVO = userOptional.get();
+			String resetToken = UUID.randomUUID().toString();
+			userMapper.updateResetToken(userVO.getUserId(), resetToken);
+			
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setTo(userVO.getEmail());
+			mailMessage.setSubject("패스워드 초기화 요청");
+			mailMessage.setText("패스워드 초기화를 위해, 링크를 클릭해주세요: \n" + " http://localhost:8080/resetPw?token=" + resetToken);
+			mailMessage.setFrom(emailFrom);
+			
+			javaMailSender.send(mailMessage);
+		} else {
+			throw new RuntimeException("회원님의 이메일: " + email + " 을 찾을 수 없습니다.");
+		}
+	}
+
+	@Override
+	public Optional<UserVO> findByResetToken(String resetToken) {
+		return userMapper.findByResetToken(resetToken);
+	}
+
+	@Override
+	public void updatePassword(String token, String newPassword) {
+		Optional<UserVO> userOptional = userMapper.findByResetToken(token);
+		if (userOptional.isPresent()) {
+			String encodedPassword = passwordEncoder.encode(newPassword);
+			userMapper.updatePassword(userOptional.get().getId(), encodedPassword);
+		} else {
+			throw new RuntimeException("유효하지 않은 토큰입니다.");
+		}
+	}
+
+	// 회원가입 시 이메일 인증 코드 전송
+	@Override
+	public void sendVerificationEmail(String email) {
+		String verificationCode = generateVerificationCode();
+		verificationCodes.put(email, verificationCode);
+		
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(email);
+		mailMessage.setSubject("이메일 인증");
+		mailMessage.setText("인증코드를 입력해주세요: " + verificationCode);
+		mailMessage.setFrom(emailFrom);
+		
+		javaMailSender.send(mailMessage);
+	}
+	
+	// 인증코드 확인
+	@Override
+	public boolean verifyCode(String email, String code) {
+		System.out.println("verification codes: " + verificationCodes);
+		String storedCode = verificationCodes.get(email);
+		System.out.println("저장된 인증코드: " + storedCode);
+		
+		return storedCode != null && storedCode.equals(code);
+	}
+	
+	// 코드 생성
+	private String generateVerificationCode() {
+		Random random = new Random();
+		int verificationCode = 1000 + random.nextInt(9000); // 1000부터 9999 사이의 숫자 생성
+		return String.valueOf(verificationCode);
 	}
 }

@@ -3,6 +3,40 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
+	<style>
+.row {
+	width: 100%;
+}
+.center {
+  text-align: center;
+  width: 60%;
+  margin: auto;
+}
+
+.homeworkPaging {
+  display: inline-block;
+}
+
+.homeworkPaging a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  /*border: 1px solid #ddd;*/
+  /*margin: 0 4px;*/
+}
+
+.homeworkPaging a.active {
+  background-color: #365CF5;
+  color: white;
+  border: 1px solid #365CF5;
+}
+
+.homeworkPaging a:hover:not(.active) {
+	background-color: #ddd;
+}
+</style>
 <head>
 <meta charset="UTF-8">
 <title>과제 목록 교수</title>
@@ -17,142 +51,155 @@
 	<div class="col-10">
 		<div class="card-style mb-30">
 			<h1 class="mb-30">과제 목록</h1>
-			<select id="subjectSelect">
-				<option value="0">전체 과목</option>
-				<option th:each="subjects : ${subject}" th:value="${subjects.subjectId}">[[${subjects.subjectName}]]
-				</option>
-			</select>
+			<div class="select-style-1"
+				style="position: relative; margin-bottom: 15px;">
+				<label>과목 선택</label>
+				<div class="select-position" style="width: 250px;">
+					<select id="subjectSelect">
+						<option value="0">전체 과목</option>
+						<option th:each="subjects : ${subject}"
+							th:value="${subjects.subjectId}">[[${subjects.subjectName}]]
+						</option>
+					</select>
+				</div>
+				<!-- 과제 검색 -->
+				<div class="input-style-1"
+					style="position: absolute; top: 43px; right: 20px;">
+					<input name="id" id="searchHomework" type="text"
+						placeholder="과제명 검색" style="padding: 10px; width: 250px;">
+					<img
+						style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;"
+						src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+				</div>
+			</div>
+
 			<div class="table-wrapper table-responsive">
 				<table class="table">
 					<thead>
 						<tr>
-							<th>
-								<h6>강의실</h6>
-							</th>
-							<th>
-								<h6>과제명</h6>
-							</th>
-							<th>
-								<h6>과목명</h6>
-							</th>
-							<th>
-								<h6>마감일</h6>
-							</th>
-
-							<th>
-								<h6>진행상태</h6>
-							</th>
+							<th><h6>강의실</h6></th>
+							<th><h6>과제명</h6></th>
+							<th><h6>과목명</h6></th>
+							<th><h6>마감일</h6></th>
+							<th><h6>진행상태</h6></th>
 						</tr>
 						<!-- end table row-->
 					</thead>
-					<tbody id="body">
-						
+					<tbody id="homeworkBody">
+
 					</tbody>
 				</table>
-				<!-- end table -->
+				<div class="center">
+					<div class="homeworkPaging">
+					
+					</div>
+				</div>
 			</div>
 		</div>
-		<!-- end card -->
 	</div>
-	<!-- end col -->
 </div>
 
 <script>
-//출력
-$().ready(function() {
-	homeworkList();
-});
-//과제목록
-function homeworkList(){
-	// 유저정보
-	let userid = 10;
-	
-	$.ajax({
-		url:"/all/homeworkList_S",
-		type: "get",
-		data: {userid:userid},
-		success:function(data){
-			let today = new Date();
-			let todayFormatted = formatDate(today);
-			
-			data.forEach(function(e){
-				let homeworkDate = formatDate(e.homeworkDate);
-				let status = homeworkDate < todayFormatted ? '과제 제출 마감' : '과제 진행중';
-				let statusIcon = homeworkDate < todayFormatted ? 'close-btn' : 'active-btn';
-				
-				let homework =
-					`
-					<tr onclick="location.href='homeworkInfo?homeworkId='+${e.homeworkId}">
-						<td>${e.classId}</td>
-						<td>${e.homeworkTitle}</td>
-						<td>${e.subjectName}</td>
-						<td>${homeworkDate}</td>
-						<td >
-							<span class="status-btn ${statusIcon}">${status}</span>
-						</td>
-					</tr>
-					`
-				$('#body').append(homework)	;
-			});
-			classCategory();
-		},
-		 error:function(err){
-			alert("homeworkListS err")
-		} 
+//--------------------------------------------
+// DOM 요소들이 전부 로드되고 나서 아래 이벤트들 실행
+//--------------------------------------------
+$(document).ready(function() {
+	$('#subjectSelect').off('change').on('change', function() {
+		filterHomeworks(1);
 	});
+
+    $('#searchHomework').off('keyup').on('keyup', function(e) {
+    	filterHomeworks(1); // 검색어 입력하거나 지울 시 실시간으로 데이터 변경후 페이지 1로 고정
+    });
+	
+	filterHomeworks(1);	   
+});
+//--------------------------------------------
+// 현재 과제 리스트(필터링)
+//--------------------------------------------
+function filterHomeworks(page) {
+    var filter = $('#subjectSelect').val();
+    var searchQuery = $('#searchHomework').val();
+	let userId = 24;
+    $.ajax({
+        url: '/all/filterHomeworkStudent',
+        type: 'GET',
+        data: {
+            page: page,
+            filter: filter,
+            searchQuery: searchQuery,
+            userId : userId
+        },
+        success: function(response) {
+            updateHomeworks(response.homeworks);
+            homeworkPagination(response.page, page);
+        },
+        error: function(error) {
+            alert("filterHomeworks Err")
+        }
+    });
 }
 
-// 과목 카테고리
-function classCategory() {
-		$("#subjectSelect").change(function() {
-			// 유저정보
-			let userid = 60;
-			let vals = $("#subjectSelect").val();
-				$.ajax({
-					url : "/all/subjectCategory",
-					type : "get",
-					data : {
-						vals : vals,
-						userid : userid
-					},
-					success : function(data) {
-						 // 댓글 목록 초기화
-			            $('#body').empty(); 
-						 
-			            let today = new Date();
-						let todayFormatted = formatDate(today);
-						
-						data.forEach(function(e){
-							let homeworkDate = formatDate(e.homeworkDate);
-							let status = homeworkDate < todayFormatted ? '과제 제출 마감' : '과제 진행중';
-							let statusIcon = homeworkDate < todayFormatted ? 'close-btn' : 'active-btn';
-							
-							let subjectCategory =
-								`
-								<tr>
-									<td>${e.classId}</td>
-									<td>${e.homeworkTitle}</td>
-									<td>${e.subjectName}</td>
-									<td>${homeworkDate}</td>
-									<td>
-									<span class="status-btn ${statusIcon}">${status}</span>
-									</td>
-								</tr>
-								`
-							$('#body').append(subjectCategory);
-						});
-						
-					},
-					error : function(err) {
-						alert(" classCategory err")
-					}
-				});
-		});
-	}
+
+//--------------------------------------------
+// 필터링으로 인한 과제 리스트 변경(목록 업데이트)
+//--------------------------------------------
+function updateHomeworks(homeworks) {
+    var tbody = $('#homeworkBody');
+    tbody.empty();
+	
+    homeworks.forEach((test,idx) => {
+		var tDate = formatDate(test.homeworkDate);
+		var processIdx = idx;
+		
+		let list = `
+			<tr onclick="location.href='/all/homeworkInfo?homeworkId=${test.homeworkId}'">
+				<td class="min-width">${test.classId}</td>
+				<td class="min-width">${test.homeworkTitle}</td>
+				<td class="min-width">${test.subjectName}</td>
+				<td class="min-width tDate">${tDate}</td>
+				<td id="tProcess" class="min-width">
+					<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
+				</td>
+			</tr>
+			
+		`;
+		$('#homeworkBody').append(list);
+		process();
+	})
+    
+    };
 
 
+//--------------------------------------------
+// 페이지네이션 함수
+//--------------------------------------------
+ function homeworkPagination(pageDTO, currentPage) {
+    var pagination = $('.homeworkPaging');
+    pagination.empty();
 
+    if (pageDTO.prev) {
+        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '">&laquo;</a>');
+    }
 
+    for (let p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
+        var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
+
+        if (p === currentPage) {
+            pageLink.addClass('active');
+        }
+
+        pageLink.on('click', function() {
+            filterHomeworks(p);
+        });
+
+        pagination.append(pageLink);
+    }
+
+    if (pageDTO.next) {
+        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '">&raquo;</a>');
+    }
+} 
 	//날짜 포멧 변환 함수
 	function formatDate(date) {
 		var d = new Date(date), month = '' + (d.getMonth() + 1), day = ''
@@ -165,5 +212,23 @@ function classCategory() {
 
 		return [ year, month, day ].join('-');
 	} 
+	var today = new Date();
+	var today1 = formatDate(today);
+	//--------------------------------------------
+	//날짜 비교해서 시험진행 상태 변경
+	//--------------------------------------------
+	function process(){
+		var arry = [];
+		$('.tDate').each(function (index, item) {
+			 arry.push($(item).text());
+			 if(arry[index] < today1){
+			 	$('#'+index).text('기간 만료');
+			 	$('#'+index).attr('class', 'status-btn close-btn process');
+			 } else {
+			 	$('#'+index).text('진행중');
+			 	$('#'+index).attr('class', 'status-btn active-btn process');
+			 }
+		});
+	}
 </script>
 </html>

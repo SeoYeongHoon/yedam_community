@@ -83,7 +83,7 @@
 							<th><h6>과제명</h6></th>
 							<th><h6>과목명</h6></th>
 							<th><h6>마감일</h6></th>
-							<!-- <th><h6>진행상태</h6></th> -->
+							<th><h6>진행상태</h6></th> 
 						</tr>
 					</thead>
 					<tbody id="homeworkBody">
@@ -103,15 +103,36 @@
 </div>
 
 <script>
-	//날짜 포멧 변환 함수
-	function formatDate(dateString) {
-		var date = new Date(dateString);
-	    var year = date.getFullYear().toString().substr(2, 2); // 연도의 마지막 두 자리
-	    var month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 +1, 두 자리로 맞추기
-	    var day = date.getDate().toString().padStart(2, '0'); // 두 자리로 맞추기
-	    
-	    return `${year}.${month}.${day}`;
-	}
+//날짜 포멧 변환 함수
+function formatDate(date) {
+	var d = new Date(date), month = '' + (d.getMonth() + 1), day = ''
+			+ d.getDate(), year = d.getFullYear();
+
+	if (month.length < 2)
+		month = '0' + month;
+	if (day.length < 2)
+		day = '0' + day;
+
+	return [ year, month, day ].join('-');
+} 
+var today = new Date();
+var today1 = formatDate(today);
+//--------------------------------------------
+//날짜 비교해서 시험진행 상태 변경
+//--------------------------------------------
+function process(){
+	var arry = [];
+	$('.tDate').each(function (index, item) {
+		 arry.push($(item).text());
+		 if(arry[index] < today1){
+		 	$('#'+index).text('기간 만료');
+		 	$('#'+index).attr('class', 'status-btn close-btn process');
+		 } else {
+		 	$('#'+index).text('진행중');
+		 	$('#'+index).attr('class', 'status-btn active-btn process');
+		 }
+	});
+}
 	
 	//--------------------------------------------
 	// DOM 요소들이 전부 로드되고 나서 아래 이벤트들 실행
@@ -157,34 +178,35 @@
 	// 필터링으로 인한 과제 리스트 변경(목록 업데이트)
 	//--------------------------------------------
 	function updateHomeworks(homeworks) {
-	    var tbody = $('#homeworkBody');
-	    tbody.empty();
-
-	    homeworks.forEach(function(homework) {
-			var tr = $('<tr></tr>');
-			console.log(homework.homeworkId)
-	        var tdClassId = $('<td></td>').text(homework.classId);
-	        tr.append(tdClassId);
-
-	        var tdTitle = $('<td></td>').text(homework.homeworkTitle);
-	        tr.append(tdTitle);
-
-	        var tdSubject = $('<td></td>').text(homework.subjectName);
-	        tr.append(tdSubject);
-
-	        var formattedDate = formatDate(homework.homeworkDate); // 날짜 포맷 변환
-	        var tdDate = $('<td></td>').text(formattedDate);
-	        tr.append(tdDate);
+    var tbody = $('#homeworkBody');
+    tbody.empty();
+	
+    homeworks.forEach((test,idx) => {
+		var tDate = formatDate(test.homeworkDate);
+		var processIdx = idx;
+		
+		let list = `
+			<tr onclick="location.href='/all/homeworkInfo?homeworkId=${test.homeworkId}'">
+				<td class="min-width">${test.classId}</td>
+				<td class="min-width">${test.homeworkTitle}</td>
+				<td class="min-width">${test.subjectName}</td>
+				<td class="min-width tDate">${tDate}</td>
+				<td id="tProcess" class="min-width">
+					<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
+				</td>
+			</tr>
 			
-	        $('#homeworkBody').append(tr);
-	        $(tr).attr('onclick','location.href="/all/homeworkInfo?homeworkId='+ homework.homeworkId + '"')
-	    });
-	}
+		`;
+		$('#homeworkBody').append(list);
+		process();
+	})
+    
+    };
 
 	//--------------------------------------------
 	// 페이지네이션 함수
 	//--------------------------------------------
-	function homeworkPagination(pageDTO, currentPage) {
+	 function homeworkPagination(pageDTO, currentPage) {
 	    var pagination = $('.homeworkPaging');
 	    pagination.empty();
 
@@ -209,6 +231,6 @@
 	    if (pageDTO.next) {
 	        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '">&raquo;</a>');
 	    }
-	}
+	} 
 </script>
 </html>

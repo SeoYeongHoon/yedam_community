@@ -25,7 +25,7 @@ public class SpringSecurityConfig {
 		http
 			.authorizeHttpRequests(requests ->requests
 				.antMatchers("/**").permitAll()
-//				.antMatchers("/adminMain").hasRole("ADMIN")
+				.antMatchers("/adminMain").hasRole("ADMIN")
 				.antMatchers("/home").authenticated()
 				.anyRequest().authenticated())
 			.formLogin(login ->login

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="common/configs/config :: ConfigFragment">
+</head>	  
+<body>
+	<section class="tab-components">
+		<div class="container-fluid" style="padding-bottom: 100px;">
+			<div class="title-wrapper pt-30" style="max-width: 720px; margin: 0 auto; text-align: center;">
+				<div class="">
+					<img src="/images/yedam_logo.png" style="width: 300px; margin: -40px;">
+					<div class="title">
+						<h2>비밀번호 초기화</h2>
+					</div>
+				</div>
+				<div class="add-line"><p>변경하실 비밀번호를 입력해주세요.</p></div>
+			</div>
+			<form id="reset_pw_form" action="/resetPw" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" method="post">
+				<div class="row">
+					<div class="col-12">
+						<!-- input style start -->
+						<div class="card-style mb-30">
+						<input type="hidden" name="resetToken" th:value="${token}">
+							<div class="input-style-1">
+								<label>비밀번호</label> 
+								<input id="passwordInput" name="newPassword" type="password" placeholder="비밀번호를 입력하세요.">
+							</div>
+						</div>
+						<div class="d-flex" style="margin-top: 10px; justify-content: center;">
+							<button type="submit" class="login_btn main-btn primary-btn btn-hover" style="padding: 8px 15px; margin-right: 10px;">비밀번호 변경</button>
+							<!-- <button type="button" class="main-btn light-btn btn-hover" style="padding: 8px 30px; margin-right: 10px;">뒤로가기</button> -->
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</section>
+</body>
+</html>

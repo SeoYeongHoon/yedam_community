@@ -2,10 +2,12 @@ package com.yedam.app.yedam_user.mapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_user.service.RegisterVO;
@@ -73,4 +75,21 @@ public interface UserMapper {
 	// 회원정보 수정
 	public void updateUserInfo(UserVO userVO);
 	
+	// 비밀번호 초기화용 메일 전송 
+	@Select("SELECT * FROM users WHERE id = #{id} AND name = #{name} AND email = #{email}")
+	Optional<UserVO> findPassword(String id, String name, String email);
+	
+	// 비밀번호 초기화 후 변경
+	@Update("UPDATE users SET reset_token = #{resetToken} where user_id = #{userId}")
+	public void updateResetToken(int userId, String resetToken);
+	
+	// 초기화용 Token 찾기
+	@Select("SELECT * FROM users WHERE reset_token = #{resetToken}")
+	public Optional<UserVO> findByResetToken(@Param("resetToken") String resetToken);
+	
+	// 비밀번호 초기화
+	@Update("UPDATE users SET password = #{password}, reset_token = NULL WHERE id = #{id}")
+	public void updatePassword(@Param("id") String id, @Param("password") String password);
+
+	// 회원가입 시 이메일 인증 확인
 }

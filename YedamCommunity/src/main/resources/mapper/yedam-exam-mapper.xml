@@ -322,6 +322,11 @@
 		WHERE subject_name = #{subjectName}
 		AND curriculum_id = #{curriculumId}
 	</delete>
+	<!-- 문제 삭제 -->
+	<delete id="deleteQuiz" parameterType="int">
+		DELETE FROM quizes
+		WHERE quiz_id = #{quizId}
+	</delete>
 	
 	<!-- 유저 정보 출력(시험 대상자) -->
 	<select id="selectUserAll" resultType="TeacherVO">
@@ -336,7 +341,19 @@
 		FROM users
 		WHERE curriculum_id = #{curriculumId}
 	</select>
-	
+	<!-- 재시험 대상자 출력 -->
+	<select id="reTestUser" resultType="TeacherVO" parameterType="int">
+		SELECT u.user_id
+    		 , u.name
+		     , u.curriculum_id
+		     , t.test_id
+		FROM users u JOIN test_targets t 
+		               ON u.user_id = t.user_id
+		             JOIN exam_results e
+		               ON e.test_target_id = t.test_target_id
+		WHERE t.test_id = #{testId}
+		AND e.is_reexam = 0
+	</select>
 	<!-- 강의실별 과목평균점수 조회 -->
 	<select id="subjectAvg" resultType="TeacherVO" parameterType="int">
 		SELECT s.subject_name

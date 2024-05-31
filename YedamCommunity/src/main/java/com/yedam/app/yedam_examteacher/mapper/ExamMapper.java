@@ -18,6 +18,7 @@ public interface ExamMapper {
 	public List<TeacherVO> selectUserAll(TeacherVO teacherVO); // 시험 대상자 조회
 	public int insertQuizbox(TeacherVO teacherVO); // 시험에 출제할 문제 등록
 	public int insertTestUser(TeacherVO teacherVO); // 시험 대상자 등록
+	public List<TeacherVO> reTestUser(@Param("testId") int tId); // 재시험 대상자 등록
 	
 	//--------------------------------------------
 	// 문제 등록/조회 페이지 기능 모음	
@@ -43,6 +44,7 @@ public interface ExamMapper {
 	List<TeacherVO> filterQuiz(Map<String, Object> params); // 문제 조회(페이징)
 	int getQuizCnt(String subjectName); // 문제 count
 	public List<TeacherVO> infoQuiz(@Param("qId") int qId); // 문제 자세히보기 단건조회
+	public int deleteQuiz(@Param("quizId") int qId); // 문제 삭제
 	
 	//--------------------------------------------
 	// 강의실 정보 출력(과목평균,시험리스트,수강생)
