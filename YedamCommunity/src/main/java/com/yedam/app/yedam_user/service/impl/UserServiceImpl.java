@@ -19,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_common.LoginUserVO;
-import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_user.mapper.UserMapper;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
@@ -181,7 +180,7 @@ public class UserServiceImpl implements UserService {
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 			mailMessage.setTo(userVO.getEmail());
 			mailMessage.setSubject("패스워드 초기화 요청");
-			mailMessage.setText("패스워드 초기화를 위해, 링크를 클릭해주세요: \n" + " http://localhost:8080/resetPw?token=" + resetToken);
+			mailMessage.setText("패스워드 초기화를 위해, 링크를 클릭해주세요: \n" + " http://localhost:8080/all/resetPw?token=" + resetToken);
 			mailMessage.setFrom(emailFrom);
 			
 			javaMailSender.send(mailMessage);

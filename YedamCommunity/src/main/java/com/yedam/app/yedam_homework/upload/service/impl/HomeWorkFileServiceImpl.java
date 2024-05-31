@@ -51,7 +51,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			String originalName = uploadFile.getOriginalFilename();
 
 			// 모든 경로에서 마지막 / 부분으로부터 +1 해준 부분부터 출력하겠다.
-			String fileName = originalName.substring(originalName.lastIndexOf("//") + 1);
+			String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
 
 			// 확장자
 			String fileExt = originalName.substring(originalName.lastIndexOf(".") + 1);
@@ -137,7 +137,7 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			String downloadFileName = uuid + "_" + fileName;
 
 			// 저장할때 이름 = 경로 + / + 랜덤한 파일 이름
-			String saveName = uploadPath + File.separator + uploadFileName;
+			String saveName = uploadPath + uploadFileName;
 
 			// Paths.get() 매서드는 특정 경로의 파일 정보를 가져옴(경로 정의)
 			Path savePath = Paths.get(saveName);

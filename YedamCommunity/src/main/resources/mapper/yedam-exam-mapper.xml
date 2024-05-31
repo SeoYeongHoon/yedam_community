@@ -45,14 +45,16 @@
 						  , test_time
 						  , test_date
 						  , test_name
-						  , class_id)
+						  , class_id
+						  , pass_score)
 		VALUES (test_id_seq.nextval
 				, #{curriculumId}
 				, #{testContent}
 				, #{testTime}
 				, sysdate
 				, #{testName}
-				, #{classId})				  
+				, #{classId}
+				, #{passScore})				  
 	</insert>
 	<!-- 시험에 출제되는 문제 등록 -->
 	<insert id="insertQuizbox" parameterType="TeacherVO">
