@@ -220,8 +220,7 @@ public class PostController {
 	@GetMapping("/postUpdate/{boardId}/{postId}")
 	public String postUpdateForm(@PathVariable Integer boardId
 			                   , @PathVariable Integer postId
-			                   , Model model
-			                   , Authentication authentication) {
+			                   , Model model) {
 
 		if (postId == null) {
 			return "redirect:/post/" + boardId;
