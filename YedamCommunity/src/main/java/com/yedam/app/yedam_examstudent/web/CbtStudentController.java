@@ -1,13 +1,16 @@
 package com.yedam.app.yedam_examstudent.web;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +26,19 @@ import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 
+@Component
+@EnableScheduling
 @Controller
 public class CbtStudentController {
 	
 	//service주입
 	@Autowired
 	CbtStudentService cbtStudentService;
-
+	
+//	@Scheduled(cron = "0 0 0 * * *")
+//	public void schedule() {
+//		System.out.println(1)
+//	}
 	
 	//ㅡㅡㅡㅡ
 	//시험전체
@@ -48,35 +57,34 @@ public class CbtStudentController {
 		testVO.setPage(page);
 		List<TestVO> list1 = cbtStudentService.testListAll(testVO); //시험목록
 		List<ExamResultVO> list2 = new ArrayList<>();
-		//List<TestVO> list3 = cbtStudentService.userSubject(userVO.getuserId()); //시험과목
 		int size = cbtStudentService.testListSize(userVO.getuserId()); //시험개수
 		int[] array1 = new int[list1.size()];
 		int[] array2 = new int[list1.size()];
-		int[] array3 = new int[list1.size()];
-		Date date = new Date();
+		Date date1 = new Date(); //현재날짜
+		Calendar date = Calendar.getInstance();
+		Date date2 = new Date(date.getTimeInMillis());
 		for(int i = 0; i < list1.size(); i++) {			
 			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
-			array1[i] = (cbtStudentService.isTestResult(testVO));
+			array1[i] = (cbtStudentService.isTestResult(testVO)); //시험 결과
 			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
-			list2.add(cbtStudentService.isTestFeedback(testVO));
-			testVO.setUserId(userVO.getuserId());
-			testVO.setTestId(list1.get(i).getTestId());
-			array2[i] = cbtStudentService.isTestReexam(testVO);
-			if(date.after(list1.get(i).getTestDate())) {
-				array3[i] = 1;
+			list2.add(cbtStudentService.isTestFeedback(testVO)); //피드백 유무
+			date.setTime(list1.get(i).getTestDate()); //시간 설정
+			date.add(Calendar.HOUR_OF_DAY , 23); //시간
+			date.add(Calendar.MINUTE, 59); //분
+			date.add(Calendar.SECOND, 59); //초
+			if(date1.after(date2)) { //현재 시간이 응시기간을 지난 경우
+				array2[i] = 1;
 			}
 			else {
-				array3[i] = 0;
+				array2[i] = 0;
 			}
 		}
 		model.addAttribute("testList", list1); //시험목록
 		model.addAttribute("isResult", array1); //시험결과유무
 		model.addAttribute("isFeedback", list2); //피드백유무
-		model.addAttribute("isReexam", array2); //재시험유무
-		model.addAttribute("dateComp", array3); //응시기간 유효성
-		//model.addAttribute("userSubject", list3); //시험과목
+		model.addAttribute("dateComp", array2); //응시기간 유효성
 		model.addAttribute("page", page); //페이지
 		model.addAttribute("size", size); //시험개수
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
@@ -156,14 +164,9 @@ public class CbtStudentController {
 		quizboxVO.setQuizId(randQuizId[0]);
 		quizboxVO.setTestId(info.getTestId());
 		quizboxVO.setSubjectId(info.getSubjectId());
-		QuizboxVO quiz1 = cbtStudentService.testQuiz(quizboxVO); //시험문제
-		answerVO.setQuizId(randQuizId[0]);
-		answerVO.setTestId(info.getTestId());
-		answerVO.setSubjectId(info.getSubjectId());
-		//List<AnswerVO> quiz2 = cbtStudentService.testQuiz2(answerVO); //문제보기
+		QuizboxVO quiz = cbtStudentService.testQuiz(quizboxVO); //시험문제
 		model.addAttribute("testStart", info); //응시정보
-		model.addAttribute("testQuiz", quiz1); //시험문제 내용정보
-		//model.addAttribute("testQuiz2", quiz2); //시험문제 보기정보
+		model.addAttribute("testQuiz", quiz); //시험문제 내용정보
 		model.addAttribute("page", page); //현재 페이지번호
 		model.addAttribute("randQuizId", randQuizId); //문제번호 전달
 		model.addAttribute("randRn", randRn); //문제 일련번호
