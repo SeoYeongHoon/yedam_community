@@ -248,7 +248,6 @@
 			       		 , quiz_solution
 			       		 , user_id
 			       		 , quiz_answer
-			       		 , subject_id
 		            FROM quizes) b
 		            <![CDATA[
 		            Where rownum <= (#{page} * 12)     

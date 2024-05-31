@@ -173,6 +173,7 @@ public class ExamController {
 	@PostMapping("quizinsert")
 	public String quizInsertProcess(TeacherVO teacherVO) {
 		examService.quizInsert(teacherVO);
+		System.out.println("서브젝트값 받았나 확인 : "+ teacherVO);
 		return "redirect:quizlist";
 	}
 	//--------------------------------------------
