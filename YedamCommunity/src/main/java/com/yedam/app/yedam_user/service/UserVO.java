@@ -32,5 +32,6 @@ public class UserVO {
 	
 	// 비밀번호 초기화용 메일 토큰
 	private String resetToken;
+
 	
 }

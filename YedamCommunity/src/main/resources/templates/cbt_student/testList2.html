@@ -111,7 +111,7 @@
 							</td>
 							<td class="tlist_2" th:if="${isResult[stat.index] == 1}">
 								<button th:id="${list.testId}" data-category="success"
-									th:onclick="|location.href='@{/testResult2(testId=${list.testId})}'|"
+									th:onclick="|location.href='@{/testResult2(testId=${list.testId},userId=${logId})}'|"
 									class="filterItem tlist_3 main-btn success-btn square-btn btn-hover">응시완료</button>
 							</td>
 							<td class="tlist_2" th:if="${isResult[stat.index] == 0}">
@@ -211,7 +211,7 @@ noTestModal();
 function noTestModal(){
 	let modal = document.querySelectorAll('.modal2');
 	let noTestBtn = document.querySelectorAll('.noTestBtn');
-	let clostBtn = document.querySelectorAll('.closeBtn2');
+	let closeBtn = document.querySelectorAll('.closeBtn2');
 	
 	for(let i = 0; i < modal.length; i++){
 		noTestBtn[i].addEventListener('click', function() { //미응시버튼을 클릭하면
