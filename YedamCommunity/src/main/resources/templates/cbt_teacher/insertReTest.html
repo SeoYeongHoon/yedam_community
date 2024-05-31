@@ -26,7 +26,11 @@
 		<h6 class="mb-25">제한 시간</h6>
 		<input type="text" placeholder="시간입력(분)" style="border: 1px solid"
 			name="testTime" id="testTime">
-
+	</div>
+	<div style="position:relative; top:10px">		
+		<h6 class="mb-25">합격 점수</h6>
+		<input type="text" placeholder="합격점수 입력" style="border: 1px solid"
+			name="passScore" id="passScore">
 	</div>
 	<br>
 	<!-- ======= 시험 제한시간 입력 end ======= -->
@@ -70,12 +74,14 @@ var tName = '';
 var tContent = '';
 var tTIme = 0;
 var userId = 0;
-var testId = window.localStorage.getItem('reTestId');
-var classId = window.localStorage.getItem('classId');
+var passScore = 0;
+var testId = 0;
+var retestId = window.localStorage.getItem('reTestId');
+var classId = window.localStorage.getItem('reClassId');
 var qContent = window.localStorage.getItem('quizContent');
 var quizId = window.localStorage.getItem('quizId');
 var quizScore = window.localStorage.getItem('quizScore');
-var curriculumId = window.localStorage.getItem('ReCurriculumId');
+var curriculumId = window.localStorage.getItem('reCurriculumId');
 var subName = window.localStorage.getItem('subjectName');
 $('#testName').on('change', function() {
 	tName = $('#testName').val();
@@ -91,7 +97,8 @@ $('#testTime').on('change', function() {
 	tTime = $('#testTime').val();
 	//window.localStorage.setItem('testTime', tTime);
 });
-
+console.log("classId 값 : "+classId)
+console.log("currId 값 : "+curriculumId)
 //--------------------------------------------
 // 재시험 대상자 리스트 출력
 //--------------------------------------------
@@ -101,7 +108,7 @@ function reTest(){
 	$.ajax({
 		url : "retestuser",
 		type : "get", 
-		data : {testId : testId},
+		data : {testId : retestId},
 		async : false,
 				
 		success : function(data){
@@ -172,13 +179,16 @@ $('#addBtn').on('click', function() {
 	//--------------------------------------------
 	// tests 테이블에 insert 동작.
 	//--------------------------------------------
+	passScore = $('#passScore').val();
 	let obj = {
 		"curriculumId" : curriculumId,
 		"testContent" : tContent,
 		"testTime" : tTime,
 		"testName" : tName,
-		"classId" : classId
+		"classId" : classId,
+		"passScore" : passScore
 	};
+	
 	$.ajax({
 		url : "testinsert",
 		type : "post",
@@ -186,10 +196,12 @@ $('#addBtn').on('click', function() {
 		data : obj,
 		
 		success : function(data) {
+			testId = data;
 			console.log(data);
-			if(data != 'true' && data == null){
+			
+			/* if(data != 'true' && data == null){
 				return;
-			}
+			} */
 		},
 		error : function(err) {
 			alert('시험 등록 실패');
@@ -206,7 +218,8 @@ $('#addBtn').on('click', function() {
 	        "quizId": arryQuizId,
 	        "subjectName": arrySubName,
 	        "curriculumId": curriculumId,
-	        "quizScore": arryQuizScore
+	        "quizScore": arryQuizScore,
+	        "testId" : testId
 	      };
 	
 	$.ajax({
@@ -222,20 +235,21 @@ $('#addBtn').on('click', function() {
 		error : function(err){
 			alert('시험 등록 실패(문제 등록 실패)');
 		}
-	}); 
+	});
 
 	//--------------------------------------------
 	// test_targets 테이블에 insert 동작
 	//--------------------------------------------
 	obj = {
-	        "userId": storageUser
+	        "userId": storageUser,
+	        "testId" : testId
 	      };
 	
 	$.ajax({
 		url : "testuserinsert",
 		type : "post",
 		contentType : 'application/json',
-		data : JSON.stringify(storageUser),
+		data : JSON.stringify(obj),
 		async : false,
 		
 		success : function(data){
@@ -245,7 +259,7 @@ $('#addBtn').on('click', function() {
 		error : function(err){
 			alert('시험 등록 실패(시험 대상자 등록 실패)');
 		}
-	}); 
+	});
 }) // 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
 
 //--------------------------------------------

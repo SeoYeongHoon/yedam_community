@@ -223,6 +223,7 @@ function updateList(tests){
 		var tTime = test.testTime;
 		var classId = 0;
 		var processIdx = idx;
+		var sName = test.subjectName;
 		
 		if(cId==0){
 			classId = test.classId
@@ -233,7 +234,7 @@ function updateList(tests){
 		let temp = `
 			<tr>
 				<td ><i class="mdi mdi-script-text-play-outline"></i></td>
-				<td class="min-width">${tName}</td>
+				<td class="min-width">${tName} [과목 : ${sName}]</td>
 				<td class="min-width">${classId}강의실</td>
 				<td class="min-width tDate">${tDate}</td>
 				<td class="min-width">${tTime}</td>

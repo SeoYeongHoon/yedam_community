@@ -5,12 +5,12 @@
 	layout:fragment="Admin">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
 <form th:action="@{/}" method="post" th:object="${teacherVO}">
+<button type="button" id="1234">test</button>
 	<!-- ======= 시험 이름 입력 start ======= -->
 	<div class="input-style-1">
 		<h6 class="mb-25">시험 Title</h6>
-		<input type="text" placeholder="시험의 이름 입력(최대 15자 입력)" th:field="*{testName}" maxlength="15" oninput="nameMaxLength(this);"/>
+		<input type="text" placeholder="시험의 이름 입력(최대 15자 입력)" th:field="*{testName}" maxlength="15" />
 	</div>
 	<!-- ======= 시험 이름 입력 end ======= -->
 
@@ -75,6 +75,7 @@ var tContent = '';
 var tTIme = 0;
 var userId = 0;
 var passScore = 0;
+var testId = 0;
 var classId = window.localStorage.getItem('classId');
 var qContent = window.localStorage.getItem('quizContent');
 var quizId = window.localStorage.getItem('quizId');
@@ -113,9 +114,7 @@ $('.checkbox').on('change', function() {
 		if ($('#user' + i).is(":checked")) {
 			storageUser.push($('#user' + i).val());
 		}
-		;
 	}
-	;
 })
 //--------------------------------------------
 // 전체 추가 체크박스 체크시 배열에 전체 대상자 추가
@@ -157,54 +156,8 @@ $('#addBtn').on('click', function() {
 		data : obj,
 		
 		success : function(data) {
-			console.log(data);
-			if(data != 'true' && data == null){
-				console.log('test 등록성공')
-			}
-			//===============================================================
-			// 테이블 등록 순서때문에 ajax위치 바꿔서 테스트중.
-			let qObj = {
-			        "quizContent": arryQContent,
-			        "quizId": arryQuizId,
-			        "subjectName": arrySubName,
-			        "curriculumId": curriculumId,
-			        "quizScore": arryQuizScore
-			      };
-			
-			$.ajax({
-				url : "quizboxinsert",
-				type : "post",
-				contentType : 'application/json',
-				data : JSON.stringify(qObj),
-				async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
-					
-				success : function(data){
-					alert('quizbox 성공');
-				},
-				error : function(err){
-					alert('시험 등록 실패(문제 등록 실패)');
-				}
-			}); 
-			//===============================================================
-			tObj = {
-			        "userId": storageUser
-			      };
-			
-			$.ajax({
-				url : "testuserinsert",
-				type : "post",
-				contentType : 'application/json',
-				data : JSON.stringify(storageUser),
-				async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
-				
-				success : function(data){
-					alert('users 성공');
-				},
-				error : function(err){
-					alert('시험 등록 실패(시험 대상자 등록 실패)');
-				}
-			});
-			//====================================================================
+			testId = data;
+			alert("새로 만들어진 testId값 : "+testId);
 		},
 		error : function(err) {
 			alert('시험 등록 실패');
@@ -213,44 +166,47 @@ $('#addBtn').on('click', function() {
 		}
 	});
 	
-	/* //--------------------------------------------
+	//--------------------------------------------
 	// quizbox 테이블에 선택된 문제수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
 	//--------------------------------------------
-	let qObj = {
+	obj = {
 	        "quizContent": arryQContent,
 	        "quizId": arryQuizId,
 	        "subjectName": arrySubName,
 	        "curriculumId": curriculumId,
-	        "quizScore": arryQuizScore
+	        "quizScore": arryQuizScore,
+	        "testId" : testId
 	      };
 	
 	$.ajax({
 		url : "quizboxinsert",
 		type : "post",
 		contentType : 'application/json',
-		data : JSON.stringify(qObj),
+		data : JSON.stringify(obj),
 		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
 			
 		success : function(data){
+			alert("testId값 in quizbox : "+testId);
 			alert('quizbox 성공');
 		},
 		error : function(err){
 			alert('시험 등록 실패(문제 등록 실패)');
 		}
-	}); 
+	});
 
 	//--------------------------------------------
 	// test_targets 테이블에 선택된 학생수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
 	//--------------------------------------------
-	tObj = {
-	        "userId": storageUser
+	obj = {
+	        "userId": storageUser,
+	        "testId" : testId
 	      };
 	
 	$.ajax({
 		url : "testuserinsert",
 		type : "post",
 		contentType : 'application/json',
-		data : JSON.stringify(storageUser),
+		data : JSON.stringify(obj),
 		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
 		
 		success : function(data){
@@ -259,7 +215,7 @@ $('#addBtn').on('click', function() {
 		error : function(err){
 			alert('시험 등록 실패(시험 대상자 등록 실패)');
 		}
-	});  */
+	});
 })
 //--------------------------------------------
 // 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
@@ -293,11 +249,5 @@ checkboxes.forEach(function(checkbox) {
 //유저 선택 체크박스 관련 기능 종료
 //--------------------------------------------
 
-function nameMaxLength(e){
-    if(e.value.length > e.maxLength){
-    	e.value = e.value.slice(0, e.maxLength);
-	}
-}
-	
 </script>
 </html>

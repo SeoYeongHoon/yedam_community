@@ -103,9 +103,11 @@ public class ExamController {
 	//--------------------------------------------
 	@PostMapping("testinsert")
 	@ResponseBody
-	public String testInsertProcess(TeacherVO teacherVO) {
+	public int testInsertProcess(TeacherVO teacherVO) {
 		examService.testInsert(teacherVO);
-		return "true";
+		int testId = examService.CurrTestId();
+		
+		return testId;
 	}
 	//--------------------------------------------
 	// 시험에 출제될 문제 등록 - 처리
@@ -114,6 +116,7 @@ public class ExamController {
 	@ResponseBody
 	public String quizboxInsertProcess(@RequestBody QuizVO quizVO) {
 		examService.quizboxInsert(quizVO);
+		System.out.println("quizbox에 들어간 값 : " + quizVO);
 		return "true";
 	}
 	//--------------------------------------------
@@ -121,8 +124,8 @@ public class ExamController {
 	//--------------------------------------------
 	@PostMapping("testuserinsert")
 	@ResponseBody
-	public String testUserInsertProcess(@RequestBody int[] userId) {
-		examService.testUserInsert(userId);
+	public String testUserInsertProcess(@RequestBody QuizVO quizVO) {
+		examService.testUserInsert(quizVO);
 		return "true";
 	}
 	
