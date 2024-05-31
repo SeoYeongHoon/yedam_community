@@ -155,7 +155,7 @@ public class PostController {
         postVO.setWriter(userVO.getNickname());
         
         model.addAttribute("post", postVO);
-        return "posts/postinsert";
+        return "posts/postInsert";
     }
 
 	// --------------------------------------------
@@ -195,7 +195,7 @@ public class PostController {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    return "redirect:/post/" + postVO.getBoardId();
+	    return "redirect:/all/post/" + postVO.getBoardId();
 	}
 
 
@@ -211,7 +211,7 @@ public class PostController {
 		postVO.setBoardId(boardId);
 		postService.PostDelete(postVO);
 
-		return "redirect:/post/" + boardId;
+		return "redirect:/all/post/" + boardId;
 	}
 
 	// --------------------------------------------
@@ -224,7 +224,7 @@ public class PostController {
 			                   , Authentication authentication) {
 
 		if (postId == null) {
-			return "redirect:/all/post/" + boardId;
+			return "redirect:/post/" + boardId;
 		}
 		PostVO postVO = postService.getPostReplies(postId, boardId);
 		model.addAttribute("post", postVO);
