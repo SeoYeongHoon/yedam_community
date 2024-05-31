@@ -152,7 +152,7 @@ public class PostController {
         
         // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
         LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-        postVO.setWriter(userVO.getNickname());
+        postVO.setWriter(userVO.getUsername());
         
         model.addAttribute("post", postVO);
         return "posts/postInsert";
@@ -187,7 +187,7 @@ public class PostController {
 
 	        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	        postVO.setUserId(userVO.getuserId());
-	        postVO.setWriter(userVO.getNickname());
+	        postVO.setWriter(userVO.getUsername());
 	        postVO.setCreateDate(new Date());
 	        postVO.setUpdateDate(new Date());
 	        postService.createPost(postVO);
@@ -278,7 +278,7 @@ public class PostController {
 			                 Authentication authentication) {
 		try {
 			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-			reportVO.setReporter(userVO.getNickname());
+			reportVO.setReporter(userVO.getUsername());
 			reportVO.setProcess(0);
 			postService.createReport(reportVO);
 		} catch (Exception e) {
