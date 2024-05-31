@@ -10,9 +10,9 @@
 			<nav class="menu-desktop" style="height: 100%; display: flex; align-items: center; position: relative;">
 				<ul class="main-menu">
 					<div class="" style="margin-right: 20px;">
-						<a href="/home"><img src="/images/logo_main.png" alt="LOGO"></a>
+						<a href="/all/home"><img src="/images/logo_main.png" alt="LOGO"></a>
 					</div>
-					<li class="main-menu-active"><a href="/home">Home</a>
+					<li class="mega-menu-item"><a href="/all/home">Home</a>
 					<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_ADMIN')">
 						<li class="mega-menu-item"><a href="/teachermain">LMS</a></li>
 					</th:block>
@@ -22,7 +22,7 @@
 					<li class="mega-menu-item"><a th:href="@{/post/4}">질문과 토론 게시판</a></li>
 				</ul>
 				<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD') or hasAuthority('ROLE_ADMIN')">
-					<div class="profile_my_info" style="position: absolute; right: 90px;">
+					<div class="profile_my_info" style="position: absolute; right: 90px; color: black;">
 						<p style="font-weight: bold">[[${#authentication.name}]] 님</p>
 						<p>환영합니다!</p>
 					</div>
@@ -63,6 +63,39 @@
 	        menuList.style.display = 'none';
 	    }
 	});
+	
+	// 현재 페이지 URL
+    function getHomeCurrentPage() {
+        var pathArray = window.location.pathname.split('/');
+        console.log(pathArray);
+        return pathArray[pathArray.length - 1];
+    }
 
+    // 현재 페이지에 해당하는 메뉴에 active 추가
+    function setActiveHomeMenuItem() {
+        var currentPage = getHomeCurrentPage();
+        var navLinks = document.querySelectorAll('.main-nav ul li a');
+        console.log("현재 페이지: ", currentPage);
+		console.log("네비게이션", navLinks);
+        
+        for (var i = 0; i < navLinks.length; i++) {
+			console.log("일단 페이지: " + currentPage);
+        	
+            if (navLinks[i].getAttribute('href') === ("/all/" + currentPage)) {
+				console.log("어드민페이지: " + navLinks[i].getAttribute('href'));
+                navLinks[i].classList.add('active');
+            } else if (navLinks[i].getAttribute('href') === ("/post/" + currentPage)) {
+				console.log("모든 유저 페이지: " + navLinks[i].getAttribute('href'));
+				navLinks[i].classList.add('active'); 
+			}
+			 else {
+				console.log("이 외 페이지: " + navLinks[i].getAttribute('href'));
+            	navLinks[i].classList.remove('active');
+            }
+        }
+    }
+	window.onload = function() {
+		setActiveHomeMenuItem();
+	}
 </script>
 </html>

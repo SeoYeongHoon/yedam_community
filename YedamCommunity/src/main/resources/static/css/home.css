@@ -268,3 +268,11 @@ a.control_next {
 	margin: 0 auto;
 	position: relative;
 }
+
+.main-nav ul li a:hover {
+  color: #51BC56;
+}
+
+.main-nav ul li a.active {
+	color: #51BC56;
+}
