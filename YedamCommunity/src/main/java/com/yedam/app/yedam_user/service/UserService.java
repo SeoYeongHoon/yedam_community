@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
@@ -73,4 +74,16 @@ public interface UserService {
 	
 	// 비밀번호 초기화용 메일 전송 
 	public void sendPasswordResetEmail(String id, String name, String email);
+	
+	// 초기화용 token 찾기
+	public Optional<UserVO> findByResetToken(String token);
+	
+	// 비밀번호 업데이트
+	public void updatePassword(String resetToken, String newPassword);
+	
+	// 회원가입 시 이메일 인증 메일 전송
+	public void sendVerificationEmail(String email);
+	
+	// 인증코드 확인
+	public boolean verifyCode(String email, String code);
 }

@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head th:replace="common/configs/config :: ConfigFragment">
-</head>	  
+</head>
 <body>
 	<section class="tab-components">
 		<div class="container-fluid" style="padding-bottom: 100px;">
@@ -15,15 +15,14 @@
 					</div>
 				</div>
 				<div class="add-line"><p>로그인에 필요한 정보를 입력해주세요.</p></div>
-				<div class="alert alert-danger" role="alert"
-	                 th:if="${loginError}">
-	                <span th:text="${loginError}"></span>
-	                <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
-	            </div>
+				<!-- 로그인 실패 알림표시 -->
+				<div id="error-message" class="alert alert-danger" role="alert" style="display: none;">
+					<button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+				</div>
 			</div>
 			
 			<!-- 로그인 폼 -->
-			<form id="login_form" action="/" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;" method="POST">
+			<form id="login_form" class="form-elements-wrapper" style="max-width: 720px; margin: 0 auto;">
 				<div class="row">
 					<div class="col-12">
 						<!-- input style start -->
@@ -41,18 +40,60 @@
 							</div>
 						</div>
 						<p>회원이 아니신가요? <a href="/all/register">회원가입하기</a></p>
-						<p><a href="/findId">아이디 찾기</a> 또는 <a href="/findPw">비밀번호 찾기</a></p>
+						<p><a href="/all/findId">아이디 찾기</a> 또는 <a href="/all/findPw">비밀번호 찾기</a></p>
 						<div class="d-flex" style="margin-top: 10px; justify-content: center;">
-							<button type="submit" class="login_btn main-btn primary-btn btn-hover" style="padding: 8px 30px; margin-right: 10px;">로그인</button>
+							<button type="button" id="loginButton" class="login_btn main-btn primary-btn btn-hover" style="padding: 8px 30px; margin-right: 10px;">로그인</button>
 						</div>
 					</div>
 				</div>
 			</form>
-			
 		</div>
 	</section>
 </body>
 <script>
-	
+	//--------------------------------------------
+	// 로그인 처리 및 아이디/비번 틀렸을 때 로직
+	//--------------------------------------------
+	$(document).ready(function() {
+	    function login() {
+	        const username = $('#loginId').val();
+	        const password = $('#password').val();
+
+	        $.ajax({
+	            url: '/login',
+	            type: 'POST',
+	            contentType: 'application/x-www-form-urlencoded',
+	            data: {
+	                username: encodeURIComponent(username),
+	                password: encodeURIComponent(password)
+	            },
+	            success: function(response) {
+	                window.location.href = '/home';
+	            },
+	            error: function(xhr) {
+	                if (xhr.status === 401) {
+	                    $('#error-message').css("display", "block");
+	                    $('#error-message').text('아이디나 비밀번호를 확인하세요.');
+	                } else {
+	                    $('#error-message').css("display", "block");
+	                    $('#error-message').text('알 수 없는 오류가 발생했습니다.');
+	                }
+	            }
+	        });
+	    }
+
+	    $('#loginButton').click(function() {
+	        login();
+	    });
+
+		// 입력 필드에서 엔터키 눌렀을 때 이벤트
+	    $('#login_form').on('keypress', function(e) {
+	        if (e.which === 13) { // 엔터키의 키 코드
+	            e.preventDefault(); // 기본 제출 동작 방지
+	            login();
+	        }
+	    });
+	});
+
 </script>
 </html>

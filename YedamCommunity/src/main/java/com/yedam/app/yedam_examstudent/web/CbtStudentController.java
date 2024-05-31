@@ -35,9 +35,16 @@ public class CbtStudentController {
 	@Autowired
 	CbtStudentService cbtStudentService;
 	
+<<<<<<< HEAD
 	@Scheduled(cron = "*/5 * * * * *")
 	public void schedule() {
 	}
+=======
+//	@Scheduled(cron = "*/5 * * * * *")
+//	public void schedule() {
+//		System.out.println(1);
+//	}
+>>>>>>> branch 'Limwoo' of https://github.com/SeoYeongHoon/yedam_community.git
 	
 	//ㅡㅡㅡㅡ
 	//시험전체

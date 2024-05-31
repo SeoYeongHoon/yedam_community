@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_post.web;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.ReportVO;
 /**
  * 게시판, 게시글
- * 2024.05.29
+ * 2024.05.30
  * 임우열
  */
 @Controller
@@ -148,8 +149,6 @@ public class PostController {
         PostVO postVO = new PostVO();
         postVO.setBoardId(boardId);
         
-        
-        // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
         LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
         postVO.setWriter(userVO.getNickname());
         
@@ -162,40 +161,61 @@ public class PostController {
 	// --------------------------------------------
 	@PostMapping("/postInsert")
 	public String postInsertProcess(PostVO postVO, 
-	                                @RequestParam("file") MultipartFile file, 
+	                                @RequestParam("files") List<MultipartFile> files, 
 	                                Authentication authentication) {
 	    try {
-	        if (!file.isEmpty()) {
-	            String fileName = file.getOriginalFilename();
-	            
-	            String filePath = uploadPath + "/" + fileName;
-	            
-	            File directory = new File(uploadPath);
-	            if (!directory.exists()) {
-	                directory.mkdirs();
+	        List<BoardFilesVO> boardFiles = new ArrayList<>();
+
+	        for (MultipartFile file : files) {
+	            if (!file.isEmpty()) {
+	                String fileName = file.getOriginalFilename();
+	                String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+	                long fileSize = file.getSize();
+
+	                // 연도/월 폴더 생성
+	                String datePath = new SimpleDateFormat("yyyy/MM").format(new Date());
+	                String filePath = uploadPath + "/" + datePath;
+
+	                File directory = new File(filePath);
+	                if (!directory.exists()) {
+	                    directory.mkdirs();
+	                }
+
+	                // 파일 저장
+	                File dest = new File(filePath + "/" + fileName);
+	                file.transferTo(dest);
+
+	                // 파일 정보 저장
+	                BoardFilesVO boardFile = new BoardFilesVO();
+	                boardFile.setBoardfileName(fileName);
+	                boardFile.setBoardfileSize(fileSize);
+	                boardFile.setBoardfileLocation(datePath + "/" + fileName);
+	                boardFile.setBoardfileExt(fileExt);
+	                boardFile.setBoardId(postVO.getBoardId()); // boardId 설정
+	                boardFiles.add(boardFile);
 	            }
-	            
-	            File dest = new File(filePath);
-	            file.transferTo(dest);
-	            
-	            postVO.setBoardfileName(fileName);
-	            postVO.setBoardfileSize(file.getSize());
-	            postVO.setBoardfileLocation(fileName);
-	            postVO.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
 	        }
 
 	        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	        postVO.setUserId(userVO.getuserId());
 	        postVO.setWriter(userVO.getNickname());
-	        
+
 	        postVO.setCreateDate(new Date());
 	        postVO.setUpdateDate(new Date());
-	        postService.createPost(postVO);
+	        postVO.setBoardFiles(boardFiles);
+
+	        // 로그 추가
+	        System.out.println("PostVO: " + postVO);
+	        System.out.println("BoardFiles: " + boardFiles);
+
+	        int postId = postService.createPost(postVO);
+
+	        return "redirect:/post/" + postVO.getBoardId() + "/" + postId;
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	        return "redirect:/error"; // 오류 발생 시 리디렉션
 	    }
-	    return "redirect:/post/" + postVO.getBoardId();
 	}
 
 
