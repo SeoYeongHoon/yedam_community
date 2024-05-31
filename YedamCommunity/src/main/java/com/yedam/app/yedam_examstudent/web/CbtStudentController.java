@@ -37,7 +37,6 @@ public class CbtStudentController {
 	
 	@Scheduled(cron = "*/5 * * * * *")
 	public void schedule() {
-		System.out.println(1);
 	}
 	
 	//ㅡㅡㅡㅡ
