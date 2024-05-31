@@ -248,8 +248,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostVO> getPostAll(PostVO postVO) {
-		return postMapper.MainpagePostList(postVO);
+	public List<PostVO> getPostAll() {
+		return postMapper.MainpagePostList();
 	}
 
 }

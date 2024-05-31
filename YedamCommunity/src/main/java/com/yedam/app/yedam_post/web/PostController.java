@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +33,7 @@ import com.yedam.app.yedam_post.service.ReportVO;
  * 임우열
  */
 @Controller
+@RequestMapping("/all")
 public class PostController {
 	
 	
@@ -48,7 +50,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 리스트 조회
 	// --------------------------------------------
-	@GetMapping("/all/post/{boardId}")
+	@GetMapping("/post/{boardId}")
 	public String postList(@PathVariable int boardId,
 	                       PostVO postVO,
 	                       @RequestParam(required = false, defaultValue = "1") int page,
@@ -96,7 +98,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------
-	@GetMapping("/all/post/{boardId}/{postId}")
+	@GetMapping("/post/{boardId}/{postId}")
 	public String getPostDetail(@PathVariable int boardId,
 	                            @PathVariable int postId,
 	                            Authentication authentication,
@@ -140,7 +142,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록
 	// --------------------------------------------
-	@GetMapping("/all/postInsert/{boardId}")
+	@GetMapping("/postInsert/{boardId}")
     public String postInsertForm(Model model
     		                   , @PathVariable int boardId
     		                   , Authentication authentication) {
@@ -153,13 +155,13 @@ public class PostController {
         postVO.setWriter(userVO.getNickname());
         
         model.addAttribute("post", postVO);
-        return "posts/postinsert";
+        return "posts/postInsert";
     }
 
 	// --------------------------------------------
 	// 게시글 등록 처리
 	// --------------------------------------------
-	@PostMapping("/all/postInsert")
+	@PostMapping("/postInsert")
 	public String postInsertProcess(PostVO postVO, 
 	                                @RequestParam("file") MultipartFile file, 
 	                                Authentication authentication) {
@@ -215,14 +217,14 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 업데이트
 	// --------------------------------------------
-	@GetMapping("/all/postUpdate/{boardId}/{postId}")
+	@GetMapping("/postUpdate/{boardId}/{postId}")
 	public String postUpdateForm(@PathVariable Integer boardId
 			                   , @PathVariable Integer postId
 			                   , Model model
 			                   , Authentication authentication) {
 
 		if (postId == null) {
-			return "redirect:/all/post/" + boardId;
+			return "redirect:/post/" + boardId;
 		}
 		PostVO postVO = postService.getPostReplies(postId, boardId);
 		model.addAttribute("post", postVO);
