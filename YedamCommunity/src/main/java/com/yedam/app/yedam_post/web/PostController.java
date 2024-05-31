@@ -230,7 +230,7 @@ public class PostController {
 		model.addAttribute("post", postVO);
 		model.addAttribute("boardId", boardId);
 		model.addAttribute(postVO);
-		return "/posts/postUpdate";
+		return "posts/postUpdate";
 	}
 
 	// --------------------------------------------
