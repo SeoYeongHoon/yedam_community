@@ -1,5 +1,6 @@
 package com.yedam.app.yedam_user.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -235,5 +236,11 @@ public class UserServiceImpl implements UserService {
 		Random random = new Random();
 		int verificationCode = 1000 + random.nextInt(9000); // 1000부터 9999 사이의 숫자 생성
 		return String.valueOf(verificationCode);
+	}
+
+	// 수강생 => 수료생 자동 변경
+	@Override
+	public void updateUserType() {
+		userMapper.updateUserType();
 	}
 }
