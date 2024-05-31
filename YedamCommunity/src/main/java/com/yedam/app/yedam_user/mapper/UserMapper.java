@@ -1,5 +1,6 @@
 package com.yedam.app.yedam_user.mapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserVO;
@@ -92,4 +94,7 @@ public interface UserMapper {
 	public void updatePassword(@Param("id") String id, @Param("password") String password);
 
 	// 회원가입 시 이메일 인증 확인
+	
+	// 수강생 => 수료생 자동 변경
+	public void updateUserType();
 }

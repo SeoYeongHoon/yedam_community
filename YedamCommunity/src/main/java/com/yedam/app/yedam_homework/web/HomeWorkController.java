@@ -33,6 +33,8 @@ import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
 import com.yedam.app.yedam_homework.upload.service.ReplyFileVO;
 import com.yedam.app.yedam_subjects.service.SubjectService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 과제 관리
  * 
@@ -40,6 +42,7 @@ import com.yedam.app.yedam_subjects.service.SubjectService;
  * 
  */
 @Controller
+//@Slf4j 넣고 sysout 대신에  log.debug("보드 리스트") 사용하기
 @RequestMapping("/admin")
 public class HomeWorkController {
 
@@ -115,18 +118,13 @@ public class HomeWorkController {
 	@ResponseBody
 	public String homeworkInsertProcess(@RequestPart MultipartFile[] uploadFiles, 
 													 HomeWorkVO homeworkVO) {
-		System.err.println("홈워크 == "+ homeworkVO);
-		System.err.println("파일 == "+ uploadFiles);
 
 		// 과제등록
 		homeworkService.homeworkInsert(homeworkVO);
 
 		// 타겟 등록
 		HomeWorkTargetVO targetVo = homeworkService.homeworktargetList(homeworkVO);
-		//targetVo.setHomeworkId(targetVo.getHomeworkId());
-		//targetVo.setCurriculumId(targetVo.getCurriculumId());
 		homeworkService.homeworkTargetInsert(targetVo);
-		System.err.println(targetVo.getHomeworkId());
 
 		// 과제 파일 업로드
 		homeworkfileService.homeworkUploadFile(uploadFiles, targetVo.getHomeworkId());

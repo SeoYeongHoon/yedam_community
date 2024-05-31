@@ -53,7 +53,7 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 			
 			String downloadFileName = uuid + "_" + fileName;
 			
-			String saveName = uploadPath + File.separator + uploadFileName;
+			String saveName = uploadPath + uploadFileName;
 			System.err.println("파일 저장시 이름: " + saveName);
 			
 			// 특정 경로의 파일 정보 가져오는 메소드

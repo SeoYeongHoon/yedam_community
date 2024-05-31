@@ -368,8 +368,14 @@
                 ON(b.quiz_id = c.quiz_id)
                 JOIN test_results d
                 ON(b.quiz_id = d.quiz_id)
-        WHERE   b.subject_id = #{subjectId}
-        AND     b.test_id = #{testId})
+                JOIN exam_results e
+                ON(d.result_id = e.result_id)
+        WHERE   e.test_target_id = (SELECT  test_target_id
+                              		FROM    test_targets
+                                	WHERE   test_id = #{testId} 
+                                	AND		user_id = #{userId})
+        AND 	d.user_id = #{userId} 
+        AND		b.test_id = #{testId})
         <!-- 문제 보기 열 > 행 바꾸기 -->
         SELECT 
         	test_result_id

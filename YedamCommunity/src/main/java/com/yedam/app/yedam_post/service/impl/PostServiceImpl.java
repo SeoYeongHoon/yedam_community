@@ -239,8 +239,17 @@ public class PostServiceImpl implements PostService {
 		return postMapper.deleteLike(map);
 	}
 	
+	//--------------------------------------------
+	// 파일 출력
+	//--------------------------------------------
+	
 	public List<BoardFilesVO> getBoardFiles(int postId, int boardId) {
 	    return postMapper.getBoardFiles(postId, boardId);
+	}
+
+	@Override
+	public List<PostVO> getPostAll(PostVO postVO) {
+		return postMapper.MainpagePostList(postVO);
 	}
 
 }
