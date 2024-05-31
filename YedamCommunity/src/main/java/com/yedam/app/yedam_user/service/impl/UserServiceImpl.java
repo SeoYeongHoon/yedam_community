@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.yedam_common.LoginUserVO;
-import com.yedam.app.yedam_curriculum.service.CurriculumVO;
-import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_user.mapper.UserMapper;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
