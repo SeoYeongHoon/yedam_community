@@ -9,4 +9,6 @@ public class QuizVO {
 	int [] quizScore;
 	String[] subjectName;
 	int curriculumId;
+	int testId;
+	int [] userId;
 }

@@ -263,7 +263,7 @@ function quizContentList(page, subjectName){
 			//--------------------------------------------
 			// 문제 체크박스 버튼 누르고 문제선택 누를시 문제박스 색상 변경.
 			//--------------------------------------------
-			$('#quizSelect').on('click', function(e){
+			$('#quizSelect').on('click', function(index, e){
 				$("input:checkbox[name=select]:checked").each(function(){
 					$("input:checkbox[name=select]:checked").parent().parent().attr("style", "border-color:blue;")
 				})
