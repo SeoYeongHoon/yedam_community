@@ -1,5 +1,6 @@
 package com.yedam.app.yedam_common;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,10 +8,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class SpringSecurityConfig {
+	
+	@Autowired
+	private AuthenticationFailureHandler customAuthenticationFailureHandler;
 
 	// 암호화
 	@Bean
@@ -23,16 +28,21 @@ public class SpringSecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
 		http
-			.authorizeHttpRequests(requests ->requests
-				.antMatchers("/**").permitAll()
-//				.antMatchers("/adminMain").hasRole("ADMIN")
+			.authorizeHttpRequests(requests -> requests
+//				.antMatchers("/**").permitAll()
+				.antMatchers("/adminMain/**").hasRole("ADMIN")
 				.antMatchers("/home").authenticated()
+				.antMatchers("/all/**").permitAll()
+				.antMatchers("/css/**", "/fonts/**", "/images/**", "/js/**", "/vendor/**").permitAll()
 				.anyRequest().authenticated())
-			.formLogin(login ->login
-				.loginPage("/").permitAll()
-				.defaultSuccessUrl("/home", true))
-			.logout(logout ->logout
-				.logoutSuccessUrl("/")
+			.formLogin(login -> login
+				.loginPage("/all/login").permitAll()
+				.loginProcessingUrl("/login")
+				.defaultSuccessUrl("/home", true)
+				.failureHandler(customAuthenticationFailureHandler)
+				)
+			.logout(logout -> logout
+				.logoutSuccessUrl("/all/login")
 				.permitAll());
 		
 		http.csrf(csrf ->csrf.disable());

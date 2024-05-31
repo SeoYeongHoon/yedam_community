@@ -283,12 +283,12 @@ public class ExamController {
 	//--------------------------------------------
 	@GetMapping("userTestInfo")
 	public String userTestInfo(TeacherVO teacherVO, Model model) {
-		try {
-			TeacherVO findVO = examService.userTestInfo(teacherVO);
-			model.addAttribute("userTestInfo", findVO);
-		} catch (Exception e){
+		TeacherVO findVO = examService.userTestInfo(teacherVO);
+		model.addAttribute("userTestInfo", findVO);
+		if(findVO == null) {
 			return "redirect:teachermain";
 		}
+		
 		return "cbt_teacher/userTestInfo";
 	}
 	//--------------------------------------------
