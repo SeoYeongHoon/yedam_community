@@ -20,9 +20,17 @@
 
 
   <h2 th:if="${#lists.size(postInfo.boardFiles) > 0}"></h2>
-    <div th:each="file : ${postInfo.boardFiles}">
-     <img th:if="${file.exists}" th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
-    </div>
+	<div th:each="file : ${postInfo.boardFiles}">
+	    <div th:if="${file.boardfileLocation.endsWith('.jpg') or file.boardfileLocation.endsWith('.jpeg') or file.boardfileLocation.endsWith('.png') or file.boardfileLocation.endsWith('.gif')}">
+	        <img th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
+	    </div>
+	    
+	    <div th:if="${file.boardfileLocation.endsWith('.mp4') or file.boardfileLocation.endsWith('.webm') or file.boardfileLocation.endsWith('.ogg')}">
+	        <video controls width="250">
+	            <source th:src="|/files/${file.boardfileLocation}|" type="video/mp4" />
+	        </video>
+	    </div>
+	</div>
   <div th:switch="${boardId}">
     <div th:case="2">
       <h3>구인구직 게시판 전용</h3>
