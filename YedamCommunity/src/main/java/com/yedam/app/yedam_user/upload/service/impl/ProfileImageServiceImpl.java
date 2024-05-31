@@ -92,9 +92,4 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 		return uploadFileName.replace(File.separator, "/");
 	}
 
-//	@Override
-//	public ProfileImageVO getProfileImageByLogId(String id) {
-//		return profileImageMapper.getProfileImageByLogId(id);
-//	}
-
 }
