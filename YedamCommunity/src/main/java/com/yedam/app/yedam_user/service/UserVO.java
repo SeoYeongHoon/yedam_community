@@ -196,6 +196,7 @@ public class UserVO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
 	
 	
 	
