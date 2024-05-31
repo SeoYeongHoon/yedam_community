@@ -88,6 +88,6 @@ public interface PostMapper {
 	//--------------------------------------------
     // 메인페이지 조회
     //--------------------------------------------
-	public List<PostVO> MainpagePostList(PostVO postVO);
+	public List<PostVO> MainpagePostList();
 }
 

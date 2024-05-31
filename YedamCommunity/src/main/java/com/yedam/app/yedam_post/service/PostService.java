@@ -109,8 +109,7 @@ public interface PostService {
 	//--------------------------------------------
     // 메인페이지 조회
     //--------------------------------------------
-	public List<PostVO> getPostAll(PostVO postVO);
-
+	public List<PostVO> getPostAll();
 
 }
 
