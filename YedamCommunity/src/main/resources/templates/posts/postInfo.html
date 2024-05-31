@@ -97,12 +97,12 @@
     </form>
   </div>
 <div th:if="${isOwner}">
-  <a th:href="@{/postUpdate/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}">수정</a>
+  <a th:href="@{/all/postUpdate/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}">수정</a>
   <form th:action="@{/postDelete/{boardId}/{postId}(boardId=${boardId}, postId=${postInfo.postId})}" method="get">
     <button type="submit">삭제</button>
   </form>
   </div>
-  <a th:href="@{/post/{boardId}(boardId=${boardId})}">목록으로</a>
+  <a th:href="@{/all/post/{boardId}(boardId=${boardId})}">목록으로</a>
 </div>
 <script>
   $(document).ready(function () {
@@ -235,7 +235,9 @@
             alert("신고 접수에 실패하였습니다.");
           }
         },
-        error: function () {},
+        error: function (err) {
+        	alert("에러");
+        },
       });
     });
   });

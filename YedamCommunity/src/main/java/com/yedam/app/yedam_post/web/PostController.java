@@ -1,7 +1,6 @@
 package com.yedam.app.yedam_post.web;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +48,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 리스트 조회
 	// --------------------------------------------
-	@GetMapping("/post/{boardId}")
+	@GetMapping("/all/post/{boardId}")
 	public String postList(@PathVariable int boardId,
 	                       PostVO postVO,
 	                       @RequestParam(required = false, defaultValue = "1") int page,
@@ -97,7 +96,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------
-	@GetMapping("/post/{boardId}/{postId}")
+	@GetMapping("/all/post/{boardId}/{postId}")
 	public String getPostDetail(@PathVariable int boardId,
 	                            @PathVariable int postId,
 	                            Authentication authentication,
@@ -141,7 +140,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록
 	// --------------------------------------------
-	@GetMapping("/postInsert/{boardId}")
+	@GetMapping("/all/postInsert/{boardId}")
     public String postInsertForm(Model model
     		                   , @PathVariable int boardId
     		                   , Authentication authentication) {
@@ -160,15 +159,16 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록 처리
 	// --------------------------------------------
-	@PostMapping("/postInsert")
+	@PostMapping("/all/postInsert")
 	public String postInsertProcess(PostVO postVO, 
 	                                @RequestParam("file") MultipartFile file, 
 	                                Authentication authentication) {
 	    try {
 	        if (!file.isEmpty()) {
 	            String fileName = file.getOriginalFilename();
-	            
-	            String filePath = uploadPath + "/" + fileName;
+	            System.err.println("fileName :" + fileName);
+	            String filePath = uploadPath + fileName;
+	            System.err.println("filePath :" + filePath);
 	            
 	            File directory = new File(uploadPath);
 	            if (!directory.exists()) {
@@ -177,7 +177,6 @@ public class PostController {
 	            
 	            File dest = new File(filePath);
 	            file.transferTo(dest);
-	            
 	            postVO.setBoardfileName(fileName);
 	            postVO.setBoardfileSize(file.getSize());
 	            postVO.setBoardfileLocation(fileName);
@@ -187,7 +186,6 @@ public class PostController {
 	        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	        postVO.setUserId(userVO.getuserId());
 	        postVO.setWriter(userVO.getNickname());
-	        
 	        postVO.setCreateDate(new Date());
 	        postVO.setUpdateDate(new Date());
 	        postService.createPost(postVO);
@@ -195,7 +193,7 @@ public class PostController {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    return "redirect:/post/" + postVO.getBoardId();
+	    return "redirect:/all/post/" + postVO.getBoardId();
 	}
 
 
@@ -211,25 +209,26 @@ public class PostController {
 		postVO.setBoardId(boardId);
 		postService.PostDelete(postVO);
 
-		return "redirect:/post/" + boardId;
+		return "redirect:/all/post/" + boardId;
 	}
 
 	// --------------------------------------------
 	// 게시글 업데이트
 	// --------------------------------------------
-	@GetMapping("/postUpdate/{boardId}/{postId}")
+	@GetMapping("/all/postUpdate/{boardId}/{postId}")
 	public String postUpdateForm(@PathVariable Integer boardId
 			                   , @PathVariable Integer postId
-			                   , @PathVariable int userId
-			                   , Model model) {
+			                   , Model model
+			                   , Authentication authentication) {
 
 		if (postId == null) {
-			return "redirect:/post/" + boardId;
+			return "redirect:/all/post/" + boardId;
 		}
-		PostVO post = postService.getPostReplies(postId, boardId);
-		model.addAttribute("post", post);
+		PostVO postVO = postService.getPostReplies(postId, boardId);
+		model.addAttribute("post", postVO);
 		model.addAttribute("boardId", boardId);
-		return "posts/postUpdate";
+		model.addAttribute(postVO);
+		return "/posts/postUpdate";
 	}
 
 	// --------------------------------------------
@@ -243,7 +242,7 @@ public class PostController {
 	    try {
 	        if (!file.isEmpty()) {
 	            String fileName = file.getOriginalFilename();
-	            String filePath = uploadPath + "/" + fileName;
+	            String filePath = uploadPath + fileName;
 
 	            File directory = new File(uploadPath);
 	            if (!directory.exists()) {
@@ -296,7 +295,6 @@ public class PostController {
 	public boolean updateLike(@RequestParam("postId") int postId, 
 			              Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		
 		PostVO postVO = new PostVO();
 		postVO.setUserId(userVO.getuserId());
 	    int userId = userVO.getuserId();

@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.yedam_post.mapper.PostMapper">
 
-	<!-- 게시글 등록 - PL/SQL - -->
+	<!-- 게시글 등록 - PL/SQL -->
     <insert id="insertPost" parameterType="PostVO" statementType="CALLABLE">
         <![CDATA[
     DECLARE
@@ -240,4 +240,20 @@
             OR writer LIKE '%' || #{postVO.keyword} || '%' )
       </if>
 	</sql>
+	
+	<select id="MainpagePostList" parameterType="int" resultType="PostVO">
+	    SELECT POST_ID ,
+               BOARD_ID ,
+               USER_ID ,
+               TITLE ,
+               POST_CONTENT ,
+               CREATE_DATE ,
+               WRITER ,
+               POST_VIEW ,
+               POST_LIKE ,
+               UPDATE_DATE 
+        FROM posts
+        WHERE board_id = {boardId}
+        ORDER BY post_like DESC
+    </select>
 </mapper>
