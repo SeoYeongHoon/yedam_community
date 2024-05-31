@@ -4,8 +4,8 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.yedam_post.mapper.PostMapper">
 
-	<!-- 게시글 등록 - PL/SQL - -->
-<!-- <insert id="insertPost" parameterType="PostVO" statementType="CALLABLE">
+	<!-- 게시글 등록 - PL/SQL -->
+    <insert id="insertPost" parameterType="PostVO" statementType="CALLABLE">
         <![CDATA[
     DECLARE
         v_post_id NUMBER;
@@ -56,51 +56,7 @@
               , #{boardfileExt,      jdbcType=VARCHAR});
     END;
     ]]>
-    </insert> -->
-    
-    <!-- 게시글 등록 -->
-	<insert id="insertPost" parameterType="PostVO">
-    	INSERT INTO posts (post_id
-    	                 , board_id
-    	                 , title
-    	                 , post_content
-    	                 , create_date
-    	                 , update_date
-    	                 , writer
-    	                 , post_view
-    	                 , post_like
-    	                 , user_id)
-    	VALUES (post_id_seq.NEXTVAL
-    	      , #{boardId}
-    	      , #{title}
-    	      , #{postContent}
-    	      , #{createDate}
-    	      , #{updateDate}
-    	      , #{writer}
-    	      , 0
-    	      , 0
-    	      , #{userId})
-	</insert>
-
-    <!-- 파일 정보 등록 -->
-	<insert id="insertBoardFile" parameterType="BoardFilesVO">
-    	INSERT INTO boardfiles (boardfile_id
-    	                      , boardfile_name
-    	                      , boardfile_size
-    	                      , boardfile_location
-    	                      , download_location
-    	                      , boardfile_ext
-    	                      , post_id
-    	                      , board_id)
-    	VALUES (boardfile_id_seq.NEXTVAL
-    	      , #{boardfileName}
-    	      , #{boardfileSize}
-    	      , #{boardfileLocation}
-    	      , #{boardfileLocation}
-    	      , #{boardfileExt}
-    	      , #{postId}
-    	      , #{boardId})
-	</insert>
+    </insert>
 
 	<!-- 게시글 단건조회 -->
 	<select id="getPostDetails" parameterType="int" resultType="PostVO">
@@ -284,4 +240,20 @@
             OR writer LIKE '%' || #{postVO.keyword} || '%' )
       </if>
 	</sql>
+	
+	<select id="MainpagePostList" parameterType="int" resultType="PostVO">
+	    SELECT POST_ID ,
+               BOARD_ID ,
+               USER_ID ,
+               TITLE ,
+               POST_CONTENT ,
+               CREATE_DATE ,
+               WRITER ,
+               POST_VIEW ,
+               POST_LIKE ,
+               UPDATE_DATE 
+        FROM posts
+        WHERE board_id = {boardId}
+        ORDER BY post_like DESC
+    </select>
 </mapper>

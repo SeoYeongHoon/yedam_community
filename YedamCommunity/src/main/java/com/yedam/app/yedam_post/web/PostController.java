@@ -1,8 +1,6 @@
 package com.yedam.app.yedam_post.web;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +28,7 @@ import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.ReportVO;
 /**
  * 게시판, 게시글
- * 2024.05.30
+ * 2024.05.29
  * 임우열
  */
 @Controller
@@ -50,7 +48,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 리스트 조회
 	// --------------------------------------------
-	@GetMapping("/post/{boardId}")
+	@GetMapping("/all/post/{boardId}")
 	public String postList(@PathVariable int boardId,
 	                       PostVO postVO,
 	                       @RequestParam(required = false, defaultValue = "1") int page,
@@ -98,7 +96,7 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------
-	@GetMapping("/post/{boardId}/{postId}")
+	@GetMapping("/all/post/{boardId}/{postId}")
 	public String getPostDetail(@PathVariable int boardId,
 	                            @PathVariable int postId,
 	                            Authentication authentication,
@@ -142,13 +140,15 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록
 	// --------------------------------------------
-	@GetMapping("/postInsert/{boardId}")
+	@GetMapping("/all/postInsert/{boardId}")
     public String postInsertForm(Model model
     		                   , @PathVariable int boardId
     		                   , Authentication authentication) {
         PostVO postVO = new PostVO();
         postVO.setBoardId(boardId);
         
+        
+        // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
         LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
         postVO.setWriter(userVO.getNickname());
         
@@ -159,63 +159,41 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록 처리
 	// --------------------------------------------
-	@PostMapping("/postInsert")
+	@PostMapping("/all/postInsert")
 	public String postInsertProcess(PostVO postVO, 
-	                                @RequestParam("files") List<MultipartFile> files, 
+	                                @RequestParam("file") MultipartFile file, 
 	                                Authentication authentication) {
 	    try {
-	        List<BoardFilesVO> boardFiles = new ArrayList<>();
-
-	        for (MultipartFile file : files) {
-	            if (!file.isEmpty()) {
-	                String fileName = file.getOriginalFilename();
-	                String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
-	                long fileSize = file.getSize();
-
-	                // 연도/월 폴더 생성
-	                String datePath = new SimpleDateFormat("yyyy/MM").format(new Date());
-	                String filePath = uploadPath + "/" + datePath;
-
-	                File directory = new File(filePath);
-	                if (!directory.exists()) {
-	                    directory.mkdirs();
-	                }
-
-	                // 파일 저장
-	                File dest = new File(filePath + "/" + fileName);
-	                file.transferTo(dest);
-
-	                // 파일 정보 저장
-	                BoardFilesVO boardFile = new BoardFilesVO();
-	                boardFile.setBoardfileName(fileName);
-	                boardFile.setBoardfileSize(fileSize);
-	                boardFile.setBoardfileLocation(datePath + "/" + fileName);
-	                boardFile.setBoardfileExt(fileExt);
-	                boardFile.setBoardId(postVO.getBoardId()); // boardId 설정
-	                boardFiles.add(boardFile);
+	        if (!file.isEmpty()) {
+	            String fileName = file.getOriginalFilename();
+	            System.err.println("fileName :" + fileName);
+	            String filePath = uploadPath + fileName;
+	            System.err.println("filePath :" + filePath);
+	            
+	            File directory = new File(uploadPath);
+	            if (!directory.exists()) {
+	                directory.mkdirs();
 	            }
+	            
+	            File dest = new File(filePath);
+	            file.transferTo(dest);
+	            postVO.setBoardfileName(fileName);
+	            postVO.setBoardfileSize(file.getSize());
+	            postVO.setBoardfileLocation(fileName);
+	            postVO.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
 	        }
 
 	        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	        postVO.setUserId(userVO.getuserId());
 	        postVO.setWriter(userVO.getNickname());
-
 	        postVO.setCreateDate(new Date());
 	        postVO.setUpdateDate(new Date());
-	        postVO.setBoardFiles(boardFiles);
-
-	        // 로그 추가
-	        System.out.println("PostVO: " + postVO);
-	        System.out.println("BoardFiles: " + boardFiles);
-
-	        int postId = postService.createPost(postVO);
-
-	        return "redirect:/post/" + postVO.getBoardId() + "/" + postId;
+	        postService.createPost(postVO);
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        return "redirect:/error"; // 오류 발생 시 리디렉션
 	    }
+	    return "redirect:/all/post/" + postVO.getBoardId();
 	}
 
 
@@ -231,25 +209,26 @@ public class PostController {
 		postVO.setBoardId(boardId);
 		postService.PostDelete(postVO);
 
-		return "redirect:/post/" + boardId;
+		return "redirect:/all/post/" + boardId;
 	}
 
 	// --------------------------------------------
 	// 게시글 업데이트
 	// --------------------------------------------
-	@GetMapping("/postUpdate/{boardId}/{postId}")
+	@GetMapping("/all/postUpdate/{boardId}/{postId}")
 	public String postUpdateForm(@PathVariable Integer boardId
 			                   , @PathVariable Integer postId
-			                   , @PathVariable int userId
-			                   , Model model) {
+			                   , Model model
+			                   , Authentication authentication) {
 
 		if (postId == null) {
-			return "redirect:/post/" + boardId;
+			return "redirect:/all/post/" + boardId;
 		}
-		PostVO post = postService.getPostReplies(postId, boardId);
-		model.addAttribute("post", post);
+		PostVO postVO = postService.getPostReplies(postId, boardId);
+		model.addAttribute("post", postVO);
 		model.addAttribute("boardId", boardId);
-		return "posts/postUpdate";
+		model.addAttribute(postVO);
+		return "/posts/postUpdate";
 	}
 
 	// --------------------------------------------
@@ -263,7 +242,7 @@ public class PostController {
 	    try {
 	        if (!file.isEmpty()) {
 	            String fileName = file.getOriginalFilename();
-	            String filePath = uploadPath + "/" + fileName;
+	            String filePath = uploadPath + fileName;
 
 	            File directory = new File(uploadPath);
 	            if (!directory.exists()) {
@@ -316,7 +295,6 @@ public class PostController {
 	public boolean updateLike(@RequestParam("postId") int postId, 
 			              Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		
 		PostVO postVO = new PostVO();
 		postVO.setUserId(userVO.getuserId());
 	    int userId = userVO.getuserId();

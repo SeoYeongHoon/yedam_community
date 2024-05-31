@@ -38,21 +38,9 @@ public class PostServiceImpl implements PostService {
 	// 게시글 등록
 	//--------------------------------------------
 	@Override
-    public int createPost(PostVO postVO) {
-        postMapper.insertPost(postVO);
-        int postId = postVO.getPostId(); // MyBatis에서 설정된 postId를 가져옵니다.
-
-        System.out.println("Generated Post ID: " + postId);
-        System.out.println("PostVO: " + postVO);
-
-        for (BoardFilesVO file : postVO.getBoardFiles()) {
-            file.setPostId(postId); // 게시글 ID 설정
-            file.setBoardId(postVO.getBoardId()); // 게시판 ID 설정
-            System.out.println("BoardFile: " + file); // 로그 추가
-            postMapper.insertBoardFile(file);
-        }
-        return postId;
-    }
+	public int createPost(PostVO postVO) {
+		return postMapper.insertPost(postVO);
+	}
 	
 	//--------------------------------------------
 	// 게시글 단건조회
@@ -251,8 +239,17 @@ public class PostServiceImpl implements PostService {
 		return postMapper.deleteLike(map);
 	}
 	
+	//--------------------------------------------
+	// 파일 출력
+	//--------------------------------------------
+	
 	public List<BoardFilesVO> getBoardFiles(int postId, int boardId) {
 	    return postMapper.getBoardFiles(postId, boardId);
+	}
+
+	@Override
+	public List<PostVO> getPostAll(PostVO postVO) {
+		return postMapper.MainpagePostList(postVO);
 	}
 
 }

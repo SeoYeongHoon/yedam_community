@@ -9,6 +9,8 @@ import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostVO;
 
 public interface PostMapper {
+	
+	
 
     //--------------------------------------------
     // 단건조회
@@ -51,11 +53,6 @@ public interface PostMapper {
     // 게시글 등록
     //--------------------------------------------
     int insertPost(PostVO postVO);
-    
-    //--------------------------------------------
-    // 파일 등록
-    //--------------------------------------------
-    int insertBoardFile (BoardFilesVO boardFilesVO);
 
     //--------------------------------------------
     // 게시글 수정
@@ -87,4 +84,10 @@ public interface PostMapper {
     //--------------------------------------------
 	public List<BoardFilesVO> getBoardFiles(int postId,
 			                              int boardId);
+
+	//--------------------------------------------
+    // 메인페이지 조회
+    //--------------------------------------------
+	public List<PostVO> MainpagePostList(PostVO postVO);
 }
+
