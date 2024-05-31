@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostVO;
@@ -16,8 +17,8 @@ public class HomeController {
 	
 	@Autowired
 	PostService postservice;
-	
-	@GetMapping("/home")
+  
+	@GetMapping("/all/home")
 	public String homePage() {
 		
 		return "mainPages/home";
