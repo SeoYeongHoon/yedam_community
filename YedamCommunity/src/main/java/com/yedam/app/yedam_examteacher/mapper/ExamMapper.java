@@ -19,6 +19,7 @@ public interface ExamMapper {
 	public int insertQuizbox(TeacherVO teacherVO); // 시험에 출제할 문제 등록
 	public int insertTestUser(TeacherVO teacherVO); // 시험 대상자 등록
 	public List<TeacherVO> reTestUser(@Param("testId") int tId); // 재시험 대상자 등록
+	public int currentTestId(); // 최신으로 등록된 test_id값 불러오기
 	
 	//--------------------------------------------
 	// 문제 등록/조회 페이지 기능 모음	

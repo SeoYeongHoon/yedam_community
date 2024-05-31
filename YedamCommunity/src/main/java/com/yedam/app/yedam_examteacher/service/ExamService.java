@@ -14,7 +14,8 @@ public interface ExamService {
 	public List<TeacherVO> userList(TeacherVO teacherVO); // 시험 대상자 출력
 	public List<TeacherVO> reTestUserList(int tId); // 재시험 대상자 출력
 	public int quizboxInsert(QuizVO quizVO); // 시험에 출제될 문제 등록
-	public int testUserInsert(int[] userId); // 시험 대상자 등록
+	public int testUserInsert(QuizVO quizVO); // 시험 대상자 등록
+	public int CurrTestId();
 	
 	//--------------------------------------------
 	// 문제 조회/등록 페이지 기능 모음
