@@ -77,6 +77,7 @@ public class CbtStudentController {
 			date.add(Calendar.SECOND, 59); //초
 			if(date1.after(date2)) { //현재 시간이 응시기간을 지난 경우
 				array2[i] = 1;
+				System.out.println(array2[i]);
 			}
 			else {
 				array2[i] = 0;
