@@ -48,6 +48,8 @@ public class TestVO {
 	private int quizCnt;
 	private int page;
 	private int rn;
+	private String type; //페이징관련
+	private String filterData;
 	public int getTestId() {
 		return testId;
 	}
@@ -212,6 +214,18 @@ public class TestVO {
 	}
 	public void setRn(int rn) {
 		this.rn = rn;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getfilterData() {
+		return filterData;
+	}
+	public void setfilterData(String filterData) {
+		this.filterData = filterData;
 	}
 	
 	
