@@ -1,12 +1,18 @@
 package com.yedam.app.yedam_home.web;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostVO;
 
@@ -14,20 +20,58 @@ import com.yedam.app.yedam_post.service.PostVO;
 @Controller
 public class HomeController {
 	
+	// --------------------------------------------
+	// 로컬 저장 경로
+	// --------------------------------------------
+	@Value("${file.upload.path}")
+	private String uploadPath;
+	
 	@Autowired
 	PostService postservice;
 	
-	@GetMapping("/home")
-	public String homePage() {
-		
-		return "mainPages/home";
-	}
-	
-//	@GetMapping("/all/home")
-//	public String BoardList(Model model) {
-//		List<PostVO> list = postservice.getPostAll();
+//	@GetMapping("/home")
+//	public String homePage() {
 //		
-//		model.addAttribute(list);
 //		return "mainPages/home";
 //	}
+	
+	@GetMapping("/home")
+    public String BoardList(Model model) {
+        
+        List<PostVO> board1Posts = postservice.getPostAll(1);
+        List<PostVO> board2Posts = postservice.getPostAll(2);
+        List<PostVO> board3Posts = postservice.getPostAll(3);
+        List<PostVO> board4Posts = postservice.getPostAll(4);
+
+        List<PostVO> allPosts = new ArrayList<>();
+        allPosts.addAll(board1Posts);
+        allPosts.addAll(board2Posts);
+        allPosts.addAll(board3Posts);
+        allPosts.addAll(board4Posts);
+
+        for (PostVO post : allPosts) {
+            List<BoardFilesVO> boardFilesVO = postservice.getBoardFiles(post.getPostId(), post.getBoardId());
+            for (BoardFilesVO file : boardFilesVO) {
+                File find = new File(uploadPath + "/" + file.getBoardfileLocation());
+                file.setExists(find.exists());
+            }
+            post.setBoardFiles(boardFilesVO);
+        }
+
+        List<PostVO> popularPosts = allPosts.stream()
+                                            .sorted(Comparator.comparingInt(PostVO::getPostLike).reversed())
+                                            .limit(5) // 상위 5개 게시글 가져오기
+                                            .collect(Collectors.toList());
+        
+        model.addAttribute("board1Posts", board1Posts);
+        model.addAttribute("board2Posts", board2Posts);
+        model.addAttribute("board3Posts", board3Posts);
+        model.addAttribute("board4Posts", board4Posts);
+        model.addAttribute("popularPosts", popularPosts);
+        model.addAttribute("postList", allPosts);
+        
+        System.err.println("board1Posts: " + board1Posts);
+
+        return "mainPages/home";
+    }
 }

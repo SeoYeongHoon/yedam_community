@@ -77,7 +77,9 @@ public class PostController {
 	            }
 	            post.setBoardFiles(boardFilesVO);
 	        }
-
+	        System.err.println("boardId: "+ boardId);
+	        System.err.println("postId: " + postVO);
+	        
 	        model.addAttribute("postList", list);
 	        model.addAttribute("totalCount", totalCount);
 	        model.addAttribute("currentPage", page);

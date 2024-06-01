@@ -91,4 +91,6 @@ public interface UserService {
 	
 	// 수강생 => 수료생 자동 변경
 	public void updateUserType();
+	
+	
 }
