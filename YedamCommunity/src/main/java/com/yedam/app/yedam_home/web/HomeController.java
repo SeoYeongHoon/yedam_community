@@ -29,13 +29,7 @@ public class HomeController {
 	@Autowired
 	PostService postservice;
 	
-//	@GetMapping("/home")
-//	public String homePage() {
-//		
-//		return "mainPages/home";
-//	}
-	
-	@GetMapping("/home")
+	@GetMapping("/all/home")
     public String BoardList(Model model) {
         
         List<PostVO> board1Posts = postservice.getPostAll(1);

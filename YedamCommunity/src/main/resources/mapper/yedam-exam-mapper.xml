@@ -17,9 +17,7 @@
 	                   subject_name,
 	                   c.class_id           				  
 	             FROM tests t JOIN curriculum c
-	                               ON t.curriculum_id = c.curriculum_id
-	                          JOIN subjects s
-                                   ON c.curriculum_id = s.curriculum_id) b                     
+	                               ON t.curriculum_id = c.curriculum_id) b                     
 	             WHERE (LOWER(test_name) LIKE '%' || LOWER(#{searchQuery}) || '%')
 	             <if test=" classId!=0 ">
 
@@ -56,15 +54,17 @@
 						  , test_date
 						  , test_name
 						  , class_id
-						  , pass_score)
+						  , pass_score
+						  , subject_name)
 		VALUES (test_id_seq.nextval
 				, #{curriculumId}
 				, #{testContent}
 				, #{testTime}
-				, sysdate
+				, #{testDate}
 				, #{testName}
 				, #{classId}
-				, #{passScore})				  
+				, #{passScore}
+				, #{subjectName})				  
 	</insert>
 	<!-- 시험에 출제되는 문제 등록 -->
 	<insert id="insertQuizbox" parameterType="TeacherVO">

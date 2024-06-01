@@ -18,7 +18,6 @@
 }
 </style>
 
-<!-- 일괄등록 모달 -->
 <div class="imageModal">
 	<div class="imageModal_popup">
 		<img id="myImageLarge" th:src="@{${'/images/profile/' + #authentication.principal.profileImageLocation}}">
@@ -100,7 +99,7 @@
 				</th:block>
 				<p style="font-weight: bold; font-size: 15pt;">[[${#authentication.name}]] 님</p>
 				<ul style="padding: 10px;">
-					<a class="semiMenuItem" style="border-bottom: 1px solid black;" href="/mypage"><li>프로필</li></a>
+					<a class="semiMenuItem" href="/mypage"><li>프로필</li></a>
 					<!-- <a href="/mypage">프로필</a></li> -->
 					<a class="semiMenuItem" href="/logout"><li>로그아웃</li></a>
 				</ul>
@@ -402,8 +401,9 @@
 			imageModal.style.display = 'block';
 		});
 		
+		// 모달창 바깥 클릭 시 닫기
 		window.addEventListener('click', function(e) {
-			console.log(e.target);
+			//console.log(e.target);
 		    if (e.target === imageModal) {
 		    	console.log("모달 꺼짐");
 		        imageModal.style.display = 'none';

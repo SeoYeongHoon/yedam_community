@@ -31,21 +31,21 @@ public class SpringSecurityConfig {
 			.authorizeHttpRequests(requests -> requests
 //				.antMatchers("/**").permitAll()
 				.antMatchers("/adminMain/**").hasRole("ADMIN")
-				.antMatchers("/home").authenticated()
+				.antMatchers("/all/home").authenticated()
 				.antMatchers("/all/**").permitAll()
 				.antMatchers("/css/**", "/fonts/**", "/images/**", "/js/**", "/vendor/**").permitAll()
 				.anyRequest().authenticated())
 			.formLogin(login -> login
 				.loginPage("/all/login").permitAll()
 				.loginProcessingUrl("/login")
-				.defaultSuccessUrl("/home", true)
+				.defaultSuccessUrl("/all/home", true)
 				.failureHandler(customAuthenticationFailureHandler)
 				)
 			.logout(logout -> logout
 				.logoutSuccessUrl("/all/login")
 				.permitAll());
 		
-		http.csrf(csrf ->csrf.disable());
+		http.csrf(csrf -> csrf.disable());
 		
 		return http.build();
 	}

@@ -108,18 +108,24 @@ tr img {
 		<li><a href="quizinsert"
 			class="main-btn primary-btn-light btn-hover">새문제</a></li>
 		<li><a href="#0" class="main-btn primary-btn-light btn-hover"
-			id="quizSelect">문제선택</a></li>
+			id="quizSelect">선택문제 확인</a></li>
 		<li>
 			<div id="subSelec" style="padding-top:10px;">
-				<label>과목선택</label>
+				<h2>과목선택</h2>
 				<div class="select-position">
-					<select id="subject" style="width:auto; height:30px;">
-						<option value="all">문제 전체보기</option>
+					<select id="subject" style="width:auto; height:40px;">
+						<!--  <option value="">과목을 선택해주세요</option> -->
 						<th:block th:each="subjectInfo, idxStat : ${subjectList}">
 							<option class="typeSelec" th:value="${subjectInfo.subjectName}">[[${subjectInfo.subjectName}]]</option>
 						</th:block>
 					</select>
 				</div>
+			</div>
+		</li>
+		<li>
+			<div style="position:relative; left:600px;">
+				<label>선택문제 총점</label>
+				<input type=text id="total" readonly style="border:1px black solid"/>
 			</div>
 		</li>	
 	</ul>
@@ -268,7 +274,16 @@ function quizContentList(page, subjectName){
 					$("input:checkbox[name=select]:checked").parent().parent().attr("style", "border-color:blue;")
 				})
 			})
-			
+			let sum = 0;
+			/* 
+			for(let i=0; i<$('.box').length; i++){
+				$('#qScore'+i).on('change', function(e) {
+			    	console.log($('#qScore'+i).val())
+			    	sum += parseInt($('#qScore'+i).val())
+			    	$('#total').val(sum)
+			    });
+			} */
+	    	 
 			//--------------------------------------------	
 			// 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax 포함) 시작
 			//--------------------------------------------
@@ -551,6 +566,7 @@ $('#testInsert').on('click', function(){
 			storageSubName.push($('#sName'+i).val());
 			
 			sum += parseInt($('#qScore'+i).val());
+			$('#total').val($('#qScore'+i).val());
 		}
 	}
 	// 배점 총합이 0점일때 NaN 뜨는거 0으로 변경.
@@ -579,10 +595,12 @@ $('#testInsert').on('click', function(){
 	
 	// 위 작업 안하면 값 출력시 그냥 1,2,3 이런식으로 출력됨
 	// 위 작업을 하게 될 경우 ["1","2","3"] 이렇게 출력됨
+	subjectName = $('#subject').val();
 	window.localStorage.setItem('quizContent', arryContent);
 	window.localStorage.setItem('quizScore', arryScore);
 	window.localStorage.setItem('quizId', arryQid);
 	window.localStorage.setItem('subjectName', arrySName);
+	window.localStorage.setItem('qSubjectName', subjectName);
 })
 
 //--------------------------------------------
