@@ -33,7 +33,6 @@ import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
 import com.yedam.app.yedam_homework.upload.service.ReplyFileVO;
 import com.yedam.app.yedam_subjects.service.SubjectService;
 
-
 @Controller
 @RequestMapping("/all")
 public class HomeWorkStudentController {
@@ -246,6 +245,7 @@ public class HomeWorkStudentController {
 			@ResponseBody
 			public String updateReplyFile(@RequestPart MultipartFile[] uploadReplyFile,
 										 @RequestParam("replyId") int replyId) {
+				System.err.println("댓글 업로드 파일 ==" + uploadReplyFile);
 				// 과제 파일 업로드
 				homeworkfileService.replyUploadFile(uploadReplyFile, replyId);
 				return null;

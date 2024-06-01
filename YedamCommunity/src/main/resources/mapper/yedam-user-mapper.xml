@@ -48,43 +48,6 @@
 		WHERE user_id = #{userId}
 	</delete>
 	
-	<!-- 회원가입 신청 -->
-	<!-- <insert id="requestUser" parameterType="RegisterVO">
-		INSERT INTO register (
-			register_id
-			, id
-			, password
-			, name
-			, email
-			, tel
-			, address
-			, company_info
-			, user_type
-			, curriculum_id
-			, profile_image_name
-			, profile_image_size
-			, profile_image_location
-			, download_location
-			, profile_image_ext
-		) VALUES (
-			user_id_seq.NEXTVAL
-			, #{id}
-			, #{password}
-			, #{name}
-			, #{email}
-			, #{tel}
-			, #{address}
-			, #{companyInfo}
-			, #{userType}
-			, #{curriculumId}
-			, #{profileImageName}
-			, #{profileImageSize}
-			, #{profileImageLocation}
-			, #{downloadLocation}
-			, #{profileImageExt}
-		)
-	</insert> -->
-	
 	<!-- 관리자페이지 첫 페이지(회원가입 신청한 유저) -->
 	<select id="selectStdList" resultType="RegisterVO">
 		SELECT register_id
@@ -99,52 +62,44 @@
 	
 	<!-- 관리자페이지 유저 리스트 출력 및 필터링 -->
 	<select id="getUsersByFilter" parameterType="map" resultType="UserVO">
-		 SELECT * 
-		    FROM (
-		        SELECT rownum rn, b.*
-		        FROM users b
-		        <where>
-		            <choose>
-		                <when test="filter == 'showAll'">
-		                    AND (user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN')
-		                    AND (name LIKE '%' || #{searchQuery} || '%')
-		                </when>
-		                <when test="filter == 'showGrad'">
-		                    AND user_type = 'ROLE_GRAD'
-		                    AND (name LIKE '%' || #{searchQuery} || '%')
-		                </when>
-		                <when test="filter == 'showLearn'">
-		                    AND user_type = 'ROLE_LEARN'
-		                    AND (name LIKE '%' || #{searchQuery} || '%')
-		                </when>
-		            </choose>
-		        </where>
-		        AND 
-		        <![CDATA[
-			    rownum <= (#{page} * 5)
-			    ]]>
-			    AND (name LIKE '%' || #{searchQuery} || '%')
-		    ) a
-		    WHERE a.rn > (#{page} - 1) * 5
+		SELECT * 
+	    FROM (
+	        SELECT rownum rn, b.*, c.curriculum_start_date, c.curriculum_end_date
+	        FROM users b JOIN curriculum c ON (b.curriculum_name = c.curriculum_name)
+	        <choose>
+                <when test="filter == 'showAll'">
+                    AND (user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN' OR user_type = 'ROLE_ADMIN')
+                    AND (name LIKE '%' || #{searchQuery} || '%')
+                </when>
+                <otherwise>
+                    AND c.curriculum_id = #{filter}
+                    AND (user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN')
+                    AND (name LIKE '%' || #{searchQuery} || '%')
+                </otherwise>
+            </choose>
+	        AND 
+	        <![CDATA[
+		    rownum <= (#{page} * 5)
+		    ]]>
+		    AND (name LIKE '%' || #{searchQuery} || '%')
+	    ) a
+	    WHERE a.rn > (#{page} - 1) * 5
 	</select>
 	
 	<select id="getTotalCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
-        FROM users
+        FROM users b JOIN curriculum c ON (b.curriculum_name = c.curriculum_name)
         <where>
             <choose>
                 <when test="filter == 'showAll'">
                     AND (user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN')
                     AND (name LIKE '%' || #{searchQuery} || '%')
                 </when>
-                <when test="filter == 'showGrad'">
-                    AND user_type = 'ROLE_GRAD'
+                <otherwise>
+                    AND c.curriculum_id = #{filter}
+                    AND (user_type = 'ROLE_GRAD' OR user_type = 'ROLE_LEARN')
                     AND (name LIKE '%' || #{searchQuery} || '%')
-                </when>
-                <when test="filter == 'showLearn'">
-                    AND user_type = 'ROLE_LEARN'
-                    AND (name LIKE '%' || #{searchQuery} || '%')
-                </when>
+                </otherwise>
             </choose>
         </where>
 	</select>
@@ -376,5 +331,18 @@
 	        <if test="profileImageExt != null">profile_image_ext = #{profileImageExt},</if>
 	    </set>
 	    WHERE id = #{id}
+	</update>
+	
+	<!-- 수강생 => 수료생으로 자동 변경 -->
+	<update id="updateUserType" parameterType="UserVO">
+		UPDATE users
+		SET user_type = 'ROLE_GRAD'
+		WHERE curriculum_id IN (SELECT curriculum_id
+		                        FROM curriculum
+		                        WHERE curriculum_end_date 
+		                        <![CDATA[
+		                        <
+		                        ]]>
+		                        SYSDATE)
 	</update>
 </mapper>

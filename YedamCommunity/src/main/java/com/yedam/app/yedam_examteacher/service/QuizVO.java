@@ -9,6 +9,9 @@ public class QuizVO {
 	int [] quizScore;
 	String[] subjectName;
 	int curriculumId;
+	int testId;
+	int [] userId;
+
 	public String[] getQuizContent() {
 		return quizContent;
 	}
@@ -39,6 +42,5 @@ public class QuizVO {
 	public void setCurriculumId(int curriculumId) {
 		this.curriculumId = curriculumId;
 	}
-	
-	
+
 }

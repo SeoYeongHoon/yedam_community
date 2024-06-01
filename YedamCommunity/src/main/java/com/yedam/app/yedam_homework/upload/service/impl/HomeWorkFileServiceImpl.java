@@ -117,9 +117,10 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 
 			// 모든경로를 포함한 파일 이름
 			String originalName = uploadFile.getOriginalFilename();
+			System.err.println(originalName);
 
 			// 모든 경로에서 마지막 / 부분으로부터 +1 해준 부분부터 출력하겠다.
-			String fileName = originalName.substring(originalName.lastIndexOf("//") + 1);
+			String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
 
 			// 확장자
 			String fileExt = originalName.substring(originalName.lastIndexOf(".") + 1);
@@ -147,7 +148,6 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.err.println("파일 사이즈" + uploadFile.getSize());
 
 			FileList.add(setFilepath(uploadFileName));
 

@@ -1,5 +1,6 @@
 package com.yedam.app.yedam_user.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
 
 public interface UserService {
@@ -86,4 +88,9 @@ public interface UserService {
 	
 	// 인증코드 확인
 	public boolean verifyCode(String email, String code);
+	
+	// 수강생 => 수료생 자동 변경
+	public void updateUserType();
+	
+	
 }

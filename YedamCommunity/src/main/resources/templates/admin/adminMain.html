@@ -32,9 +32,9 @@
 		}
 		
 		.adminPaging a.active {
-		  background-color: #4CAF50;
+		  background-color: #1A2142;
 		  color: white;
-		  border: 1px solid #4CAF50;
+		  border: 1px solid #1A2142;
 		}
 		
 		.adminPaging a:hover:not(.active) {
@@ -42,6 +42,19 @@
 		}
 	</style>
 	<script>
+		function formatDate(date) {
+			var d = new Date(date), month = '' + (d.getMonth() + 1), day = ''
+					+ d.getDate(), year = d.getFullYear();
+	
+			if (month.length < 2)
+				month = '0' + month;
+			if (day.length < 2)
+				day = '0' + day;
+	
+			return [ year, month, day ].join('-');
+		} 
+		var today = new Date();
+		var today1 = formatDate(today);
 		
 		//--------------------------------------------
 		// 유저 정보 모달창에 출력
@@ -56,8 +69,12 @@
 	                console.log(user);
 	                
 	                document.getElementById('userName').textContent = user.name;
-	                document.getElementById('userType').innerText = user.userType;
-	                document.getElementById('curriculumId').textContent = user.curriculumId;
+					if (user.userType == 'ROLE_LEARN') {
+						document.getElementById('userType').innerText = '수강생'
+					} else if (user.userType == 'ROLE_GRAD') {
+						document.getElementById('userType').innerText = '수료생'
+					}
+	                document.getElementById('userId').textContent = user.id;
 	                document.getElementById('userEmail').textContent = user.email;
 	                document.getElementById('userTel').textContent = user.tel;
 	                document.getElementById('userImage').src = '/images/profile/' + user.profileImageLocation;
@@ -103,7 +120,7 @@
 	                
 	                document.getElementById('userName').textContent = user.name;
 	                document.getElementById('userType').innerText = user.userType;
-	                document.getElementById('curriculumId').textContent = user.curriculumId;
+	                document.getElementById('curriculumId').textContent = user.curriculumName;
 	                document.getElementById('userEmail').textContent = user.email;
 	                document.getElementById('userTel').textContent = user.tel;
 	                document.getElementById('userImage').src = '/images/profile/' + user.profileImageLocation;
@@ -294,13 +311,20 @@
                 tdName.textContent = user.name;
                 tr.appendChild(tdName);
                 
-                var tdTel = document.createElement('td');
+                /* var tdTel = document.createElement('td');
                 tdTel.textContent = user.tel;
-                tr.appendChild(tdTel);
+                tr.appendChild(tdTel); */
+                var tdCourse = document.createElement('td');
+                tdCourse.textContent = user.curriculumName;
+                tr.appendChild(tdCourse);
                 
                 var tdEmail = document.createElement('td');
                 tdEmail.textContent = user.email;
                 tr.appendChild(tdEmail);
+                
+                /* var tdDate = document.createElement('td');
+                tdDate.textContent = formatDate(user.curriculumStartDate) + ' ~ ' + formatDate(user.curriculumEndDate);
+                tr.appendChild(tdDate); */
                 
                 var makeBtnTd = document.createElement('td');
                 var tdInfoBtn = document.createElement('a');
@@ -320,6 +344,7 @@
 	
 	<!-- 어드민페이지 내부 컨텐트 -->
 	<div id="adminContainer" style="min-height: 1300px;">
+		
 		<h1 class="mb-4 mt-4">예담 관리자 페이지</h1>
 		
 		<div class="tables-wrapper">
@@ -331,7 +356,7 @@
 					<div class="card-style mb-30 request_wrapper"  style="position: relative; padding: 0;">
 						<div class="table-top-content" style="height: 120px;">
 							<h2 class="mb-10" style="color: white">회원가입 신청 관리</h6>
-							<a href="#0" onclick="openAddModal()" class="modal_btn" style="background-color: #e96b56; padding: 7px; position: absolute; margin: 0; left: 15px; top: 70px;">수강생 일괄 등록 및 받기</a>
+							<a href="#0" onclick="openAddModal()" class="modal_btn" style="background-color: #e96b56; padding: 7px; position: absolute; margin: 0; left: 15px; top: 70px;">수강생 정보 등록</a>
 						</div>
 						<div class="table-wrapper table-responsive" style="overflow-y: scroll; max-height: 500px;">
 							<table class="table" style="padding: 0 30px;">
@@ -406,10 +431,16 @@
 							<h2 class="mb-10" style="color: white">회원 관리</h6>
 							<div class="select-style-1" style="display: flex; position: relative; margin-top: 20px; margin-bottom: 10px; margin-left: -10px;">
 								<div class="select-position" style="min-width: 140px;">
-									<select name="userFilter" id="userFilter" style="padding: 10px; color: white; background-color: #e96b56;" onchange="filterUsers()">
+									<!-- <select name="userFilter" id="userFilter" style="padding: 10px; color: white; background-color: #e96b56;" onchange="filterUsers()">
 										<option name="showAll" value="showAll" selected>전체</option>
 										<option name="showGrad" value="showGrad">수료생</option>
 										<option name="showLearn" value="showLearn">수강생</option>
+									</select> -->
+									<select name="userFilter" id="userFilter" style="padding: 10px; color: black; background-color: white;" onchange="filterUsers()">
+										<option value="showAll" name="showAll">전체 과정</option>
+										<th:block th:each="class : ${class}">
+											<option th:value="${class.curriculumId}" th:name="${class.curriculumId}" th:text="${class.curriculumName + ' (' +class.curriculumStartDate + ' ~ ' + class.curriculumEndDate + ')'}"></option>
+										</th:block>
 									</select>
 								</div>
 							</div>
@@ -428,7 +459,7 @@
 										<h6>이름</h6>
 									</th>
 									<th>
-										<h6>연락처</h6>
+										<h6>수강명</h6>
 									</th>
 									<th>
 										<h6>이메일</h6>
@@ -440,24 +471,24 @@
 								</thead>
 								<tbody id="userInfoTable">
 									<tr th:each="user : ${users}">
-									<td>
-										<p>[[${user.userId}]]</p>
-									</td>
-									<td>
-										<p>[[${user.userType}]]</p>
-									</td>
-									<td>
-										<p>[[${user.name}]]</p>
-									</td>
-									<td>
-										<p>[[${user.tel}]]</p>
-									</td>
-									<td>
-										<p>[[${user.email}]]</p>
-									</td>
-									<td>
-										<a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchUserDetails(' + ${user.userId} + ')'">상세보기</a>
-									</td>
+										<td>
+											<p>[[${user.userId}]]</p>
+										</td>
+										<td>
+											<p>[[${user.userType}]]</p>
+										</td>
+										<td>
+											<p>[[${user.name}]]</p>
+										</td>
+										<td>
+											<p>[[${user.tel}]]</p>
+										</td>
+										<td>
+											<p>[[${user.email}]]</p>
+										</td>
+										<td>
+											<a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchUserDetails(' + ${user.userId} + ')'">상세보기</a>
+										</td>
 									</tr>
 								</tbody>
 							</table>
@@ -492,13 +523,13 @@
 		<div class="addModal">
 			<div class="add_modal_popup" style="min-width: 800px; min-height: 300px;">
 				<div class="add_modal_title">
-					<h4>수강생 일괄 등록 및 받기</h4>
+					<h4 style="color: white; font-weight: normal;">수강생 정보 등록</h4>
 					<a href="" class="modal_close" onclick="closeAddModal()">X</a>
 				</div>
-				<input class="addStdBtn" type="file" name="file" id="file" accept=".csv">
+				<input class="addStdBtn" type="file" name="file" id="file" accept=".csv" style="margin-left: 20px;">
     			<div class="add_table_wrapper" style="max-height: 400px; overflow-y: scroll; margin-bottom: 10px;">
-					<table class="table" id="csv_table">
-						<thead style="position: sticky; top: 0; background-color: white; box-shadow: 0 2px 8px 0 #00000040;">
+					<table class="table" id="csv_table" style="padding: 10px;">
+						<thead style="position: sticky; top: 0; background-color: white;">
 							<tr>
 								<!-- <th>
 									<input type="checkbox" value="checkCsvAll" onclick="checkCsvAll(this)">
@@ -518,39 +549,51 @@
 		
 		<!-- 상세정보 모달 -->
 		<div class="infoModal">
-			<div class="info_modal_popup" style="min-width: 700px; min-height: 300px;">
-				<div class="add_modal_title">
-					<h4>상세정보</h4>
-					<a href="#0" class="info_modal_close" onclick="closeInfoModal()">X</a>
-				</div>
+			<div class="info_modal_popup" style="width: 600px; height: 550px;">
+				<!--<div class="add_modal_title">
+					<h4 style="color: white; font-weight: normal;">상세정보</h4>
+				</div>-->
+				<a href="#0" class="info_modal_close" onclick="closeInfoModal()">X</a>
 			
 				<div id="info_profile" class="info_profile_content">
 					<div class="info_image_wrapper">
 						<img class="info_image" id="userImage" src="">
 					</div>
 					<div class="">
-						<div class="" style="display: inline-flex; align-items: baseline; width: 100%;">
-							<p class="info_type">이름</p>
-							<span class="info_detail" id="userName"></span>
-						</div>
-						<div class="" style="display: inline-flex; align-items: baseline; width: 100%;">
-							<p class="info_type">소속</p>
-							<span class="info_detail" id="userType"></span>
-						</div>
-						<div class="" style="display: inline-flex; align-items: baseline; width: 100%;">
-							<p class="info_type">수강 정보</p>
-							<span class="info_detail" id="curriculumId"></span>
-						</div>
-						<div class="" style="display: inline-flex; align-items: baseline; width: 100%;">
-							<p class="info_type">연락처</p>
-							<span class="info_detail" id="userTel"></span>
-						</div>
-						<!-- <p class="info_type">수강 기간: <span id="curriculumDate"></span></p> -->
-						<div class="" style="display: inline-flex; align-items: baseline; width: 100%;">
-							<p class="info_type">이메일</p>
-							<span class="info_detail" id="userEmail"></span>
-						</div>
-						
+						<span class="info_detail" id="userName" style="font-size: 20pt; width: 100%;"></span>
+						<span class="info_detail" id="userType" style="color: #e96b56;"></span>
+					</div>
+				</div>
+				<p style="color: darkgray; font-size: 15pt; padding: 10px;">Information</p>
+				<div style="padding: 10px; display: flex; flex-wrap: wrap; justify-content: center;">
+					<div class="info_user_detail">
+						<!--<p class="info_type">아이디</p>-->
+						<img src="/images/userid.png" style="width: 40px; height: 50px;">
+						<div class="info_line"></div>
+						<span class="info_detail" id="userId"></span>
+					</div>
+					
+					<div class="info_user_detail">
+						<!--<p class="info_type">연락처</p>-->
+						<img src="/images/phone.png" style="width: 30px; height: 40px;">
+						<div class="info_line"></div>
+						<span class="info_detail" id="userTel"></span>
+					</div>
+					
+					
+					<div class="info_user_detail">
+						<!--<p class="info_type">수강 정보</p>-->
+						<img src="/images/course.png" style="width: 35px; height: 50px;">
+						<div class="info_line"></div>
+						<span class="info_detail" id="curriculumId"></span>
+					</div>
+				
+				 	<!--<p class="info_type">수강 기간: <span id="curriculumDate"></span></p> -->
+					<div class="info_user_detail">
+						<!--<p class="info_type">이메일</p>-->
+						<img src="/images/email.png" style="width: 35px; height: 50px;">
+						<div class="info_line"></div>
+						<span class="info_detail" id="userEmail"></span>
 					</div>
 				</div>
 				<div class="download_all">
@@ -624,5 +667,18 @@
     	window.onload = function() {
     		filterUsers();
     	}
+		
+		var addModalBack = document.querySelector('.addModal');
+		var infoModalBack = document.querySelector('.infoModal');
+
+		// 모달창 바깥 클릭 시 닫기
+		window.addEventListener('click', function(e) {
+			console.log(e.target);
+		    if (e.target === addModalBack || e.target === infoModalBack) {
+		    	console.log("모달 꺼짐");
+		        addModalBack.style.display = 'none';
+				infoModalBack.style.display = 'none';
+		    }
+		});
 	</script>
 </html>
