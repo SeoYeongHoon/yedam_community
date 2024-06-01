@@ -9,7 +9,7 @@ public class QuizVO {
 	int [] quizScore;
 	String[] subjectName;
 	int curriculumId;
-  int testId;
+	int testId;
 	int [] userId;
 
 	public String[] getQuizContent() {
