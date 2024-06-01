@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{common/layouts/default_layout}"
-	  layout:fragment="Home">
-	<!-- <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
-	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a> -->
-	<div class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
-		<p style="color: white">예담 커뮤니티에 오신 것을 환영합니다.</p>
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Home">
+    <!-- <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
+    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a> -->
+    <div class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
+        <p style="color: white">예담 커뮤니티에 오신 것을 환영합니다.</p>
     </div>
-	<div id="main_container">
-	    <div id="home_container">
-	    	<div class="header_container">
-			   <div id="slider_wrapper">
+    <div id="main_container">
+        <div id="home_container">
+            <div class="header_container">
+                <!-- 슬라이더 -->
+                <div id="slider_wrapper">
 				  <a href="#" class="control_next"> >> </a>
 				  <a href="#" class="control_prev"> << </a>
 			      <ul class="slider_list">
@@ -21,591 +22,215 @@
 	    		    <li class="slider_item"><a class="slider_img_link" href="#"><img class="slider_img" src="https://placehold.co/500x400" alt="main_img"></a></li>
 			     </ul>
 			   </div>
-	    	
-			   <aside class="sidebar-nav-wrapper" style="width: 350px; height: 50vh; margin-left: 20px;">
-			      <nav class="sidebar-nav">
-			        <ul>
-			          <li class="nav-item nav-item-has-children">
-			              <div class="tab01-head how2 how2-cl1 bocl12 flex-s-c m-r-10 m-r-0-sr991">
-							<h3 class="f1-m-2 cl12 tab01-title">
-								인기 게시글
-							</h3>
-						  </div>
-			            </a>
-			            <ul class="popular_list">
-			              <li>
-			                <a href="index.html" class="popular_item"> 1위 항목 </a>
-			              </li>
-			              <li>
-			                <a href="index.html" class="popular_item"> 2위 항목 </a>
-			              </li>
-			              <li>
-			                <a href="index.html" class="popular_item"> 3위 항목 </a>
-			              </li>
-			            </ul>
-			          </li>
-			        </ul>
-			      </nav>
-			   </aside>
-	    	</div>
-	    	<!-- 상단 슬라이드 이미지 -->
-			
-			<div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
-				<p style="color: white">게시판 최신 글</p>
-		    </div>
-			<div id="board_wrapper">
-				<div class="board_content">
-					<div class="how2 how2-cl2 flex-s-c board_type">
-						<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-							수료 과정별 게시판
-						</h3>
-						<a th:href="@{/all/post/1}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
-							더 보기
-							<i class="fs-12 m-l-5 fa fa-caret-right"></i>
-						</a>
-					</div>
-					<ul class="board_list">
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;"><!-- [[${writer}]] --></span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-					</ul>
-				</div>
-				
-				<div class="board_content">
-					<div class="how2 how2-cl3 flex-s-c board_type">
-						<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-							구인/구직 게시판
-						</h3>
-						<a th:href="@{/all/post/2}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
-							더 보기
-							<i class="fs-12 m-l-5 fa fa-caret-right"></i>
-						</a>
-					</div>
-					<ul class="board_list">
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-					</ul>
-				</div>
-				
-				<div class="board_content">
-					<div class="how2 how2-cl5 flex-s-c board_type">
-						<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-							정보 공유 게시판
-						</h3>
-						<a th:href="@{/all/post/3}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
-							더 보기
-							<i class="fs-12 m-l-5 fa fa-caret-right"></i>
-						</a>
-					</div>
-					<ul class="board_list">
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-					</ul>
-				</div>
-				
-				<div class="board_content">
-					<div class="how2 how2-cl6 flex-s-c board_type">
-						<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-							질문과 토론 게시판
-						</h3>
-						<a th:href="@{/all/post/4}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
-							더 보기
-							<i class="fs-12 m-l-5 fa fa-caret-right"></i>
-						</a>
-					</div>
-					<ul class="board_list">
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-						<li class="board_item">
-							<div href="#" class="d-flex" style="justify-content: space-between">
-								<div class="d-flex">
-									<span style="margin-right: 20px; font-size: 10pt;">NickName</span>
-									<span style="font-size: 10pt;">11분전</span>
-								</div>
-								<div class="d-flex">
-									<div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path></svg>
-										<span class="">0</span>
-									</div>
-									<div class="flex flex-1 items-center" style="display: flex; width: 30px;">
-										<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path></svg>
-										<span class="">1</span>
-									</div>
-								</div>
-							</div>
-							<div class="">
-								<a class="board_mini_title" href="#"><span style="font-size: 14pt;">이것은 제목입니다.</span></a>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-			
-		    <!-- 수강 과정 갤러리 -->
-		    <div id="curriculum_wrapper">
-		    	<div class="curriculum_title">
-				    <div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
-						<p style="color: white">수강 과정 갤러리</p>
-				    </div>
-				    <a th:href="@{/all/post/1}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all">
-						더 보기
-						<i class="fs-12 m-l-5 fa fa-caret-right"></i>
-					</a>
-			    </div>
-			    <div class="curriculum_tiles">
-			    	<ul class="curriculum_list">
-			    		<li class="curriculum_item">
-			    			<a href="#" class="">
-				    			<div class="how2 how2-cl4 flex-s-c">
-									<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-										Java 기반 웹 프레임워크 개발자 양성과정 A
-									</h3>
-								</div>
-				    			<img class="curriculum_thumb" src="images/dog.jpg">
-			    			</a>
-			    		</li>
-			    		<li class="curriculum_item">
-			    			<a href="#" class="">
-				    			<div class="how2 how2-cl4 flex-s-c">
-									<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-										Java 기반 웹 프레임워크 개발자 양성과정 A
-									</h3>
-								</div>
-				    			<img class="curriculum_thumb" src="images/dog.jpg">
-			    			</a>
-			    		</li>
-			    		<li class="curriculum_item">
-			    			<a href="#" class="">
-				    			<div class="how2 how2-cl4 flex-s-c">
-									<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-										Java 기반 웹 프레임워크 개발자 양성과정 A
-									</h3>
-								</div>
-				    			<img class="curriculum_thumb" src="images/dog.jpg">
-			    			</a>
-			    		</li>
-			    		<li class="curriculum_item">
-			    			<a href="#" class="">
-				    			<div class="how2 how2-cl4 flex-s-c">
-									<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-										Java 기반 웹 프레임워크 개발자 양성과정 A
-									</h3>
-								</div>
-				    			<img class="curriculum_thumb" src="images/dog.jpg">
-			    			</a>
-			    		</li>
-			    		<li class="curriculum_item">
-			    			<a href="#" class="">
-				    			<div class="how2 how2-cl4 flex-s-c">
-									<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-										Java 기반 웹 프레임워크 개발자 양성과정 A
-									</h3>
-								</div>
-				    			<img class="curriculum_thumb" src="images/dog.jpg">
-			    			</a>
-			    		</li>
-			    		<li class="curriculum_item">
-			    			<a href="#" class="">
-				    			<div class="how2 how2-cl4 flex-s-c">
-									<h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">
-										Java 기반 웹 프레임워크 개발자 양성과정 A
-									</h3>
-								</div>
-				    			<img class="curriculum_thumb" src="images/dog.jpg">
-			    			</a>
-			    		</li>
-			    	</ul>
-			    </div>
-		    </div>
-		</div>
+
+                <!-- 인기 게시글 -->
+                <aside class="sidebar-nav-wrapper" style="width: 350px; height: 50vh; margin-left: 20px;">
+                    <nav class="sidebar-nav">
+                        <ul>
+                            <li class="nav-item nav-item-has-children">
+                                <div class="tab01-head how2 how2-cl1 bocl12 flex-s-c m-r-10 m-r-0-sr991">
+                                    <h3 class="f1-m-2 cl12 tab01-title">인기 게시글</h3>
+                                </div>
+                                <ul class="popular_list">
+                                    <li th:each="post, iterStat : ${popularPosts}">
+                                        <a th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|" class="popular_item">
+                                            <span th:text="${iterStat.count} + '위: ' + ${post.title}"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </aside>
+            </div>
+
+            <!-- 게시판 최신 글 -->
+            <div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+                <p style="color: white">게시판 최신 글</p>
+            </div>
+            <div id="board_wrapper">
+                <div class="board_content">
+                    <!-- boardId = 1 -->
+                    <div class="how2 how2-cl2 flex-s-c board_type">
+                        <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">수료 과정별 게시판</h3>
+                        <a th:href="@{/all/post/1}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
+                            더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
+                        </a>
+                    </div>
+                    <ul class="board_list">
+                        <li class="board_item" th:each="post : ${board1Posts}">
+                            <div class="d-flex" style="justify-content: space-between">
+                                <div class="d-flex">
+                                    <span style="margin-right: 20px; font-size: 10pt;" th:text="${post.writer}"></span>
+                                    <span style="font-size: 10pt;" th:text="${#dates.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></span>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
+                                        <svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path>
+                                        </svg>
+                                        <span th:text="${post.postLike}">0</span>
+                                    </div>
+                                    <div class="flex flex-1 items-center" style="display: flex; width: 30px;">
+                                        <svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path>
+                                        </svg>
+                                        <span th:text="${post.totalCount}">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
+                                    <span style="font-size: 14pt;" th:text="${post.title}">이것은 제목입니다.</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- boardId = 2 -->
+                <div class="board_content">
+                    <div class="how2 how2-cl3 flex-s-c board_type">
+                        <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">구인/구직 게시판</h3>
+                        <a th:href="@{/all/post/2}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
+                            더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
+                        </a>
+                    </div>
+                    <ul class="board_list">
+                        <li class="board_item" th:each="post2 : ${board2Posts}">
+                            <div class="d-flex" style="justify-content: space-between">
+                                <div class="d-flex">
+                                    <span style="margin-right: 20px; font-size: 10pt;" th:text="${post2.writer}">NickName</span>
+                                    <span style="font-size: 10pt;" th:text="${#dates.format(post2.createDate, 'yyyy-MM-dd HH:mm')}">11분전</span>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
+                                        <svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path>
+                                        </svg>
+                                        <span th:text="${post2.postLike}">0</span>
+                                    </div>
+                                    <div class="flex flex-1 items-center" style="display: flex; width: 30px;">
+                                        <svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path>
+                                        </svg>
+                                        <span th:text="${post2.totalCount}">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post2.boardId}, postId=${post2.postId})}'|">
+                                    <span style="font-size: 14pt;" th:text="${post2.title}">이것은 제목입니다.</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- boardId = 3 -->
+                <div class="board_content">
+                    <div class="how2 how2-cl5 flex-s-c board_type">
+                        <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">정보 공유 게시판</h3>
+                        <a th:href="@{/all/post/3}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
+                            더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
+                        </a>
+                    </div>
+                    <ul class="board_list">
+                        <li class="board_item" th:each="post3 : ${board3Posts}">
+                            <div class="d-flex" style="justify-content: space-between">
+                                <div class="d-flex">
+                                    <span style="margin-right: 20px; font-size: 10pt;" th:text="${post3.writer}">NickName</span>
+                                    <span style="font-size: 10pt;" th:text="${#dates.format(post3.createDate, 'yyyy-MM-dd HH:mm')}">11분전</span>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
+                                        <svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path>
+                                        </svg>
+                                        <span th:text="${post3.postLike}">0</span>
+                                    </div>
+                                    <div class="flex flex-1 items-center" style="display: flex; width: 30px;">
+                                        <svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path>
+                                        </svg>
+                                        <span th:text="${post3.totalCount}">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post3.boardId}, postId=${post3.postId})}'|">
+                                    <span style="font-size: 14pt;" th:text="${post3.title}">이것은 제목입니다.</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- boardId = 4 -->
+                <div class="board_content">
+                    <div class="how2 how2-cl6 flex-s-c board_type">
+                        <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">질문과 토론 게시판</h3>
+                        <a th:href="@{/all/post/4}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
+                            더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
+                        </a>
+                    </div>
+                    <ul class="board_list">
+                        <li class="board_item" th:each="post4 : ${board4Posts}">
+                            <div class="d-flex" style="justify-content: space-between">
+                                <div class="d-flex">
+                                    <span style="margin-right: 20px; font-size: 10pt;" th:text="${post4.writer}">NickName</span>
+                                    <span style="font-size: 10pt;" th:text="${#dates.format(post4.createDate, 'yyyy-MM-dd HH:mm')}">11분전</span>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="flex flex-1 items-center gap-x-0.5" style="display: flex; width: 30px; margin-right: 16px;">
+                                        <svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"></path>
+                                        </svg>
+                                        <span th:text="${post4.postLike}">0</span>
+                                    </div>
+                                    <div class="flex flex-1 items-center" style="display: flex; width: 30px;">
+                                        <svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"></path>
+                                        </svg>
+                                        <span th:text="${post4.totalCount}">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post4.boardId}, postId=${post4.postId})}'|">
+                                    <span style="font-size: 14pt;" th:text="${post4.title}">이것은 제목입니다.</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 수강 과정 갤러리 -->
+            <div id="curriculum_wrapper">
+                <div class="curriculum_title">
+                    <div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+                        <p style="color: white">수강 과정 갤러리</p>
+                    </div>
+                    <a th:href="@{/all/post/1}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all">
+                        더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
+                    </a>
+                </div>
+                <div class="curriculum_tiles">
+                    <ul class="curriculum_list">
+                        <li th:each="post : ${board1Posts}" class="curriculum_item">
+                            <div th:each="file : ${post.boardFiles}" th:if="${file.exists}">
+                                <a th:href="@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}" class="">
+                                    <div class="how2 how2-cl4 flex-s-c">
+                                        <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">Java 기반 웹 프레임워크 개발자 양성과정 A</h3>
+                                    </div>
+                                    <img th:src="@{|/files/${file.boardfileLocation}|}" th:alt="${file.boardfileName}" class="curriculum_thumb"/>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </html>

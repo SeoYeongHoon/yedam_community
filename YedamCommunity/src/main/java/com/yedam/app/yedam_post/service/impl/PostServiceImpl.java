@@ -247,9 +247,13 @@ public class PostServiceImpl implements PostService {
 	    return postMapper.getBoardFiles(postId, boardId);
 	}
 
-	@Override
-	public List<PostVO> getPostAll() {
-		return postMapper.MainpagePostList();
-	}
+//	@Override
+//	public List<PostVO> getPostAll() {
+//		return postMapper.MainpagePostList();
+//	}
 
+	@Override
+	public List<PostVO> getPostAll(int boardId) {
+		return postMapper.getpostAll(boardId); 
+	}
 }

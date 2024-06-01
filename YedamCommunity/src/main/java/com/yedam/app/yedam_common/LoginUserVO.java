@@ -88,10 +88,6 @@ public class LoginUserVO implements UserDetails {
 		return userVO.getUserId();
 	}
 
-	public String getNickname() {
-		return userVO.getName();
-	}
-
 	public Object getId() {
 		return userVO.getId();
 	}

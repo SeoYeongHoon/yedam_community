@@ -30,22 +30,15 @@ public class ReplyController {
 	@PostMapping("/Reply")
 	@ResponseBody
 	public String addReply(
-			               @RequestParam("boardId") int boardId,
-			               @RequestParam("postId") int postId, 
-			               @RequestParam("replyContent") String replyContent,
+			                PostReplyVO postReplyVO, 
 			               Authentication authentication) {
 		
 		
-		PostReplyVO postreplyVO = new PostReplyVO();
-		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		postreplyVO.setReplyWriter(userVO.getNickname());
 		
-		postreplyVO.setPostId(postId);
-		postreplyVO.setBoardId(boardId); 
-		postreplyVO.setReplyContent(replyContent);
-		postreplyVO.setReplyDate(new Date());
-		postreplyVO.setUpdateDate(new Date());
-		postService.createReply(postreplyVO);
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+		postReplyVO.setReplyWriter(userVO.getUsername());
+		postService.createReply(postReplyVO);
+		System.out.println("postReplyVO : " + postReplyVO);
 		return "success";
 	}
 	
@@ -77,10 +70,8 @@ public class ReplyController {
     		                 Authentication authentication) {
     	
     	PostCommentVO postcommentVO = new PostCommentVO();
-    	
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		postcommentVO.setCommentWriter(userVO.getNickname());
-    	
+		postcommentVO.setCommentWriter(userVO.getUsername());
         postcommentVO.setReplyId(replyId);
         postcommentVO.setCommentContent(commentContent);
         postService.createComment(postcommentVO);
