@@ -29,6 +29,13 @@
            , sysdate)
   </insert>
   
+  <!-- 대댓글 수정 -->
+	<update id="commentUpdate" parameterType="PostCommentVO">
+		UPDATE comments
+		SET comment_content = #{commentContent}, comment_date = sysdate
+		WHERE comment_id =#{commentId}
+	</update>
+	
   <delete id="deleteComment" parameterType="int">
   	DELETE 
   	FROM comments

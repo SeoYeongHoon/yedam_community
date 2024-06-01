@@ -41,6 +41,16 @@ public class ReplyController {
 		System.out.println("postReplyVO : " + postReplyVO);
 		return "success";
 	}
+	//--------------------------------------------
+    //댓글 수정 처리
+    //--------------------------------------------
+	@PostMapping("/replyUpdate")
+	@ResponseBody
+	public  Map<String, Object> replyUpdate (PostReplyVO postreplyVO) {
+		System.err.println("댓글 정보= "+ postreplyVO);
+			postService.updateReply(postreplyVO);
+		return null;
+	}
 	
 	//--------------------------------------------
     //댓글 삭제 처리
@@ -78,6 +88,17 @@ public class ReplyController {
         return "대댓글이 성공적으로 추가되었습니다.";
     }
     
+    //--------------------------------------------
+    //댓글 수정 처리
+    //--------------------------------------------
+	@PostMapping("/commentUpdate")
+	@ResponseBody
+	public  Map<String, Object> commentUpdate (PostCommentVO postcommentVO) {
+		System.err.println("댓글 정보= "+ postcommentVO);
+			postService.updateComment(postcommentVO);
+		return null;
+	}
+	
     //--------------------------------------------
     //대댓글 삭제 처리
     //-------------------------------------------- 

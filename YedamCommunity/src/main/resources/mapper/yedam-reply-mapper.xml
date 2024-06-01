@@ -47,7 +47,16 @@
               , #{replyWriter}
               , sysdate)
     </insert>
-
+    
+	<!-- 댓글 수정 -->
+	<update id="replyUpdate" parameterType="PostReplyVO">
+		UPDATE	replies
+		SET		reply_content = #{replyContent} ,reply_date = sysdate
+		WHERE   reply_id = #{replyId}
+	</update>
+	
+	
+	
 	<!-- 댓글 삭제 -->
     <delete id="deleteReply1" parameterType="int">
         DELETE 
