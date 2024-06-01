@@ -111,16 +111,19 @@
     // 댓글 작성
     // --------------------------------------------
     $(document).on("click", "#reply-submit", function () {
-      let formData = $("#reply-form").serialize();
+      let formData = new FormData(document.getElementById('reply-form'));
       $.ajax({
         url: "/all/Reply",
         type: "POST",
+        processData: false, // QueryString(key=value)로 자동변환 무시
+		contentType: false, // FormData가 가지고 있는 통신 정보를 사용
         data: formData,
         success: function (response) {
           alert("댓글이 등록되었습니다.");
+          loadReplies();
         },
         error: function (error) {
-          loadReplies();
+          
         },
       });
     });

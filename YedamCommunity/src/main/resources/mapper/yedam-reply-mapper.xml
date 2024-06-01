@@ -31,7 +31,7 @@
    </select>
   
   <!-- 댓글 등록 -->
-   <insert id="insertReply" parameterType="PostReplyVO" useGeneratedKeys="true" keyProperty="replyId">
+   <insert id="insertReply" parameterType="PostReplyVO" >
         INSERT INTO replies (reply_id
                            , post_id
                            , board_id
@@ -43,9 +43,9 @@
               , #{postId}
               , #{boardId}
               , #{replyContent}
-              , #{replyDate}
+              , sysdate
               , #{replyWriter}
-              , #{updateDate})
+              , sysdate)
     </insert>
 
 	<!-- 댓글 삭제 -->
