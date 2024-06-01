@@ -65,6 +65,16 @@ public class TeacherVO {
 	private int passScore;
 	private int testTargetId;
 	private int quizScore;
+	
+	
+	
+	
+	public String getCompanyInfo() {
+		return companyInfo;
+	}
+	public void setCompanyInfo(String companyInfo) {
+		this.companyInfo = companyInfo;
+	}
 	public int getUserId() {
 		return userId;
 	}
