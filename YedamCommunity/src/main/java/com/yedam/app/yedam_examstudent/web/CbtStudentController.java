@@ -30,6 +30,7 @@ import com.yedam.app.yedam_subjects.service.SubjectsVO;
 @Component
 @EnableScheduling
 @Controller
+
 public class CbtStudentController {
 	
 	//service주입
@@ -233,6 +234,7 @@ public class CbtStudentController {
 		model.addAttribute("randRn", randRn); //문제 일련번호
 		model.addAttribute("randQuizScore", randQuizScore); //문제 배점
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
+		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testStart";
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -314,7 +316,7 @@ public class CbtStudentController {
 	
 	
 	//ㅡㅡㅡㅡ
-	//오답확인
+	//문제풀이
 	//ㅡㅡㅡㅡ
 	@GetMapping("testResult2")
 	public String testResult2(int testId,
@@ -340,6 +342,7 @@ public class CbtStudentController {
 				falseCnt++;
 			}
 		}
+		System.out.println();
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("quizList", list); //시험결과 문제+보기 정보
 		model.addAttribute("trueCnt", trueCnt); //맞은개수
