@@ -6,6 +6,70 @@
 <head>
     <meta charset="UTF-8">
     <title>게시글 수정</title>
+    <style>
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 2em;
+      }
+      
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+      
+      input[type="text"], textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+      }
+      
+      input[type="file"] {
+        margin-bottom: 20px;
+        font-size: 1em;
+      }
+      
+      .update-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-bottom: 10px; 
+      }
+      
+      .update-button:hover {
+        background-color: #357A38;
+      }
+      
+      .board-button {
+      	text-align:center;
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-bottom: 10px; 
+      }
+      
+      .board-button:hover {
+        background-color: #357A38;
+      }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -28,13 +92,17 @@
         <input type="file" id="file" name="file" multiple="multiple"/><br />
         
         <div>
-            <button type="button" id="updateBtn">수정</button>
+            <button type="button" class="update-button" id="updateBtn">수정</button>
         </div>
     </form>
-    <a th:href="@{/all/post/{boardId}(boardId=${post.boardId})}">목록으로</a>
+    <a class="board-button" th:href="@{/all/post/{boardId}(boardId=${post.boardId})}">목록</a>
 </div>
     
 <script>
+
+    //--------------------------------------------
+    // 게시글 수정
+    //--------------------------------------------
     $('#updateBtn').on('click', function(event) {
         if (!validationCheck()) return;
         let formData = new FormData($('#updateForm')[0]);

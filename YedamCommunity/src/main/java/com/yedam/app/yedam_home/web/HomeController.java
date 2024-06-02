@@ -29,20 +29,25 @@ public class HomeController {
 	@Autowired
 	PostService postservice;
 	
+	// --------------------------------------------
+	// 게시글 정보 불러오기
+	// --------------------------------------------
 	@GetMapping("/all/home")
     public String BoardList(Model model) {
         
+		// 게시판 1 - 수강별, 2 - 구인/ 구인 3 - 정보, 4 - 질문
         List<PostVO> board1Posts = postservice.getPostAll(1);
         List<PostVO> board2Posts = postservice.getPostAll(2);
         List<PostVO> board3Posts = postservice.getPostAll(3);
         List<PostVO> board4Posts = postservice.getPostAll(4);
-
+        
         List<PostVO> allPosts = new ArrayList<>();
         allPosts.addAll(board1Posts);
         allPosts.addAll(board2Posts);
         allPosts.addAll(board3Posts);
         allPosts.addAll(board4Posts);
-
+        
+        // 파일 불러오기
         for (PostVO post : allPosts) {
             List<BoardFilesVO> boardFilesVO = postservice.getBoardFiles(post.getPostId(), post.getBoardId());
             for (BoardFilesVO file : boardFilesVO) {
@@ -51,10 +56,11 @@ public class HomeController {
             }
             post.setBoardFiles(boardFilesVO);
         }
-
+        
+        // 인기 게시글
         List<PostVO> popularPosts = allPosts.stream()
                                             .sorted(Comparator.comparingInt(PostVO::getPostLike).reversed())
-                                            .limit(5) // 상위 5개 게시글 가져오기
+                                            .limit(5) // 상위 5개 게시글
                                             .collect(Collectors.toList());
         
         model.addAttribute("board1Posts", board1Posts);
