@@ -134,12 +134,12 @@ public class HomeWorkController {
 	
 	
 	// ----------------
-	// 과제 수정페이지
+	// 과제 수정
 	// ----------------
 	@PutMapping("/updateHomework")
 	@ResponseBody
 	public Map<String, Object> updateHomework(HomeWorkVO homeworkVO) {
-		
+		System.err.println("과제수정 "+homeworkVO);
 		return homeworkService.homeworkUpdate(homeworkVO);
 	}
 	

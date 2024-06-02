@@ -24,6 +24,11 @@ public class PostVO {
     private Date updateDate;
     private String keyword;
     
+    //댓글
+    private int replyId;
+    private String replyContent;
+    
+    //
     private int replyCount;
     private int commentCount;
     private int totalCount;

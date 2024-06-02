@@ -256,4 +256,41 @@ public class PostServiceImpl implements PostService {
 	public List<PostVO> getPostAll(int boardId) {
 		return postMapper.getpostAll(boardId); 
 	}
+	
+	//======================
+	// 댓글 수정
+	//=====================
+	@Override
+	public Map<String, Object> updateReply(PostReplyVO postreplyVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		int result = replyMapper.replyUpdate(postreplyVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result", isSuccessed);
+		map.put("reply", postreplyVO);
+		 
+		 return map;
+	}
+	
+	//======================
+	// 대댓글 수정
+	//=====================
+	@Override
+	public Map<String, Object> updateComment(PostCommentVO postcommentVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		int result = commentMapper.commentUpdate(postcommentVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result", isSuccessed);
+		map.put("comment", postcommentVO);
+		return map;
+	}
 }

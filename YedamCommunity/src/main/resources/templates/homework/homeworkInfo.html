@@ -153,11 +153,11 @@
 				style="padding: 10px; width: 250px; border: 1px solid black;"
 				th:value="${homeworkInfo.homeworkTitle}" readonly>
 			<h2>마감일자</h2>
-			<input id="homeworkDate" class="homeworkUpdate" type="text"
+			<input id="homeworkDate"  type="text"
 				th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}"
 				style="padding: 10px; width: 250px; border: 1px solid black;"
 				readonly>
-				<input id="updateDate" type="date" style="padding: 10px; width: 250px; border: 1px solid black; display:none;">
+				<input id="updateDate" type="date" style="padding: 10px; width: 250px; border: 1px solid black; display:none;"class="homeworkUpdate">
 			<hr>
 			
 			<h2>내용</h2>
@@ -174,8 +174,7 @@
 				<!-- 파일 업로드 -->
 				<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
 					<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
-					<div id="file" style="padding: 50px; display: none;"
-						class="card-style mb-30">
+					<div id="file" style="padding: 50px; display: none;" class="card-style mb-30">
 						<input type="file" name="uploadFiles" multiple="multiple">
 						<button id="fileUpload" type="button"
 							style="padding: 10px; width: 100px; border: 1px solid black;">파일
@@ -285,8 +284,6 @@ $('#updateHomework').on('click',function(e){
 	$('.homeworkUpdate').css('backgroundColor','yellow') // 수정할 input
 	$('#updateHomeworks').css('display', 'block'); // 수정완료 버튼
 	$('.deleteFile').css('display', 'block'); // 파일삭제 버튼
-	//$('#homeworkDate').prop('type','date'); // 마감일자 타입 변경
-	//$('#homeworkDate').val('');// 변경한 마감일자
 	$('#homeworkDate').css("display","none");
 	$('#updateDate').css("display","block");
 	$('#file').css('display','block'); //파일업로드 버튼 
@@ -318,7 +315,7 @@ $('#fileUpload').on('click',function(e){
 })
 
 $('#updateHomeworks').on('click',function(){
-	let homeworkDate = $('#homeworkDate').val()
+	let homeworkDate = $('#updateDate').val()
 	let homeworkTitle = $('#title').val();
 	let homeworkContent = $('#content').val();
 	let homeworkId = $('#deleteHomeworks').val();
@@ -664,9 +661,9 @@ $('#deleteHomeworks').on('click',function(){
    //--------------------------
    function addComment(replyId){
 	   let content = $('#comment-'+replyId).val(); 
+	   console.log("대댓글 내용 = " + content);
 	   
-	    if (content.value =='') {
-	        alert('댓글 내용을 입력하세요.');
+	    if (content =='') {
 	        $('#modalReply').modal('show');
 	        replyContent.focus();
 	        return;
