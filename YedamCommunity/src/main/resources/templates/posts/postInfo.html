@@ -71,17 +71,14 @@
           <button type="button" class="delete-comment" th:data-comment-id="${comment.commentId}">대댓글 삭제</button>
           <button type="button" class="border" th:id="|comment-update${comment.commentId}|" th:value="${comment.commentId}">대댓글 수정</button>
           <button type="button" class="border" th:id="|comment-updateBtn${comment.commentId}|" th:value="${comment.commentId}" style="display:none;">수정</button>
-         
         </li>
       </ul>
-
-      <form class="comment-form" >
+	<!-- 대댓글 작성 -->
         <input type="hidden" name="replyId" th:value="${reply.replyId}" />
         <input type="hidden" name="postId" th:value="${postInfo.postId}" />
         <input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
-        <textarea name="commentContent" style="background-color : yellow;"></textarea>
-        <button type="button" class="comment-submit border">대댓글 작성</button>
-      </form>
+        <textarea th:id="|commentContent${reply.replyId}|" name="commentContent" style="background-color : yellow;"></textarea>
+        <button th:id="|addComment${reply.replyId}|"type="button" class="comment-submit border" th:value="${reply.replyId}">대댓글 작성</button>
     </li>
   </ul>
 
@@ -89,7 +86,7 @@
   <form id="reply-form" class="reply">
     <input type="hidden" name="postId" th:value="${postInfo.postId}" />
     <input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
-    <textarea name="replyContent" style="background-color : skyblue;"></textarea>
+    <textarea id="replyContent" name="replyContent" style="background-color : skyblue;"></textarea>
     <button type="button" id="reply-submit">댓글 작성</button>
   </form>
 
@@ -134,28 +131,34 @@
 	// --------------------------------------------
     // 댓글 작성
     // --------------------------------------------
+   
+    
     $(document).on("click", "#reply-submit", function () {
       let formData = new FormData(document.getElementById('reply-form'));
-      $.ajax({
-        url: "/all/Reply",
-        type: "POST",
-        processData: false, // QueryString(key=value)로 자동변환 무시
-		contentType: false, // FormData가 가지고 있는 통신 정보를 사용
-        data: formData,
-        success: function (response) {
-          alert("댓글이 등록되었습니다.");
-          loadReplies();
-        },
-        error: function (error) {
-          
-        },
-      });
-    });
+      let content = $('#replyContent').val();
+      if(content == ''){
+    	  alert("댓글 내용 없음");
+      }else{
+    	  $.ajax({
+          	  url: "/all/Reply",
+            	type: "POST",
+            	processData: false, // QueryString(key=value)로 자동변환 무시
+    			contentType: false, // FormData가 가지고 있는 통신 정보를 사용
+            	data: formData,
+            	success: function (response) {
+              		alert("댓글이 등록되었습니다.");
+              		window.location.reload()
+            	},
+            	error: function (error) {
+    	        }
+          	}); // 아작스 종료
+      }// if end
+    });// click end
+    
  	// --------------------------------------------
     // 댓글 수정
     // --------------------------------------------
-     // 인풋 리드온리 풀고 수정버튼 보이게
-     let replyIds = []; 
+      let replyIds = []; 
     $('.replyId').each(function() {
         replyIds.push($(this).val()); // 배열에 replyId 값을 추가합니다.
     });
@@ -169,9 +172,9 @@
     	    	$('#reply-update'+replyId).css('display','none');
     	    	$('#reply-updateBtn'+replyId).css('display','block');
     	    })
-    	    
+    	     
     	     $('#reply-updateBtn'+replyId).on('click',function(){
-    	    	//let replyId = $(this).val();
+    	    	 
     	    	let replyContent = $('#replyId-'+replyId).val();
     	    	console.log("댓글 내용=" + replyContent)
     	    	
@@ -194,6 +197,7 @@
     // 댓글 삭제
     // --------------------------------------------
     $(document).on("click", ".delete-reply", function () {
+    	
       let replyId = $(this).data("reply-id");
       if (confirm("댓글을 삭제하시겠습니까?")) {
         $.ajax({
@@ -214,20 +218,28 @@
     // --------------------------------------------
     // 대댓글 작성
     // --------------------------------------------
-    $(document).on("click", ".comment-submit", function () {
-      let formData = $(this).closest("form").serialize();
-      $.ajax({
-        url: "/all/Comment",
-        type: "POST",
-        data: formData,
-        success: function (response) {
-        },
-        error: function (error) {
-        	loadReplies();
-        },
-      });
-    });
-    
+      replyIds.forEach(function(replyId){
+$("#addComment"+replyId).on("click", function () {
+    	console.log("대댓글아이디= " + replyId)
+      let commentContent = $('#commentContent'+replyId).val();
+      console.log("대댓글 내용 = "+commentContent)
+      if(commentContent == ''){
+    	  alert('대댓글 내용 없음')
+      }else{
+	      $.ajax({
+    	    url: "/all/Comment",
+        	type: "POST",
+        	data: {commentContent : commentContent, replyId : replyId },
+        	success: function (response) {
+        		window.location.reload()
+        	},
+        	error: function (error) {
+        		alert("대댓글 등록 아작스 실패")
+        	},
+      });// ajax end
+      } // if end
+    }); // click end
+      })
     // --------------------------------------------
     // 대댓글 수정
     // --------------------------------------------
@@ -246,16 +258,19 @@
 	    	$('#comment-updateBtn'+commentId).css('display','block');
     	})
     	
+    	
+    	
+    		
     	$('#comment-updateBtn'+commentId).on('click',function(){
-	    	let commentContent = $('#commentId-'+commentId).val();
+    		let commentContent = $('#commentId-'+commentId).val();
 	    	console.log("댓글 내용=" + commentContent)
-	    	
 	     	 $.ajax({
 	    		url:'/all/commentUpdate',
 	    		type: 'post',
 	    		data: {commentId : commentId, commentContent : commentContent},
 	    		success: function(data){
-	    			loadReplies();
+	    			console.log('대댓글 수정버튼 눌림')
+	    			window.location.reload()
 	    			
 	    		},
 	    		error: function(err){

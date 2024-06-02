@@ -15,8 +15,8 @@
         FROM comments
         WHERE reply_id = #{replyId}
   </select>
-  
-  <insert id="insertComment" parameterType="PostCommentVO" useGeneratedKeys="true" keyProperty="commentId">
+  <!-- 대댓글 등록  -->
+  <insert id="insertComment" parameterType="PostCommentVO">
   	INSERT INTO comments (comment_id
                         , reply_id
                         , comment_writer
