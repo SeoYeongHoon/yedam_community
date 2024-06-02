@@ -234,7 +234,6 @@ public class CbtStudentController {
 		model.addAttribute("randRn", randRn); //문제 일련번호
 		model.addAttribute("randQuizScore", randQuizScore); //문제 배점
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
-		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testStart";
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ

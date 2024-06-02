@@ -390,7 +390,7 @@
                 ON(d.result_id = e.result_id)
         WHERE   d.user_id = #{userId}
         AND     b.test_id = #{testId}
-        AND     e.test_target_id IN (SELECT  test_target_id
+        AND     e.test_target_id = (SELECT  test_target_id
                         			FROM  	test_targets
                         			WHERE 	test_id = #{testId}
                         			AND   	user_id = #{userId}))

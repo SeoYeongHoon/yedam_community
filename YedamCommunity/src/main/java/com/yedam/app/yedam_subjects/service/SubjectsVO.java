@@ -34,6 +34,4 @@ public class SubjectsVO {
 		this.userId = userId;
 	}
 	
-	
-	
 }
