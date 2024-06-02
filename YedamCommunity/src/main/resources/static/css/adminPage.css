@@ -391,3 +391,18 @@
 	display: block;
 	z-index: 999;
 }
+
+.homeworkList {
+	cursor: pointer;
+}
+.homeworkList:hover {
+	background-color: rgb(229 231 235);
+}
+
+.classSelect {
+	cursor: pointer;
+}
+
+.classSelectCard:hover {
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}

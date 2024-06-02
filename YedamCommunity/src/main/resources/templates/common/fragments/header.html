@@ -76,20 +76,15 @@
         var currentPage = getHomeCurrentPage();
         var navLinks = document.querySelectorAll('.main-nav ul li a');
         console.log("현재 페이지: ", currentPage);
-		console.log("네비게이션", navLinks);
         
         for (var i = 0; i < navLinks.length; i++) {
-			console.log("일단 페이지: " + currentPage);
         	
             if (navLinks[i].getAttribute('href') === ("/all/" + currentPage)) {
-				console.log("어드민페이지: " + navLinks[i].getAttribute('href'));
                 navLinks[i].classList.add('active');
-            } else if (navLinks[i].getAttribute('href') === ("/post/" + currentPage)) {
-				console.log("모든 유저 페이지: " + navLinks[i].getAttribute('href'));
+            } else if (navLinks[i].getAttribute('href') === ("/all/post/" + currentPage)) {
 				navLinks[i].classList.add('active'); 
 			}
 			 else {
-				console.log("이 외 페이지: " + navLinks[i].getAttribute('href'));
             	navLinks[i].classList.remove('active');
             }
         }

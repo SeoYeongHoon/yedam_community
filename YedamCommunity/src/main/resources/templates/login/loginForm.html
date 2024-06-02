@@ -10,7 +10,7 @@
 				<div class="">
 					<img src="/images/yedam_logo.png" style="width: 300px; margin: -40px;">
 					<div class="title">
-						<h2>예담 커뮤니티에 오신 것을 환영합니다.</h2>
+						<h2 style="font-weight: normal;">예담 커뮤니티에 오신 것을 환영합니다.</h2>
 						<p>예담 커뮤니티는 예담 출신의 수료생과 현재 수강하고 있는 학생을 위한 플랫폼입니다.</p>
 					</div>
 				</div>
@@ -60,7 +60,7 @@
 	        const password = $('#password').val();
 
 	        $.ajax({
-	            url: '/login',
+	            url: '/all/login',
 	            type: 'POST',
 	            contentType: 'application/x-www-form-urlencoded',
 	            data: {
