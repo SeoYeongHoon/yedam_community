@@ -46,6 +46,7 @@ public interface ExamMapper {
 	int getQuizCnt(String subjectName); // 문제 count
 	public List<TeacherVO> infoQuiz(@Param("qId") int qId); // 문제 자세히보기 단건조회
 	public int deleteQuiz(@Param("quizId") int qId); // 문제 삭제
+	public int updateAnswer(TeacherVO teacherVO); //문제에 등록된 지문 수정
 	
 	//--------------------------------------------
 	// 강의실 정보 출력(과목평균,시험리스트,수강생)
@@ -63,5 +64,5 @@ public interface ExamMapper {
 	// 학생 피드백 작성 페이지 기능모음
 	//--------------------------------------------
 	public TeacherVO userFeed(TeacherVO teacherVO); // 유저 시험 결과 조회
-	public int feedAdd(TeacherVO teacherVO);
+	public int feedAdd(TeacherVO teacherVO); // 피드백 내용 추가 (기능은 update)
 }
