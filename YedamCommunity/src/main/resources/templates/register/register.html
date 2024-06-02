@@ -10,7 +10,7 @@
 				<div class="">
 					<img src="/images/yedam_logo.png" style="width: 300px; margin: -40px;">
 					<div class="title">
-						<h2>예담 커뮤니티에 오신 것을 환영합니다.</h2>
+						<h2 style="font-weight: normal;">예담 커뮤니티에 오신 것을 환영합니다.</h2>
 						<p>예담 커뮤니티는 예담 출신의 수료생과 현재 수강하고 있는 학생을 위한 플랫폼입니다.</p>
 					</div>
 				</div>
@@ -72,6 +72,7 @@
 								<label>이메일</label> 
 								<input id="email" name="email" type="text" placeholder="이메일을 입력하세요." required="true" autofocus="">
 								<a th:onclick="sendVerificationCode()" href="javascript:void(0)" class="main-btn light-btn btn-hover" style="padding: 8px 8px; position: absolute; right: 10px; top: 38px;">인증메일 전송</a>
+								<div id="noneEmail" style="color: #d50100; display: none;"><p>전송할 메일을 입력해주세요!</p></div>
 								<div id="verificationCodeForm" style="display: none; position: relative;">
 									<input id="verificationCode" name="verificationCode" type="text" placeholder="인증번호를 입력하세요" style="width: 200px; margin-top: 10px;" required="true" autofocus="">
 									<a id="verificationCodeBtn" href="javascript:void(0)" th:onclick="verifyCode()" class="main-btn dark-btn-outline btn-hover" style="padding: 8px 30px; position: absolute; left: 215px; bottom: 7px;">확인</a>
@@ -167,21 +168,28 @@
 		var email = $('#email').val();
 		console.log("이메일: " + email);
 		
-		document.querySelector("#verificationCodeForm").style.display = 'block';
+		if (email) {
+			document.querySelector("#verificationCodeForm").style.display = 'block';
+			document.querySelector('#noneEmail').style.display = 'none';
+			
+			$.ajax({
+				url: '/all/sendVerificationEmail',
+				type: 'POST',
+				data: {
+					email: email
+				},
+				success: function(response) {
+					console.log("전송완료");
+				},
+				error: function(error) {
+					console.log("에러!: " + error);
+				}
+			});
+		} else {
+			document.querySelector('#noneEmail').style.display = 'block';
+		}
 		
-		$.ajax({
-			url: '/all/sendVerificationEmail',
-			type: 'POST',
-			data: {
-				email: email
-			},
-			success: function(response) {
-				console.log("전송완료");
-			},
-			error: function(error) {
-				console.log("에러!: " + error);
-			}
-		});
+		
 	}
 	
 	function verifyCode() {
