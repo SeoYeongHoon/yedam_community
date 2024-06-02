@@ -8,7 +8,6 @@ public class SubjectsVO {
 	private int subjectId;
 	private String subjectName;
 	private int curriculumId;
-	private int userId;
 	public int getSubjectId() {
 		return subjectId;
 	}
@@ -27,13 +26,6 @@ public class SubjectsVO {
 	public void setCurriculumId(int curriculumId) {
 		this.curriculumId = curriculumId;
 	}
-	public int getUserId() {
-		return userId;
-	}
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
 	
 	
 	
