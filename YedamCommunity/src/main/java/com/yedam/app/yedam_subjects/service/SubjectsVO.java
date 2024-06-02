@@ -33,7 +33,6 @@ public class SubjectsVO {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	
-	
+
 	
 }
