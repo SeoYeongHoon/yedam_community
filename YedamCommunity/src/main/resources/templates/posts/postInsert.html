@@ -1,32 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{common/layouts/default_layout}"
-  layout:fragment="Home">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Home">
 <head>
   <title>게시글 작성</title>
+  <style>
+	.inser-title {
+	margin-top: 40px;
+	}
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2em;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    input[type="file"] {
+      margin-bottom: 20px;
+      font-size: 1em;
+    }
+    .submit-button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-bottom: 10px; 
+    }
+    .submit-button:hover {
+      background-color: #357A38;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
-  <h1>게시글 작성</h1>
-  <form th:action="@{/all/postInsert}" th:object="${post}" method="post"
-    enctype="multipart/form-data">
+  <h1 class="inser-title">게시글 작성</h1>
+  <form th:action="@{/all/postInsert}" th:object="${post}" method="post" enctype="multipart/form-data">
     
-    <label for="title">제목: </label> 
-    <input type="text" id="title" th:field="*{title}" /><br /> 
+    <label for="title">제목: </label>
+    <input type="text" id="title" th:field="*{title}" /><br />
+    
     <label for="postContent">내용:</label>
-    <textarea id="postContent" th:field="*{postContent}"></textarea><br /> 
-    <label for="writer">작성자:</label> 
+    <textarea id="postContent" th:field="*{postContent}"></textarea><br />
+    
+    <label for="writer">작성자:</label>
     <input type="text" id="writer" th:field="*{writer}" readonly /><br />
 
     <!-- 파일 업로드 -->
-    <label for="file">파일 :</label> 
+    <label for="file">파일 :</label>
     <input type="file" name="file" multiple="multiple" /><br />
     
     <input type="hidden" th:field="*{boardId}" />
     <input type="hidden" th:field="*{userId}" />
 
-    <button type="submit">등록</button>
+    <button class="submit-button" type="submit">등록</button>
   </form>
 </div>
 </body>
