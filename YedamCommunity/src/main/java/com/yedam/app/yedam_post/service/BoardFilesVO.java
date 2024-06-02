@@ -8,7 +8,7 @@ public class BoardFilesVO {
 	private int boardId;
 	private int postId;
 	private String boardfileName;
-	private int boardfileSize;
+	private long boardfileSize;
 	private String boardfileLocation;
 	private String boardfileExt;
 	
@@ -45,11 +45,11 @@ public class BoardFilesVO {
 	public void setBoardfileName(String boardfileName) {
 		this.boardfileName = boardfileName;
 	}
-	public int getBoardfileSize() {
+	public long getBoardfileSize() {
 		return boardfileSize;
 	}
-	public void setBoardfileSize(int boardfileSize) {
-		this.boardfileSize = boardfileSize;
+	public void setBoardfileSize(long fileSize) {
+		this.boardfileSize = fileSize;
 	}
 	public String getBoardfileLocation() {
 		return boardfileLocation;

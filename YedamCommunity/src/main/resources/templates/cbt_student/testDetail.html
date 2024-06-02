@@ -69,6 +69,7 @@
 			<th:block th:if="${(isResult == 1) || (isResult == 0 && dateComp == 1)}">
 				<form class="tdetail_1" action="testResult2" method="get">
 					<input type="hidden" name="testId" th:value="${testDetail.testId}">
+					<input type="hidden" name="userId" th:value="${logId}">
 					<button type="submit" class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
 				</form>
 			</th:block>

@@ -114,7 +114,11 @@
 								<div class="select-position">
 									<select th:name="courseSelect">
 										<option value="">====== 과정을 선택하세요. ======</option>
-										<option th:each="course : ${courses}" th:name="${course.curriculumName}" th:value="${course.curriculumName}" th:text="${course.curriculumName}"></option>
+										<option th:each="course : ${courses}" 
+												th:name="${course.curriculumName}" 
+												th:value="${course.curriculumName}" 
+												th:text="${course.curriculumName + ' (' + course.curriculumStartDate + ' ~ ' + course.curriculumEndDate + ')'}">
+										</option>
 									</select>
 								</div>
 							</div>

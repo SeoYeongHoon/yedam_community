@@ -22,7 +22,7 @@
 	</select>
 	
 	<!-- 학생별 과제 조회 -->
-	<select id="selectUserHomework" resultType="HomeWorkVO">
+	<!-- <select id="selectUserHomework" resultType="HomeWorkVO">
 		SELECT  h.homework_title,
         		h.homework_date,
         		h.homework_id,
@@ -33,7 +33,7 @@
         		        	JOIN subjects s ON (s.curriculum_id = c.curriculum_id)
 		WHERE   h.subject_id = s.subject_id AND user_id = #{userid}
 		ORDER BY  h.homework_id DESC
-	</select>
+	</select> -->
 
 	<!-- 상세조회 -->
 	<select id="selectHomework" resultType="HomeWorkVO">
@@ -241,7 +241,11 @@
 	<!-- 과제 수정 -->
 	<update id="updateHomework" parameterType="HomeWorkVO">
 		UPDATE homeworks
-		SET homework_content = #{homeworkContent} , homework_date = #{homeworkDate} , homework_title = #{homeworkTitle}
+		SET homework_content = #{homeworkContent} , 
+			<if test="!homeworkDate == 0">
+			homework_date = #{homeworkDate} , 
+			</if>
+			homework_title = #{homeworkTitle}
 		WHERE homework_id = #{homeworkId}
 	</update>
 </mapper>

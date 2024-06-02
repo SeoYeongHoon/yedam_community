@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
@@ -59,9 +61,12 @@ public class HomeWorkStudentController {
 		// 과제 목록(학생)
 		// ----------------
 		@GetMapping("/homework_S")
-		public String homeworksList(Model model) {
-			int userId = 24;
-			List<CurriculumVO> subjects = curriculumService.subjectList(userId);
+		public String homeworksList(Model model,
+				 					Authentication authentication) {
+			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+			System.err.println("유저 아이디 = "+userVO.getuserId());
+			model.addAttribute("userId",userVO.getuserId());
+			List<CurriculumVO> subjects = curriculumService.subjectList(userVO.getuserId());
 			model.addAttribute("subject", subjects);
 			return "homework/homeworkList_s"; // 출력할 페이지
 		}
@@ -87,10 +92,14 @@ public class HomeWorkStudentController {
 		// 과제상세페이지
 		// ----------------
 		@GetMapping("/homeworkInfo")
-		public String homeworkInfo(HomeWorkVO homeworkVO, Model model) {
+		public String homeworkInfo(HomeWorkVO homeworkVO, 
+								   Model model,
+								   Authentication authentication) {
+			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+			model.addAttribute("userId",userVO.getuserId());
+			model.addAttribute("userName",userVO.getUsername());
 			// 과제 상세 조회
 			HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
-			System.err.println(findVO);
 			model.addAttribute("homeworkList", findVO);
 			ReplyVO reply = new ReplyVO();
 			reply.setReplyId(findVO.getReplyId());
@@ -133,8 +142,12 @@ public class HomeWorkStudentController {
 		// ----------------
 		@PostMapping("/insertReply")
 		@ResponseBody
-		public ReplyVO insertReply(@RequestPart MultipartFile[] uploadFiles, ReplyVO replyVO, Model model) {
-			replyVO.setReplyWriter("dudwo");
+		public ReplyVO insertReply(@RequestPart MultipartFile[] uploadFiles, 
+												ReplyVO replyVO, 
+												Model model,
+												Authentication authentication) {
+			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+			replyVO.setReplyWriter(userVO.getUsername());
 			// 댓글등록
 			homeworkReplyService.replyInsert(replyVO);
 			int replyId = replyVO.getReplyId();
@@ -147,11 +160,14 @@ public class HomeWorkStudentController {
 		// ----------------
 		@PostMapping("/insertComment")
 		@ResponseBody
-		public CommentVO insertComment(@RequestParam String content, @RequestParam int replyId) {
+		public CommentVO insertComment(@RequestParam String content, 
+									   @RequestParam int replyId,
+									   Authentication authentication) {
+			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 			CommentVO comment = new CommentVO();
 			comment.setReplyId(replyId);
 			comment.setCommentContent(content);
-			comment.setCommentWriter("dudwo");
+			comment.setCommentWriter(userVO.getUsername());
 			// 대댓글 등록
 			homeworkReplyService.commentInsert(comment);
 			return comment;
@@ -229,10 +245,7 @@ public class HomeWorkStudentController {
 			@ResponseBody
 			public String updateReplyFile(@RequestPart MultipartFile[] uploadReplyFile,
 										 @RequestParam("replyId") int replyId) {
-				
-				System.err.println("파일1 == "+ uploadReplyFile);
-				System.err.println("과제 아이디1 == "+ replyId);
-				
+				System.err.println("댓글 업로드 파일 ==" + uploadReplyFile);
 				// 과제 파일 업로드
 				homeworkfileService.replyUploadFile(uploadReplyFile, replyId);
 				return null;

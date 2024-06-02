@@ -12,6 +12,8 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +37,7 @@ import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
 
 @Controller
+@EnableScheduling
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -47,14 +50,27 @@ public class AdminController {
 	@Autowired
 	CurriculumService curriculumService;
 	
+	//ㅡㅡㅡㅡ
+	// 과정 기간 끝나면 수강생 -> 수료생 자동 변경
+	// 매 자정마다 함수 실행
+	//ㅡㅡㅡㅡ
+	@Scheduled(cron = "0 0 0 * * *")
+	@GetMapping("/checkUserType")
+	public void checkUserType() {
+		userService.updateUserType();
+	}
+	
 	// 어드민 메인 페이지 및 회원가입 요청 목록
 	@GetMapping("/adminMain")
-	public String adminPage(Model model) {
-//		if (!SecurityUtils.hasRole("ROLE_ADMIN")) {
-//            return "error/access";
-//        }
+	public String adminPage(Model model, CurriculumVO curriculumVO) {
+		if (!SecurityUtils.hasRole("ROLE_ADMIN")) {
+            return "error/access";
+        }
+		System.out.println(curriculumVO.getCurriculumEndDate());
 		List<UserVO> requestList = userService.stdList();
+		List<CurriculumVO> currList = curriculumService.CurriculumList();
 		model.addAttribute("requests", requestList);
+		model.addAttribute("class", currList);
 	    
 	    return "admin/adminMain";
 	}
@@ -64,9 +80,11 @@ public class AdminController {
 	@ResponseBody
 	public Map<String, Object> filterUsers(@RequestParam(defaultValue = "1") int page, 
 	                                       @RequestParam(defaultValue = "showAll") String filter,
-	                                       @RequestParam(defaultValue = "") String searchQuery) {
+	                                       @RequestParam(defaultValue = "") String searchQuery,
+	                                       Model model) {
 	    List<UserVO> users = userService.getUsersByFilter(filter, page, searchQuery);
 	    int totalCnt = userService.userTotalCnt(filter, searchQuery);
+	    
 	    
 	    PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
 

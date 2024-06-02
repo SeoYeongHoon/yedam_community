@@ -1,12 +1,12 @@
 package com.yedam.app.yedam_post.service;
 
 import java.util.Date;
+
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
-
 @Data
 public class PostVO {
 	
@@ -24,8 +24,15 @@ public class PostVO {
     private Date updateDate;
     private String keyword;
     
-
-
+    //댓글
+    private int replyId;
+    private String replyContent;
+    
+    //
+    private int replyCount;
+    private int commentCount;
+    private int totalCount;
+    
 	private int boardfileId;
     private String boardfileName;
     private long boardfileSize;
@@ -211,5 +218,31 @@ public class PostVO {
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
+
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+
+	public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+
+	
     
 }

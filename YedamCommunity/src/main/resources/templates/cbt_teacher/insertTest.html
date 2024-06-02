@@ -5,12 +5,11 @@
 	layout:fragment="Admin">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
 <form th:action="@{/}" method="post" th:object="${teacherVO}">
 	<!-- ======= 시험 이름 입력 start ======= -->
 	<div class="input-style-1">
 		<h6 class="mb-25">시험 Title</h6>
-		<input type="text" placeholder="시험의 이름 입력(최대 15자 입력)" th:field="*{testName}" maxlength="15" oninput="nameMaxLength(this);"/>
+		<input type="text" placeholder="시험의 이름 입력(최대 15자 입력)" th:field="*{testName}" maxlength="15" />
 	</div>
 	<!-- ======= 시험 이름 입력 end ======= -->
 
@@ -20,14 +19,27 @@
 		<textarea placeholder="시험의 안내사항을 입력하세요." rows="8" cols="100"
 			th:field="*{testContent}"></textarea>
 	</div>
-	<!-- ======= 시험 안내사항 입력 start ======= -->
-
+	<!-- ======= 시험 안내사항 입력 end ======= -->
+	<br>
+	<!-- ======= 시험 시작일 입력 start ======= -->
+	<div>
+		<h6 class="mb-25">시험 시작일</h6>
+		<input type="date" placeholder="시간입력(분)" style="border: 1px solid"
+			name="testDate" id="testDate">
+	</div>
+	<!-- ======= 시험 시작일 입력 end ======= -->
+	<br>
 	<!-- ======= 시험 제한시간 입력 start ======= -->
 	<div>
 		<h6 class="mb-25">제한 시간</h6>
 		<input type="text" placeholder="시간입력(분)" style="border: 1px solid"
 			name="testTime" id="testTime">
-
+	</div>
+	<br>
+	<div style="position:relative; top:10px">		
+		<h6 class="mb-25">합격 점수</h6>
+		<input type="text" placeholder="합격점수 입력" style="border: 1px solid"
+			name="passScore" id="passScore">
 	</div>
 	<br>
 	<!-- ======= 시험 제한시간 입력 end ======= -->
@@ -65,188 +77,196 @@
 		</li>
 	</ul>
 </form>
-
 <script>
-	var tName = '';
-	var tContent = '';
-	var tTIme = 0;
-	var userId = 0;
-	var classId = window.localStorage.getItem('classId');
-	var qContent = window.localStorage.getItem('quizContent');
-	var quizId = window.localStorage.getItem('quizId');
-	var quizScore = window.localStorage.getItem('quizScore');
-	var curriculumId = window.localStorage.getItem('curriculumId');
-	var subName = window.localStorage.getItem('subjectName');
-	$('#testName').on('change', function() {
-		tName = $('#testName').val();
-		//window.localStorage.setItem('testName', tName);
-	});
+var tName = '';
+var tContent = '';
+var tDate = '';
+var tTIme = 0;
+var userId = 0;
+var passScore = 0;
+var testId = 0;
+var classId = window.localStorage.getItem('classId');
+var qContent = window.localStorage.getItem('quizContent');
+var quizId = window.localStorage.getItem('quizId');
+var quizScore = window.localStorage.getItem('quizScore');
+var curriculumId = window.localStorage.getItem('curriculumId');
+var subName = window.localStorage.getItem('subjectName');
+var subjectName = window.localStorage.getItem('qSubjectName');
 
-	$('#testContent').on('change', function() {
-		tContent = $('#testContent').val();
-		//window.localStorage.setItem('testContent', tContent);
-	});
+//--------------------------------------------
+// input태그에 값 입력시 변수에 각각의 value값들 저장
+//--------------------------------------------
+$('#testName').on('change', function() {
+	tName = $('#testName').val();
+	//window.localStorage.setItem('testName', tName);
+});
 
-	$('#testTime').on('change', function() {
-		tTime = $('#testTime').val();
-		//window.localStorage.setItem('testTime', tTime);
-	});
+$('#testContent').on('change', function() {
+	tContent = $('#testContent').val();
+	//window.localStorage.setItem('testContent', tContent);
+});
 
-	// localstorage에 저장된 복수의 값을 배열 타입으로 변환
-	var arryQContent = JSON.parse(qContent); // 시험 문제가 모여있는 배열	
-	var arryQuizId = JSON.parse(quizId); // 시험 id값이 모여있는 배열 
-	var arryQuizScore = JSON.parse(quizScore); // 시험 배점이 모여있는 배열
-	var arrySubName = JSON.parse(subName); // 문제 과목이름이 모여있는 배열
+$('#testTime').on('change', function() {
+	tTime = $('#testTime').val();
+	//window.localStorage.setItem('testTime', tTime);
+});
+$('#testDate').on('change', function(){
+	tDate = $('#testDate').val();
+})
 
-	var storageUser = []; // 시험 대상자가 모여있는 배열
+// localstorage에 저장된 복수의 값을 배열 타입으로 변환
+var arryQContent = JSON.parse(qContent); // 시험 문제가 모여있는 배열	
+var arryQuizId = JSON.parse(quizId); // 시험 id값이 모여있는 배열 
+var arryQuizScore = JSON.parse(quizScore); // 시험 배점이 모여있는 배열
+var arrySubName = JSON.parse(subName); // 문제 과목이름이 모여있는 배열
 
-	//--------------------------------------------
-	// 대상자 개별의 체크박스 체크시 배열에 대상자 추가
-	//--------------------------------------------
-	$('.checkbox').on('change', function() {
-		storageUser = [];
-		for (let i = 0; i < $('.checkbox').length; i++) {
-			if ($('#user' + i).is(":checked")) {
-				storageUser.push($('#user' + i).val());
-			}
-			;
+var storageUser = []; // 시험 대상자가 모여있는 배열
+
+//--------------------------------------------
+// 대상자 개별의 체크박스 체크시 배열에 대상자 추가
+//--------------------------------------------
+$('.checkbox').on('change', function() {
+	storageUser = [];
+	for (let i = 0; i < $('.checkbox').length; i++) {
+		if ($('#user' + i).is(":checked")) {
+			storageUser.push($('#user' + i).val());
 		}
-		;
-	})
-	//--------------------------------------------
-	// 전체 추가 체크박스 체크시 배열에 전체 대상자 추가
-	//--------------------------------------------
-	$('#checkbox-1').on('change', function() {
-		storageUser = [];
-		for (let i = 0; i < $('.checkbox').length; i++) {
-			if ($('#checkbox-1').is(':checked')) {
-				storageUser.push($('#user' + i).val());
-			} else {
-				storageUser = [];
-			}
+	}
+})
+//--------------------------------------------
+// 전체 추가 체크박스 체크시 배열에 전체 대상자 추가
+//--------------------------------------------
+$('#checkbox-1').on('change', function() {
+	storageUser = [];
+	for (let i = 0; i < $('.checkbox').length; i++) {
+		if ($('#checkbox-1').is(':checked')) {
+			storageUser.push($('#user' + i).val());
+		} else {
+			storageUser = [];
 		}
-	})
+	}
+})
+
+//--------------------------------------------
+// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능
+// 1. tests 테이블에 최초 딱 한번만 insert 동작
+// 2. quizbox 테이블에 선택된 문제들에 대한 숫자만큼 insert문 동작
+// 3. test_targets 테이블에 선택된 학생들에 대한 숫자만큼 insert문 동작
+//--------------------------------------------
+$('#addBtn').on('click', function() {
+	//--------------------------------------------
+	// tests 테이블에 insert 동작.
+	//--------------------------------------------
+	passScore = $('#passScore').val();
+	let obj = {
+		"curriculumId" : curriculumId,
+		"testContent" : tContent,
+		"testTime" : tTime,
+		"testName" : tName,
+		"classId" : classId,
+		"passScore" : passScore,
+		"subjectName" : subjectName,
+		"testDate" : tDate
+	};
+	$.ajax({
+		url : "testinsert",
+		type : "post",
+		async : false,
+		data : obj,
+		
+		success : function(data) {
+			testId = data;
+			alert("새로 만들어진 testId값 : "+testId);
+		},
+		error : function(err) {
+			alert('시험 등록 실패');
+			return;
+			
+		}
+	});
 	
 	//--------------------------------------------
-	// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능
-	// 1. tests 테이블에 최초 딱 한번만 insert 동작
-	// 2. quizbox 테이블에 선택된 문제들에 대한 숫자만큼 insert문 동작
-	// 3. test_targets 테이블에 선택된 학생들에 대한 숫자만큼 insert문 동작
+	// quizbox 테이블에 선택된 문제수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
 	//--------------------------------------------
-	$('#addBtn').on('click', function() {
-		//--------------------------------------------
-		// tests 테이블에 insert 동작.
-		//--------------------------------------------
-		let obj = {
-			"curriculumId" : curriculumId,
-			"testContent" : tContent,
-			"testTime" : tTime,
-			"testName" : tName,
-			"classId" : classId
-		};
-		$.ajax({
-			url : "testinsert",
-			type : "post",
-			async : false,
-			data : obj,
+	obj = {
+	        "quizContent": arryQContent,
+	        "quizId": arryQuizId,
+	        "subjectName": arrySubName,
+	        "curriculumId": curriculumId,
+	        "quizScore": arryQuizScore,
+	        "testId" : testId
+	      };
+	
+	$.ajax({
+		url : "quizboxinsert",
+		type : "post",
+		contentType : 'application/json',
+		data : JSON.stringify(obj),
+		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
 			
-			success : function(data) {
-				console.log(data);
-				if(data != 'true' && data == null){
-					return;
-				}
-			},
-			error : function(err) {
-				alert('시험 등록 실패');
-				return;
-				
-			}
-		});
-		
-		//--------------------------------------------
-		// quizbox 테이블에 선택된 문제수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
-		//--------------------------------------------
-		obj = {
-		        "quizContent": arryQContent,
-		        "quizId": arryQuizId,
-		        "subjectName": arrySubName,
-		        "curriculumId": curriculumId,
-		        "quizScore": arryQuizScore
-		      };
-		
-		$.ajax({
-			url : "quizboxinsert",
-			type : "post",
-			contentType : 'application/json',
-			data : JSON.stringify(obj),
-			async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
-				
-			success : function(data){
-				alert('quizbox 성공');
-			},
-			error : function(err){
-				alert('시험 등록 실패(문제 등록 실패)');
-			}
-		}); 
-
-		//--------------------------------------------
-		// test_targets 테이블에 선택된 학생수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
-		//--------------------------------------------
-		obj = {
-		        "userId": storageUser
-		      };
-		
-		$.ajax({
-			url : "testuserinsert",
-			type : "post",
-			contentType : 'application/json',
-			data : JSON.stringify(storageUser),
-			async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
-			
-			success : function(data){
-				alert('users 성공');
-			},
-			error : function(err){
-				alert('시험 등록 실패(시험 대상자 등록 실패)');
-			}
-		}); 
-	})
-	//--------------------------------------------
-	// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
-	//--------------------------------------------
-
-	//--------------------------------------------
-	// 유저 선택 체크박스 관련 기능 시작
-	//--------------------------------------------
-	var selectAllCheckbox = document.getElementById("checkbox-1");
-	var checkboxes = document.querySelectorAll(".checkbox");
-	//--------------------------------------------
-	// 전체 선택/해제 체크박스의 상태에 따라 모든 항목 체크박스 선택/해제
-	//--------------------------------------------
-	selectAllCheckbox.addEventListener("change", function() {
-		var isChecked = selectAllCheckbox.checked;
-		checkboxes.forEach(function(checkbox) {
-			checkbox.checked = isChecked;
-		});
+		success : function(data){
+			alert("testId값 in quizbox : "+testId);
+			alert('quizbox 성공');
+		},
+		error : function(err){
+			alert('시험 등록 실패(문제 등록 실패)');
+		}
 	});
+
 	//--------------------------------------------
-	// 항목 체크박스 중 하나라도 선택 취소될 경우, 전체 선택/해제 체크박스도 선택 취소
+	// test_targets 테이블에 선택된 학생수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
 	//--------------------------------------------
+	obj = {
+	        "userId": storageUser,
+	        "testId" : testId
+	      };
+	
+	$.ajax({
+		url : "testuserinsert",
+		type : "post",
+		contentType : 'application/json',
+		data : JSON.stringify(obj),
+		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
+		
+		success : function(data){
+			alert('users 성공');
+		},
+		error : function(err){
+			alert('시험 등록 실패(시험 대상자 등록 실패)');
+		}
+	});
+})
+//--------------------------------------------
+// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
+//--------------------------------------------
+
+//--------------------------------------------
+// 유저 선택 체크박스 관련 기능 시작
+//--------------------------------------------
+var selectAllCheckbox = document.getElementById("checkbox-1");
+var checkboxes = document.querySelectorAll(".checkbox");
+//--------------------------------------------
+// 전체 선택/해제 체크박스의 상태에 따라 모든 항목 체크박스 선택/해제
+//--------------------------------------------
+selectAllCheckbox.addEventListener("change", function() {
+	var isChecked = selectAllCheckbox.checked;
 	checkboxes.forEach(function(checkbox) {
-		checkbox.addEventListener("change", function() {
-			if (!checkbox.checked) {
-				selectAllCheckbox.checked = false;
-			}
-		});
+		checkbox.checked = isChecked;
 	});
-	//--------------------------------------------
-	//유저 선택 체크박스 관련 기능 종료
-	//--------------------------------------------
-	
-	function nameMaxLength(e){
-        if(e.value.length > e.maxLength){
-            e.value = e.value.slice(0, e.maxLength);
-        }
-    }
+});
+//--------------------------------------------
+// 항목 체크박스 중 하나라도 선택 취소될 경우, 전체 선택/해제 체크박스도 선택 취소
+//--------------------------------------------
+checkboxes.forEach(function(checkbox) {
+	checkbox.addEventListener("change", function() {
+		if (!checkbox.checked) {
+			selectAllCheckbox.checked = false;
+		}
+	});
+});
+//--------------------------------------------
+//유저 선택 체크박스 관련 기능 종료
+//--------------------------------------------
+
 </script>
 </html>

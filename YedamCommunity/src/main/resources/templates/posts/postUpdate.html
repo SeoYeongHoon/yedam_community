@@ -13,6 +13,7 @@
     <form id="updateForm" th:object="${post}" enctype="multipart/form-data">
         <input type="hidden" th:field="*{postId}" />
         <input type="hidden" th:field="*{boardId}" />
+        <input type="hidden" th:field="*{userId}" />
         <div>
             <label for="title">제목:</label> 
             <input type="text" th:field="*{title}" id="title" />
@@ -30,7 +31,7 @@
             <button type="button" id="updateBtn">수정</button>
         </div>
     </form>
-    <a th:href="@{/post/{boardId}(boardId=${post.boardId})}">목록으로</a>
+    <a th:href="@{/all/post/{boardId}(boardId=${post.boardId})}">목록으로</a>
 </div>
     
 <script>
@@ -38,7 +39,7 @@
         if (!validationCheck()) return;
         let formData = new FormData($('#updateForm')[0]);
         $.ajax({
-            url: '/postUpdate',
+            url: '/all/postUpdate',
             type: 'POST',
             data: formData,
             processData: false,
@@ -46,7 +47,7 @@
             success: function(result) {
                 if (result.success) {
                     alert('정상적으로 수정되었습니다.');
-                    window.location.href = '/post/' + formData.get('boardId');
+                    window.location.href = '/all/post/' + formData.get('boardId') + "/" + formData.get('postId');
                 } else {
                     alert('수정되지 않았습니다. 오류 메시지: ' + result.message);
                 }
