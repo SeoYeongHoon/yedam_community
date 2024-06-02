@@ -11,202 +11,201 @@
 	display :none; 
 }
 </style>
-<main class="main-wrapper">
-	<!-- 댓글내용 확인 모달창 -->
-	<div id="modalReply" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<!-- 모달 헤더 -->
-				<div class="modal-header">
-					<h5 class="modal-title">등록 실패</h5>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+<!-- 댓글내용 확인 모달창 -->
+<div id="modalReply" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 실패</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">댓글을 입력해주세요!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" th:src="@{/images/failed.png}">
 				</div>
-				<!-- 모달 본문 -->
-				<div class="modal-body">
-					<p style="text-align: center;">댓글을 입력해주세요!</p>
-					<div style="text-align: center;">
-						<img alt="등록완료버튼" th:src="@{/images/failed.png}">
-					</div>
-				</div>
-				<!-- 모달 푸터 -->
-				<div class="modal-footer">
-					<button id='errBtn' type="button" class="btn btn-primary"
-						data-dismiss="modal">확인</button>
-				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<!-- 등록완료 모달창 -->
-	<div id="modal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<!-- 모달 헤더 -->
-				<div class="modal-header">
-					<h5 class="modal-title">등록 완료</h5>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+<!-- 등록완료 모달창 -->
+<div id="modal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 완료</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">등록이 완료되었습니다!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" th:src="@{/images/registration.png}">
 				</div>
-				<!-- 모달 본문 -->
-				<div class="modal-body">
-					<p style="text-align: center;">등록이 완료되었습니다!</p>
-					<div style="text-align: center;">
-						<img alt="등록완료버튼" th:src="@{/images/registration.png}">
-					</div>
-				</div>
-				<!-- 모달 푸터 -->
-				<div class="modal-footer">
-					<button id='okBtn' type="button" class="btn btn-primary close"
-						data-dismiss="modal">확인</button>
-				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='okBtn' type="button" class="btn btn-primary close"
+					data-dismiss="modal">확인</button>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<!-- 대댓글 내용 확인 모달창 -->
-	<div id="commentCentent" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<!-- 모달 헤더 -->
-				<div class="modal-header">
-					<h5 class="modal-title">등록 실패</h5>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+<!-- 대댓글 내용 확인 모달창 -->
+<div id="commentCentent" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 실패</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">대댓글을 입력해주세요!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" th:src="@{/images/failed.png}">
 				</div>
-				<!-- 모달 본문 -->
-				<div class="modal-body">
-					<p style="text-align: center;">대댓글을 입력해주세요!</p>
-					<div style="text-align: center;">
-						<img alt="등록완료버튼" th:src="@{/images/failed.png}">
-					</div>
-				</div>
-				<!-- 모달 푸터 -->
-				<div class="modal-footer">
-					<button id='errBtn' type="button" class="btn btn-primary"
-						data-dismiss="modal">확인</button>
-				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
 			</div>
 		</div>
 	</div>
-	<!-- 삭제 완료 모달창 -->
-	<div id="deleteOK" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<!-- 모달 헤더 -->
-				<div class="modal-header">
-					<h5 class="modal-title">삭제 완료</h5>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+<!-- 삭제 완료 모달창 -->
+<div id="deleteOK" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">삭제 완료</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">댓글이 삭제되었습니다!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" th:src="@{/images/registration.png}">
 				</div>
-				<!-- 모달 본문 -->
-				<div class="modal-body">
-					<p style="text-align: center;">댓글이 삭제되었습니다!</p>
-					<div style="text-align: center;">
-						<img alt="등록완료버튼" th:src="@{/images/registration.png}">
-					</div>
-				</div>
-				<!-- 모달 푸터 -->
-				<div class="modal-footer">
-					<button id='okBtn' type="button" class="btn btn-primary close"
-						data-dismiss="modal">확인</button>
-				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='okBtn' type="button" class="btn btn-primary close"
+					data-dismiss="modal">확인</button>
 			</div>
 		</div>
 	</div>
-	<!-- 과제삭제 모달창 -->
-	<div id="deleteHomework" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<!-- 모달 헤더 -->
-				<div class="modal-header">
-					<h5 class="modal-title">삭제 완료</h5>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+<!-- 과제삭제 모달창 -->
+<div id="deleteHomework" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">삭제 완료</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">과제가 삭제되었습니다.</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" th:src="@{/images/registration.png}">
 				</div>
-				<!-- 모달 본문 -->
-				<div class="modal-body">
-					<p style="text-align: center;">과제가 삭제되었습니다.</p>
-					<div style="text-align: center;">
-						<img alt="등록완료버튼" th:src="@{/images/registration.png}">
-					</div>
-				</div>
-				<!-- 모달 푸터 -->
-				<div class="modal-footer">
-					<button id='checkBtn' type="button" class="btn btn-primary"
-						onclick="location.href='/admin/homework_T'">확인</button>
-				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='checkBtn' type="button" class="btn btn-primary"
+					onclick="location.href='/admin/homework_T'">확인</button>
 			</div>
 		</div>
 	</div>
+</div>
 
 
-	<!-- 과제 상세페이지 시작 -->
-	<input id="logId" type="hidden" th:value="${userId}">
-	<input id="logName" type="hidden" th:value="${userName}">
-	<div th:each="homeworkInfo : ${homeworkList}">
-			<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
-				class="main-btn light-btn rounded-full btn-hover admin"
-				style="float: right;" type="button">과제 삭제</button>
-			<button id="updateHomework"
-				class="main-btn warning-btn rounded-full btn-hover admin"
-				th:value="${homeworkInfo.homeworkId}" type="button">게시글 수정</button>
-		<div style="border: 1px solid black;">
-			<hr>
-			<h1>제목</h1>
-			<input id="title" class="homeworkUpdate" type="text"
-				style="padding: 10px; width: 250px; border: 1px solid black;"
-				th:value="${homeworkInfo.homeworkTitle}" readonly>
-			<h2>마감일자</h2>
-			<input id="homeworkDate"  type="text"
-				th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}"
-				style="padding: 10px; width: 250px; border: 1px solid black;"
-				readonly>
-				<input id="updateDate" type="date" style="padding: 10px; width: 250px; border: 1px solid black; display:none;"class="homeworkUpdate">
-			<hr>
-			
-			<h2>내용</h2>
-			
-			<hr>
-			
-			<input id="content" class="homeworkUpdate" type="text"
-				th:value="${homeworkInfo.homeworkContent}"
-				style="padding: 10px; width: 250px; border: 1px solid black;"
-				readonly>
-
-			<!-- 파일내역 출력 -->
-			<div id="homeworkFile"></div>
-				<!-- 파일 업로드 -->
-				<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
-					<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
-					<div id="file" style="padding: 50px; display: none;" class="card-style mb-30">
-						<input type="file" name="uploadFiles" multiple="multiple">
-						<button id="fileUpload" type="button"
-							style="padding: 10px; width: 100px; border: 1px solid black;">파일
-							등록</button>
-					</div>
-				</form>
-			
-			<button id=updateHomeworks class="main-btn primary-btn btn-hover"
-				type="button" style="display: none;">등록</button>
+<!-- 과제 상세페이지 시작 -->
+<input id="logId" type="hidden" th:value="${userId}">
+<input id="logName" type="hidden" th:value="${userName}">
+<div th:each="homeworkInfo : ${homeworkList}" style="padding: 30px;">
+		<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
+			class="main-btn light-btn   btn-hover admin"
+			style="float: right; padding: 10px 15px;" type="button">과제 삭제</button>
+		<button id="updateHomework"
+			class="main-btn warning-btn   btn-hover admin"
+			th:value="${homeworkInfo.homeworkId}" type="button" style="padding: 10px 15px;">게시글 수정</button>
+	<div>
+		<hr>
+		<div class="input-style-1">
+			<label>제목</label> 
+			<input id="title" class="homeworkUpdate" type="text" style="width: 100%;" th:value="${homeworkInfo.homeworkTitle}" disabled>
 		</div>
-		<div style="border: 1px solid black;">
-
-			<!-- 댓글출력 -->
-			<h3>댓글</h3>
-			<div id="replyList"></div>
+		<div class="input-style-1">
+			<label>마감일자</label> 
+			<input id="homeworkDate"  type="text" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="width: 250px;" disabled>
+			<input id="updateDate" type="date" style="width: 250px; display:none;"class="homeworkUpdate">
+		</div>
+		<!-- 파일내역 출력 -->
+		<div id="homeworkFile"></div>
+		<!-- 파일 업로드 -->
+		<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
+			<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
+			<div id="file" style="padding: 50px; display: none;" class="card-style mb-30">
+				<input type="file" name="uploadFiles" multiple="multiple">
+				<button id="fileUpload" type="button"
+					style="padding: 10px; width: 100px; border: 1px solid black;">파일
+					등록</button>
+			</div>
+		</form>
+		
+		<button id=updateHomeworks class="main-btn primary-btn btn-hover" type="button" style="display: none;">등록</button>
+		
+		<hr>
+		
+		<div class="input-style-1">
+			<label>내용</label> 
+			<textarea cols="100" rows="10" class="homeworkUpdate" id="content" name="feedback" th:text="${homeworkInfo.homeworkContent}" disabled></textarea>
+		<!--<input id="content" class="homeworkUpdate" type="text"
+			th:value="${homeworkInfo.homeworkContent}"
+			style="padding: 10px; width: 250px; border: 1px solid black;"
+			readonly>-->
 		</div>
 	</div>
-	<!-- end reply -->
-	<h3>댓글 작성</h3>
-	<form name="insertReply" id="addReply" method="post"
-		th:object="${homeworkList}" enctype="multipart/form-data">
-		<input id="targetId" type="hidden" th:field="*{homeworkTargetId}">
-		<input type="hidden" th:field="*{homeworkId}">
-		<textarea style="border: 1px solid black;" rows="8" cols="50"
-			placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
-		<div class="col-12" style="text-align: center;">
-			<input type="file" name="uploadFiles" multiple>
-			<button id="insertBtn" class="main-btn primary-btn btn-hover"
-				type="button">등록</button>
-		</div>
-	</form>
-</main>
+	
+	<hr>
+		
+	<div style="border: 1px solid black;">
+
+		<!-- 댓글출력 -->
+		<h3>댓글</h3>
+		<div id="replyList"></div>
+	</div>
+</div>
+<!-- end reply -->
+<h3>댓글 작성</h3>
+<form name="insertReply" id="addReply" method="post"
+	th:object="${homeworkList}" enctype="multipart/form-data">
+	<input id="targetId" type="hidden" th:field="*{homeworkTargetId}">
+	<input type="hidden" th:field="*{homeworkId}">
+	<textarea style="border: 1px solid black;" rows="8" cols="50"
+		placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
+	<div class="col-12" style="text-align: center;">
+		<input type="file" name="uploadFiles" multiple>
+		<button id="insertBtn" class="main-btn primary-btn btn-hover"
+			type="button">등록</button>
+	</div>
+</form>
 
 <script>
 
@@ -238,6 +237,7 @@ function fileList(){
 				let file =
 					`
 					<div>
+						<label>파일</label>
 						<p>
 						<a class="filePath" value="${e.homeworkfileId}"  href="/homeworkdownload/${e.downloadLocation}">${e.homeworkfileName}</a>
 							<button id="deleteFile-${e.homeworkfileId}" value="${e.homeworkfileLocation}" type="button" class="close deleteFile" style="float:left; display:none;" >&times;</button>
@@ -388,7 +388,7 @@ $('#deleteHomeworks').on('click',function(){
             	   <div class ="replyDiv"style="border: 1px solid black;">
             	   		<h3>댓글내용</h3>
             	   		<input class="replyContent-${e.replyId}" type="text" value="${e.replyContent}" readonly >
-                   		<button type="button" class="main-btn warning-btn rounded-full btn-hover contentUpdate-${e.replyId}" style="display: none;"	>수정</button>
+                   		<button type="button" class="main-btn warning-btn   btn-hover contentUpdate-${e.replyId}" style="display: none;"	>수정</button>
                    		<h3>작성자</h3>
                    		<input  id="logName" type="text" value="${e.replyWriter}" readonly >
                    		<h3>작성일자</h3>
@@ -403,8 +403,8 @@ $('#deleteHomeworks').on('click',function(){
 		   						</form>
 		   					</div>
 								<button class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
-								<button class="main-btn light-btn rounded-full btn-hover logName logName-${e.replyWriter}" type="button" onclick="deleteReply(${e.replyId})">댓글 삭제</button>
-								<button class="main-btn warning-btn rounded-full btn-hover updateBtn logName logName-${e.replyWriter}" type="button" value="${e.replyId}" >댓글 수정</button>
+								<button class="main-btn light-btn   btn-hover logName logName-${e.replyWriter}" type="button" onclick="deleteReply(${e.replyId})">댓글 삭제</button>
+								<button class="main-btn warning-btn   btn-hover updateBtn logName logName-${e.replyWriter}" type="button" value="${e.replyId}" >댓글 수정</button>
 							</div>
 						
 						<div id="comments-${e.replyId}">
@@ -614,10 +614,10 @@ $('#deleteHomeworks').on('click',function(){
 	        		   		<input class="commentLogName" type="hidden" value="${e.commentWriter}">
 	        			 	<input class="commentContent-${e.commentId}" type="text" value="${e.commentContent}" readonly >
 	        			 	<p>작성자: ${e.commentWriter}</p>
-	        			 	<button type="button" class="main-btn warning-btn rounded-full btn-hover replyContentUpdate-${e.commentId}" style="display: none;"	>수정</button>
+	        			 	<button type="button" class="main-btn warning-btn   btn-hover replyContentUpdate-${e.commentId}" style="display: none;"	>수정</button>
 	        			 	<p >대댓글 작성일자 : ${commentDate}</p>
-	        			 	<button class="main-btn light-btn rounded-full btn-hover logName commentLogName-${e.commentWriter}" type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
-	        			 	<button class="main-btn warning-btn rounded-full btn-hover cUpdateBtn logName commentLogName-${e.commentWriter}" type="button" id="cUpdateBtn" value="${e.commentId}">답글 수정</button>
+	        			 	<button class="main-btn light-btn   btn-hover logName commentLogName-${e.commentWriter}" type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
+	        			 	<button class="main-btn warning-btn   btn-hover cUpdateBtn logName commentLogName-${e.commentWriter}" type="button" id="cUpdateBtn" value="${e.commentId}">답글 수정</button>
 	        			 </div>
 	        			 `
 	        		 $('#comments-'+e.replyId).append(comments);

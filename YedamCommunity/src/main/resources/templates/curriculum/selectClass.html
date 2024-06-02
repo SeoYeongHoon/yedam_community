@@ -19,22 +19,13 @@
           <div class="cards-styles" >
             <div class="row" >
               <div class="col-4" th:each="classInfo : ${class}">
-                <div class="card-style-1 mb-30">
-                  <div class="card-content" th:onclick="|location.href='@{/admin/homeworkInsert(curriculumId=${classInfo.curriculumId})}'|">
-                    <h4>
-                    	<font style="vertical-align: inherit;">
-                    		<font style="vertical-align: inherit;">[[${classInfo.classId}]]강의실</font>
-                    	</font>
-                    </h4>
+                <div class="card-style-1 mb-30 classSelectCard">
+                  <div class="card-content classSelect" th:onclick="|location.href='@{/admin/homeworkInsert(curriculumId=${classInfo.curriculumId})}'|">
+                    <h4 style="font-weight: normal;">[[${classInfo.classId}]]강의실</h4>
                     <hr>
-                    <p>
-                    	<font style="vertical-align: inherit;">
-                    		<font style="vertical-align: inherit;">[[${classInfo.curriculumName}]]</font>
-                   		</font>
-                   		<font style="vertical-align: inherit;">
-                    		<font style="vertical-align: inherit;"><[[${#dates.format(classInfo.curriculumStartDate,'yyyy년MM월dd일')}]]~[[${#dates.format(classInfo.curriculumEndDate,'yyyy년MM월dd일')}]]></font>
-                   		</font>
-                   	</p>
+                    <p>[[${classInfo.curriculumName}]]</p>
+					<p>( [[${#dates.format(classInfo.curriculumStartDate,'yyyy년MM월dd일')}]]~[[${#dates.format(classInfo.curriculumEndDate,'yyyy년MM월dd일')}]] )</p>
+                    	
                   </div>
                 </div>
               </div>
