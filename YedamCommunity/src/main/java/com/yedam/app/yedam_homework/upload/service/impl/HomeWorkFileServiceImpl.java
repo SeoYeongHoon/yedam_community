@@ -50,6 +50,11 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 			// 모든경로를 포함한 파일 이름
 			String originalName = uploadFile.getOriginalFilename();
 
+			 // 파일 이름이 없는 경우 업로드를 진행하지 않음
+	        if (originalName == null || originalName.isEmpty()) {
+	            continue;  // 다음 파일로 넘어감
+	        }
+
 			// 모든 경로에서 마지막 / 부분으로부터 +1 해준 부분부터 출력하겠다.
 			String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
 
@@ -117,8 +122,12 @@ public class HomeWorkFileServiceImpl implements HomeWorkFileService {
 
 			// 모든경로를 포함한 파일 이름
 			String originalName = uploadFile.getOriginalFilename();
-			System.err.println(originalName);
 
+			 // 파일 이름이 없는 경우 업로드를 진행하지 않음
+	        if (originalName == null || originalName.isEmpty()) {
+	            continue;  // 다음 파일로 넘어감
+	        }
+	        
 			// 모든 경로에서 마지막 / 부분으로부터 +1 해준 부분부터 출력하겠다.
 			String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
 
