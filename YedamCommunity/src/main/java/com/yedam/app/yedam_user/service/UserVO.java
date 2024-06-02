@@ -1,5 +1,9 @@
 package com.yedam.app.yedam_user.service;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -15,10 +19,13 @@ public class UserVO {
 	private String email;
 	private String address;
 	private String companyInfo;
-	private Integer isComplete;
 	private String userType;
 	private Integer curriculumId;
 	private String curriculumName;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date curriculumStartDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date curriculumEndDate;
 
 	// 이미지처리
 	private String profileImageName;
@@ -105,14 +112,6 @@ public class UserVO {
 		this.companyInfo = companyInfo;
 	}
 
-	public Integer getIsComplete() {
-		return isComplete;
-	}
-
-	public void setIsComplete(Integer isComplete) {
-		this.isComplete = isComplete;
-	}
-
 	public String getUserType() {
 		return userType;
 	}
@@ -135,6 +134,22 @@ public class UserVO {
 
 	public void setCurriculumName(String curriculumName) {
 		this.curriculumName = curriculumName;
+	}
+
+	public Date getCurriculumStartDate() {
+		return curriculumStartDate;
+	}
+
+	public void setCurriculumStartDate(Date curriculumStartDate) {
+		this.curriculumStartDate = curriculumStartDate;
+	}
+
+	public Date getCurriculumEndDate() {
+		return curriculumEndDate;
+	}
+
+	public void setCurriculumEndDate(Date curriculumEndDate) {
+		this.curriculumEndDate = curriculumEndDate;
 	}
 
 	public String getProfileImageName() {
@@ -196,5 +211,6 @@ public class UserVO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
 	
 }
