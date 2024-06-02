@@ -37,6 +37,7 @@ public interface ExamService {
 	public List<TeacherVO> currList(); // 과정명 출력(과목명 추가할때 사용)
 	public List<TeacherVO> subjectListOfCurr(int cId); // 과목명 출력(과목 추가/삭제시 사용)
 	public int quizDelete(int qId); // 문제 삭제
+	public Map<String, Object> answerUpdate(TeacherVO teacherVO); // 등록된 문제 지문들 수정
 	
 	
 	//--------------------------------------------

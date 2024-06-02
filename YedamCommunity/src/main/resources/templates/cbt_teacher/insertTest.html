@@ -176,7 +176,6 @@ $('#addBtn').on('click', function() {
 		
 		success : function(data) {
 			testId = data;
-			alert("새로 만들어진 testId값 : "+testId);
 		},
 		error : function(err) {
 			alert('시험 등록 실패');
@@ -205,8 +204,7 @@ $('#addBtn').on('click', function() {
 		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
 			
 		success : function(data){
-			alert("testId값 in quizbox : "+testId);
-			alert('quizbox 성공');
+			
 		},
 		error : function(err){
 			alert('시험 등록 실패(문제 등록 실패)');
@@ -229,7 +227,7 @@ $('#addBtn').on('click', function() {
 		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
 		
 		success : function(data){
-			alert('users 성공');
+			
 		},
 		error : function(err){
 			alert('시험 등록 실패(시험 대상자 등록 실패)');

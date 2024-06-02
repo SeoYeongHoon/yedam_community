@@ -89,7 +89,7 @@
 							<h6>출제 강의실</h6>
 						</th>
 						<th>
-							<h6>마감일</h6>
+							<h6>시험 응시일</h6>
 						</th>
 						<th>
 							<h6>시험 시간(분)</h6>
@@ -276,9 +276,12 @@ function process(){
 		 if(arry[index] < today1){
 		 	$('#'+index).text('시험종료');
 		 	$('#'+index).attr('class', 'status-btn close-btn process');
-		 } else {
+		 } else if(arry[index] == today1) {
 		 	$('#'+index).text('시험중');
 		 	$('#'+index).attr('class', 'status-btn active-btn process');
+		 } else {
+			$('#'+index).text('대기중');
+			$('#'+index).attr('class', 'status-btn info-btn process');
 		 }
 	});
 }

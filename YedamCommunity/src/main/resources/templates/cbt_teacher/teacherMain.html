@@ -5,6 +5,11 @@
 	layout:fragment="Admin">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+p:hover {
+  color: #365CF5;
+}
+</style>
 <div class="col-lg-12" id="allClass">
 	<div class="card-style mb-30">
 		<ul class="buttons-group">
@@ -39,7 +44,8 @@
 </div>
 <!-- end col -->
 
-<div class="row chart">
+
+<div class="row">
 	<div class="col-lg-12">
 		<div class="card-style mb-30">
 			<div
@@ -49,9 +55,8 @@
 				</div>
 			</div>
 			<!-- End Title -->
-			<div class="chart">
-				<canvas id="chart"
-					style="width: 100%; height: 50px; margin-left: 45px;"></canvas>
+			<div class="chart" style="width:800px; height:400px;">
+				<canvas id="chart"></canvas>
 			</div>
 			<!-- End Chart -->
 		</div>
@@ -92,15 +97,16 @@
 </div>
 <!-- end row -->
 <!-- ========= card-style-3 end ========= -->
-<button id="Btn">테스트</button>
 <script>
 var classId = 1;
 var testId = 0;
-var label = [];
+var label = [];1
 var chartData = [];
 var myChart = null;
 function classInfo(classId){
+	//--------------------------------------------
 	// 학생정보 불러오기
+	//--------------------------------------------
 	$.ajax({
 		url : "userinfo",
 		type : "get", 
@@ -115,7 +121,9 @@ function classInfo(classId){
 			console.log('에러입니다');
 		}	
 	}); // 학생정보 불러오기 end of ajax
+	//--------------------------------------------
 	// 강의실정보 불러오기
+	//--------------------------------------------
 	$.ajax({
 		url : "classinfo",
 		type : "get", 
@@ -133,7 +141,9 @@ function classInfo(classId){
 			console.log('에러입니다');
 		}	
 	}); // 강의실정보 불러오기 end of ajax
+	//--------------------------------------------
 	// 강의실별 시험정보 불러오기
+	//--------------------------------------------
 	$.ajax({
 		url : "classTestinfo",
 		type : "get", 
@@ -153,28 +163,29 @@ function classInfo(classId){
 
 				    return [year, month, day].join('/');
 				} // 날짜 포멧 변환 end
-				$('.test').append($('<p class="testInfoItem" />').text(item.testName + ' ' + formatDate(item.testDate)).attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
+				$('.test').append($('<p class="testInfoItem" />').text((idx+1) + '. ' + item.testName + '  [' + formatDate(item.testDate) + ']').attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
 			})
 		},
 		error : function(err){
 			console.log('에러입니다');
 		}	
 	}); // 시험정보 end of ajax
-	
+	//--------------------------------------------
 	// 평균점수 불러오기
+	//--------------------------------------------
+	let myCt = document.getElementById('chart').getContext('2d');
 	$.ajax({
 		url : "subjectavg",
 		type : "get", 
 		data : {classId : classId},
 					
 		success : function(data){
+			console.log("최초 로딩 데이터 : "+data)
 			data.forEach((item,idx) => {
 				label.push(item.subjectName);
 				chartData.push(item.subjectAvg);
 			})
 			// 차트 그리기
-			let myCt = document.getElementById('chart');
-
 			myChart = new Chart(myCt, {
 				type: 'bar',
 			   	data: {
@@ -183,9 +194,13 @@ function classInfo(classId){
 			      		{
 			        		label: '평균점수',
 			        		data: chartData,
+			        		borderWidth: 1
 			      		}
 			    	]
 			  	},
+			  	options: {
+			        maintainAspectRatio: true, // default value. false일 경우 포함된 div의 크기에 맞춰서 그려짐.
+			    }
 			});
 		},
 		error : function(err){
@@ -193,8 +208,9 @@ function classInfo(classId){
 		}	
 	}); // 평균점수 end of ajax
 }
-
+//--------------------------------------------
 // 강의실 버튼 클릭시 정보 갱신
+//--------------------------------------------
 $('#allClass').on('click','.classNum', function(classId) {
 	$('.test').html('');
 	$('.classUser').html('');
@@ -203,7 +219,9 @@ $('#allClass').on('click','.classNum', function(classId) {
 	chartData = [];
 	//console.log($(this).val());
 	classId = $(this).val()
+	//--------------------------------------------
 	// 강의실별 학생정보 불러오기
+	//--------------------------------------------
 	$.ajax({
 		url : "userinfo",
 		type : "get", 
@@ -211,15 +229,16 @@ $('#allClass').on('click','.classNum', function(classId) {
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				$('.classUser').append($('<p />').text(item.name).attr("onclick","location.href='/userTestInfo?userId="+item.userId+"'"));
+				$('.classUser').append($('<p />').text((idx+1)+'. '+item.name).attr("onclick","location.href='/userTestInfo?userId="+item.userId+"'"));
 			})
 		},
 		error : function(err){
 			console.log('에러입니다');
 		}	
 	}); // 학생정보 end of ajax
-	
+	//--------------------------------------------
 	// 강의실별 과정명 불러오기
+	//--------------------------------------------
 	$.ajax({
 		url : "classinfo",
 		type : "get", 
@@ -237,8 +256,9 @@ $('#allClass').on('click','.classNum', function(classId) {
 			console.log('에러입니다');
 		}	
 	}); // 과정명 end of ajax
-	
+	//--------------------------------------------
 	// 강의실별 시험정보 불러오기
+	//--------------------------------------------
 	$.ajax({
 		url : "classTestinfo",
 		type : "get", 
@@ -246,28 +266,29 @@ $('#allClass').on('click','.classNum', function(classId) {
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				$('.test').append($('<p />').text(item.testName + ' ' + formatDate(item.testDate)).attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
+				$('.test').append($('<p />').text((idx+1) + '. ' + item.testName + '  [' + formatDate(item.testDate)+']').attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
 			})
 		},
 		error : function(err){
 			console.log('에러입니다');
 		}	
 	}); // 시험정보 end of ajax
-	
+	//--------------------------------------------
 	// 평균점수 불러오기
+	//--------------------------------------------
+	let myCt = document.getElementById('chart');
 	$.ajax({
 		url : "subjectavg",
 		type : "get", 
 		data : {classId : classId},
 					
 		success : function(data){
+			console.log("버튼 클릭했을떄 data : "+data)
 			data.forEach((item,idx) => {
 				label.push(item.subjectName);
 				chartData.push(item.subjectAvg);
 			})
 			// 차트 그리기
-			let myCt = document.getElementById('chart');
-
 			myChart = new Chart(myCt, {
 				type: 'bar',
 			   	data: {
@@ -287,9 +308,13 @@ $('#allClass').on('click','.classNum', function(classId) {
 	}); // 평균점수 end of ajax
 })// on click 함수 종료
 
-classInfo(classId);
+$(document).ready(function(){
+	classInfo(classId)
+});
 
+//--------------------------------------------
 //날짜 포멧 변환 함수
+//--------------------------------------------
 function formatDate(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -301,25 +326,6 @@ function formatDate(date) {
 
     return [year, month, day].join('/');
 } // 날짜 포멧 변환 end
-
-
-/* let myCt = document.getElementById('chart');
-
-let myChart = new Chart(myCt, {
-  type: 'bar',
-  data: {
-    labels: ['2020', '2021', '2022', '2023'],
-    datasets: [
-      {
-        label: 'Dataset',
-        data: [10,20,30,40],
-      }
-    ]
-  },
-}); */
-
-//테스트중1
-
 
 
 </script>
