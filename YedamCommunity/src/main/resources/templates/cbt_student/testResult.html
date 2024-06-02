@@ -80,6 +80,7 @@
 					th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
 			<form class="tresult_1 tresult_3" th:action="testResult2" method="get">
 				<input type="hidden" name="testId" th:value="${testResult.testId}">
+				<input type="hidden" name="userId" th:value="${logId}">
 				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
 			</form>
 		</div>

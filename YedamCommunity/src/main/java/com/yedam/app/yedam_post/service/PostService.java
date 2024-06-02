@@ -82,6 +82,11 @@ public interface PostService {
     public int createReply(PostReplyVO postreplyVO);
     
     //--------------------------------------------
+    // 댓글 수정
+    //--------------------------------------------
+    public  Map<String, Object> updateReply(PostReplyVO postreplyVO);
+    
+    //--------------------------------------------
     // 댓글 삭제
     //--------------------------------------------
     public Map<String, Object> deleteReply(PostReplyVO postreplyVO);
@@ -90,6 +95,12 @@ public interface PostService {
     // 대댓글 등록
     //--------------------------------------------
     public int createComment(PostCommentVO postcommentVO);
+    
+    //--------------------------------------------
+    // 대댓글 등록
+    //--------------------------------------------
+    public Map<String, Object> updateComment(PostCommentVO postcommentVO);
+    
     
     //--------------------------------------------
     // 대댓글 삭제
@@ -105,10 +116,11 @@ public interface PostService {
     // 파일 조회
     //--------------------------------------------
 	public List<BoardFilesVO> getBoardFiles(int postId, int boardId);
-
 	
-
-
+	//--------------------------------------------
+    // 메인페이지 조회
+    //--------------------------------------------
+	public List<PostVO> getPostAll(int boardId);
 
 }
 

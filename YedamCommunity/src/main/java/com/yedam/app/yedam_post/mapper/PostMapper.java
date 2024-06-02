@@ -82,4 +82,12 @@ public interface PostMapper {
     //--------------------------------------------
 	public List<BoardFilesVO> getBoardFiles(int postId,
 			                              int boardId);
+
+	//--------------------------------------------
+    // 메인페이지 조회
+    //--------------------------------------------
+//	public List<PostVO> MainpagePostList();
+	
+	public List<PostVO> getpostAll(int boardId);
 }
+

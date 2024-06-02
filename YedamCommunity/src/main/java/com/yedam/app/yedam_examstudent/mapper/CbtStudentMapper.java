@@ -8,6 +8,7 @@ import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
+import com.yedam.app.yedam_subjects.service.SubjectsVO;
 
 @Mapper
 public interface CbtStudentMapper {
@@ -25,6 +26,10 @@ public interface CbtStudentMapper {
 	//재시험유무
 	//ㅡㅡㅡㅡㅡ
 	public int isTestReexam(TestVO testVO);
+	//ㅡㅡㅡㅡ
+	//시험과목
+	//ㅡㅡㅡㅡ
+	public List<SubjectsVO> selectTestSub(SubjectsVO subjectsVO);
 	//ㅡㅡㅡㅡ
 	//시험목록
 	//ㅡㅡㅡㅡ

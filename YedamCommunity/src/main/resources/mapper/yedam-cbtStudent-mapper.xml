@@ -5,7 +5,7 @@
 <mapper namespace="com.yedam.app.yedam_examstudent.mapper.CbtStudentMapper">
 	<!-- 시험결과유무 -->
 	<select id="isTestResult" resultType="int">
-		SELECT  COUNT(b.result_id)
+		SELECT  COUNT(b.result_id) AS result_id
         FROM    test_targets a
                 JOIN exam_results b 
                 ON(a.test_target_id = b.test_target_id)
@@ -28,32 +28,50 @@
 	</select>
 	<!-- 재시험유무 -->
 	<select id="isTestReexam" resultType="int">
-		SELECT  NVL(MAX(b.is_reexam),2)
+		SELECT  NVL(MAX(b.is_reexam),2) AS is_reexam
         FROM    test_targets a
                 JOIN exam_results b 
                 ON(a.test_target_id = b.test_target_id)
         WHERE   a.user_id = #{userId}
         AND     a.test_id = #{testId}
 	</select>
+	<select id="selectTestSub" resultType="SubjectsVO">
+		SELECT  DISTINCT subject_name
+		FROM	tests
+		WHERE	curriculum_id = (SELECT  curriculum_id
+								 FROM	 users
+								 WHERE	 user_id = #{userId})
+	</select>
 	<!-- 시험목록 페이징 -->
-	<select id="selectTestListAll" resultType="TestVO">
+	<select id="selectTestListAll" parameterType="TestVO" resultType="TestVO">
 		SELECT  b.*
   		FROM    (SELECT  a.* 
   						 ,ROWNUM AS rn
 			  	 FROM    (SELECT  a.test_id
                 				  ,a.test_date
                 				  ,a.test_name
+                				  ,a.subject_name
                 				  ,c.name
         				  FROM    tests a 
                 				  JOIN test_targets b
                 				  ON(a.test_id = b.test_id)
                 				  JOIN users c
                 				  ON(b.user_id = c.user_id)
-        				  WHERE   b.user_id = #{userId}
-        				  ORDER BY a.test_date DESC , a.test_id ASC) a ) b
-    	WHERE   b.rn > (#{page} - 1) * 5 
+        				  <where>
+        				  		b.user_id = #{userId}
+        				  		<choose>
+        				  			<when test="type == 'sub'">
+        				  				AND  a.subject_name = #{filterData}
+        				  			</when>	
+        				  			<when test="type == 'search'">
+        				  				AND  a.test_name LIKE '%' || #{filterData} || '%'
+        				  			</when>
+        				  		</choose>	
+        				  </where>
+        				  ORDER BY a.test_date DESC , a.test_id DESC) a ) b
+    	WHERE   b.rn > (#{page} - 1) * 10 
     	<![CDATA[
-    	AND     b.rn <= #{page} * 5 ]]>
+    	AND     b.rn <= #{page} * 10 ]]>
 	</select>
 	<!-- 시험개수 -->
 	<select id="selectTestListSize" resultType="int">
@@ -368,8 +386,14 @@
                 ON(b.quiz_id = c.quiz_id)
                 JOIN test_results d
                 ON(b.quiz_id = d.quiz_id)
-        WHERE   b.subject_id = #{subjectId}
-        AND     b.test_id = #{testId})
+                JOIN exam_results e 
+                ON(d.result_id = e.result_id)
+        WHERE   d.user_id = #{userId}
+        AND     b.test_id = #{testId}
+        AND     e.test_target_id = (SELECT  test_target_id
+                        			FROM  	test_targets
+                        			WHERE 	test_id = #{testId}
+                        			AND   	user_id = #{userId}))
         <!-- 문제 보기 열 > 행 바꾸기 -->
         SELECT 
         	test_result_id

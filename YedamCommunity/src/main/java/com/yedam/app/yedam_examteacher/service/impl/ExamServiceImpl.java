@@ -37,6 +37,12 @@ public class ExamServiceImpl implements ExamService {
 		return examMapper.testTotalCnt(cId, searchQuery);
 	}
 	
+	// 가장 최신에 등록된 test_id
+	@Override
+	public int CurrTestId() {
+		return examMapper.currentTestId();
+	}
+	
 	//--------------------------------------------
 	// 시험 등록
 	//--------------------------------------------
@@ -63,6 +69,7 @@ public class ExamServiceImpl implements ExamService {
 			teacherVO.setQuizScore(quizVO.getQuizScore()[i]);
 			teacherVO.setSubjectName(quizVO.getSubjectName()[i]);
 			teacherVO.setCurriculumId(quizVO.getCurriculumId());
+			teacherVO.setTestId(quizVO.getTestId());
 			
 			examMapper.insertQuizbox(teacherVO);
 		}
@@ -72,11 +79,12 @@ public class ExamServiceImpl implements ExamService {
 	// 시험 대상자 등록
 	//--------------------------------------------
 	@Override
-	public int testUserInsert(int[] userId) {
+	public int testUserInsert(QuizVO quizVO) {
 		TeacherVO teacherVO = new TeacherVO();
-		int userSize = userId.length;
+		int userSize = quizVO.getUserId().length;
 		for(int i=0; i<userSize; i++) {
-			teacherVO.setUserId(userId[i]);
+			teacherVO.setUserId(quizVO.getUserId()[i]);
+			teacherVO.setTestId(quizVO.getTestId());
 			
 			examMapper.insertTestUser(teacherVO);
 		}

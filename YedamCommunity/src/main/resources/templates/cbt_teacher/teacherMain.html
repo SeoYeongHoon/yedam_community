@@ -108,7 +108,7 @@ function classInfo(classId){
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				$('.classUser').append($('<p />').text(item.name).attr("onclick","location.href='/userTestInfo?userId="+item.userId+"'"));
+				$('.classUser').append($('<p />').text((idx+1)+'. '+item.name).attr("onclick","location.href='/userTestInfo?userId="+item.userId+"'"));
 			})
 		},
 		error : function(err){
