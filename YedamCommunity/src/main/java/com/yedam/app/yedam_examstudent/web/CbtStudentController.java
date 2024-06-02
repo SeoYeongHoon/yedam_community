@@ -3,9 +3,9 @@ package com.yedam.app.yedam_examstudent.web;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -25,6 +25,7 @@ import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
+import com.yedam.app.yedam_subjects.service.SubjectsVO;
 
 @Component
 @EnableScheduling
@@ -48,49 +49,107 @@ public class CbtStudentController {
 	public String testList(int page,
 						   TestVO testVO,
 						   ExamResultVO examResultVO,
-			               HttpSession session, 
+						   SubjectsVO subjectsVO,
 			               Authentication authentication,
 			               Model model) {
-		//HttpSession session = req.getSession();
-		//int logid = 14;
+		//ㅡㅡㅡ
+		//세션값
+		//ㅡㅡㅡ
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		//시험과목 찾기
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		subjectsVO.setUserId(userVO.getuserId());
+		List<SubjectsVO> list = cbtStudentService.testSub(subjectsVO);
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//시험 전체 목록 페이징 결과
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		testVO.setUserId(userVO.getuserId());
+		testVO.setType("");
+		testVO.setfilterData("");
 		testVO.setPage(page);
-		List<TestVO> list1 = cbtStudentService.testListAll(testVO); //시험목록
-		List<ExamResultVO> list2 = new ArrayList<>();
-		int size = cbtStudentService.testListSize(userVO.getuserId()); //시험개수
-		int[] array1 = new int[list1.size()];
-		int[] array2 = new int[list1.size()];
-		Date date1 = new Date(); //현재날짜
-		Calendar date = Calendar.getInstance();
-		Date date2 = new Date(date.getTimeInMillis());
-		for(int i = 0; i < list1.size(); i++) {			
+		List<TestVO> list1 = cbtStudentService.testListAll(testVO);
+		int size = cbtStudentService.testListSize(userVO.getuserId()); //시험개수		
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//시험 전체 목록에 따른 시험결과, 피드백, 미응시 찾기
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		List<ExamResultVO> list2 = new ArrayList<>(); //피드백 관련 변수
+		int[] array1 = new int[list1.size()]; //시험결과 유무 관련 변수
+		for(int i = 0; i < list1.size(); i++) {
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+			//시험결과의 존재 유무 찾기
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
-			array1[i] = (cbtStudentService.isTestResult(testVO)); //시험 결과
+			array1[i] = (cbtStudentService.isTestResult(testVO));
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+			//피드백의 존재 유무 찾기
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
-			list2.add(cbtStudentService.isTestFeedback(testVO)); //피드백 유무
-			date.setTime(list1.get(i).getTestDate()); //시간 설정
-			date.add(Calendar.HOUR_OF_DAY , 23); //시간
-			date.add(Calendar.MINUTE, 59); //분
-			date.add(Calendar.SECOND, 59); //초
-			if(date1.after(date2)) { //현재 시간이 응시기간을 지난 경우
-				array2[i] = 1;
-				System.out.println(array2[i]);
-			}
-			else {
-				array2[i] = 0;
-			}
+			list2.add(cbtStudentService.isTestFeedback(testVO));
 		}
+		model.addAttribute("testSub", list); //시험과목
 		model.addAttribute("testList", list1); //시험목록
-		model.addAttribute("isResult", array1); //시험결과유무
 		model.addAttribute("isFeedback", list2); //피드백유무
-		model.addAttribute("dateComp", array2); //응시기간 유효성
+		model.addAttribute("isResult", array1); //시험결과유무
 		model.addAttribute("page", page); //페이지
 		model.addAttribute("size", size); //시험개수
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testList2";
+	}
+	
+	//---------------
+	//시험목록 필터링 AJAX
+	//---------------
+	@ResponseBody
+	@GetMapping("listFilter")
+	public Map<String, Object> listFilter(@RequestParam("type") String type,
+								   @RequestParam("filterData") String filterData,
+								   @RequestParam("page") int page,
+								   Authentication authentication,
+								   TestVO testVO,
+								   ExamResultVO examResultVO){
+		//ㅡㅡㅡ
+		//세션값
+		//ㅡㅡㅡ
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		System.out.println(filterData);
+		if(filterData.equals("all") || filterData.equals("")) {
+			testVO.setfilterData("");
+			testVO.setType("");
+		}
+		else {
+			testVO.setfilterData(filterData);
+			testVO.setType(type);
+		}
+		testVO.setUserId(userVO.getuserId());
+		testVO.setPage(page);
+		List<TestVO> list1 = cbtStudentService.testListAll(testVO);
+		List<ExamResultVO> list2 = new ArrayList<>(); //피드백 관련 변수
+		int[] array1 = new int[list1.size()]; //시험결과 유무 관련 변수
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//시험 전체 목록에 따른 시험결과, 피드백, 미응시 찾기
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		for(int i = 0; i < list1.size(); i++) {
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+			//시험결과의 존재 유무 찾기
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+			testVO.setUserId(userVO.getuserId());
+			testVO.setTestId(list1.get(i).getTestId());
+			array1[i] = (cbtStudentService.isTestResult(testVO));
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+			//피드백의 존재 유무 찾기
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+			testVO.setUserId(userVO.getuserId());
+			testVO.setTestId(list1.get(i).getTestId());
+			list2.add(cbtStudentService.isTestFeedback(testVO));
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("testList",list1);
+		map.put("isFeedback", list2);
+		map.put("isResult", array1);
+		return map;
 	}
 	
 	
@@ -119,27 +178,28 @@ public class CbtStudentController {
 			i++;
 		}
 		int isResult = 0;
-		int isReexam = 0;
 		int dateComp = 0;
-		Date date = new Date();
 		testVO.setUserId(userVO.getuserId());
 		testVO.setTestId(info.getTestId());
 		isResult = (cbtStudentService.isTestResult(testVO));
-		testVO.setUserId(userVO.getuserId());
-		testVO.setTestId(info.getTestId());
-		isReexam = cbtStudentService.isTestReexam(testVO);
-		if(date.after(info.getTestDate())) {
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//마감날짜 23:59:59 지난 경우 미응시 처리
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		Calendar cal = Calendar.getInstance(); //캘린더 객체 생성
+		cal.setTime(info.getTestDate()); //시간 설정
+		cal.set(Calendar.HOUR_OF_DAY , 23); //시간 지정
+		cal.set(Calendar.MINUTE, 59); //분 지정
+		cal.set(Calendar.SECOND, 59); //초 지정
+		Date date1 = cal.getTime(); //캘린더 객체 날짜 타입 변수
+		Date date2 = new Date(); //비교할 현재 날짜 변수
+		if(date2.after(date1)) { //현재 날짜가 응시기간을 지난 경우
 			dateComp = 1;
-		}
-		else {
-			dateComp = 0;
 		}
 		model.addAttribute("testDetail", info); //상세정보
 		model.addAttribute("randQuizId", randQuizId); //문제 번호
 		model.addAttribute("randRn", randRn); //문제 일련번호
 		model.addAttribute("randQuizScore", randQuizScore); //문제 배점
 		model.addAttribute("isResult", isResult); //시험결과 유무
-		model.addAttribute("isReexam", isReexam); //재시험 유무
 		model.addAttribute("dateComp", dateComp); //날짜 비교
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testDetail";
@@ -161,7 +221,6 @@ public class CbtStudentController {
 			                Model model,
 			                Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
-		//String logid ="14";
 		testVO.setUserId(userVO.getuserId());
 		TestVO info = cbtStudentService.testStart(testVO); //응시정보
 		quizboxVO.setQuizId(randQuizId[0]);
@@ -173,7 +232,7 @@ public class CbtStudentController {
 		model.addAttribute("page", page); //현재 페이지번호
 		model.addAttribute("randQuizId", randQuizId); //문제번호 전달
 		model.addAttribute("randRn", randRn); //문제 일련번호
-		model.addAttribute("randQuizScore", randQuizScore); //문제 배저
+		model.addAttribute("randQuizScore", randQuizScore); //문제 배점
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testStart";
 	}
@@ -210,7 +269,6 @@ public class CbtStudentController {
 							Authentication authentication) {
 		boolean result = false;
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
-		//String logid ="14";
 		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		cbtStudentService.testSubmit2(examResultVO); //[1]시험결과 정보등록
@@ -240,7 +298,6 @@ public class CbtStudentController {
 			                 Model model,
 			                 Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
-		//String logid ="14";
 		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
@@ -267,7 +324,6 @@ public class CbtStudentController {
 							  Model model,
 							  Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
-		//String logid ="14";
 		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
