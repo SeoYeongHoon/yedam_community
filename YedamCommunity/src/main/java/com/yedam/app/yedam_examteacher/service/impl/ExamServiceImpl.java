@@ -194,6 +194,23 @@ public class ExamServiceImpl implements ExamService {
 	public int quizDelete(int qId) {
 		return examMapper.deleteQuiz(qId);
 	}
+	//--------------------------------------------
+	// 문제에 등록된 지문들 수정
+	//--------------------------------------------
+	@Override
+	public Map<String, Object> answerUpdate(TeacherVO teacherVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSucessed = false;
+
+		int result = examMapper.updateAnswer(teacherVO);
+
+		if (result == 1) {
+			isSucessed = true;
+		}
+		map.put("result", isSucessed);
+		map.put("target", teacherVO);
+		return map;
+	}
 	
 	//--------------------------------------------
 	// 문제 필터링 출력

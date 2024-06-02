@@ -106,6 +106,10 @@
   </div>
 </div>
 <script th:inline="javascript">
+
+  //--------------------------------------------
+  // 게시글 검색
+  //--------------------------------------------
   function searchPosts() {
     const keyword = document.getElementById('searchKeyword').value;
     const boardId = [[${boardId}]];
