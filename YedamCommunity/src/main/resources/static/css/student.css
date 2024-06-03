@@ -55,7 +55,81 @@
     max-width: 500px;
     padding: 20px;
 }
+.replyWrapper {
+	border-bottom: 2px solid #e5e5e5;
+    margin: 5px 0 10px 0;
+    padding-bottom: 10px;
+}
 
 .replyDiv {
-	border: 2px solid #e5e5e5;
+	display: flex;
+	position: relative;
+	min-height: 50px;
+    align-items: baseline;
+}
+
+#logName {
+	width: 200px;
+}
+
+#logDate {
+	/* position: absolute;
+	right: 0; */
+}
+
+.replyBtnDiv {
+	display: flex;
+	height: 30px;
+	
+}
+
+#logContent {
+  min-height: 40px;
+  resize: none;
+  overflow: hidden;
+  min-width: 50%;
+  width: 100%;
+  margin-right: 30px;
+}
+
+.replyLogBtn {
+	position: absolute;
+    right: 10px;
+    bottom: -15px;
+}
+
+#updateConfirmBtn {
+	display: none;
+    padding: 5px 15px;
+    position: absolute;
+    bottom: -45px;
+    right: 217px;
+}
+
+.replyCommentWrapper {
+	margin-top: 10px;
+	display: flex;
+	align-items: baseline;
+}
+
+.replyTextArea {
+    background-color: rgba(239, 239, 239, 0.5);
+    border: 1px solid rgb(229, 229, 229);
+    border-radius: 4px;
+    padding: 5px;
+    width: 60%;
+	resize: none;
+	overflow: hidden;
+    margin-left: 180px;
+    margin-right: 15px;
+}
+
+#commentInsertBtn {
+	padding: 5px 15px;
+}
+
+.commentWrapper {
+	display: flex;
+    align-items: baseline;
+    padding-left: 185px;
 }

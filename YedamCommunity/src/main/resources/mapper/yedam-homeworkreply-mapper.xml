@@ -37,7 +37,7 @@
        			reply_writer
 		FROM    replies
 		WHERE   homework_target_id = #{homeworkTargetId}
-		ORDER BY reply_id DESC
+		ORDER BY reply_date
 	</select>
 
 	<!-- 대댓글 조회 -->

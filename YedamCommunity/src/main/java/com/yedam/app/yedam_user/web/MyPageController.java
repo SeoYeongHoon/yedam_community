@@ -131,6 +131,6 @@ public class MyPageController {
 	public String quitUserRequest(int userId) {
 		userService.removeUser(userId);
 		
-		return "redirect:/";
+		return "redirect:/all/login";
 	}
 }
