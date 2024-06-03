@@ -46,8 +46,7 @@ public class RegisterController {
 	}
 	
 	@PostMapping("/register")
-	public String registerRequest(MultipartFile[] uploadFiles, 
-//			                     RegisterVO registerVO,
+	public String registerRequest(MultipartFile[] uploadFiles,
 								 @RequestParam String courseSelect,
 			                     UserVO userVO,
 			                     Model model, 
@@ -56,14 +55,8 @@ public class RegisterController {
 		
 		String password = req.getParameter("password");
 		String passwordConfirm = req.getParameter("password-confirm");
-//		System.out.println(password + ", " + passwordConfirm);
 		
-		System.out.println("SELECT 값: " + courseSelect);
-		System.out.println("과정 이름 값: " + userVO.getCurriculumId());
 		userVO.setCurriculumName(courseSelect);
-		
-		
-//		System.out.println("업로드 파일: " + uploadFiles);
 		
 	    try {
 	    	// 아이디 비번 확인
@@ -91,11 +84,9 @@ public class RegisterController {
             }
 
             userService.registerUser(userVO);
-            System.out.println("성공! " + userVO);
             return "register/registerComplete";
         } catch (Exception e) {
             model.addAttribute("error", "회원가입 실패! 다시 시도해주세요.");
-            System.out.println("실패!!" + userVO.toString());
             System.out.println(e);
             return "redirect:/";
         }
@@ -106,7 +97,7 @@ public class RegisterController {
 		return "register/registerComplete";
 	}
     
-	// 휴대폰 인증
+	// 이메일 인증용 전송
 	@PostMapping("/sendVerificationEmail")
 	public ResponseEntity<String> sendVarificationEmail(@RequestParam String email) {
 		
@@ -121,12 +112,12 @@ public class RegisterController {
 		
 	}
 	
+	// 이메일 코드 인증
 	@PostMapping("/verifyCode")
 	public ResponseEntity<String> verifyCode(@RequestParam String email,
 											 @RequestParam String code) {
 		System.out.println("verifyCode 메소드 실행");
 		boolean isVerified = userService.verifyCode(email, code);
-		System.out.println("서비스가 실행되었나?");
 		if (isVerified) {
 			System.out.println("인증성공");
 			return ResponseEntity.ok("인증완료");
@@ -134,20 +125,4 @@ public class RegisterController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증실패");
 		}
 	}
-	
-//	@PostMapping("/verify-code")
-//    public Map<String, Object> verifyCode(@RequestBody FindPhoneVO findPhoneVO) {
-//        String phoneNumber = findPhoneVO.getPhoneNumber();
-//        String verificationCode = findPhoneVO.getVerificationCode();
-//
-//        Map<String, Object> responseBody = new HashMap<>();
-//        if (verificationCode.equals(verificationCodes.get(phoneNumber))) {
-//            verificationCodes.remove(phoneNumber);
-//            responseBody.put("success", true);
-//        } else {
-//            responseBody.put("success", false);
-//        }
-//        return responseBody;
-//    }
-//	
 }
