@@ -2,6 +2,8 @@ package com.yedam.app.yedam_post.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -168,9 +170,7 @@ public class PostController {
 	public String postInsertProcess(PostVO postVO, 
 	                                @RequestParam("file") MultipartFile file, 
 	                                Authentication authentication) {
-		System.err.println("postInsert 실행 :" + postVO);
-		/* try { */
-	    	
+		
 	        if (!file.isEmpty()) {
 	            String fileName = file.getOriginalFilename();
 	            System.err.println("fileName :" + fileName);
@@ -181,10 +181,9 @@ public class PostController {
 	            if (!directory.exists()) {
 	                directory.mkdirs();
 	            }
-	            
-	            File dest = new File(filePath);
+	            Path savePath = Paths.get(filePath);
 	            try {
-					file.transferTo(dest);
+					file.transferTo(savePath);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -200,12 +199,8 @@ public class PostController {
 	        postVO.setCreateDate(new Date());
 	        postVO.setUpdateDate(new Date());
 	        postService.createPost(postVO);
-/*
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }*/
+	        
 	    return "redirect:/all/post/" + postVO.getBoardId();
-	        //return null;
 	}
 
 
