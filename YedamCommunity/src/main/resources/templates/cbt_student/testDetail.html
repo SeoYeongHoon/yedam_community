@@ -16,7 +16,9 @@
 	<div class="card-style"
 		style="border: 1px solid gray; border-radius: 20px; width: 900px; margin: 0 auto; margin-top: 100px; margin-bottom: 100px;">
 		<br> <br>
-		<h1 style="text-align: center;">시험</h1>
+		<h1 th:if="${isResult == 0 && dateComp == 1}" style="text-align: center;">미응시</h1>
+		<h1 th:if="${isResult == 0 && dateComp == 0}" style="text-align: center;">응시하기</h1>
+		<h1 th:if="${isResult == 1}" style="text-align: center;">응시완료</h1>
 		<br> <br>
 		<table class="table">
 			<tr>
@@ -50,9 +52,13 @@
 		</table>
 		<br> <br>
 		<div style="text-align: center">
-			<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
-				th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
+			<th:block th:if="${isResult == 0 && dateComp == 1}">
+				<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
+						th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
+			</th:block>
 			<th:block th:if="${isResult == 0 && dateComp == 0}">
+				<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
+						th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
 				<form class="tdetail_1" action="testStart" method="post">
 					<input type="hidden" name="page" th:value="1">
 					<input type="hidden" name="testId" th:value="${testDetail.testId}">
@@ -69,7 +75,9 @@
 					<button type="submit" class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover">시작</button>
 				</form>
 			</th:block>
-			<th:block th:if="${(isResult == 1) || (isResult == 0 && dateComp == 1)}">
+			<th:block th:if="${isResult == 1}">
+				<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
+						th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
 				<form class="tdetail_1" action="testResult2" method="get">
 					<input type="hidden" name="testId" th:value="${testDetail.testId}">
 					<input type="hidden" name="userId" th:value="${logId}">

@@ -107,10 +107,10 @@
 		<!-- 문제개수 관련 -->
 		<div>
 			<h3 class="tstart_2">전체문제:</h3>
-			<h3 id="allQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]문항</h3>
+			<h3 id="allQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]</h3>
 			<br>
 			<h3 class="tstart_2">남은문제:</h3>
-			<h3 id="remainQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]문항</h3>
+			<h3 id="remainQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]</h3>
 		</div>	
 		<div>
 			<!-- 문제갱신 위한 ajax용 데이터 -->
@@ -550,7 +550,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span1.classList.add('selectedContent');
 			span1.classList.add('tstart_6');
 			span1.setAttribute('style', 'background: white');
-			span1.innerText = '① ' + data.one;
+			span1.innerText = '1 ' + data.one;
 			div1.append(span1);
 			div.append(div1);
 			
@@ -559,7 +559,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span2.classList.add('selectedContent');
 			span2.classList.add('tstart_6');
 			span2.setAttribute('style', 'background: white');
-			span2.innerText = '② ' + data.two;
+			span2.innerText = '2 ' + data.two;
 			div2.append(span2);
 			div.append(div2);
 			
@@ -568,7 +568,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span3.classList.add('selectedContent');
 			span3.classList.add('tstart_6');
 			span3.setAttribute('style', 'background: white');
-			span3.innerText = '③ ' + data.three;
+			span3.innerText = '3 ' + data.three;
 			div3.append(span3);
 			div.append(div3);
 			
@@ -577,7 +577,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span4.classList.add('selectedContent');
 			span4.classList.add('tstart_6');
 			span4.setAttribute('style', 'background: white');
-			span4.innerText = '④ ' + data.four;
+			span4.innerText = '4 ' + data.four;
 			div4.append(span4);
 			div.append(div4);
 			
@@ -586,7 +586,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span5.classList.add('selectedContent');
 			span5.classList.add('tstart_6');
 			span5.setAttribute('style', 'background: white');
-			span5.innerText = '⑤ ' + data.five;
+			span5.innerText = '5 ' + data.five;
 			div5.append(span5);
 			div.append(div5);
 				
