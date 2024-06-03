@@ -54,10 +54,10 @@ public class PostController {
 	// 게시글 리스트 조회
 	// --------------------------------------------
 	@GetMapping("/post/{boardId}")
-	public String postList(@PathVariable int boardId,
+	public String postList(@PathVariable Integer boardId,
 	                       PostVO postVO,
-	                       @RequestParam(required = false, defaultValue = "1") int page,
-	                       @RequestParam(required = false, defaultValue = "6") int pageSize,
+	                       @RequestParam(required = false, defaultValue = "1") Integer page,
+	                       @RequestParam(required = false, defaultValue = "6") Integer pageSize,
 	                       @RequestParam(required = false) String keyword,
 	                       Model model) {
 	    try {
