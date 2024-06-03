@@ -1,5 +1,7 @@
 @charset "UTF-8";
-
+/*
+	시험결과 페이지2
+*/
 .tresult_1 {
 	display: inline-block;
 }
@@ -12,13 +14,15 @@
 .tresult_4 {
 	display: block;
 }
+/*맞는 보기*/
 .true {
 	color: blue;
 }
+/*틀린 보기*/
 .false {
 	color: red;
 }
-
+/*TOP 버튼*/
 #topBtn {
 	display:none;
 	position:fixed;
@@ -33,7 +37,6 @@
 	padding:15px 20px;
 	border-radius:100%;
 }
-
 .feedback_form {
 	position: sticky;
     top: 0;
@@ -43,7 +46,6 @@
     border-radius: 5px;
     padding-top: 10px;
 }
-
 .feedback_std_test {
 	position: relative;
 	border: 1px solid gray;
@@ -52,4 +54,8 @@
     width: 100%;
     max-width: 500px;
     padding: 20px;
+}
+
+.replyDiv {
+	border: 2px solid #e5e5e5;
 }

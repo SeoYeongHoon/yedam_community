@@ -97,7 +97,7 @@
 				        <a class="profile_change_btn" onclick="document.getElementById('change_image').click();">
 				            <input id="change_image" name="uploadFiles" type="file" style="display:none;" onchange="displayUploadedImg(this);">
 				            <p class="change_image_text">변경</p>
-				            <img class="mypage_profile_image" th:src="@{'/images/profile/' + ${#authentication.principal.profileImageLocation}}">
+				            <img class="mypage_profile_image" th:src="@{'/files' + ${#authentication.principal.profileImageLocation}}">
 				        </a>
 				        <div class="input-style-1">
 				            <label>이름</label> 
@@ -266,7 +266,7 @@
 							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
 								<h4 style="color: white">최근 시험 정보</h4>
 						    </div>
-							<a href="/testList2?page=1" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;">
+							<a href="/all/testList2?page=1" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;">
 								더 보기
 								<i class="fs-12 m-l-5 fa fa-caret-right"></i>
 							</a>
@@ -347,7 +347,7 @@
 							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
 								<h4 style="color: white">과제 정보</h4>
 						    </div>
-							<a href="#" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;">
+							<a href="/all/homework_S" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;">
 								더 보기
 								<i class="fs-12 m-l-5 fa fa-caret-right"></i>
 							</a>

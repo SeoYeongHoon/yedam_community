@@ -183,14 +183,13 @@
 			readonly>-->
 
 		</div>
+		<div><p>전체 댓글 12개</p></div>
 	</div>
 	
 	<hr>
 		
-	<div style="border: 1px solid black;">
-
+	<div style="">
 		<!-- 댓글출력 -->
-		<h3>댓글</h3>
 		<div id="replyList"></div>
 	</div>
 </div>
@@ -392,13 +391,15 @@ $('#deleteHomeworks').on('click',function(){
                let replies = 
             	   `
             	   <input class="replyId" type="hidden" value="${e.replyId}">
-            	   <div class ="replyDiv"style="border: 1px solid black;">
-            	   		<h3>댓글내용</h3>
+            	   <div class ="replyDiv">
+            	   		<!-- 댓글 내용 -->
             	   		<input class="replyContent-${e.replyId}" type="text" value="${e.replyContent}" readonly >
-                   		<button type="button" class="main-btn warning-btn   btn-hover contentUpdate-${e.replyId}" style="display: none;"	>수정</button>
-                   		<h3>작성자</h3>
+                   		<button type="button" class="main-btn warning-btn   btn-hover contentUpdate-${e.replyId}" style="display: none;">수정</button>
+                   		
+                   		<!-- 작성자 -->
                    		<input  id="logName" type="text" value="${e.replyWriter}" readonly >
-                   		<h3>작성일자</h3>
+                   		
+                   		<!-- 작성일자 -->
                    		<input class="replyDate-${e.replyId}" type="text" value="${replyDate}"  readonly >
                    	</div>	
                    		<div id="replyFilesList${e.replyId}"></div>

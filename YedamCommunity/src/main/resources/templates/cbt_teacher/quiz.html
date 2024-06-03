@@ -3,61 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-#modalWrap {
-	position: fixed; /* 화면에 고정 */
-	z-index: 1; /* 상위에 위치 */
-	padding-top: 200px;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.7); /* 반투명한 배경색 */
-	display: none; /* 초기에는 숨김 */
-}
-
-#modalWrap2 {
-	position: fixed; /* 화면에 고정 */
-	z-index: 1; /* 상위에 위치 */
-	padding-top: 200px;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.7); /* 반투명한 배경색 */
-	display: none; /* 초기에는 숨김 */
-}
-
-#modalBody {
-	width: 50%;
-	height: 90%;
-	padding: 30px 30px;
-	margin: 0 auto;
-	border: 1px solid #777;
-	background-color: #fff;
-}
-
-#modalBody2 {
-	width: 50%;
-	height: 90%;
-	padding: 30px 30px;
-	margin: 0 auto;
-	border: 1px solid #777;
-	background-color: #fff;
-}
-
-.close-area {
-	display: inline;
-	float: right;
-	padding-right: 10px;
-	cursor: pointer;
-	color: black;
-}
-
 li {
 	display: inline;
 }
@@ -98,7 +44,6 @@ tr img {
 		
 }
 </style>
-<!-- <p th:text="${currList}"></p> -->
 <div style="margin:10px; padding:10px">
 	<button type="button" id="subBtn" style="margin-bottom: 10px;"
 		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
@@ -114,7 +59,6 @@ tr img {
 				<h2>과목선택</h2>
 				<div class="select-position">
 					<select id="subject" style="width:auto; height:40px;">
-						<!--  <option value="">과목을 선택해주세요</option> -->
 						<th:block th:each="subjectInfo, idxStat : ${subjectList}">
 							<option class="typeSelec" th:value="${subjectInfo.subjectName}">[[${subjectInfo.subjectName}]]</option>
 						</th:block>
@@ -137,50 +81,229 @@ tr img {
 	</div>
 </div>
 
-
 <!-- 문제 상세보기 모달창 -->
-<div id="modalWrap" class="modal-overlay"></div>
+<div id="modalWrap" class="modal-overlay modal fade">
+	<div id="modalBody" class="modal-dialog">
+		<div class="modal-content" style="width: 800px;">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">문제 자세히 보기</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body" id="quizInfo">
+			
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div> <!-- modal-content end -->	
+	</div> <!-- modalBody end -->
+</div> <!-- modalWrap end -->
 <!-- 문제 상세보기 모달창 end-->
 
 <!-- 과목추가/삭제 모달창 -->
-<div id="modalWrap2" class="modal-overlay">
-	<div id="modalBody2">
-		<div class="close-area">X</div>
-		<br>
-		<div class="input-style-1">
-			<!-- 과정 선택창 -->
-			<h4>과정 선택</h4>
-				<div class="select-position">
-					<select id="curr">
-						<th:block th:each="currInfo, idxStat : ${currList}">
-							<option class="typeSelec" th:value="${currInfo.curriculumId}" th:name="${currInfo.curriculumId}">[[${currInfo.curriculumName}]] - [[${currInfo.classId}]]강의실</option>
-						</th:block>
-					</select>
-				</div>
-		<form th:action="@{/subjectdelete}" id="delForm" name="delForm" method="get" th:object="${teacherVO}">
-			<div class="card-style mb-30">
-				<h6 class="mb-25">과목 설정</h6>
-				<div class="form-check checkbox-style mb-20 currSub">
-				</div>
-				<input type="hidden" id="hidden" name="curriculumId"/>	
+<div id="modalWrap2" class="modal-overlay modal fade">
+	<div id="modalBody2" class="modal-dialog">
+		<div class="modal-content" style="width: 800px;">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">과목 등록 / 추가</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
-			<button type="submit"
-				class="main-btn danger-btn-light square-btn btn-hover" id="delBtn" formaction="subjectdelete">삭제</button>
-		</form>	
-		</div>
-		<form th:action="@{/subjectinsert}" id="insertForm" name="insertForm" method="post" th:object="${teacherVO}">
-			<div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
 				<div class="input-style-1">
-					<input type="text" id="insertSubName" placeholder="과목명을 입력하세요" th:field=*{subjectName}></input>
-					<input type="hidden" id="insertSub"></input>
+					<!-- 과정 선택창 -->
+					<h5 class="modal-title">과정 선택</h5>
+					<div class="select-position">
+						<select id="curr">
+							<th:block th:each="currInfo, idxStat : ${currList}">
+								<option class="typeSelec" th:value="${currInfo.curriculumId}" th:name="${currInfo.curriculumId}">[[${currInfo.curriculumName}]] - [[${currInfo.classId}]]강의실</option>
+							</th:block>
+						</select>
+					</div>
+				</div>	
+				<form th:action="@{/subjectdelete}" id="delForm" name="delForm" method="get" th:object="${teacherVO}">
+					<div class="card-style mb-30">
+						<h6 class="mb-25">과목 삭제</h6>
+						<div class="form-check checkbox-style mb-20 currSub">
+							해당 영역에 등록된 과목명 및 체크박스 생성
+						</div>
+						<input type="hidden" id="hidden" name="curriculumId"/>	
+						<button type="submit"
+							class="main-btn danger-btn-light square-btn btn-hover" id="delBtn" formaction="subjectdelete">삭제</button>
+					</div>
+				</form>	
+				
+				<form th:action="@{/subjectinsert}" id="insertForm" name="insertForm" method="post" th:object="${teacherVO}">
+				<div class="card-style mb-30">
+					<h6 class="mb-25">과목 추가</h6>
+					<div class="input-style-1">
+						<input type="text" id="insertSubName" placeholder="과목명을 입력하세요" th:field=*{subjectName}></input>
+						<input type="hidden" id="insertSub"></input>
+					</div>
+					<button id="subAdd" class="main-btn primary-btn btn-hover"
+						type="submit">과목추가</button>
 				</div>
-				<button id="subAdd" class="main-btn primary-btn btn-hover"
-					type="submit">과목추가</button>
+				</form>
+			</div> <!-- modal-body end -->
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
 			</div>
-		</form>
+		</div> <!-- modal-content end -->
+	</div> <!-- modalBody2 end -->
+</div> <!-- modalWrap2 end -->
+<!-- 과목추가 모달창 end -->
+
+<!-- 과목명 미입력시 뜨는 모달창 -->
+<div id="addSubFail" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 실패</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">과목명을 입력해주세요!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
 	</div>
 </div>
-<!-- 과목추가 모달창 end -->
+<!-- 과목 등록완료 모달창 -->
+<div id="okModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 완료</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">등록이 완료되었습니다!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" src="/images/registration.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='okBtn' type="button" class="btn btn-primary close"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 과목 삭제 완료 모달창 -->
+<div id="delModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 완료</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">등록이 완료되었습니다!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" src="/images/registration.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='okBtn' type="button" class="btn btn-primary close"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 문제 체크 안했을때 알림 모달창 -->
+<div id="quizChkbox" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">문제를 선택하세요</p>
+				<div style="text-align: center;">
+					<img alt="문제 선택 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 배점 총합이 100점이 아닐때 뜨는 모달 -->
+<div id="scoreFail" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;" id="totalScore">배점의 총합이 100점이 아닙니다.</p>
+				<div style="text-align: center;">
+					<img alt="배점 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 배점이 100점이 됐을경우 다음으로 넘어갈때 뜨는 모달창 -->
+<div id="scoreOk" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">다음 화면으로 넘어갑니다.</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" src="/images/registration.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='okBtn' type="button" class="btn btn-primary close"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 $(document).ready(function() {
 	$('#subject').off('change').on('change', function() {
@@ -294,7 +417,8 @@ function quizContentList(page, subjectName){
 			// 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax 포함) 시작
 			//--------------------------------------------
 			$('.box').on('click', '.infoBtn', function(qId) {
-				$("#modalWrap").empty(); // 최초로 모달창 비워주는 기능 필요
+				$("#quizInfo").empty(); // 최초로 모달창 비워주는 기능 필요(안그러면 버튼 누를때마다 누적됨)
+				$('#modalWrap').modal('show');
 				qId = $(this).val()
 				answer = []; // 배열값 초기화
 				//--------------------------------------------
@@ -328,60 +452,52 @@ function quizContentList(page, subjectName){
 									solution = item.quizSolution;
 									qContent = item.quizContent;
 									let qInfo = `
-										<div id="modalBody">
-											<div class="close-area">X</div>
-												<h4>문제</h4>
-												<br>
-												<textarea rows="5" cols="50" id="quizContent" readonly="true">${qContent}</textarea>
-											<br><br>
-											<div>
-												<h4>보기</h4>
-												<br>
-												<div class="row row1" style="padding-left:15px">
-													<p class="">1. </p>
-													<input class="col-8" type="text" id="textContent1" value="${textContent1}" readonly="true" />
-												</div>
-												<div class="row row2" style="padding-left:15px">
-													<p class="">2. </p>
-													<input class="col-8" type="text" id="textContent2" value="${textContent2}" readonly="true" />
-												</div>
-												<div class="row row3" style="padding-left:15px">
-													<p class="">3. </p>
-													<input class="col-8" type="text" id="textContent3" value="${textContent3}" readonly="true" />
-												</div>
-												<div class="row row4" style="padding-left:15px">
-													<p class="">4. </p>
-													<input class="col-8" type="text" id="textContent4" value="${textContent4}" readonly="true" />
-												</div>
-												<div class="row row5" style="padding-left:15px">
-													<p class="">5. </p>
-													<input class="col-8" type="text" id="textContent5" value="${textContent5}" readonly="true" />
-												</div>
-											</div>
-											<br><br>
-											<div>
-												<h4>해설</h4>
-												<br>
-												<textarea rows="5" cols="50" id="quizSolution" readonly="true">${solution}</textarea>
-											</div>
+										<div>
+											<h4>문제</h4>
 											<br>
-											<div style="text-align: center;" class="btnDiv">
-												<button id="closeBtn" class="main-btn primary-btn btn-hover okBtn"
-													type="button">확인</button>
-												<button id="del${qId}" value="${qId}" class="main-btn danger-btn btn-hover quizDelBtn"
-													type="button">삭제</button>
-												<button id="update${qId}" value="${qId}" class="main-btn info-btn btn-hover quizUpBtn"
-													type="button" style="visibility:hidden">문제 수정</button>
-												<button value="${qId}" class="main-btn info-btn btn-hover updateShowBtn"
-													type="button">수정하기</button>
+											<textarea rows="5" cols="50" id="quizContent" readonly="true">${qContent}</textarea>
+										</div>	
+										<br>
+										<div>
+											<h4>보기</h4>
+											<br>
+											<div class="row row1" style="padding-left:15px">
+												<p class="">1. </p>
+												<input class="col-8" type="text" id="textContent1" value="${textContent1}" readonly="true" />
+											</div>
+											<div class="row row2" style="padding-left:15px">
+												<p class="">2. </p>
+												<input class="col-8" type="text" id="textContent2" value="${textContent2}" readonly="true" />
+											</div>
+											<div class="row row3" style="padding-left:15px">
+												<p class="">3. </p>
+												<input class="col-8" type="text" id="textContent3" value="${textContent3}" readonly="true" />
+											</div>
+											<div class="row row4" style="padding-left:15px">
+												<p class="">4. </p>
+												<input class="col-8" type="text" id="textContent4" value="${textContent4}" readonly="true" />
+											</div>
+											<div class="row row5" style="padding-left:15px">
+												<p class="">5. </p>
+												<input class="col-8" type="text" id="textContent5" value="${textContent5}" readonly="true" />
 											</div>
 										</div>
+										<br>
+										<div>
+											<h4>해설</h4>
+											<br>
+											<textarea rows="5" cols="50" id="quizSolution" readonly="true">${solution}</textarea>
+										</div>
+										<div style="text-align: center;" class="btnDiv">
+											<button id="del${qId}" value="${qId}" class="main-btn danger-btn btn-hover quizDelBtn"
+												type="button">삭제</button>
+											<button id="update${qId}" value="${qId}" class="main-btn info-btn btn-hover quizUpBtn"
+												type="button" style="visibility:hidden">문제 수정</button>
+											<button value="${qId}" class="main-btn info-btn btn-hover updateShowBtn"
+												type="button">수정하기</button>
 										`;
-									$("#modalWrap").append(qInfo);
-									// 확인버튼 누르면 모달창 닫기
-									$('.btnDiv').on('click', '.okBtn', function(){
-										modal.style.display = "none";
-									});
+									$("#quizInfo").append(qInfo);
+								
 									if($('#textContent2').val() == 'undefined'){
 										$('.row5').hide();
 										$('.row4').hide();
@@ -400,13 +516,6 @@ function quizContentList(page, subjectName){
 					}
 				}); // 지문 자세히보기 - 모달에 불러오기 종료
 			}) // 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax 포함) 종료
-
-			//--------------------------------------------	
-			// 자세히 보기 버튼 눌렀을때 모달창 띄우기
-			//--------------------------------------------
-			$('#quizBox').on('click', '.infoBtn', function (e) {
-				modal.style.display = "flex"; // 버튼 클릭시 모달 보임
-			});
 		},
 		error : function(){
 			alert('실패');
@@ -467,11 +576,11 @@ document.querySelector('form[name="insertForm"]')
 function validationCheck(event){
 	event.preventDefault();
 	if($('#insertSubName').val() == ''){
-		alert('과목명을 입력해 주세요.');
+		$('#addSubFail').modal('show') // 과목명 미입력시 모달창 생성
 		$('#insertSubName').focus();
 		return;
 	} else {
-		alert('과목이 추가되었습니다');
+		$('#okModal').modal('show');
 		$('#insertForm').submit();
 	}
 }
@@ -479,7 +588,7 @@ function validationCheck(event){
 
 $('#delBtn').on('click',function(){
 	if($('#delBtn').submit()){
-		//alert('과목이 삭제되었습니다.')
+		$('#delModal').modal('show');
 	} else {
 		alert('오류 발생.')
 	}
@@ -490,8 +599,7 @@ $('#delBtn').on('click',function(){
 //--------------------------------------------
 $('.form-check').on('click', '.checkbox', function(){
 	var chkVal = $(this).val();
-	console.log(chkVal);
-	console.log(curriId);
+	curriId = $('#curr').val();
 	$('input[type="checkbox"][name="subjectName"]').click(function(){
 		  if($(this).prop('checked')){
 		     $('input[type="checkbox"][name="subjectName"]').prop('checked',false);
@@ -512,44 +620,20 @@ $('.form-check').on('click', '.checkbox', function(){
 //--------------------------------------------
 // 모달창 (과목 추가/삭제)
 //--------------------------------------------
-const modalSub = document.getElementById("modalWrap2"); // 과목추가 모달창 요소 가져오기
 const modal = document.getElementById("modalWrap"); // 자세히보기 모달창 요소 가져오기
-
+//--------------------------------------------
+// 과목 추가/삭제 모달창 띄우기
+//--------------------------------------------
 $('#subBtn').on('click', function(e){
-	modalSub.style.display = "flex"; // 과목추가/삭제 버튼 클릭시 모달창 보이기
-});
-//--------------------------------------------
-// X버튼 누르면 모달창 닫기
-//--------------------------------------------
-$('.modal-overlay').on('click', '.close-area',function (){
-	modal.style.display = "none";
-	modalSub.style.display = "none";
-});
-
-//--------------------------------------------
-// 모달창 밖에 화면 누르면 모달창 닫는 기능
-//--------------------------------------------
-modal.addEventListener("click", e => {
-	const evTarget = e.target
-	if(evTarget.classList.contains("modal-overlay")) {
-		modal.style.display = "none"
-	}
-})
-modalSub.addEventListener("click", e => {
-    const evTarget = e.target
-    if(evTarget.classList.contains("modal-overlay")) {
-        modalSub.style.display = "none";
-    }
+	$('#modalWrap2').modal('show');
 });
 //--------------------------------------------
 // esc누르면 모달창 닫기
 //--------------------------------------------
 window.addEventListener("keyup", e => {
-    if(modalSub.style.display === "flex" && e.key === "Escape") {
-    	modalSub.style.display = "none";
-    } else if(modal.style.display === "flex" && e.key === "Escape") {
+    if(modal.style.display === "flex" && e.key === "Escape") {
     	modal.style.display = "none"
-    }  
+    }
 });
 //--------------------------------------------
 // 모달창 기능 종료
@@ -597,15 +681,19 @@ $('#testInsert').on('click', function(){
 	}
 	// 문제를 선택(체크) 하지 않은 경우 알람창
 	if($('input[name="select"]:checked').length == 0){
-		alert('문제가 선택되지 않았습니다.\n문제를 선택해주세요.')
+		//alert('문제가 선택되지 않았습니다.\n문제를 선택해주세요.')
+		$('#quizChkbox').modal('show');
 		return false;
 	}
 	// 배점의 총합이 100이 됐는지 체크
 	if(sum == 100){
-		alert('배점의 합이 100점입니다.\n다음으로 넘어갑니다.')
+		//alert('배점의 합이 100점입니다.\n다음으로 넘어갑니다.')
+		$('#scoreOk').modal('show');
 		
 	} else {
-		alert('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum)
+		//alert('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum)
+		$('#totalScore').text('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum);
+		$('#scoreFail').modal('show');
 		return false;
 	}
 	
@@ -653,13 +741,14 @@ function updateList(quizes){
 					<div class="card-content">
 						<h4>${qContent}</h4>
 						<br>
-						<button type="button" class="infoBtn" name="${qId}" value="${qId}">자세히 보기</button>
+						<button type="button" class="infoBtn" id="${qId}btn" name="${qId}" value="${qId}">자세히 보기</button>
 					</div>
 				</div>
 			</div>
 			`;
 		$("#quizBox").append(temp);
 	}) // for문 종료
+	
 } // 함수 종료
 
 window.onload = function() {

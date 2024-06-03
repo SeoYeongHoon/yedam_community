@@ -8,6 +8,9 @@
 	display: inline-block;
 	width: 150px;
 }
+.tdetail_2 {
+	text-align: center;
+}
 </style>
 <div>
 	<div class="card-style"
@@ -17,31 +20,31 @@
 		<br> <br>
 		<table class="table">
 			<tr>
-				<th>과정명</th>
+				<th class="tdetail_2">과정명</th>
 				<td>[[${testDetail.curriculumName}]]</td>
 			</tr>
 			<tr>
-				<th>시험명</th>
+				<th class="tdetail_2">시험명</th>
 				<td>[[${testDetail.testName}]]</td>
 			</tr>
 			<tr>
-				<th>응시기간</th>
+				<th class="tdetail_2">응시기간</th>
 				<td>[[${#dates.format(testDetail.testDate, 'yyyy년 MM월 dd일')}]]</td>
 			</tr>
 			<tr>
-				<th>제한시간</th>
+				<th class="tdetail_2">제한시간</th>
 				<td>[[${testDetail.testTime}]]분</td>
 			</tr>
 			<tr>
-				<th>총점</th>
+				<th class="tdetail_2">총점</th>
 				<td>[[${testDetail.quizScore}]]점</td>
 			</tr>
 			<tr>
-				<th>문제수</th>
+				<th class="tdetail_2">문제수</th>
 				<td>[[${testDetail.quizIdCnt}]]개</td>
 			</tr>
 			<tr>
-				<th>유의사항</th>
+				<th class="tdetail_2">유의사항</th>
 				<td>[[${testDetail.testContent}]]</td>
 			</tr>
 		</table>

@@ -6,7 +6,7 @@
 <head>
   <title>게시글 작성</title>
   <style>
-	.inser-title {
+	.insert-title {
 	margin-top: 40px;
 	}
 
@@ -52,7 +52,7 @@
 </head>
 <body>
 <div class="container">
-  <h1 class="inser-title">게시글 작성</h1>
+  <h1 class="insert-title">게시글 작성</h1>
   <form th:action="@{/all/postInsert}" th:object="${post}" method="post" enctype="multipart/form-data">
     
     <label for="title">제목: </label>

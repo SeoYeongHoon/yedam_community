@@ -41,7 +41,20 @@
 </head>
 <body>
 <div id="post_container">
-  <h3 th:text="'게시판 ' + ${boardId}">게시판</h3>
+   <div th:switch="${boardId}">
+    <div th:case="1">
+      <h3>수료 과정별 게시판</h3>
+    </div>
+    <div th:case="2">
+      <h3>구인/ 구직 게시판</h3>
+    </div>
+    <div th:case="3">
+      <h3>정보 게시판</h3>
+    </div>
+    <div th:case="4">
+      <h3>질문과 토론 게시판</h3>
+   </div>
+  </div>
   <div class="insertBtn">
     <a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}">글쓰기</a>
   </div>
