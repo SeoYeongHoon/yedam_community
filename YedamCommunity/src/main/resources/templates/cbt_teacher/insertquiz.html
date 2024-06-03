@@ -3,14 +3,12 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>	
 <style>
 #shortAnswer {
 	display : none;
 }
 </style>	
-<form name="insertForm" th:action="@{/quizinsert}" method="post" th:object="${teacherVO}">
+<form name="insertForm" th:action="@{/admin/quizinsert}" method="post" th:object="${teacherVO}">
 	<!-- ======= 과목설정 select ======= -->
 	<div class="card-style mb-30">
 		<div class="select-style-1">
@@ -106,7 +104,7 @@
 			<button type="submit" class="main-btn primary-btn square-btn btn-hover addbt" id="addBtn">등록</button>
 		</li>
 		<li>
-	        <button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
+	        <button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/admin/quizlist}'|">취소</button>
 	    </li>
 	</ul>	
 	</div>
@@ -141,7 +139,7 @@
 		<!-- end textarea -->
 	<ul class="buttons-group">
 		<li>
-			<button type="submit" class="main-btn primary-btn square-btn btn-hover addbt" id="addBtnJu" formaction="quizinsertJu">등록</button>
+			<button type="button" class="main-btn primary-btn square-btn btn-hover addbt" id="addBtnJu" formaction="quizinsertJu">등록</button>
 		</li>
 		<li>
 	        <button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/quizlist}'|">취소</button>
@@ -153,6 +151,126 @@
 	</div>
 </form>
 
+<!-- 문제를 입력하지 않았을때 뜨는 모달창 -->
+<div id="quizContentErr" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">문제 입력 오류</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;" id="totalScore">문제를 입력하세요</p>
+				<div style="text-align: center;">
+					<img alt="문제입력 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- '정답'지문을 입력하지 않았을때 뜨는 모달창 -->
+<div id="correctTextContent" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">정답 지문 입력 오류</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;" id="totalScore">정답 지문을 입력하세요</p>
+				<div style="text-align: center;">
+					<img alt="정답 지문 입력 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 지문을 입력하지 않았을때 뜨는 모달창 -->
+<div id="TextContentErr" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">지문 입력 오류</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;" id="totalScore">지문을 입력하세요</p>
+				<div style="text-align: center;">
+					<img alt="지문 입력 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 문제 해설을 입력하지 않았을때 뜨는 모달창 -->
+<div id="solutionErr" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">해설 입력 오류</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;" id="totalScore">문제 해설을 입력하세요</p>
+				<div style="text-align: center;">
+					<img alt="해설 입력 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 정상적으로 문제 등록이 진행될때 뜨는 모달창 -->
+<div id="quizAddOk" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">문제 정상 등록</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">문제가 정상적으로 등록되었습니다.</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" src="/images/registration.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='okBtn' type="button" class="btn btn-primary close"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 const multi = document.getElementById("multiple");
 const shor = document.getElementById("shortAnswer");
@@ -181,41 +299,41 @@ $('.addbt').on('click', function validationCheck(event){
 	let qContent = document.getElementById('quizContent');
 	let qContentJu = document.getElementById('quizContentJu');
 	if(qContent.value == '' && qContentJu.value == ''){
-		alert('문제 내용을 입력해 주세요.');
+		$('#quizContentErr').modal('show');
 		return;
 	}
 	
 	let tContent = document.getElementById('textContent');
 	let tContentJu = document.getElementById('textContentJu');
 	if(tContent.value == '' && tContentJu.value == ''){
-		alert('정답 지문을 입력하세요.');
+		$('#correctTextContent').modal('show');
 		return;
 	}
 	
 	let tContent2 = document.getElementById('textContent2');
 	if(tContent2.value == '' && tContentJu.value == ''){
-		alert('2번 지문을 입력하세요.');
+		$('#TextContentErr').modal('show');
 		tContent2.focus();
 		return;
 	}
 	
 	let tContent3 = document.getElementById('textContent3');
 	if(tContent3.value == '' && tContentJu.value == ''){
-		alert('3번 지문을 입력하세요.');
+		$('#TextContentErr').modal('show');
 		tContent3.focus();
 		return;
 	}
 	
 	let tContent4 = document.getElementById('textContent4');
 	if(tContent4.value == '' && tContentJu.value == ''){
-		alert('4번 지문을 입력하세요.');
+		$('#TextContentErr').modal('show');
 		tContent4.focus();
 		return;
 	}
 	
 	let tContent5 = document.getElementById('textContent5');
 	if(tContent5.value == '' && tContentJu.value == ''){
-		alert('5번 지문을 입력하세요.');
+		$('#TextContentErr').modal('show');
 		tContent5.focus();
 		return;
 	}
@@ -223,14 +341,25 @@ $('.addbt').on('click', function validationCheck(event){
 	let qSolution = document.getElementById('quizSolution');
 	let qSolutionJu = document.getElementById('quizSolutionJu');
 	if(qSolution.value == '' && qSolutionJu.value == ''){
-		alert('문제 해설을 입력하세요.');
+		$('#solutionErr').modal('show');
 		return;
 	}
-	insertForm.submit();
+	
+	$('#quizAddOk').modal('show');
+	
+	$('#okBtn').on('click', function(){
+		insertForm.submit();
+	})
 })
+// 주관식 문제 등록버튼 눌렀을때 form action 속성 변경
 $('#addBtnJu').on('click', function(){
-	$('form').attr('action','/quizinsertJu')
-	insertForm.submit();
+	$('form').attr('action','/admin/quizinsertJu')
+	$('#quizAddOk').modal('show');
+	
+	$('#okBtn').on('click', function(){
+		insertForm.submit();
+	})
 })
+
 </script>
 </html>

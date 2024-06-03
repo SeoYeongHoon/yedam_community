@@ -33,7 +33,7 @@
 		<div style="text-align: center">
 			<a class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover" href="javascript:history.back()">이전</a>
 			<button class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover"
-					th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
+					th:onclick="|location.href='@{/all/testList2(page=1)}'|">목록</button>
 		</div>
 		<br>
 	</div>
@@ -43,12 +43,12 @@
 			<th:block th:if="${quiz.isCorrect == 1}">
 				<h1 class="tresult_1">[[${idx.count}]].</h1>
 				<!-- 맞힌 채점 이미지 -->
-				<img src="images/icons/true.png" style="position: absolute; left: -10px; top: 0px; width: 100px; height: 100px;">
+				<img src="/images/icons/true.png" style="position: absolute; left: -10px; top: 0px; width: 100px; height: 100px;">
 			</th:block>
 			<th:block th:unless="${quiz.isCorrect == 1}">
 				<h1 class="tresult_1">[[${idx.count}]].</h1>
 				<!-- 틀린 채점 이미지 -->
-				<img src="images/icons/false.png" style="position: absolute; left: -10px; top: -30px; width: 100px; height: 100px;">
+				<img src="/images/icons/false.png" style="position: absolute; left: -10px; top: -30px; width: 100px; height: 100px;">
 			</th:block>
 			<h1 class="tresult_1">[[${quiz.quizContent}]]</h1>
 			<p class="tresult_1">([[${quiz.quizScore}]]점)</p>
@@ -69,6 +69,7 @@
 			<p>[[${quiz.quizSolution}]]</p>	
 		</div>
 	</th:block>
+	<!-- TOP 버튼 -->
 	<a href="#" id="topBtn">
   		<span class="glyphicon glyphicon-chevron-up" th:text="TOP"></span>
 	</a>		

@@ -17,16 +17,16 @@
 	                   subject_name,
 	                   c.class_id           				  
 	             FROM tests t JOIN curriculum c
-	                               ON t.curriculum_id = c.curriculum_id) b                     
-	             WHERE (LOWER(test_name) LIKE '%' || LOWER(#{searchQuery}) || '%')
-	             <if test=" classId!=0 ">
-
-	             AND class_id = #{classId}
-	             </if> 
-	             <![CDATA[
-	             AND rownum <= (#{page} * 10)
-	             ]]>
-	             ORDER BY test_date DESC) a 
+	                            ON t.curriculum_id = c.curriculum_id
+	             ORDER BY test_date DESC) b                     
+	       WHERE (LOWER(test_name) LIKE '%' || LOWER(#{searchQuery}) || '%')
+	       <if test=" classId!=0 ">
+	       AND class_id = #{classId}
+	       </if> 
+	       <![CDATA[
+	       AND rownum <= (#{page} * 10)
+	       ]]>
+	       ) a 
 	WHERE a.rn > (#{page} - 1) * 10
 	</select>
 	<select id="testTotalCnt" parameterType="map" resultType="int">
@@ -442,14 +442,23 @@
 	</select>
 	<!-- 강의실별 과목평균점수 조회 -->
 	<select id="subjectAvg" resultType="TeacherVO" parameterType="int">
-		SELECT s.subject_name
-		     , c.class_id 
-		     , (select AVG(result_score)
-		        from exam_results) AS subject_avg
-		FROM subjects s JOIN curriculum c 
-		                  ON s.curriculum_id = c.curriculum_id
-		WHERE class_id = #{classId}
-		AND is_complete = 2
+		SELECT a.curriculum_id
+		      ,a.curriculum_name
+		      ,b.subject_id
+		      ,b.subject_name
+		      ,AVG(c.result_score) AS subjectAvg
+		FROM curriculum a JOIN subjects b 
+		                    ON(a.curriculum_id = b.curriculum_id)
+		                  JOIN exam_results c
+		                  ON(b.subject_id = c.subject_id)
+		GROUP BY a.curriculum_id
+		        ,a.curriculum_name
+		        ,b.subject_id
+		        ,b.subject_name
+		HAVING a.curriculum_id = (SELECT curriculum_id
+		                         FROM curriculum
+		                         WHERE class_id = #{classId}
+		                         AND is_complete = 2)         
 	</select>
 	
 	<!-- 강의실별 시험리스트 조회 -->

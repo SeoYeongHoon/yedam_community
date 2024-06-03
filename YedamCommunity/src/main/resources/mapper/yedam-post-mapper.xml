@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.yedam_post.mapper.PostMapper">
 
+
 	<!-- 게시글 등록 - PL/SQL -->
     <insert id="insertPost" parameterType="PostVO" statementType="CALLABLE">
         <![CDATA[
@@ -185,24 +186,23 @@
     
  	<!-- 페이지네이션 -->
  	 <select id="getPosts" resultType="PostVO">
-        SELECT * 
+    SELECT p.*, f.*
+    FROM (
+        SELECT p.*, ROWNUM AS rnum
         FROM (
-            SELECT
-                p.*,
-                ROWNUM AS rnum
-            FROM (
-                SELECT *
-                FROM posts
-                WHERE board_id = #{postVO.boardId, jdbcType=INTEGER}
-	            <include refid="condition"></include>
-                ORDER BY post_id DESC
-            ) p
-            <![CDATA[
-            WHERE ROWNUM <= #{endRow, jdbcType=INTEGER}
-            ]]>
+            SELECT *
+            FROM posts
+            WHERE board_id = #{postVO.boardId, jdbcType=INTEGER}
+            <include refid="condition"/>
+            ORDER BY post_id DESC
         ) p
-        LEFT JOIN boardfiles f ON p.post_id = f.post_id
-        WHERE rnum > #{startRow, jdbcType=INTEGER}
+        <![CDATA[
+        WHERE ROWNUM <= #{endRow, jdbcType=INTEGER}
+        ]]>
+    ) p
+    LEFT JOIN boardfiles f ON p.post_id = f.post_id
+    WHERE p.rnum > #{startRow, jdbcType=INTEGER}
+    ORDER BY p.rnum
     </select> 
     
     <!-- 게시글 개수 -->

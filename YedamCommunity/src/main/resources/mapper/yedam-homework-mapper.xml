@@ -45,7 +45,7 @@
 		h.subject_id,
 		t.homework_target_id
 		FROM homeworks h JOIN homework_targets t ON (h.homework_id = t.homework_id)
-		WHERE h.homework_id = #{homeworkId} 
+		WHERE h.homework_id = #{homeworkId}
 	</select>
 
 	<!-- 과목명 조회 -->

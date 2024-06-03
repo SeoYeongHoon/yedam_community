@@ -73,6 +73,7 @@ public class RegisterController {
 	    	}
 	    	
 	    	List<String> imageList = profileImageService.uploadFile(uploadFiles);
+	    	
             if (!imageList.isEmpty()) {
                 String imagePath = imageList.get(0);
                 userVO.setProfileImageLocation(imagePath);
