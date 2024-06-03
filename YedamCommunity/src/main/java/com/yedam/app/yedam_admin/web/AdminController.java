@@ -186,7 +186,7 @@ public class AdminController {
 //	과정 등록
 	@PostMapping("/course")
 	public String addCourse(MultipartFile[] uploadFiles, CurriculumVO curriculumVO, Model model) {
-		System.err.println("커리큘럼 VO = "+curriculumVO);
+		System.err.println("커리큘럼 VO = " + curriculumVO);
 		
 	    try {
 	      
@@ -205,10 +205,12 @@ public class AdminController {
             curriculumService.insertCurriculum(curriculumVO);
 	        
 	        model.addAttribute("message", "과정이 성공적으로 등록되었습니다.");
+	        System.out.println("과정등록 성공!");
 	        return "redirect:/admin/course";
 	    } catch (Exception e) {
 	        model.addAttribute("message", "과정 등록에 실패했습니다.");
-	        return "admin/course";
+	        System.err.println("과정등록 실패!");
+	        return "admin/manageCourse";
 	    }
 	}
 	

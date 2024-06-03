@@ -99,24 +99,24 @@
 			<!-- 목록 페이징 -->
 			<div style="text-align: center;">
 				<a class="tlist_4" th:if="${page == 1}" th:text="'<'" href="#"></a>
-				<a class="tlist_4" th:unless="${page == 1}" th:text="'<'" th:href="@{/testList2(page=${page-1})}"></a>
+				<a class="tlist_4" th:unless="${page == 1}" th:text="'<'" th:href="@{/all/testList2(page=${page-1})}"></a>
 				<th:block th:if="${size % 10 == 0}">
 					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 10 - 1))}">
-						<a class="tlist_4" th:text="${stat.count}" th:href="@{/testList2(page=${stat.count})}"></a>
+						<a class="tlist_4" th:text="${stat.count}" th:href="@{/all/testList2(page=${stat.count})}"></a>
 					</th:block>
 				</th:block>
 				<th:block th:unless="${size % 10 == 0}">
 					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 10))}">
-						<a class="tlist_4" th:text="${stat.count}" th:href="@{/testList2(page=${stat.count})}"></a>
+						<a class="tlist_4" th:text="${stat.count}" th:href="@{/all/testList2(page=${stat.count})}"></a>
 					</th:block>
 				</th:block>
 				<th:block th:if="${size % 10 == 0}">
 					<a class="tlist_4" th:if="${page == (size / 10)}" th:text="'>'" href="#"></a>
-					<a class="tlist_4" th:unless="${page == (size / 10)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
+					<a class="tlist_4" th:unless="${page == (size / 10)}" th:text="'>'" th:href="@{/all/testList2(page=${page+1})}"></a>
 				</th:block>
 				<th:block th:unless="${size % 10 == 0}">
 					<a class="tlist_4" th:if="${page == (size / 10 + 1)}" th:text="'>'" href="#"></a>
-					<a class="tlist_4" th:unless="${page == (size / 10 + 1)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
+					<a class="tlist_4" th:unless="${page == (size / 10 + 1)}" th:text="'>'" th:href="@{/all/testList2(page=${page+1})}"></a>
 				</th:block>
 			</div>
 			</th:block>
@@ -159,18 +159,19 @@ $(document).on('click','.closeBtn2',function(){
 $(document).on('click','.testStartBtn',function(){
 	let testId = $(this).parent().siblings('input').val();
 	//console.log(testId);
-	location.href='/testDetail?testId=' + testId;
+	location.href='/all/testDetail?testId=' + testId;
 })
 //<<응시완료 버튼 관련>>
 $(document).on('click','.testEndBtn',function(){
 	let testId = $(this).parent().siblings('input').val();
 	//console.log(testId);
-	location.href='/testResult2?testId=' + testId;
+	location.href='/all/testResult2?testId=' + testId;
 })
 //<<페이지 열때 목록 출력>>
 window.onload = function(){
 	let type = 'all';
 	let filterData = '';
+	setActiveMenuItem();
 	testListFilter(type, filterData); //필터링 함수 호출
 }
 
@@ -192,7 +193,7 @@ $('#searchBtn').on('click',function(){
 function testListFilter(type, filterData){
 	//시험목록 가져오기
 	$.ajax({
-		url: 'listFilter',
+		url: '/all/listFilter',
 		method: 'get',
 		data: {
 			type: type,

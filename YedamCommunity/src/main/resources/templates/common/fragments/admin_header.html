@@ -20,7 +20,7 @@
 
 <div class="imageModal">
 	<div class="imageModal_popup">
-		<img id="myImageLarge" th:src="@{${'/images/profile/' + #authentication.principal.profileImageLocation}}">
+		<img id="myImageLarge" th:src="@{${'/files' + #authentication.principal.profileImageLocation}}">
 	</div>
 </div>
 <aside class="sidebar-nav-wrapper" style="position:fixed;">
@@ -84,8 +84,8 @@
 	        <span class="text" style="margin-left: -12px; font-weight: normal;">Yedam Community LMS</span>
       	</div>
       	<div class="profile_image_btn" style="max-width: 100%; height: 315px; max-height: 100%; position: relative; padding: 20px 0; text-align: center; border-bottom: 1px solid rgb(192, 192, 192, 0.5);">
-			<button id="myImageBtn"><img th:src="@{${'/images/profile/' + #authentication.principal.profileImageLocation}}" 
-				style="width: 140px; height: 140px;"></button>
+			<button id="myImageBtn"><img th:src="@{${'/files' + #authentication.principal.profileImageLocation}}" 
+				style="width: 140px; height: 140px; box-shadow: 0px 12px 24px -4px rgba(145, 158, 171, 0.12), 0px 0px 2px 0px rgba(145, 158, 171, 0.5);"></button>
 			<div class="profile_my_info" style="color: black; margin-top: 20px;">
 				<th:block sec:authorize="hasAuthority('ROLE_LEARN')">
 					<p style="font-weight: normal; font-size: 12pt; color: #e96b56;">
@@ -287,24 +287,18 @@
 	            <ul id="ddmenu_4" class="collapse show dropdown-nav">
 	            <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
 	              <li>
-	                <a href="/teachermain" style="font-weight: normal;"> HOME </a>
+	                <a href="/admin/teachermain" style="font-weight: normal;"> 시험 메인 </a>
 	              </li>
 	              <li>
-	                <a href="/testlist" style="font-weight: normal;"> 시험목록 </a>
+	                <a href="/admin/testlist" style="font-weight: normal;"> 시험목록 </a>
 	              </li>
 	              <li>
-	                <a href="/quizlist" style="font-weight: normal;"> 문제목록 </a>
+	                <a href="/admin/quizlist" style="font-weight: normal;"> 문제목록 </a>
 	              </li>
 	            </th:block>
 	            <th:block sec:authorize="hasAuthority('ROLE_LEARN')">
 	              <li>
-	                <a href="/myPage" style="font-weight: normal;"> HOME </a>
-	              </li>
-	              <li>
-	                <a href="/testList2?page=1" style="font-weight: normal;"> 시험목록 </a>
-	              </li>
-	              <li>
-	                <a href="#" style="font-weight: normal;"> 과제목록 </a>
+	                <a href="/all/testList2" style="font-weight: normal;"> 내 시험 </a>
 	              </li>
 	            </th:block>
 	            </ul>

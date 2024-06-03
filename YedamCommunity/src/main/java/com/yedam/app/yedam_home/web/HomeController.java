@@ -69,8 +69,6 @@ public class HomeController {
         model.addAttribute("board4Posts", board4Posts);
         model.addAttribute("popularPosts", popularPosts);
         model.addAttribute("postList", allPosts);
-        
-        System.err.println("board1Posts: " + board1Posts);
 
         return "mainPages/home";
     }

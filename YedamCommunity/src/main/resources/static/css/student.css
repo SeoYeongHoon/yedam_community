@@ -53,3 +53,7 @@
     max-width: 500px;
     padding: 20px;
 }
+
+.replyDiv {
+	border: 2px solid #e5e5e5;
+}

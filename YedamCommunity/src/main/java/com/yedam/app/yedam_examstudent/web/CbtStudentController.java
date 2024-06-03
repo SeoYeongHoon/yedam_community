@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,6 +32,7 @@ import com.yedam.app.yedam_subjects.service.SubjectsVO;
 @EnableScheduling
 @Controller
 
+@RequestMapping("/all")
 public class CbtStudentController {
 	
 	//service주입
@@ -46,7 +48,7 @@ public class CbtStudentController {
 	//시험전체
 	//ㅡㅡㅡㅡ
 	@GetMapping("testList2")
-	public String testList(int page,
+	public String testList(@RequestParam(defaultValue = "1") int page,
 						   TestVO testVO,
 						   ExamResultVO examResultVO,
 						   SubjectsVO subjectsVO,
