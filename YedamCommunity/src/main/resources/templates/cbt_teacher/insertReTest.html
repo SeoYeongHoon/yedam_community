@@ -3,12 +3,12 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
 <form th:action="@{/}" method="post" th:object="${teacherVO}">
 	<!-- ======= 시험 이름 입력 start ======= -->
 	<div class="input-style-1">
-		<h6 class="mb-25">재시험 Title</h6>
+		<h6 class="mb-25">재시험</h6>
 		<input type="text" placeholder="시험의 이름 입력(최대 15자 입력)" th:field="*{testName}" maxlength="15" oninput="nameMaxLength(this);"/>
 	</div>
 	<!-- ======= 시험 이름 입력 end ======= -->
@@ -65,8 +65,8 @@
 	<ul class="buttons-group">
 		<li>
 			<button type="button"
-				class="main-btn primary-btn square-btn btn-hover" id="addBtn"
-				th:onclick="|location.href='@{/admin/testlist}'|">
+				class="main-btn primary-btn square-btn btn-hover" id="addBtn">
+				<!-- th:onclick="|location.href='@{/admin/testlist}'|"> -->
 				시험 출제하기</button>
 		</li>
 		<li>
@@ -76,12 +76,60 @@
 		</li>
 	</ul>
 </form>
+<!-- 내용 확인 모달창 -->
+<div id="errModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 실패</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">빈값을 입력해주세요!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" th:src="@{/images/failed.png}">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 등록완료 모달 -->
+<div id="addModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 완료</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">등록이 완료되었습니다!</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" src="/images/registration.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='' type="button" class="btn btn-primary close" th:onclick="|location.href='@{/admin/testlist}'|"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script>
 var tName = '';
 var tContent = '';
 var tDate = '';
-var tTIme = 0;
+var tTIme = 0;  
 var userId = 0;
 var passScore = 0;
 var testId = 0;
@@ -93,8 +141,9 @@ var quizScore = window.localStorage.getItem('quizScore');
 var curriculumId = window.localStorage.getItem('reCurriculumId');
 var subName = window.localStorage.getItem('subjectName');
 var subjectName = window.localStorage.getItem('qSubjectName');
-$('#testName').on('change', function() {
-	tName = $('#testName').val();
+/* $('#testName').on('change', function() {
+		tName = $('#testName').val();
+	}
 	//window.localStorage.setItem('testName', tName);
 });
 
@@ -109,7 +158,7 @@ $('#testTime').on('change', function() {
 });
 $('#testDate').on('change', function(){
 	tDate = $('#testDate').val();
-})
+}) */
 console.log("classId 값 : "+classId)
 console.log("currId 값 : "+curriculumId)
 //--------------------------------------------
@@ -189,92 +238,95 @@ $('#checkbox-1').on('change', function() {
 // 3. test_targets 테이블에 선택된 학생들에 대한 숫자만큼 insert문 동작
 //--------------------------------------------
 $('#addBtn').on('click', function() {
-	//--------------------------------------------
-	// tests 테이블에 insert 동작.
-	//--------------------------------------------
-	passScore = $('#passScore').val();
-	let obj = {
-			"curriculumId" : curriculumId,
-			"testContent" : tContent,
-			"testTime" : tTime,
-			"testName" : tName,
-			"classId" : classId,
-			"passScore" : passScore,
-			"subjectName" : subjectName,
-			"testDate" : tDate
-	};
-	
-	$.ajax({
-		url : "testinsert",
-		type : "post",
-		async : false,
-		data : obj,
-		
-		success : function(data) {
-			testId = data;
-			
-			/* if(data != 'true' && data == null){
-				return;
-			} */
-		},
-		error : function(err) {
-			alert('시험 등록 실패');
-			return;
-			
-		}
-	});
-	
-	//--------------------------------------------
-	// quizbox 테이블에 insert 동작
-	//--------------------------------------------
-	obj = {
-	        "quizContent": arryQContent,
-	        "quizId": arryQuizId,
-	        "subjectName": arrySubName,
-	        "curriculumId": curriculumId,
-	        "quizScore": arryQuizScore,
-	        "testId" : testId
-	      };
-	
-	$.ajax({
-		url : "quizboxinsert",
-		type : "post",
-		contentType : 'application/json',
-		data : JSON.stringify(obj),
-		async : false,
-			
-		success : function(data){
-			
-		},
-		error : function(err){
-			alert('시험 등록 실패(문제 등록 실패)');
-		}
-	});
+    //--------------------------------------------
+    // tests 테이블에 insert 동작.
+    //--------------------------------------------
+    tContent = $('#testContent').val();
+    tTime = $('#testTime').val();
+    tName = $('#testName').val();
+    tDate = $('#testDate').val();
+    passScore = $('#passScore').val();
 
-	//--------------------------------------------
-	// test_targets 테이블에 insert 동작
-	//--------------------------------------------
-	obj = {
-	        "userId": storageUser,
-	        "testId" : testId
-	      };
-	
-	$.ajax({
-		url : "testuserinsert",
-		type : "post",
-		contentType : 'application/json',
-		data : JSON.stringify(obj),
-		async : false,
-		
-		success : function(data){
-			
-			window.localStorage.clear();
-		},
-		error : function(err){
-			alert('시험 등록 실패(시험 대상자 등록 실패)');
-		}
-	});
-}) // 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
+    // 변경된 부분: tTime에 대해 두 번의 검사가 포함되어 있는 것을 하나로 통합
+    if (tContent === '' || tTime === '' || tTime == 0 || tName === '' || tDate === '' || passScore === ''|| storageUser.length == 0) {
+       $('#errModal').modal('show');
+    } else {
+        let obj = {
+            "curriculumId": curriculumId,
+            "testContent": tContent,
+            "testTime": tTime,
+            "testName": tName,
+            "classId": classId,
+            "passScore": passScore,
+            "subjectName": subjectName,
+            "testDate": tDate
+        };
+
+        $.ajax({
+            url: "testinsert",
+            type: "post",
+            async: false,
+            data: obj,
+            success: function(data) {
+                testId = data;
+            },
+            error: function(err) {
+                alert('시험 등록 실패');
+                return;
+            }
+        });
+
+        //--------------------------------------------
+        // quizbox 테이블에 insert 동작
+        //--------------------------------------------
+        obj = {
+            "quizContent": arryQContent,
+            "quizId": arryQuizId,
+            "subjectName": arrySubName,
+            "curriculumId": curriculumId,
+            "quizScore": arryQuizScore,
+            "testId": testId
+        };
+
+        $.ajax({
+            url: "quizboxinsert",
+            type: "post",
+            contentType: 'application/json',
+            data: JSON.stringify(obj),
+            async: false,
+            success: function(data) {
+                // 성공 시 처리
+            },
+            error: function(err) {
+                alert('시험 등록 실패(문제 등록 실패)');
+            }
+        });
+
+        //--------------------------------------------
+        // test_targets 테이블에 insert 동작
+        //--------------------------------------------
+        obj = {
+            "userId": storageUser,
+            "testId": testId
+        };
+
+        $.ajax({
+            url: "testuserinsert",
+            type: "post",
+            contentType: 'application/json',
+            data: JSON.stringify(obj),
+            async: false,
+            success: function(data) {
+            	$('#addModal').modal('show');
+                window.localStorage.clear();
+            },
+            error: function(err) {
+                alert('시험 등록 실패(시험 대상자 등록 실패)');
+            }
+        });
+    }
+}); // 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
+
 
 //--------------------------------------------
 // 유저 선택 체크박스 관련 기능 시작
