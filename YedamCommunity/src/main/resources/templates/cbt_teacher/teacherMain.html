@@ -209,6 +209,16 @@ function classInfo(classId){
 			  	options: {
 			        maintainAspectRatio: true, // default value. false일 경우 포함된 div의 크기에 맞춰서 그려짐.
 			        responsive: true,
+			        plugins: {
+			            legend: {
+			                labels: {
+			                    font: {
+			                        family: 'WavvePADO-Regular',
+			                        size: 18
+			                    }
+			                }
+			            },
+			        }
 			    }
 			});
 		},
@@ -236,7 +246,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 	// 강의실별 학생정보 불러오기
 	//--------------------------------------------
 	$.ajax({
-		url : "userinfo",
+		url : "/admin/userinfo",
 		type : "get", 
 		data : {classId : classId},
 				
@@ -253,7 +263,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 	// 강의실별 과정명 불러오기
 	//--------------------------------------------
 	$.ajax({
-		url : "classinfo",
+		url : "/admin/classinfo",
 		type : "get", 
 		data : {classId : classId},
 				
@@ -292,7 +302,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 	/* let myCt = document.getElementById('chart'); */
 	let myCt = document.getElementById('chart').getContext('2d');
 	$.ajax({
-		url : "subjectavg",
+		url : "/admin/subjectavg",
 		type : "get", 
 		data : {classId : classId},
 					
@@ -319,6 +329,17 @@ $('#allClass').on('click','.classNum', function(classId) {
 			  	options: {
 			        maintainAspectRatio: true, // default value. false일 경우 포함된 div의 크기에 맞춰서 그려짐.
 			        responsive: true,
+			        plugins: {
+			            legend: {
+			                labels: {
+			                    // This more specific font property overrides the global property
+			                    font: {
+			                        family: 'WavvePADO-Regular',
+			                        size: 18
+			                    }
+			                }
+			            },
+			        }
 			    }
 			});
 		},

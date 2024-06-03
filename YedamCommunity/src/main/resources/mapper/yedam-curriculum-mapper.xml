@@ -6,13 +6,7 @@
 <mapper namespace="com.yedam.app.yedam_curriculum.mapper.CurriculumMapper">
   <!-- 과정 전체 조회(영재,택준) -->
   <select id="cSelectAll" resultType="CurriculumVO">
-  	SELECT	curriculum_id,
-  			curriculum_name,
-  			curriculum_start_date,
-  			curriculum_end_date,
-  			is_complete,
-  			class_id,
-  			curriculum_img
+  	SELECT	*
   	FROM	curriculum
   	WHERE   is_complete = 2
   	ORDER BY class_id
