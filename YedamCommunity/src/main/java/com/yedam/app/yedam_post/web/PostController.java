@@ -204,8 +204,8 @@ public class PostController {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }*/
-	    //return "redirect:/all/post/" + postVO.getBoardId();
-	        return null;
+	    return "redirect:/all/post/" + postVO.getBoardId();
+	        //return null;
 	}
 
 
