@@ -17,7 +17,13 @@ public class CurriculumVO {
 	private Date curriculumEndDate;
 	private int isComplete;
 	private int classId;
-	private String curriculumImg;
+//	private String curriculumImg;
+	// 이미지처리
+	private String profileImageName;
+	private double profileImageSize;
+	private String profileImageLocation;
+	private String downloadLocation;
+	private String profileImageExt;
 	
 	//과목명
 	private int subjectId;
@@ -72,14 +78,6 @@ public class CurriculumVO {
 
 	public void setClassId(int classId) {
 		this.classId = classId;
-	}
-
-	public String getCurriculumImg() {
-		return curriculumImg;
-	}
-
-	public void setCurriculumImg(String curriculumImg) {
-		this.curriculumImg = curriculumImg;
 	}
 
 	public int getSubjectId() {

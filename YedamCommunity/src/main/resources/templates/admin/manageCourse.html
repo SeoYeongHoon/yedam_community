@@ -80,7 +80,7 @@
 				<a class="open_add_course main-btn light-btn btn-hover" style="color: white; background-color: #e96b56; padding: 7px 20px; position: absolute; margin: 0; right: 14px; bottom: 14px;">수강 등록</a>
 				
 				<!-- 수강등록 버튼 클릭 시 display: flex -->
-				<form id="add_course_form" action="/admin/course" method="post">
+				<form id="add_course_form" action="/admin/course" method="post" enctype="multipart/form-data">
 					<div class="add_course">
 						<div class="input-style-1 add_course_item">
 							<label class="course_item_type" style="color: white;">과정명</label>
@@ -101,7 +101,7 @@
 			            </div>
 			            <div class="input-style-1 add_course_item">
 			            	<label class="course_item_type" style="color: white;">이미지</label>
-			            	<input name="curriculumImg" type="file">
+			            	<input name="uploadFiles" type="file">
 			            </div>
 		            	<button type="submit" class="main-btn light-btn btn-hover" style="color: white; background-color: #e96b56; padding: 5px 25px;">등록</button>
 					</div>
@@ -120,7 +120,7 @@
 										[[${#dates.format(curriculum.curriculumStartDate, 'yyyy년 MM월 dd일')}]] - [[${#dates.format(curriculum.curriculumEndDate, 'yyyy년 MM월 dd일')}]]
 									</p>
 									<p style="border-bottom: 2px solid #5d657b; padding: 20px; font-size: 13pt; color: black; font-weight: bold;">[[${curriculum.curriculumName}]]</p>
-									<img th:src="@{/images/{fileName}(fileName=${curriculum.curriculumImg})}" style="max-width: 100%;">
+									<img th:src="@{/files{fileName}(fileName=${curriculum.profileImageLocation})}" style="max-width: 100%;">
 									
 									<!-- 삭제용 과정 ID -->
 									<input type="hidden" id="currId" th:value="${curriculum.curriculumId}">		

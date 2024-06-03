@@ -48,7 +48,7 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 			String uuid = UUID.randomUUID().toString();
 			System.err.println("시간기준 랜덤값: " + uuid);
 			
-			String uploadFileName = folderPath + File.separator + uuid + "_" + fileName;
+			String uploadFileName = File.separator + uuid + "_" + fileName;
 			System.err.println("파일이름 중간에 _ 넣어서 구분: " + uploadFileName);
 			
 			String downloadFileName = uuid + "_" + fileName;
@@ -58,8 +58,10 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 			
 			// 특정 경로의 파일 정보 가져오는 메소드
 			Path savePath = Paths.get(saveName);
+			System.out.println("path 설정");
 			
 			try {
+				System.out.println("업로드 try");
 				// uploadFile에 파일을 업로드하는 메소드
 				uploadFile.transferTo(savePath);
 				imageList.add(setFilePath(uploadFileName));
@@ -83,7 +85,7 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 		File uploadPathFolder = new File(uploadPath, folderPath);
 		
 		if (uploadPathFolder.exists() == false) {
-			uploadPathFolder.mkdir();
+			uploadPathFolder.mkdirs();
 		}
 		return folderPath;
 	}

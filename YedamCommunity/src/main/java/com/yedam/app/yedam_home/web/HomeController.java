@@ -69,7 +69,6 @@ public class HomeController {
         model.addAttribute("board4Posts", board4Posts);
         model.addAttribute("popularPosts", popularPosts);
         model.addAttribute("postList", allPosts);
-        
         return "mainPages/home";
     }
 }

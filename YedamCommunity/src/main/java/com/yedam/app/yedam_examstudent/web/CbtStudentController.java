@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,6 +32,7 @@ import com.yedam.app.yedam_subjects.service.SubjectsVO;
 @EnableScheduling
 @Controller
 
+@RequestMapping("/all")
 public class CbtStudentController {
 	
 	//service주입
@@ -46,7 +48,7 @@ public class CbtStudentController {
 	//시험전체
 	//ㅡㅡㅡㅡ
 	@GetMapping("testList2")
-	public String testList(int page,
+	public String testList(@RequestParam(defaultValue = "1") int page,
 						   TestVO testVO,
 						   ExamResultVO examResultVO,
 						   SubjectsVO subjectsVO,
@@ -146,9 +148,9 @@ public class CbtStudentController {
 			list2.add(cbtStudentService.isTestFeedback(testVO));
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("testList",list1);
-		map.put("isFeedback", list2);
-		map.put("isResult", array1);
+		map.put("testList",list1); //시험목록
+		map.put("isFeedback", list2); //피드백유무
+		map.put("isResult", array1); //시험결과유무
 		return map;
 	}
 	
