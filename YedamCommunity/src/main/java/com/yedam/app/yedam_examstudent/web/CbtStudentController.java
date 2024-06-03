@@ -146,9 +146,9 @@ public class CbtStudentController {
 			list2.add(cbtStudentService.isTestFeedback(testVO));
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("testList",list1);
-		map.put("isFeedback", list2);
-		map.put("isResult", array1);
+		map.put("testList",list1); //시험목록
+		map.put("isFeedback", list2); //피드백유무
+		map.put("isResult", array1); //시험결과유무
 		return map;
 	}
 	
