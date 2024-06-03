@@ -11,6 +11,13 @@
 	display :none; 
 }
 </style>
+<script>
+function autoResize(textarea) {
+	console.log("리사이징");
+  	textarea.style.height = 'auto'; // 기존 높이를 초기화
+  	textarea.style.height = (textarea.scrollHeight) + 8 + 'px'; // 새로운 높이로 설정
+}
+</script>
 <!-- 댓글내용 확인 모달창 -->
 <div id="modalReply" class="modal fade">
 	<div class="modal-dialog">
@@ -138,16 +145,16 @@
 <input id="logType" type="hidden" th:value="${userType}">
 <input id="logName" type="hidden" th:value="${userName}">
 <div th:each="homeworkInfo : ${homeworkList}" style="padding: 30px;">
-		<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
-			class="main-btn light-btn   btn-hover admin"
-			style="float: right; padding: 10px 15px;" type="button">과제 삭제</button>
-		<button id="updateHomework"
-			class="main-btn warning-btn   btn-hover admin"
-			th:value="${homeworkInfo.homeworkId}" type="button" style="padding: 10px 15px;">게시글 수정</button>
+	<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
+		class="main-btn light-btn   btn-hover admin"
+		style="float: right; padding: 10px 15px;" type="button">과제 삭제</button>
+	<button id="updateHomework"
+		class="main-btn warning-btn   btn-hover admin"
+		th:value="${homeworkInfo.homeworkId}" type="button" style="padding: 10px 15px;">게시글 수정</button>
 	<div>
 		<hr>
 		<div class="input-style-1">
-			<label>제목</label> 
+			<label>제목</label>
 			<input id="title" class="homeworkUpdate" type="text" style="width: 100%;" th:value="${homeworkInfo.homeworkTitle}" disabled>
 
 		</div>
@@ -194,7 +201,7 @@
 	</div>
 </div>
 <!-- end reply -->
-<h3>댓글 작성</h3>
+<h3>과제 작성</h3>
 <form name="insertReply" id="addReply" method="post"
 	th:object="${homeworkList}" enctype="multipart/form-data">
 	<input id="targetId" type="hidden" th:field="*{homeworkTargetId}">
@@ -391,49 +398,49 @@ $('#deleteHomeworks').on('click',function(){
                let replies = 
             	   `
             	   <input class="replyId" type="hidden" value="${e.replyId}">
-            	   <div class ="replyDiv">
-            	   		<!-- 댓글 내용 -->
-            	   		<input class="replyContent-${e.replyId}" type="text" value="${e.replyContent}" readonly >
-                   		<button type="button" class="main-btn warning-btn   btn-hover contentUpdate-${e.replyId}" style="display: none;">수정</button>
-                   		
-                   		<!-- 작성자 -->
-                   		<input  id="logName" type="text" value="${e.replyWriter}" readonly >
-                   		
-                   		<!-- 작성일자 -->
-                   		<input class="replyDate-${e.replyId}" type="text" value="${replyDate}"  readonly >
-                   	</div>	
-                   		<div id="replyFilesList${e.replyId}"></div>
-                   		<div class="col-12 " style="text-align: right;">
-                   			<div id="replyFileUpload-${e.replyId}" style="display:none;">
-		   						<form method="post" enctype="multipart/form-data" id="updateReplyForm${e.replyId}">
-		   							<input type="file" id="uploadReplyFile${e.replyId}" name="uploadReplyFile" multiple="multiple">
-		   							<button class="updateReplyFile" value="${e.replyId}" type="button" style="padding: 10px; width: 100px; border: 1px solid black;">댓글 파일 등록</button>
-		   						</form>
-		   					</div>
-								<button class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
-
-								<button class="main-btn light-btn   btn-hover logName logName-${e.replyWriter}" type="button" onclick="deleteReply(${e.replyId})">댓글 삭제</button>
-								<button class="main-btn warning-btn   btn-hover updateBtn logName logName-${e.replyWriter}" id="ReplyUpdateBtn${e.replyId}" type="button" value="${e.replyId}" >댓글 수정</button>
-
+            	   <div class ="replyWrapper">
+            	   		<div class="replyDiv">
+	                   		<!-- 작성자 -->
+	                   		<input id="logName" type="text" value="${e.replyWriter}" readonly >
+	                   		
+	            	   		<!-- 댓글 내용 -->
+	            	   		<textarea id="logContent" cols="70" rows="1" class="replyContent-${e.replyId}" readonly oninput="autoResize(this)">${e.replyContent}</textarea>
+	                   		<button type="button" id="updateConfirmBtn" class="main-btn warning-btn btn-hover contentUpdate-${e.replyId}">수정</button>
+	                   		
+	                   		<!-- 작성일자 -->
+	                   		<input id="logDate" class="replyDate-${e.replyId}" type="text" value="${replyDate}"  readonly >
+	                   		<div class="replyLogBtn">
+		                   		<button style="padding: 5px 15px;" class="main-btn primary-btn btn-hover commentInput"	type="button" onclick="showReplyInput(${e.replyId})">답글</button>
+								<button style="padding: 5px 15px;" class="main-btn warning-btn btn-hover updateBtn logName logName-${e.replyWriter}" id="ReplyUpdateBtn${e.replyId}" type="button" value="${e.replyId}" >수정</button>
+								<button style="padding: 5px 15px;" class="main-btn danger-btn btn-hover logName logName-${e.replyWriter}" type="button" onclick="deleteReply(${e.replyId})">삭제</button>
 							</div>
-						
-						<div id="comments-${e.replyId}">
+            	   		</div>
+            	   		
+            	   		
+	                   	<div class="col-12" style="margin-top: 10px; padding-left: 0;">
+	                   		<div id="replyFileUpload-${e.replyId}" style="display:none;">
+			   					<form style="display: flex;" method="post" enctype="multipart/form-data" id="updateReplyForm${e.replyId}">
+			   						<input style="width: 200px;" type="file" id="uploadReplyFile${e.replyId}" name="uploadReplyFile" multiple="multiple">
+			   						<button class="updateReplyFile main-btn dark-btn btn-hover" value="${e.replyId}" type="button" style="padding: 5px 10px;">파일 추가</button>
+			   					</form>
+			   				</div>
+						</div>
+						<div id="${e.replyId}" class="replyCommentWrapper" style="display: none;">
+							<textarea class="replyTextArea" id="comment-${e.replyId}" rows="4" cols="50" placeholder="답글 내용을 입력하세요" oninput="autoResize(this)"></textarea>
+							<button id="commentInsertBtn" class="main-btn primary-btn btn-hover commentInsertBtn" type="button" value="${e.replyId}" onclick="addComment(${e.replyId})">답글 등록</button>
+						</div>
+						<div id="comments-${e.replyId}" style="margin-top: 10px;">
 							<div id="commentsList"></div>
 						</div>
-						
-						<div id="${e.replyId}" style="display: none; margin-top: 10px;">
-							<textarea id="comment-${e.replyId}" style="border: 1px solid black;" rows="4" cols="50" placeholder="답글 내용을 입력하세요"></textarea>
-							<div class="col-12" style="text-align: center; margin-top: 10px;">
-							<button class="main-btn primary-btn btn-hover commentInsertBtn" type="button" value="${e.replyId}" onclick="addComment(${e.replyId})">답글 등록</button>
-							</div>
-						</div>
-                	</div>
-                	`;
+                   	</div>	
+                   	
+                   	<div id="replyFilesList${e.replyId}"></div>
+                `;
 			
                $('#replyList').append(replies);
                $('#comments-'+e.replyId).append(commentList(e.comments));
                $('#replyFileUpload-'+e.replyId).append(replyFile(e.replyId));
-               
+               document.querySelectorAll('.replyContent-'+e.replyId).forEach(textarea => autoResize(textarea));
             }); // forEach 끝
             
          //-------------------   
@@ -442,7 +449,7 @@ $('#deleteHomeworks').on('click',function(){
        	 let userName = $('#logName').val() // 로그인한 Name
          let replyName = $('#logName').val()
          if(userName == replyName){
-         $(".logName-"+userName).css('display','block');
+         $(".logName-"+userName).css('display','inline-flex');
          }
 			//출력된 댓글 아이디 가져오기
             let replyIds = [];
@@ -456,9 +463,13 @@ $('#deleteHomeworks').on('click',function(){
             	$('#ReplyUpdateBtn'+replyId).on('click',function(e){ // 댓글 수정버튼 클릭
 	            	console.log("댓글수정버튼 눌렀다")
     	        	//replyId = $(this).val(); //클릭시 댓글 id 불러옴
+    	        	$('.replyLogBtn').css('display', 'none');
         	    	$('.replyContent-'+replyId).prop('readonly',false); // 댓글 내용창 readonly 풀림
-            		$('.replyContent-'+replyId).css('backgroundColor','yellow'); // 입력창 노랑색으로 표시
-            		$('.contentUpdate-'+replyId).css('display','block'); // 수정버튼 보이게
+            		$('.replyContent-'+replyId).css('backgroundColor','rgba(239, 239, 239, 0.5)'); // 입력창 노랑색으로 표시
+            		$('.replyContent-'+replyId).css('border','1px solid #e5e5e5'); // 입력창 노랑색으로 표시
+            		$('.replyContent-'+replyId).css('borderRadius','4px'); // 입력창 노랑색으로 표시
+            		$('.replyContent-'+replyId).css('padding','5px'); // 입력창 노랑색으로 표시
+            		$('.contentUpdate-'+replyId).css('display','inline-flex'); // 수정버튼 보이게
 	            	$('#replyFileUpload-' + replyId).css('display','block'); // 댓글 파일 등록 출력
     	        	$('.deleteReplyFile'+replyId).css('display','block'); //파일 삭제버튼 보이기
         	    	updateReply(replyId); // 댓글 수정 함수실행
@@ -580,8 +591,8 @@ function replyFile(replyId){
             contentType : false, // FormData가 가지고 있는 통신 정보를 사용
             data : formData,
             success : function(json) {
-               $('#modal').modal('show'); //성공모달
-               replyContent.value = ''; // 댓글 입력창 초기화
+              /*  $('#modal').modal('show'); //성공모달
+               replyContent.value = ''; // 댓글 입력창 초기화 */
                $('#uploadFiles').val(''); // 댓글 파일필드 초기화
                replyList();// 댓글 목록 새로고침
             },
@@ -610,7 +621,7 @@ function replyFile(replyId){
 			type:'PUT',
 			data: {replyContent : content, replyId :replyId, date : date},
 			success:function(data){
-				$('#modal').modal('show');
+				/* $('#modal').modal('show'); */
 				$('#replyUpdate-'+replyId).prop('readonly',true);
 				//$('.replyfiles-'+ replyId).empty();
 				replyList(); // 댓글 출력
@@ -635,14 +646,14 @@ function replyFile(replyId){
 	        	 comments.forEach(function(e){
 	        		 let commentDate = formatDate(e.commentDate);
 	        		   let comments =
-	        			 `<div>
+	        			 `<div style="display: flex; align-items: baseline; margin-left: 185px; background-color: rgba(239, 239, 239, 0.5); border: 1px solid rgb(229, 229, 229); border-radius: 4px; padding: 5px;">
 	        		   		<input class="commentLogName" type="hidden" value="${e.commentWriter}">
-	        			 	<input class="commentContent-${e.commentId}" type="text" value="${e.commentContent}" readonly >
-	        			 	<p>작성자: ${e.commentWriter}</p>
+	        			 	<p style="width: 200px;"> ㄴ  ${e.commentWriter}</p>
+	        			 	<textarea style="background-color: rgba(239, 239, 239, 0.5); min-height: 60px;" id="logContent" cols="70" rows="1" class="commentContent-${e.commentId}" readonly oninput="autoResize(this)">${e.commentContent}</textarea>
 	        			 	<button type="button" class="main-btn warning-btn   btn-hover replyContentUpdate-${e.commentId}" style="display: none;"	>수정</button>
-	        			 	<p >대댓글 작성일자 : ${commentDate}</p>
-	        			 	<button class="main-btn light-btn   btn-hover logName commentLogName-${e.commentWriter}" type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
-	        			 	<button class="main-btn warning-btn   btn-hover cUpdateBtn logName commentLogName-${e.commentWriter}" type="button" id="cUpdateBtn" value="${e.commentId}">답글 수정</button>
+	        			 	<p >${commentDate}</p>
+	        			 	<button class="main-btn light-btn btn-hover logName commentLogName-${e.commentWriter}" type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
+	        			 	<button class="main-btn warning-btn btn-hover cUpdateBtn logName commentLogName-${e.commentWriter}" type="button" id="cUpdateBtn" value="${e.commentId}">답글 수정</button>
 	        			 </div>
 	        			 `
 	        		 $('#comments-'+e.replyId).append(comments);
@@ -700,7 +711,7 @@ function replyFile(replyId){
 		   type: 'post',
 		   data :{replyId:replyId , content:content} ,
 		   success: function(data){
-			 $('#modal').modal('show');
+			 /* $('#modal').modal('show'); */
 			 content.value='';
 			 replyList();
 		   },
@@ -756,25 +767,32 @@ function replyFile(replyId){
        let replyInput = document.getElementById(replyId); 
       
       if (replyInput.style.display === 'none') {
-         replyInput.style.display = 'block';
+         replyInput.style.display = 'flex';
       } else {
          replyInput.style.display = 'none';
       }
    } //showReplyInput 함수 end
    
  	//--------------------------
-   // 날짜 포맷 변환 함수
-   //--------------------------
-   function formatDate(date) {
-      var d = new Date(date),
-          month = '' + (d.getMonth() + 1),
-          day = '' + d.getDate(),
-          year = d.getFullYear();
+	// 날짜 포맷 변환 함수
+	//--------------------------
+	function formatDate(dateString) {
+	    // Date 객체 생성
+	    const date = new Date(dateString);
+	
+	    // 날짜 정보 추출
+	    const year = date.getFullYear();
+	    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+	    const day = ('0' + date.getDate()).slice(-2);
+	
+	    // 시간 정보 추출
+	    const hours = ('0' + date.getHours()).slice(-2);
+	    const minutes = ('0' + date.getMinutes()).slice(-2);
+	    const seconds = ('0' + date.getSeconds()).slice(-2);
+	
+	    // 원하는 형식으로 문자열 생성
+	    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	}
 
-      if (month.length < 2) month = '0' + month;
-      if (day.length < 2) day = '0' + day;
-
-      return [year, month, day].join('-');
-   } //formatDate end
 </script>
 </html>
