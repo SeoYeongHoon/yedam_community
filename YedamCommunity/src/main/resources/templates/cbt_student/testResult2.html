@@ -8,7 +8,7 @@
 	<div class="card-style col-lg-12"
 		style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">
 		<br>
-		<h1 class="tresult_2">[ 문제풀이 ]</h1>
+		<h1 class="tresult_2">문제풀이</h1>
 		<br>
 		<table class="table">
 			<tr>
@@ -42,12 +42,12 @@
 		<div class="card-style col-lg-6" style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">						
 			<th:block th:if="${quiz.isCorrect == 1}">
 				<h1 class="tresult_1">[[${idx.count}]].</h1>
-				<!-- 채점 이미지 -->
+				<!-- 맞힌 채점 이미지 -->
 				<img src="images/icons/true.png" style="position: absolute; left: -10px; top: 0px; width: 100px; height: 100px;">
 			</th:block>
 			<th:block th:unless="${quiz.isCorrect == 1}">
 				<h1 class="tresult_1">[[${idx.count}]].</h1>
-				<!-- 채점 이미지 -->
+				<!-- 틀린 채점 이미지 -->
 				<img src="images/icons/false.png" style="position: absolute; left: -10px; top: -30px; width: 100px; height: 100px;">
 			</th:block>
 			<h1 class="tresult_1">[[${quiz.quizContent}]]</h1>
@@ -55,15 +55,16 @@
 			<br> <br>
 			<div>
 				<!-- 보기번호 정답/오답 표시 -->
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 1 ? 'true' : (quiz.exampleNum != 1 && quiz.testAnswer == 1)? 'false':_}">[[${quiz.one}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 2 ? 'true' : (quiz.exampleNum != 2 && quiz.testAnswer == 2)? 'false':_}">[[${quiz.two}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 3 ? 'true' : (quiz.exampleNum != 3 && quiz.testAnswer == 3)? 'false':_}">[[${quiz.three}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 4 ? 'true' : (quiz.exampleNum != 4 && quiz.testAnswer == 4)? 'false':_}">[[${quiz.four}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 5 ? 'true' : (quiz.exampleNum != 5 && quiz.testAnswer == 5)? 'false':_}">[[${quiz.five}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 1 ? 'true' : (quiz.exampleNum != 1 && quiz.testAnswer == 1)? 'false':_}">① [[${quiz.one}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 2 ? 'true' : (quiz.exampleNum != 2 && quiz.testAnswer == 2)? 'false':_}">② [[${quiz.two}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 3 ? 'true' : (quiz.exampleNum != 3 && quiz.testAnswer == 3)? 'false':_}">③ [[${quiz.three}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 4 ? 'true' : (quiz.exampleNum != 4 && quiz.testAnswer == 4)? 'false':_}">④ [[${quiz.four}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 5 ? 'true' : (quiz.exampleNum != 5 && quiz.testAnswer == 5)? 'false':_}">⑤ [[${quiz.five}]]</span>
 			</div>
 			<hr>
-			<h3>풀이</h3>	
-			<p>정답: [[${quiz.exampleNum}]]</p>
+			<!-- 문제 해설 -->
+			<h3 class="tresult_1">해설</h3>	
+			<p class="tresult_1">(정답: [[${quiz.exampleNum}]])</p>
 			<br>
 			<p>[[${quiz.quizSolution}]]</p>	
 		</div>
