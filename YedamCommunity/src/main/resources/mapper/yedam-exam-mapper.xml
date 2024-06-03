@@ -380,7 +380,9 @@
 	<!-- 과목명 출력(문제 필터링용) -->
 	<select id="selectSubjectAll" resultType="TeacherVO">
 		SELECT DISTINCT subject_name
-		FROM subjects
+		FROM subjects s JOIN curriculum c
+		                  ON s.curriculum_id = c.curriculum_id
+		WHERE is_complete = 2
 		ORDER BY subject_name
 	</select>
 	<!-- 과목명 출력(과목명 삭제를 위해) -->
