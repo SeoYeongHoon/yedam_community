@@ -1,6 +1,7 @@
 package com.yedam.app.yedam_post.web;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,8 +78,6 @@ public class PostController {
 	            }
 	            post.setBoardFiles(boardFilesVO);
 	        }
-	        System.err.println("boardId: "+ boardId);
-	        System.err.println("postId: " + postVO);
 	        
 	        model.addAttribute("postList", list);
 	        model.addAttribute("totalCount", totalCount);
@@ -169,7 +168,9 @@ public class PostController {
 	public String postInsertProcess(PostVO postVO, 
 	                                @RequestParam("file") MultipartFile file, 
 	                                Authentication authentication) {
-	    try {
+		System.err.println("postInsert 실행 :" + postVO);
+		/* try { */
+	    	
 	        if (!file.isEmpty()) {
 	            String fileName = file.getOriginalFilename();
 	            System.err.println("fileName :" + fileName);
@@ -182,7 +183,11 @@ public class PostController {
 	            }
 	            
 	            File dest = new File(filePath);
-	            file.transferTo(dest);
+	            try {
+					file.transferTo(dest);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 	            postVO.setBoardfileName(fileName);
 	            postVO.setBoardfileSize(file.getSize());
 	            postVO.setBoardfileLocation(fileName);
@@ -195,11 +200,12 @@ public class PostController {
 	        postVO.setCreateDate(new Date());
 	        postVO.setUpdateDate(new Date());
 	        postService.createPost(postVO);
-
+/*
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	    }
-	    return "redirect:/all/post/" + postVO.getBoardId();
+	    }*/
+	    //return "redirect:/all/post/" + postVO.getBoardId();
+	        return null;
 	}
 
 
