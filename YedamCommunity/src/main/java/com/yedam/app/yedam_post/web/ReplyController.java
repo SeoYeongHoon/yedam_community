@@ -1,6 +1,5 @@
 package com.yedam.app.yedam_post.web;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_post.service.PostCommentVO;
-import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostReplyVO;
+import com.yedam.app.yedam_post.service.PostService;
 
 @Controller
 @RequestMapping("/all")
@@ -78,7 +77,6 @@ public class ReplyController {
 		  LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		  postcommentVO.setCommentWriter(userVO.getUsername());
 		  postService.createComment(postcommentVO);
-		 
         
         return null;
     }

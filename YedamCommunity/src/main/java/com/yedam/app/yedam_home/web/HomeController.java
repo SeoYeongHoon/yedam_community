@@ -35,7 +35,7 @@ public class HomeController {
 	@GetMapping("/all/home")
     public String BoardList(Model model) {
         
-		// 게시판 1 - 수강별, 2 - 구인/ 구인 3 - 정보, 4 - 질문
+		// 게시판 1 - 수강별, 2 - 구인/ 구인, 3 - 정보, 4 - 질문
         List<PostVO> board1Posts = postservice.getPostAll(1);
         List<PostVO> board2Posts = postservice.getPostAll(2);
         List<PostVO> board3Posts = postservice.getPostAll(3);
@@ -69,7 +69,6 @@ public class HomeController {
         model.addAttribute("board4Posts", board4Posts);
         model.addAttribute("popularPosts", popularPosts);
         model.addAttribute("postList", allPosts);
-
         return "mainPages/home";
     }
 }
