@@ -40,22 +40,19 @@
 <script>
 	
 </script>
-<h1>과제 목록 교수</h1>
-<div class="row">
-	<div class="col-10">
+<div class="row" style="justify-content: center;">
+	<div class="col-10" style="margin-top: 50px;">
 		<div style='float: right;'>
-			<a href="/admin/selectClass" class=" primary-btn rounded-full btn-hover"
-				style='padding: 10px;'> <font style="vertical-align: inherit;">
-					<font style="vertical-align: inherit;">+ 과제</font>
-			</font>
+			<a href="/admin/selectClass" class=" primary-btn main-btn btn-hover" style='padding: 5px 15px;'> 
+				+ 과제
 			</a>
 		</div>
 	</div>
 </div>
-<div class="row">
+<div class="row" style="margin-top: 10px; justify-content: center;">
 	<div class="col-10">
 		<div class="card-style mb-30">
-			<h1 class="mb-30">과제 목록</h1>
+			<h1 class="mb-30" style="font-weight: normal;">과제 목록</h1>
 			<div class="select-style-1" style="position: relative; margin-bottom: 15px;">
 				<label>강의실 선택</label>
 				<div class="select-position" style="width: 250px;">
@@ -79,15 +76,14 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th><h6>강의실</h6></th>
-							<th><h6>과제명</h6></th>
-							<th><h6>과목명</h6></th>
-							<th><h6>마감일</h6></th>
-							<th><h6>진행상태</h6></th> 
+							<th style="text-align: center;"><h6>강의실</h6></th>
+							<th style="text-align: center;"><h6>과제명</h6></th>
+							<th style="text-align: center;"><h6>과목명</h6></th>
+							<th style="text-align: center;"><h6>마감일</h6></th>
+							<th style="text-align: center;"><h6>진행상태</h6></th> 
 						</tr>
 					</thead>
-					<tbody id="homeworkBody">
-						
+					<tbody id="homeworkBody" style="text-align: center;">
 					</tbody>
 				</table>
 				<div class="center">
@@ -186,17 +182,16 @@ function process(){
 		var processIdx = idx;
 		
 		let list = `
-			<tr onclick="location.href='/all/homeworkInfo?homeworkId=${test.homeworkId}'">
-				<td class="min-width">${test.classId}</td>
-				<td class="min-width">${test.homeworkTitle}</td>
-				<td class="min-width">${test.subjectName}</td>
-				<td class="min-width tDate">${tDate}</td>
-				<td id="tProcess" class="min-width">
+			<tr class="homeworkList" onclick="location.href='/all/homeworkInfo?homeworkId=${test.homeworkId}' ">
+				<td>${test.classId}</td>
+				<td>${test.homeworkTitle}</td>
+				<td>${test.subjectName}</td>
+				<td class="tDate">${tDate}</td>
+				<td id="tProcess">
 					<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
 				</td>
 			</tr>
-			
-		`;
+			`;
 		$('#homeworkBody').append(list);
 		process();
 	})

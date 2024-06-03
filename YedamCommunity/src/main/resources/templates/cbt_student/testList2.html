@@ -24,11 +24,11 @@
 	position: fixed;
 }
 /*모달*/
-.modal h1, .closeBtn, .closeBtn2 {
+.noTestModal h1, .closeBtn, .closeBtn2 {
 	text-align: center;
 }
 /*모달 팝업 영역 스타일링*/
-.modal, .modal2 {
+.noTestModal, .feedbackModal {
 	display: none; /*평소에 숨김처리*/
 	position: fixed; /*모달창 화면전체*/
 	top: 0;
@@ -38,8 +38,8 @@
 	overflow: hidden;
 	background: rgba(0, 0, 0, 0.5);
 }
-.modal .modal-dialog,
-.modal2 .modal-dialog {
+.noTestModal .modal-dialog,
+.feedbakcModal .modal-dialog {
 	/*팝업*/
 	position: absolute;
 	top: 50%;
@@ -49,8 +49,8 @@
 	background: #ffffff;
 	border-radius: 10px;
 }
-.modal .closeBtn,
-.modal2 .closeBtn2 {
+.noTestModal .closeBtn,
+.feedbackModal .closeBtn2 {
 	display: block;
 	padding: 10px 20px;
 	background-color: rgb(116, 0, 0);
@@ -60,103 +60,39 @@
 	cursor: pointer;
 	transition: box-shadow 0.2s;
 }
-.modal.on,
-.modal2.on {
+.noTestModal.on,
+.feedbackModal.on {
 	display: block;
 }
 </style>
 <div>
-	<h1 style="margin: 50px;">내 시험</h1>
 	<div class="card-style" style="width: 1500px;">
-		<div>
-			<button data-category="all" class="filterBtn tlist_1 status-btn light-btn">전체</button>
-			<button data-category="success" class="filterBtn tlist_1 status-btn success-btn">응시완료</button>
-			<button data-category="proceed" class="filterBtn tlist_1 status-btn active-btn">응시하기</button>
-			<button data-category="re" class="filterBtn tlist_1 status-btn close-btn">재시험</button>
-		
+		<h1 style="margin: 50px;">내 시험</h1>
+		<div id="testList">
+			<!-- 과목 필터링 -->
+			<select id="subSelect" class="tlist_1">
+				<option th:value="all">전체</option>
+				<th:block th:each="sub : ${testSub}">
+					<option th:value="${sub.subjectName}">[[${sub.subjectName}]]</option>
+				</th:block>
+			</select>
+			<!-- 검색 필터링 -->
+			<input id="testSearch" class="tlist_1" type="text" style="border: 1px solid black;">
+			<button id="searchBtn" class="tlist_1" type="button" style="border: 1px solid black;">검색</button>
 			<br> <br>
 			<table class="table">
 				<thead>
 					<tr>
 						<th class="tlist_2">No.</th>
+						<th class="tlist_2">과목</th>
 						<th class="tlist_2">시험명</th>
 						<th class="tlist_2">마감일</th>
 						<th class="tlist_2">응시상태</th>
 						<th class="tlist_2">피드백</th>
 					</tr>
 				</thead>
+				<!-- 시험목록 출력 -->
 				<tbody id="tbody">
-					<th:block th:each="list, stat : ${testList}">
-						<tr>
-							<td class="tlist_2">[[${list.rn}]]</td>
-							<td class="tlist_2">[[${list.testName}]]</td>
-							<td class="tlist_2">[[${#dates.format(list.testDate, 'yyyy년 MM월 dd일')}]]</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 0 && dateComp[stat.index] == 0}">
-								<button th:id="${list.testId}" data-category="proceed"
-									th:onclick="|location.href='@{/testDetail(testId=${list.testId})}'|"
-									class="filterItem tlist_3 main-btn primary-btn square-btn btn-hover">응시하기</button>
-							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 0 && dateComp[stat.index] == 1}">
-								<!-- 피드백내용 모달형식 -->
-								<div class="modal2">
-									<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 380px;">
-										<h1>피드백</h1>
-										<div>
-											<button type="button" class="closeBtn2">닫기</button>
-										</div>
-									</div>
-								</div>
-								<button data-category="proceed"
-									class="noTestBtn filterItem tlist_3 main-btn warning-btn square-btn btn-hover">미응시</button>
-							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 1}">
-								<button th:id="${list.testId}" data-category="success"
-									th:onclick="|location.href='@{/testResult2(testId=${list.testId},userId=${logId})}'|"
-									class="filterItem tlist_3 main-btn success-btn square-btn btn-hover">응시완료</button>
-							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 0}">
-								<button type="button"
-									class="tlist_3 main-btn warning-btn square-btn btn-hover">응시전</button>
-							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isFeedback[stat.index].feedback != '0'}">
-								<!-- 피드백내용 모달형식 -->
-								<div class="modal">
-									<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 380px;">
-										<h1>피드백</h1>
-										<br>
-										<table class="table">
-											<tr>
-												<th>시험명</th>
-												<td>[[${isFeedback[stat.index].testName}]]</td>
-											</tr>
-											<tr>
-												<th>시험점수</th>
-												<td>[[${isFeedback[stat.index].resultScore}]]</td>
-											</tr>
-											<tr>
-												<th>통과점수</th>
-												<td>[[${isFeedback[stat.index].passScore}]]</td>
-											</tr>
-											<tr>
-												<th>내용</th>
-												<td>[[${isFeedback[stat.index].feedback}]]</td>
-											</tr>
-										</table>
-										<br>
-										<div>
-											<button type="button" class="closeBtn">닫기</button>
-										</div>
-									</div>
-								</div>
-								<button type="button"
-										class="tlist_3 feedbackOn main-btn success-btn square-btn btn-hover">피드백완료</button>
-							</td>
-							<td class="tlist_2" th:if="${isResult[stat.index] == 1 && isFeedback[stat.index].feedback == '0'}">
-								<button type="button"
-									class="tlist_3 main-btn dark-btn square-btn btn-hover">피드백대기</button>
-							</td>
-						</tr>
-					</th:block>
 				</tbody>
 			</table>
 			<hr><br><br>
@@ -164,84 +100,204 @@
 			<div style="text-align: center;">
 				<a class="tlist_4" th:if="${page == 1}" th:text="'<'" href="#"></a>
 				<a class="tlist_4" th:unless="${page == 1}" th:text="'<'" th:href="@{/testList2(page=${page-1})}"></a>
-				<th:block th:if="${size % 5 == 0}">
-					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 5 - 1))}">
+				<th:block th:if="${size % 10 == 0}">
+					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 10 - 1))}">
 						<a class="tlist_4" th:text="${stat.count}" th:href="@{/testList2(page=${stat.count})}"></a>
 					</th:block>
 				</th:block>
-				<th:block th:unless="${size % 5 == 0}">
-					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 5))}">
+				<th:block th:unless="${size % 10 == 0}">
+					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 10))}">
 						<a class="tlist_4" th:text="${stat.count}" th:href="@{/testList2(page=${stat.count})}"></a>
 					</th:block>
 				</th:block>
-				<th:block th:if="${size % 5 == 0}">
-					<a class="tlist_4" th:if="${page == (size / 5)}" th:text="'>'" href="#"></a>
-					<a class="tlist_4" th:unless="${page == (size / 5)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
+				<th:block th:if="${size % 10 == 0}">
+					<a class="tlist_4" th:if="${page == (size / 10)}" th:text="'>'" href="#"></a>
+					<a class="tlist_4" th:unless="${page == (size / 10)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
 				</th:block>
-				<th:block th:unless="${size % 5 == 0}">
-					<a class="tlist_4" th:if="${page == (size / 5 + 1)}" th:text="'>'" href="#"></a>
-					<a class="tlist_4" th:unless="${page == (size / 5 + 1)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
+				<th:block th:unless="${size % 10 == 0}">
+					<a class="tlist_4" th:if="${page == (size / 10 + 1)}" th:text="'>'" href="#"></a>
+					<a class="tlist_4" th:unless="${page == (size / 10 + 1)}" th:text="'>'" th:href="@{/testList2(page=${page+1})}"></a>
 				</th:block>
 			</div>
 			</th:block>
 		</div>
+		<!-- 미응시 모달 -->
+		<div class="noTestModal">
+			<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 380px;">
+				<h1>미응시</h1>
+				<br><br>
+				<h1>시험에 응시하지 않았습니다.</h1>
+				<br><br>
+				<div>
+					<button type="button" class="closeBtn">닫기</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <script>
-//<<피드백 모달 관련>>
-feedbackModal();
-function feedbackModal(){
-	const modalContent = document.querySelectorAll('.modal');
-	const modalOpen = document.querySelectorAll('.feedbackOn');
-	const modalClose = document.querySelectorAll('.closeBtn');
 
-	for(let i = 0; i < modalOpen.length; i++){
-		modalOpen[i].addEventListener('click', function() { //피드백버튼을 클릭하면
-			modalContent[i].classList.add('on'); //모달창 열기
-		});
-	}
-	for(let i = 0; i < modalClose.length; i++){
-		modalClose[i].addEventListener('click', function() { //닫기버튼을 클릭하면
-			modalContent[i].classList.remove('on'); //모달창 닫기
-		});
-	}
+//<<미응시 모달창 관련>>
+$(document).on('click','.noTestBtn',function(){
+	$('.noTestModal').addClass('on');
+})
+$(document).on('click','.closeBtn',function(){
+	$('.noTestModal').removeClass('on');
+})
+
+
+//<<피드백 모달창 관련>>
+$(document).on('click','.feedbackOn',function(){
+	$('.feedbackModal').addClass('on');
+})
+$(document).on('click','.closeBtn2',function(){
+	$('.feedbackModal').removeClass('on');
+})
+
+
+//<<응시하기 버튼 관련>>
+$(document).on('click','.testStartBtn',function(){
+	let testId = $(this).parent().siblings('input').val();
+	//console.log(testId);
+	location.href='/testDetail?testId=' + testId;
+})
+//<<응시완료 버튼 관련>>
+$(document).on('click','.testEndBtn',function(){
+	let testId = $(this).parent().siblings('input').val();
+	//console.log(testId);
+	location.href='/testResult2?testId=' + testId;
+})
+//<<페이지 열때 목록 출력>>
+window.onload = function(){
+	let type = 'all';
+	let filterData = '';
+	testListFilter(type, filterData); //필터링 함수 호출
 }
-//<<미응시 모달 관련>>
-noTestModal();
-function noTestModal(){
-	let modal = document.querySelectorAll('.modal2');
-	let noTestBtn = document.querySelectorAll('.noTestBtn');
-	let closeBtn = document.querySelectorAll('.closeBtn2');
-	
-	for(let i = 0; i < modal.length; i++){
-		noTestBtn[i].addEventListener('click', function() { //미응시버튼을 클릭하면
-			modal[i].classList.add('on'); //모달창 열기
-		});
-	}
-	for(let i = 0; i < closeBtn.length; i++){
-		closeBtn[i].addEventListener('click', function() { //닫기버튼을 클릭하면
-			modal[i].classList.remove('on'); //모달창 닫기
-		});
-	}
+
+
+
+//<<과목 선택 필터링 관련>>
+$('#subSelect').on('change',function(){
+	let type = 'sub';
+	let filterData = $(this).val();
+	testListFilter(type, filterData); //필터링 함수 호출
+})
+//<<시험 검색 필터링 관련>>
+$('#searchBtn').on('click',function(){
+	let type = 'search';
+	let filterData = $('#testSearch').val();
+	testListFilter(type, filterData); //필터링 함수 호출
+})
+//<<시험목록 필터링 함수 관련>>
+function testListFilter(type, filterData){
+	//시험목록 가져오기
+	$.ajax({
+		url: 'listFilter',
+		method: 'get',
+		data: {
+			type: type,
+			filterData: filterData,
+			page: 1
+		},
+		success: function(data){
+			let tbody = $('#tbody');
+			tbody.empty();
+			for(let i = 0; i < data.testList.length; i++){
+				let date = new Date(data.testList[i].testDate); //시험 날짜
+				let year = date.getFullYear();
+				let month = date.getMonth()+1;
+				let day = date.getDate();
+				date.setHours(23);
+				date.setMinutes(59);
+				date.setSeconds(59);
+				let date2 = new Date(); //현재 날짜
+				let dateComp = 0;
+				if(date2 > date){
+					dateComp = 1;
+				}
+				let tr = $('<tr>');
+				//시험정보
+				let html1 = `
+					<td class="tlist_2">${data.testList[i].rn}</td>
+					<td class="tlist_2">${data.testList[i].subjectName}</td>
+					<td class="tlist_2">${data.testList[i].testName}</td>
+					<td class="tlist_2">${year}년 ${month}월 ${day}일</td>`;
+				//응시상태
+				let html2 = '';
+				if(data.isResult[i] == 0 && dateComp == 0){						
+					html2 = `<td class="tlist_2">
+						<button class="testStartBtn tlist_3 main-btn dark-btn square-btn btn-hover">응시하기</button></td>`;
+				}
+				else if(data.isResult[i] == 0 && dateComp == 1){						
+					html2 = `<td class="tlist_2">
+						<button class="noTestBtn tlist_3 main-btn warning-btn square-btn btn-hover">미응시</button></td>`;
+				}
+				else if(data.isResult[i] == 1){						
+					html2 = `<td class="tlist_2">
+						<button class="testEndBtn tlist_3 main-btn success-btn square-btn btn-hover">응시완료</button></td>`;
+				}
+				//피드백
+				let html3 = '';
+				if(data.isResult[i] == 0 && dateComp == 0){					
+					html3 = `<td class="tlist_2">
+						<button type="button" class="tlist_3 main-btn warning-btn square-btn btn-hover">응시전</button></td>`;
+				}
+				else if(data.isResult[i] == 0 && dateComp == 1){					
+					html3 = `<td class="tlist_2">
+						<button type="button" class="tlist_3 main-btn warning-btn square-btn btn-hover">미응시</button></td>`;
+				}
+				else if(data.isResult[i] == 1 && data.isFeedback[i].feedback != 0){					
+					html3 = `<td class="tlist_2">
+						<button type="button" class="tlist_3 feedbackOn main-btn success-btn square-btn btn-hover">피드백완료</button>
+						<div class="feedbackModal">
+							<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 380px;">
+								<h1>피드백</h1>
+								<table class="table">
+									<tr>
+										<th>시험명</th>
+										<td>${data.isFeedback[i].testName}</td>
+									</tr>
+									<tr>
+										<th>시험점수</th>
+										<td>${data.isFeedback[i].resultScore}</td>
+									</tr>
+									<tr>
+										<th>기준점수</th>
+										<td>${data.isFeedback[i].passScore}</td>
+									</tr>
+									<tr>
+										<th>피드백내용</th>
+										<td>${data.isFeedback[i].feedback}</td>
+									</tr>
+								</table>
+								<div>
+									<button type="button" class="closeBtn2">닫기</button>
+								</div>
+							</div>
+						</div>
+						</td>`;
+				}
+				else if(data.isResult[i] == 1 && data.isFeedback[i].feedback == 0){
+					html3 = `<td class="tlist_2">
+						<button type="button" class="tlist_3 main-btn dark-btn square-btn btn-hover">피드백대기</button></td>`;
+				}
+				//해당 시험 번호 값
+				let input = $('<input>');
+				input.attr('type', 'hidden');
+				input.attr('value', data.testList[i].testId);
+				input.attr('class', 'testId');
+				//시험목록 붙이기
+				tr.append(html1);
+				tr.append(html2);
+				tr.append(html3);
+				tr.append(input);
+				tbody.append(tr);
+			}
+		},
+		error: function(){
+			console.log('error');
+		}
+	})
 }
-//<<시험목록 필터링 관련>>
-$('.filterItem').show(); //처음에 요소들 나타내기
-$('.filterBtn').click(function(){
-	let selected = $(this).data('category'); //현재 선택된 카테고리 데이터
-	if(selected == 'all'){ //전체선택시
-		$('.filterItem').closest('td').closest('tr').show(); //해당 행 출력
-	}
-	else{
-		$('.filterItem').each(function(){
-			let item = $(this).data('category'); //현재 선택된 카테고리 데이터
-			if(item == selected){
-				$(this).closest('td').closest('tr').show(); //해당 행 출력
-			}
-			else{
-				$(this).closest('td').closest('tr').hide(); //나머지 행 숨기기
-			}
-		});
-	}
-});
 </script>
 </html>

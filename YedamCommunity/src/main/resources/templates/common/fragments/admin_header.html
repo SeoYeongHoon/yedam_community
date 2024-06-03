@@ -18,7 +18,6 @@
 }
 </style>
 
-<!-- 일괄등록 모달 -->
 <div class="imageModal">
 	<div class="imageModal_popup">
 		<img id="myImageLarge" th:src="@{${'/images/profile/' + #authentication.principal.profileImageLocation}}">
@@ -82,27 +81,27 @@
 				</g>
 				</svg>
 	        </span>
-	        <span class="text" style="margin-left: -12px;">Yedam Community LMS</span>
+	        <span class="text" style="margin-left: -12px; font-weight: normal;">Yedam Community LMS</span>
       	</div>
       	<div class="profile_image_btn" style="max-width: 100%; height: 315px; max-height: 100%; position: relative; padding: 20px 0; text-align: center; border-bottom: 1px solid rgb(192, 192, 192, 0.5);">
 			<button id="myImageBtn"><img th:src="@{${'/images/profile/' + #authentication.principal.profileImageLocation}}" 
 				style="width: 140px; height: 140px;"></button>
 			<div class="profile_my_info" style="color: black; margin-top: 20px;">
 				<th:block sec:authorize="hasAuthority('ROLE_LEARN')">
-					<p style="font-weight: bold; font-size: 12pt; color: #e96b56;">
+					<p style="font-weight: normal; font-size: 12pt; color: #e96b56;">
 						<수강생 />
 					</p>
 				</th:block>
 				<th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
-					<p style="font-weight: bold; font-size: 12pt; color: #e96b56;">
+					<p style="font-weight: normal; font-size: 12pt; color: #e96b56;">
 						<관리자 />
 					</p>
 				</th:block>
-				<p style="font-weight: bold; font-size: 15pt;">[[${#authentication.name}]] 님</p>
+				<p style="font-weight: normal; font-size: 15pt;">[[${#authentication.name}]] 님</p>
 				<ul style="padding: 10px;">
-					<a class="semiMenuItem" style="border-bottom: 1px solid black;" href="/mypage"><li>프로필</li></a>
+					<a class="semiMenuItem" href="/mypage" style="font-weight: normal;"><li>프로필</li></a>
 					<!-- <a href="/mypage">프로필</a></li> -->
-					<a class="semiMenuItem" href="/logout"><li>로그아웃</li></a>
+					<a class="semiMenuItem" href="/logout" style="font-weight: normal;"><li>로그아웃</li></a>
 				</ul>
 			</div>
 		</div>
@@ -122,17 +121,17 @@
 							<path id="primary" d="M3,9H21M15,9V20m6,0V4a1,1,0,0,0-1-1H4A1,1,0,0,0,3,4V20a1,1,0,0,0,1,1H20A1,1,0,0,0,21,20Z" style="fill: none; stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path>
 						</svg>
 		              </span>
-		              <span class="text" style="margin-left: -12px;">관리자페이지</span>
+		              <span class="text" style="margin-left: -12px; font-weight: normal;">관리자페이지</span>
 		            </a>
 		            <ul id="ddmenu_1" class="collapse show dropdown-nav">
 			            <li>
-			              <a href="/admin/adminMain" class="active"> 회원 관리 </a>
+			              <a href="/admin/adminMain" class="active" style="font-weight: normal;"> 회원 관리 </a>
 			            </li>
 			            <li>
-			              <a href="/admin/course"> 수강과정 관리 </a>
+			              <a href="/admin/course" style="font-weight: normal;"> 수강과정 관리 </a>
 			            </li>
 			            <li>
-			              <a href="/admin/manageReport"> 신고글 관리 </a>
+			              <a href="/admin/manageReport" style="font-weight: normal;"> 신고글 관리 </a>
 			            </li>
 		            </ul>
 	       		</li>
@@ -154,23 +153,23 @@
 					    <path d="M106.7 896m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="#5F6379" />
 					</svg>
 	              </span>
-	              <span class="text" style="margin-left: -12px;">서비스 페이지</span>
+	              <span class="text" style="margin-left: -12px; font-weight: normal;">서비스 페이지</span>
 	            </a>
 	            <ul id="ddmenu_2" class="collapse show dropdown-nav">
 	              <li>
-	                <a href="/home"> 홈페이지 </a>
+	                <a href="/home" style="font-weight: normal;"> 홈페이지 </a>
 	              </li>
 	              <li>
-	                <a href="settings.html"> 수료 과정별 게시판 </a>
+	                <a href="settings.html" style="font-weight: normal;"> 수료 과정별 게시판 </a>
 	              </li>
 	              <li>
-	                <a href="settings.html"> 구인/구직 게시판 </a>
+	                <a href="settings.html" style="font-weight: normal;"> 구인/구직 게시판 </a>
 	              </li>
 	              <li>
-	                <a href="settings.html"> 정보 공유 게시판 </a>
+	                <a href="settings.html" style="font-weight: normal;"> 정보 공유 게시판 </a>
 	              </li>
 	              <li>
-	                <a href="settings.html"> 질문과 토론 게시판 </a>
+	                <a href="settings.html" style="font-weight: normal;"> 질문과 토론 게시판 </a>
 	              </li>
 	            </ul>
            </li>
@@ -215,17 +214,20 @@
 						<rect x="306.25" y="111.25" style="fill:#FFCC75;" width="40" height="267.5"/>
 					</g>
 	              </span>
-	              <span class="text">과제 </span>
+	              <span class="text" style="font-weight: normal;">과제 </span>
 	            </a>
 	            <ul id="ddmenu_4" class="collapse show dropdown-nav">
 	            	<th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
 		              <li>
-		                <a href="/admin/homework_T"> 과제 목록</a>
+		                <a href="/admin/homework_T" style="font-weight: normal;">과제 목록</a>
 		              </li>
+					  <li>
+  		                <a href="/admin/selectClass" style="font-weight: normal;">강의실 선택</a>
+  		              </li>
 		            </th:block>
 		            <th:block sec:authorize="hasAuthority('ROLE_LEARN')">
 		              <li>
-		                <a href="/all/homework_S"> 과제 목록</a>
+		                <a href="/all/homework_S" style="font-weight: normal;"> 과제 목록</a>
 		              </li>
 		            </th:block>
 	            </ul>
@@ -280,29 +282,29 @@
 						c2.392-1.939,2.004-6.271,0-7.758L353.616,149.968z"/>
 					</svg>
 	              </span>
-	              <span class="text">시험 </span>
+	              <span class="text" style="font-weight: normal;">시험 </span>
 	            </a>
 	            <ul id="ddmenu_4" class="collapse show dropdown-nav">
 	            <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
 	              <li>
-	                <a href="/teachermain"> HOME </a>
+	                <a href="/teachermain" style="font-weight: normal;"> HOME </a>
 	              </li>
 	              <li>
-	                <a href="/testlist"> 시험목록 </a>
+	                <a href="/testlist" style="font-weight: normal;"> 시험목록 </a>
 	              </li>
 	              <li>
-	                <a href="/quizlist"> 문제목록 </a>
+	                <a href="/quizlist" style="font-weight: normal;"> 문제목록 </a>
 	              </li>
 	            </th:block>
 	            <th:block sec:authorize="hasAuthority('ROLE_LEARN')">
 	              <li>
-	                <a href="/myPage"> HOME </a>
+	                <a href="/myPage" style="font-weight: normal;"> HOME </a>
 	              </li>
 	              <li>
-	                <a href="/testList2?page=1"> 시험목록 </a>
+	                <a href="/testList2?page=1" style="font-weight: normal;"> 시험목록 </a>
 	              </li>
 	              <li>
-	                <a href="#"> 과제목록 </a>
+	                <a href="#" style="font-weight: normal;"> 과제목록 </a>
 	              </li>
 	            </th:block>
 	            </ul>
@@ -327,7 +329,6 @@
 	        var currentPage = getCurrentPage();
 	        var navLinks = document.querySelectorAll('.sidebar-nav ul li a');
 	        console.log("현재 페이지: ", currentPage);
-			console.log("네비게이션", navLinks);
 	        
 	        for (var i = 0; i < navLinks.length; i++) {
             	
@@ -402,8 +403,9 @@
 			imageModal.style.display = 'block';
 		});
 		
+		// 모달창 바깥 클릭 시 닫기
 		window.addEventListener('click', function(e) {
-			console.log(e.target);
+			//console.log(e.target);
 		    if (e.target === imageModal) {
 		    	console.log("모달 꺼짐");
 		        imageModal.style.display = 'none';

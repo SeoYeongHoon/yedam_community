@@ -77,7 +77,9 @@ public class PostController {
 	            }
 	            post.setBoardFiles(boardFilesVO);
 	        }
-
+	        System.err.println("boardId: "+ boardId);
+	        System.err.println("postId: " + postVO);
+	        
 	        model.addAttribute("postList", list);
 	        model.addAttribute("totalCount", totalCount);
 	        model.addAttribute("currentPage", page);
@@ -108,8 +110,10 @@ public class PostController {
 	    
 	    // 게시글 단건 조회
 	    PostVO postVO = postService.getPostReplies(postId, boardId);
+	    
 	    // 댓글 조회
 	    List<PostReplyVO> replylist = postService.getPostReply(postId);
+	    
 	    for (PostReplyVO postreplyVO : replylist) {
 	        // 대댓글 조회
 	        List<PostCommentVO> commentlist = postService.getPostComment(postreplyVO);

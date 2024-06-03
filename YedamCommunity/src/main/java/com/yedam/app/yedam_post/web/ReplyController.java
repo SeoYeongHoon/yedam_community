@@ -29,17 +29,23 @@ public class ReplyController {
 	//--------------------------------------------
 	@PostMapping("/Reply")
 	@ResponseBody
-	public String addReply(
-			                PostReplyVO postReplyVO, 
+	public String addReply(PostReplyVO postReplyVO, 
 			               Authentication authentication) {
-		
-		
 		
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		postReplyVO.setReplyWriter(userVO.getUsername());
 		postService.createReply(postReplyVO);
 		System.out.println("postReplyVO : " + postReplyVO);
 		return "success";
+	}
+	//--------------------------------------------
+    //댓글 수정 처리
+    //--------------------------------------------
+	@PostMapping("/replyUpdate")
+	@ResponseBody
+	public  Map<String, Object> replyUpdate (PostReplyVO postreplyVO) {
+			postService.updateReply(postreplyVO);
+		return null;
 	}
 	
 	//--------------------------------------------
@@ -65,19 +71,29 @@ public class ReplyController {
     //--------------------------------------------
     @PostMapping("/Comment")
     @ResponseBody
-    public String addComment(@RequestParam("replyId") int replyId,
-    		                 @RequestParam("commentContent") String commentContent,
+    public String addComment(PostCommentVO postcommentVO,
     		                 Authentication authentication) {
-    	
-    	PostCommentVO postcommentVO = new PostCommentVO();
-		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		postcommentVO.setCommentWriter(userVO.getUsername());
-        postcommentVO.setReplyId(replyId);
-        postcommentVO.setCommentContent(commentContent);
-        postService.createComment(postcommentVO);
-        return "대댓글이 성공적으로 추가되었습니다.";
+    	System.err.println("대댓글등록 넘어와따"+postcommentVO);
+		
+		  LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+		  postcommentVO.setCommentWriter(userVO.getUsername());
+		  postService.createComment(postcommentVO);
+		 
+        
+        return null;
     }
     
+    //--------------------------------------------
+    //댓글 수정 처리
+    //--------------------------------------------
+	@PostMapping("/commentUpdate")
+	@ResponseBody
+	public  Map<String, Object> commentUpdate (PostCommentVO postcommentVO) {
+		System.err.println("댓글 정보= "+ postcommentVO);
+			postService.updateComment(postcommentVO);
+		return null;
+	}
+	
     //--------------------------------------------
     //대댓글 삭제 처리
     //-------------------------------------------- 

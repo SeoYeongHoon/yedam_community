@@ -33,7 +33,6 @@ import com.yedam.app.yedam_homework.upload.service.HomeWorkFileVO;
 import com.yedam.app.yedam_homework.upload.service.ReplyFileVO;
 import com.yedam.app.yedam_subjects.service.SubjectService;
 
-
 @Controller
 @RequestMapping("/all")
 public class HomeWorkStudentController {
@@ -97,7 +96,8 @@ public class HomeWorkStudentController {
 								   Model model,
 								   Authentication authentication) {
 			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-			model.addAttribute("userId",userVO.getuserId());
+			System.err.println("유저타입= "+userVO.getUserType());
+			model.addAttribute("userType",userVO.getUserType());
 			model.addAttribute("userName",userVO.getUsername());
 			// 과제 상세 조회
 			HomeWorkVO findVO = homeworkService.homeworkInfo(homeworkVO);
@@ -246,6 +246,7 @@ public class HomeWorkStudentController {
 			@ResponseBody
 			public String updateReplyFile(@RequestPart MultipartFile[] uploadReplyFile,
 										 @RequestParam("replyId") int replyId) {
+				System.err.println("댓글 업로드 파일 ==" + uploadReplyFile);
 				// 과제 파일 업로드
 				homeworkfileService.replyUploadFile(uploadReplyFile, replyId);
 				return null;

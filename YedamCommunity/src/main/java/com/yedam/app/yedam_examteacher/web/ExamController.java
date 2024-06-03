@@ -229,6 +229,14 @@ public class ExamController {
 		return "redirect:quizlist";
 	}
 	//--------------------------------------------
+	// 문제에 등록된 지문 수정
+	//--------------------------------------------
+	@PostMapping("answerupdate")
+	@ResponseBody
+	public Map<String, Object> answerUpdate(@RequestBody TeacherVO teacherVO){
+		return examService.answerUpdate(teacherVO);
+	}
+	//--------------------------------------------
 	// 과목 추가 - 처리
 	//--------------------------------------------
 	@PostMapping("subjectinsert")
@@ -254,7 +262,7 @@ public class ExamController {
 	public String subjectDelete(TeacherVO teacherVO) {
 		examService.subjectDelete(teacherVO);
 		return "redirect:quizlist";
-	}
+	}	
 	//--------------------------------------------
 	// 과정명에 맞는 과목명만 출력
 	//--------------------------------------------

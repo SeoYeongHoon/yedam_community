@@ -6,7 +6,6 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <form th:action="@{/}" method="post" th:object="${teacherVO}">
-<button type="button" id="1234">test</button>
 	<!-- ======= 시험 이름 입력 start ======= -->
 	<div class="input-style-1">
 		<h6 class="mb-25">시험 Title</h6>
@@ -21,13 +20,22 @@
 			th:field="*{testContent}"></textarea>
 	</div>
 	<!-- ======= 시험 안내사항 입력 end ======= -->
-
+	<br>
+	<!-- ======= 시험 시작일 입력 start ======= -->
+	<div>
+		<h6 class="mb-25">시험 시작일</h6>
+		<input type="date" placeholder="시간입력(분)" style="border: 1px solid"
+			name="testDate" id="testDate">
+	</div>
+	<!-- ======= 시험 시작일 입력 end ======= -->
+	<br>
 	<!-- ======= 시험 제한시간 입력 start ======= -->
 	<div>
 		<h6 class="mb-25">제한 시간</h6>
 		<input type="text" placeholder="시간입력(분)" style="border: 1px solid"
 			name="testTime" id="testTime">
 	</div>
+	<br>
 	<div style="position:relative; top:10px">		
 		<h6 class="mb-25">합격 점수</h6>
 		<input type="text" placeholder="합격점수 입력" style="border: 1px solid"
@@ -72,6 +80,7 @@
 <script>
 var tName = '';
 var tContent = '';
+var tDate = '';
 var tTIme = 0;
 var userId = 0;
 var passScore = 0;
@@ -82,6 +91,11 @@ var quizId = window.localStorage.getItem('quizId');
 var quizScore = window.localStorage.getItem('quizScore');
 var curriculumId = window.localStorage.getItem('curriculumId');
 var subName = window.localStorage.getItem('subjectName');
+var subjectName = window.localStorage.getItem('qSubjectName');
+
+//--------------------------------------------
+// input태그에 값 입력시 변수에 각각의 value값들 저장
+//--------------------------------------------
 $('#testName').on('change', function() {
 	tName = $('#testName').val();
 	//window.localStorage.setItem('testName', tName);
@@ -96,6 +110,9 @@ $('#testTime').on('change', function() {
 	tTime = $('#testTime').val();
 	//window.localStorage.setItem('testTime', tTime);
 });
+$('#testDate').on('change', function(){
+	tDate = $('#testDate').val();
+})
 
 // localstorage에 저장된 복수의 값을 배열 타입으로 변환
 var arryQContent = JSON.parse(qContent); // 시험 문제가 모여있는 배열	
@@ -147,7 +164,9 @@ $('#addBtn').on('click', function() {
 		"testTime" : tTime,
 		"testName" : tName,
 		"classId" : classId,
-		"passScore" : passScore
+		"passScore" : passScore,
+		"subjectName" : subjectName,
+		"testDate" : tDate
 	};
 	$.ajax({
 		url : "testinsert",
@@ -157,7 +176,6 @@ $('#addBtn').on('click', function() {
 		
 		success : function(data) {
 			testId = data;
-			alert("새로 만들어진 testId값 : "+testId);
 		},
 		error : function(err) {
 			alert('시험 등록 실패');
@@ -186,8 +204,7 @@ $('#addBtn').on('click', function() {
 		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
 			
 		success : function(data){
-			alert("testId값 in quizbox : "+testId);
-			alert('quizbox 성공');
+			
 		},
 		error : function(err){
 			alert('시험 등록 실패(문제 등록 실패)');
@@ -210,7 +227,7 @@ $('#addBtn').on('click', function() {
 		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
 		
 		success : function(data){
-			alert('users 성공');
+			
 		},
 		error : function(err){
 			alert('시험 등록 실패(시험 대상자 등록 실패)');

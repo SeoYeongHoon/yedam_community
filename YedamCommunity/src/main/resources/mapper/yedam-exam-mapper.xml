@@ -17,9 +17,7 @@
 	                   subject_name,
 	                   c.class_id           				  
 	             FROM tests t JOIN curriculum c
-	                               ON t.curriculum_id = c.curriculum_id
-	                          JOIN subjects s
-                                   ON c.curriculum_id = s.curriculum_id) b                     
+	                               ON t.curriculum_id = c.curriculum_id) b                     
 	             WHERE (LOWER(test_name) LIKE '%' || LOWER(#{searchQuery}) || '%')
 	             <if test=" classId!=0 ">
 
@@ -56,15 +54,17 @@
 						  , test_date
 						  , test_name
 						  , class_id
-						  , pass_score)
+						  , pass_score
+						  , subject_name)
 		VALUES (test_id_seq.nextval
 				, #{curriculumId}
 				, #{testContent}
 				, #{testTime}
-				, sysdate
+				, #{testDate}
 				, #{testName}
 				, #{classId}
-				, #{passScore})				  
+				, #{passScore}
+				, #{subjectName})				  
 	</insert>
 	<!-- 시험에 출제되는 문제 등록 -->
 	<insert id="insertQuizbox" parameterType="TeacherVO">
@@ -224,6 +224,72 @@
 			  , #{subjectId}
 			  , #{quizAnswer})
 	</insert>
+	<update id="updateAnswer" parameterType="TeacherVO" statementType="CALLABLE">
+		<!-- CREATE OR REPLACE PROCEDURE Update_answers
+			( v_tContent IN answers.text_content%TYPE,
+			  v_tContent2 IN answers.text_content%TYPE,
+			  v_tContent3 IN answers.text_content%TYPE,
+			  v_tContent4 IN answers.text_content%TYPE,
+			  v_tContent5 IN answers.text_content%TYPE,
+			  v_quizId IN answers.quiz_id%TYPE,
+			  v_qContent  IN   quizes.quiz_content%TYPE,
+			  v_qSolution  IN   quizes.quiz_solution%TYPE)
+		
+		IS
+			v_answers answers%ROWTYPE ;
+			
+		BEGIN
+		    UPDATE answers
+		    SET text_content = v_tContent,
+		        quiz_answer = v_tContent
+		    WHERE quiz_id = v_quizId
+		    AND example_num = 1;
+		    
+		    UPDATE answers
+		    SET text_content = v_tContent2
+		    WHERE quiz_id = v_quizId
+		    AND example_num = 2;
+		    
+		    UPDATE answers
+		    SET text_content = v_tContent3
+		    WHERE quiz_id = v_quizId
+		    AND example_num = 3;
+		    
+		    UPDATE answers
+		    SET text_content = v_tContent4
+		    WHERE quiz_id = v_quizId
+		    AND example_num = 4;
+		    
+		    UPDATE answers
+		    SET text_content = v_tContent5
+		    WHERE quiz_id = v_quizId
+		    AND example_num = 5;
+		    
+		    UPDATE quizes
+		    SET quiz_content = v_qContent
+		    WHERE quiz_id = v_quizId;
+		    
+		    UPDATE quizes
+		    SET quiz_solution = v_qSolution
+		    WHERE quiz_id = v_quizId;
+		    
+		    COMMIT;
+
+		END ;
+		/ -->
+		{ CALL 
+			Update_answers(
+				#{textContent,	mode=IN, jdbcType=VARCHAR}, 
+				#{textContent2, mode=IN, jdbcType=VARCHAR}, 
+				#{textContent3,	mode=IN, jdbcType=VARCHAR}, 
+				#{textContent4,	mode=IN, jdbcType=VARCHAR}, 
+				#{textContent5,	mode=IN, jdbcType=VARCHAR}, 
+				#{quizId,		mode=IN, jdbcType=INTEGER},
+				#{quizContent,		mode=IN, jdbcType=VARCHAR},
+				#{quizSolution,		mode=IN, jdbcType=VARCHAR}
+			) 
+		}
+	</update>
 	<!-- 문제저장소에 문제 출력 -->
 	<!-- <select id="filterQuiz" resultType="TeacherVO" parameterType="String">
 		SELECT quiz_id
@@ -274,8 +340,15 @@
 		WHERE quiz_id = #{quizId}
 		ORDER BY example_num      
 	</select>
-	<select id="quizAnswer" resultType="TeacherVO" parameterType="int">
+	<!-- <select id="quizAnswer" resultType="TeacherVO" parameterType="int">
 		SELECT example_num||'. '||text_content as text_content
+		FROM answers
+		WHERE quiz_id = #{qId}
+		ORDER BY example_num    
+	</select> -->
+	<select id="quizAnswer" resultType="TeacherVO" parameterType="int">
+		SELECT example_num
+			 , text_content
 		FROM answers
 		WHERE quiz_id = #{qId}
 		ORDER BY example_num    
@@ -369,11 +442,8 @@
 	<select id="subjectAvg" resultType="TeacherVO" parameterType="int">
 		SELECT s.subject_name
 		     , c.class_id 
-		     , (select AVG(quiz_score)
-		        from quizbox q JOIN exam_results e
-		                         ON q.quizbox_id = e.quizbox_id
-		                       JOIN test_results t
-		                         ON t.result_id = e.result_id) AS subject_avg
+		     , (select AVG(result_score)
+		        from exam_results) AS subject_avg
 		FROM subjects s JOIN curriculum c 
 		                  ON s.curriculum_id = c.curriculum_id
 		WHERE class_id = #{classId}

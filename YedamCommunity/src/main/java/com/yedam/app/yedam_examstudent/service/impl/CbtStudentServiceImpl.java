@@ -11,6 +11,7 @@ import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
 import com.yedam.app.yedam_examstudent.service.TestVO;
+import com.yedam.app.yedam_subjects.service.SubjectsVO;
 
 @Service
 public class CbtStudentServiceImpl implements CbtStudentService{
@@ -40,6 +41,13 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	@Override
 	public int isTestReexam(TestVO testVO) {
 		return cbtStudentMapper.isTestReexam(testVO);
+	}
+	//ㅡㅡㅡㅡ
+	//시험과목
+	//ㅡㅡㅡㅡ
+	@Override
+	public List<SubjectsVO> testSub(SubjectsVO subjectsVO) {
+		return cbtStudentMapper.selectTestSub(subjectsVO);
 	}
 	//ㅡㅡㅡㅡ
 	//시험목록
@@ -129,14 +137,6 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	}
 	
 	
-	
-	
-	
-	
-	
 
-
-
-	
 
 }

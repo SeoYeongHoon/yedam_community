@@ -2,6 +2,8 @@ package com.yedam.app.yedam_examstudent.service;
 
 import java.util.List;
 
+import com.yedam.app.yedam_subjects.service.SubjectsVO;
+
 
 public interface CbtStudentService {
 	
@@ -17,6 +19,10 @@ public interface CbtStudentService {
 	//재시험유무
 	//ㅡㅡㅡㅡㅡ
 	public int isTestReexam(TestVO testVO);
+	//ㅡㅡㅡㅡ
+	//시험과목
+	//ㅡㅡㅡㅡ
+	public List<SubjectsVO> testSub(SubjectsVO subjectsVO);
 	//ㅡㅡㅡㅡ
 	//시험목록
 	//ㅡㅡㅡㅡ
