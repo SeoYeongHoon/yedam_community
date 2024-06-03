@@ -3,44 +3,44 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-		tr img {
-			width: 80px;
-		    max-width: 100%;
-		    overflow: hidden;
-		    margin-right: 15px;
-		}
-		
-		.center {
-		  text-align: center;
-		  width: 60%;
-		  margin: auto;
-		}
-		
-		.testPaging {
-		  display: inline-block;
-		}
-		
-		.testPaging a {
-		  color: black;
-		  float: left;
-		  padding: 8px 16px;
-		  text-decoration: none;
-		  transition: background-color .3s;
-		  /*border: 1px solid #ddd;*/
-		  /*margin: 0 4px;*/
-		}
-		
-		.testPaging a.active {
-		  background-color: #4CAF50;
-		  color: white;
-		  border: 1px solid #4CAF50;
-		}
-		
-		.testPaging a:hover:not(.active) {
-			background-color: #ddd;
-		}
+tr img {
+	width: 80px;
+    max-width: 100%;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.center {
+  text-align: center;
+  width: 60%;
+  margin: auto;
+}
+
+.testPaging {
+  display: inline-block;
+}
+
+.testPaging a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  /*border: 1px solid #ddd;*/
+  /*margin: 0 4px;*/
+}
+
+.testPaging a.active {
+  background-color: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.testPaging a:hover:not(.active) {
+	background-color: #ddd;
+}
 </style>
 <div class="row">
 	<div class="col-12">
@@ -80,9 +80,6 @@
 				<thead>
 					<tr>
 						<th>
-							<h6>#</h6>
-						</th>
-						<th>
 							<h6>시험명</h6>
 						</th>
 						<th>
@@ -116,6 +113,7 @@
 		</div>
 	</div>
 </div>
+             
 <script>
 $(document).ready(function() {
 	$('#classSelect').off('change').on('change', function() {
@@ -233,7 +231,6 @@ function updateList(tests){
 		
 		let temp = `
 			<tr>
-				<td ><i class="mdi mdi-script-text-play-outline"></i></td>
 				<td class="min-width">${tName} [과목 : ${sName}]</td>
 				<td class="min-width">${classId}강의실</td>
 				<td class="min-width tDate">${tDate}</td>
