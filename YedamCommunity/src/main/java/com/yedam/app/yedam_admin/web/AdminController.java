@@ -35,6 +35,7 @@ import com.yedam.app.yedam_post.service.ReportVO;
 import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
+import com.yedam.app.yedam_user.upload.service.ProfileImageService;
 
 @Controller
 @EnableScheduling
@@ -49,6 +50,9 @@ public class AdminController {
 	
 	@Autowired
 	CurriculumService curriculumService;
+	
+	@Autowired
+	ProfileImageService profileImageService;
 	
 	//ㅡㅡㅡㅡ
 	// 과정 기간 끝나면 수강생 -> 수료생 자동 변경
@@ -181,9 +185,25 @@ public class AdminController {
 	
 //	과정 등록
 	@PostMapping("/course")
-	public String addCourse(CurriculumVO curriculumVO, Model model) {
+	public String addCourse(MultipartFile[] uploadFiles, CurriculumVO curriculumVO, Model model) {
+		System.err.println("커리큘럼 VO = "+curriculumVO);
+		
 	    try {
-	        curriculumService.insertCurriculum(curriculumVO);
+	      
+	    	System.out.println("데이터 입력");
+	        List<String> imageList = profileImageService.uploadFile(uploadFiles);
+            if (!imageList.isEmpty()) {
+                String imagePath = imageList.get(0);
+                curriculumVO.setProfileImageLocation(imagePath);
+                MultipartFile profileImage = uploadFiles[0];
+                curriculumVO.setProfileImageName(profileImage.getOriginalFilename());
+                curriculumVO.setProfileImageSize((int) profileImage.getSize());
+                curriculumVO.setProfileImageExt(profileImage.getOriginalFilename().substring(profileImage.getOriginalFilename().lastIndexOf(".") + 1));
+                curriculumVO.setDownloadLocation(imagePath);
+                System.out.println("데이터 입력 완료");
+            }
+            curriculumService.insertCurriculum(curriculumVO);
+	        
 	        model.addAttribute("message", "과정이 성공적으로 등록되었습니다.");
 	        return "redirect:/admin/course";
 	    } catch (Exception e) {
