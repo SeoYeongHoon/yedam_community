@@ -78,7 +78,7 @@
 		<div style="text-align: center">
 			<button class="tresult_1 tresult_3 main-btn dark-btn-outline square-btn btn-hover"
 					th:onclick="|location.href='@{/all/testList2(page=1)}'|">목록</button>
-			<form class="tresult_1 tresult_3" th:action="/all/testResult2" method="get">
+			<form class="tresult_1 tresult_3" action="/all/testResult2" method="get">
 				<input type="hidden" name="testId" th:value="${testResult.testId}">
 				<input type="hidden" name="userId" th:value="${logId}">
 				<button type="submit" class="main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
@@ -105,6 +105,12 @@
 				<span class="tresult_4" th:classappend="${quiz.exampleNum == 3 ? 'true' : (quiz.exampleNum != 3 && quiz.testAnswer == 3)? 'false':_}">③ [[${quiz.three}]]</span>
 				<span class="tresult_4" th:classappend="${quiz.exampleNum == 4 ? 'true' : (quiz.exampleNum != 4 && quiz.testAnswer == 4)? 'false':_}">④ [[${quiz.four}]]</span>
 				<span class="tresult_4" th:classappend="${quiz.exampleNum == 5 ? 'true' : (quiz.exampleNum != 5 && quiz.testAnswer == 5)? 'false':_}">⑤ [[${quiz.five}]]</span>
+			</div>
+		</div>
+		<div th:unless="${quiz.isCorrect == 0}">
+			<th:block th:with="answerCnt=${answerCnt + 1}"></th:block>
+			<div th:if="${answerCnt == #lists.size(quizList)}">
+				<h1 style="text-align: center;">시험을 모두 맞혔습니다!</h1>
 			</div>
 		</div>
 	</th:block>
