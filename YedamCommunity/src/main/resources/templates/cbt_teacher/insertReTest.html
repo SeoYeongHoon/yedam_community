@@ -20,7 +20,15 @@
 			th:field="*{testContent}"></textarea>
 	</div>
 	<!-- ======= 시험 안내사항 입력 start ======= -->
-
+	<br>
+	<!-- ======= 시험 시작일 입력 start ======= -->
+	<div>
+		<h6 class="mb-25">시험 시작일</h6>
+		<input type="date" placeholder="시간입력(분)" style="border: 1px solid"
+			name="testDate" id="testDate">
+	</div>
+	<!-- ======= 시험 시작일 입력 end ======= -->
+	<br>
 	<!-- ======= 시험 제한시간 입력 start ======= -->
 	<div>
 		<h6 class="mb-25">제한 시간</h6>
@@ -58,13 +66,13 @@
 		<li>
 			<button type="button"
 				class="main-btn primary-btn square-btn btn-hover" id="addBtn"
-				th:onclick="|location.href='@{/testlist}'|">
+				th:onclick="|location.href='@{/admin/testlist}'|">
 				시험 출제하기</button>
 		</li>
 		<li>
 			<button type="button"
 				class="main-btn deactive-btn square-btn btn-hover"
-				th:onclick="|location.href='@{/quizlist}'|">돌아가기</button>
+				th:onclick="|location.href='@{/admin/quizlist}'|">돌아가기</button>
 		</li>
 	</ul>
 </form>
@@ -72,6 +80,7 @@
 <script>
 var tName = '';
 var tContent = '';
+var tDate = '';
 var tTIme = 0;
 var userId = 0;
 var passScore = 0;
@@ -83,6 +92,7 @@ var quizId = window.localStorage.getItem('quizId');
 var quizScore = window.localStorage.getItem('quizScore');
 var curriculumId = window.localStorage.getItem('reCurriculumId');
 var subName = window.localStorage.getItem('subjectName');
+var subjectName = window.localStorage.getItem('qSubjectName');
 $('#testName').on('change', function() {
 	tName = $('#testName').val();
 	//window.localStorage.setItem('testName', tName);
@@ -97,6 +107,9 @@ $('#testTime').on('change', function() {
 	tTime = $('#testTime').val();
 	//window.localStorage.setItem('testTime', tTime);
 });
+$('#testDate').on('change', function(){
+	tDate = $('#testDate').val();
+})
 console.log("classId 값 : "+classId)
 console.log("currId 값 : "+curriculumId)
 //--------------------------------------------
@@ -181,12 +194,14 @@ $('#addBtn').on('click', function() {
 	//--------------------------------------------
 	passScore = $('#passScore').val();
 	let obj = {
-		"curriculumId" : curriculumId,
-		"testContent" : tContent,
-		"testTime" : tTime,
-		"testName" : tName,
-		"classId" : classId,
-		"passScore" : passScore
+			"curriculumId" : curriculumId,
+			"testContent" : tContent,
+			"testTime" : tTime,
+			"testName" : tName,
+			"classId" : classId,
+			"passScore" : passScore,
+			"subjectName" : subjectName,
+			"testDate" : tDate
 	};
 	
 	$.ajax({
@@ -197,7 +212,6 @@ $('#addBtn').on('click', function() {
 		
 		success : function(data) {
 			testId = data;
-			console.log(data);
 			
 			/* if(data != 'true' && data == null){
 				return;

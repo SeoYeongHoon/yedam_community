@@ -121,7 +121,7 @@ function classInfo(classId){
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				$('.classUser').append($('<p class="testInfoItem" />').text((idx+1)+'. '+item.name).attr("onclick","location.href='/userTestInfo?userId="+item.userId+"'"));
+				$('.classUser').append($('<p class="testInfoItem" />').text((idx+1)+'. '+item.name).attr("onclick","location.href='/admin/userTestInfo?userId="+item.userId+"'"));
 			})
 		},
 		error : function(err){
@@ -170,7 +170,7 @@ function classInfo(classId){
 
 				    return [year, month, day].join('/');
 				} // 날짜 포멧 변환 end
-				$('.test').append($('<p class="testInfoItem" />').text((idx+1) + '. ' + item.testName + '  [' + formatDate(item.testDate) + ']').attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
+				$('.test').append($('<p class="testInfoItem" />').text((idx+1) + '. ' + item.testName + '  [' + formatDate(item.testDate) + ']').attr("onclick","location.href='/admin/testinfo?testId="+item.testId+"'"));
 			})
 		},
 		error : function(err){
@@ -252,7 +252,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				$('.classUser').append($('<p class="testInfoItem" />').text((idx+1)+'. '+item.name).attr("onclick","location.href='/userTestInfo?userId="+item.userId+"'"));
+				$('.classUser').append($('<p class="testInfoItem" />').text((idx+1)+'. '+item.name).attr("onclick","location.href='/admin/userTestInfo?userId="+item.userId+"'"));
 			})
 		},
 		error : function(err){
@@ -289,7 +289,7 @@ $('#allClass').on('click','.classNum', function(classId) {
 				
 		success : function(data){
 			data.forEach((item,idx) => {
-				$('.test').append($('<p class="testInfoItem" />').text((idx+1) + '. ' + item.testName + '  [' + formatDate(item.testDate)+']').attr("onclick","location.href='/testinfo?testId="+item.testId+"'"));
+				$('.test').append($('<p class="testInfoItem" />').text((idx+1) + '. ' + item.testName + '  [' + formatDate(item.testDate)+']').attr("onclick","location.href='/admin/testinfo?testId="+item.testId+"'"));
 			})
 		},
 		error : function(err){

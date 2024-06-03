@@ -48,7 +48,7 @@ tr img {
 	<button type="button" id="subBtn" style="margin-bottom: 10px;"
 		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
-		<li><a href="/admin/selectClassExam" id="testInsert"
+		<li><a id="testInsert"
 			class="main-btn danger-btn-light btn-hover">다음</a></li>
 		<li><a href="quizinsert"
 			class="main-btn primary-btn-light btn-hover">새문제</a></li>
@@ -152,7 +152,7 @@ tr img {
 			</div> <!-- modal-body end -->
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='errBtn' type="button" class="btn btn-primary"
+				<button id='' type="button" class="btn btn-primary"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div> <!-- modal-content end -->
@@ -178,7 +178,7 @@ tr img {
 			</div>
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='errBtn' type="button" class="btn btn-primary"
+				<button id='' type="button" class="btn btn-primary"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div>
@@ -202,7 +202,7 @@ tr img {
 			</div>
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='okBtn' type="button" class="btn btn-primary close"
+				<button id='' type="button" class="btn btn-primary close"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div>
@@ -226,7 +226,7 @@ tr img {
 			</div>
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='okBtn' type="button" class="btn btn-primary close"
+				<button id='' type="button" class="btn btn-primary close"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div>
@@ -250,7 +250,7 @@ tr img {
 			</div>
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='errBtn' type="button" class="btn btn-primary"
+				<button id='' type="button" class="btn btn-primary"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div>
@@ -274,7 +274,7 @@ tr img {
 			</div>
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='errBtn' type="button" class="btn btn-primary"
+				<button id='' type="button" class="btn btn-primary"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div>
@@ -298,7 +298,7 @@ tr img {
 			</div>
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='okBtn' type="button" class="btn btn-primary close"
+				<button id='scoreOkBtn' type="button" class="btn btn-primary close"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div>
@@ -403,15 +403,6 @@ function quizContentList(page, subjectName){
 					$(this).parent().parent().parent().attr("style", "")
 				}
 			})
-			let sum = 0;
-			/* 기능 구현해야함
-			for(let i=0; i<$('.box').length; i++){
-				$('#qScore'+i).on('change', function(e) {
-			    	console.log($('#qScore'+i).val())
-			    	sum += parseInt($('#qScore'+i).val())
-			    	$('#total').val(sum)
-			    });
-			} */
 	    	 
 			//--------------------------------------------	
 			// 단건 조회 문제 불러오는(자세히보기 버튼) 함수 (ajax 포함) 시작
@@ -618,26 +609,11 @@ $('.form-check').on('click', '.checkbox', function(){
 //--------------------------------------------
 // 모달창 작업
 //--------------------------------------------
-// 모달창 (과목 추가/삭제)
-//--------------------------------------------
-const modal = document.getElementById("modalWrap"); // 자세히보기 모달창 요소 가져오기
-//--------------------------------------------
 // 과목 추가/삭제 모달창 띄우기
 //--------------------------------------------
 $('#subBtn').on('click', function(e){
 	$('#modalWrap2').modal('show');
 });
-//--------------------------------------------
-// esc누르면 모달창 닫기
-//--------------------------------------------
-window.addEventListener("keyup", e => {
-    if(modal.style.display === "flex" && e.key === "Escape") {
-    	modal.style.display = "none"
-    }
-});
-//--------------------------------------------
-// 모달창 기능 종료
-//--------------------------------------------
 
 //--------------------------------------------
 // 과목명 필터링해서 문제 출력
@@ -658,12 +634,13 @@ $('#subject').on('change', function(){
 //--------------------------------------------
 // 시험출제 버튼 누르면 선택된 문제들이 localstorage에 저장되고 페이지가 넘어감.
 //--------------------------------------------
+var sum = 0;
 $('#testInsert').on('click', function(){
+	sum = 0;
 	storageContent = [];
 	storageScore = [];
 	storageQId = [];
 	storageSubName = [];
-	let sum = 0;
 	for(let i=0; i<$('.box').length; i++){
 		if($('#qContent'+i).is(":checked")){
 			storageContent.push($('#qContent'+i).val());
@@ -671,27 +648,23 @@ $('#testInsert').on('click', function(){
 			storageQId.push($('#qId'+i).val());
 			storageSubName.push($('#sName'+i).val());
 			
+			if($('#qScore'+i).val() == ""){
+				$('#qScore'+i).val('0');
+			}
 			sum += parseInt($('#qScore'+i).val());
-			$('#total').val($('#qScore'+i).val());
-		}
-	}
-	// 배점 총합이 0점일때 NaN 뜨는거 0으로 변경.
-	if(isNaN(sum)){
-		sum = 0;
-	}
+		} // if종료
+	} // for종료
+	$('#total').val(sum);
+	
 	// 문제를 선택(체크) 하지 않은 경우 알람창
 	if($('input[name="select"]:checked').length == 0){
-		//alert('문제가 선택되지 않았습니다.\n문제를 선택해주세요.')
 		$('#quizChkbox').modal('show');
 		return false;
 	}
 	// 배점의 총합이 100이 됐는지 체크
 	if(sum == 100){
-		//alert('배점의 합이 100점입니다.\n다음으로 넘어갑니다.')
 		$('#scoreOk').modal('show');
-		
 	} else {
-		//alert('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum)
 		$('#totalScore').text('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum);
 		$('#scoreFail').modal('show');
 		return false;
@@ -762,9 +735,9 @@ let reCurriculumId = window.localStorage.getItem('reCurriculumId')
 
 if(reCurriculumId == null || reCurriculumId == ""){
 	console.log("reCurriculumId 값이 없다 : " + reCurriculumId)
-	$('#testInsert').attr('href', 'admin/selectClassExam')
+	$('#scoreOkBtn').attr('onclick', "location.href='/admin/selectClassExam'")
 } else {
-	$('#testInsert').attr('href', 'retestinsert')
+	$('#scoreOkBtn').attr('onclick', "location.href='/admin/retestinsert'")
 };	
 //--------------------------------------------
 // 문제 삭제 기능
