@@ -35,7 +35,11 @@
 				  		  , curriculum_end_date
 				  		  , is_complete
 				  		  , class_id
-				  		  , curriculum_img
+				  		  , profile_image_name
+						  , profile_image_size
+						  , profile_image_location
+						  , download_location
+						  , profile_image_ext
 				  			)
 	VALUES (
 		curriculum_id_seq.NEXTVAL
@@ -44,7 +48,11 @@
 	  , #{curriculumEndDate}
 	  , 2
 	  , #{classId}
-	  , #{curriculumImg}
+	  , #{profileImageName}
+	  , #{profileImageSize}
+	  , #{profileImageLocation}
+	  , #{downloadLocation}
+	  , #{profileImageExt}
 	)			  			
   
   </insert>
