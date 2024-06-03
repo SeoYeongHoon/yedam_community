@@ -44,7 +44,7 @@
 	<!-- end col -->
 	
 	<div align="right" class="col-12">
-		<button type="button" id="reTest" class="tlist_1 status-btn close-btn" onclick="location.href='quizlist'">재시험 출제</button>
+		<button type="button" id="reTest" class="tlist_1 status-btn close-btn" onclick="location.href='/admin/quizlist'">재시험 출제</button>
 	</div>
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 		<div class="card-style-3 mb-30">
@@ -86,13 +86,13 @@ function userList(testId){
 				if(item.isReexam == 1){
 					//item.isReexam = '재시험 X';
 					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'));
-					$('#passFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
+					$('#passFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
 					
 				} else {
 					//item.isReexam = '재시험 O';
 					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'),
 									      $('<input type="hidden">').attr({value : item.userId, id : "u"+idx}));
-					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
+					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
 					console.log("input태그 val값" + $('#u'+idx).val());
 					reUserId.push($('#u'+idx).val());
 				}
