@@ -39,10 +39,6 @@ public class CbtStudentController {
 	@Autowired
 	CbtStudentService cbtStudentService;
 	
-//	@Scheduled(cron = "0 0 0 * * *")
-//	public void schedule() {
-//		System.out.println(1)
-//	}
 	
 	//ㅡㅡㅡㅡ
 	//시험전체
@@ -116,8 +112,10 @@ public class CbtStudentController {
 		//세션값
 		//ㅡㅡㅡ
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
-		System.out.println(filterData);
-		if(filterData.equals("all") || filterData.equals("")) {
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//옵션 및 검색 필터링
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		if(filterData.equals("all") || filterData.equals("")) { //과목이 전체거나 검색창이 공백인 경우
 			testVO.setfilterData("");
 			testVO.setType("");
 		}
@@ -167,7 +165,9 @@ public class CbtStudentController {
 		TestVO info = cbtStudentService.testDetail(testVO); //시험상세
 		List<QuizboxVO> list = cbtStudentService.testQuizRand(quizboxVO); //랜덤문제
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
-		//int logid = 14;
+		//ㅡㅡㅡㅡㅡ
+		//랜덤 문제
+		//ㅡㅡㅡㅡㅡ
 		int quizCnt = list.size(); //문제개수
 		int[] randQuizId = new int[quizCnt]; //랜덤 문제 번호 배열
 		int[] randRn = new int[quizCnt]; //랜덤 문제 일련번호 배열
@@ -179,14 +179,17 @@ public class CbtStudentController {
 			randQuizScore[i] = quiz.getQuizScore(); //랜덤으로 생성된 문제의 배점 저장
 			i++;
 		}
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		//시험결과 유무
+		//ㅡㅡㅡㅡㅡㅡㅡ
 		int isResult = 0;
-		int dateComp = 0;
 		testVO.setUserId(userVO.getuserId());
 		testVO.setTestId(info.getTestId());
 		isResult = (cbtStudentService.isTestResult(testVO));
-		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-		//마감날짜 23:59:59 지난 경우 미응시 처리
-		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//ㅡㅡㅡㅡㅡㅡ
+		//미응시 처리
+		//ㅡㅡㅡㅡㅡㅡ
+		int dateComp = 0;
 		Calendar cal = Calendar.getInstance(); //캘린더 객체 생성
 		cal.setTime(info.getTestDate()); //시간 설정
 		cal.set(Calendar.HOUR_OF_DAY , 23); //시간 지정
@@ -223,8 +226,14 @@ public class CbtStudentController {
 			                Model model,
 			                Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		//시험 응시정보
+		//ㅡㅡㅡㅡㅡㅡㅡ
 		testVO.setUserId(userVO.getuserId());
 		TestVO info = cbtStudentService.testStart(testVO); //응시정보
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		//랜덤 시험문제
+		//ㅡㅡㅡㅡㅡㅡㅡ
 		quizboxVO.setQuizId(randQuizId[0]);
 		quizboxVO.setTestId(info.getTestId());
 		quizboxVO.setSubjectId(info.getSubjectId());
@@ -271,10 +280,16 @@ public class CbtStudentController {
 							Authentication authentication) {
 		boolean result = false;
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//[1]시험결과 등록
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		cbtStudentService.testSubmit2(examResultVO); //[1]시험결과 정보등록
 		for(int i = 0; i < randRn.length; i++) { //전체 문제 개수만큼 반복
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+			//[2]시험결과 답안등록
+			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 			testResultVO.setTestAnswer(submitAnswer[i]);
 			testResultVO.setQuizId(randQuizId[i]);
 			testResultVO.setTestId(testId);
@@ -282,6 +297,9 @@ public class CbtStudentController {
 			testResultVO.setResultId(examResultVO.getResultId());
 			cbtStudentService.testSubmit(testResultVO); //[2]문제 등록
 		}
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//[3]시험결과 총점등록
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		result = cbtStudentService.testSubmit3(examResultVO); //[3]총점 업데이트
 		return result;
 	}
@@ -300,18 +318,26 @@ public class CbtStudentController {
 			                 Model model,
 			                 Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		//시험결과 정보
+		//ㅡㅡㅡㅡㅡㅡㅡ
 		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//시혐결과 문제정보
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		List<QuizboxVO> list = new ArrayList<>();
 		quizboxVO.setUserId(userVO.getuserId());
 		quizboxVO.setTestId(testId);
 		list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
+		int answerCnt = 0;
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("testMin", min); //응시시간 분
 		model.addAttribute("testSec", sec); //응시시간 초
 		model.addAttribute("quizList", list); //시험결과 문제+보기 정보
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
+		model.addAttribute("answerCnt", answerCnt); //맞힌 개수 구하기 위한 임의 변수
 		return "cbt_student/testResult";
 	}
 	
@@ -326,15 +352,24 @@ public class CbtStudentController {
 							  Model model,
 							  Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		//시험결과 정보
+		//ㅡㅡㅡㅡㅡㅡㅡ
 		examResultVO.setUserId(userVO.getuserId());
 		examResultVO.setTestId(testId);
 		ExamResultVO info = cbtStudentService.testResult(examResultVO);
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//시험결과 문제정보
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		List<QuizboxVO> list = new ArrayList<>();
-		int trueCnt = 0;
-		int falseCnt = 0;
 		quizboxVO.setUserId(userVO.getuserId());
 		quizboxVO.setTestId(testId);
 		list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//맞힌개수 틀린개수
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		int trueCnt = 0;
+		int falseCnt = 0;
 		for(int i = 0; i < list.size(); i++) {
 			if(list.get(i).getIsCorrect() == 1) {
 				trueCnt++;
@@ -343,7 +378,6 @@ public class CbtStudentController {
 				falseCnt++;
 			}
 		}
-		System.out.println();
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("quizList", list); //시험결과 문제+보기 정보
 		model.addAttribute("trueCnt", trueCnt); //맞은개수
