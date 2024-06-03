@@ -99,7 +99,7 @@ $('#updateBtn').on('click', updateAjaxJq);
 var testIdInfo = $('#testIdInfo').val();
 
 $('#backToTest').on('click', () => {
-	location.href = "/testinfo?testId=" + testIdInfo;
+	location.href = "/admin/testinfo?testId=" + testIdInfo;
 })
 
 function updateAjaxJq(event){
@@ -119,7 +119,7 @@ function updateAjaxJq(event){
 	.done(result =>{
 		if(result != null){
 			alert('피드백이 등록(수정)되었습니다.');
-			location.href="/testinfo?testId=" + testIdInfo;
+			location.href="/admin/testinfo?testId=" + testIdInfo;
 		}else{
 			alert('등록(수정)되지 않았습니다.\n확인해주세요.');
 		}
