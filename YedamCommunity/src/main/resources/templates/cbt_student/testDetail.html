@@ -54,12 +54,12 @@
 		<div style="text-align: center">
 			<th:block th:if="${isResult == 0 && dateComp == 1}">
 				<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
-						th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
+						th:onclick="|location.href='@{/all/testList2(page=1)}'|">목록</button>
 			</th:block>
 			<th:block th:if="${isResult == 0 && dateComp == 0}">
 				<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
-						th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
-				<form class="tdetail_1" action="testStart" method="post">
+						th:onclick="|location.href='@{/all/testList2(page=1)}'|">목록</button>
+				<form class="tdetail_1" action="/all/testStart" method="post">
 					<input type="hidden" name="page" th:value="1">
 					<input type="hidden" name="testId" th:value="${testDetail.testId}">
 					<input type="hidden" name="subjectId" th:value="${testDetail.subjectId}">
@@ -77,8 +77,8 @@
 			</th:block>
 			<th:block th:if="${isResult == 1}">
 				<button class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover"
-						th:onclick="|location.href='@{/testList2(page=1)}'|">목록</button>
-				<form class="tdetail_1" action="testResult2" method="get">
+						th:onclick="|location.href='@{/all/testList2(page=1)}'|">목록</button>
+				<form class="tdetail_1" action="/all/testResult2" method="get">
 					<input type="hidden" name="testId" th:value="${testDetail.testId}">
 					<input type="hidden" name="userId" th:value="${logId}">
 					<button type="submit" class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover">문제풀이</button>
