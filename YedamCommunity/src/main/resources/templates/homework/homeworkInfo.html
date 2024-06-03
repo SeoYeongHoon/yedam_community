@@ -190,30 +190,30 @@ function autoResize(textarea) {
 			readonly>-->
 
 		</div>
-		<div><p>전체 댓글 12개</p></div>
 	</div>
 	
 	<hr>
+	
+	<form name="insertReply" id="addReply" method="post"
+		th:object="${homeworkList}" enctype="multipart/form-data">
+		<input id="targetId" type="hidden" th:field="*{homeworkTargetId}">
+		<input type="hidden" th:field="*{homeworkId}">
+		<textarea class="replyHomeworkArea" rows="4" cols="50" placeholder="내용을 입력하세요" th:field="*{replyContent}" oninput="autoResize(this)"></textarea>
+		<div class="col-12" style="text-align: end;">
+			<input type="file" name="uploadFiles" multiple style="margin-top: 10px; margin-left: -14px;">
+			<button id="insertBtn" class="main-btn primary-btn btn-hover"
+				type="button">등록</button>
+		</div>
+		<hr>
+	</form>
 		
-	<div style="">
+	<div>
 		<!-- 댓글출력 -->
 		<div id="replyList"></div>
 	</div>
 </div>
 <!-- end reply -->
-<h3>과제 작성</h3>
-<form name="insertReply" id="addReply" method="post"
-	th:object="${homeworkList}" enctype="multipart/form-data">
-	<input id="targetId" type="hidden" th:field="*{homeworkTargetId}">
-	<input type="hidden" th:field="*{homeworkId}">
-	<textarea style="border: 1px solid black;" rows="8" cols="50"
-		placeholder="내용을 입력하세요" th:field="*{replyContent}"></textarea>
-	<div class="col-12" style="text-align: center;">
-		<input type="file" name="uploadFiles" multiple>
-		<button id="insertBtn" class="main-btn primary-btn btn-hover"
-			type="button">등록</button>
-	</div>
-</form>
+
 
 <script>
 
@@ -425,7 +425,8 @@ $('#deleteHomeworks').on('click',function(){
 			   					</form>
 			   				</div>
 						</div>
-						<div id="${e.replyId}" class="replyCommentWrapper" style="display: none;">
+						<div id="${e.replyId}" class="replyCommentWrapper" style="display: none; position: relative;">
+							<p class="replierName">${e.replyWriter}</p>
 							<textarea class="replyTextArea" id="comment-${e.replyId}" rows="4" cols="50" placeholder="답글 내용을 입력하세요" oninput="autoResize(this)"></textarea>
 							<button id="commentInsertBtn" class="main-btn primary-btn btn-hover commentInsertBtn" type="button" value="${e.replyId}" onclick="addComment(${e.replyId})">답글 등록</button>
 						</div>
@@ -591,8 +592,8 @@ function replyFile(replyId){
             contentType : false, // FormData가 가지고 있는 통신 정보를 사용
             data : formData,
             success : function(json) {
-              /*  $('#modal').modal('show'); //성공모달
-               replyContent.value = ''; // 댓글 입력창 초기화 */
+              /*  $('#modal').modal('show'); //성공모달 */
+               replyContent.value = ''; // 댓글 입력창 초기화 
                $('#uploadFiles').val(''); // 댓글 파일필드 초기화
                replyList();// 댓글 목록 새로고침
             },
@@ -793,6 +794,8 @@ function replyFile(replyId){
 	    // 원하는 형식으로 문자열 생성
 	    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 	}
+	
+	
 
 </script>
 </html>

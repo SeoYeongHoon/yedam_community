@@ -30,6 +30,17 @@ public class ReplyVO {
 	
 	//다운로드 경로
 	private String downloadLocation;
+	
+	// 댓글+대댓글 총 개수
+	private int totalCount;
+	
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
 
 	public int getReplyId() {
 		return replyId;
