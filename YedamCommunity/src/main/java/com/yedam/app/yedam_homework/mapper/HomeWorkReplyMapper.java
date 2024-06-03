@@ -3,6 +3,8 @@ package com.yedam.app.yedam_homework.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.repository.query.Param;
+
 import com.yedam.app.yedam_homework.service.CommentVO;
 import com.yedam.app.yedam_homework.service.ReplyVO;
 
@@ -31,4 +33,6 @@ public interface HomeWorkReplyMapper {
 	// 대댓글 삭제
 	public int deleteComment(int comment);
 
+	// 댓글, 대댓글 총 개수
+	public int getTotalCount(int homeworkTargetId);
 }

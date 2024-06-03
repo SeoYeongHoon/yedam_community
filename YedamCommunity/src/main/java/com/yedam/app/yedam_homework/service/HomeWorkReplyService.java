@@ -26,5 +26,7 @@ public interface HomeWorkReplyService {
 
 	// 대댓글 삭제
 	public int commentDelete(int comment);
-
+	
+	// 댓글, 대댓글 총 개수
+	public ReplyVO getTotalCount(int homeworkTargetId);
 }

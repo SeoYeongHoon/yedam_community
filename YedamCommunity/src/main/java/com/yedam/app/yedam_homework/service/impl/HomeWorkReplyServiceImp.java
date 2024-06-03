@@ -88,4 +88,13 @@ public class HomeWorkReplyServiceImp implements HomeWorkReplyService {
 		return map;
 	}
 
+	// 댓글, 대댓글 총 개수
+	@Override
+	public ReplyVO getTotalCount(int homeworkTargetId) {
+		ReplyVO replyVO = new ReplyVO();
+		int count = homeworkReplyMapper.getTotalCount(homeworkTargetId);
+		replyVO.setTotalCount(count);
+		return replyVO;
+	}
+
 }

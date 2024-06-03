@@ -33,11 +33,11 @@
 		SELECT	reply_id,
        			reply_content,
        			reply_date,
-      			update_date,
+      			TO_CHAR(update_date, 'YYYY-MM-DD HH24:MI:SS') as updateDate,
        			reply_writer
 		FROM    replies
 		WHERE   homework_target_id = #{homeworkTargetId}
-		ORDER BY reply_date
+		ORDER BY updateDate
 	</select>
 
 	<!-- 대댓글 조회 -->
@@ -101,4 +101,17 @@
 		WHERE comment_id = #{commentId}
 	</update>
 	
+	<!-- 댓글 + 대댓글 총 개수 -->
+	<select id="getTotalCount" parameterType="int" resultType="int">
+        SELECT 
+            (SELECT COUNT(*)
+             FROM replies r 
+             JOIN homework_targets h ON r.homework_target_id = h.homework_target_id
+             WHERE h.homework_target_id = #{homeworkTargetId}) +
+            (SELECT COUNT(*)
+             FROM replies r 
+             JOIN comments c ON r.reply_id = c.reply_id
+             WHERE r.homework_target_id = #{homeworkTargetId}) AS totalCount
+        FROM dual
+    </select>
 </mapper>

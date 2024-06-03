@@ -4,7 +4,7 @@
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
 <style>
-li {
+.quizListMenu {
 	display: inline;
 }
 tr img {
@@ -48,13 +48,13 @@ tr img {
 	<button type="button" id="subBtn" style="margin-bottom: 10px;"
 		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
 	<ul>
-		<li><a id="testInsert"
+		<li class="quizListMenu"><a id="testInsert"
 			class="main-btn danger-btn-light btn-hover">다음</a></li>
-		<li><a href="quizinsert"
+		<li class="quizListMenu"><a href="quizinsert"
 			class="main-btn primary-btn-light btn-hover">새문제</a></li>
-		<li><a href="#0" class="main-btn primary-btn-light btn-hover"
+		<li class="quizListMenu"><a href="#0" class="main-btn primary-btn-light btn-hover"
 			id="quizSelect">선택문제 확인</a></li>
-		<li>
+		<li class="quizListMenu">
 			<div id="subSelec" style="padding-top:10px;">
 				<h2>과목선택</h2>
 				<div class="select-position">
@@ -66,7 +66,7 @@ tr img {
 				</div>
 			</div>
 		</li>
-		<li>
+		<li class="quizListMenu">
 			<div style="position:relative; left:800px;">
 				<label>선택문제 총점 - 구현중</label>
 				<input type=text id="total" readonly style="border:1px black solid"/>
@@ -725,6 +725,7 @@ function updateList(quizes){
 } // 함수 종료
 
 window.onload = function() {
+	setActiveMenuItem();
 	quizContentList(page, subjectName);
 }
 
