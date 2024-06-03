@@ -26,7 +26,7 @@
 				<input type="hidden" th:id="classId" th:value="${classInfo.classId}"/>
 				<div class="card-style-1 mb-30">
 					<div class="card-content"
-						th:onclick="|location.href='@{/testinsert(curriculumId=${classInfo.curriculumId})}'|">
+						th:onclick="|location.href='@{/admin/testinsert(curriculumId=${classInfo.curriculumId})}'|">
 						<h4>
 							<font style="vertical-align: inherit;"> 
 								<font style="vertical-align: inherit;">[[${classInfo.classId}]]강의실</font>
