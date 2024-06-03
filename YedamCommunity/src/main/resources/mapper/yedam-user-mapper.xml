@@ -193,7 +193,6 @@
 	                  , i.tel
 	                  , i.email
 	                  , i.address
-	                  <!-- , i.user_image -->
 	                  , i.company_info
 	                  , i.user_type
 		              , i.curriculum_name
@@ -295,28 +294,8 @@
 				, #{profileImageExt}
 		)
     </insert>
-
-	
-    <!-- <update id="updateRegisterStatus" parameterType="map">
-        UPDATE register
-        SET status = #{status}
-        WHERE id = #{id}
-    </update> -->
     
-    <!-- 회원정보 수정 -->
-    <!--<update id="updateUserInfo" parameterType="UserVO">
-		UPDATE users
-		SET name = #{name},
-			password = #{password},
-			email = #{email},
-			tel = #{tel},
-			profile_image_name = #{profileImageName},
-			profile_image_location = #{profileImageLocation},
-			profile_image_size = #{profileImageSize},
-			download_location = #{downloadLocation},
-			profile_image_ext = #{profileImageExt}
-		WHERE id = #{id}
-	</update>-->
+    <!-- 마이페이지에서 개인정보 변경 -->
 	<update id="updateUserInfo" parameterType="UserVO">
 	    UPDATE users
 	    <set>
