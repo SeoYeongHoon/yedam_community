@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.LoginUserVO;
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostCommentVO;
 import com.yedam.app.yedam_post.service.PostReplyVO;
@@ -60,6 +62,9 @@ public class PostController {
 	                       @RequestParam(required = false, defaultValue = "6") Integer pageSize,
 	                       @RequestParam(required = false) String keyword,
 	                       Model model) {
+		System.err.println("boardId"+ boardId); //1
+		
+		
 	    try {
 	        postVO.setBoardId(boardId);
 
@@ -97,7 +102,24 @@ public class PostController {
 	    return "posts/postList";
 	}
 
-
+	//--------------------------------
+	// 수료과정별 게시판
+	//--------------------------------
+	@GetMapping("/curriculumPost")
+	public String curriculum(Model model) {
+		List<CurriculumVO> List = postService.curriculumList();
+		System.err.println(List);
+		return "posts/curriculumPost";
+	}
+	
+	
+	/*
+	 * @GetMapping("/curriculumPost")
+	 * 
+	 * @ResponseBody public String curriculumPOst() {
+	 * 
+	 * return null; }
+	 */
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------
@@ -124,7 +146,10 @@ public class PostController {
 	    
 	    // 현재 로그인한 유저와 작성자 비교
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-	    boolean isOwner = userVO.getuserId().equals(postVO.getUserId());
+	    String userName = userVO.getUsername();
+	    String userType = userVO.getUserType();
+	    System.err.println(userType);
+	    
 	    
 	    // 파일 조회
 	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
@@ -139,7 +164,8 @@ public class PostController {
 	    model.addAttribute("boardId", boardId);
 	    model.addAttribute("postInfo", postVO);
 	    // 작성자 여부 추가
-	    model.addAttribute("isOwner", isOwner);
+	    model.addAttribute("userName", userName);
+	    model.addAttribute("userType", userType);
 
 	    return "posts/postInfo";
 	}
@@ -207,9 +233,10 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 삭제 처리
 	// --------------------------------------------
-	@GetMapping("/postDelete/{boardId}/{postId}")
-	public String postDelete(@PathVariable int boardId
-			               , @PathVariable int postId) {
+	@DeleteMapping("/postDelete")
+	@ResponseBody
+	public String postDelete(@RequestParam int boardId
+			               , @RequestParam int postId) {
 
 		PostVO postVO = new PostVO();
 		postVO.setPostId(postId);
@@ -230,6 +257,14 @@ public class PostController {
 		if (postId == null) {
 			return "redirect:/post/" + boardId;
 		}
+		
+		// 파일 조회
+	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
+	    for (BoardFilesVO file : boardFilesVO) {
+	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
+	        file.setExists(find.exists());
+	    }
+	    
 		PostVO postVO = postService.getPostReplies(postId, boardId);
 		model.addAttribute("post", postVO);
 		model.addAttribute("boardId", boardId);
@@ -255,9 +290,12 @@ public class PostController {
 	                directory.mkdirs();
 	            }
 
-	            File dest = new File(filePath);
-	            file.transferTo(dest);
-
+	            Path savePath = Paths.get(filePath);
+	            try {
+					file.transferTo(savePath);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 	            postVO.setBoardfileName(fileName);
 	            postVO.setBoardfileSize(file.getSize());
 	            postVO.setBoardfileLocation(fileName);
@@ -315,5 +353,10 @@ public class PostController {
 		}
 		return likeCheck==1? true : false;
 	}
+	
+	// --------------------------------------------
+	// 투표 
+	// --------------------------------------------
+	
 
 }

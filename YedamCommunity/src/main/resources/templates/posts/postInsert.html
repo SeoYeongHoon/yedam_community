@@ -58,11 +58,23 @@
     <label for="title">제목: </label>
     <input type="text" id="title" th:field="*{title}" /><br />
     
+<!-- <div th:switch="${boardId}">
+    <div th:case="4">
+      <h3>투표 / 토론</h3>
+      <input type="radio" name="post-vote" value="질문"> 질문
+      <input type="radio" name="post-debate" value="토론"> 토론
+      
+      
+    </div>
+  </div> -->
+    
     <label for="postContent">내용:</label>
     <textarea id="postContent" th:field="*{postContent}"></textarea><br />
     
     <label for="writer">작성자:</label>
     <input type="text" id="writer" th:field="*{writer}" readonly /><br />
+    
+     
 
     <!-- 파일 업로드 -->
     <label for="file">파일 :</label>

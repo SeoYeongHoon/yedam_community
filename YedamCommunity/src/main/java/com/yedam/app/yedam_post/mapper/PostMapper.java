@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostVO;
 
@@ -55,10 +56,11 @@ public interface PostMapper {
     //--------------------------------------------
     // 게시글 수정
     //--------------------------------------------
-    int updatePost(PostVO postVO);
+    int updatePost1(PostVO postVO); // 제목, 내용 수정
+    int updatePost2(PostVO postVo); // 파일 수정
 
     //--------------------------------------------
-    // 게시글 삭제
+    // 게시글 삭제 
     //--------------------------------------------
     int deletePost1(int postId, int boardId);
     int deletePost2(int postId, int boardId);
@@ -86,10 +88,7 @@ public interface PostMapper {
 	//--------------------------------------------
     // 메인페이지 조회
     //--------------------------------------------
-//	public List<PostVO> MainpagePostList();
-	
 	public List<PostVO> getpostAll(int boardId);
-	
 	
 	//--------------------------------------------
     // 마이페이지 내 게시글 조회
@@ -97,3 +96,8 @@ public interface PostMapper {
 	public List<PostVO> getMyPost(int userId);
 }
 
+	// --------------------------------------------
+	// 수료과정별 게시판
+	// --------------------------------------------
+	public List<CurriculumVO> curriculumAll();
+}

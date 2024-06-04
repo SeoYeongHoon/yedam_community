@@ -22,21 +22,22 @@
 				<input type="hidden" th:field="*{userId}"/>
 			</div>
 		</div>
-	
-	<!-- 과목설정 end select -->
-	<!-- ======= 문제 유형 radio ======= -->
+		<!-- 과목설정 end select -->
+		<!-- ======= 문제 유형 radio ======= -->
 		<h6 class="mb-25">문제 유형</h6>
-		<div class="form-check radio-style mb-20">
-			<input class="form-check-input chk" type="radio" value="gek" id="radio-1" name="qType" checked />
-			<label class="form-check-label" for="radio-1">객관식</label>
-		</div>
-		<!-- end radio -->
-		<div class="form-check radio-style radio-warning mb-20">
-			<input class="form-check-input chk" type="radio" value="ju" id="radio-2" name="qType"/>
-			<label class="form-check-label" for="radio-2"> 주관식 </label>
-		</div>
-		<!-- end radio -->
-	<!-- ======= 문제 유형 radio style end ======= -->
+		<div>
+			<div class="form-check radio-style mb-20" style="display:inline-block;">
+				<input class="form-check-input chk" type="radio" value="gek" id="radio-1" name="qType" checked />
+				<label for="radio-1">객관식</label>
+			</div>
+			<!-- end radio -->
+			<div class="form-check radio-style radio-warning mb-20" style="display:inline-block;margin-left:15px">
+				<input class="form-check-input chk" type="radio" value="ju" id="radio-2" name="qType"/>
+				<label for="radio-2"> 주관식 </label>
+			</div>
+			<!-- end radio -->
+		</div>		
+		<!-- ======= 문제 유형 radio style end ======= -->
 	
 	<!-- 객관식 문제 입력 영역 ----------------------------------------------------->
 	<div id="multiple">
@@ -126,7 +127,7 @@
                     <label class="form-check-label" th:field="*{exampleNum}" th:value="1" ></label>
 			<input type="text" class="correct" placeholder="문제의 정답을 입력하세요." name="textContentJu" id="textContentJu"
 				   style="border:1px solid black;"/>
-			<input type="hidden" class="correct2" name="quizAnswerJu"/>
+			<input type="hidden" class="correct2" name="quizAnswerJu" id="quizAnswerJu"/>
 		</div>
 		<!-- end radio -->
 		
@@ -289,7 +290,11 @@ $('.addbt').on('click',function(){
 	$('.correct2').attr("value",cor);
 	console.log($('.correct2').val());
 })
-
+$('#addBtnJu').on('click',function(){
+	let corJu = $('#textContentJu').val();
+	$('#quizAnswerJu').attr("value",corJu);
+	console.log($('#quizAnswerJu').val());
+})
 //document.querySelector('form[name="insertForm"]')
 //		.addEventListener('submit', validationCheck);
 

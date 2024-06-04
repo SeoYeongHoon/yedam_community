@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.yedam.app.yedam_homework.service.ReplyVO;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
+
 public interface PostService {
 	
 	
@@ -124,7 +126,6 @@ public interface PostService {
     //--------------------------------------------
 	public List<PostVO> getPostAll(int boardId);
 	
-	
 	//--------------------------------------------
     // 마이페이지 내 게시글 조회
     //--------------------------------------------
@@ -134,5 +135,10 @@ public interface PostService {
     // 마이페이지 내 댓글 조회
     //--------------------------------------------
 	public List<ReplyVO> getMyReply(int userId);
+  
+	//--------------------------------------------
+    // 수료과정별 게시판
+    //--------------------------------------------
+	public List<CurriculumVO> curriculumList();
 }
 

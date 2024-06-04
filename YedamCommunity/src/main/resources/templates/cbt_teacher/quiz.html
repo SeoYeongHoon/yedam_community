@@ -43,38 +43,47 @@ tr img {
 .testPaging a:hover:not(.active) {
 		
 }
+.box{
+	width: 30%;
+    height: 50%;
+    margin-right: 5px; 
+    margin-bottom: 5px; 
+    border: 1px solid gray;
+}
 </style>
-<div style="margin:10px; padding:10px">
-	<button type="button" id="subBtn" style="margin-bottom: 10px;"
-		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button>
-	<ul>
-		<li class="quizListMenu"><a id="testInsert"
-			class="main-btn danger-btn-light btn-hover">다음</a></li>
-		<li class="quizListMenu"><a href="quizinsert"
-			class="main-btn primary-btn-light btn-hover">새문제</a></li>
-		<li class="quizListMenu"><a href="#0" class="main-btn primary-btn-light btn-hover"
-			id="quizSelect">선택문제 확인</a></li>
+<div style="margin:30px 5px;">
+	<!-- <button type="button" id="subBtn" style="margin-bottom: 10px;"
+		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button> -->
+	<ul style="margin-bottom:10px;">
 		<li class="quizListMenu">
-			<div id="subSelec" style="padding-top:10px;">
-				<h2>과목선택</h2>
-				<div class="select-position">
-					<select id="subject" style="width:auto; height:40px;">
-						<th:block th:each="subjectInfo, idxStat : ${subjectList}">
-							<option class="typeSelec" th:value="${subjectInfo.subjectName}">[[${subjectInfo.subjectName}]]</option>
-						</th:block>
-					</select>
-				</div>
-			</div>
+			<a id="subBtn" class="main-btn primary-btn-light btn-hover">과목 추가/삭제</a>
 		</li>
 		<li class="quizListMenu">
-			<div style="position:relative; left:800px;">
-				<label>선택문제 총점 - 구현중</label>
-				<input type=text id="total" readonly style="border:1px black solid"/>
-			</div>
+			<a href="quizinsert" class="main-btn primary-btn-light btn-hover">새문제</a>
+		</li>
+		<li class="quizListMenu">
+			<a href="#0" class="main-btn primary-btn-light btn-hover" id="quizSelect">선택문제 확인</a>
+		</li>
+		<li class="quizListMenu" style="margin-right:50px">
+			<a id="testInsert" class="main-btn danger-btn-light btn-hover" style="float:right;margin-right:200px">다음</a>
 		</li>	
 	</ul>
 </div>
-<div id="quizBox" class="container row" ></div>
+<div id="subSelec" style="padding-top:10px;margin-bottom: 15px;">
+	<h2>과목선택</h2>
+	<div class="select-position">
+		<select id="subject" style="width:auto; height:40px;">
+			<th:block th:each="subjectInfo, idxStat : ${subjectList}">
+				<option class="typeSelec" th:value="${subjectInfo.subjectName}">[[${subjectInfo.subjectName}]]</option>
+			</th:block>
+		</select>
+	</div>
+</div>
+<div style="">
+	<label style="color:gray;">선택문제 총점</label>
+	<input type=text id="total" style="border:1px black solid;width:50px;position: relative;left: 90px;bottom: 30px;" readonly/>
+</div>
+<div id="quizBox" class="row" style="margin:5px"></div>
 <div class="center">
 	<div class="testPaging">
 		<!-- ajax실행으로 태그 생성 -->
@@ -110,7 +119,7 @@ tr img {
 		<div class="modal-content" style="width: 800px;">
 			<!-- 모달 헤더 -->
 			<div class="modal-header">
-				<h5 class="modal-title">과목 등록 / 추가</h5>
+				<h5 class="modal-title">과목 추가 / 삭제</h5>
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<!-- 모달 본문 -->
@@ -130,7 +139,7 @@ tr img {
 					<div class="card-style mb-30">
 						<h6 class="mb-25">과목 삭제</h6>
 						<div class="form-check checkbox-style mb-20 currSub">
-							해당 영역에 등록된 과목명 및 체크박스 생성
+							<!-- 해당 영역에 등록된 과목명 및 체크박스 생성  -->
 						</div>
 						<input type="hidden" id="hidden" name="curriculumId"/>	
 						<button type="submit"
@@ -395,12 +404,12 @@ function quizContentList(page, subjectName){
 			//--------------------------------------------
 			$('#quizSelect').on('click', function(index, e){
 				$("input:checkbox[name=select]:checked").each(function(){
-					$("input:checkbox[name=select]:checked").parent().parent().parent().attr("style", "border-color:blue;")
+					$("input:checkbox[name=select]:checked").parent().parent().attr("style", "border-color:blue;")
 				})
 			})
 			$('.quizChk ').on('change', function(){
 				if(!$('checkbox').checked){
-					$(this).parent().parent().parent().attr("style", "")
+					$(this).parent().parent().attr("style", "")
 				}
 			})
 	    	 
@@ -446,7 +455,7 @@ function quizContentList(page, subjectName){
 										<div>
 											<h4>문제</h4>
 											<br>
-											<textarea rows="5" cols="50" id="quizContent" readonly="true">${qContent}</textarea>
+											<textarea rows="7" cols="80" id="quizContent" readonly="true">${qContent}</textarea>
 										</div>	
 										<br>
 										<div>
@@ -686,36 +695,38 @@ $('#testInsert').on('click', function(){
 	window.localStorage.setItem('qSubjectName', subjectName);
 })
 
+
 //--------------------------------------------
 // 등록된 문제 필터링으로 인한 리스트 업데이트
 //--------------------------------------------
 function updateList(quizes){
 	$('#quizBox').html('');
-	
+	let uName = '';
 	quizes.forEach((quiz,idx) => {
 		subName = quiz.subjectName;				
 		qContent = quiz.quizContent;
 		qId = quiz.quizId;
 		sId = quiz.subjectId;
+		uName = quiz.name;
 		
 		let temp = `
-			<div style="color:gray;" class="col-3 box" id="${qId}">
-				<div class="card-style-3 mb-30 box2">
-					<div>
-						<div class="row">
-							<input type="checkbox" class="quizChk " name="select"  id="qContent${idx}" value="${qContent}" style="zoom : 1.3"></input>
-							<label for="qContent${idx}" style="margin-bottom: 0;margin-left: 5px;">문제선택</label>
-						</div>
-						<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}" style="border:1px solid black; width: 70px;">
-						<p>과목명 : ${subName}</p>
-						<input type="hidden" id="qId${idx}" value="${qId}" />
-						<input type="hidden" id="sName${idx}" value="${subName}" />
-					</div>
-					<div class="card-content">
-						<h4>${qContent}</h4>
-						<br>
-						<button type="button" class="infoBtn" id="${qId}btn" name="${qId}" value="${qId}">자세히 보기</button>
-					</div>
+			<div style="color:gray;" class="box" id="${qId}">
+				<div>
+					<input type="checkbox" class="quizChk " name="select"  id="qContent${idx}" value="${qContent}" style="zoom : 1.5;display: inline-block;margin: 3px;"></input>
+					<label for="qContent${idx}">문제선택</label>
+					<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}" style="border:1px solid black;width:60px;display: inline-block;">
+					<p style="display: inline-block;font-size: 12px;float: right;padding-right: 5px;">과목명 : ${subName}</p>
+				</div>
+				
+				<input type="hidden" id="qId${idx}" value="${qId}" />
+				<input type="hidden" id="sName${idx}" value="${subName}" />
+				<div class="card-content" style="margin: 10px;">
+					<h4>${qContent}</h4>
+					<br>
+				</div>
+				<div style="margin: 3px;">
+					<button type="button" class="infoBtn" id="${qId}btn" name="${qId}" value="${qId}">자세히 보기</button>
+					<p style="display: inline-block;font-size: 12px;float: right;">작성자 : ${uName}</p>
 				</div>
 			</div>
 			`;

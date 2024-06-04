@@ -52,16 +52,12 @@
       <h3>질문과 토론 게시판</h3>
    </div>
   </div>
+  
   <div class="insertBtn">
     <a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
   </div>
 
   <!-- 검색 폼 -->
-  <!-- <form id="searchForm" method="get" th:action="@{/all/post/{boardId}(boardId=${boardId})}">
-    <input type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
-    <button type="submit">검색</button>
-  </form> -->
-  
   <div class="input-style-1" style="position: absolute; top: 80px;">
 	<form id="searchForm" method="get" th:action="@{/all/post/{boardId}(boardId=${boardId})}">
 	    <input type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
