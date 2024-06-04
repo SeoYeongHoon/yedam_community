@@ -310,7 +310,7 @@ public class PostServiceImpl implements PostService {
     // 마이페이지 내 댓글 조회
     //--------------------------------------------
 	@Override
-	public List<ReplyVO> getMyReply(int userId) {
+	public List<PostReplyVO> getMyReply(int userId) {
 		return replyMapper.getMyReply(userId);
 	}	
 	
