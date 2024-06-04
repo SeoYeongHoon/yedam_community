@@ -300,7 +300,7 @@ public class ExamController {
 		TeacherVO findVO = examService.userTestInfo(teacherVO);
 		model.addAttribute("userTestInfo", findVO);
 		if(findVO == null) {
-			return "redirect:teachermain";
+			return "userTestInfo";
 		}
 		
 		return "cbt_teacher/userTestInfo";
