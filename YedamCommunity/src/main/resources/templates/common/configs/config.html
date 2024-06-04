@@ -40,15 +40,21 @@
 	<link th:href="@{/css/adminPage.css}" rel="stylesheet" />
 	<script type="text/javascript" th:src="@{/js/admin.js}"></script>
 	<style>
-		@font-face {
+		/* @font-face {
 		    font-family: 'WavvePADO-Regular';
 		    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404@1.0/WavvePADO-Regular.woff2') format('woff2');
+		    font-weight: normal;
+		    font-style: normal;
+		} */
+		@font-face {
+		    font-family: 'NEXON Lv1 Gothic OTF';
+		    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
 		    font-weight: normal;
 		    font-style: normal;
 		}
 		* {
 			/* font-family: 'Do Hyeon', sans-serif; /* 도현체 */
-			font-family: 'WavvePADO-Regular';
+			font-family: 'NEXON Lv1 Gothic OTF';
 		}
 		
 		#load {
@@ -60,7 +66,7 @@
 			display: block;
 			opacity: 0.8;
 			background: white;
-			z-index: 99;
+			z-index: 99999;
 			text-align: center;
 		}
 		
@@ -73,23 +79,17 @@
 	</style>
 	
 	<!-- 로딩창 -->
-	<!-- <div id="load">
-		<img src="images/loading_book.gif" alt="loading">
-	</div> -->
+	<div id="load" style="display: none;">
+		<img src="/images/loading_book.gif" alt="loading">
+	</div>
 	
 	<script>
 		const loading_page = document.getElementById("load");
-		/* window.onload = function() {
-			setTimeout(() => {
-				loading_page.style.display = 'none';
-			}, 100)
-		} */
 		
-		/* window.addEventListener('load', function() {
-			setTimeout(() => {
-				loading_page.style.display = 'none';
-			}, 1000)
-		}); */
+		$(window).on("beforeunload", function() {
+			loading_page.style.display = 'block';
+		});
+		
 	</script>
 </html>
 	
