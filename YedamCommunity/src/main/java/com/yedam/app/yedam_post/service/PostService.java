@@ -151,5 +151,15 @@ public interface PostService {
     //--------------------------------------------
 	public List<PostVO> selectPost();
 	
+	List<VoteVO> getVotes();
+
+	int createVote(VoteVO vote);
+	
+    List<VoteItemVO> getVoteItems(int voteId);
+    
+    int createVoteItem(VoteItemVO voteItem);
+    
+    int createVoteUser(VoteUserVO voteUser);
+	
 }
 

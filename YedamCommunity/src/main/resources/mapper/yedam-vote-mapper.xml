@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.yedam.app.yedam_post.mapper.VoteMapper">
+
+    <select id="selectVotes" resultType="VoteVO">
+        SELECT * FROM votes
+    </select>
+
+    <insert id="insertVote" parameterType="VoteVO">
+        INSERT INTO votes (vote_id
+                         , vote_end_date
+                         , is_processing
+                         , board_id
+                         , post_id)
+        VALUES (vote_id_seq.NEXTVAL
+             , #{voteEndDate}
+             , #{isProcessing}
+             , #{boardId}
+             , #{postId})
+    </insert>
+
+    <select id="selectVoteItemsByVoteId" parameterType="int" resultType="VoteItemVO">
+        SELECT * 
+        FROM vote_items 
+        WHERE vote_id = #{voteId}
+    </select>
+
+    <insert id="insertVoteItem" parameterType="VoteItemVO">
+        INSERT INTO vote_items (vote_item_id
+                              , vote_seq
+                              , vote_item_name
+                              , vote_count
+                              , vote_id)
+        VALUES (vote_item_id_seq.NEXTVAL
+              , #{voteSeq}
+              , #{voteItemName}
+              , #{voteCount}
+              , #{voteId})
+    </insert>
+
+    <insert id="insertVoteUser" parameterType="VoteUserVO">
+        INSERT INTO vote_users (vote_user_id 
+                              , vote_date
+                              , vote_item_id
+                              , user_id)
+        VALUES (vote_user_id_seq.NEXTVAL
+              , sysdate
+              , #{voteItemId}
+              , #{userId})
+    </insert>
+
+</mapper>

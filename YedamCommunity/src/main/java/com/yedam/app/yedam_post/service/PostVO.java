@@ -28,7 +28,7 @@ public class PostVO {
     private int replyId;
     private String replyContent;
     private int replyCount;
-    //
+    //대댓글내용
     private int commentCount;
     //좋아요
     private int totalCount;
@@ -59,6 +59,53 @@ public class PostVO {
     //--------------------------------------------
     private List<BoardFilesVO> boardFiles;
     
+    // 투표 관련 필드 추가
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date voteEndDate;
+    private String type;
+    private List<String> items;
+    
+
+
+	public int getReplyId() {
+		return replyId;
+	}
+
+	public void setReplyId(int replyId) {
+		this.replyId = replyId;
+	}
+
+	public String getReplyContent() {
+		return replyContent;
+	}
+
+	public void setReplyContent(String replyContent) {
+		this.replyContent = replyContent;
+	}
+
+	public Date getVoteEndDate() {
+		return voteEndDate;
+	}
+
+	public void setVoteEndDate(Date voteEndDate) {
+		this.voteEndDate = voteEndDate;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public List<String> getItems() {
+		return items;
+	}
+
+	public void setItems(List<String> items) {
+		this.items = items;
+	}
 
 	public int getPostId() {
 		return postId;

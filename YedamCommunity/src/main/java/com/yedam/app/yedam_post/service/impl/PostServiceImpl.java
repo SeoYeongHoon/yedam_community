@@ -16,12 +16,16 @@ import com.yedam.app.yedam_post.mapper.CommentMapper;
 import com.yedam.app.yedam_post.mapper.PostMapper;
 import com.yedam.app.yedam_post.mapper.ReplyMapper;
 import com.yedam.app.yedam_post.mapper.ReportMapper;
+import com.yedam.app.yedam_post.mapper.VoteMapper;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostCommentVO;
 import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostReplyVO;
 import com.yedam.app.yedam_post.service.ReportVO;
+import com.yedam.app.yedam_post.service.VoteItemVO;
+import com.yedam.app.yedam_post.service.VoteUserVO;
+import com.yedam.app.yedam_post.service.VoteVO;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -37,6 +41,9 @@ public class PostServiceImpl implements PostService {
 	
 	@Autowired
 	private ReportMapper reportMapper;
+	
+	@Autowired
+	private VoteMapper voteMapper;
 
 	//--------------------------------------------
 	// 게시글 등록
@@ -329,10 +336,37 @@ public class PostServiceImpl implements PostService {
 	public List<PostVO> postlist() {
 		return postMapper.postAll();
 	}
+	
+	//--------------------------------------------
+    // 투표 전체 조회
+    //--------------------------------------------
+	 public List<VoteVO> getVotes() {
+	     return voteMapper.selectVotes();
+	}
 
 	@Override
 	public List<PostVO> selectPost() {
-		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public int createVote(VoteVO vote) {
+    	return voteMapper.insertVote(vote);
+    }
+
+    @Override
+    public List<VoteItemVO> getVoteItems(int voteId) {
+        return voteMapper.selectVoteItemsByVoteId(voteId);
+    }
+
+    @Override
+    public int createVoteItem(VoteItemVO voteItem) {
+    	return voteMapper.insertVoteItem(voteItem);
+    }
+
+    @Override
+    public int createVoteUser(VoteUserVO voteUser) {
+    	return voteMapper.insertVoteUser(voteUser);
+		 
+    }
 }
