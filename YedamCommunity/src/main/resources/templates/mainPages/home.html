@@ -10,21 +10,34 @@
     </div>
     <div id="main_container">
         <div id="home_container">
-            <div class="header_container">
+            <div class="header_container" style="">
                 <!-- 슬라이더 -->
                 <div id="slider_wrapper">
-				  <a href="#" class="control_next"> >> </a>
-				  <a href="#" class="control_prev"> << </a>
+				  <a href="#" class="control_next"><p>&raquo;</p></a>
+				  <a href="#" class="control_prev"><p>&laquo;</p></a>
 			      <ul class="slider_list">
-			        <li class="slider_item"><a class="slider_img_link" href="#"><img class="slider_img" src="/images/dog.jpg" alt="main_img"></a></li>
-	    			<li class="slider_item"><a class="slider_img_link" href="#"><img class="slider_img" src="https://placehold.co/500x400" alt="main_img"></a></li>
-	    			<li class="slider_item"><a class="slider_img_link" href="#"><img class="slider_img" src="/images/dog.jpg" alt="main_img"></a></li>
-	    		    <li class="slider_item"><a class="slider_img_link" href="#"><img class="slider_img" src="https://placehold.co/500x400" alt="main_img"></a></li>
+			      	<li class="slider_item" th:each="post, idx : ${popularPosts}" th:if="${post.boardfileLocation != null}">
+			      		<!-- 이미지 파일 출력 -->
+					    <div th:if="${post.boardfileLocation != null and (post.boardfileLocation.endsWith('.jpg') or post.boardfileLocation.endsWith('.jpeg') or post.boardfileLocation.endsWith('.png') or post.boardfileLocation.endsWith('.gif'))}">
+					    	<a class="slider_img_link" href="#">
+					    		<img class="slider_img" th:src="@{|/files/${post.boardfileLocation}|}">
+					    		<p class="slider_content_title"><span>#[[${idx.index + 1}]] </span> [[${post.title}]]</p>
+					    	</a>
+					    </div>
+					    <!-- 비디오 파일 출력 -->
+					    <div th:if="${post.boardfileLocation != null and (post.boardfileLocation.endsWith('.mp4') or post.boardfileLocation.endsWith('.webm') or post.boardfileLocation.endsWith('.ogg'))}">
+					      <a class="slider_img_link" href="#">
+						      <video class="slider_img" controls>
+						        <source th:src="|/files/${post.boardfileLocation}|" type="video/mp4"/>
+						      </video>
+					      </a>
+					    </div>
+                    </li>
 			     </ul>
 			   </div>
 
                 <!-- 인기 게시글 -->
-                <aside class="sidebar-nav-wrapper" style="width: 350px; height: 50vh; margin-left: 20px;">
+                <aside class="sidebar-nav-wrapper" style="width: 350px; height: 500px; margin-left: 20px;">
                     <nav class="sidebar-nav">
                         <ul>
                             <li class="nav-item nav-item-has-children">
@@ -34,7 +47,7 @@
                                 <ul class="popular_list">
                                     <li th:each="post, iterStat : ${popularPosts}">
                                         <a th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|" class="popular_item">
-                                            <span th:text="${iterStat.count} + '위: ' + ${post.title}"></span>
+                                            <span class="popular_item_number"><p th:text="${iterStat.count}"></p></span><span class="popular_item_text" th:text="${post.title}"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -52,8 +65,13 @@
                 <div class="board_content">
                     <!-- boardId = 1 -->
                     <div class="how2 how2-cl2 flex-s-c board_type">
+<<<<<<< HEAD
                         <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">수료 과정별 게시판</h3>
                         <a th:href="" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
+=======
+                        <p style="line-height: 0">수료 과정별 게시판</p>
+                        <a th:href="@{/all/post/1}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
+>>>>>>> branch 'main' of https://github.com/SeoYeongHoon/yedam_community.git
                             더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
                         </a>
                     </div>
@@ -81,7 +99,7 @@
                             </div>
                             <div>
                                 <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-                                    <span style="font-size: 14pt;" th:text="${post.title}">이것은 제목입니다.</span>
+                                    <span style="font-size: 12pt; font-weight: bold;" th:text="${post.title}">이것은 제목입니다.</span>
                                 </a>
                             </div>
                         </li>
@@ -91,7 +109,7 @@
                 <!-- boardId = 2 -->
                 <div class="board_content">
                     <div class="how2 how2-cl3 flex-s-c board_type">
-                        <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">구인/구직 게시판</h3>
+                        <p style="line-height: 0">구인/구직 게시판</p>
                         <a th:href="@{/all/post/2}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
                             더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
                         </a>
@@ -120,7 +138,7 @@
                             </div>
                             <div>
                                 <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post2.boardId}, postId=${post2.postId})}'|">
-                                    <span style="font-size: 14pt;" th:text="${post2.title}">이것은 제목입니다.</span>
+                                    <span style="font-size: 12pt; font-weight: bold;" th:text="${post2.title}">이것은 제목입니다.</span>
                                 </a>
                             </div>
                         </li>
@@ -130,7 +148,7 @@
                 <!-- boardId = 3 -->
                 <div class="board_content">
                     <div class="how2 how2-cl5 flex-s-c board_type">
-                        <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">정보 공유 게시판</h3>
+                        <p style="line-height: 0">정보 공유 게시판</p>
                         <a th:href="@{/all/post/3}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
                             더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
                         </a>
@@ -159,7 +177,7 @@
                             </div>
                             <div>
                                 <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post3.boardId}, postId=${post3.postId})}'|">
-                                    <span style="font-size: 14pt;" th:text="${post3.title}">이것은 제목입니다.</span>
+                                    <span style="font-size: 12pt; font-weight: bold;" th:text="${post3.title}">이것은 제목입니다.</span>
                                 </a>
                             </div>
                         </li>
@@ -169,7 +187,7 @@
                 <!-- boardId = 4 -->
                 <div class="board_content">
                     <div class="how2 how2-cl6 flex-s-c board_type">
-                        <h3 class="f1-m-2 cl3 tab01-title" style="line-height: 0">질문과 토론 게시판</h3>
+                        <p style="line-height: 0">질문과 토론 게시판</p>
                         <a th:href="@{/all/post/4}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 14px; right: 10px;">
                             더 보기 <i class="fs-12 m-l-5 fa fa-caret-right"></i>
                         </a>
@@ -198,7 +216,7 @@
                             </div>
                             <div>
                                 <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post4.boardId}, postId=${post4.postId})}'|">
-                                    <span style="font-size: 14pt;" th:text="${post4.title}">이것은 제목입니다.</span>
+                                    <span style="font-size: 12pt; font-weight: bold;" th:text="${post4.title}">이것은 제목입니다.</span>
                                 </a>
                             </div>
                         </li>

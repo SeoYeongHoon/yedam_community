@@ -77,7 +77,8 @@
 	                document.getElementById('userId').textContent = user.id;
 	                document.getElementById('userEmail').textContent = user.email;
 	                document.getElementById('userTel').textContent = user.tel;
-	                document.getElementById('userImage').src = '/images/profile/' + user.profileImageLocation;
+	                document.getElementById('curriculumId').textContent = user.curriculumName;
+	                document.getElementById('userImage').src = '/files' + user.profileImageLocation;
 	
 	                document.querySelector('.infoModal').style.display = 'block';
 	                document.querySelector('.approveUserBtn').style.display = 'none';
@@ -123,7 +124,7 @@
 	                document.getElementById('curriculumId').textContent = user.curriculumName;
 	                document.getElementById('userEmail').textContent = user.email;
 	                document.getElementById('userTel').textContent = user.tel;
-	                document.getElementById('userImage').src = '/images/profile/' + user.profileImageLocation;
+	                document.getElementById('userImage').src = '/files' + user.profileImageLocation;
 	
 	                document.querySelector('.infoModal').style.display = 'block';
 	                document.querySelector('.approveUserBtn').style.display = 'inline-block';
@@ -186,11 +187,10 @@
 		function openAddModal() {
 			document.querySelector('.addModal').style.display = 'block';
 		}
+
 		function closeAddModal() {
 			document.querySelector('.addModal').style.display = 'none';
 		}
-		
-		
 		
 		// 회원가입 승인
 		function approveRegister(registerId) {
@@ -353,7 +353,7 @@
               		<!-- 회원가입 신청한 유저 리스트 -->
 					<div class="card-style mb-30 request_wrapper"  style="position: relative; padding: 0;">
 						<div class="table-top-content" style="height: 120px;">
-							<h2 class="mb-10" style="color: white; font-weight: normal;">회원가입 신청 관리</h6>
+							<h2 class="mb-10" style="color: white;">회원가입 신청 관리</h6>
 							<a href="#0" onclick="openAddModal()" class="modal_btn" style="background-color: #e96b56; padding: 7px; position: absolute; margin: 0; left: 15px; top: 70px;">수강생 정보 등록</a>
 						</div>
 						<div class="table-wrapper table-responsive" style="overflow-y: scroll; max-height: 500px;">
@@ -426,7 +426,7 @@
 					<!-- 회원가입 된 유저리스트 -->
 					<div class="card-style mb-30 request_wrapper" style="position: relative; max-height: 100%; padding: 0 0 30px 0;">
 						<div class="table-top-content">
-							<h2 class="mb-10" style="color: white; font-weight: normal;">회원 관리</h6>
+							<h2 class="mb-10" style="color: white;">회원 관리</h6>
 							<div class="select-style-1" style="display: flex; position: relative; margin-top: 20px; margin-bottom: 10px; margin-left: -10px;">
 								<div class="select-position" style="min-width: 140px;">
 									<!-- <select name="userFilter" id="userFilter" style="padding: 10px; color: white; background-color: #e96b56;" onchange="filterUsers()">
@@ -522,16 +522,13 @@
 			<div class="add_modal_popup" style="min-width: 800px; min-height: 300px;">
 				<div class="add_modal_title">
 					<h4 style="color: white; font-weight: normal;">수강생 정보 등록</h4>
-					<a href="" class="modal_close" onclick="closeAddModal()">X</a>
+					<a href="#0" class="modal_close" onclick="closeAddModal()">X</a>
 				</div>
 				<input class="addStdBtn" type="file" name="file" id="file" accept=".csv" style="margin-left: 20px;">
     			<div class="add_table_wrapper" style="max-height: 400px; overflow-y: scroll; margin-bottom: 10px;">
 					<table class="table" id="csv_table" style="padding: 10px;">
 						<thead style="position: sticky; top: 0; background-color: white;">
 							<tr>
-								<!-- <th>
-									<input type="checkbox" value="checkCsvAll" onclick="checkCsvAll(this)">
-								</th> -->
 								<th><h6 style="font-weight: 700;">이름</h6></th>
 								<th><h6 style="font-weight: 700;">전화번호</h6></th>
 								<th><h6 style="font-weight: 700;">이메일</h6></th>
@@ -638,14 +635,14 @@
 		                            /* '<td><a href="' + row.downloadLink + '">받기</a></td>' + */
 	                            '</tr>';
 	                        $('#table-body').append(template);
-	                    });
-	                    var complete = 
-	                       	'<div class="table-top-content" style="width: 300px; text-align: center; margin-bottom: 0; height: 40px; padding: 8px 16px;">' +
-	                       		'<p style="color: white">학생 정보가 저장되었습니다!</p>' +
-	                       	'</div>';
-	                    $('.add_modal_popup').append(complete);
-	                }
-	            });
+	                    	});
+		                    var complete = 
+		                       	'<div class="table-top-content" style="width: 300px; text-align: center; margin-bottom: 0; height: 40px; padding: 8px 16px;">' +
+		                       		'<p style="color: white">학생 정보가 저장되었습니다!</p>' +
+		                       	'</div>';
+		                    $('.add_modal_popup').append(complete);
+	                	}
+	            	});
 				}
 	        });
 		});
