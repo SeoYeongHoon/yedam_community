@@ -3,6 +3,8 @@ package com.yedam.app.yedam_post.service;
 import java.util.List;
 import java.util.Map;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
+
 public interface PostService {
 	
 	
@@ -121,6 +123,12 @@ public interface PostService {
     // 메인페이지 조회
     //--------------------------------------------
 	public List<PostVO> getPostAll(int boardId);
+	
+	//--------------------------------------------
+    // 수료과정별 게시판
+    //--------------------------------------------
+	public List<CurriculumVO> curriculumList();
+	
 
 }
 

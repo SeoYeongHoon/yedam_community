@@ -281,4 +281,11 @@
 		       ]]>
 		       AND board_id = #{boardId}
     </select>
+    
+<!-- 수료게시판 전체조회 -->
+    <select id="curriculumAll" resultType="CurriculumVO">
+    	    SELECT * 
+			FROM curriculum
+			WHERE is_complete = 1
+    </select>
 </mapper>

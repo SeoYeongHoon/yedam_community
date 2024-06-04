@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.mapper.CommentMapper;
 import com.yedam.app.yedam_post.mapper.PostMapper;
 import com.yedam.app.yedam_post.mapper.ReplyMapper;
@@ -292,5 +293,13 @@ public class PostServiceImpl implements PostService {
 		map.put("result", isSuccessed);
 		map.put("comment", postcommentVO);
 		return map;
+	}
+
+	//--------------------------------------------
+    // 수료과정별 게시판
+    //--------------------------------------------
+	@Override
+	public List<CurriculumVO> curriculumList() {
+		return postMapper.curriculumAll();
 	}
 }
