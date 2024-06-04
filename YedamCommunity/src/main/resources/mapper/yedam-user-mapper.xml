@@ -116,6 +116,7 @@
 	            , address
 	            , company_info
 	            , user_type
+	            , curriculum_id
 	            , curriculum_name
 	            , profile_image_name
 				, profile_image_size
@@ -132,6 +133,7 @@
 	            , address
 	            , company_info
 	            , user_type
+	            , curriculum_id
 	            , curriculum_name
 	            , profile_image_name
 				, profile_image_size
@@ -157,6 +159,7 @@
 			                , address
 			                , company_info
 			                , user_type
+			                , curriculum_id
 				            , curriculum_name
 				            , profile_image_name
 							, profile_image_size
@@ -179,6 +182,7 @@
 	                             , address
 	                             , company_info
 	                             , user_type
+	                             , curriculum_id
 					             , curriculum_name
 					             , profile_image_name
 								 , profile_image_size
@@ -195,6 +199,7 @@
 	                  , i.address
 	                  , i.company_info
 	                  , i.user_type
+	                  , i.curriculum_id
 		              , i.curriculum_name
 		              , i.profile_image_name
 					  , i.profile_image_size
@@ -236,6 +241,7 @@
 		                   address,
 		                   company_info,
 		                   user_type,
+		                   curriculum_id,
 		                   curriculum_name,
 		                   profile_image_name,
 		                   profile_image_size,
@@ -251,6 +257,7 @@
 				, #{address}
 				, #{companyInfo}
 				, #{userType}
+				, #{curriculumId}
 				, #{curriculumName}
 				, #{profileImageName}
 				, #{profileImageSize}
@@ -271,6 +278,7 @@
 							, address
 							, company_info
 							, user_type
+							, curriculum_id
 							, curriculum_name
 							, profile_image_name
 							, profile_image_size
@@ -286,6 +294,7 @@
 				, #{address}
 				, #{companyInfo}
 				, #{userType}
+				, #{curriculumId}
 				, #{curriculumName}
 				, #{profileImageName}
 				, #{profileImageSize}

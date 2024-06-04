@@ -104,30 +104,23 @@
 									<input name="companyInfo" type="text" placeholder="현재 수강생이거나 취업 준비 중이면 비워두기">
 								</div>
 							</div>
-							<!-- <div class="input-style-1" style="position: relative">
-								<label>과정입력</label> 
-								<div>
-									<input name="curriculumId" type="number" placeholder="과정명 입력" required="true" autofocus="">
-								</div>
-							</div> -->
 							<div class="select-style-1" style="position: relative">
 								<label>과정 선택</label>
 								<div class="select-position">
-									<select th:name="courseSelect">
+									<select th:name="courseSelect" id="selectCourse" onchange="appendCourseId()">
 										<option value="">====== 과정을 선택하세요. ======</option>
-										<option th:each="course : ${courses}" 
-												th:name="${course.curriculumName}" 
-												th:value="${course.curriculumName}" 
-												th:text="${course.curriculumName + ' (' + course.curriculumStartDate + ' ~ ' + course.curriculumEndDate + ')'}">
+										<option th:each="course : ${courses}"  
+												th:value="${course.curriculumName}"
+												th:name="${course.curriculumId}"
+												>
+												[[${course.curriculumName + ' (' + course.curriculumStartDate + ' ~ ' + course.curriculumEndDate + ')'}]]
 										</option>
 									</select>
+									<input type="hidden" id="selectedCourseId" th:name="selectedCourseId">
 								</div>
 							</div>
 							<div>
-								<label>프로필 사진</label> 
-								<!--<div>
-									<input name="userImage" type="file" placeholder="현재 수강생 또는 취업 준비 중이면 공란">
-								</div>-->
+								<label>프로필 사진</label>
 								<div>
 								    <input type="file" id="chooseFile" name="uploadFiles" onchange="loadFile(this)">
 						        </div>
@@ -149,6 +142,9 @@
 </body>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+	//--------------------------------------------
+	// 주소찾기 API
+	//--------------------------------------------
 	function execDaumPostcode() {
 		new daum.Postcode({
 			oncomplete : function(data) {
@@ -161,9 +157,8 @@
 	}
 	
 	//--------------------------------------------
-	// 이메일 인증 함수
+	// 이메일 인증코드 전송 
 	//--------------------------------------------
-	
 	function sendVerificationCode() {
 		var email = $('#email').val();
 		console.log("이메일: " + email);
@@ -192,6 +187,9 @@
 		
 	}
 	
+	//--------------------------------------------
+	// 이메일 인증코드 확인
+	//--------------------------------------------
 	function verifyCode() {
 		var code = $('#verificationCode').val();
 		var email = $('#email').val();
@@ -228,9 +226,14 @@
 		}
 	}
 	
-	/* $(document).ready(function() {
-		sendVerificationCode();
-		verifyCode();
-	}); */
+	//--------------------------------------------
+	// curriculumId 보내기
+	//--------------------------------------------
+	function appendCourseId() {
+		var selectedCourseId = document.querySelectorAll('option:checked')[0].attributes.name.value;
+		
+		document.querySelector('#selectedCourseId').value = selectedCourseId;
+	}
+	$('#selectCourse').on('change', appendCourseId());
 </script>
 </h>

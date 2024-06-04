@@ -22,9 +22,6 @@
     .pagination a:hover:not(.active) {
       background-color: #ddd;
     }
-    .insertBtn {
-      text-align: right;
-    }
     .gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -41,7 +38,7 @@
 </head>
 <body>
 <div id="post_container">
-   <div th:switch="${boardId}">
+   <div th:switch="${boardId}" style="margin-bottom: 100px;">
     <div th:case="1">
       <h3>수료 과정별 게시판</h3>
     </div>
@@ -55,35 +52,39 @@
       <h3>질문과 토론 게시판</h3>
    </div>
   </div>
+  
   <div class="insertBtn">
-    <a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}">글쓰기</a>
+    <a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
   </div>
 
   <!-- 검색 폼 -->
-  <form id="searchForm" method="get" th:action="@{/all/post/{boardId}(boardId=${boardId})}">
-    <input type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
-    <button type="submit">검색</button>
-  </form>
+  <div class="input-style-1" style="position: absolute; top: 80px;">
+	<form id="searchForm" method="get" th:action="@{/all/post/{boardId}(boardId=${boardId})}">
+	    <input type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
+	    <!-- <button type="submit">검색</button> -->
+		<img style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+  	</form>
+  </div>
 
   <table class="table">
     <thead>
       <tr>
-        <th>게시글 번호</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>작성시간</th>
-        <th>조회수</th>
-        <th>추천수</th>
+        <th class="postTableHeader">게시글 번호</th>
+        <th class="postTableHeader">제목</th>
+        <th class="postTableHeader">작성자</th>
+        <th class="postTableHeader">작성시간</th>
+        <th class="postTableHeader">조회수</th>
+        <th class="postTableHeader">추천수</th>
       </tr>
     </thead>
     <tbody>
-      <tr th:each="info : ${postList}" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
-        <td th:text="${info.postId}">1</td>
-        <td th:text="${info.title}">제목</td>
-        <td th:text="${info.writer}">작성자</td>
-        <td th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
-        <td th:text="${info.postView}">조회수</td>
-        <td th:text="${info.postLike}">추천수</td>
+      <tr class="postListRow" th:each="info : ${postList}" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
+        <td class="postTableData" th:text="${info.postId}">1</td>
+        <td class="postTableData" th:text="${info.title}">제목</td>
+        <td class="postTableData" th:text="${info.writer}">작성자</td>
+        <td class="postTableData" th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
+        <td class="postTableData" th:text="${info.postView}">조회수</td>
+        <td class="postTableData" th:text="${info.postLike}">추천수</td>
       </tr>
     </tbody>
   </table>

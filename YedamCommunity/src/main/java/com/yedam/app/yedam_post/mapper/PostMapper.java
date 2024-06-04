@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostVO;
 
@@ -88,5 +89,9 @@ public interface PostMapper {
     // 메인페이지 조회
     //--------------------------------------------
 	public List<PostVO> getpostAll(int boardId);
-}
 
+	// --------------------------------------------
+	// 수료과정별 게시판
+	// --------------------------------------------
+	public List<CurriculumVO> curriculumAll();
+}

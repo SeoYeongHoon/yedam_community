@@ -252,42 +252,50 @@
     </select> -->
     
     <select id="getpostAll" resultType="PostVO">
-    	 SELECT *
-    FROM (
-        SELECT p.POST_ID,
-               p.BOARD_ID,
-               p.USER_ID,
-               p.TITLE,
-               p.POST_CONTENT,
-               p.CREATE_DATE,
-               p.WRITER,
-               p.POST_VIEW,
-               p.POST_LIKE,
-               p.UPDATE_DATE,
-               b.boardfile_location,
-               b.boardfile_name,
-               COUNT(r.reply_id) AS reply_count,
-               COUNT(c.comment_id) AS comment_count,
-               COUNT(r.reply_id) + COUNT(c.comment_id) AS total_count
-        FROM posts p
-        LEFT JOIN replies r ON p.post_id = r.post_id
-        LEFT JOIN comments c ON r.reply_id = c.reply_id
-        LEFT JOIN boardfiles b ON p.post_id = b.post_id
-        GROUP BY p.POST_ID,
-                 p.BOARD_ID,
-                 p.USER_ID,
-                 p.TITLE,
-                 p.POST_CONTENT,
-                 p.CREATE_DATE,
-                 p.WRITER,
-                 p.POST_VIEW,
-                 p.POST_LIKE,
-                 p.UPDATE_DATE,
-                 b.boardfile_location,
-                 b.boardfile_name)
-         <![CDATA[
-       WHERE ROWNUM <= 5
-       ]]>
-       AND board_id = #{boardId}
+    	    SELECT *
+		    FROM (
+		        SELECT p.POST_ID,
+		               p.BOARD_ID,
+		               p.USER_ID,
+		               p.TITLE,
+		               p.POST_CONTENT,
+		               p.CREATE_DATE,
+		               p.WRITER,
+		               p.POST_VIEW,
+		               p.POST_LIKE,
+		               p.UPDATE_DATE,
+		               b.boardfile_location,
+		               b.boardfile_name,
+		               COUNT(r.reply_id) AS reply_count,
+		               COUNT(c.comment_id) AS comment_count,
+		               COUNT(r.reply_id) + COUNT(c.comment_id) AS total_count
+		        FROM posts p
+		        LEFT JOIN replies r ON p.post_id = r.post_id
+		        LEFT JOIN comments c ON r.reply_id = c.reply_id
+		        LEFT JOIN boardfiles b ON p.post_id = b.post_id
+		        GROUP BY p.POST_ID,
+		                 p.BOARD_ID,
+		                 p.USER_ID,
+		                 p.TITLE,
+		                 p.POST_CONTENT,
+		                 p.CREATE_DATE,
+		                 p.WRITER,
+		                 p.POST_VIEW,
+		                 p.POST_LIKE,
+		                 p.UPDATE_DATE,
+		                 b.boardfile_location,
+		                 b.boardfile_name
+		        ORDER BY p.create_date DESC)
+		       <![CDATA[
+		       WHERE ROWNUM <= 5
+		       ]]>
+		       AND board_id = #{boardId}
+    </select>
+    
+<!-- 수료게시판 전체조회 -->
+    <select id="curriculumAll" resultType="CurriculumVO">
+    	    SELECT * 
+			FROM curriculum
+			WHERE is_complete = 1
     </select>
 </mapper>

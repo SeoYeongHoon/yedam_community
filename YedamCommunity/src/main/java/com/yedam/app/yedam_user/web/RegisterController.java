@@ -48,6 +48,7 @@ public class RegisterController {
 	@PostMapping("/register")
 	public String registerRequest(MultipartFile[] uploadFiles,
 								 @RequestParam String courseSelect,
+								 @RequestParam Integer selectedCourseId,
 			                     UserVO userVO,
 			                     Model model, 
 			                     RedirectAttributes rttr, 
@@ -55,8 +56,6 @@ public class RegisterController {
 		
 		String password = req.getParameter("password");
 		String passwordConfirm = req.getParameter("password-confirm");
-		
-		userVO.setCurriculumName(courseSelect);
 		
 	    try {
 	    	// 아이디 비번 확인
@@ -83,6 +82,9 @@ public class RegisterController {
                 userVO.setProfileImageExt(profileImage.getOriginalFilename().substring(profileImage.getOriginalFilename().lastIndexOf(".") + 1));
                 userVO.setDownloadLocation(imagePath);
             }
+    		
+    		userVO.setCurriculumName(courseSelect);
+    		userVO.setCurriculumId(selectedCourseId);
 
             userService.registerUser(userVO);
             return "register/registerComplete";
