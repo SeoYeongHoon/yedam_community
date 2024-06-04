@@ -55,10 +55,11 @@ public interface PostMapper {
     //--------------------------------------------
     // 게시글 수정
     //--------------------------------------------
-    int updatePost(PostVO postVO);
+    int updatePost1(PostVO postVO); // 제목, 내용 수정
+    int updatePost2(PostVO postVo); // 파일 수정
 
     //--------------------------------------------
-    // 게시글 삭제
+    // 게시글 삭제 
     //--------------------------------------------
     int deletePost1(int postId, int boardId);
     int deletePost2(int postId, int boardId);
@@ -86,8 +87,6 @@ public interface PostMapper {
 	//--------------------------------------------
     // 메인페이지 조회
     //--------------------------------------------
-//	public List<PostVO> MainpagePostList();
-	
 	public List<PostVO> getpostAll(int boardId);
 }
 

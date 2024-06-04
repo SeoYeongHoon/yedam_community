@@ -54,10 +54,12 @@ public class PostServiceImpl implements PostService {
 	// 게시글 수정
 	//--------------------------------------------
 	@Override
+	@Transactional
 	public Map<String, Object> PostUpdate(PostVO postVO) {
 		Map<String, Object> result = new HashMap<>();
 		try {
-			postMapper.updatePost(postVO);
+			postMapper.updatePost1(postVO); // 게시글
+			postMapper.updatePost2(postVO); // 파일 수정
 			result.put("success", true);
 		} catch (Exception e) {
 			result.put("success", false);
@@ -78,8 +80,6 @@ public class PostServiceImpl implements PostService {
 			postMapper.deletePost1(postId, boardId); // 대댓글 삭제
 			postMapper.deletePost2(postId, boardId); // 댓글 삭제
 			postMapper.deletePost3(postId, boardId); // 파일 삭제
-			                                   
-			                                         // 사이에 들어갈 삭제목록 자리들
 			postMapper.deletePost5(postId, boardId); // 게시글 삭제
 
 			resultMap.put("status", "success");
