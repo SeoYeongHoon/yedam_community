@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.LoginUserVO;
+import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostCommentVO;
 import com.yedam.app.yedam_post.service.PostReplyVO;
@@ -62,6 +62,9 @@ public class PostController {
 	                       @RequestParam(required = false, defaultValue = "6") Integer pageSize,
 	                       @RequestParam(required = false) String keyword,
 	                       Model model) {
+		System.err.println("boardId"+ boardId); //1
+		
+		
 	    try {
 	        postVO.setBoardId(boardId);
 
@@ -99,7 +102,24 @@ public class PostController {
 	    return "posts/postList";
 	}
 
-
+	//--------------------------------
+	// 수료과정별 게시판
+	//--------------------------------
+	@GetMapping("/curriculumPost")
+	public String curriculum(Model model) {
+		List<CurriculumVO> List = postService.curriculumList();
+		System.err.println(List);
+		return "posts/curriculumPost";
+	}
+	
+	
+	/*
+	 * @GetMapping("/curriculumPost")
+	 * 
+	 * @ResponseBody public String curriculumPOst() {
+	 * 
+	 * return null; }
+	 */
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------

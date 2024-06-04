@@ -27,12 +27,12 @@ public class PostVO {
     //댓글
     private int replyId;
     private String replyContent;
-    
-    //
     private int replyCount;
+    //
     private int commentCount;
+    //좋아요
     private int totalCount;
-    
+    //파일
 	private int boardfileId;
     private String boardfileName;
     private long boardfileSize;
