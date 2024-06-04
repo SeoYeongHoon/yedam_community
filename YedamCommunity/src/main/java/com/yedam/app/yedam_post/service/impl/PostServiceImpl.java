@@ -313,12 +313,26 @@ public class PostServiceImpl implements PostService {
 	public List<ReplyVO> getMyReply(int userId) {
 		return replyMapper.getMyReply(userId);
 	}	
-
+	
+	//--------------------------------------------
     // 수료과정별 게시판
     //--------------------------------------------
 	@Override
 	public List<CurriculumVO> curriculumList() {
 		return postMapper.curriculumAll();
 
+	}
+	//--------------------------------------------
+    // 게시글 전체 조회
+    //--------------------------------------------
+	@Override
+	public List<PostVO> postlist() {
+		return postMapper.postAll();
+	}
+
+	@Override
+	public List<PostVO> selectPost() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

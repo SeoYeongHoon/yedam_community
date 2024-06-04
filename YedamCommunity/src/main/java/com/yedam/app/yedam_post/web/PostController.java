@@ -109,17 +109,28 @@ public class PostController {
 	public String curriculum(Model model) {
 		List<CurriculumVO> List = postService.curriculumList();
 		System.err.println(List);
+		model.addAttribute("curriculum",List);
 		return "posts/curriculumPost";
 	}
 	
-	
-	/*
-	 * @GetMapping("/curriculumPost")
-	 * 
-	 * @ResponseBody public String curriculumPOst() {
-	 * 
-	 * return null; }
-	 */
+	//--------------------------------
+	// 게시글 전체 조회
+	//--------------------------------
+	 @GetMapping("/postList")
+	 @ResponseBody 
+	 public List<PostVO> curriculumPOst() {
+		 return  postService.postlist();
+	  }
+	 
+	//--------------------------------
+	// 해당 커리큘럼 게시글 조회
+	//--------------------------------
+	 @GetMapping("/selectPost")
+	 @ResponseBody 
+	 public List<PostVO> selectPost() {
+		 return  postService.postlist();
+	  }
+	 
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------

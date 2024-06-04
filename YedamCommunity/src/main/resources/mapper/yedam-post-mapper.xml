@@ -299,6 +299,15 @@
 			WHERE is_complete = 1
     </select>
     
+    <!-- 수료게시판 게시글 전체조회 -->
+    <select id="postAll" resultType="PostVO">
+ 	SELECT * 
+	FROM posts
+	WHERE board_id = 1
+	ORDER BY post_id DESC 
+    </select>
+    
+    
     <select id="getMyPost" resultType="PostVO">
     	SELECT *
 		FROM posts
