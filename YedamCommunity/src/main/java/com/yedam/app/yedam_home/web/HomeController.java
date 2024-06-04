@@ -19,7 +19,6 @@ import com.yedam.app.yedam_post.service.PostVO;
 
 @Controller
 public class HomeController {
-	
 	// --------------------------------------------
 	// 로컬 저장 경로
 	// --------------------------------------------
@@ -60,7 +59,7 @@ public class HomeController {
         // 인기 게시글
         List<PostVO> popularPosts = allPosts.stream()
                                             .sorted(Comparator.comparingInt(PostVO::getPostLike).reversed())
-                                            .limit(5) // 상위 5개 게시글
+                                            .limit(10) // 상위 5개 게시글
                                             .collect(Collectors.toList());
         
         model.addAttribute("board1Posts", board1Posts);
@@ -69,6 +68,7 @@ public class HomeController {
         model.addAttribute("board4Posts", board4Posts);
         model.addAttribute("popularPosts", popularPosts);
         model.addAttribute("postList", allPosts);
+        
         return "mainPages/home";
     }
 }
