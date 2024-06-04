@@ -329,10 +329,28 @@ public class PostServiceImpl implements PostService {
 	public List<PostVO> postlist() {
 		return postMapper.postAll();
 	}
-
+	
+	//--------------------------------------------
+    // 커리큘럼별 게시글 조회
+    //--------------------------------------------
 	@Override
-	public List<PostVO> selectPost() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PostVO> selectCurriculum(int curriculumId) {
+		return postMapper.curriculumSelect(curriculumId);
+	}
+	// 게시글 페이징
+	@Override
+	public List<PostVO> getPostsByFilter(int filter, int page, String searchQuery) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("filter", filter);
+		params.put("page", page);
+		params.put("searchQuery", searchQuery);
+		
+		return postMapper.getPostsByFilter(filter, page, searchQuery);
+	}
+	// 페이징용 카운트
+	
+	@Override
+	public int getTotalCnt(int filter, String searchQuery) {
+		return postMapper.getTotalCnt(filter, searchQuery);
 	}
 }
