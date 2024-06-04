@@ -115,6 +115,7 @@
 	</select>
 	<!-- 시험문제 랜덤 -->
 	<select id="selectTestQuizRand" resultType="QuizboxVO">
+		<!-- 
 		SELECT  aa.*
 		        ,ROWNUM as rn
         FROM    (SELECT  quiz_content
@@ -123,34 +124,37 @@
                          ,subject_id
                  FROM    quizbox
                  WHERE   test_id = #{testId}
-                 ORDER BY DBMS_RANDOM.VALUE) aa
-	</select>
-	<!-- 시험보기 랜덤 -->
-	<select id="selectTestQuizRand2" resultType="QuizboxVO">
-		WITH a AS(
+                 ORDER BY DBMS_RANDOM.VALUE) aa -->
+        WITH a AS(
 		SELECT  ROWNUM AS rn
-				,a.quiz_id
-				,a.example_num
-				,a.text_content
-		FROM    (SELECT  quiz_id
-						 ,example_num
-						 ,text_content
+        		,a.quiz_id
+        		,a.example_num
+        		,b.quiz_score
+		FROM    (SELECT  quiz_id, example_num
         		FROM     answers
-        		ORDER BY quiz_id
-        				 ,DBMS_RANDOM.VALUE) a
-        		JOIN quizbox b 
-        		ON(a.quiz_id = b.quiz_id)
+        		ORDER BY quiz_id, DBMS_RANDOM.VALUE) a
+        		JOIN quizbox b ON(a.quiz_id = b.quiz_id)
 		WHERE   b.test_id = #{testId})
-		
-		SELECT  a.quiz_id
-        		,MAX(DECODE(MOD(rn,5), 1, text_content)) AS one
-        		,MAX(DECODE(MOD(rn,5), 2, text_content)) AS two
-        		,MAX(DECODE(MOD(rn,5), 3, text_content)) AS three
-        		,MAX(DECODE(MOD(rn,5), 4, text_content)) AS four
-        		,MAX(DECODE(MOD(rn,5), 0, text_content)) AS five
-		FROM    a
-		GROUP BY a.quiz_id
+		SELECT  ROWNUM AS rn
+        		,aa.quiz_id
+        		,aa.one
+        		,aa.two
+        		,aa.three
+        		,aa.four
+        		,aa.five
+        		,aa.quiz_score
+		FROM    (SELECT a.quiz_id
+                		,MAX(DECODE(MOD(a.rn,5), 1, a.example_num)) AS one
+                		,MAX(DECODE(MOD(a.rn,5), 2, a.example_num)) AS two
+                		,MAX(DECODE(MOD(a.rn,5), 3, a.example_num)) AS three
+                		,MAX(DECODE(MOD(a.rn,5), 4, a.example_num)) AS four
+                		,MAX(DECODE(MOD(a.rn,5), 0, a.example_num)) AS five
+                		,a.quiz_score
+        		FROM    a
+        		GROUP BY a.quiz_id
+                 		 ,a.quiz_score) aa
 	</select>
+	
 	
 	
 	
@@ -174,6 +178,34 @@
 	</select>
 	<!-- 시험시작 퀴즈 -->
 	<select id="selectTestQuiz" resultType="QuizboxVO">
+		WITH a AS(
+        SELECT  b.quiz_id
+                ,b.quiz_content
+                ,b.quiz_score
+                ,a.text_content
+                ,a.example_num
+                ,b.subject_id
+        FROM    answers a
+        		JOIN quizbox b
+                ON(a.quiz_id = b.quiz_id)
+        WHERE   b.test_id = #{testId}
+        AND     b.quiz_id = #{quizId}
+        ORDER BY a.example_num)
+        SELECT  quiz_id
+                ,quiz_content
+                ,quiz_score
+                ,subject_id
+                ,MAX(DECODE(example_num, #{one}, text_content)) AS oneContent
+                ,MAX(DECODE(example_num, #{two}, text_content)) AS twoContent
+                ,MAX(DECODE(example_num, #{three}, text_content)) AS threeContent
+                ,MAX(DECODE(example_num, #{four}, text_content)) AS fourContent
+                ,MAX(DECODE(example_num, #{five}, text_content)) AS fiveContent
+        FROM    a
+        GROUP BY quiz_id
+        		 ,quiz_content
+        		 ,quiz_score
+        		 ,subject_id
+		<!--
 		WITH a AS(
         SELECT  ROWNUM as rn
         		,b.quiz_content
@@ -204,7 +236,45 @@
         GROUP BY quiz_id
         		 ,quiz_content
         		 ,quiz_score
-        		 ,subject_id
+        		 ,subject_id 
+        WITH a AS(
+		SELECT  ROWNUM as rn
+        		,a.quiz_id
+        		,a.example_num
+        		,a.text_content
+        		,b.quiz_content
+        		,b.quiz_score
+        		,b.subject_id
+        		,b.test_id
+		FROM    (SELECT  quiz_id, example_num, text_content
+        		FROM     answers
+        		ORDER BY quiz_id, DBMS_RANDOM.VALUE) a
+        		JOIN quizbox b ON(a.quiz_id = b.quiz_id)
+		WHERE   b.test_id = 378
+		AND     b.quiz_id = 73)
+		SELECT  aa.quiz_id
+				,aa.quiz_content
+				,aa.quiz_score
+				,aa.subject_id
+				,aa.one
+				,aa.two
+				,aa.three
+				,aa.four
+				,aa.five
+		FROM    (SELECT  a.quiz_id
+                		,a.quiz_content
+                		,a.quiz_score
+                		,a.subject_id
+                		,MAX(DECODE(mod(a.rn,5), 1, a.text_content)) AS one
+                		,MAX(DECODE(mod(a.rn,5), 2, a.text_content)) AS two
+                		,MAX(DECODE(mod(a.rn,5), 3, a.text_content)) AS three
+                		,MAX(DECODE(mod(a.rn,5), 4, a.text_content)) AS four
+                		,MAX(DECODE(mod(a.rn,5), 0, a.text_content)) AS five
+            	FROM    a
+            	GROUP BY a.quiz_id
+            			 ,a.quiz_content
+            			 ,a.quiz_score
+            			 ,a.subject_id) aa-->
 	</select>
 	
 	
@@ -432,11 +502,11 @@
             ,MAX(DECODE(example_answer, 1, example_num)) AS example_num
             ,MAX(test_answer) AS test_answer
             ,MAX(is_correct) AS is_correct
-            ,MAX(DECODE(example_num, 1, text_content)) AS one
-            ,MAX(DECODE(example_num, 2, text_content)) AS two
-            ,MAX(DECODE(example_num, 3, text_content)) AS three
-            ,MAX(DECODE(example_num, 4, text_content)) AS four
-            ,MAX(DECODE(example_num, 5, text_content)) AS five
+            ,MAX(DECODE(example_num, 1, text_content)) AS oneContent
+            ,MAX(DECODE(example_num, 2, text_content)) AS twoContent
+            ,MAX(DECODE(example_num, 3, text_content)) AS threeContent
+            ,MAX(DECODE(example_num, 4, text_content)) AS fourContent
+            ,MAX(DECODE(example_num, 5, text_content)) AS fiveContent
         FROM a
         GROUP BY test_result_id
         		 ,quiz_id

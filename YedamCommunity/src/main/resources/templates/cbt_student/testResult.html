@@ -100,11 +100,11 @@
 			<br> <br>
 			<div>
 				<!-- 보기번호 정답/오답 표시 -->
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 1 ? 'true' : (quiz.exampleNum != 1 && quiz.testAnswer == 1)? 'false':_}">① [[${quiz.one}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 2 ? 'true' : (quiz.exampleNum != 2 && quiz.testAnswer == 2)? 'false':_}">② [[${quiz.two}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 3 ? 'true' : (quiz.exampleNum != 3 && quiz.testAnswer == 3)? 'false':_}">③ [[${quiz.three}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 4 ? 'true' : (quiz.exampleNum != 4 && quiz.testAnswer == 4)? 'false':_}">④ [[${quiz.four}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 5 ? 'true' : (quiz.exampleNum != 5 && quiz.testAnswer == 5)? 'false':_}">⑤ [[${quiz.five}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 1 ? 'true' : (quiz.exampleNum != 1 && quiz.testAnswer == 1)? 'false':_}">① [[${quiz.oneContent}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 2 ? 'true' : (quiz.exampleNum != 2 && quiz.testAnswer == 2)? 'false':_}">② [[${quiz.twoContent}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 3 ? 'true' : (quiz.exampleNum != 3 && quiz.testAnswer == 3)? 'false':_}">③ [[${quiz.threeContent}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 4 ? 'true' : (quiz.exampleNum != 4 && quiz.testAnswer == 4)? 'false':_}">④ [[${quiz.fourContent}]]</span>
+				<span class="tresult_4" th:classappend="${quiz.exampleNum == 5 ? 'true' : (quiz.exampleNum != 5 && quiz.testAnswer == 5)? 'false':_}">⑤ [[${quiz.fiveContent}]]</span>
 			</div>
 		</div>
 		<div th:unless="${quiz.isCorrect == 0}">

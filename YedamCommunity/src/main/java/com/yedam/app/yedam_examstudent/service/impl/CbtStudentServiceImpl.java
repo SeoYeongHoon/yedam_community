@@ -73,13 +73,6 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	public List<QuizboxVO> testQuizRand(QuizboxVO quizboxVO) {
 		return cbtStudentMapper.selectTestQuizRand(quizboxVO);
 	}
-	//ㅡㅡㅡㅡㅡㅡ
-	//시험보기랜덤
-	//ㅡㅡㅡㅡㅡㅡ
-	@Override
-	public List<QuizboxVO> testQuizRand2(QuizboxVO quizboxVO) {
-		return cbtStudentMapper.selectTestQuizRand2(quizboxVO);
-	}
 	//ㅡㅡㅡㅡ
 	//시험상세
 	//ㅡㅡㅡㅡ
