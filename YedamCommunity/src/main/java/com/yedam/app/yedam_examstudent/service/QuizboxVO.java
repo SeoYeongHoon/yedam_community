@@ -20,11 +20,16 @@ public class QuizboxVO { //선택된문제 테이블
 	private int testAnswer;
 	private int exampleAnswer;
 	private int exampleNum;
-	private String one;
-	private String two;
-	private String three;
-	private String four;
-	private String five;
+	private String oneContent; //1번보기내용
+	private String twoContent; //2번보기내용
+	private String threeContent; //3번보기내용
+	private String fourContent; //4번보기내용
+	private String fiveContent; //5번보기내용
+	private int one; //1번보기번호
+	private int two; //2번보기번호
+	private int three; //3번보기번호
+	private int four; //4번보기번호
+	private int five; //5번보기번호
 	public int getQuizboxId() {
 		return quizboxId;
 	}
@@ -109,41 +114,71 @@ public class QuizboxVO { //선택된문제 테이블
 	public void setExampleAnswer(int exampleAnswer) {
 		this.exampleAnswer = exampleAnswer;
 	}
-	public String getOne() {
-		return one;
-	}
-	public void setOne(String one) {
-		this.one = one;
-	}
-	public String getTwo() {
-		return two;
-	}
-	public void setTwo(String two) {
-		this.two = two;
-	}
-	public String getThree() {
-		return three;
-	}
-	public void setThree(String three) {
-		this.three = three;
-	}
-	public String getFour() {
-		return four;
-	}
-	public void setFour(String four) {
-		this.four = four;
-	}
-	public String getFive() {
-		return five;
-	}
-	public void setFive(String five) {
-		this.five = five;
-	}
 	public int getExampleNum() {
 		return exampleNum;
 	}
 	public void setExampleNum(int exampleNum) {
 		this.exampleNum = exampleNum;
+	}
+	public String getOneContent() {
+		return oneContent;
+	}
+	public void setOneContent(String oneContent) {
+		this.oneContent = oneContent;
+	}
+	public String getTwoContent() {
+		return twoContent;
+	}
+	public void setTwoContent(String twoContent) {
+		this.twoContent = twoContent;
+	}
+	public String getThreeContent() {
+		return threeContent;
+	}
+	public void setThreeContent(String threeContent) {
+		this.threeContent = threeContent;
+	}
+	public String getFourContent() {
+		return fourContent;
+	}
+	public void setFourContent(String fourContent) {
+		this.fourContent = fourContent;
+	}
+	public String getFiveContent() {
+		return fiveContent;
+	}
+	public void setFiveContent(String fiveContent) {
+		this.fiveContent = fiveContent;
+	}
+	public int getOne() {
+		return one;
+	}
+	public void setOne(int one) {
+		this.one = one;
+	}
+	public int getTwo() {
+		return two;
+	}
+	public void setTwo(int two) {
+		this.two = two;
+	}
+	public int getThree() {
+		return three;
+	}
+	public void setThree(int three) {
+		this.three = three;
+	}
+	public int getFour() {
+		return four;
+	}
+	public void setFour(int four) {
+		this.four = four;
+	}
+	public int getFive() {
+		return five;
+	}
+	public void setFive(int five) {
+		this.five = five;
 	}
 	
 	
