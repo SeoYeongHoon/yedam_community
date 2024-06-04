@@ -96,7 +96,7 @@ public interface PostMapper {
 	public List<PostVO> getMyPost(int userId);
 
 	// --------------------------------------------
-	// 수료과정별 게시판
+	// 수료과정
 	// --------------------------------------------
 	public List<CurriculumVO> curriculumAll();
 	
@@ -104,4 +104,15 @@ public interface PostMapper {
     // 게시글 전체 조회
     //--------------------------------------------
 	public List<PostVO> postAll();
+	
+	//--------------------------------------------
+    // 커리큘럼별 게시글 조회
+    //--------------------------------------------
+	public List<PostVO> curriculumSelect(int curriculumId);
+	
+	// 게시글 페이징 및 필터링
+	public List<PostVO> getPostsByFilter (int filter, int page, String searchQuery);
+	
+	// 페이징용 카운트
+	int getTotalCnt(int filter, String searchQuery);
 }

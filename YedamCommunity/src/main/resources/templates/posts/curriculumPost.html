@@ -4,6 +4,14 @@
       layout:decorate="~{common/layouts/default_layout}"
       layout:fragment="Home">
       
+<style>
+.center {
+  text-align: center;
+  width: 60%;
+  margin: auto;
+}
+</style>
+      
 <head>
   <title>게시글 목록</title>
 </head>
@@ -16,14 +24,24 @@
 		<ul class="buttons-group">
 			<li th:each="curriculums : ${curriculum}">
 				<button type="button" style="padding: 10px 30px;"
-					class="main-btn success-btn-outline btn-hover classNum active curriculum"
-					th:value="${curriculums.curriculumId}">[[${curriculums.curriculumName}]]</button>
+						class="main-btn success-btn-outline btn-hover classNum active curriculum chooseCurriculum"
+						th:value="${curriculums.curriculumId}">[[${curriculums.curriculumName}]]</button>
 			</li>
 		</ul>
 	</div>
 	<!-- end card -->
 </div>
-<div id="search"></div>
+	<!-- 게시글 검색 -->
+	<div>
+		<form id="searchForm" method="get" >
+			<input style="border: solid black 1px; top: 80px;" type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
+  		</form>
+ 	</div>
+ 	<!-- 게시글 검색 end -->
+	<div>
+    	<a th:href="@{/all/postInsert/1}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+ 	</div>
+ 
 <div id="postList">
 	<table class="table">
 	    <thead>
@@ -39,43 +57,26 @@
 	    <tbody id="tbody">
 	    </tbody>
 	  </table>
+	  
+	  asdasdsad
+	  <div class="center">
+	  	<div class="homeworkPaging"></div>
+	  </div>
 </div>
-
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
-<p>footer</p>
+<h1>갤러리</h1>
+<div id="gallery"></div>
 </div>
 <script>
 //--------------------------
 // 페이지 로드
 //--------------------------
  $().ready(function(){
-	 searchForm();
 	 postList();
 })
 
-//검색창
-function searchForm(){
-	let search =
-		`
-			<div>
-				<form id="searchForm" method="get" >
-	    			<input style="border: solid black 1px; top: 80px;" type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
-  				</form>
- 			</div>
-		`
-	$('#search').append(search)
-} // postList end 
-
+//----------------
 //게시글 리스트
+//-----------------
 function postList(){
 	
 	$.ajax({
@@ -84,9 +85,45 @@ function postList(){
 		async: false,
 		success: function(data){
 			data.forEach(function(e){
-				console.log(e.postId)
 				let postData = formatDate(e.createDate);
-				console.log("게시글 날짜"+postData)
+				let post =
+					`
+			      		<tr id="tr" onclick="location.href='/all/post/1/${e.postId}'">
+			        		<td class="postTableData">${e.postId}</td>
+					       	<td class="postTableData">${e.title}</td>
+			        		<td class="postTableData">${e.writer}</td>
+			        		<td class="postTableData">${postData}</td>
+			        		<td class="postTableData">${e.postView}</td>
+			        		<td class="postTableData">${e.postLike}</td>
+			      		</tr>
+			  		`
+			  	gallery(e.postId);
+			  	$('#tbody').append(post)
+			})
+		
+		},
+		error: function(){
+			alert('게시글리스트 아작스 실패')
+		}
+	})
+	
+} //postList end
+
+//---------------------------
+// 과정 선택
+//---------------------------
+$('.curriculum').on('click',function(){
+	let curriculumId = $(this).val()
+	
+	$.ajax({
+		url:'/all/selectCurriculum',
+		type:'get',
+		data:{curriculumId:curriculumId},
+		success:function(data){
+			$('#tbody').empty();
+			data.forEach(function(e){
+				console.log("게시글 아이디=" + e.postId)
+				let postData = formatDate(e.createDate);
 				let post =
 					`
 			      		<tr id="tr" onclick="location.href='/all/post/1/${e.postId}'">
@@ -101,27 +138,85 @@ function postList(){
 			  	$('#tbody').append(post)
 			})
 		},
-		error: function(){
-			alert('게시글리스트 아작스 실패')
-		}
-	})
-	
-} //postList end
-$('.curriculum').on('click',function(){
-	let curriculumId = $(this).val()
-	
-	$.ajax({
-		url:'/all/selectPost',
-		type:'',
-		data:{},
-		success:function(data){
-			alert("커리큘럼 버튼 성공")
-		},
 		error:function(err){
 			alert('커리큘럼 버튼 실패')
 		}
 	})
 })
+//--------------------------
+// 갤러리 출력
+//-------------------------
+function gallery(postId){
+	console.log("갤러리 성공=="+postId)
+	
+	$.ajax({
+		url:'/all/gallery',
+		type:'get',
+		data:{postId : postId},
+		success:function(data){
+			data.forEach(function(e){
+			 console.log("게시글 아이디 = "+postId+"/ 게시글 파일"+e.boardfileLocation) 
+			 let galleryList =
+				 `
+				 	<div onclick="location.href='/all/post/1/${postId}'">
+			 			<img src="/files/${e.boardfileLocation}" alt="${e.boardfileName}">
+			 		</div>
+				 `
+			$('#gallery').append(galleryList);
+			})
+		},
+		error:function(err){
+			alert('gallery실패')
+		}
+	})
+}
+
+
+//--------------------------------------------
+// 현재 과제 리스트(필터링)
+//--------------------------------------------
+function filterHomeworks(page) {
+    var filter = $('.chooseCurriculum').val();
+    var searchQuery = $('#searchKeyword').val();
+
+    $.ajax({
+        url: '/admin/filterPost',
+        type: 'GET',
+        data: {
+            page: page,
+            filter: filter,
+            searchQuery: searchQuery
+        },
+        success: function(response) {
+            updateHomeworks(response.homeworks);
+            homeworkPagination(response.page, page);
+        },
+        error: function(error) {
+            console.error('Error:', error);
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //----------------------
 //날짜 포멧 변환 함수
 //----------------------

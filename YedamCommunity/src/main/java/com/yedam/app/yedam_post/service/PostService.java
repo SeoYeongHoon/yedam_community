@@ -137,7 +137,7 @@ public interface PostService {
 	public List<PostReplyVO> getMyReply(int userId);
   
 	//--------------------------------------------
-    // 수료과정별 게시판
+    // 수료과정
     //--------------------------------------------
 	public List<CurriculumVO> curriculumList();
 	
@@ -149,7 +149,15 @@ public interface PostService {
 	//--------------------------------------------
     // 해당커리큘럼 게시글 조회
     //--------------------------------------------
-	public List<PostVO> selectPost();
+	public List<PostVO> selectCurriculum(int curriculumId);
+	
+	//--------------------------------------------
+    // 게시글 페이징 및 필터링
+    //--------------------------------------------
+	public List<PostVO> getPostsByFilter (int filter, int page, String searchQuery);
+	
+	// 페이징용 카운트
+	public int getTotalCnt(int filter, String searchQuery);
 	
 }
 
