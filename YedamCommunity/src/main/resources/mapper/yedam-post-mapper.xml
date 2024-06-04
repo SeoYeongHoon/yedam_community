@@ -298,4 +298,10 @@
 			FROM curriculum
 			WHERE is_complete = 1
     </select>
+    
+    <select id="getMyPost" resultType="PostVO">
+    	SELECT *
+		FROM posts
+		WHERE user_id = #{userId}
+    </select>
 </mapper>

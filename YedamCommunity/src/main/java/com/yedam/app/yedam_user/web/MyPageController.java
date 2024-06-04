@@ -24,6 +24,9 @@ import com.yedam.app.yedam_examstudent.service.CbtStudentService;
 import com.yedam.app.yedam_examstudent.service.TestVO;
 import com.yedam.app.yedam_homework.service.HomeWorkService;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
+import com.yedam.app.yedam_homework.service.ReplyVO;
+import com.yedam.app.yedam_post.service.PostService;
+import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
 import com.yedam.app.yedam_user.upload.service.ProfileImageService;
@@ -46,21 +49,35 @@ public class MyPageController {
 	@Autowired
 	CbtStudentService cbtStudentService;
 	
+	@Autowired
+	PostService postService;
+	
 	@GetMapping("/mypage")
 	public String myPage(TestVO testVO,
 						 HomeWorkVO homeWorkVO,
+						 PostVO postVO,
 						 Model model) {
 		System.out.println("유저정보: " + SecurityUtils.getCurrentLogId());
 		int logid = SecurityUtils.getCurrentLogId();
+		System.out.println("로그인 아이디: " + logid);
+		
+		// 내 게시글 출력
+		List<PostVO> myPostList = postService.getMyPost(logid);
+		model.addAttribute("myPost", myPostList);
+		
+		// 내 댓글 출력
+		List<ReplyVO> myReplyList = postService.getMyReply(logid);
+		model.addAttribute("myReply", myReplyList);
+		
+		// 내 시험 출력
 		testVO.setUserId(logid);
 		testVO.setPage(1);
 		List<TestVO> testList = cbtStudentService.testListAll(testVO);
 		model.addAttribute("recentTest", testList);
-		System.out.println("시험 리스트:" + testList);
 		
+		// 내 과제 출력
 		List<HomeWorkVO> homeworkList = homeWorkService.getRecentTest(logid);
 		model.addAttribute("recentHomework", homeworkList);
-		System.out.println("과제 리스트:" + homeworkList);
 		
 		return "mypage/mypage";
 	}
