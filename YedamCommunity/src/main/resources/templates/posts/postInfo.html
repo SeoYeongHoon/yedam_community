@@ -95,7 +95,7 @@
   <p th:text="${postInfo.writer}">Post Writer</p>
   <p th:text="${postInfo.postContent}">Post Content</p>
 
-  <h2 th:if="${#lists.size(postInfo.boardFiles) > 0}">첨부파일</h2>
+  <h2 th:if="${#lists.size(postInfo.boardFiles) > 0}"></h2>
   <div th:each="file : ${postInfo.boardFiles}">
     <!-- 이미지 파일 출력 -->
     <div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.jpg') or file.boardfileLocation.endsWith('.jpeg') or file.boardfileLocation.endsWith('.png') or file.boardfileLocation.endsWith('.gif'))}">
@@ -163,7 +163,7 @@
         <input type="hidden" name="replyId" th:value="${reply.replyId}"/>
         <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
         <input type="hidden" name="boardId" th:value="${postInfo.boardId}"/>
-        <textarea name="commentContent" style="background-color: yellow;"></textarea>
+        <textarea name="commentContent" id="commentContent" style="background-color: yellow;"></textarea>
         <button type="button" class="comment-submit border">대댓글 작성</button>
       </form>
     </li>
@@ -172,7 +172,7 @@
   <form id="reply-form" class="reply">
     <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
     <input type="hidden" name="boardId" th:value="${postInfo.boardId}"/>
-    <textarea name="replyContent" style="background-color: skyblue;"></textarea>
+    <textarea name="replyContent" id="replyContent" style="background-color: skyblue;"></textarea>
     <button type="button" id="reply-submit">댓글 작성</button>
   </form>
 
@@ -186,22 +186,34 @@
   <!-- 신고버튼 -->
   <button type="button" id="reportBtn">신고</button> 
 
-  <!-- 신고 폼 (모달 창으로 표시할 수도 있음) -->
-  <div id="reportForm" style="display: none">
-    <h3>게시글 신고</h3>
-    <form id="report-form">
-      <input type="hidden" id ="postId" name="postId" th:value="${postInfo.postId}"/>
-      <input type="hidden" id="boardId" name="boardId" th:value="${postInfo.boardId}"/>
-      <input type="hidden" name="reporter" th:value="${reporter}"/>
-      <select name="reportType">
-        <option value="1">부적절한 언어 사용</option>
-        <option value="2">유해하거나 위험한 행위</option>
-        <option value="3">성적인 내용</option>
-        <option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
-      </select>
-      <button type="button" id="report-submit">신고 제출</button>
-    </form>
-  </div>
+  <!-- 게시글 신고 모달창 -->
+<div id="reportForm" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">게시글 신고</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<input type="hidden" id ="postId" name="postId" th:value="${postInfo.postId}"/>
+                <input type="hidden" id="boardId" name="boardId" th:value="${postInfo.boardId}"/>
+                <input type="hidden" name="reporter" th:value="${reporter}"/>
+                   <select name="reportType">
+                   <option value="1">부적절한 언어 사용</option>
+                   <option value="2">유해하거나 위험한 행위</option>
+                   <option value="3">성적인 내용</option>
+                   <option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
+                   </select>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button type="button" id="report-submit">신고 제출</button>
+			</div>
+		</div>
+	</div>
+</div>
 
   <div>
   	<input id="writer" type="hidden" th:value="${postInfo.writer}">
@@ -213,36 +225,9 @@
   <a th:href="@{/all/post/{boardId}(boardId=${boardId})}">목록</a>
 </div>
 
-<!-- 등록완료 모달창 -->
-<div id="deleteModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">삭제 완료</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<p style="text-align: center;">게시글이 성공적으로 삭제되었습니다!</p>
-				<div style="text-align: center;">
-					<img alt="등록완료버튼" th:src="@{/images/registration.png}">
-				</div>
-			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button id='okBtn' type="button" class="btn btn-primary close" data-dismiss="modal">확인</button>
-			</div>
-		</div>
-	</div>
-</div>
-
 <script>
 
 
-/* $('#tesdsad').on('click', function () {
-	$('#modalReply').modal('show');
-}) */
 
 
 	let writer = $('#writer').val();
@@ -284,8 +269,6 @@
 		}
 		
 	})
-	
-	
 	
 	//------------------------
 	// 게시글수정/삭제버튼 권한
@@ -332,6 +315,7 @@
     // 댓글 작성
     //--------------------------------------------
     $(document).on("click", "#reply-submit", function () {
+    	if(!replyCheck()) return;
       let formData = new FormData(document.getElementById('reply-form'));
       $.ajax({
         url: "/all/Reply",
@@ -340,7 +324,7 @@
         contentType: false,
         data: formData,
         success: function (response) {
-          loadReplies();
+        	window.location.reload()
         },
         error: function (error) {
           console.error("댓글 등록 실패:", error);
@@ -367,7 +351,7 @@
         type: 'post',
         data: {replyId: replyId, replyContent: replyContent},
         success: function (data) {
-          loadReplies();
+        	window.location.reload()
         },
         error: function (err) {
           alert("댓글 업데이트 에러");
@@ -386,7 +370,7 @@
           type: "DELETE",
           data: {replyId: replyId},
           success: function (response) {
-            loadReplies();
+        	  window.location.reload()
           },
           error: function (error) {
             console.error("댓글 삭제 실패:", error);
@@ -400,6 +384,7 @@
     // 대댓글 작성
     //--------------------------------------------
     $(document).on("click", ".comment-submit", function () {
+    	if(!commentCheck()) return;
       let formData = $(this).closest("form").serialize();
       $.ajax({
         url: "/all/Comment",
@@ -536,7 +521,7 @@
   $(document).ready(function () {
     // 신고 버튼 클릭 시 폼 표시
     $("#reportBtn").on("click", function () {
-      $("#reportForm").toggle();
+      $("#reportForm").modal();
     });
 
     // 신고 제출
@@ -549,7 +534,6 @@
         success: function (response) {
           if (response === "success") {
             alert("신고가 접수되었습니다.");
-            $("#reportForm").hide();
           } else {
             alert("신고 접수에 실패하였습니다.");
           }
@@ -560,6 +544,7 @@
       });
     });
   });
+  
 
   //--------------------------------------------
   // 이벤트 핸들러 재적용 함수
@@ -660,6 +645,38 @@
         });
     });
   }
+  
+  function replyCheck(){
+		let name = $('#replyContent');
+		if(name.val() == ''){
+			alert('내용이 필요합니다.');
+			name.focus();
+			return false;
+		}
+		return true;
+	}
+  function commentCheck(){
+		let name = $('#commentContent');
+		if(name.val() == ''){
+			alert('내용이 필요합니다.');
+			name.focus();
+			return false;
+		}
+		return true;
+	}
+  
+  function commentCheck(){
+		let name = $('#commentContent');
+		if(name.val() ==){
+			return true;
+			
+		} else if(name.val() == ''){
+			alert('내용이 필요합니다.');
+			name.focus();
+		}
+		return false;
+	}
+
 
 </script>
 </body>

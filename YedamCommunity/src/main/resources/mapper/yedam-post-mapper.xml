@@ -194,7 +194,7 @@
 		WHERE post_id = #{postId}
     </update>
     
- 	<!-- 페이지네이션 -->
+ 	<!-- 게시글 조회 페이지네이션 -->
  	 <select id="getPosts" resultType="PostVO">
     SELECT p.*, f.*
     FROM (
@@ -304,4 +304,6 @@
 		FROM posts
 		WHERE user_id = #{userId}
     </select>
+    
+    
 </mapper>
