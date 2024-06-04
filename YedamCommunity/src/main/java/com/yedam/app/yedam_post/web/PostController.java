@@ -62,6 +62,9 @@ public class PostController {
 	                       @RequestParam(required = false, defaultValue = "6") Integer pageSize,
 	                       @RequestParam(required = false) String keyword,
 	                       Model model) {
+		System.err.println("boardId"+ boardId); //1
+		
+		
 	    try {
 	        postVO.setBoardId(boardId);
 
