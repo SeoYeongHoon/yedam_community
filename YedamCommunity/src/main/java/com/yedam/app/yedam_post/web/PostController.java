@@ -257,6 +257,14 @@ public class PostController {
 		if (postId == null) {
 			return "redirect:/post/" + boardId;
 		}
+		
+		// 파일 조회
+	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
+	    for (BoardFilesVO file : boardFilesVO) {
+	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
+	        file.setExists(find.exists());
+	    }
+	    
 		PostVO postVO = postService.getPostReplies(postId, boardId);
 		model.addAttribute("post", postVO);
 		model.addAttribute("boardId", boardId);
@@ -282,9 +290,12 @@ public class PostController {
 	                directory.mkdirs();
 	            }
 
-	            File dest = new File(filePath);
-	            file.transferTo(dest);
-
+	            Path savePath = Paths.get(filePath);
+	            try {
+					file.transferTo(savePath);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 	            postVO.setBoardfileName(fileName);
 	            postVO.setBoardfileSize(file.getSize());
 	            postVO.setBoardfileLocation(fileName);
@@ -342,5 +353,10 @@ public class PostController {
 		}
 		return likeCheck==1? true : false;
 	}
+	
+	// --------------------------------------------
+	// 투표 
+	// --------------------------------------------
+	
 
 }

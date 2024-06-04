@@ -93,7 +93,7 @@
   </select>
 
 	<!-- 게시글 수정 -->
-	<update id="updatePost" parameterType="PostVO">
+	<update id="updatePost1" parameterType="PostVO">
 		UPDATE posts
 		SET title =	#{title}
 		  , post_content = #{postContent}
@@ -101,7 +101,17 @@
 		WHERE post_id = #{postId}
 		AND board_id = #{boardId}
 	</update>
-
+	<!-- 게시글 수정 파일 -->
+	<update id="updatePost2" parameterType="com.yedam.app.yedam_post.service.BoardFilesVO">
+		UPDATE boardfiles
+		SET boardfile_name = #{boardfileName}
+    	  , boardfile_size = #{boardfileSize}
+          , boardfile_location = #{boardfileLocation}
+          , boardfile_ext = #{boardfileExt}
+		WHERE post_id = #{postId}
+		AND board_id = #{boardId}
+	</update>
+	
 	<!-- 삭제 -->
 	<delete id="deletePost1" parameterType="int">
 		DELETE FROM comments
