@@ -99,4 +99,9 @@ public interface PostMapper {
 	// 수료과정별 게시판
 	// --------------------------------------------
 	public List<CurriculumVO> curriculumAll();
+	
+	//--------------------------------------------
+    // 게시글 전체 조회
+    //--------------------------------------------
+	public List<PostVO> postAll();
 }

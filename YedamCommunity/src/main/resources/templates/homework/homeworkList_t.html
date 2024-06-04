@@ -99,7 +99,9 @@
 </div>
 
 <script>
+//----------------------
 //날짜 포멧 변환 함수
+//----------------------
 function formatDate(date) {
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = ''
 			+ d.getDate(), year = d.getFullYear();
@@ -113,6 +115,7 @@ function formatDate(date) {
 } 
 var today = new Date();
 var today1 = formatDate(today);
+
 //--------------------------------------------
 //날짜 비교해서 시험진행 상태 변경
 //--------------------------------------------
