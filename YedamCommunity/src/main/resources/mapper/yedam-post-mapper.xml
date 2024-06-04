@@ -275,8 +275,8 @@
 		                 p.UPDATE_DATE,
 		                 b.boardfile_location,
 		                 b.boardfile_name
-		          ORDER BY p.create_date DESC)
-		         <![CDATA[
+		        ORDER BY p.create_date DESC)
+		       <![CDATA[
 		       WHERE ROWNUM <= 5
 		       ]]>
 		       AND board_id = #{boardId}
