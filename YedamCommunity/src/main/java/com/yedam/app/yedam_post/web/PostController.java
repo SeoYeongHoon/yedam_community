@@ -9,11 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -124,7 +126,10 @@ public class PostController {
 	    
 	    // 현재 로그인한 유저와 작성자 비교
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-	    boolean isOwner = userVO.getuserId().equals(postVO.getUserId());
+	    String userName = userVO.getUsername();
+	    String userType = userVO.getUserType();
+	    System.err.println(userType);
+	    
 	    
 	    // 파일 조회
 	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
@@ -139,7 +144,8 @@ public class PostController {
 	    model.addAttribute("boardId", boardId);
 	    model.addAttribute("postInfo", postVO);
 	    // 작성자 여부 추가
-	    model.addAttribute("isOwner", isOwner);
+	    model.addAttribute("userName", userName);
+	    model.addAttribute("userType", userType);
 
 	    return "posts/postInfo";
 	}
@@ -207,9 +213,10 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 삭제 처리
 	// --------------------------------------------
-	@GetMapping("/postDelete/{boardId}/{postId}")
-	public String postDelete(@PathVariable int boardId
-			               , @PathVariable int postId) {
+	@DeleteMapping("/postDelete")
+	@ResponseBody
+	public String postDelete(@RequestParam int boardId
+			               , @RequestParam int postId) {
 
 		PostVO postVO = new PostVO();
 		postVO.setPostId(postId);
