@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,9 +36,10 @@ import com.yedam.app.yedam_post.service.PostReplyVO;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.ReportVO;
+import com.yedam.app.yedam_post.service.VoteItemVO;
 /**
  * 게시판, 게시글
- * 2024.05.29
+ * 2024.06.05
  * 임우열
  */
 @Controller
@@ -218,43 +221,68 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록 처리
 	// --------------------------------------------
-	@PostMapping("/postInsert")
-	public String postInsertProcess(PostVO postVO, 
-	                                @RequestParam("file") MultipartFile file, 
-	                                Authentication authentication) {
-		
-	        if (!file.isEmpty()) {
-	            String fileName = file.getOriginalFilename();
-	            System.err.println("fileName :" + fileName);
-	            String filePath = uploadPath + fileName;
-	            System.err.println("filePath :" + filePath);
-	            
-	            File directory = new File(uploadPath);
-	            if (!directory.exists()) {
-	                directory.mkdirs();
-	            }
-	            Path savePath = Paths.get(filePath);
-	            try {
-					file.transferTo(savePath);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	            postVO.setBoardfileName(fileName);
-	            postVO.setBoardfileSize(file.getSize());
-	            postVO.setBoardfileLocation(fileName);
-	            postVO.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
-	        }
+	// 투표관련으로 작업중
+    @PostMapping("/postInsert")
+    public String postInsertProcess(PostVO postVO, @RequestParam("file") MultipartFile file, 
+                                    @RequestParam(value = "items", required = false) List<String> items, 
+                                    @RequestParam(value = "endDate", required = false) String endDateString,
+                                    Authentication authentication) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date endDate = null;
+        if (endDateString != null) {
+            try {
+                endDate = formatter.parse(endDateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return "redirect:/error"; // 오류 페이지로 리디렉션
+            }
+        }
+        
+        if (!file.isEmpty()) {
+            String fileName = file.getOriginalFilename();
+            String filePath = uploadPath + fileName;
 
-	        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-	        postVO.setUserId(userVO.getuserId());
-	        postVO.setWriter(userVO.getUsername());
-	        postVO.setCreateDate(new Date());
-	        postVO.setUpdateDate(new Date());
-	        postService.createPost(postVO);
-	        
-	    return "redirect:/all/post/" + postVO.getBoardId();
-	}
+            File directory = new File(uploadPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
 
+            Path savePath = Paths.get(filePath);
+            try {
+                file.transferTo(savePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            postVO.setBoardfileName(fileName);
+            postVO.setBoardfileSize(file.getSize());
+            postVO.setBoardfileLocation(fileName);
+            postVO.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
+        }
+
+        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+        postVO.setUserId(userVO.getuserId());
+        postVO.setWriter(userVO.getUsername());
+        postVO.setCreateDate(new Date());
+        postVO.setUpdateDate(new Date());
+
+        if (postVO.getBoardId() == 4) { // 투표/토론 게시판인 경우
+            postVO.setVoteEndDate(endDate);
+            postService.createPost(postVO);
+
+            // 투표 항목 저장
+            for (int i = 0; i < items.size(); i++) {
+                VoteItemVO voteItem = new VoteItemVO();
+                voteItem.setVoteItemName(items.get(i));
+                voteItem.setVoteSeq(i + 1);
+                voteItem.setVoteId(postVO.getPostId());
+                postService.createVoteItem(voteItem);
+            }
+        } else {
+            postService.createPost(postVO);
+        }
+
+        return "redirect:/all/post/" + postVO.getBoardId();
+    }
 
 	// --------------------------------------------
 	// 게시글 삭제 처리

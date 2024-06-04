@@ -6,67 +6,79 @@
 <head>
   <title>게시글 작성</title>
   <style>
-	.insert-title {
-	margin-top: 40px;
-	}
-
+    .insert-title {
+        margin-top: 40px;
+    }
     h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 2em;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 2em;
     }
     label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-      font-size: 1.1em;
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 1.1em;
     }
     input[type="text"], textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1em;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
     }
     input[type="file"] {
-      margin-bottom: 20px;
-      font-size: 1em;
+        margin-bottom: 20px;
+        font-size: 1em;
     }
     .submit-button {
-      width: 100%;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1.1em;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      margin-bottom: 10px; 
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-bottom: 10px;
     }
     .submit-button:hover {
-      background-color: #357A38;
+        background-color: #357A38;
     }
   </style>
 </head>
 <body>
 <div class="container">
   <h1 class="insert-title">게시글 작성</h1>
-  <form th:action="@{/all/postInsert}" th:object="${post}" method="post" enctype="multipart/form-data">
-    
-    <label for="title">제목: </label>
+  <form th:action="@{/all/postInsert}" th:object="${post}" method="post" enctype="multipart/form-data" id="post-form">
+    <label for="title">제목:</label>
     <input type="text" id="title" th:field="*{title}" /><br />
     
-<!-- <div th:switch="${boardId}">
-    <div th:case="4">
-      <h3>투표 / 토론</h3>
-      <input type="radio" name="post-vote" value="질문"> 질문
-      <input type="radio" name="post-debate" value="토론"> 토론
-      
-      
-    </div>
-  </div> -->
+    <div th:switch="${boardId}">
+      <div th:case="4">
+        <h3>투표 / 토론</h3>
+        <div class="form-group">
+            <label for="type">유형</label>
+            <input type="radio" id="question" name="type" value="question">
+            <label for="question">질문</label>
+            <input type="radio" id="discussion" name="type" value="discussion">
+            <label for="discussion">토론</label>
+        </div>
+        <div class="form-group">
+            <label for="period">기간</label>
+            <input type="date" id="endDate" name="endDate">
+        </div>
+        <div class="form-group">
+            <label for="items">항목</label>
+            <div class="form-items" id="item-container">
+                <input type="text" class="item-input" placeholder="항목을 입력하세요.">
+                <button type="button" id="add-item">추가</button>
+            </div>
+        </div>
+      </div>
+    </div> 
     
     <label for="postContent">내용:</label>
     <textarea id="postContent" th:field="*{postContent}"></textarea><br />
@@ -74,18 +86,34 @@
     <label for="writer">작성자:</label>
     <input type="text" id="writer" th:field="*{writer}" readonly /><br />
     
-     
-
-    <!-- 파일 업로드 -->
-    <label for="file">파일 :</label>
+    <label for="file">파일:</label>
     <input type="file" name="file" multiple="multiple"/><br />
     
     <input type="hidden" th:field="*{boardId}" />
     <input type="hidden" th:field="*{userId}" />
-
-
     <button class="submit-button" type="submit">등록</button>
   </form>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#add-item').click(function() {
+        if ($('#item-container input.item-input').length < 5) {
+            $('#item-container').prepend('<input type="text" class="item-input" placeholder="항목을 입력하세요.">');
+        } else {
+            alert('최대 5개의 항목만 추가할 수 있습니다.');
+        }
+    });
+
+    $('#post-form').submit(function(event) {
+        $('.item-input').each(function() {
+            var item = $(this).val();
+            if (item) {
+                $('#post-form').append('<input type="hidden" name="items" value="' + item + '">');
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
