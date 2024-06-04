@@ -134,7 +134,7 @@ public interface PostService {
 	//--------------------------------------------
     // 마이페이지 내 댓글 조회
     //--------------------------------------------
-	public List<ReplyVO> getMyReply(int userId);
+	public List<PostReplyVO> getMyReply(int userId);
   
 	//--------------------------------------------
     // 수료과정별 게시판
