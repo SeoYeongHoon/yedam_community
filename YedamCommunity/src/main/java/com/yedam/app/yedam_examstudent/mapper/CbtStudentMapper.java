@@ -45,10 +45,6 @@ public interface CbtStudentMapper {
 	//시험문제 랜덤
 	//ㅡㅡㅡㅡㅡㅡㅡ
 	public List<QuizboxVO> selectTestQuizRand(QuizboxVO quizboxVO);
-	//ㅡㅡㅡㅡㅡㅡㅡ
-	//시험보기 랜덤
-	//ㅡㅡㅡㅡㅡㅡㅡ
-	public List<QuizboxVO> selectTestQuizRand2(QuizboxVO quizboxVO);
 	//ㅡㅡㅡㅡ
 	//시험상세
 	//ㅡㅡㅡㅡ

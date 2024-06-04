@@ -3,6 +3,28 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{common/layouts/default_layout}"
 	  layout:fragment="Home">
+	<style>
+		.col-no {
+	        width: 50px; /* No 열의 너비 */
+	    }
+	    .col-title {
+	        width: 500px; /* 제목, 댓글내용 열의 너비 */
+	    }
+	    .col-board {
+	        width: 150px; /* 게시판 열의 너비 */
+	    }
+	    .col-date {
+	        width: 100px; /* 작성일자 열의 너비 */
+	    }
+		.ellipsis {
+			display: inline-block;
+	        white-space: nowrap;
+	        overflow: hidden;
+	        text-overflow: ellipsis;
+	        max-width: 100%;
+	        vertical-align: top !important;
+	    }
+	</style>
 	<script>
 		function showProfileForm() {
 			document.querySelector('.mypage_manage_container').style.display = 'none';
@@ -132,10 +154,12 @@
 							<p class="manage_menu_title">내가 쓴 글</p>
 							<p>작성한 게시글과 댓글을 확인하세요.</p>
 						</a>
-						<a class="manage_exam_homework_menu manage_menu_item" href="#" onclick="showExamHomeworkForm()">
-							<p class="manage_menu_title">내 시험 / 과제</p>
-							<p>시험과 과제를 확인하세요.</p>
-						</a>
+						<th:block sec:authorize="hasAuthority('ROLE_LEARN')">
+							<a class="manage_exam_homework_menu manage_menu_item" href="#" onclick="showExamHomeworkForm()">
+								<p class="manage_menu_title">내 시험 / 과제</p>
+								<p>시험과 과제를 확인하세요.</p>
+							</a>
+						</th:block>
 					</nav>
 				</div>
 				
@@ -144,7 +168,7 @@
 					<div class="mypage_my_board mt-4">
 						
 						<div class="mypage_my_post mb-4 pt-4" style="position: relative;">
-							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 10px 16px;">
 								<h4 style="color: white">내 게시글</h4>
 						    </div>
 							<a href="#" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;">
@@ -154,40 +178,32 @@
 							<table class="table mt-2" style="padding: 5px 10px;">
 								<thead>
 									<tr>
-										<th class="postTableHeader">
-											<h6>No</h6>
-										</th>
-										<th class="postTableHeader">
-											<h6>제목</h6>
-										</th>
-										<th class="postTableHeader">
-											<h6>게시판</h6>
-										</th>
-										<th class="postTableHeader">
-											<h6>작성일자</h6>
-										</th>
+										<th class="col-no">
+							                <h6>No</h6>
+							            </th>
+							            <th class="col-title">
+							                <h6>제목</h6>
+							            </th>
+							            <th class="col-board">
+							                <h6>게시판</h6>
+							            </th>
+							            <th class="col-date">
+							                <h6>작성일자</h6>
+							            </th>
 									</tr>
 								</thead>
 								<tbody>
 									<th:block th:each="myPost, idx : ${myPost}">
-										<tr class="postListRow" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${myPost.boardId}, postId=${myPost.postId})}'|">
-											<td class="postTableData"><p>[[${idx.index + 1}]]</p></td>
-											<td class="postTableData"><p>[[${myPost.title}]]</p></td>
-											<td class="postTableData" th:switch="${myPost.boardId}">
-												<div th:case="1">
-													<p>수료 과정별 게시판</p>
-												</div>
-												<div th:case="2">
-													<p>구인/구직 게시판</p>
-												</div>
-												<div th:case="3">
-													<p>정보 게시판</p>
-												</div>
-												<div th:case="4">
-													<p>질문과 토론 게시판</p>
-												</div>
+										<tr class="postListRow" th:onclick="|window.open('@{/all/post/{boardId}/{postId}(boardId=${myPost.boardId}, postId=${myPost.postId})}', '_blank')|">
+											<td class="col-no replyTableData"><p>[[${idx.index + 1}]]</p></td>
+											<td class="col-title replyTableData ellipsis">[[${myPost.title}]]</td>
+											<td class="col-board replyTableData" th:switch="${myPost.boardId}">
+												<div th:case="1">수료 과정별 게시판</div>
+												<div th:case="2">구인/구직 게시판</div>
+												<div th:case="3">정보 게시판</p></div>
+												<div th:case="4">질문과 토론 게시판</p></div>
 											</td>
-											<td class="postTableData"><p>[[${#dates.format(myPost.createDate, 'yy.MM.dd')}]]</p></td>
+											<td class="replyTableData"><p>[[${#dates.format(myPost.createDate, 'yy.MM.dd HH:mm:ss')}]]</p></td>
 										</tr>
 									</th:block>
 								</tbody>
@@ -195,7 +211,7 @@
 						</div>
 						
 						<div class="mypage_my_comment mt-4" style="position: relative; border-top: 1px solid rgb(192, 192, 192, 0.5); padding-top: 30px;">
-							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 10px 16px;">
 								<h4 style="color: white">내 댓글</h4>
 						    </div>
 							<a href="#" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 55px; right: 20px;">
@@ -205,40 +221,32 @@
 							<table class="table mt-2" style="padding: 5px 10px;">
 								<thead>
 									<tr>
-										<th>
-											<h6>No</h6>
-										</th>
-										<th>
-											<h6>댓글 내용</h6>
-										</th>
-										<th>
-											<h6>게시판</h6>
-										</th>
-										<th>
-											<h6>작성일자</h6>
-										</th>
+										<th class="col-no">
+							                <h6>No</h6>
+							            </th>
+							            <th class="col-title">
+							                <h6>댓글 내용</h6>
+							            </th>
+							            <th class="col-board">
+							                <h6>게시판</h6>
+							            </th>
+							            <th class="col-date">
+							                <h6>작성일자</h6>
+							            </th>
 									</tr>
 								</thead>
 								<tbody>
 									<th:block th:each="myReply, idx : ${myReply}">
-										<tr class="postListRow" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${myReply.boardId}, postId=${myReply.postId})}'|">
-											<td class="replyTableData"><p>[[${idx.index + 1}]]</p></td>
-											<td class="replyTableData"><p>[[${myReply.replyContent}]]</p></td>
-											<td class="replyTableData" th:switch="${myReply.boardId}">
-												<div th:case="1">
-													<p>수료 과정별 게시판</p>
-												</div>
-												<div th:case="2">
-													<p>구인/구직 게시판</p>
-												</div>
-												<div th:case="3">
-													<p>정보 게시판</p>
-												</div>
-												<div th:case="4">
-													<p>질문과 토론 게시판</p>
-												</div>
+										 <tr class="postListRow" th:onclick="|window.open('@{/all/post/{boardId}/{postId}(boardId=${myReply.boardId}, postId=${myReply.postId})}', '_blank')|">
+											<td class="col-no replyTableData"><p>[[${idx.index + 1}]]</p></td>
+											<td class="col-title replyTableData ellipsis">[[${myReply.replyContent}]]</td>
+											<td class="col-board replyTableData" th:switch="${myReply.boardId}">
+												<div th:case="1">수료 과정별 게시판</div>
+												<div th:case="2">구인/구직 게시판</div>
+												<div th:case="3">정보 게시판</p></div>
+												<div th:case="4">질문과 토론 게시판</p></div>
 											</td>
-											<td class="replyTableData"><p>[[${#dates.format(myReply.replyDate, 'yy.MM.dd')}]]</p></td>
+											<td class="col-date replyTableData"><p>[[${#dates.format(myReply.replyDate, 'yy.MM.dd HH:mm:ss')}]]</p></td>
 										</tr>
 									</th:block>
 								</tbody>
@@ -246,13 +254,13 @@
 						</div>
 					</div>
 					
-					<div class="mypage_exam_homework mt-4 pt-4" style="">
+					<div class="mypage_exam_homework mt-4 pt-4">
 						
 						<div class="mypage_exam_list">
-							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 10px 16px;">
 								<h4 style="color: white">최근 시험 정보</h4>
 						    </div>
-							<a href="/all/testList2?page=1" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;">
+							<a href="/all/testList2?page=1" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;" target="_blank">
 								더 보기
 								<i class="fs-12 m-l-5 fa fa-caret-right"></i>
 							</a>
@@ -260,41 +268,45 @@
 							<table class="table mt-3" style="padding: 0 10px;">
 								<thead>
 									<tr>
-										<th>
+										<th class="col-no">
+							                <h6>No</h6>
+							            </th>
+										<th class="col-title">
 											<h6>시험명</h6>
 										</th>
-										<th>
+										<th class="col-board">
 											<h6>응시기한</h6>
 										</th>
-										<th>
+										<th class="col-board">
 											<h6>응시여부</h6>
 										</th>
-										<th>
+										<th class="col-board">
 											<h6>피드백여부</h6>
 										</th>
 									</tr>
 								</thead>
 								<tbody>
-								<th:block th:each="test : ${recentTest}">
+								<th:block th:each="test, idx : ${recentTest}">
 									<tr>
-										<td><p>[[${test.testName}]]</p></td>
+										<td class="col-no replyTableData"><p>[[${idx.index + 1}]]</p></td>
+										<td class="col-title replyTableData ellipsis">[[${test.testName}]]</td>
 										<td><p>[[${#dates.format(test.testDate, 'yy.MM.dd')}]]</p></td>
 										<th:block th:if="${#strings.isEmpty(test.resultId)}">
-											<td><p>응시하기</p></td>
+											<td>응시하기</td>
 											<td></td>
 										</th:block>
 										<th:block th:if="${not #strings.isEmpty(test.resultId) && test.resultScore >= test.passScore}">
-											<td><p>응시완료</p></td>
+											<td>응시완료</td>
 											<th:block>					
-												<td th:if="${not #strings.isEmpty(test.feedback)}"><p>피드백완료</p></td>
-												<td th:unless="${not #strings.isEmpty(test.feedback)}"><p>피드백대기</p></td>
+												<td th:if="${not #strings.isEmpty(test.feedback)}">피드백완료</td>
+												<td th:unless="${not #strings.isEmpty(test.feedback)}">피드백대기</td>
 											</th:block>
 										</th:block>
 										<th:block th:if="${not #strings.isEmpty(test.resultId) && test.resultScore < test.passScore}">
-											<td><p>재시험</p></td>
+											<td>재시험</td>
 											<th:block>
-												<td th:if="${not #strings.isEmpty(test.feedback)}"><p>피드백완료</p></td>
-												<td th:unless="${not #strings.isEmpty(test.feedback)}"><p>피드백대기</p></td>
+												<td th:if="${not #strings.isEmpty(test.feedback)}">피드백완료</td>
+												<td th:unless="${not #strings.isEmpty(test.feedback)}">피드백대기</td>
 											</th:block>
 										</th:block>
 									</tr>
@@ -330,10 +342,10 @@
 						</div>
 						
 						<div class="mypage_homework_list mt-4" style="position: relative; border-top: 1px solid rgb(192, 192, 192, 0.5); padding-top: 30px;">
-							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+							<div class="table-top-content" style="width: 300px; margin-left: 10px; margin-bottom: 0; height: 40px; padding: 10px 16px;">
 								<h4 style="color: white">과제 정보</h4>
 						    </div>
-							<a href="/all/homework_S" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;">
+							<a href="/all/homework_S" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03 view_all" style="position: absolute; top: 48px; right: 20px;" target="_blank">
 								더 보기
 								<i class="fs-12 m-l-5 fa fa-caret-right"></i>
 							</a>
@@ -341,43 +353,40 @@
 								<table class="table" style="padding: 5px 10px;">
 									<thead>
 										<tr>
-											<th>
+											<th class="col-no">
+												<h6>No</h6>
+											</th>
+											<th class="col-title">
 												<h6>과제 이름</h6>
 											</th>
-											<th>
+											<th class="col-board">
 												<h6>과목</h6>
 											</th>
-											<th>
+											<th class="col-board">
 												<h6>제출 기한</h6>
+											</th>
+											<th class="col-board">
+												<h6>피드백여부</h6>
 											</th>
 										</tr>
 									</thead>
 									<tbody>
-									<th:block th:each="homework : ${recentHomework}">
+									<th:block th:each="homework, idx : ${recentHomework}">
 										<tr>
-											<td><p>[[${homework.homeworkTitle}]]</p></td>
-											<td><p>[[${homework.subjectId}]]</p></td>
-											<td><p>[[${#dates.format(homework.homeworkDate, 'yy.MM.dd')}]]</p></td>
-											<!-- <th:block th:if="${#strings.isEmpty(test.resultId)}">
-												<td><p>응시하기</p></td>
-												<td></td>
-											</th:block>
-											<th:block th:if="${not #strings.isEmpty(test.resultId) && test.resultScore >= test.passScore}">
-												<td><p>응시완료</p></td>
-												<th:block>					
-													<td th:if="${not #strings.isEmpty(test.feedback)}"><p>피드백완료</p></td>
-													<td th:unless="${not #strings.isEmpty(test.feedback)}"><p>피드백대기</p></td>
-												</th:block>
-											</th:block>
-											<th:block th:if="${not #strings.isEmpty(test.resultId) && test.resultScore < test.passScore}">
-												<td><p>재시험</p></td>
-												<th:block>
-													<td th:if="${not #strings.isEmpty(test.feedback)}"><p>피드백완료</p></td>
-													<td th:unless="${not #strings.isEmpty(test.feedback)}"><p>피드백대기</p></td>
-												</th:block>
-											</th:block> -->
+											<td class="col-no replyTableData"><p>[[${idx.index + 1}]]</p></td>
+											<td class="col-title replyTableData ellipsis">[[${homework.homeworkTitle}]]</td>
+											<td class="col-board replyTableData">[[${homework.subjectId}]]</td>
+											<td class="col-board replyTableData"><p>[[${#dates.format(homework.homeworkDate, 'yy.MM.dd')}]]</p></td>
+											<td class="col-board replyTableData"></td>
 										</tr>
 									</th:block>
+										<tr>
+											<td class="col-no replyTableData"><p>1</p></td>
+											<td class="col-title replyTableData ellipsis">과제 샘플</td>
+											<td class="col-board replyTableData">JAVA</td>
+											<td class="col-board replyTableData"><p>24.06.04</p></td>
+											<td class="col-board replyTableData">피드백대기</td>
+										</tr>
 									</tbody>
 								</table>
 							</div>

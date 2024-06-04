@@ -301,11 +301,70 @@
     
     <!-- 수료게시판 게시글 전체조회 -->
     <select id="postAll" resultType="PostVO">
- 	SELECT * 
-	FROM posts
-	WHERE board_id = 1
-	ORDER BY post_id DESC 
+ 		SELECT * 
+		FROM posts
+		WHERE board_id = 1
+		ORDER BY post_id DESC 
     </select>
+    
+    <!-- 해당 커리큘럼 게시글 조회 -->
+     <select id="curriculumSelect" resultType="PostVO">
+ 		SELECT 
+   				p.post_id,
+    			p.board_id,
+    			p.user_id,
+    			p.title,
+    			p.post_content,
+    			p.create_date,
+    			p.writer,
+    			p.post_view,
+    			p.post_like,
+    			p.update_date
+		FROM    posts p JOIN boards b ON (p.board_id = b.board_id)
+                		JOIN curriculum c ON (b.curriculum_id = c.curriculum_id)
+		WHERE   c.curriculum_id = #{curriculumId}
+		ORDER BY post_id DESC
+    </select>
+    
+    	<!-- 게시글 페이징 및 출력 -->
+	<select id="getHomeworksByFilter" parameterType="map" resultType="HomeWorkVO">
+		SELECT *
+	    FROM (
+	        SELECT b.*, ROWNUM rnum
+	        FROM (
+	            SELECT	p.post_id,
+    					p.board_id,
+    					p.user_id,
+    					p.title,
+    					p.post_content,
+    					p.create_date,
+    					p.writer,
+    					p.post_view,
+    					p.post_like,
+    					p.update_date
+	            FROM    posts p JOIN boards b ON (p.board_id = b.board_id)
+                				JOIN curriculum c ON (b.curriculum_id = c.curriculum_id)
+	            WHERE (#{filter} = 0 OR c.curriculum_id = #{filter})
+	            AND LOWER(p.title) LIKE '%' || #{searchQuery} || '%'
+	            ORDER BY p.post_id DESC
+	        ) b
+	        <![CDATA[
+		    WHERE ROWNUM <= #{page} * 5
+		    ]]>
+	    )
+	    WHERE rnum > (#{page} - 1) * 5
+	</select>
+    
+    <!-- 페이징용 카운트 -->
+	<select id="getTotalCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM posts p	JOIN boards b ON p.board_id = b.board_id
+						JOIN curriculum c ON b.curriculum_id = c.curriculum_id
+		WHERE LOWER(p.title) LIKE '%' || #{searchQuery} || '%'
+		<if test="filter != 0">
+    		AND c.curriculum_id = #{filter}
+		</if>
+	</select>
     
     
     <select id="getMyPost" resultType="PostVO">

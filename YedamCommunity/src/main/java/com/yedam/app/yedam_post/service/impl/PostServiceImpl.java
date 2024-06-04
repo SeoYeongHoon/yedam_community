@@ -317,7 +317,7 @@ public class PostServiceImpl implements PostService {
     // 마이페이지 내 댓글 조회
     //--------------------------------------------
 	@Override
-	public List<ReplyVO> getMyReply(int userId) {
+	public List<PostReplyVO> getMyReply(int userId) {
 		return replyMapper.getMyReply(userId);
 	}	
 	
@@ -338,6 +338,7 @@ public class PostServiceImpl implements PostService {
 	}
 	
 	//--------------------------------------------
+
     // 투표 전체 조회
     //--------------------------------------------
 	 public List<VoteVO> getVotes() {
@@ -347,6 +348,27 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public List<PostVO> selectPost() {
 		return null;
+    // 커리큘럼별 게시글 조회
+    //--------------------------------------------
+	@Override
+	public List<PostVO> selectCurriculum(int curriculumId) {
+		return postMapper.curriculumSelect(curriculumId);
+	}
+	// 게시글 페이징
+	@Override
+	public List<PostVO> getPostsByFilter(int filter, int page, String searchQuery) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("filter", filter);
+		params.put("page", page);
+		params.put("searchQuery", searchQuery);
+		
+		return postMapper.getPostsByFilter(filter, page, searchQuery);
+	}
+	// 페이징용 카운트
+	
+	@Override
+	public int getTotalCnt(int filter, String searchQuery) {
+		return postMapper.getTotalCnt(filter, searchQuery);
 	}
 
     @Override

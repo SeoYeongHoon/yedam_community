@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.LoginUserVO;
+import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
+import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostCommentVO;
 import com.yedam.app.yedam_post.service.PostReplyVO;
@@ -111,13 +113,12 @@ public class PostController {
 	@GetMapping("/curriculumPost")
 	public String curriculum(Model model) {
 		List<CurriculumVO> List = postService.curriculumList();
-		System.err.println(List);
 		model.addAttribute("curriculum",List);
 		return "posts/curriculumPost";
 	}
 	
 	//--------------------------------
-	// 게시글 전체 조회
+	// 수교과정별게시판 게시글 전체 조회
 	//--------------------------------
 	 @GetMapping("/postList")
 	 @ResponseBody 
@@ -126,12 +127,26 @@ public class PostController {
 	  }
 	 
 	//--------------------------------
+	// 수교과정별게시판 갤러리 조회
+	//--------------------------------
+		 @GetMapping("/gallery")
+		 @ResponseBody 
+		 public List<BoardFilesVO> gallery(@RequestParam int postId) {
+			 int boardId = 1;
+			 List<BoardFilesVO> fileList = postService.getBoardFiles(postId, boardId);
+			 System.err.println("fileList= " + fileList);
+			 return  postService.getBoardFiles(postId, boardId);
+		  }
+		 
+		 
+	//--------------------------------
 	// 해당 커리큘럼 게시글 조회
 	//--------------------------------
-	 @GetMapping("/selectPost")
+	 @GetMapping("/selectCurriculum")
 	 @ResponseBody 
-	 public List<PostVO> selectPost() {
-		 return  postService.postlist();
+	 public List<PostVO> selectPost(@RequestParam int curriculumId) {
+		 List<PostVO> postList =  postService.selectCurriculum(curriculumId);
+		 return  postList;
 	  }
 	 
 	// --------------------------------------------
@@ -392,6 +407,28 @@ public class PostController {
 		}
 		return likeCheck==1? true : false;
 	}
+	
+	// ----------------
+	// 게시글 필터링 및 페이징
+	// ----------------
+	@GetMapping("/filterPost")
+	@ResponseBody
+	public Map<String, Object> filterHomeworks(@RequestParam("filter") int filter,
+											   @RequestParam(defaultValue = "1") int page,
+											   @RequestParam(defaultValue = "") String searchQuery) {
+		
+		  List<PostVO> posts = postService.getPostsByFilter(filter,page, searchQuery); 
+		  int totalCnt = postService.getTotalCnt(filter,searchQuery);
+		  
+		  PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
+		  
+		  Map<String, Object> response = new HashMap<>(); 
+		  response.put("posts",posts); 
+		  response.put("page", pageDTO);
+		
+		return response;
+	}
+	
 	
 	// --------------------------------------------
 	// 투표 

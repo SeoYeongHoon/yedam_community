@@ -25,6 +25,7 @@ import com.yedam.app.yedam_examstudent.service.TestVO;
 import com.yedam.app.yedam_homework.service.HomeWorkService;
 import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_homework.service.ReplyVO;
+import com.yedam.app.yedam_post.service.PostReplyVO;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_user.service.UserService;
@@ -66,7 +67,7 @@ public class MyPageController {
 		model.addAttribute("myPost", myPostList);
 		
 		// 내 댓글 출력
-		List<ReplyVO> myReplyList = postService.getMyReply(logid);
+		List<PostReplyVO> myReplyList = postService.getMyReply(logid);
 		model.addAttribute("myReply", myReplyList);
 		
 		// 내 시험 출력

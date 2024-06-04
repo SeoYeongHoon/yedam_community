@@ -93,19 +93,16 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 		
 		return homeworkMapper.getHomeworksByFilter(params);
 	}
+	
 	// 과제 페이징 및 필터링(학생)
 	@Override
 	public List<HomeWorkVO> getHomeworksByFilterStudent(int filter, int page, String searchQuery, int userId) {
 		Map<String, Object> params = new HashMap<>();
-		System.err.println("서비스IMPL" + params);
-		System.err.println("서비스filter" + filter);
-		System.err.println("서비스page" + page);
-		System.err.println("서비스searchQuery" + searchQuery);
-		System.err.println("서비스userId" + userId);
 		params.put("filter", filter);
 		params.put("page", page);
 		params.put("searchQuery", searchQuery);
 		params.put("userId", userId);
+		
 		return homeworkMapper.getHomeworksByFilterStudent(params);
 	}
 	
