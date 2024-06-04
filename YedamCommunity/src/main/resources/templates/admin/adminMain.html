@@ -77,7 +77,8 @@
 	                document.getElementById('userId').textContent = user.id;
 	                document.getElementById('userEmail').textContent = user.email;
 	                document.getElementById('userTel').textContent = user.tel;
-	                document.getElementById('userImage').src = '/images/profile/' + user.profileImageLocation;
+	                document.getElementById('curriculumId').textContent = user.curriculumName;
+	                document.getElementById('userImage').src = '/files' + user.profileImageLocation;
 	
 	                document.querySelector('.infoModal').style.display = 'block';
 	                document.querySelector('.approveUserBtn').style.display = 'none';
@@ -123,7 +124,7 @@
 	                document.getElementById('curriculumId').textContent = user.curriculumName;
 	                document.getElementById('userEmail').textContent = user.email;
 	                document.getElementById('userTel').textContent = user.tel;
-	                document.getElementById('userImage').src = '/images/profile/' + user.profileImageLocation;
+	                document.getElementById('userImage').src = '/files' + user.profileImageLocation;
 	
 	                document.querySelector('.infoModal').style.display = 'block';
 	                document.querySelector('.approveUserBtn').style.display = 'inline-block';

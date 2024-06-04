@@ -47,8 +47,11 @@
 }
 
 .popular_item {
-	font-size: 16pt !important;
-	font-weight: bold !important;
+	font-size: 14pt !important;
+}
+
+.popular_item_text:hover {
+	color: #e71d69;
 }
 
 #home_container {

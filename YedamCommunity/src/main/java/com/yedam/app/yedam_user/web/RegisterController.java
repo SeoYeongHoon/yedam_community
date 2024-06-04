@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
-import com.yedam.app.yedam_user.service.RegisterVO;
 import com.yedam.app.yedam_user.service.UserService;
 import com.yedam.app.yedam_user.service.UserVO;
 import com.yedam.app.yedam_user.upload.service.ProfileImageService;
@@ -51,15 +50,12 @@ public class RegisterController {
 								 @RequestParam String courseSelect,
 								 @RequestParam Integer selectedCourseId,
 			                     UserVO userVO,
-			                     RegisterVO registerVO,
 			                     Model model, 
 			                     RedirectAttributes rttr, 
 			                     HttpServletRequest req) {
 		
 		String password = req.getParameter("password");
 		String passwordConfirm = req.getParameter("password-confirm");
-		
-		System.out.println("과정선택: " + courseSelect + selectedCourseId);
 		
 	    try {
 	    	// 아이디 비번 확인
@@ -87,7 +83,6 @@ public class RegisterController {
                 userVO.setDownloadLocation(imagePath);
             }
     		
-//    		userVO.setCurriculumId(courseSelect);
     		userVO.setCurriculumName(courseSelect);
     		userVO.setCurriculumId(selectedCourseId);
 

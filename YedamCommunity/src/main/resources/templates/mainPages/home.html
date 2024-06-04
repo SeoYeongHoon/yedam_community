@@ -34,7 +34,7 @@
                                 <ul class="popular_list">
                                     <li th:each="post, iterStat : ${popularPosts}">
                                         <a th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|" class="popular_item">
-                                            <span th:text="${iterStat.count} + '위: ' + ${post.title}"></span>
+                                            <span class="popular_item_text" th:text="${iterStat.count} + '위: ' + ${post.title}"></span>
                                         </a>
                                     </li>
                                 </ul>
