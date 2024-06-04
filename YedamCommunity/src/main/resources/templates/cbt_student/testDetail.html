@@ -63,14 +63,13 @@
 					<input type="hidden" name="page" th:value="1">
 					<input type="hidden" name="testId" th:value="${testDetail.testId}">
 					<input type="hidden" name="subjectId" th:value="${testDetail.subjectId}">
-	 				<div th:each="quiz : ${randQuizId}">				
-						<input type="hidden" name="randQuizId" th:value="${quiz}">
+	 				<div th:each="quiz : ${randQuizContent}">				
+						<input type="hidden" name="randQuizId" th:value="${quiz.quizId}">
+						<input type="hidden" name="randRn" th:value="${quiz.rn}">
+						<input type="hidden" name="randQuizScore" th:value="${quiz.quizScore}">
 					</div>
-					<div th:each="rn : ${randRn}">				
-						<input type="hidden" name="randRn" th:value="${rn}">
-					</div>
-					<div th:each="score : ${randQuizScore}">				
-						<input type="hidden" name="randQuizScore" th:value="${score}">
+					<div th:each="quiz2 : ${randQuizExample}">
+						<input type="hidden" name="one" th:value="${quiz2}">
 					</div>
 					<button type="submit" class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover">시작</button>
 				</form>

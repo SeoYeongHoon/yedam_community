@@ -54,6 +54,7 @@
 }
 .blink {
   animation: blink-effect 1s step-end infinite;
+ }
 /*모달*/
 .modal h1, #closeBtn, #confirmBtn {
 	text-align: center;
@@ -188,12 +189,14 @@
 	<!-- 우측 -->
 	<!-- 문제갱신되는 부분 -->
 	<div id="quiz" class="card-style col-lg-10" style="height: 800px">
-		<h1>[[${page}]]. [[${testQuiz.quizContent}]]</h1>
+		<div>
+			<h1>[[${page}]]. [[${testQuiz.quizContent}]]</h1>
+		</div>
 		<p class="tstart_5">([[${testQuiz.quizScore}]]점)</p>
 		<br> <br> <br>
 		<div th:if="${not #strings.isEmpty(testQuiz.two)}">
 			<div>
-				<span class="selectedContent tstart_6" style="background: white;">1. [[${testQuiz.one}]]</span>
+				<span class="selectedContent tstart_6" style="background: white">1. [[${testQuiz.one}]]</span>
 			</div>
 			<div>
 				<span class="selectedContent tstart_6" style="background: white;">2. [[${testQuiz.two}]]</span>
@@ -217,9 +220,9 @@ let testTimeMid = document.querySelector('#testTimeMid');
 let testTimeSec = document.querySelector('#testTimeSec');
 let toastMsg = document.querySelector('#toast_message');
 let testTime = testTimeMin.innerText; //서버에서 받아온 시험시간
-//let min = testTime; //분
-let min = 10;
-let sec = 2; //초
+let min = testTime; //분
+//let min = 10;
+let sec = 0; //초
 setInterval(function(){
 	sec--;
 	if(sec < 0){ //초 리셋
@@ -557,57 +560,59 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 		dataType: 'json',
 		traditional: true,
 		success: function(data){
+			let div1 = document.createElement('div'); //문제내용 감싸기
 			h1.innerText = page + '. ' + data.quizContent; //문제내용
 			p.innerText = '(' + data.quizScore + '점)'; //문제배점
-			div.append(h1);
-			div.append(p);
-			div.append(br1);
-			div.append(br2);
+			div1.append(h1);
+			div1.append(p);
+			div1.append(br1);
+			div1.append(br2);
+			div.append(div1);
 			
 			let span1 = document.createElement('span'); //첫번째 보기
-			let div1 = document.createElement('div'); //첫번째 보기 감싸기
+			let div2 = document.createElement('div'); //첫번째 보기 감싸기
 			span1.classList.add('selectedContent');
 			span1.classList.add('tstart_6');
 			span1.setAttribute('style', 'background: white');
-			span1.innerText = '1 ' + data.one;
-			div1.append(span1);
-			div.append(div1);
+			span1.innerText = '1. ' + data.one;
+			div2.append(span1);
+			div.append(div2);
 			
 			let span2 = document.createElement('span'); //두번째 보기
-			let div2 = document.createElement('div'); //두번째 보기 감싸기
+			let div3 = document.createElement('div'); //두번째 보기 감싸기
 			span2.classList.add('selectedContent');
 			span2.classList.add('tstart_6');
 			span2.setAttribute('style', 'background: white');
-			span2.innerText = '2 ' + data.two;
-			div2.append(span2);
-			div.append(div2);
+			span2.innerText = '2. ' + data.two;
+			div3.append(span2);
+			div.append(div3);
 			
 			let span3 = document.createElement('span'); //세번째 보기
-			let div3 = document.createElement('div'); //세번째 보기 감싸기
+			let div4 = document.createElement('div'); //세번째 보기 감싸기
 			span3.classList.add('selectedContent');
 			span3.classList.add('tstart_6');
 			span3.setAttribute('style', 'background: white');
-			span3.innerText = '3 ' + data.three;
-			div3.append(span3);
-			div.append(div3);
+			span3.innerText = '3. ' + data.three;
+			div4.append(span3);
+			div.append(div4);
 			
 			let span4 = document.createElement('span'); //네번째 보기
-			let div4 = document.createElement('div'); //네번째 보기 감싸기
+			let div5 = document.createElement('div'); //네번째 보기 감싸기
 			span4.classList.add('selectedContent');
 			span4.classList.add('tstart_6');
 			span4.setAttribute('style', 'background: white');
-			span4.innerText = '4 ' + data.four;
-			div4.append(span4);
-			div.append(div4);
+			span4.innerText = '4. ' + data.four;
+			div5.append(span4);
+			div.append(div5);
 			
 			let span5 = document.createElement('span'); //다섯번째 보기
-			let div5 = document.createElement('div'); //다섯번째 보기 감싸기
+			let div6 = document.createElement('div'); //다섯번째 보기 감싸기
 			span5.classList.add('selectedContent');
 			span5.classList.add('tstart_6');
 			span5.setAttribute('style', 'background: white');
-			span5.innerText = '5 ' + data.five;
-			div5.append(span5);
-			div.append(div5);
+			span5.innerText = '5. ' + data.five;
+			div6.append(span5);
+			div.append(div6);
 				
 			quiz.remove(); //현재 문제 지우기
 			start.append(div); //새로운 문제 붙이기
@@ -669,7 +674,7 @@ function submitTest(){
 		modal.classList.remove('on'); //모달창 닫기
 	});
 	//<모달창 확인 버튼>
-	$(document).on('click','#confirmBtn',function(e){ //확인버튼을 클릭하면
+	$('#confirmBtn').on('click',function(e){ //확인버튼을 클릭하면
 		e.preventDefault(); //폼 전송 막기
 		modal.classList.remove('on'); //모달창 닫기
 		testResult(); //시험제출 함수 호출, ajax 실행

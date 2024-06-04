@@ -115,18 +115,12 @@
       </div>
     </div>
   </div>
-
-<!--   <div th:switch="${boardId}">
-    <div th:case="2">
-      <h3>구인구직 게시판 전용</h3>
-      추가 콘텐츠를 여기에 추가
-    </div>
+<!-- <div th:switch="${boardId}">
     <div th:case="4">
       <h3>질문과 토론게시판 전용</h3>
       추가 콘텐츠를 여기에 추가
     </div>
   </div> -->
-
   <h5>댓글</h5>
   <ul id="reply-list">
     <li th:each="reply : ${postInfo.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
@@ -244,6 +238,13 @@
 </div>
 
 <script>
+
+
+/* $('#tesdsad').on('click', function () {
+	$('#modalReply').modal('show');
+}) */
+
+
 	let writer = $('#writer').val();
 	let userName = $('#userName').val();
 	let postId = $('#postId').val();
@@ -324,6 +325,7 @@
 		location.href='/all/post/'+boardId
 	})
 	
+
   $(document).ready(function () {
 	  
 	//--------------------------------------------

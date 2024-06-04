@@ -42,5 +42,17 @@ public class QuizVO {
 	public void setCurriculumId(int curriculumId) {
 		this.curriculumId = curriculumId;
 	}
+	public int getTestId() {
+		return testId;
+	}
+	public void setTestId(int testId) {
+		this.testId = testId;
+	}
+	public int[] getUserId() {
+		return userId;
+	}
+	public void setUserId(int[] userId) {
+		this.userId = userId;
+	}
 
 }

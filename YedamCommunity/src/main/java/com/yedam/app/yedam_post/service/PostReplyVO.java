@@ -19,6 +19,9 @@ public class PostReplyVO {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updateDate;
     
+    private int commentId;
+    private String commentContent;
+    
     // 대댓글을 끌고올려는곳
     private List<PostCommentVO> comments;
 

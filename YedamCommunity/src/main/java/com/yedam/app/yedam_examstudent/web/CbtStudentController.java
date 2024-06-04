@@ -162,23 +162,22 @@ public class CbtStudentController {
 			                 QuizboxVO quizboxVO, 
 			                 Model model,
 			                 Authentication authentication) {
-		TestVO info = cbtStudentService.testDetail(testVO); //시험상세
-		List<QuizboxVO> list = cbtStudentService.testQuizRand(quizboxVO); //랜덤문제
+		//ㅡㅡ
+		//세션
+		//ㅡㅡ
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal(); //세션값 가져오기
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		//시험 상세정보
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		TestVO info = cbtStudentService.testDetail(testVO); //시험상세
 		//ㅡㅡㅡㅡㅡ
 		//랜덤 문제
 		//ㅡㅡㅡㅡㅡ
-		int quizCnt = list.size(); //문제개수
-		int[] randQuizId = new int[quizCnt]; //랜덤 문제 번호 배열
-		int[] randRn = new int[quizCnt]; //랜덤 문제 일련번호 배열
-		int[] randQuizScore = new int[quizCnt]; //랜덤 문제 배점 배열
-		int i = 0;
-		for(QuizboxVO quiz : list) { //랜덤 문제 목록에 값 꺼내기		
-			randQuizId[i] = quiz.getQuizId(); //랜덤으로 생성된 문제의 번호 저장
-			randRn[i] = quiz.getRn(); //랜덤으로 생성된 문제의 일련번호 저장
-			randQuizScore[i] = quiz.getQuizScore(); //랜덤으로 생성된 문제의 배점 저장
-			i++;
-		}
+		List<QuizboxVO> list = cbtStudentService.testQuizRand(quizboxVO); //랜덤문제
+		//ㅡㅡㅡㅡㅡ
+		//랜덤 보기
+		//ㅡㅡㅡㅡㅡ
+		List<QuizboxVO> list2 = cbtStudentService.testQuizRand2(quizboxVO); //랜덤보기
 		//ㅡㅡㅡㅡㅡㅡㅡ
 		//시험결과 유무
 		//ㅡㅡㅡㅡㅡㅡㅡ
@@ -201,9 +200,8 @@ public class CbtStudentController {
 			dateComp = 1;
 		}
 		model.addAttribute("testDetail", info); //상세정보
-		model.addAttribute("randQuizId", randQuizId); //문제 번호
-		model.addAttribute("randRn", randRn); //문제 일련번호
-		model.addAttribute("randQuizScore", randQuizScore); //문제 배점
+		model.addAttribute("randQuizContent", list); //문제보기
+		model.addAttribute("randQuizExample", list2); //문제보기
 		model.addAttribute("isResult", isResult); //시험결과 유무
 		model.addAttribute("dateComp", dateComp); //날짜 비교
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
@@ -219,7 +217,7 @@ public class CbtStudentController {
 	public String testStart(int page, 
 			                int[] randQuizId, 
 			                int[] randRn, 
-			                int[] randQuizScore, 
+			                int[] randQuizScore,
 			                TestVO testVO, 
 			                QuizboxVO quizboxVO, 
 			                AnswerVO answerVO, 
@@ -231,12 +229,11 @@ public class CbtStudentController {
 		//ㅡㅡㅡㅡㅡㅡㅡ
 		testVO.setUserId(userVO.getuserId());
 		TestVO info = cbtStudentService.testStart(testVO); //응시정보
-		//ㅡㅡㅡㅡㅡㅡㅡ
-		//랜덤 시험문제
-		//ㅡㅡㅡㅡㅡㅡㅡ
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//랜덤 시험문제 및 보기
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		quizboxVO.setQuizId(randQuizId[0]);
 		quizboxVO.setTestId(info.getTestId());
-		quizboxVO.setSubjectId(info.getSubjectId());
 		QuizboxVO quiz = cbtStudentService.testQuiz(quizboxVO); //시험문제
 		model.addAttribute("testStart", info); //응시정보
 		model.addAttribute("testQuiz", quiz); //시험문제 내용정보
@@ -260,10 +257,13 @@ public class CbtStudentController {
 								  @RequestParam("randRn") int[] randRn,
 								  QuizboxVO quizboxVO){
 		int i = page - 1;
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//랜덤 시험문제 및 보기
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		quizboxVO.setQuizId(randQuizId[i]); //해당 문제번호
 		quizboxVO.setTestId(testId); //해당 시험번호
 		quizboxVO.setSubjectId(subjectId); //해당 과목번호
-		return cbtStudentService.testQuiz(quizboxVO);
+		return cbtStudentService.testQuiz(quizboxVO); //시험문제
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	//문제제출 AJAX
