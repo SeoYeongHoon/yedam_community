@@ -70,4 +70,16 @@
         WHERE reply_id = #{replyId}
     </delete>
    
+   <!-- 마이페이지 내 댓글 출력 -->
+   <select id="getMyReply" resultType="PostReplyVO">
+		SELECT r.board_id,
+			   r.reply_id,
+			   r.reply_content,
+			   c.comment_id,
+			   c.comment_content
+		FROM replies r JOIN comments c ON r.reply_id = c.reply_id
+		WHERE r.reply_writer = (SELECT name
+	                        	FROM users
+	                        	WHERE user_id = #{userId})
+   </select>
   </mapper>

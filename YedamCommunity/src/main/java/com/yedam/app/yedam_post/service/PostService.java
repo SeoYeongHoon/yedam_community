@@ -3,6 +3,8 @@ package com.yedam.app.yedam_post.service;
 import java.util.List;
 import java.util.Map;
 
+import com.yedam.app.yedam_homework.service.ReplyVO;
+
 public interface PostService {
 	
 	
@@ -121,6 +123,16 @@ public interface PostService {
     // 메인페이지 조회
     //--------------------------------------------
 	public List<PostVO> getPostAll(int boardId);
-
+	
+	
+	//--------------------------------------------
+    // 마이페이지 내 게시글 조회
+    //--------------------------------------------
+	public List<PostVO> getMyPost(int userId);
+	
+	//--------------------------------------------
+    // 마이페이지 내 댓글 조회
+    //--------------------------------------------
+	public List<ReplyVO> getMyReply(int userId);
 }
 

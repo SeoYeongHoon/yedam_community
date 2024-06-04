@@ -280,4 +280,10 @@
        ]]>
        AND board_id = #{boardId}
     </select>
+    
+    <select id="getMyPost" resultType="PostVO">
+    	SELECT *
+		FROM posts
+		WHERE user_id = #{userId}
+    </select>
 </mapper>

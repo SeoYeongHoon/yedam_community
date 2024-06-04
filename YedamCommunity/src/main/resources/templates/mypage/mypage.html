@@ -154,49 +154,42 @@
 							<table class="table mt-2" style="padding: 5px 10px;">
 								<thead>
 									<tr>
-										<th>
+										<th class="postTableHeader">
 											<h6>No</h6>
 										</th>
-										<th>
+										<th class="postTableHeader">
 											<h6>제목</h6>
 										</th>
-										<th>
+										<th class="postTableHeader">
 											<h6>게시판</h6>
 										</th>
-										<th>
+										<th class="postTableHeader">
 											<h6>작성일자</h6>
 										</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>
-											<p>10</p>
-										</td>
-										<td>
-											<p>자바랑 파이썬 중에 어떤 게 더 어렵나요?</p>
-										</td>
-										<td>
-											<p>질문과 토론</p>
-										</td>
-										<td>
-											<p>24.04.26</p>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<p>10</p>
-										</td>
-										<td>
-											<p>자바랑 파이썬 중에 어떤 게 더 어렵나요?</p>
-										</td>
-										<td>
-											<p>질문과 토론</p>
-										</td>
-										<td>
-											<p>24.04.26</p>
-										</td>
-									</tr>
+									<th:block th:each="myPost, idx : ${myPost}">
+										<tr class="postListRow" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${myPost.boardId}, postId=${myPost.postId})}'|">
+											<td class="postTableData"><p>[[${idx.index + 1}]]</p></td>
+											<td class="postTableData"><p>[[${myPost.title}]]</p></td>
+											<td class="postTableData" th:switch="${myPost.boardId}">
+												<div th:case="1">
+													<p>수료 과정별 게시판</p>
+												</div>
+												<div th:case="2">
+													<p>구인/구직 게시판</p>
+												</div>
+												<div th:case="3">
+													<p>정보 게시판</p>
+												</div>
+												<div th:case="4">
+													<p>질문과 토론 게시판</p>
+												</div>
+											</td>
+											<td class="postTableData"><p>[[${#dates.format(myPost.createDate, 'yy.MM.dd')}]]</p></td>
+										</tr>
+									</th:block>
 								</tbody>
 							</table>
 						</div>
@@ -227,34 +220,27 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>
-											<p>5</p>
-										</td>
-										<td>
-											<p>안녕하세요. 댓글입니다.</p>
-										</td>
-										<td>
-											<p>정보 공유</p>
-										</td>
-										<td>
-											<p>24.04.26</p>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<p>6</p>
-										</td>
-										<td>
-											<p>안녕하세요. 댓글입니다.</p>
-										</td>
-										<td>
-											<p>질문과 토론</p>
-										</td>
-										<td>
-											<p>24.04.26</p>
-										</td>
-									</tr>
+									<th:block th:each="myReply, idx : ${myReply}">
+										<tr class="postListRow" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${myReply.boardId}, postId=${myReply.postId})}'|">
+											<td class="replyTableData"><p>[[${idx.index + 1}]]</p></td>
+											<td class="replyTableData"><p>[[${myReply.replyContent}]]</p></td>
+											<td class="replyTableData" th:switch="${myReply.boardId}">
+												<div th:case="1">
+													<p>수료 과정별 게시판</p>
+												</div>
+												<div th:case="2">
+													<p>구인/구직 게시판</p>
+												</div>
+												<div th:case="3">
+													<p>정보 게시판</p>
+												</div>
+												<div th:case="4">
+													<p>질문과 토론 게시판</p>
+												</div>
+											</td>
+											<td class="replyTableData"><p>[[${#dates.format(myReply.replyDate, 'yy.MM.dd')}]]</p></td>
+										</tr>
+									</th:block>
 								</tbody>
 							</table>
 						</div>
@@ -393,36 +379,6 @@
 										</tr>
 									</th:block>
 									</tbody>
-									<!-- <tbody>
-										<tr>
-											<td>
-												<p>O</p>
-											</td>
-											<td>
-												<p>자바 24.08.22 과제</p>
-											</td>
-											<td>
-												<p>JAVA</p>
-											</td>
-											<td>
-												<p>24.08.26</p>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<p>X</p>
-											</td>
-											<td>
-												<p>자바랑 파이썬 중에 어떤 게 더 어렵나요?</p>
-											</td>
-											<td>
-												<p>질문과 토론</p>
-											</td>
-											<td>
-												<p>24.04.26</p>
-											</td>
-										</tr>
-									</tbody> -->
 								</table>
 							</div>
 						</div>

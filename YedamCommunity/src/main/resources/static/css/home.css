@@ -341,9 +341,24 @@ a.control_next {
 .postTableHeader {
 	text-align: center;
 }
-
 .postTableData {
 	text-align: center;
+	max-width: 300px;
+    /* text-wrap: balance; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.replyTableHeader {
+	
+}
+.replyTableData {
+	max-width: 300px;
+    /* text-wrap: balance; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 30px;
 }
 
 .insertBtn {

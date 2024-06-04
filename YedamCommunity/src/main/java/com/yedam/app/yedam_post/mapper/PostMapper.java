@@ -89,5 +89,11 @@ public interface PostMapper {
 //	public List<PostVO> MainpagePostList();
 	
 	public List<PostVO> getpostAll(int boardId);
+	
+	
+	//--------------------------------------------
+    // 마이페이지 내 게시글 조회
+    //--------------------------------------------
+	public List<PostVO> getMyPost(int userId);
 }
 

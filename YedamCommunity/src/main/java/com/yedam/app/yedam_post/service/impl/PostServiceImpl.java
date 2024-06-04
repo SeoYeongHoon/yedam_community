@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yedam.app.yedam_homework.service.ReplyVO;
 import com.yedam.app.yedam_post.mapper.CommentMapper;
 import com.yedam.app.yedam_post.mapper.PostMapper;
 import com.yedam.app.yedam_post.mapper.ReplyMapper;
@@ -292,5 +293,21 @@ public class PostServiceImpl implements PostService {
 		map.put("result", isSuccessed);
 		map.put("comment", postcommentVO);
 		return map;
+	}
+
+	//--------------------------------------------
+    // 마이페이지 내 게시글 조회
+    //--------------------------------------------
+	@Override
+	public List<PostVO> getMyPost(int userId) {
+		return postMapper.getMyPost(userId);
+	}
+
+	//--------------------------------------------
+    // 마이페이지 내 댓글 조회
+    //--------------------------------------------
+	@Override
+	public List<ReplyVO> getMyReply(int userId) {
+		return replyMapper.getMyReply(userId);
 	}
 }
