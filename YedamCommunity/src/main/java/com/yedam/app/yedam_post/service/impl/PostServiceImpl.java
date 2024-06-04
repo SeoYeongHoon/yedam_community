@@ -312,6 +312,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public List<ReplyVO> getMyReply(int userId) {
 		return replyMapper.getMyReply(userId);
+	}	
 
     // 수료과정별 게시판
     //--------------------------------------------
