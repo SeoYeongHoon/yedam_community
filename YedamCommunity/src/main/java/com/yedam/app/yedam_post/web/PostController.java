@@ -109,6 +109,7 @@ public class PostController {
 	public String curriculum(Model model) {
 		List<CurriculumVO> List = postService.curriculumList();
 		System.err.println(List);
+		model.addAttribute("curriculum",List);
 		return "posts/curriculumPost";
 	}
 	
