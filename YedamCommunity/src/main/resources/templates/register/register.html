@@ -142,6 +142,9 @@
 </body>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+	//--------------------------------------------
+	// 주소찾기 API
+	//--------------------------------------------
 	function execDaumPostcode() {
 		new daum.Postcode({
 			oncomplete : function(data) {
@@ -154,7 +157,7 @@
 	}
 	
 	//--------------------------------------------
-	// 이메일 인증 함수
+	// 이메일 인증코드 전송 
 	//--------------------------------------------
 	function sendVerificationCode() {
 		var email = $('#email').val();
@@ -184,6 +187,9 @@
 		
 	}
 	
+	//--------------------------------------------
+	// 이메일 인증코드 확인
+	//--------------------------------------------
 	function verifyCode() {
 		var code = $('#verificationCode').val();
 		var email = $('#email').val();
@@ -220,22 +226,14 @@
 		}
 	}
 	
-	/* $(document).ready(function() {
-		sendVerificationCode();
-		verifyCode();
-	}); */
-	
 	//--------------------------------------------
-	// 커리큘럼 ID 보내기
+	// curriculumId 보내기
 	//--------------------------------------------
 	function appendCourseId() {
 		var selectedCourseId = document.querySelectorAll('option:checked')[0].attributes.name.value;
 		
-		console.log(selectedCourseId);
-		
 		document.querySelector('#selectedCourseId').value = selectedCourseId;
 	}
-	
 	$('#selectCourse').on('change', appendCourseId());
 </script>
 </h>
