@@ -338,16 +338,12 @@ public class PostServiceImpl implements PostService {
 	}
 	
 	//--------------------------------------------
-
     // 투표 전체 조회
     //--------------------------------------------
 	 public List<VoteVO> getVotes() {
 	     return voteMapper.selectVotes();
 	}
 
-	@Override
-	public List<PostVO> selectPost() {
-		return null;
     // 커리큘럼별 게시글 조회
     //--------------------------------------------
 	@Override
