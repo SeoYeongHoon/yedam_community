@@ -388,4 +388,9 @@ public class PostServiceImpl implements PostService {
     	return voteMapper.insertVoteUser(voteUser);
 		 
     }
+
+	@Override
+	public int boardId(int userId) {
+		return postMapper.getBoardId(userId);
+	}
 }

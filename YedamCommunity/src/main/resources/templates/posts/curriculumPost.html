@@ -17,137 +17,61 @@
 </head>
 
 <body>
+<th:block th:each="post : ${postList}">
+	<input class="postId" type="hidden" th:value="${post.postId}">
+</th:block>
 <div id="post_container">
-<div class="col-lg-12" id="allClass" style="margin-top: 20px;">
-	<!-- 게시판 선택 버튼 -->
-	<div class="card-style mb-30" >
-		<ul class="buttons-group">
-			<li th:each="curriculums : ${curriculum}">
-				<button type="button" style="padding: 10px 30px;"
-						class="main-btn success-btn-outline btn-hover classNum active curriculum chooseCurriculum"
-						th:value="${curriculums.curriculumId}">[[${curriculums.curriculumName}]]</button>
-			</li>
-		</ul>
+	<div class="col-lg-12" id="allClass" style="margin-top: 20px;">
+		<!-- 게시판 선택 버튼 -->
+		<div class="card-style mb-30" >
+			<ul class="buttons-group">
+				<li th:each="curriculums : ${curriculum}">
+					<button type="button" style="padding: 10px 30px;"
+							class="main-btn success-btn-outline btn-hover classNum active curriculum chooseCurriculum"
+							th:value="${curriculums.curriculumId}">[[${curriculums.curriculumName}]]</button>
+				</li>
+			</ul>
+		</div>
+		<!-- end card -->
 	</div>
-	<!-- end card -->
-</div>
-	<!-- 게시글 검색 -->
-	<div>
-		<form id="searchForm" method="get" >
-			<input style="border: solid black 1px; top: 80px;" type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
-  		</form>
- 	</div>
- 	<!-- 게시글 검색 end -->
-	<div>
-    	<a th:href="@{/all/postInsert/1}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
- 	</div>
- 
-<div id="postList">
-	<table class="table">
-	    <thead>
-	      <tr>
-	        <th class="postTableHeader">게시글 번호</th>
-	        <th class="postTableHeader">제목</th>
-	        <th class="postTableHeader">작성자</th>
-	        <th class="postTableHeader">작성시간</th>
-	        <th class="postTableHeader">조회수</th>
-	        <th class="postTableHeader">추천수</th>
-	      </tr>
-	    </thead>
-	    <tbody id="tbody">
-	    </tbody>
-	  </table>
-	  
-	  asdasdsad
-	  <div class="center">
-	  	<div class="homeworkPaging"></div>
-	  </div>
-</div>
-<h1>갤러리</h1>
-<div id="gallery"></div>
+		<!-- 게시글 검색 -->
+		<div class="input-style-1" style="top: -20px; right: -10px; margin:0px;">
+			<input name="id" id="searchPost" type="text" placeholder="게시글 검색" style="padding: 10px; width: 250px; ">
+			<!-- <img style="top: 12px; right: 10px; width: 20px; opacity: 0.5;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"> -->
+		</div>
+	 	<!-- 게시글 검색 end -->
+		<div>
+			<input id="boardId" type="hidden"  th:value="${boardId}" >
+	    	<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover addPostBtn">글쓰기</a>
+	 	</div>
+	 
+	<div id="postList">
+		<table class="table">
+		    <thead>
+		      <tr>
+		        <th class="postTableHeader">게시글 번호</th>
+		        <th class="postTableHeader">제목</th>
+		        <th class="postTableHeader">작성자</th>
+		        <th class="postTableHeader">작성시간</th>
+		        <th class="postTableHeader">조회수</th>
+		        <th class="postTableHeader">추천수</th>
+		      </tr>
+		    </thead>
+		    <tbody id="tbody"></tbody>
+		  </table>
+		  <div class="center">
+		  	<div class="postPaging"></div>
+		  </div>
+	</div>
+	<h1>갤러리</h1>
+	<div id="gallery"></div>
 </div>
 <script>
-//--------------------------
-// 페이지 로드
-//--------------------------
- $().ready(function(){
-	 postList();
-})
 
-//----------------
-//게시글 리스트
-//-----------------
-function postList(){
-	
-	$.ajax({
-		url:'/all/postList',
-		type:'get',
-		async: false,
-		success: function(data){
-			data.forEach(function(e){
-				let postData = formatDate(e.createDate);
-				let post =
-					`
-			      		<tr id="tr" onclick="location.href='/all/post/1/${e.postId}'">
-			        		<td class="postTableData">${e.postId}</td>
-					       	<td class="postTableData">${e.title}</td>
-			        		<td class="postTableData">${e.writer}</td>
-			        		<td class="postTableData">${postData}</td>
-			        		<td class="postTableData">${e.postView}</td>
-			        		<td class="postTableData">${e.postLike}</td>
-			      		</tr>
-			  		`
-			  	gallery(e.postId);
-			  	$('#tbody').append(post)
-			})
-		
-		},
-		error: function(){
-			alert('게시글리스트 아작스 실패')
-		}
-	})
-	
-} //postList end
-
-//---------------------------
-// 과정 선택
-//---------------------------
-$('.curriculum').on('click',function(){
-	let curriculumId = $(this).val()
-	
-	$.ajax({
-		url:'/all/selectCurriculum',
-		type:'get',
-		data:{curriculumId:curriculumId},
-		success:function(data){
-			$('#tbody').empty();
-			data.forEach(function(e){
-				console.log("게시글 아이디=" + e.postId)
-				let postData = formatDate(e.createDate);
-				let post =
-					`
-			      		<tr id="tr" onclick="location.href='/all/post/1/${e.postId}'">
-			        		<td class="postTableData">${e.postId}</td>
-					       	<td class="postTableData">${e.title}</td>
-			        		<td class="postTableData">${e.writer}</td>
-			        		<td class="postTableData">${postData}</td>
-			        		<td class="postTableData">${e.postView}</td>
-			        		<td class="postTableData">${e.postLike}</td>
-			      		</tr>
-			  		`
-			  	$('#tbody').append(post)
-			})
-		},
-		error:function(err){
-			alert('커리큘럼 버튼 실패')
-		}
-	})
-})
 //--------------------------
 // 갤러리 출력
 //-------------------------
 function gallery(postId){
-	console.log("갤러리 성공=="+postId)
 	
 	$.ajax({
 		url:'/all/gallery',
@@ -155,7 +79,6 @@ function gallery(postId){
 		data:{postId : postId},
 		success:function(data){
 			data.forEach(function(e){
-			 console.log("게시글 아이디 = "+postId+"/ 게시글 파일"+e.boardfileLocation) 
 			 let galleryList =
 				 `
 				 	<div onclick="location.href='/all/post/1/${postId}'">
@@ -171,16 +94,41 @@ function gallery(postId){
 	})
 }
 
+let curriculumId = 0;
+//--------------------------------------------
+// DOM 요소들이 전부 로드되고 나서 아래 이벤트들 실행
+//--------------------------------------------
+$(document).ready(function() {
+	$('.chooseCurriculum').on('click',function() {
+		curriculumId = $(this).val();
+		filterCurriculum(1);
+	});
+
+    $('#searchPost').off('keyup').on('keyup', function(e) {
+    	filterCurriculum(1); // 검색어 입력하거나 지울 시 실시간으로 데이터 변경후 페이지 1로 고정
+    });
+	
+    filterCurriculum(1);
+    let postIds =[]
+    
+    $('.postId').each(function(){
+    	postIds.push($(this).val());
+    })
+    
+    postIds.forEach(function(postId){
+    	gallery(postId)
+    })
+});
 
 //--------------------------------------------
 // 현재 과제 리스트(필터링)
 //--------------------------------------------
-function filterHomeworks(page) {
-    var filter = $('.chooseCurriculum').val();
-    var searchQuery = $('#searchKeyword').val();
-
+function filterCurriculum(page,filter) {
+    var filter = curriculumId;
+    var searchQuery = $('#searchPost').val();
+	
     $.ajax({
-        url: '/admin/filterPost',
+        url: '/all/filterPost',
         type: 'GET',
         data: {
             page: page,
@@ -188,8 +136,10 @@ function filterHomeworks(page) {
             searchQuery: searchQuery
         },
         success: function(response) {
-            updateHomeworks(response.homeworks);
-            homeworkPagination(response.page, page);
+        	updatePost(response.posts);
+            postPagination(response.page, page);
+            
+            	
         },
         error: function(error) {
             console.error('Error:', error);
@@ -197,7 +147,69 @@ function filterHomeworks(page) {
     });
 }
 
+//--------------------------------------------
+// 필터링으로 인한 과제 리스트 변경(목록 업데이트)
+//--------------------------------------------
+function updatePost(posts) {
+	let tbody = $('#tbody');
+	tbody.empty();
+	
+	posts.forEach((test,idx) => {
+		let postData = formatDate(test.createDate);
+		
+		let boardIds =[]
+		  $('#boardId').each(function(){
+			  boardIds.push($(this).val());
+		    })
+		boardIds.forEach(function(boardId){
+			console.log("boardId== " + boardId)
+		})
+		let post =
+			`
+	      		<tr id="tr" onclick="location.href='/all/post/1/${test.postId}'">
+	        		<td class="postTableData">${test.postId}</td>
+			       	<td class="postTableData">${test.title}</td>
+	        		<td class="postTableData">${test.writer}</td>
+	        		<td class="postTableData">${postData}</td>
+	        		<td class="postTableData">${test.postView}</td>
+	        		<td class="postTableData">${test.postLike}</td>
+	      		</tr>
+	  		`
+		$('#tbody').append(post);
+	})
+	
+};
 
+
+//--------------------------------------------
+// 페이지네이션 함수
+//--------------------------------------------
+ function postPagination(pageDTO, currentPage) {
+    var pagination = $('.postPaging');
+    pagination.empty();
+
+    if (pageDTO.prev) {
+        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '">&laquo;</a>');
+    }
+
+    for (let p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
+        var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
+
+        if (p === currentPage) {
+            pageLink.addClass('active');
+        }
+
+        pageLink.on('click', function() {
+        	filterCurriculum(p);
+        });
+
+        pagination.append(pageLink);
+    }
+
+    if (pageDTO.next) {
+        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '">&raquo;</a>');
+    }
+} 
 
 
 

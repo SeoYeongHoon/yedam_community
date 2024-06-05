@@ -82,14 +82,13 @@
 	
 	<!-- 첨부 파일 조회 -->
   <select id="getBoardFiles" parameterType="map" resultType="com.yedam.app.yedam_post.service.BoardFilesVO">
-    	SELECT b.boardfile_id,
-               b.boardfile_name,
-               b.boardfile_location,
-               b.boardfile_size,
-               b.boardfile_ext
-    	FROM boardfiles b
-   	 	WHERE b.post_id = #{postId}
-      	AND b.board_id = #{boardId}
+    	SELECT	b.boardfile_id,
+        		b.boardfile_name,
+        		b.boardfile_location,
+        		b.boardfile_size,
+        		b.boardfile_ext
+		FROM boardfiles b JOIN posts p on (b.board_id = p.board_id)
+		WHERE p.post_id = #{postId}
   </select>
 
 	<!-- 게시글 수정 -->
@@ -292,7 +291,7 @@
 		       AND board_id = #{boardId}
     </select>
     
-<!-- 수료게시판 전체조회 -->
+	<!-- 수료게시판 전체조회 -->
     <select id="curriculumAll" resultType="CurriculumVO">
     	    SELECT * 
 			FROM curriculum
@@ -302,9 +301,18 @@
     <!-- 수료게시판 게시글 전체조회 -->
     <select id="postAll" resultType="PostVO">
  		SELECT * 
-		FROM posts
-		WHERE board_id = 1
-		ORDER BY post_id DESC 
+		FROM posts p JOIN boards b on (p.board_id = b.board_id)
+		WHERE b.board_type = 1
+		ORDER BY post_id DESC  
+    </select>
+    
+      <!-- 접속유저 boardId 찾기 -->
+    <select id="getBoardId" resultType="int">
+ 		SELECT board_id
+		FROM boards
+		WHERE curriculum_id = ( SELECT curriculum_id
+                        		FROM users
+                        		where user_id = #{uesrId})
     </select>
     
     <!-- 해당 커리큘럼 게시글 조회 -->
@@ -327,7 +335,7 @@
     </select>
     
     	<!-- 게시글 페이징 및 출력 -->
-	<select id="getHomeworksByFilter" parameterType="map" resultType="HomeWorkVO">
+	<select id="getPostsByFilter" parameterType="map" resultType="PostVO">
 		SELECT *
 	    FROM (
 	        SELECT b.*, ROWNUM rnum
