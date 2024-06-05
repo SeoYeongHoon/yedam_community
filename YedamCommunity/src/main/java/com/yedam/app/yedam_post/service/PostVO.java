@@ -63,8 +63,9 @@ public class PostVO {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date voteEndDate;
     private String type;
+	private int isProcessing;
+    private Integer voteId;
     private List<String> items;
-    
 
 
 	public int getReplyId() {

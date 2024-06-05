@@ -29,14 +29,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
-import com.yedam.app.yedam_homework.service.HomeWorkVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostCommentVO;
 import com.yedam.app.yedam_post.service.PostReplyVO;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.ReportVO;
-import com.yedam.app.yedam_post.service.VoteItemVO;
 /**
  * 게시판, 게시글
  * 2024.06.05
@@ -154,31 +152,16 @@ public class PostController {
 	// --------------------------------------------
 	@GetMapping("/post/{boardId}/{postId}")
 	public String getPostDetail(@PathVariable int boardId,
-	                            @PathVariable int postId,
+                                @PathVariable int postId,
 	                            Authentication authentication,
 	                            Model model) {
-	    // 조회수 업데이트
-	    postService.PostViewCnt(postId, boardId);
-	    
 	    // 게시글 단건 조회
 	    PostVO postVO = postService.getPostReplies(postId, boardId);
-	    
-	    // 댓글 조회
-	    List<PostReplyVO> replylist = postService.getPostReply(postId);
-	    
-	    for (PostReplyVO postreplyVO : replylist) {
-	        // 대댓글 조회
-	        List<PostCommentVO> commentlist = postService.getPostComment(postreplyVO);
-	        postreplyVO.setComments(commentlist);
-	    }
-	    postVO.setReplies(replylist);
 	    
 	    // 현재 로그인한 유저와 작성자 비교
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	    String userName = userVO.getUsername();
 	    String userType = userVO.getUserType();
-	    System.err.println(userType);
-	    
 	    
 	    // 파일 조회
 	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
@@ -186,8 +169,7 @@ public class PostController {
 	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
 	        file.setExists(find.exists());
 	    }
-	    
-	    postVO.setBoardFiles(boardFilesVO);	    
+	    postVO.setBoardFiles(boardFilesVO);	   
 	    postVO.setBoardId(boardId);
 	    postVO.setPostId(postId);
 	    model.addAttribute("boardId", boardId);
@@ -202,12 +184,13 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록
 	// --------------------------------------------
-	@GetMapping("/postInsert/{boardId}")
+	@GetMapping("/postInsert")
     public String postInsertForm(Model model
+    		                   , PostVO postVO
     		                   , @PathVariable int boardId
     		                   , Authentication authentication) {
-        PostVO postVO = new PostVO();
         postVO.setBoardId(boardId);
+        
         
         
         // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
@@ -221,22 +204,10 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록 처리
 	// --------------------------------------------
-	// 투표관련으로 작업중
-    @PostMapping("/postInsert")
-    public String postInsertProcess(PostVO postVO, @RequestParam("file") MultipartFile file, 
-                                    @RequestParam(value = "items", required = false) List<String> items, 
-                                    @RequestParam(value = "endDate", required = false) String endDateString,
+	@PostMapping("/postInsert")
+    public String postInsertProcess(PostVO postVO,
+    		                        @RequestParam("file") MultipartFile file, 
                                     Authentication authentication) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date endDate = null;
-        if (endDateString != null) {
-            try {
-                endDate = formatter.parse(endDateString);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return "redirect:/error"; // 오류 페이지로 리디렉션
-            }
-        }
         
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
@@ -264,26 +235,66 @@ public class PostController {
         postVO.setWriter(userVO.getUsername());
         postVO.setCreateDate(new Date());
         postVO.setUpdateDate(new Date());
-
-        if (postVO.getBoardId() == 4) { // 투표/토론 게시판인 경우
-            postVO.setVoteEndDate(endDate);
-            postService.createPost(postVO);
-
-            // 투표 항목 저장
-            for (int i = 0; i < items.size(); i++) {
-                VoteItemVO voteItem = new VoteItemVO();
-                voteItem.setVoteItemName(items.get(i));
-                voteItem.setVoteSeq(i + 1);
-                voteItem.setVoteId(postVO.getPostId());
-                postService.createVoteItem(voteItem);
-            }
-        } else {
-            postService.createPost(postVO);
-        }
-
+        postService.createPost(postVO);
         return "redirect:/all/post/" + postVO.getBoardId();
     }
+	
+	// --------------------------------------------
+	// 게시글 질문 토론 등록
+	// --------------------------------------------
+	@GetMapping("/postInsertVote")
+    public String postInsertForm(Model model
+    		                   , PostVO postVO
+    		                   , Authentication authentication) {
+		
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+		postVO.setWriter(userVO.getUsername());
+        // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
+        model.addAttribute("post", postVO);
+        return "posts/postInsertvote";
+    }
+	
+	// --------------------------------------------
+	// 게시글 질문 토론 등록 처리
+	// --------------------------------------------
+	@PostMapping("/postInsertVote")
+	public String postInsertVoteProcess(PostVO postVO
+			                          , Authentication authentication) {
+		
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+        postVO.setUserId(userVO.getuserId());
+        postVO.setWriter(userVO.getUsername());
+        postService.createVote(postVO);
+        return "redirect:/all/post/" + 4;
+	}
+	
+	// --------------------------------------------
+	// 게시글 질문 토론 단건조회
+	// --------------------------------------------
+	@GetMapping("/postvote/{boardId}/{postId}")
+	public String getPostVoteDetail(Model model,
+			                        @PathVariable int boardId,
+		                            @PathVariable int postId,
+			                        Authentication authentication) {
+		// 게시글 단건 조회
+	    PostVO postVO = postService.getPostReplies(postId, boardId);
+	    
+	    // 현재 로그인한 유저와 작성자 비교
+	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+	    String userName = userVO.getUsername();
+	    String userType = userVO.getUserType();
 
+	    postVO.setBoardId(boardId);
+	    postVO.setPostId(postId);
+	    model.addAttribute("postvote", postVO);
+	    // 작성자 여부 추가
+	    model.addAttribute("userName", userName);
+	    model.addAttribute("userType", userType);
+	    
+	    return "posts/postInfovote";
+	}
+	
+	
 	// --------------------------------------------
 	// 게시글 삭제 처리
 	// --------------------------------------------
@@ -428,6 +439,9 @@ public class PostController {
 		
 		return response;
 	}
+	
+	
+	
 	
 
 }

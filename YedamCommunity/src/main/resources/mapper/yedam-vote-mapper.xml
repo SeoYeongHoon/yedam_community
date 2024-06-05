@@ -8,7 +8,37 @@
         SELECT * FROM votes
     </select>
 
-    <insert id="insertVote" parameterType="VoteVO">
+    <insert id="insertVote" parameterType="VoteVO" statementType="CALLABLE">
+     DECLARE
+        v_post_id NUMBER;
+        v_vote_id NUMBER;
+    BEGIN
+
+        INSERT INTO posts (post_id
+                         , board_id
+                         , user_id
+                         , title
+                         , post_content
+                         , create_date
+                         , writer
+                         , post_view
+                         , post_like
+                         , update_date)
+        VALUES (post_id_seq.NEXTVAL
+              , 4
+              , #{userId}
+              , #{title}
+              , #{postContent}
+              , SYSDATE
+              , #{writer}
+              , 0
+              , 0
+              , NULL);
+
+		SELECT post_id_seq.CURRVAL
+		INTO v_post_id
+		FROM dual;
+
         INSERT INTO votes (vote_id
                          , vote_end_date
                          , is_processing
@@ -16,9 +46,36 @@
                          , post_id)
         VALUES (vote_id_seq.NEXTVAL
              , #{voteEndDate}
-             , #{isProcessing}
-             , #{boardId}
-             , #{postId})
+             , 0
+             , 4
+             , v_post_id);
+             
+        SELECT vote_id_seq.CURRVAL
+        INTO v_vote_id
+        FROM dual;
+        
+        INSERT INTO vote_items (vote_item_id
+                              , vote_seq
+                              , vote_item_name
+                              , vote_count
+                              , vote_id)
+        VALUES (vote_item_id_seq.NEXTVAL
+              , 1
+              , '찬성'
+              , 0
+              , v_vote_id);
+              
+              INSERT INTO vote_items (vote_item_id
+                              , vote_seq
+                              , vote_item_name
+                              , vote_count
+                              , vote_id)
+       VALUES (vote_item_id_seq.NEXTVAL
+              , 2
+              , '반대'
+              , 0
+              , v_vote_id);
+    END;
     </insert>
 
     <select id="selectVoteItemsByVoteId" parameterType="int" resultType="VoteItemVO">
@@ -27,18 +84,6 @@
         WHERE vote_id = #{voteId}
     </select>
 
-    <insert id="insertVoteItem" parameterType="VoteItemVO">
-        INSERT INTO vote_items (vote_item_id
-                              , vote_seq
-                              , vote_item_name
-                              , vote_count
-                              , vote_id)
-        VALUES (vote_item_id_seq.NEXTVAL
-              , #{voteSeq}
-              , #{voteItemName}
-              , #{voteCount}
-              , #{voteId})
-    </insert>
 
     <insert id="insertVoteUser" parameterType="VoteUserVO">
         INSERT INTO vote_users (vote_user_id 
