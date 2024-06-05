@@ -30,6 +30,11 @@ public class QuizboxVO { //선택된문제 테이블
 	private int three; //3번보기번호
 	private int four; //4번보기번호
 	private int five; //5번보기번호
+	private String exampleOne;
+	private String exampleTwo;
+	private String exampleThree;
+	private String exampleFour;
+	private String exampleFive;
 	public int getQuizboxId() {
 		return quizboxId;
 	}
@@ -179,6 +184,36 @@ public class QuizboxVO { //선택된문제 테이블
 	}
 	public void setFive(int five) {
 		this.five = five;
+	}
+	public String getExampleOne() {
+		return exampleOne;
+	}
+	public void setExampleOne(String exampleOne) {
+		this.exampleOne = exampleOne;
+	}
+	public String getExampleTwo() {
+		return exampleTwo;
+	}
+	public void setExampleTwo(String exampleTwo) {
+		this.exampleTwo = exampleTwo;
+	}
+	public String getExampleThree() {
+		return exampleThree;
+	}
+	public void setExampleThree(String exampleThree) {
+		this.exampleThree = exampleThree;
+	}
+	public String getExampleFour() {
+		return exampleFour;
+	}
+	public void setExampleFour(String exampleFour) {
+		this.exampleFour = exampleFour;
+	}
+	public String getExampleFive() {
+		return exampleFive;
+	}
+	public void setExampleFive(String exampleFive) {
+		this.exampleFive = exampleFive;
 	}
 	
 	

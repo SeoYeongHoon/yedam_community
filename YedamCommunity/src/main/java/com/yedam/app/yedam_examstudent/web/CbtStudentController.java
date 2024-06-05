@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_examstudent.service.AnswerVO;
+import com.yedam.app.yedam_examstudent.service.AnswerboxVO;
 import com.yedam.app.yedam_examstudent.service.CbtStudentService;
 import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
@@ -159,7 +160,8 @@ public class CbtStudentController {
 	//ㅡㅡㅡㅡ
 	@GetMapping("testDetail")
 	public String testDetail(TestVO testVO, 
-			                 QuizboxVO quizboxVO, 
+			                 QuizboxVO quizboxVO,
+			                 AnswerboxVO answerboxVO,
 			                 Model model,
 			                 Authentication authentication) {
 		//ㅡㅡ
@@ -174,6 +176,27 @@ public class CbtStudentController {
 		//랜덤 문제
 		//ㅡㅡㅡㅡㅡ
 		List<QuizboxVO> list = cbtStudentService.testQuizRand(quizboxVO); //랜덤문제
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		//시험보기 등록
+		//ㅡㅡㅡㅡㅡㅡㅡ
+		int cnt = 0;
+		boolean result = false;
+		for(int i = 0; i < list.size(); i++) {			
+			answerboxVO.setExampleOne(list.get(i).getOne());
+			answerboxVO.setExampleTwo(list.get(i).getTwo());
+			answerboxVO.setExampleThree(list.get(i).getThree());
+			answerboxVO.setExampleFour(list.get(i).getFour());
+			answerboxVO.setExampleFive(list.get(i).getFive());
+			answerboxVO.setQuizId(list.get(i).getQuizId());
+			answerboxVO.setTestId(list.get(i).getTestId());
+			answerboxVO.setUserId(userVO.getuserId());
+			if(cbtStudentService.testQuizExample(answerboxVO)) {
+				cnt++;
+			}
+		}
+		if(cnt > 0) {
+			result = true;
+		}
 		//ㅡㅡㅡㅡㅡㅡㅡ
 		//시험결과 유무
 		//ㅡㅡㅡㅡㅡㅡㅡ
@@ -197,9 +220,9 @@ public class CbtStudentController {
 		}
 		model.addAttribute("testDetail", info); //상세정보
 		model.addAttribute("randQuiz", list); //문제보기
-		//model.addAttribute("randQuizExample", list2); //문제보기
 		model.addAttribute("isResult", isResult); //시험결과 유무
 		model.addAttribute("dateComp", dateComp); //날짜 비교
+		model.addAttribute("result", result); //보기등록
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		return "cbt_student/testDetail";
 	}
@@ -235,11 +258,6 @@ public class CbtStudentController {
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		quizboxVO.setQuizId(randQuizId[0]);
 		quizboxVO.setTestId(info.getTestId());
-		quizboxVO.setOne(one[0]); //1번 보기 번호
-		quizboxVO.setTwo(two[0]); //2번 보기 번호
-		quizboxVO.setThree(three[0]); //3번 보기 번호
-		quizboxVO.setFour(four[0]); //4번 보기 번호
-		quizboxVO.setFive(five[0]); //5번 보기 번호
 		QuizboxVO quiz = cbtStudentService.testQuiz(quizboxVO); //시험문제
 		model.addAttribute("testStart", info); //응시정보
 		model.addAttribute("testQuiz", quiz); //시험문제 내용정보
@@ -266,11 +284,6 @@ public class CbtStudentController {
 								  @RequestParam("quizCnt") int quizCnt, 
 								  @RequestParam("randQuizId") int[] randQuizId, 
 								  @RequestParam("randRn") int[] randRn,
-								  @RequestParam("one") int[] one,
-								  @RequestParam("two") int[] two,
-								  @RequestParam("three") int[] three,
-								  @RequestParam("four") int[] four,
-								  @RequestParam("five") int[] five,
 								  QuizboxVO quizboxVO){
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		//현재 페이지 번호
@@ -281,12 +294,6 @@ public class CbtStudentController {
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		quizboxVO.setQuizId(randQuizId[i]); //해당 문제번호
 		quizboxVO.setTestId(testId); //해당 시험번호
-		quizboxVO.setSubjectId(subjectId); //해당 과목번호
-		quizboxVO.setOne(one[i]); //1번 보기 번호
-		quizboxVO.setTwo(two[i]); //2번 보기 번호
-		quizboxVO.setThree(three[i]); //3번 보기 번호
-		quizboxVO.setFour(four[i]); //4번 보기 번호
-		quizboxVO.setFive(five[i]); //5번 보기 번호
 		return cbtStudentService.testQuiz(quizboxVO); //시험문제
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -294,7 +301,7 @@ public class CbtStudentController {
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	@ResponseBody
 	@PostMapping("testStart1")
-	public boolean testStart(@RequestParam("submitAnswer") int[] submitAnswer, 
+	public boolean testStart(@RequestParam("submitAnswer") String[] submitAnswer, 
 							@RequestParam("randQuizId") int[] randQuizId,
 							@RequestParam("randRn") int[] randRn,
 							@RequestParam("randQuizScore") int[] randQuizScore,
@@ -337,6 +344,12 @@ public class CbtStudentController {
 	public String testResult(int testId,
 			                 int min, 
 			                 int sec,
+			                 int[] randQuizId,
+			                 int[] one,
+				             int[] two,
+				             int[] three,
+				             int[] four,
+				             int[] five,
 			                 ExamResultVO examResultVO,
 			                 QuizboxVO quizboxVO,
 			                 Model model,
@@ -352,14 +365,27 @@ public class CbtStudentController {
 		//시혐결과 문제정보
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		List<QuizboxVO> list = new ArrayList<>();
-		quizboxVO.setUserId(userVO.getuserId());
-		quizboxVO.setTestId(testId);
-		list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
+		for(int i = 0; i < one.length; i++) {			
+			quizboxVO.setUserId(userVO.getuserId());
+			quizboxVO.setTestId(testId);
+			quizboxVO.setQuizId(randQuizId[i]);
+			quizboxVO.setOne(one[i]);
+			quizboxVO.setTwo(two[i]);
+			quizboxVO.setThree(three[i]);
+			quizboxVO.setFour(four[i]);
+			quizboxVO.setFive(five[i]);
+			list.addAll(cbtStudentService.testResultQuiz(quizboxVO)); //매퍼 결과 전체 리스트에 추가
+		}
 		int answerCnt = 0;
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("testMin", min); //응시시간 분
 		model.addAttribute("testSec", sec); //응시시간 초
 		model.addAttribute("quizList", list); //시험결과 문제+보기 정보
+		model.addAttribute("one", one); //랜덤 1번보기 번호
+		model.addAttribute("two", two); //랜덤 2번보기 번호
+		model.addAttribute("three", three); //랜덤 3번보기 번호
+		model.addAttribute("four", four); //랜덤 4번보기 번호
+		model.addAttribute("five", five); //랜덤 5번보기 번호
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		model.addAttribute("answerCnt", answerCnt); //맞힌 개수 구하기 위한 임의 변수
 		return "cbt_student/testResult";
