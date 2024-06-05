@@ -393,6 +393,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostVO getPostVotedetailNo(PostVO postVO) {
 		return postMapper.getPostVoteno(postVO);
+	}
 
 	//수료과정 파일조회
 	@Override
