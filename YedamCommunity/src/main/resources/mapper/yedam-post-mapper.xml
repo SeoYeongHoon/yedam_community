@@ -82,13 +82,29 @@
 	
 	<!-- 첨부 파일 조회 -->
   <select id="getBoardFiles" parameterType="map" resultType="com.yedam.app.yedam_post.service.BoardFilesVO">
+    	SELECT b.boardfile_id,
+               b.boardfile_name,
+               b.boardfile_location,
+               b.boardfile_size,
+               b.boardfile_ext
+    	FROM boardfiles b
+   	 	WHERE b.post_id = #{postId}
+      	AND b.board_id = #{boardId}
+  </select>
+  
+  <!-- 수료과정별 파일 조회 -->
+  <select id="successFile" parameterType="map" resultType="com.yedam.app.yedam_post.service.BoardFilesVO">
     	SELECT	b.boardfile_id,
         		b.boardfile_name,
-        		b.boardfile_location,
-        		b.boardfile_size,
-        		b.boardfile_ext
-		FROM boardfiles b JOIN posts p on (b.board_id = p.board_id)
-		WHERE p.post_id = #{postId}
+    			b.boardfile_location,
+    			b.boardfile_size,
+        		b.boardfile_ext,
+        		b.post_id,
+        		b.board_id,
+        		s.board_type
+		FROM boardfiles b JOIN boards s ON b.board_id = s.board_id
+		WHERE s.curriculum_id = #{curriculumId} 
+		ORDER BY boardfile_id DESC
   </select>
 
 	<!-- 게시글 수정 -->
@@ -100,6 +116,8 @@
 		WHERE post_id = #{postId}
 		AND board_id = #{boardId}
 	</update>
+	
+	
 	<!-- 게시글 수정 파일 -->
 	<update id="updatePost2" parameterType="com.yedam.app.yedam_post.service.BoardFilesVO">
 		UPDATE boardfiles
@@ -193,25 +211,25 @@
 		WHERE post_id = #{postId}
     </update>
     
- 	<!-- 게시글 조회 페이지네이션 -->
+ 	 <!-- 게시글 조회 페이지네이션 -->
  	 <select id="getPosts" resultType="PostVO">
-    SELECT p.*, f.*
-    FROM (
-        SELECT p.*, ROWNUM AS rnum
-        FROM (
-            SELECT *
-            FROM posts
-            WHERE board_id = #{postVO.boardId, jdbcType=INTEGER}
-            <include refid="condition"/>
-            ORDER BY post_id DESC
-        ) p
-        <![CDATA[
-        WHERE ROWNUM <= #{endRow, jdbcType=INTEGER}
-        ]]>
-    ) p
-    LEFT JOIN boardfiles f ON p.post_id = f.post_id
-    WHERE p.rnum > #{startRow, jdbcType=INTEGER}
-    ORDER BY p.rnum
+		    SELECT p.*, f.*
+		    FROM (
+		        SELECT p.*, ROWNUM AS rnum
+		        FROM (
+		            SELECT *
+		            FROM posts
+		            WHERE board_id = #{postVO.boardId}
+		            <include refid="condition"/>
+		            ORDER BY post_id DESC
+		        ) p
+		        <![CDATA[
+		        WHERE ROWNUM <= #{endRow}
+		        ]]>
+		    ) p
+		    LEFT JOIN boardfiles f ON p.post_id = f.post_id
+		    WHERE p.rnum > #{startRow}
+		    ORDER BY p.rnum
     </select> 
     
     <!-- 게시글 개수 -->
@@ -229,7 +247,6 @@
 	<sql id="condition">
 	  <if test = 'postVO.keyword != null and ! "".equals(postVO.keyword)'>
       		AND(title LIKE '%' || #{postVO.keyword} ||'%'
-            OR post_content LIKE '%' || #{postVO.keyword} || '%'
             OR writer LIKE '%' || #{postVO.keyword} || '%' )
       </if>
 	</sql>
@@ -308,11 +325,20 @@
     
       <!-- 접속유저 boardId 찾기 -->
     <select id="getBoardId" resultType="int">
- 		SELECT board_id
-		FROM boards
-		WHERE curriculum_id = ( SELECT curriculum_id
-                        		FROM users
-                        		where user_id = #{uesrId})
+		SELECT	NVL(MAX(board_id),0)
+		FROM	boards	
+		WHERE	curriculum_id = ( SELECT curriculum_id
+        	                      FROM users
+	                      	      where user_id = #{userId})
+		
+    </select>
+    
+      <!-- boardType으로 boardId 찾기 -->
+    <select id="setBoardType" resultType="int">
+		SELECT  board_id
+		FROM    boards
+		WHERE   board_type = #{boardType}
+		
     </select>
     
     <!-- 해당 커리큘럼 게시글 조회 -->

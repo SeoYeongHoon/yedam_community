@@ -393,4 +393,15 @@ public class PostServiceImpl implements PostService {
 	public int boardId(int userId) {
 		return postMapper.getBoardId(userId);
 	}
+	//수료과정 파일조회
+	@Override
+	public List<BoardFilesVO> successFileList(int boardType) {
+		return postMapper.successFile(boardType);
+	}
+
+	// boardType로 boardId 조회
+	@Override
+	public int boardTypeSet(int boardType) {
+		return postMapper.setBoardType(boardType);
+	}
 }
