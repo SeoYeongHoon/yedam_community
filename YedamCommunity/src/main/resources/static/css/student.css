@@ -59,6 +59,7 @@
 	border-bottom: 2px solid #e5e5e5;
     margin: 5px 0 10px 0;
     padding-bottom: 10px;
+    position: relative;
 }
 
 .replyDiv {
@@ -66,6 +67,12 @@
 	position: relative;
 	min-height: 50px;
     align-items: baseline;
+}
+
+.replyAddedFile {
+	position: absolute;
+    right: 190px;
+    top: 0;
 }
 
 #logName {
@@ -142,6 +149,23 @@
     overflow-wrap: anywhere;
 }
 
+.commentWriterName {
+	width: 200px;
+    margin-left: 20px;
+}
+
+.commentWriterName::before {
+	content: " ";
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: url(https://nstatic.dcinside.com/dc/w/images/sp/sp_img.png) no-repeat;
+    background-position: -283px -200px;
+}
+
 .replyHomeworkArea {
 	background: rgba(239, 239, 239, 0.5);
     border: 1px solid #e5e5e5;
@@ -155,4 +179,25 @@
 	padding: 8px 30px;
 	margin-top: -40px;
     margin-right: -15px;
+}
+
+.col-no {
+       width: 50px; /* No 열의 너비 */
+}
+.col-title {
+    width: 400px; /* 제목, 댓글내용 열의 너비 */
+}
+.col-board {
+    width: 150px; /* 게시판 열의 너비 */
+}
+.col-date {
+    width: 100px; /* 작성일자 열의 너비 */
+}
+.ellipsis {
+	display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    vertical-align: top !important;
 }

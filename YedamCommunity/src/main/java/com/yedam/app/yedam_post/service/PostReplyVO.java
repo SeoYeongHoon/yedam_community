@@ -19,14 +19,40 @@ public class PostReplyVO {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updateDate;
     
+    // 내가 쓴 댓글, 대댓글 불러오기 위함
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date addDate;
+    private String addContent;
+    private int addId;
+    
     private int commentId;
     private String commentContent;
     
     // 대댓글을 끌고올려는곳
     private List<PostCommentVO> comments;
 
-	public int getReplyId() {
-		return replyId;
+    public Date getAddDate() {
+		return addDate;
+	}
+
+	public void setAddDate(Date addDate) {
+		this.addDate = addDate;
+	}
+	
+	public void setAddId(int addId) {
+		this.addId = addId;
+	}
+
+	public int getAddId() {
+		return addId;
+	}
+	
+	public String getAddContent() {
+		return addContent;
+	}
+	
+	public void setAddContent(String addContent) {
+		this.addContent = addContent;
 	}
 
 	public void setReplyId(int replyId) {

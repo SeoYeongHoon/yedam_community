@@ -29,49 +29,54 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 	public List<String> uploadFile(MultipartFile[] uploadFiles) {
 		
 		List<String> imageList = new ArrayList<>();
-		
+		System.out.println("업로드파일 유무:" + uploadFiles);
 		for (MultipartFile uploadFile : uploadFiles) {
-			System.err.println("업로드파일: " + uploadFiles);
-			
-			String originalName = uploadFile.getOriginalFilename();
-			System.err.println("파일 원래 이름: " + originalName);
-			
-			String fileName = originalName.substring(originalName.lastIndexOf("//") + 1);
-			System.err.println("바뀐 파일 이름: " + fileName);
-			
-			String fileExt = originalName.substring(originalName.lastIndexOf(".") + 1);
-			System.err.println("파일 확장자: " + fileExt);
-			
-			String folderPath = makeFolder();
-			System.err.println("날짜 폴더 생성, 경로: " + folderPath);
-			
-			String uuid = UUID.randomUUID().toString();
-			System.err.println("시간기준 랜덤값: " + uuid);
-			
-			String uploadFileName = File.separator + uuid + "_" + fileName;
-			System.err.println("파일이름 중간에 _ 넣어서 구분: " + uploadFileName);
-			
-			String downloadFileName = uuid + "_" + fileName;
-			
-			String saveName = uploadPath + uploadFileName;
-			System.err.println("파일 저장시 이름: " + saveName);
-			
-			// 특정 경로의 파일 정보 가져오는 메소드
-			Path savePath = Paths.get(saveName);
-			System.out.println("path 설정");
-			
-			try {
-				System.out.println("업로드 try");
-				// uploadFile에 파일을 업로드하는 메소드
-				uploadFile.transferTo(savePath);
-				imageList.add(setFilePath(uploadFileName));
-			} catch (IOException e) {
-				e.printStackTrace();
+			// 프로필 사진 설정 안 할 시(파일크기가 0), 기본이미지로 설정. 
+			if (uploadFile.getSize() != 0) {
+				System.err.println("업로드파일: " + uploadFiles);
+				
+				String originalName = uploadFile.getOriginalFilename();
+				System.err.println("파일 원래 이름: " + originalName);
+				
+				String fileName = originalName.substring(originalName.lastIndexOf("//") + 1);
+				System.err.println("바뀐 파일 이름: " + fileName);
+				
+				String fileExt = originalName.substring(originalName.lastIndexOf(".") + 1);
+				System.err.println("파일 확장자: " + fileExt);
+				
+				String folderPath = makeFolder();
+				System.err.println("날짜 폴더 생성, 경로: " + folderPath);
+				
+				String uuid = UUID.randomUUID().toString();
+				System.err.println("시간기준 랜덤값: " + uuid);
+				
+				String uploadFileName = File.separator + uuid + "_" + fileName;
+				System.err.println("파일이름 중간에 _ 넣어서 구분: " + uploadFileName);
+				
+				String downloadFileName = uuid + "_" + fileName;
+				
+				String saveName = uploadPath + uploadFileName;
+				System.err.println("파일 저장시 이름: " + saveName);
+				
+				// 특정 경로의 파일 정보 가져오는 메소드
+				Path savePath = Paths.get(saveName);
+				System.out.println("path 설정");
+				
+				try {
+					System.out.println("업로드 try");
+					// uploadFile에 파일을 업로드하는 메소드
+					uploadFile.transferTo(savePath);
+					imageList.add(setFilePath(uploadFileName));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				System.err.println("파일크기: " + uploadFile.getSize());
+				
+				System.err.println("이미지 리스트: " + imageList);
+			} else {
+				imageList.add(setFilePath("/default_profile.jpg"));
 			}
-			
-			System.err.println("파일크기: " + uploadFile.getSize());
-			
-			System.err.println("이미지 리스트: " + imageList);
 
 		}
 		

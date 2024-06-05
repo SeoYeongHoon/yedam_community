@@ -239,14 +239,14 @@
 									<th:block th:each="myReply, idx : ${myReply}">
 										 <tr class="postListRow" th:onclick="|window.open('@{/all/post/{boardId}/{postId}(boardId=${myReply.boardId}, postId=${myReply.postId})}', '_blank')|">
 											<td class="col-no replyTableData"><p>[[${idx.index + 1}]]</p></td>
-											<td class="col-title replyTableData ellipsis">[[${myReply.replyContent}]]</td>
+											<td class="col-title replyTableData ellipsis">[[${myReply.addContent}]]</td>
 											<td class="col-board replyTableData" th:switch="${myReply.boardId}">
 												<div th:case="1">수료 과정별 게시판</div>
 												<div th:case="2">구인/구직 게시판</div>
 												<div th:case="3">정보 게시판</p></div>
 												<div th:case="4">질문과 토론 게시판</p></div>
 											</td>
-											<td class="col-date replyTableData"><p>[[${#dates.format(myReply.replyDate, 'yy.MM.dd HH:mm:ss')}]]</p></td>
+											<td class="col-date replyTableData"><p>[[${#dates.format(myReply.addDate, 'yy.MM.dd HH:mm:ss')}]]</p></td>
 										</tr>
 									</th:block>
 								</tbody>
@@ -365,28 +365,25 @@
 											<th class="col-board">
 												<h6>제출 기한</h6>
 											</th>
-											<th class="col-board">
-												<h6>피드백여부</h6>
-											</th>
 										</tr>
 									</thead>
 									<tbody>
 									<th:block th:each="homework, idx : ${recentHomework}">
-										<tr>
+										<tr class="postListRow" th:onclick="|window.open('@{/all/homeworkInfo?homeworkId={homeworkId}(homeworkId=${homework.homeworkId})}', '_blank')|">
+										<!-- <tr onclick="location.href='/all/homeworkInfo?homeworkId=${homework.homeworkId}'"> -->
 											<td class="col-no replyTableData"><p>[[${idx.index + 1}]]</p></td>
 											<td class="col-title replyTableData ellipsis">[[${homework.homeworkTitle}]]</td>
-											<td class="col-board replyTableData">[[${homework.subjectId}]]</td>
+											<td class="col-board replyTableData">[[${homework.subjectName}]]</td>
 											<td class="col-board replyTableData"><p>[[${#dates.format(homework.homeworkDate, 'yy.MM.dd')}]]</p></td>
-											<td class="col-board replyTableData"></td>
 										</tr>
 									</th:block>
-										<tr>
+										<!-- <tr>
 											<td class="col-no replyTableData"><p>1</p></td>
 											<td class="col-title replyTableData ellipsis">과제 샘플</td>
 											<td class="col-board replyTableData">JAVA</td>
 											<td class="col-board replyTableData"><p>24.06.04</p></td>
 											<td class="col-board replyTableData">피드백대기</td>
-										</tr>
+										</tr> -->
 									</tbody>
 								</table>
 							</div>

@@ -10,8 +10,16 @@
 }
 
 .sidebar-nav-wrapper {
-	/* overflow-y: hidden !important; */
-	box-shadow: 0px 0px 30px 0px rgba(200, 208, 216, 0.6) !important;
+	box-shadow: none;
+}
+
+.bestPost {
+	font-weight: bold;
+    margin-bottom: 5px;
+    border-bottom: 1px solid rgb(192, 192, 192, 0.5);
+    width: 100%;
+    text-align: end;
+    font-size: 18px;
 }
 
 #footer {
@@ -61,20 +69,32 @@
 	font-size: 12pt !important;
 	font-weight: normal !important;
 	font-style: normal;
-	color: #e71d69 !important;
 	transition: none !important;
+	color: black;
+    background-color: rgb(229 231 235);
 }
 .popular_item_number {
-	border: 1px solid pink;
-    width: 30px;
-    height: 26px;
-    text-align: center;
-    display: inline-block;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    width: 26px;
+    height: 28px;
+    display: flex;
     color: white;
-    background-color: #e71d69;
-    font-family: monospace, sans-serif !important;
-    font-weight: bold;
+	font-weight: normal !important;
+    justify-content: center;
+    align-items: center;
+    background-color: #e96b56;
     margin-right: 10px;
+}
+
+.popular_item_text {
+    font-size: 14px;
+    width: 240px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    vertical-align: top !important;
 }
 
 #home_container {
@@ -203,7 +223,7 @@ a.control_next {
     cursor: pointer;
 }
 .board_mini_title:hover {
-	color: #15a752 !important;
+	color: #e96b56 !important;
 	transition: none !important;
 }
 
@@ -323,11 +343,11 @@ a.control_next {
 }
 
 .main-nav ul li a:hover {
-  color: #51BC56;
+  color: #e96b56;
 }
 
 .main-nav ul li a.active {
-	color: #51BC56;
+	color: #e96b56;
 }
 
 .postListRow {
@@ -359,6 +379,7 @@ a.control_next {
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-right: 30px;
+    border: none !important;
 }
 
 .insertBtn {
@@ -380,4 +401,15 @@ a.control_next {
     margin-top: 2px;
     background: url(https://nstatic.dcinside.com/dc/w/images/sp/sp_img.png) no-repeat -133px -1023px;
     vertical-align: top;
+}
+
+.post_title {
+	font-size: 12pt; 
+	font-weight: bold;
+    white-space: nowrap;
+    width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    vertical-align: top !important;
 }

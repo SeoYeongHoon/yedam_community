@@ -556,12 +556,12 @@ li.respon-sub-menu > .sub-menu .sub-menu {
 
 /*---------------------------------------------*/
 .main-menu > li:hover > a:after {
-  color: #17b978;
+  color: #e96b56;
 }
 
 .main-menu > li:hover > a {
   text-decoration: none;
-  color: #17b978;
+  color: #e96b56;
 }
 
 .main-menu > li:hover > .sub-menu {

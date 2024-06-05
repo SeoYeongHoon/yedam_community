@@ -1,31 +1,6 @@
 
 (function ($) {
     "use strict";
-
-    /*==================================================================
-    [ Load page ]*/
-    try {
-        $(".animsition").animsition({
-            inClass: 'fade-in',
-            outClass: 'fade-out',
-            inDuration: 1500,
-            outDuration: 800,
-            linkElement: '.animsition-link',
-            loading: true,
-            loadingParentElement: 'html',
-            loadingClass: 'animsition-loading-1',
-            loadingInner: '<div class="loader05"></div>',
-            timeout: false,
-            timeoutCountdown: 5000,
-            onLoadEvent: true,
-            browser: [ 'animation-duration', '-webkit-animation-duration'],
-            overlay : false,
-            overlayClass : 'animsition-overlay-slide',
-            overlayParentElement : 'html',
-            transition: function(url){ window.location.href = url; }
-        });
-    } catch(er) {console.log(er);}
-
     
     /*==================================================================
     [ Back to top ]*/
@@ -43,50 +18,6 @@
         $('#myBtn').on("click", function(){
             $('html, body').animate({scrollTop: 0}, 300);
         });
-    } catch(er) {console.log(er);}
-
-
-    /*==================================================================
-    [ Fixed menu ]*/
-    try {
-        var posNav = $('.wrap-main-nav').offset().top;
-        var menuDesktop = $('.container-menu-desktop');
-        var mainNav = $('.main-nav');
-        var lastScrollTop = 0;
-        var st = 0;
-        
-        $(window).on('scroll',function(){
-            fixedHeader();     
-        });
-        
-        $(window).on('resize',function(){ 
-            fixedHeader();
-        });
-
-        $(window).on('load',function(){ 
-            fixedHeader();
-        });
-
-        var fixedHeader = function() {
-            st = $(window).scrollTop();
-
-            if(st > posNav + mainNav.outerHeight()) {
-                $(menuDesktop).addClass('fix-menu-desktop');
-            } 
-            else if(st <= posNav) {
-                $(menuDesktop).removeClass('fix-menu-desktop');
-            }   
-
-            if (st > lastScrollTop){
-                $(mainNav).removeClass('show-main-nav');
-            } 
-            else {
-                $(mainNav).addClass('show-main-nav');
-            }
-
-            lastScrollTop = st;
-        };
-            
     } catch(er) {console.log(er);}
 
     /*==================================================================

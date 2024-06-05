@@ -73,18 +73,26 @@
    <!-- 마이페이지 내 댓글 출력 -->
    <select id="getMyReply" resultType="PostReplyVO">
 		SELECT r.board_id,
-	           r.reply_id,
-	           r.reply_content,
-	           r.post_id,
-	           r.reply_date,
-	           c.comment_id,
-	           c.comment_content
-	    FROM replies r
-	    JOIN comments c ON r.reply_id = c.reply_id
-	    WHERE r.reply_writer = (SELECT name
-	                            FROM users
-	                            WHERE user_id = #{userId})
-		AND r.board_id IS NOT NULL	 
-		ORDER BY r.reply_date                           
+		       r.post_id,
+		       r.reply_id AS addId,
+		       r.reply_content AS addContent,
+		       r.reply_date AS add_date
+		FROM   replies r
+		WHERE  r.reply_writer = (SELECT name
+		                         FROM users
+		                         WHERE user_id = #{userId})
+		AND    r.board_id IS NOT NULL
+		UNION ALL
+		SELECT r.board_id,
+		       r.post_id,
+		       c.reply_id AS addId,
+		       c.comment_content AS addContent,
+		       c.comment_date AS add_date
+		FROM   comments c JOIN   replies r ON c.reply_id = r.reply_id
+		WHERE  c.comment_writer = (SELECT name
+		                           FROM users
+		                           WHERE user_id = #{userId})
+		AND    r.board_id IS NOT NULL
+		ORDER BY add_date                           
    </select>
   </mapper>
