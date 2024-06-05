@@ -28,4 +28,6 @@ public interface CurriculumMapper {
 	//해당 과정 과목명 조회
 	public List<CurriculumVO> subjectSelectAll(int userid);
 	
+	// 과정별 과목명 조회
+	public List<CurriculumVO> selectSubject(CurriculumVO curriculumVO);
 }

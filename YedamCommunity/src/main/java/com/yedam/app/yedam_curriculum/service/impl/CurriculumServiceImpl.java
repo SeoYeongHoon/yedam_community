@@ -53,5 +53,11 @@ public class CurriculumServiceImpl implements CurriculumService {
 	public List<CurriculumVO> subjectList(int userid) {
 		return curriculumMapper.subjectSelectAll(userid);
 	}
+	
+	// 과정별 과목명 조회
+	@Override
+	public List<CurriculumVO> classSubject(CurriculumVO curriculumVO) {
+		return curriculumMapper.selectSubject(curriculumVO);
+	}
 
 }

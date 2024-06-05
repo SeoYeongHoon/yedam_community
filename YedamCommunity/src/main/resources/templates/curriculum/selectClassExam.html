@@ -25,8 +25,7 @@
 				<input type="hidden" th:id="curriId" th:value="${classInfo.curriculumId}"/>
 				<input type="hidden" th:id="classId" th:value="${classInfo.classId}"/>
 				<div class="card-style-1 mb-30">
-					<div class="card-content"
-						th:onclick="|location.href='@{/admin/testinsert(curriculumId=${classInfo.curriculumId})}'|">
+					<div class="card-content" th:id="${classInfo.classId}">
 						<h4>
 							<font style="vertical-align: inherit;"> 
 								<font style="vertical-align: inherit;">[[${classInfo.classId}]]강의실</font>
@@ -49,9 +48,38 @@
 	</div>
 	<!-- 강의실 항목 end -->
 </div>
+<div id="subName">
+	<p></p>
+</div>
+<!-- 선택한 강의실에 출제한 과목이 존재하지 않았을때 뜨는 모달창 -->
+<div id="noSubject" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">과목 오류</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;" id="totalScore">선택한 강의실(과정)에 출제한 과목이 존재하지 않습니다.</p>
+				<div style="text-align: center;">
+					<img alt="강의실 선택 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='modalOk' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 var currId = 0;
 var classId = 0;
+var subArry = [];
+qSubjectName = window.localStorage.getItem('qSubjectName');
 $('.curri').on('click', function(){
 	currId = $(this).children('input#curriId').val();
 	classId = $(this).children('input#classId').val();
@@ -59,6 +87,29 @@ $('.curri').on('click', function(){
 	console.log(classId);
 	window.localStorage.setItem('curriculumId', currId);
 	window.localStorage.setItem('classId', classId);
+	
+	$.ajax({
+		url : "/admin/selectSubject",
+		type : "get", 
+		data : {classId : classId},
+		async : false,
+		
+		success : function(data){
+			subArry = [];
+			data.forEach((item,idx) => {
+				subArry.push(item.subjectName);
+			})
+			if(subArry.indexOf(qSubjectName) < 0){
+				$('#noSubject').modal('show');
+			} else {
+				location.replace('/admin/testinsert?curriculumId='+ currId)
+			}
+		},
+		error : function(err){
+			alert('통신 실패')
+		}	 
+	});	
 });
+
 </script>
 </html>
