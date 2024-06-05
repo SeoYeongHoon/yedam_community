@@ -100,11 +100,11 @@
 			<br> <br>
 			<div>
 				<!-- 보기번호 정답/오답 표시 -->
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == one[idx.index] ? 'true' : (quiz.exampleNum != one[idx.index] && quiz.testAnswer == one[idx.index] ? 'false':_}">① [[${quiz.oneContent}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == two[idx.index] ? 'true' : (quiz.exampleNum != two[idx.index] && quiz.testAnswer == two[idx.index] ? 'false':_}">② [[${quiz.twoContent}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == three[idx.index] ? 'true' : (quiz.exampleNum != three[idx.index] && quiz.testAnswer == three[idx.index] ? 'false':_}">③ [[${quiz.threeContent}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == four[idx.index] ? 'true' : (quiz.exampleNum != four[idx.index] && quiz.testAnswer == four[idx.index] ? 'false':_}">④ [[${quiz.fourContent}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == five[idx.index] ? 'true' : (quiz.exampleNum != five[idx.index] && quiz.testAnswer == five[idx.index] ? 'false':_}">⑤ [[${quiz.fiveContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.oneContent) ? 'true' : (quiz.textContent != quiz.oneContent && quiz.answerContent == quiz.oneContent) ? 'false':_}">① [[${quiz.oneContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.twoContent) ? 'true' : (quiz.textContent != quiz.twoContent && quiz.answerContent == quiz.twoContent) ? 'false':_}">② [[${quiz.twoContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.threeContent) ? 'true' : (quiz.textContent != quiz.threeContent && quiz.answerContent == quiz.threeContent) ? 'false':_}">③ [[${quiz.threeContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.fourContent) ? 'true' : (quiz.textContent != quiz.fourContent && quiz.answerContent == quiz.fourContent) ? 'false':_}">④ [[${quiz.fourContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.fiveContent) ? 'true' : (quiz.textContent != quiz.fiveContent && quiz.answerContent == quiz.fiveContent) ? 'false':_}">⑤ [[${quiz.fiveContent}]]</span>
 			</div>
 		</div>
 		<div th:unless="${quiz.isCorrect == 0}">
