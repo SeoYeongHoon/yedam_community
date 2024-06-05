@@ -226,34 +226,6 @@
 	</select>
 	<!-- 시험시작 퀴즈 -->
 	<select id="selectTestQuiz" resultType="QuizboxVO">
-		<!-- 
-		WITH a AS(
-        SELECT  b.quiz_id
-                ,b.quiz_content
-                ,b.quiz_score
-                ,a.text_content
-                ,a.example_num
-                ,b.subject_id
-        FROM    answers a
-        		JOIN quizbox b
-                ON(a.quiz_id = b.quiz_id)
-        WHERE   b.test_id = #{testId}
-        AND     b.quiz_id = #{quizId}
-        ORDER BY a.example_num)
-        SELECT  quiz_id
-                ,quiz_content
-                ,quiz_score
-                ,subject_id
-                ,MAX(DECODE(example_num, #{one}, text_content)) AS oneContent
-                ,MAX(DECODE(example_num, #{two}, text_content)) AS twoContent
-                ,MAX(DECODE(example_num, #{three}, text_content)) AS threeContent
-                ,MAX(DECODE(example_num, #{four}, text_content)) AS fourContent
-                ,MAX(DECODE(example_num, #{five}, text_content)) AS fiveContent
-        FROM    a
-        GROUP BY quiz_id
-        		 ,quiz_content
-        		 ,quiz_score
-        		 ,subject_id-->
        	SELECT  d.quiz_id
         		,d.quiz_content
         		,d.quiz_score
@@ -461,55 +433,56 @@
 	</select>
 	<!-- 시험결과 문제 정보 -->
 	<select id="selectTestResultQuiz" resultType="QuizboxVO">
-		<!-- 임시 테이블 정의 -->
-		WITH a AS(
-        SELECT  a.example_num
-		        ,a.text_content
-		        ,a.example_answer
-		        ,b.quiz_id
-                ,b.quiz_content
-                ,b.quiz_score
-                ,c.quiz_solution
-                ,d.test_answer
-                ,d.is_correct
-                ,d.test_result_id
-        FROM    answers a 
-        		JOIN quizbox b
-                ON(a.quiz_id = b.quiz_id)
-                JOIN quizes c
-                ON(b.quiz_id = c.quiz_id)
-                JOIN test_results d
-                ON(b.quiz_id = d.quiz_id)
-                JOIN exam_results e 
-                ON(d.result_id = e.result_id)
-        WHERE   d.user_id = #{userId}
-        AND     b.test_id = #{testId}
-        AND		b.quiz_id = #{quizId}
-        AND     e.test_target_id = (SELECT  test_target_id
-                        			FROM  	test_targets
-                        			WHERE 	test_id = #{testId}
-                        			AND   	user_id = #{userId}))
-        <!-- 문제 보기 열 > 행 바꾸기 -->
-        SELECT 
-        	test_result_id
-        	,quiz_id
-            ,quiz_content
-            ,quiz_score
-            ,quiz_solution
-            ,MAX(DECODE(example_answer, 1, example_num)) AS example_num
-            ,MAX(test_answer) AS test_answer
-            ,MAX(is_correct) AS is_correct
-            ,MAX(DECODE(example_num, #{one}, text_content)) AS oneContent
-            ,MAX(DECODE(example_num, #{two}, text_content)) AS twoContent
-            ,MAX(DECODE(example_num, #{three}, text_content)) AS threeContent
-            ,MAX(DECODE(example_num, #{four}, text_content)) AS fourContent
-            ,MAX(DECODE(example_num, #{five}, text_content)) AS fiveContent
-        FROM a
-        GROUP BY test_result_id
-        		 ,quiz_id
-        		 ,quiz_content
-        		 ,quiz_score
-        		 ,quiz_solution
-        ORDER BY a.test_result_id
+        WITH e AS(
+		SELECT  a.quiz_id
+				,b.test_result_id
+				,MAX(DECODE(a.example_answer, 1, a.example_num)) AS example_num
+        		,MAX(DECODE(a.example_answer, 1, a.text_content)) AS text_content
+        		,MAX(DECODE(a.example_num, b.test_answer, a.text_content)) AS answerContent
+		FROM    answers a 
+				JOIN test_results b ON(a.quiz_id = b.quiz_id)
+		WHERE     b.result_id = (SELECT  result_id
+                    		   FROM    test_targets a
+                    		    	   JOIN exam_results b ON(a.test_target_id = b.test_target_id)
+                    		   WHERE   a.user_id = #{userId}
+                    		   AND 	   a.test_id = #{testId})
+		GROUP BY a.quiz_id
+				 ,b.test_result_id)
+		,f AS(
+		SELECT a.quiz_id
+        		,MAX(DECODE(a.example_num, b.example_one, a.text_content)) AS oneContent
+        		,MAX(DECODE(a.example_num, b.example_two, a.text_content)) AS twoContent
+        		,MAX(DECODE(a.example_num, b.example_three, a.text_content)) AS threeContent
+        		,MAX(DECODE(a.example_num, b.example_four, a.text_content)) AS fourContent
+        		,MAX(DECODE(a.example_num, b.example_five, a.text_content)) AS fiveContent
+		FROM 	answers a 
+		        JOIN answerbox b ON(a.quiz_id = b.quiz_id)
+		GROUP BY a.quiz_id)
+		SELECT  a.quiz_id
+				,e.test_result_id
+		        ,a.quiz_content
+		        ,a.quiz_score
+		        ,b.quiz_solution
+		        ,d.test_answer
+		        ,d.is_correct
+		        ,e.example_num
+		        ,e.text_content
+        		,e.answerContent
+		        ,f.oneContent
+		        ,f.twoContent
+		        ,f.threeContent
+		        ,f.fourContent
+		        ,f.fiveContent
+		FROM 	quizbox a 
+		        JOIN quizes b ON(a.quiz_id = b.quiz_id)
+		        JOIN test_results d ON(a.quiz_id = d.quiz_id)
+		        JOIN e ON(a.quiz_id = e.quiz_id)
+		        JOIN f ON(a.quiz_id = f.quiz_id)
+		WHERE	d.result_id = (SELECT  b.result_id
+		                       FROM    test_targets a 
+		                               JOIN exam_results b ON(a.test_target_id = b.test_target_id)
+		                       WHERE   a.user_id = #{userId}
+		                       AND     a.test_id = #{testId})
+		ORDER BY e.test_result_id
 	</select>
 </mapper>

@@ -133,6 +133,21 @@
 				<div th:each="rn : ${randRn}">				
 					<input class="randRn" type="hidden" th:value="${rn}">
 				</div>
+				<div th:each="one : ${one}">
+					<input class="oneExample" name="one" type="hidden" th:value="${one}">
+				</div>
+				<div th:each="two : ${two}">
+					<input class="twoExample" name="two" type="hidden" th:value="${two}">
+				</div>
+				<div th:each="three : ${three}">
+					<input class="threeExample" name="three" type="hidden" th:value="${three}">
+				</div>
+				<div th:each="four : ${four}">
+					<input class="fourExample" name="four" type="hidden" th:value="${four}">
+				</div>
+				<div th:each="five : ${five}">
+					<input class="fiveExample" name="five" type="hidden" th:value="${five}">
+				</div>
 			</div>
 			<!-- 시험관련 버튼 -->
 			<div class="tstart_5">
@@ -163,21 +178,6 @@
 						<div th:each="quiz : ${randQuizId}">
 							<input class="randQuizId" name="randQuizId" type="hidden" th:value="${quiz}">
 						</div>
-						<div th:each="one : ${one}">
-							<input class="oneExample" name="one" type="hidden" th:value="${one}">
-						</div>
-						<div th:each="two : ${two}">
-							<input class="twoExample" name="two" type="hidden" th:value="${two}">
-						</div>
-						<div th:each="three : ${three}">
-							<input class="threeExample" name="three" type="hidden" th:value="${three}">
-						</div>
-						<div th:each="four : ${four}">
-							<input class="fourExample" name="four" type="hidden" th:value="${four}">
-						</div>
-						<div th:each="five : ${five}">
-							<input class="fiveExample" name="five" type="hidden" th:value="${five}">
-						</div>
 						<button id="confirmBtn" class="tstart_2" type="submit">확인</button>
 					</form>
 				</div>
@@ -191,9 +191,7 @@
 		<th:block th:each="quiz, idx : ${#numbers.sequence(1,#lists.size(randRn))}">
 			<div class="selectedQuiz tstart_3">
 				<h3 class="tstart_2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
-				<!-- 답안 색상 관련 -->
 				<input class="thisAnswer" type="hidden" th:value="${idx.count}">
-				<!-- 답안 제출 관련 -->
 				<input class="submitAnswer" type="hidden" th:value="0">
 				<div class="one selectedAnswer">①</div>
 				<div class="two selectedAnswer">②</div>
@@ -592,7 +590,6 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 		dataType: 'json',
 		traditional: true,
 		success: function(data){
-			console.log(1);
 			let div1 = document.createElement('div'); //문제내용 감싸기
 			h1.innerText = page + '. ' + data.quizContent; //문제내용
 			p.innerText = '(' + data.quizScore + '점)'; //문제배점

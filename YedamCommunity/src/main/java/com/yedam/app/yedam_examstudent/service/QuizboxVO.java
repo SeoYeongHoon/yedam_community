@@ -14,12 +14,15 @@ public class QuizboxVO { //선택된문제 테이블
 	private int quizCnt; //문제개수
 	private int rn; //문제랜덤 일련번호
 	//기타
+	private int testResultId;
 	private int userId;
 	private String quizSolution;
 	private int isCorrect;
 	private int testAnswer;
 	private int exampleAnswer;
 	private int exampleNum;
+	private String textContent;
+	private String answerContent;
 	private String oneContent; //1번보기내용
 	private String twoContent; //2번보기내용
 	private String threeContent; //3번보기내용
@@ -214,6 +217,24 @@ public class QuizboxVO { //선택된문제 테이블
 	}
 	public void setExampleFive(String exampleFive) {
 		this.exampleFive = exampleFive;
+	}
+	public String getTextContent() {
+		return textContent;
+	}
+	public void setTextContent(String textContent) {
+		this.textContent = textContent;
+	}
+	public String getAnswerContent() {
+		return answerContent;
+	}
+	public void setAnswerContent(String answerContent) {
+		this.answerContent = answerContent;
+	}
+	public int getTestResultId() {
+		return testResultId;
+	}
+	public void setTestResultId(int testResultId) {
+		this.testResultId = testResultId;
 	}
 	
 	
