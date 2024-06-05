@@ -57,7 +57,6 @@
     <input type="text" id="title" th:field="*{title}" /><br />
     
         <h3>투표 / 토론</h3>
-        
         <div class="form-group">
             <label for="type">유형</label>
             <input type="radio" id="question" name="type" value="question">
@@ -76,9 +75,6 @@
     
     <label for="writer">작성자:</label>
     <input type="text" id="writer" th:field="*{writer}" readonly /><br />
-    
-    <label for="file">파일:</label>
-    <input type="file" name="file" multiple="multiple"/><br />
     
     <input type="hidden" th:field="*{boardId}" />
     <input type="hidden" th:field="*{userId}" />

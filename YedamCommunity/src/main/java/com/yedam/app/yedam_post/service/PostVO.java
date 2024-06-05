@@ -67,6 +67,10 @@ public class PostVO {
     private Integer voteId;
     private List<String> items;
 
+    private int voteItemId;
+	private int voteSeq;
+	private String voteItemName;
+	private int voteCount;
 
 	public int getReplyId() {
 		return replyId;

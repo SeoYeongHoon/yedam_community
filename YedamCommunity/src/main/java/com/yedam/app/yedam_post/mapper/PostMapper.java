@@ -117,4 +117,11 @@ public interface PostMapper {
 	int getTotalCnt(int filter, String searchQuery);
 	
 	public int getBoardId(int userId);
+	
+	// 질문 토론 단건조회 Yes
+	PostVO getPostVoteyes(PostVO postVO);
+	
+	// 질문 토론 단건조회 No
+	PostVO getPostVoteno(PostVO postVO);
+
 }

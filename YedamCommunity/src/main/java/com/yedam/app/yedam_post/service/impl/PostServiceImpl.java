@@ -374,16 +374,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<VoteItemVO> getVoteItems(int voteId) {
-        return voteMapper.selectVoteItemsByVoteId(voteId);
-    }
-
-    @Override
-    public int createVoteItem(VoteItemVO voteItem) {
-    	return voteMapper.insertVoteItem(voteItem);
-    }
-
-    @Override
     public int createVoteUser(VoteUserVO voteUser) {
     	return voteMapper.insertVoteUser(voteUser);
 		 
@@ -392,5 +382,15 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public int boardId(int userId) {
 		return postMapper.getBoardId(userId);
+	}
+
+	@Override
+	public PostVO getPostVotedetail(PostVO postVO) {
+		return postMapper.getPostVoteyes(postVO);
+	}
+	
+	@Override
+	public PostVO getPostVotedetailNo(PostVO postVO) {
+		return postMapper.getPostVoteno(postVO);
 	}
 }

@@ -162,22 +162,15 @@ public interface PostService {
 	// 보드아이디 가졍괴
 	public int boardId(int userId);	
 	
+	// 질문 토론 단건조회 Yes
+	public PostVO getPostVotedetail(PostVO postVO);
 	
-	
-	
-	
-	
-	
-	
-	List<VoteVO> getVotes();
+	public PostVO getPostVotedetailNo(PostVO postVO);
 
 	int createVote(PostVO postVO);
 	
-    List<VoteItemVO> getVoteItems(int voteId);
-    
-    int createVoteItem(VoteItemVO voteItem);
-    
     int createVoteUser(VoteUserVO voteUser);
+
 	
 }
 

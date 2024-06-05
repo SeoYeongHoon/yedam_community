@@ -81,7 +81,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="postListRow" th:each="info : ${postList}" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
+      <tr class="postListRow" th:each="info : ${postList}" th:onclick="|location.href='@{/all/postvote/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
         <td class="postTableData" th:text="${info.postId}">1</td>
         <td class="postTableData" th:text="${info.title}">제목</td>
         <td class="postTableData" th:text="${info.writer}">작성자</td>

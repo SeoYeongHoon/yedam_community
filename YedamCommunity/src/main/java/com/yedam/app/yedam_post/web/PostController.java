@@ -285,26 +285,27 @@ public class PostController {
 	// --------------------------------------------
 	@GetMapping("/postvote/{boardId}/{postId}")
 	public String getPostVoteDetail(Model model,
-			                        @PathVariable int boardId,
-		                            @PathVariable int postId,
+   	  	 	     					PostVO postVO,
 			                        Authentication authentication) {
 		// 게시글 단건 조회
-	    PostVO postVO = postService.getPostReplies(postId, boardId);
+	    postVO = postService.getPostVotedetail(postVO);
+	    PostVO find = postService.getPostVotedetailNo(postVO);
 	    
 	    // 현재 로그인한 유저와 작성자 비교
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	    String userName = userVO.getUsername();
 	    String userType = userVO.getUserType();
-
-	    postVO.setBoardId(boardId);
-	    postVO.setPostId(postId);
+	    
 	    model.addAttribute("postvote", postVO);
+	    model.addAttribute("postvoteno",find);
 	    // 작성자 여부 추가
 	    model.addAttribute("userName", userName);
 	    model.addAttribute("userType", userType);
 	    
 	    return "posts/postInfovote";
 	}
+	
+	
 	
 	
 	// --------------------------------------------
@@ -419,7 +420,7 @@ public class PostController {
 		PostVO postVO = new PostVO();
 		postVO.setUserId(userVO.getuserId());
 	    int userId = userVO.getuserId();
-		Integer likeCheck = postService.likeCheck(postId, userId);
+		Integer likeCheck = postService.likeCheck(postId, userId); // 유저가 추천을 눌렀는지 안닌지 확인
 		
 		if (likeCheck == 0) {
 			postService.createLike(postId, userId); // 게시판의 추천을 눌렀을시 boardlikes 테이블에 insert
