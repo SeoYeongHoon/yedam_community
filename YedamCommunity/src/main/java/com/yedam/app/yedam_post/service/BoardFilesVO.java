@@ -7,6 +7,7 @@ public class BoardFilesVO {
 	private int boardfileId;
 	private int boardId;
 	private int postId;
+	private int boardType;
 	private String boardfileName;
 	private long boardfileSize;
 	private String boardfileLocation;

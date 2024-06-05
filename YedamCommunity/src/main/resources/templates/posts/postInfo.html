@@ -3,105 +3,95 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layouts/default_layout}"
       layout:fragment="Home">
+<style>
+   .reply {
+     border: 1px solid #e1e1e1;
+     padding: 10px;
+     margin-bottom: 10px;
+     border-radius: 5px;
+   }
 
-<head>
-  <title>게시글 상세</title>
-  <style>
-    .reply {
-      border: 1px solid #e1e1e1;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
+   .comment {
+     border: 1px solid #e1e1e1;
+     padding: 10px;
+     margin-left: 20px;
+     margin-bottom: 10px;
+     border-radius: 5px;
+     background-color: #f9f9f9;
+   }
 
-    .comment {
-      border: 1px solid #e1e1e1;
-      padding: 10px;
-      margin-left: 20px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-    }
+   .reply .reply-content,
+   .comment .comment-content {
+     background-color: #f1f1f1;
+     border-radius: 5px;
+     padding: 10px;
+     margin-bottom: 10px;
+   }
 
-    .reply .reply-content,
-    .comment .comment-content {
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
+   .reply .reply-info,
+   .comment .comment-info {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 5px;
+   }
 
-    .reply .reply-info,
-    .comment .comment-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5px;
-    }
+   .reply .reply-actions,
+   .comment .comment-actions {
+     display: flex;
+     gap: 10px;
+   }
 
-    .reply .reply-actions,
-    .comment .comment-actions {
-      display: flex;
-      gap: 10px;
-    }
+   .post-info-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+   }
 
-    .post-info-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+   .post-info-header .title {
+     margin-top: 15px;
+     font-size: 1.5em;
+     font-weight: bold;
+   }
 
-    .post-info-header .title {
-      margin-top: 15px;
-      font-size: 1.5em;
-      font-weight: bold;
-    }
+   .post-info-header .details {
+     font-size: 1.2em;
+     color: gray;
+   }
 
-    .post-info-header .details {
-      font-size: 1.2em;
-      color: gray;
-    }
+   textarea {
+     width: 100%;
+     box-sizing: border-box;
+     padding: 10px;
+     margin-bottom: 10px;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+   }
 
-    textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+   .custom-modal {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     background: white;
+     padding: 20px;
+     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+     z-index: 1000;
+     display: none;
+   }
 
-    .custom-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      z-index: 1000;
-      display: none;
-    }
+   .modal-backdrop {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: rgba(0,0,0,0.5);
+     z-index: 999;
+     display: none;
+   }
+</style>
 
-    .modal-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;
-      display: none;
-    }
-  </style>
-  <!-- jQuery 포함 -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Bootstrap CSS 및 JS 포함 -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-
-<body>
 <div class="container">
   <div class="post-info-header">
     <div class="title" th:text="${postInfo.title}">Post Title</div>

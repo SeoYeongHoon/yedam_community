@@ -33,6 +33,7 @@ public class PostVO {
     //좋아요
     private int totalCount;
     //파일
+    private int boardType;
 	private int boardfileId;
     private String boardfileName;
     private long boardfileSize;

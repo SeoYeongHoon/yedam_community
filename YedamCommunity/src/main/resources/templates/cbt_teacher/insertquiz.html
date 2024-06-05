@@ -50,49 +50,51 @@
 	<!-- ======= 시험문제 입력 style end ======= -->
 	<!-- ======= 정답 지문 입력 radio style start ======= -->
 		<h6 class="mb-25" style="color:red;">정답 체크. !!정답으로 지정할 지문을 선택하세요.!!</h6>
-		<div class="radio-style mb-20 row" style="padding-left:20px">
-			<input class="exampleAnswer" type="radio" name="exampleAnswer" value="1" style="scale:1.3;" checked=""/> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
-            <input class="form-check-label" name="exampleNum" value="1" type="hidden" />
-            <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">1.</p>
-			<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent" id="textContent"
-				   style="border:1px solid black;"/>
-			<input class="correct2" type="hidden" name="quizAnswer"/> <!-- 문제의 정답 자동등록 -->
-		</div>
-		<!-- end radio -->
-		<div class="radio-style mb-20 row" style="padding-left:20px">
-			<input class="exampleAnswer" type="radio" name="exampleAnswer2" value="0" style="scale:1.3;" /> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
-            <input class="form-check-label" name="exampleNum" value="2" type="hidden" />
-            <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">2.</p>
-			<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent2" id="textContent2"
-			       style="border:1px solid black;"/>
-			<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->       
-		</div>
-		<!-- end radio -->
-		<div class="radio-style mb-20 row" style="padding-left:20px">
-			<input class="exampleAnswer" type="radio" name="exampleAnswer3" value="0" style="scale:1.3;" /> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
-            <input class="form-check-label" name="exampleNum" value="3" type="hidden" />
-            <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">3.</p>
-			<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent3" id="textContent3"
-			       style="border:1px solid black;"/>
-			<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
-		</div>
-		<!-- end radio -->
-		<div class="radio-style mb-20 row" style="padding-left:20px">
-			<input class="exampleAnswer" type="radio" name="exampleAnswer4" value="0" style="scale:1.3;" /> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
-            <input class="form-check-label" name="exampleNum" value="4" type="hidden" />
-            <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">4.</p>
-			<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent4" id="textContent4"
-			       style="border:1px solid black;"/>
-			<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
-		</div>
-		<!-- end radio -->
-		<div class="radio-style mb-20 row" style="padding-left:20px">
-			<input class="exampleAnswer" type="radio" name="exampleAnswer5" value="0" style="scale:1.3;" /> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
-            <input class="form-check-label" name="exampleNum" value="5" type="hidden" />
-            <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">5.</p>
-			<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent5" id="textContent5"
-			       style="border:1px solid black;"/>
-			<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
+		<div id="radioArea">
+			<div class="radio-style mb-20 row" style="padding-left:20px">
+				<input class="exampleAnswer" type="radio" name="exampleAnswer" value="1" style="scale:1.3;" checked/> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
+		           <input class="form-check-label" name="exampleNum" value="1" type="hidden" />
+		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">1.</p>
+				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent" id="textContent"
+					   style="border:1px solid black;"/>
+				<input class="correct2" type="hidden" name="quizAnswer"/> <!-- 문제의 정답 자동등록 -->
+			</div>
+			<!-- end radio -->
+			<div class="radio-style mb-20 row" style="padding-left:20px">
+				<input class="exampleAnswer" type="radio" name="exampleAnswer2" value="0" style="scale:1.3;" /> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
+		           <input class="form-check-label" name="exampleNum" value="2" type="hidden" />
+		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">2.</p>
+				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent2" id="textContent2"
+				       style="border:1px solid black;"/>
+				<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->       
+			</div>
+			<!-- end radio -->
+			<div class="radio-style mb-20 row" style="padding-left:20px">
+				<input class="exampleAnswer" type="radio" name="exampleAnswer3" value="0" style="scale:1.3;" /> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
+		           <input class="form-check-label" name="exampleNum" value="3" type="hidden" />
+		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">3.</p>
+				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent3" id="textContent3"
+				       style="border:1px solid black;"/>
+				<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
+			</div>
+			<!-- end radio -->
+			<div class="radio-style mb-20 row" style="padding-left:20px">
+				<input class="exampleAnswer" type="radio" name="exampleAnswer4" value="0" style="scale:1.3;" /> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
+		           <input class="form-check-label" name="exampleNum" value="4" type="hidden" />
+		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">4.</p>
+				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent4" id="textContent4"
+				       style="border:1px solid black;"/>
+				<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
+			</div>
+			<!-- end radio -->
+			<div class="radio-style mb-20 row" style="padding-left:20px">
+				<input class="exampleAnswer" type="radio" name="exampleAnswer5" value="0" style="scale:1.3;" /> <!-- 문제의 정답 타입 자동 지정(1:정답,0:오답) -->
+		           <input class="form-check-label" name="exampleNum" value="5" type="hidden" />
+		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">5.</p>
+				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent5" id="textContent5"
+				       style="border:1px solid black;"/>
+				<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
+			</div>
 		</div>
 		<br>
 		<!-- end radio -->
@@ -290,18 +292,12 @@ $('#radio-2').change(function(e){
 	multi.style.display = "none";	
 	shor.style.display = "block";	
 })
-$('.addbt').on('click',function(){
-	let cor = $('.correct').val();
-	$('.correct2').attr("value",cor);
-	console.log($('.correct2').val());
-})
+
 $('#addBtnJu').on('click',function(){
 	let corJu = $('#textContentJu').val();
 	$('#quizAnswerJu').attr("value",corJu);
 	console.log($('#quizAnswerJu').val());
 })
-//document.querySelector('form[name="insertForm"]')
-//		.addEventListener('submit', validationCheck);
 
 $('.addbt').on('click', function validationCheck(event){
 	event.preventDefault();
@@ -379,21 +375,24 @@ $('#addBtnJu').on('click', function(){
 	})
 })
 // 정답체크한 radio 지문만 정답으로 등록되도록 하는 기능
-/* $('.exampleAnswer').on('change',function(){
-	console.log('라디오 변경');
+$('.exampleAnswer').on('change',function(){
 	$('.exampleAnswer').attr('value','0'); // radio버튼 클릭시 최초 val값 0으로 설정
 	$('.correct2').attr('name',''); // hidden input 태그의 name속성 초기화
 	$('.correct2').attr('value',''); // hidden input 태그의 value속성 초기화
+	$('.exampleAnswer').prop('checked',false); // name값이 서로 다르지만 중복체크 안되도록 설정1
+	$(this).prop('checked',true); // name값이 서로 다르지만 중복체크 안되도록 설정2
 	$(this).attr('value','1'); // 클릭한 radio버튼의 val값만 1로 변경 (val값1 = 지문이 정답으로 처리됨)
-	$(this).parent().children('.correct2').attr('name','quizAnswer'); // 
+	$(this).parent().children('.correct2').attr('name','quizAnswer'); // 클릭한 radio버튼의 val값을 quizAnswer컬럼에 넣기위한 작업
 	
-	let cor = $(this).parent().children('.correct').val();
-	$('.correct2').attr("value",cor);
-	if($('.correct').change()){
-		console.log('인풋창 변화 감지')
-	}
-	console.log($('.correct2').val());
-}) */
+	let cor = $(this).parent().children('.correct').val(); // input태그에 지문입력한 val값 저장.
+	$(this).parent().children('.correct2').attr("value",cor); // name:quizAnswer 에 val값 넣기.
+})
 
+// 지문입력 input태그 변경 감지해서 val값 설정
+$('#radioArea').on('change', '.correct', function(){
+	console.log("인풋장에 입력된 this.val: "+$(this).val())
+	let cor = $(this).parent().children('.correct').val();
+	$(this).parent().children('.correct2').attr("value",cor);
+})
 </script>
 </html>

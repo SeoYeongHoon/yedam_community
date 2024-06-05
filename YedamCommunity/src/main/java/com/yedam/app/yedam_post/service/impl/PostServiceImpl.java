@@ -384,6 +384,7 @@ public class PostServiceImpl implements PostService {
 		return postMapper.getBoardId(userId);
 	}
 
+
 	@Override
 	public PostVO getPostVotedetail(PostVO postVO) {
 		return postMapper.getPostVoteyes(postVO);
@@ -392,5 +393,17 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostVO getPostVotedetailNo(PostVO postVO) {
 		return postMapper.getPostVoteno(postVO);
+
+	//수료과정 파일조회
+	@Override
+	public List<BoardFilesVO> successFileList(int boardType) {
+		return postMapper.successFile(boardType);
+	}
+
+	// boardType로 boardId 조회
+	@Override
+	public int boardTypeSet(int boardType) {
+		return postMapper.setBoardType(boardType);
+
 	}
 }

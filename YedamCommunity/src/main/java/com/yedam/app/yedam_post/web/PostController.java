@@ -58,18 +58,20 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 리스트 조회
 	// --------------------------------------------
-	@GetMapping("/post/{boardId}")
-	public String postList(@PathVariable Integer boardId,
+	@GetMapping("/posts/{boardType}")
+	public String postList(@PathVariable Integer boardType,
 	                       PostVO postVO,
 	                       @RequestParam(required = false, defaultValue = "1") Integer page,
 	                       @RequestParam(required = false, defaultValue = "6") Integer pageSize,
 	                       @RequestParam(required = false) String keyword,
 	                       Model model) {
-		System.err.println("boardId"+ boardId); //1
+		System.err.println("boardType= "+ boardType);
 		
-		
+		 int boardId = postService.boardTypeSet(boardType);
+		 postVO.setBoardId(boardId);
+		 System.err.println("boardId= ?" + boardId);
 	    try {
-	        postVO.setBoardId(boardId);
+	        postVO.setBoardType(boardType);
 
 	        if (keyword != null && !keyword.isEmpty()) {
 	            postVO.setKeyword(keyword);
@@ -78,10 +80,11 @@ public class PostController {
 	        List<PostVO> list = postService.getPosts(postVO, page, pageSize);
 	        int totalCount = postService.getPostCount(postVO);
 	        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	        
 
 	        // 게시글 리스트에서 파일 정보 가져오기
 	        for (PostVO post : list) {
-	            List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(post.getPostId(), boardId);
+	            List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(post.getPostId(), boardType);
 	            for (BoardFilesVO file : boardFilesVO) {
 	                File find = new File(uploadPath + "/" + file.getBoardfileLocation());
 	                file.setExists(find.exists());
@@ -93,7 +96,7 @@ public class PostController {
 	        model.addAttribute("totalCount", totalCount);
 	        model.addAttribute("currentPage", page);
 	        model.addAttribute("pageSize", pageSize);
-	        model.addAttribute("boardId", boardId);
+	        model.addAttribute("boardId", boardType);
 	        model.addAttribute("keyword", keyword);
 	        model.addAttribute("totalPages", totalPages);
 
@@ -114,13 +117,11 @@ public class PostController {
 		
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		int userId = userVO.getuserId();
+		
 		int boardId =  postService.boardId(userId);
 		
 		List<CurriculumVO> List = postService.curriculumList();
 		List<PostVO> postList = postService.postlist();
-		System.err.println("list == "+ List.get(0));
-		System.err.println("postList == "+ postList.get(0));
-		
 		model.addAttribute("boardId",boardId);
 		model.addAttribute("curriculum",List);
 		model.addAttribute("postList",postList);
@@ -141,10 +142,12 @@ public class PostController {
 	//--------------------------------
 		 @GetMapping("/gallery")
 		 @ResponseBody 
-		 public List<BoardFilesVO> gallery(@RequestParam int postId) {
-			 int boardId = 1;
-			 List<BoardFilesVO> fileList = postService.getBoardFiles(postId, boardId);
-			 return  postService.getBoardFiles(postId, boardId);
+		 public List<BoardFilesVO> gallery(@RequestParam int curriculumId) {
+			 //int boardType = 1;
+			 System.err.println("보드타입== "+curriculumId);
+			 List<BoardFilesVO> fileList = postService.successFileList(curriculumId);	 
+			 System.err.println("파일 리스트 == " + fileList.get(0));
+			 return  postService.successFileList(curriculumId);
 		  }
 		 
 		 
@@ -157,7 +160,14 @@ public class PostController {
 		 List<PostVO> postList =  postService.selectCurriculum(curriculumId);
 		 return  postList;
 	  }
-	 
+	// --------------------------------------------
+	// 헤더에 게시판 타입 부여
+	// --------------------------------------------
+	public String boardType (Model model) {
+		
+		return "common/fragments/header";
+	}
+	
 	// --------------------------------------------
 	// 게시글 단건 조회
 	// --------------------------------------------
@@ -195,19 +205,17 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 등록
 	// --------------------------------------------
-	@GetMapping("/postInsert")
+	@GetMapping("/postInsert/{boardType}")
     public String postInsertForm(Model model
     		                   , PostVO postVO
-    		                   , @PathVariable int boardId
+    		                   , @PathVariable int boardType
     		                   , Authentication authentication) {
+        postVO.setBoardType(boardType);
+        int boardId = postService.boardTypeSet(boardType);
         postVO.setBoardId(boardId);
-        
-        
-        
         // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
         LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
         postVO.setWriter(userVO.getUsername());
-        
         model.addAttribute("post", postVO);
         return "posts/postInsert";
     }
@@ -220,6 +228,7 @@ public class PostController {
     public String postInsertProcess(PostVO postVO,
     		                        @RequestParam("file") MultipartFile file, 
                                     Authentication authentication) {
+        System.err.println("postVO에 뭐있니? = " + postVO);
         
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
@@ -248,7 +257,7 @@ public class PostController {
         postVO.setCreateDate(new Date());
         postVO.setUpdateDate(new Date());
         postService.createPost(postVO);
-        return "redirect:/all/post/" + postVO.getBoardId();
+        return "redirect:/all/posts/" + postVO.getBoardType();
     }
 	
 	// --------------------------------------------

@@ -351,6 +351,7 @@
 	<select id="quizAnswer" resultType="TeacherVO" parameterType="int">
 		SELECT example_num
 			 , text_content
+			 , example_answer
 		FROM answers
 		WHERE quiz_id = #{qId}
 		ORDER BY example_num    

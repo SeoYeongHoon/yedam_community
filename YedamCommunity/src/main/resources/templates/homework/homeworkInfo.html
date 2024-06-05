@@ -10,6 +10,13 @@
 .logName{
 	display :none; 
 }
+#loggedName {
+	background: #e5ebff;
+	padding: 3px;
+}
+em {
+	font-style: normal;
+}
 </style>
 <script>
 function autoResize(textarea) {
@@ -146,11 +153,11 @@ function autoResize(textarea) {
 <input id="logName" type="hidden" th:value="${userName}">
 <div th:each="homeworkInfo : ${homeworkList}" style="padding: 30px;">
 	<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
-		class="main-btn light-btn   btn-hover admin"
+		class="main-btn danger-btn btn-hover admin"
 		style="float: right; padding: 10px 15px;" type="button">과제 삭제</button>
 	<button id="updateHomework"
 		class="main-btn warning-btn   btn-hover admin"
-		th:value="${homeworkInfo.homeworkId}" type="button" style="padding: 10px 15px;">게시글 수정</button>
+		th:value="${homeworkInfo.homeworkId}" type="button" style="padding: 10px 15px;">과제 수정</button>
 	<div>
 		<hr>
 		<div class="input-style-1">
@@ -401,7 +408,8 @@ $('#deleteHomeworks').on('click',function(){
             	   <div class ="replyWrapper">
             	   		<div class="replyDiv">
 	                   		<!-- 작성자 -->
-	                   		<input id="logName" type="text" value="${e.replyWriter}" readonly >
+	                   		
+	                   		<p id="logName" value="${e.replyWriter}"><em class="isWriter-${e.replyWriter}">${e.replyWriter}</em></p>
 	                   		
 	            	   		<!-- 댓글 내용 -->
 	            	   		<textarea id="logContent" cols="70" rows="1" class="replyContent-${e.replyId}" readonly oninput="autoResize(this)">${e.replyContent}</textarea>
@@ -416,6 +424,7 @@ $('#deleteHomeworks').on('click',function(){
 							</div>
             	   		</div>
             	   		
+            	   		<div id="replyFilesList${e.replyId}" class="replyAddedFile"></div>
             	   		
 	                   	<div class="col-12" style="margin-top: 10px; padding-left: 0;">
 	                   		<div id="replyFileUpload-${e.replyId}" style="display:none;">
@@ -426,7 +435,7 @@ $('#deleteHomeworks').on('click',function(){
 			   				</div>
 						</div>
 						<div id="${e.replyId}" class="replyCommentWrapper" style="display: none; position: relative;">
-							<p class="replierName">${e.replyWriter}</p>
+							<p class="replierName">[[${#authentication.name}]]</p>
 							<textarea class="replyTextArea" id="comment-${e.replyId}" rows="4" cols="50" placeholder="답글 내용을 입력하세요" oninput="autoResize(this)"></textarea>
 							<button id="commentInsertBtn" class="main-btn primary-btn btn-hover commentInsertBtn" type="button" value="${e.replyId}" onclick="addComment(${e.replyId})">답글 등록</button>
 						</div>
@@ -435,7 +444,6 @@ $('#deleteHomeworks').on('click',function(){
 						</div>
                    	</div>	
                    	
-                   	<div id="replyFilesList${e.replyId}"></div>
                 `;
 			
                $('#replyList').append(replies);
@@ -449,8 +457,9 @@ $('#deleteHomeworks').on('click',function(){
          //-------------------
        	 let userName = $('#logName').val() // 로그인한 Name
          let replyName = $('#logName').val()
-         if(userName == replyName){
-         $(".logName-"+userName).css('display','inline-flex');
+         if(userName == replyName) {
+	         $(".logName-"+userName).css('display','inline-flex');
+	         $(".isWriter-" + userName).attr('id', 'loggedName');
          }
 			//출력된 댓글 아이디 가져오기
             let replyIds = [];
@@ -551,7 +560,8 @@ function replyFile(replyId){
 			   data.forEach(function(e){
 				   let replyfile = 
 					   `
-					   <div id = "updateReplyFileList${e.replyId}">
+					   <div id = "updateReplyFileList${e.replyId}" style="display: flex;">
+					   		<p class="mr-2">파일: </p>
 					   		<input id="replyId${e.replyfileId}" type="hidden" value="${e.replyId}"> 
 					   		<input id="replyfileId" type="hidden" value="${e.replyfileId}"> 
 					   		<a href="/replydownload/${e.downloadLocation}">${e.replyfileName}</a> 
@@ -644,32 +654,32 @@ function replyFile(replyId){
     // 대댓글 리스트
     //-------------------
    function commentList(comments){
-	        	 comments.forEach(function(e){
-	        		 let commentDate = formatDate(e.commentDate);
-	        		   let comments =
-	        			 `<div style="display: flex; align-items: baseline; margin-left: 185px; background-color: rgba(239, 239, 239, 0.5); border: 1px solid rgb(229, 229, 229); border-radius: 4px; padding: 5px;">
-	        		   		<input class="commentLogName" type="hidden" value="${e.commentWriter}">
-	        			 	<p style="width: 200px;"> ㄴ  ${e.commentWriter}</p>
-	        			 	<textarea style="background-color: rgba(239, 239, 239, 0.5); min-height: 60px;" id="logContent" cols="70" rows="1" class="commentContent-${e.commentId}" readonly oninput="autoResize(this)">${e.commentContent}</textarea>
-	        			 	<button type="button" class="main-btn warning-btn   btn-hover replyContentUpdate-${e.commentId}" style="display: none;"	>수정</button>
-	        			 	<p >${commentDate}</p>
-	        			 	<button class="main-btn light-btn btn-hover logName commentLogName-${e.commentWriter}" type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
-	        			 	<button class="main-btn warning-btn btn-hover cUpdateBtn logName commentLogName-${e.commentWriter}" type="button" id="cUpdateBtn" value="${e.commentId}">답글 수정</button>
-	        			 </div>
-	        			 `
-	        		 $('#comments-'+e.replyId).append(comments);
-	        	 });
-	        	 
-	        	  //--------------------------
-	              // 답글 수정
-	        	  //--------------------------
-	              $('.cUpdateBtn').on('click',function(e){
-	        		  let commentId = $(this).val();
-	             	$('.commentContent-'+ commentId).prop('readonly',false);
-	             	$('.commentContent-'+commentId).css('backgroundColor','yellow');
-	            	$('.replyContentUpdate-'+commentId).css('display','block');
-	            	replyUpdate(commentId);
-	             }) // commentupdate end
+       	 comments.forEach(function(e){
+       		 let commentDate = formatDate(e.commentDate);
+       		   let comments =
+       			 `<div style="display: flex; position: relative; align-items: baseline; margin-left: 24px; background-color: rgba(239, 239, 239, 0.5); border: 1px solid rgb(229, 229, 229); border-radius: 4px; padding: 5px;">
+       		   		<input class="commentLogName" type="hidden" value="${e.commentWriter}">
+       			 	<p class="commentWriterName"><em class="isWriter-${e.commentWriter}">${e.commentWriter}</em></p>
+       			 	<textarea style="background-color: transparent; min-height: 60px;" id="logContent" cols="70" rows="1" class="commentContent-${e.commentId}" readonly oninput="autoResize(this)">${e.commentContent}</textarea>
+       			 	<button type="button" class="main-btn warning-btn   btn-hover replyContentUpdate-${e.commentId}" style="display: none;"	>수정</button>
+       			 	<p style="font-size: 14px;">${commentDate}</p>
+       			 	<button class="main-btn light-btn btn-hover logName commentLogName-${e.commentWriter}" type="button" onclick="(deleteComment(${e.commentId}))">답글 삭제</button>
+       			 	<button class="main-btn warning-btn btn-hover cUpdateBtn logName commentLogName-${e.commentWriter}" type="button" id="cUpdateBtn" value="${e.commentId}">답글 수정</button>
+       			  </div>
+       			 `
+       		 $('#comments-'+e.replyId).append(comments);
+       	 });
+        	 
+       	  //--------------------------
+          // 답글 수정
+       	  //--------------------------
+          $('.cUpdateBtn').on('click',function(e){
+   		  	let commentId = $(this).val();
+         	$('.commentContent-'+ commentId).prop('readonly',false);
+         	$('.commentContent-'+commentId).css('backgroundColor','yellow');
+        	$('.replyContentUpdate-'+commentId).css('display','block');
+        	replyUpdate(commentId);
+          }) // commentupdate end
 	   } // commentList end
 	   
    //--------------------------

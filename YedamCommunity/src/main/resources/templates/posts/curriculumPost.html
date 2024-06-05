@@ -71,18 +71,20 @@
 //--------------------------
 // 갤러리 출력
 //-------------------------
-function gallery(postId){
+function gallery(curriculumId){
+	
+	
 	
 	$.ajax({
 		url:'/all/gallery',
 		type:'get',
-		data:{postId : postId},
+		data:{curriculumId : curriculumId},
 		success:function(data){
 			data.forEach(function(e){
 			 let galleryList =
 				 `
-				 	<div onclick="location.href='/all/post/1/${postId}'">
-			 			<img src="/files/${e.boardfileLocation}" alt="${e.boardfileName}">
+				 	<div onclick="location.href='/all/post/${e.boardId}/${e.postId}'">
+			 			<img src="/files/${e.boardfileLocation}" alt="">
 			 		</div>
 				 `
 			$('#gallery').append(galleryList);
@@ -101,6 +103,8 @@ let curriculumId = 0;
 $(document).ready(function() {
 	$('.chooseCurriculum').on('click',function() {
 		curriculumId = $(this).val();
+		$('#gallery').empty();
+		gallery(curriculumId)
 		filterCurriculum(1);
 	});
 
@@ -109,15 +113,16 @@ $(document).ready(function() {
     });
 	
     filterCurriculum(1);
-    let postIds =[]
     
-    $('.postId').each(function(){
-    	postIds.push($(this).val());
-    })
-    
-    postIds.forEach(function(postId){
-    	gallery(postId)
-    })
+    let curriculumIds = []
+
+    $('.chooseCurriculum').each(function(){
+		curriculumIds.push($(this).val());
+	})
+	
+	curriculumIds.forEach(function(curriculumId){
+		gallery(curriculumId)
+	}) 
 });
 
 //--------------------------------------------
@@ -142,7 +147,7 @@ function filterCurriculum(page,filter) {
             	
         },
         error: function(error) {
-            console.error('Error:', error);
+            console.log('Error');
         }
     });
 }
@@ -157,16 +162,9 @@ function updatePost(posts) {
 	posts.forEach((test,idx) => {
 		let postData = formatDate(test.createDate);
 		
-		let boardIds =[]
-		  $('#boardId').each(function(){
-			  boardIds.push($(this).val());
-		    })
-		boardIds.forEach(function(boardId){
-			console.log("boardId== " + boardId)
-		})
 		let post =
 			`
-	      		<tr id="tr" onclick="location.href='/all/post/1/${test.postId}'">
+	      		<tr id="tr" onclick="location.href='/all/post/${test.boardId}/${test.postId}'">
 	        		<td class="postTableData">${test.postId}</td>
 			       	<td class="postTableData">${test.title}</td>
 	        		<td class="postTableData">${test.writer}</td>

@@ -368,12 +368,18 @@ var currentPage = 1;
 var curriId = 0;
 var solution = '';
 var answer = [];
+var eAnswer = [];
 var subjectName = ''; // 필터링에 사용될 과목명
 var textContent1 = '';
 var textContent2 = '';
 var textContent3 = '';
 var textContent4 = '';
 var textContent5 = '';
+var exampleAnswer = '';
+var exampleAnswer2 = '';
+var exampleAnswer3 = '';
+var exampleAnswer4 = '';
+var exampleAnswer5 = '';
 var storageContent = [];
 var storageScore = []; 
 var storageQId = [];
@@ -432,13 +438,18 @@ function quizContentList(page, subjectName){
 					success : function(data){
 						data.forEach((item,idx) => {
 							answer.push(item.textContent);
+							eAnswer.push(item.exampleAnswer);
 						})
 						textContent1 = answer[0];
 						textContent2 = answer[1];
 						textContent3 = answer[2];
 						textContent4 = answer[3];
 						textContent5 = answer[4];
-						
+						exampleAnswer = eAnswer[0];
+						exampleAnswer2 = eAnswer[1];
+						exampleAnswer3 = eAnswer[2];
+						exampleAnswer4 = eAnswer[3];
+						exampleAnswer5 = eAnswer[4];
 						//--------------------------------------------
 						// 문제,해설 단건조회(자세히보기)ajax - 모달에 불러오기 시작
 						//--------------------------------------------
@@ -464,22 +475,27 @@ function quizContentList(page, subjectName){
 											<div class="row row1" style="padding-left:15px">
 												<p class="">1. </p>
 												<input class="col-8" type="text" id="textContent1" value="${textContent1}" readonly="true" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer}" />
 											</div>
 											<div class="row row2" style="padding-left:15px">
 												<p class="">2. </p>
 												<input class="col-8" type="text" id="textContent2" value="${textContent2}" readonly="true" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer2}" />
 											</div>
 											<div class="row row3" style="padding-left:15px">
 												<p class="">3. </p>
 												<input class="col-8" type="text" id="textContent3" value="${textContent3}" readonly="true" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer3}" />
 											</div>
 											<div class="row row4" style="padding-left:15px">
 												<p class="">4. </p>
 												<input class="col-8" type="text" id="textContent4" value="${textContent4}" readonly="true" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer4}" />
 											</div>
 											<div class="row row5" style="padding-left:15px">
 												<p class="">5. </p>
 												<input class="col-8" type="text" id="textContent5" value="${textContent5}" readonly="true" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer5}" />
 											</div>
 										</div>
 										<br>
@@ -503,6 +519,10 @@ function quizContentList(page, subjectName){
 										$('.row4').hide();
 										$('.row3').hide();
 										$('.row2').hide();
+									}
+									
+									if($('.eAnswer').val() == 1){
+										$('.eAnswer').attr('style','yellow')
 									}
 								})
 							},

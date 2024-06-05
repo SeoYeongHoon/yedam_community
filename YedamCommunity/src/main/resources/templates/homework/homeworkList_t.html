@@ -40,18 +40,14 @@
 <script>
 	
 </script>
-<div class="row" style="justify-content: center;">
-	<div class="col-10" style="margin-top: 50px;">
-		<div style='float: right;'>
-			<a href="/admin/selectClass" class=" primary-btn main-btn btn-hover" style='padding: 5px 15px;'> 
-				+ 과제
-			</a>
-		</div>
-	</div>
-</div>
-<div class="row" style="margin-top: 10px; justify-content: center;">
+<div class="row" style="margin-top: 50px; justify-content: center;">
 	<div class="col-10">
 		<div class="card-style mb-30">
+			<div style="position: absolute; right: 50px; top: 90px;">
+				<a href="/admin/selectClass" class=" primary-btn main-btn btn-hover" style='padding: 5px 15px;'> 
+					+ 과제
+				</a>
+			</div>
 			<h1 class="mb-30" style="font-weight: normal;">과제 목록</h1>
 			<div class="select-style-1" style="position: relative; margin-bottom: 15px;">
 				<label>강의실 선택</label>
@@ -76,14 +72,14 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th style="text-align: center;"><h6>강의실</h6></th>
-							<th style="text-align: center;"><h6>과제명</h6></th>
-							<th style="text-align: center;"><h6>과목명</h6></th>
-							<th style="text-align: center;"><h6>마감일</h6></th>
-							<th style="text-align: center;"><h6>진행상태</h6></th> 
+							<th class="col-board"><h6>강의실</h6></th>
+							<th class="col-title"><h6>과제명</h6></th>
+							<th class="col-board"><h6>과목명</h6></th>
+							<th class="col-board"><h6>마감일</h6></th>
+							<th class="col-board"><h6>진행상태</h6></th> 
 						</tr>
 					</thead>
-					<tbody id="homeworkBody" style="text-align: center;">
+					<tbody id="homeworkBody">
 					</tbody>
 				</table>
 				<div class="center">
@@ -186,11 +182,11 @@ function process(){
 		
 		let list = `
 			<tr class="homeworkList" onclick="location.href='/all/homeworkInfo?homeworkId=${test.homeworkId}' ">
-				<td>${test.classId}</td>
-				<td>${test.homeworkTitle}</td>
-				<td>${test.subjectName}</td>
-				<td class="tDate">${tDate}</td>
-				<td id="tProcess">
+				<td class="col-board replyTableData">${test.classId}</td>
+				<td class="col-title ellipsis replyTableData">${test.homeworkTitle}</td>
+				<td class="col-board replyTableData">${test.subjectName}</td>
+				<td class="col-board replyTableData tDate">${tDate}</td>
+				<td id="tProcess" class="col-board replyTableData">
 					<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
 				</td>
 			</tr>

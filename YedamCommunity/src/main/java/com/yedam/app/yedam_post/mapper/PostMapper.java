@@ -82,8 +82,10 @@ public interface PostMapper {
     //--------------------------------------------
     // 파일 불러오기
     //--------------------------------------------
-	public List<BoardFilesVO> getBoardFiles(int postId,
-			                              int boardId);
+	public List<BoardFilesVO> getBoardFiles(int postId, int boardId);
+	
+	//수료과정 파일 조회
+	public List<BoardFilesVO> successFile(int boardType);
 
 	//--------------------------------------------
     // 메인페이지 조회
@@ -116,12 +118,17 @@ public interface PostMapper {
 	// 페이징용 카운트
 	int getTotalCnt(int filter, String searchQuery);
 	
+	// 접속유저id로 boardId 조회
 	public int getBoardId(int userId);
 	
+
 	// 질문 토론 단건조회 Yes
 	PostVO getPostVoteyes(PostVO postVO);
 	
 	// 질문 토론 단건조회 No
 	PostVO getPostVoteno(PostVO postVO);
+
+	// boardType로 boardId 조회
+	public int setBoardType(int boardType);
 
 }

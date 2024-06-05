@@ -20,20 +20,21 @@
 						<li class="mega-menu-item"><a href="/all/testList2">LMS</a></li>
 					</th:block> -->
 					<li class="mega-menu-item"><a th:href="@{/all/curriculumPost}">수료 과정별 게시판</a></li>
-					<li class="mega-menu-item"><a th:href="@{/all/post/2}">구인/구직 게시판</a></li>
-					<li class="mega-menu-item"><a th:href="@{/all/post/3}">정보 공유 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/posts/2}">구인/구직 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/posts/3}">정보 공유 게시판</a></li>
 					<li class="mega-menu-item"><a th:href="@{/all/post/4}">질문과 토론 게시판</a></li>
 				</ul>
-				<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD') or hasAuthority('ROLE_ADMIN')">
+				<!-- <th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD') or hasAuthority('ROLE_ADMIN')">
 					<div class="profile_my_info" style="position: absolute; right: 90px; color: black;">
 						<p style="font-weight: normal; color: #51BC56">[[${#authentication.name}]] <span style="color: black;">님</span></p>
 						<p>환영합니다!</p>
 					</div>
-				</th:block>
+				</th:block> -->
 				<div class="profile_image_btn">
 					<button id="myMenuBtn"><img th:src="@{${'/files' + #authentication.principal.profileImageLocation}}" 
-						style="width: 65px; height: 65px; border-radius: 50%; border: 1px solid #9AA4CA; box-shadow: 1px 5px 8px 0 #00000040;"></button>
+						style="width: 65px; height: 65px; border-radius: 50%; box-shadow: 1px 5px 8px 0 #00000040;"></button>
 					<ul class="myMenuList" style="display: none">
+						<li class="myMenuItem" style="padding-bottom: 15px; border-bottom: 1px solid #e6e6e6;"><p>안녕하세요.</p><p>[[${#authentication.name}]] 님!</p></li>
 						<th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD') or hasAuthority('ROLE_ADMIN')">
 							<li class="myMenuItem"><a href="/mypage">프로필</a></li>
 						</th:block>

@@ -93,7 +93,6 @@
 					                var user = JSON.parse(xhr.responseText);
 					
 					                document.querySelector('.infoModal').style.display = 'none';
-					                location.reload();
 					            }
 					        };
 					        xhr.send();
@@ -289,61 +288,30 @@
 		// 필터링으로 인한 유저 리스트 변경(목록 업데이트)
 		//--------------------------------------------
 		function updateUsers(users) {
-			var tbody = document.getElementById('userInfoTable');
-            tbody.innerHTML = ''; // 이전 내용 지우기
+			// var tbody = document.getElementById('userInfoTable');
+			var tbody = $('#userInfoTable');
+            tbody.empty(); // 이전 내용 지우기
 			
 			users.forEach(user => {
-                var tr = document.createElement('tr');
-                
-                var tdUserId = document.createElement('td');
-                tdUserId.textContent = user.userId;
-                tr.appendChild(tdUserId);
+				let template = `
+					<tr class="postListRow">
+						<td class="col-board replyTableData">${user.userId}</td>
+						<td class="col-board ellipsis replyTableData">${user.userType}</td>
+						<td class="col-board replyTableData">${user.name}</td>
+						<td class="col-title replyTableData">${user.curriculumName}</td>
+						<td class="col-title replyTableData">${user.email}</td>
+						<td><a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" onclick="fetchUserDetails(user.userId)">상세보기</a></td>
+					</tr>
+				`;
+				
 
-                var tdType = document.createElement('td');
-                if (user.userType == 'ROLE_GRAD') {
-                	tdType.textContent = '수료생';
-                } else {
-                	tdType.textContent = '수강생';
-                }
-                tr.appendChild(tdType);
-                
-                var tdName = document.createElement('td');
-                tdName.textContent = user.name;
-                tr.appendChild(tdName);
-                
-                /* var tdTel = document.createElement('td');
-                tdTel.textContent = user.tel;
-                tr.appendChild(tdTel); */
-                var tdCourse = document.createElement('td');
-                tdCourse.textContent = user.curriculumName;
-                tr.appendChild(tdCourse);
-                
-                var tdEmail = document.createElement('td');
-                tdEmail.textContent = user.email;
-                tr.appendChild(tdEmail);
-                
-                /* var tdDate = document.createElement('td');
-                tdDate.textContent = formatDate(user.curriculumStartDate) + ' ~ ' + formatDate(user.curriculumEndDate);
-                tr.appendChild(tdDate); */
-                
-                var makeBtnTd = document.createElement('td');
-                var tdInfoBtn = document.createElement('a');
-                tdInfoBtn.className = "main-btn light-btn btn-hover";
-                tdInfoBtn.style = "padding: 5px 10px;"
-                tdInfoBtn.innerText = "상세보기";
-                tdInfoBtn.onclick = function() {
-                	fetchUserDetails(user.userId);
-                }
-                makeBtnTd.appendChild(tdInfoBtn);
-                tr.appendChild(makeBtnTd);
-
-                tbody.appendChild(tr);
+				$('#userInfoTable').append(template);
             });
 		}
 	</script>
 	
 	<!-- 어드민페이지 내부 컨텐트 -->
-	<div id="adminContainer" style="min-height: 1300px;">
+	<div id="adminContainer" style="min-height: 1300px; margin: 30px 50px;">
 		
 		<div class="tables-wrapper">
 
@@ -447,47 +415,28 @@
 							<table class="table">
 								<thead>
 									<tr>
-									<th>
+									<th class="col-no">
 										<h6>No</h6>
 									</th>
-									<th>
+									<th class="col-board">
 										<h6>유형</h6>
 									</th>
-									<th>
+									<th class="col-board">
 										<h6>이름</h6>
 									</th>
-									<th>
+									<th class="col-title">
 										<h6>수강명</h6>
 									</th>
-									<th>
+									<th class="col-title">
 										<h6>이메일</h6>
 									</th>
-									<th>
+									<th class="col-board">
 										<h6>상세정보</h6>
 									</th>
 									</tr>
 								</thead>
 								<tbody id="userInfoTable">
-									<tr th:each="user : ${users}">
-										<td>
-											<p>[[${user.userId}]]</p>
-										</td>
-										<td>
-											<p>[[${user.userType}]]</p>
-										</td>
-										<td>
-											<p>[[${user.name}]]</p>
-										</td>
-										<td>
-											<p>[[${user.tel}]]</p>
-										</td>
-										<td>
-											<p>[[${user.email}]]</p>
-										</td>
-										<td>
-											<a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" th:onclick="'fetchUserDetails(' + ${user.userId} + ')'">상세보기</a>
-										</td>
-									</tr>
+									
 								</tbody>
 							</table>
 							

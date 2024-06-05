@@ -73,7 +73,7 @@
 	<th:block th:each="quiz, idx : ${quizResultList}" th:if="${quiz.isCorrect == 0}">
 		<div class="feedback_std_test">
 			<h1 class="tresult_1">[[${idx.count}]].</h1>
-			<img src="images/icons/false.png" style="position: absolute; left: -10px; top: -30px; width: 100px; height: 100px;">
+			<img src="/images/icons/false.png" style="position: absolute; left: -10px; top: -30px; width: 100px; height: 100px;">
 			<h1 class="tresult_1">[[${quiz.quizContent}]]</h1>
 			<p class="tresult_1">([[${quiz.quizScore}]]점)</p>
 			<div>

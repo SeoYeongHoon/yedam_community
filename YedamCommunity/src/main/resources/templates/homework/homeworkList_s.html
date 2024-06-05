@@ -46,9 +46,8 @@
 }
 </style>
 </head>
-<h1>과제 목록 학생</h1>
-<div class="row">
-	<div class="col-10">
+<div class="row" style="justify-content: center;">
+	<div class="col-10" style="margin-top: 50px;">
 		<div class="card-style mb-30">
 			<h1 class="mb-30">과제 목록</h1>
 			<div class="select-style-1"
@@ -77,11 +76,11 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th><h6>강의실</h6></th>
-							<th><h6>과제명</h6></th>
-							<th><h6>과목명</h6></th>
-							<th><h6>마감일</h6></th>
-							<th><h6>진행상태</h6></th>
+							<th class="col-board"><h6>강의실</h6></th>
+							<th class="col-title"><h6>과제명</h6></th>
+							<th class="col-board"><h6>과목명</h6></th>
+							<th class="col-board"><h6>마감일</h6></th>
+							<th class="col-board"><h6>진행상태</h6></th>
 						</tr>
 						<!-- end table row-->
 					</thead>
@@ -154,12 +153,12 @@ function updateHomeworks(homeworks) {
 		var processIdx = idx;
 		
 		let list = `
-			<tr onclick="location.href='/all/homeworkInfo?homeworkId=${test.homeworkId}'">
-				<td class="min-width">${test.classId}</td>
-				<td class="min-width">${test.homeworkTitle}</td>
-				<td class="min-width">${test.subjectName}</td>
-				<td class="min-width tDate">${tDate}</td>
-				<td id="tProcess" class="min-width">
+			<tr class="postListRow" onclick="location.href='/all/homeworkInfo?homeworkId=${test.homeworkId}'">
+				<td class="col-board replyTableData">${test.classId}</td>
+				<td class="col-title ellipsis replyTableData">${test.homeworkTitle}</td>
+				<td class="col-board replyTableData">${test.subjectName}</td>
+				<td class="col-board replyTableData tDate">${tDate}</td>
+				<td id="tProcess" class="col-board replyTableData">
 					<span class="status-btn active-btn process" id="${processIdx}">진행중</span>
 				</td>
 			</tr>

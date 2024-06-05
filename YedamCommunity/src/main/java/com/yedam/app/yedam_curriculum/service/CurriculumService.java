@@ -24,4 +24,7 @@ public interface CurriculumService {
 	
 	//해당 과정 과목명 조회
 	public List<CurriculumVO> subjectList(int userid);
+	
+	// 과정별 과목명 조회
+	public List<CurriculumVO> classSubject(CurriculumVO curriculumVO);
 }

@@ -75,5 +75,15 @@
 	WHERE curriculum_id = #{curriculumId}	
   </delete>
   
+  <!-- 과정(강의실)별 과목출력 -->
+  <select id="selectSubject" parameterType="CurriculumVO" resultType="CurriculumVO">
+  	SELECT subject_name
+  	     , c.curriculum_id
+  	     , class_id
+	FROM curriculum c JOIN subjects s 
+						ON c.curriculum_id = s.curriculum_id
+	WHERE is_complete = 2
+	AND class_id = #{classId}
+  </select>
   
 </mapper>

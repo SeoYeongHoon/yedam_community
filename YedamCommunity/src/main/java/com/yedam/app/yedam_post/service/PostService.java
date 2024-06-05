@@ -121,6 +121,9 @@ public interface PostService {
     //--------------------------------------------
 	public List<BoardFilesVO> getBoardFiles(int postId, int boardId);
 	
+	//수료과정 파일 조회
+	public List<BoardFilesVO> successFileList(int boardType);
+	
 	//--------------------------------------------
     // 메인페이지 조회
     //--------------------------------------------
@@ -159,11 +162,15 @@ public interface PostService {
 	// 페이징용 카운트
 	public int getTotalCnt(int filter, String searchQuery);
 	
-	// 보드아이디 가졍괴
+	// 접속유저id로 boardId 조회
 	public int boardId(int userId);	
-	
+
 	// 질문 토론 단건조회 Yes
 	public PostVO getPostVotedetail(PostVO postVO);
+
+	// boardType로 boardId 조회
+	public int boardTypeSet(int boardType);
+	
 	
 	public PostVO getPostVotedetailNo(PostVO postVO);
 
