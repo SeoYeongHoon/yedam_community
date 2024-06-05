@@ -115,4 +115,6 @@ public interface PostMapper {
 	
 	// 페이징용 카운트
 	int getTotalCnt(int filter, String searchQuery);
+	
+	public int getBoardId(int userId);
 }

@@ -159,6 +159,16 @@ public interface PostService {
 	// 페이징용 카운트
 	public int getTotalCnt(int filter, String searchQuery);
 	
+	// 보드아이디 가졍괴
+	public int boardId(int userId);	
+	
+	
+	
+	
+	
+	
+	
+	
 	List<VoteVO> getVotes();
 
 	int createVote(VoteVO vote);

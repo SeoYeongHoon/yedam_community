@@ -111,9 +111,21 @@ public class PostController {
 	// 수료과정별 게시판
 	//--------------------------------
 	@GetMapping("/curriculumPost")
-	public String curriculum(Model model) {
+	public String curriculum(Model model,
+							Authentication authentication) {
+		
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+		int userId = userVO.getuserId();
+		int boardId =  postService.boardId(userId);
+		
 		List<CurriculumVO> List = postService.curriculumList();
+		List<PostVO> postList = postService.postlist();
+		System.err.println("list == "+ List.get(0));
+		System.err.println("postList == "+ postList.get(0));
+		
+		model.addAttribute("boardId",boardId);
 		model.addAttribute("curriculum",List);
+		model.addAttribute("postList",postList);
 		return "posts/curriculumPost";
 	}
 	
@@ -122,7 +134,7 @@ public class PostController {
 	//--------------------------------
 	 @GetMapping("/postList")
 	 @ResponseBody 
-	 public List<PostVO> curriculumPOst() {
+	 public List<PostVO> curriculumPost() {
 		 return  postService.postlist();
 	  }
 	 
@@ -134,7 +146,6 @@ public class PostController {
 		 public List<BoardFilesVO> gallery(@RequestParam int postId) {
 			 int boardId = 1;
 			 List<BoardFilesVO> fileList = postService.getBoardFiles(postId, boardId);
-			 System.err.println("fileList= " + fileList);
 			 return  postService.getBoardFiles(postId, boardId);
 		  }
 		 
@@ -217,6 +228,7 @@ public class PostController {
         model.addAttribute("post", postVO);
         return "posts/postInsert";
     }
+	
 
 	// --------------------------------------------
 	// 게시글 등록 처리
