@@ -294,17 +294,16 @@
 			
 			users.forEach(user => {
 				let template = `
-					<tr class="postListRow">
-						<td class="col-board replyTableData">${user.userId}</td>
-						<td class="col-board ellipsis replyTableData">${user.userType}</td>
-						<td class="col-board replyTableData">${user.name}</td>
+					<tr class="">
+						<td class="replyTableData">${user.userId}</td>
+						<td class="replyTableData">${user.userType === 'ROLE_LEARN' ? '수강생' :  '수료생'}</td>
+						<td class="replyTableData">${user.name}</td>
 						<td class="col-title replyTableData">${user.curriculumName}</td>
 						<td class="col-title replyTableData">${user.email}</td>
-						<td><a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" onclick="fetchUserDetails(user.userId)">상세보기</a></td>
+						<td><a class="main-btn light-btn btn-hover" style="padding: 5px 10px;" onclick="fetchUserDetails(${user.userId})">상세보기</a></td>
 					</tr>
 				`;
 				
-
 				$('#userInfoTable').append(template);
             });
 		}
@@ -415,24 +414,24 @@
 							<table class="table">
 								<thead>
 									<tr>
-									<th class="col-no">
-										<h6>No</h6>
-									</th>
-									<th class="col-board">
-										<h6>유형</h6>
-									</th>
-									<th class="col-board">
-										<h6>이름</h6>
-									</th>
-									<th class="col-title">
-										<h6>수강명</h6>
-									</th>
-									<th class="col-title">
-										<h6>이메일</h6>
-									</th>
-									<th class="col-board">
-										<h6>상세정보</h6>
-									</th>
+										<th class="">
+											<h6>No</h6>
+										</th>
+										<th class="">
+											<h6>유형</h6>
+										</th>
+										<th class="">
+											<h6>이름</h6>
+										</th>
+										<th class="col-title">
+											<h6>수강명</h6>
+										</th>
+										<th class="col-title">
+											<h6>이메일</h6>
+										</th>
+										<th class="col-board">
+											<h6>상세정보</h6>
+										</th>
 									</tr>
 								</thead>
 								<tbody id="userInfoTable">

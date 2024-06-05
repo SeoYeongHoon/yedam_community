@@ -454,6 +454,7 @@ public class PostController {
 		  int totalCnt = postService.getTotalCnt(filter,searchQuery);
 		  
 		  PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
+		  System.out.println("필터값: " + filter);
 		  
 		  Map<String, Object> response = new HashMap<>(); 
 		  response.put("posts",posts); 
