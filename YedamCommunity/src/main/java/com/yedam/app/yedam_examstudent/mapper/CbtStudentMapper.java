@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.yedam.app.yedam_examstudent.service.AnswerboxVO;
 import com.yedam.app.yedam_examstudent.service.ExamResultVO;
 import com.yedam.app.yedam_examstudent.service.QuizboxVO;
 import com.yedam.app.yedam_examstudent.service.TestResultVO;
@@ -45,6 +46,10 @@ public interface CbtStudentMapper {
 	//시험문제 랜덤
 	//ㅡㅡㅡㅡㅡㅡㅡ
 	public List<QuizboxVO> selectTestQuizRand(QuizboxVO quizboxVO);
+	//ㅡㅡㅡㅡㅡㅡㅡ
+	//시험보기 등록
+	//ㅡㅡㅡㅡㅡㅡㅡ
+	public boolean insertTestQuizExample(AnswerboxVO answerboxVO);
 	//ㅡㅡㅡㅡ
 	//시험상세
 	//ㅡㅡㅡㅡ
@@ -60,6 +65,10 @@ public interface CbtStudentMapper {
 	//시험시작 문제정보
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	public QuizboxVO selectTestQuiz(QuizboxVO quizboxVO);
+	
+	
+	
+	
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//시험결과 (AJAX)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ

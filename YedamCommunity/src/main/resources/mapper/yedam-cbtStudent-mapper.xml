@@ -115,19 +115,10 @@
 	</select>
 	<!-- 시험문제 랜덤 -->
 	<select id="selectTestQuizRand" resultType="QuizboxVO">
-		<!-- 
-		SELECT  aa.*
-		        ,ROWNUM as rn
-        FROM    (SELECT  quiz_content
-                         ,quiz_id
-                         ,quiz_score
-                         ,subject_id
-                 FROM    quizbox
-                 WHERE   test_id = #{testId}
-                 ORDER BY DBMS_RANDOM.VALUE) aa -->
         WITH a AS(
 		SELECT  ROWNUM AS rn
         		,a.quiz_id
+        		,b.test_id
         		,a.example_num
         		,b.quiz_score
 		FROM    (SELECT  quiz_id, example_num
@@ -137,6 +128,7 @@
 		WHERE   b.test_id = #{testId})
 		SELECT  ROWNUM AS rn
         		,aa.quiz_id
+        		,aa.test_id
         		,aa.one
         		,aa.two
         		,aa.three
@@ -144,6 +136,7 @@
         		,aa.five
         		,aa.quiz_score
 		FROM    (SELECT a.quiz_id
+						,a.test_id
                 		,MAX(DECODE(MOD(a.rn,5), 1, a.example_num)) AS one
                 		,MAX(DECODE(MOD(a.rn,5), 2, a.example_num)) AS two
                 		,MAX(DECODE(MOD(a.rn,5), 3, a.example_num)) AS three
@@ -152,9 +145,64 @@
                 		,a.quiz_score
         		FROM    a
         		GROUP BY a.quiz_id
+        				 ,a.test_id
                  		 ,a.quiz_score) aa
 	</select>
-	
+	<!-- 랜덤보기 등록 -->
+	<insert id="insertTestQuizExample" parameterType="AnswerboxVO">
+		DECLARE
+    		v_answerbox_cnt NUMBER(5,0);
+    		v_answerbox_id	NUMBER(5,0);
+		BEGIN
+			<!-- 보기유무 찾기 -->
+    		SELECT  COUNT(answerbox_id)
+    		INTO    v_answerbox_cnt
+    		FROM    test_targets a
+            		JOIN tests b ON(a.test_id = b.test_id)
+            		JOIN answerbox c ON(b.test_id = c.test_id)
+    		WHERE   a.user_id = #{userId}
+    		AND		c.quiz_id = #{quizId};
+    		<!-- 이미 보기가 있는 경우 -->
+    		IF v_answerbox_cnt > 0 THEN
+    			<!-- 보기 식별번호 찾기 -->
+    			SELECT  answerbox_id
+    			INTO	v_answerbox_id
+    			FROM    test_targets a
+            			JOIN tests b ON(a.test_id = b.test_id)
+            			JOIN answerbox c ON(b.test_id = c.test_id)
+    			WHERE   a.user_id = #{userId}
+    			AND		c.quiz_id = #{quizId};
+    			<!-- 랜덤보기 수정 -->
+        		UPDATE  answerbox
+        		SET		example_one = #{exampleOne},
+        				example_two = #{exampleTwo},
+        				example_three = #{exampleThree},
+        				example_four = #{exampleFour},
+        				example_five = #{exampleFive}
+        		WHERE	answerbox_id = v_answerbox_id;
+                COMMIT;
+            ELSE    
+            	<!-- 랜덤 보기 등록 -->
+    			INSERT INTO answerbox(answerbox_id
+							  	  	  ,example_one
+							  	  	  ,example_two
+							  	  	  ,example_three
+							  	  	  ,example_four
+							  	  	  ,example_five
+							  	  	  ,quiz_id
+							  	  	  ,test_id)
+				VALUES(answerbox_id_seq.NEXTVAL
+			  	   	   ,#{exampleOne}
+			   	       ,#{exampleTwo}
+			           ,#{exampleThree}
+			           ,#{exampleFour}
+			           ,#{exampleFive}
+			           ,#{quizId}
+			           ,#{testId});
+				COMMIT;
+    		END IF;
+		END;
+	</insert>
 	
 	
 	
@@ -178,6 +226,7 @@
 	</select>
 	<!-- 시험시작 퀴즈 -->
 	<select id="selectTestQuiz" resultType="QuizboxVO">
+		<!-- 
 		WITH a AS(
         SELECT  b.quiz_id
                 ,b.quiz_content
@@ -204,77 +253,24 @@
         GROUP BY quiz_id
         		 ,quiz_content
         		 ,quiz_score
-        		 ,subject_id
-		<!--
-		WITH a AS(
-        SELECT  ROWNUM as rn
-        		,b.quiz_content
-        		,a.quiz_id
-        		,a.text_content
-        		,a.example_num
-        		,b.subject_id
-        		,b.quiz_score 
-		FROM    (SELECT  quiz_id
-						 ,text_content
-						 ,example_num
-        		FROM     answers
-        		WHERE    quiz_id = #{quizId}
-        		ORDER BY DBMS_RANDOM.VALUE) a
-        		JOIN quizbox b ON(a.quiz_id = b.quiz_id)
-		WHERE   b.test_id = #{testId}
-		AND     b.quiz_id = #{quizId})
-        SELECT  quiz_id
-                ,quiz_content
-                ,quiz_score
-                ,subject_id
-                ,MAX(DECODE(rn, 1, text_content)) AS one
-                ,MAX(DECODE(rn, 2, text_content)) AS two
-                ,MAX(DECODE(rn, 3, text_content)) AS three
-                ,MAX(DECODE(rn, 4, text_content)) AS four
-                ,MAX(DECODE(rn, 5, text_content)) AS five
-        FROM    a
-        GROUP BY quiz_id
-        		 ,quiz_content
-        		 ,quiz_score
-        		 ,subject_id 
-        WITH a AS(
-		SELECT  ROWNUM as rn
-        		,a.quiz_id
-        		,a.example_num
-        		,a.text_content
-        		,b.quiz_content
-        		,b.quiz_score
-        		,b.subject_id
-        		,b.test_id
-		FROM    (SELECT  quiz_id, example_num, text_content
-        		FROM     answers
-        		ORDER BY quiz_id, DBMS_RANDOM.VALUE) a
-        		JOIN quizbox b ON(a.quiz_id = b.quiz_id)
-		WHERE   b.test_id = 378
-		AND     b.quiz_id = 73)
-		SELECT  aa.quiz_id
-				,aa.quiz_content
-				,aa.quiz_score
-				,aa.subject_id
-				,aa.one
-				,aa.two
-				,aa.three
-				,aa.four
-				,aa.five
-		FROM    (SELECT  a.quiz_id
-                		,a.quiz_content
-                		,a.quiz_score
-                		,a.subject_id
-                		,MAX(DECODE(mod(a.rn,5), 1, a.text_content)) AS one
-                		,MAX(DECODE(mod(a.rn,5), 2, a.text_content)) AS two
-                		,MAX(DECODE(mod(a.rn,5), 3, a.text_content)) AS three
-                		,MAX(DECODE(mod(a.rn,5), 4, a.text_content)) AS four
-                		,MAX(DECODE(mod(a.rn,5), 0, a.text_content)) AS five
-            	FROM    a
-            	GROUP BY a.quiz_id
-            			 ,a.quiz_content
-            			 ,a.quiz_score
-            			 ,a.subject_id) aa-->
+        		 ,subject_id-->
+       	SELECT  d.quiz_id
+        		,d.quiz_content
+        		,d.quiz_score
+        		,MAX(DECODE(b.example_one, c.example_num, c.text_content)) AS example_one
+        		,MAX(DECODE(b.example_two, c.example_num, c.text_content)) AS example_two
+        		,MAX(DECODE(b.example_three, c.example_num, c.text_content)) AS example_three
+        		,MAX(DECODE(b.example_four, c.example_num, c.text_content)) AS example_four
+        		,MAX(DECODE(b.example_five, c.example_num, c.text_content)) AS example_five
+		FROM    tests a 
+				JOIN answerbox b ON(a.test_id = b.test_id)
+        		JOIN answers c ON(b.quiz_id = c.quiz_id)
+        		JOIN quizbox d ON(c.quiz_id = d.quiz_id)
+		WHERE   a.test_id = #{testId}
+		AND		d.quiz_id = #{quizId}
+		GROUP BY d.quiz_id
+         		 ,d.quiz_content
+         		 ,d.quiz_score
 	</select>
 	
 	
@@ -350,7 +346,7 @@
 	<!-- 문제 제출 답안 저장 - test_results 테이블 -->
 	<update id="insertTestSubmit" parameterType="TestResultVO">
 		DECLARE
-    		v_answer NUMBER(10); <!-- 내 답안 -->
+    		v_answer varchar2(50); <!-- 내 답안 -->
     		v_iscorrect NUMBER(10); <!-- 답안 정답 유무 -->
     		v_tid NUMBER(10); <!-- 시험대상자식별번호 -->
     		v_rid NUMBER(10); <!-- 시험결과식별번호 -->
@@ -488,6 +484,7 @@
                 ON(d.result_id = e.result_id)
         WHERE   d.user_id = #{userId}
         AND     b.test_id = #{testId}
+        AND		b.quiz_id = #{quizId}
         AND     e.test_target_id = (SELECT  test_target_id
                         			FROM  	test_targets
                         			WHERE 	test_id = #{testId}
@@ -502,11 +499,11 @@
             ,MAX(DECODE(example_answer, 1, example_num)) AS example_num
             ,MAX(test_answer) AS test_answer
             ,MAX(is_correct) AS is_correct
-            ,MAX(DECODE(example_num, 1, text_content)) AS oneContent
-            ,MAX(DECODE(example_num, 2, text_content)) AS twoContent
-            ,MAX(DECODE(example_num, 3, text_content)) AS threeContent
-            ,MAX(DECODE(example_num, 4, text_content)) AS fourContent
-            ,MAX(DECODE(example_num, 5, text_content)) AS fiveContent
+            ,MAX(DECODE(example_num, #{one}, text_content)) AS oneContent
+            ,MAX(DECODE(example_num, #{two}, text_content)) AS twoContent
+            ,MAX(DECODE(example_num, #{three}, text_content)) AS threeContent
+            ,MAX(DECODE(example_num, #{four}, text_content)) AS fourContent
+            ,MAX(DECODE(example_num, #{five}, text_content)) AS fiveContent
         FROM a
         GROUP BY test_result_id
         		 ,quiz_id

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class TestResultVO {
 	private int testResultId;
-	private int testAnswer;
+	private String testAnswer;
 	private int quizId;
 	private int isCorrect;
 	private int userId;
@@ -18,10 +18,10 @@ public class TestResultVO {
 	public void setTestResultId(int testResultId) {
 		this.testResultId = testResultId;
 	}
-	public int getTestAnswer() {
+	public String getTestAnswer() {
 		return testAnswer;
 	}
-	public void setTestAnswer(int testAnswer) {
+	public void setTestAnswer(String testAnswer) {
 		this.testAnswer = testAnswer;
 	}
 	public int getQuizId() {

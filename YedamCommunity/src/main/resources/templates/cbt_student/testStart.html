@@ -126,30 +126,12 @@
 				<input id="page" type="hidden" th:value="${page}">
 				<input id="testId" type="hidden" th:value="${testStart.testId}">
 				<input id="subjectId" type="hidden" th:value="${testStart.subjectId}">
-				<input id="quizCnt" type="hidden" th:value="${#lists.size(randRn)}">
-				<div th:each="quiz : ${randQuizId}">
-					<input class="randQuizId" type="hidden" th:value="${quiz}">
-				</div>	
+				<input id="quizCnt" type="hidden" th:value="${#lists.size(randRn)}">	
 				<div th:each="score : ${testQuizScore}">
 					<input class="randQuizScore" type="hidden" th:value="${score}">
 				</div>
 				<div th:each="rn : ${randRn}">				
 					<input class="randRn" type="hidden" th:value="${rn}">
-				</div>
- 				<div th:each="one : ${one}">
-					<input class="oneExample" type="hidden" th:value="${one}">
-				</div>
-				<div th:each="two : ${two}">
-					<input class="twoExample" type="hidden" th:value="${two}">
-				</div>
-				<div th:each="three : ${three}">
-					<input class="threeExample" type="hidden" th:value="${three}">
-				</div>
-				<div th:each="four : ${four}">
-					<input class="fourExample" type="hidden" th:value="${four}">
-				</div>
-				<div th:each="five : ${five}">
-					<input class="fiveExample" type="hidden" th:value="${five}">
 				</div>
 			</div>
 			<!-- 시험관련 버튼 -->
@@ -178,6 +160,24 @@
 						<input id="min" type="hidden" name="min" th:value="0">
 						<input id="sec" type="hidden" name="sec" th:value="0">
 						<input type="hidden" name="testId" th:value="${testStart.testId}">
+						<div th:each="quiz : ${randQuizId}">
+							<input class="randQuizId" name="randQuizId" type="hidden" th:value="${quiz}">
+						</div>
+						<div th:each="one : ${one}">
+							<input class="oneExample" name="one" type="hidden" th:value="${one}">
+						</div>
+						<div th:each="two : ${two}">
+							<input class="twoExample" name="two" type="hidden" th:value="${two}">
+						</div>
+						<div th:each="three : ${three}">
+							<input class="threeExample" name="three" type="hidden" th:value="${three}">
+						</div>
+						<div th:each="four : ${four}">
+							<input class="fourExample" name="four" type="hidden" th:value="${four}">
+						</div>
+						<div th:each="five : ${five}">
+							<input class="fiveExample" name="five" type="hidden" th:value="${five}">
+						</div>
 						<button id="confirmBtn" class="tstart_2" type="submit">확인</button>
 					</form>
 				</div>
@@ -191,7 +191,9 @@
 		<th:block th:each="quiz, idx : ${#numbers.sequence(1,#lists.size(randRn))}">
 			<div class="selectedQuiz tstart_3">
 				<h3 class="tstart_2" style="background-color: #A6A6A6; color: white; width: 30px; text-align: center">[[${idx.count}]]</h3>
+				<!-- 답안 색상 관련 -->
 				<input class="thisAnswer" type="hidden" th:value="${idx.count}">
+				<!-- 답안 제출 관련 -->
 				<input class="submitAnswer" type="hidden" th:value="0">
 				<div class="one selectedAnswer">①</div>
 				<div class="two selectedAnswer">②</div>
@@ -211,19 +213,19 @@
 		<br> <br> <br>
 		<div th:if="${not #strings.isEmpty(testQuiz.two)}">
 			<div>
-				<span class="selectedContent tstart_6" style="background: white">1. [[${testQuiz.oneContent}]]</span>
+				<span class="selectedContent tstart_6" style="background: white">1. [[${testQuiz.exampleOne}]]</span>
 			</div>
 			<div>
-				<span class="selectedContent tstart_6" style="background: white;">2. [[${testQuiz.twoContent}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">2. [[${testQuiz.exampleTwo}]]</span>
 			</div>
 			<div>
-				<span class="selectedContent tstart_6" style="background: white;">3. [[${testQuiz.threeContent}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">3. [[${testQuiz.exampleThree}]]</span>
 			</div>
 			<div>			
-				<span class="selectedContent tstart_6" style="background: white;">4. [[${testQuiz.fourContent}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">4. [[${testQuiz.exampleFour}]]</span>
 			</div>
 			<div>
-				<span class="selectedContent tstart_6" style="background: white;">5. [[${testQuiz.fiveContent}]]</span>
+				<span class="selectedContent tstart_6" style="background: white;">5. [[${testQuiz.exampleFive}]]</span>
 			</div>
 		</div>
 	</div>
@@ -300,6 +302,11 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 	let clicked = e.target.innerText.substr(0,1); //현재 클릭된 보기 번호 1~5
 	let selectedAnswer = document.querySelectorAll('.selectedAnswer'); //1~5 답안
 	let submitAnswer = document.querySelectorAll('.submitAnswer'); //선택된 문제 답안 저장
+	let oneExample = document.querySelectorAll('.oneExample'); //전체 1번 보기 원래 번호
+	let twoExample = document.querySelectorAll('.twoExample'); //전체 2번 보기 원래 번호
+	let threeExample = document.querySelectorAll('.threeExample'); //전체 3번 보기 원래 번호
+	let fourExample = document.querySelectorAll('.fourExample'); //전체 4번 보기 원래 번호
+	let fiveExample = document.querySelectorAll('.fiveExample'); //전체 5번 보기 원래 번호
 	//<보기 선택시 보기 색상 및 답안 색상 변경>
 	//<전체 문제개수 및 남은 문제개수 변경>
 	for(let i = 0; i < thisAnswer.length; i++){ //0~문제개수
@@ -313,11 +320,13 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = oneExample[i].vlaue;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = oneExample[i].value;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'aqua'; //답안 색상 넣기
@@ -353,11 +362,13 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = twoExample[i].value;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = twoExample[i].value;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -393,11 +404,13 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = threeExample[i].value;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = threeExample[i].value;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -433,11 +446,13 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = fourExample[i].value;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = fourExample[i].value;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -473,11 +488,13 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = fiveExample[i].value;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
-								submitAnswer[i].value = clicked;
+								//submitAnswer[i].value = clicked;
+								submitAnswer[i].value = fiveExample[i].value;
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -534,31 +551,6 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 	for(let i = 0; i < randRnVal.length; i++){
 		randRn[i] = randRnVal[i].value;
 	}
-	let oneExampleVal = document.querySelectorAll('.oneExample'); //1번 보기
-	const oneExample = new Array(quizCnt);
-	for(let i = 0; i < oneExampleVal.length; i++){
-		oneExample[i] = oneExampleVal[i].value;
-	}
-	let twoExampleVal = document.querySelectorAll('.twoExample'); //2번 보기
-	const twoExample = new Array(quizCnt);
-	for(let i = 0; i < twoExampleVal.length; i++){
-		twoExample[i] = twoExampleVal[i].value;
-	}
-	let threeExampleVal = document.querySelectorAll('.threeExample'); //3번 보기
-	const threeExample = new Array(quizCnt);
-	for(let i = 0; i < threeExampleVal.length; i++){
-		threeExample[i] = threeExampleVal[i].value;
-	}
-	let fourExampleVal = document.querySelectorAll('.fourExample'); //4번 보기
-	const fourExample = new Array(quizCnt);
-	for(let i = 0; i < fourExampleVal.length; i++){
-		fourExample[i] = fourExampleVal[i].value;
-	}
-	let fiveExampleVal = document.querySelectorAll('.fiveExample'); //5번 보기
-	const fiveExample = new Array(quizCnt);
-	for(let i = 0; i < fiveExampleVal.length; i++){
-		fiveExample[i] = fiveExampleVal[i].value;
-	}
 	//<문제갱신 관련>
 	if(this.id == 'prevQuiz' && pageVal.value > 1){ //현재 클릭된 요소가 이전버튼이면서 페이지 번호가 1초과인 경우
 		page = Number(pageVal.value) - Number(1); //페이지 번호 1 감소
@@ -595,16 +587,12 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			subjectId: subjectId,
 			quizCnt: quizCnt,
 			randQuizId: randQuizId,
-			randRn: randRn,
-			one: oneExample,
-			two: twoExample,
-			three: threeExample,
-			four: fourExample,
-			five: fiveExample
+			randRn: randRn
 		},
 		dataType: 'json',
 		traditional: true,
 		success: function(data){
+			console.log(1);
 			let div1 = document.createElement('div'); //문제내용 감싸기
 			h1.innerText = page + '. ' + data.quizContent; //문제내용
 			p.innerText = '(' + data.quizScore + '점)'; //문제배점
@@ -619,7 +607,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span1.classList.add('selectedContent');
 			span1.classList.add('tstart_6');
 			span1.setAttribute('style', 'background: white');
-			span1.innerText = '1. ' + data.oneContent;
+			span1.innerText = '1. ' + data.exampleOne;
 			div2.append(span1);
 			div.append(div2);
 			
@@ -628,7 +616,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span2.classList.add('selectedContent');
 			span2.classList.add('tstart_6');
 			span2.setAttribute('style', 'background: white');
-			span2.innerText = '2. ' + data.twoContent;
+			span2.innerText = '2. ' + data.exampleTwo;
 			div3.append(span2);
 			div.append(div3);
 			
@@ -637,7 +625,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span3.classList.add('selectedContent');
 			span3.classList.add('tstart_6');
 			span3.setAttribute('style', 'background: white');
-			span3.innerText = '3. ' + data.threeContent;
+			span3.innerText = '3. ' + data.exampleThree;
 			div4.append(span3);
 			div.append(div4);
 			
@@ -646,7 +634,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span4.classList.add('selectedContent');
 			span4.classList.add('tstart_6');
 			span4.setAttribute('style', 'background: white');
-			span4.innerText = '4. ' + data.fourContent;
+			span4.innerText = '4. ' + data.exampleFour;
 			div5.append(span4);
 			div.append(div5);
 			
@@ -655,7 +643,7 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 			span5.classList.add('selectedContent');
 			span5.classList.add('tstart_6');
 			span5.setAttribute('style', 'background: white');
-			span5.innerText = '5. ' + data.fiveContent;
+			span5.innerText = '5. ' + data.exampleFive;
 			div6.append(span5);
 			div.append(div6);
 				

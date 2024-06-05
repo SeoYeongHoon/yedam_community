@@ -38,6 +38,10 @@ public interface CbtStudentService {
 	//시험문제 랜덤
 	//ㅡㅡㅡㅡㅡㅡㅡ
 	public List<QuizboxVO> testQuizRand(QuizboxVO quizboxVO);
+	//ㅡㅡㅡㅡㅡㅡㅡ
+	//시험보기 등록
+	//ㅡㅡㅡㅡㅡㅡㅡ
+	public boolean testQuizExample(AnswerboxVO answerboxVO);
 	//ㅡㅡㅡㅡ
 	//시험상세
 	//ㅡㅡㅡㅡ
