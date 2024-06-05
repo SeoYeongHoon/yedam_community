@@ -10,7 +10,9 @@ public class VoteItemVO {
 	private String voteItemName;
 	private int voteCount;
 	private int voteId;
+	
 	public int getVoteItemId() {
+		
 		return voteItemId;
 	}
 	public void setVoteItemId(int voteItemId) {

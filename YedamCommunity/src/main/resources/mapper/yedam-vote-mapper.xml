@@ -58,22 +58,26 @@
                               , vote_seq
                               , vote_item_name
                               , vote_count
+                              , user_id
                               , vote_id)
         VALUES (vote_item_id_seq.NEXTVAL
               , 1
               , '찬성'
               , 0
+              , null
               , v_vote_id);
               
               INSERT INTO vote_items (vote_item_id
                               , vote_seq
                               , vote_item_name
                               , vote_count
+                              , user_id
                               , vote_id)
        VALUES (vote_item_id_seq.NEXTVAL
               , 2
               , '반대'
               , 0
+              , null
               , v_vote_id);
     END;
     </insert>

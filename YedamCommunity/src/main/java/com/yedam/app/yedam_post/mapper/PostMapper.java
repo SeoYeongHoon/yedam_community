@@ -121,6 +121,14 @@ public interface PostMapper {
 	// 접속유저id로 boardId 조회
 	public int getBoardId(int userId);
 	
+
+	// 질문 토론 단건조회 Yes
+	PostVO getPostVoteyes(PostVO postVO);
+	
+	// 질문 토론 단건조회 No
+	PostVO getPostVoteno(PostVO postVO);
+
 	// boardType로 boardId 조회
 	public int setBoardType(int boardType);
+
 }

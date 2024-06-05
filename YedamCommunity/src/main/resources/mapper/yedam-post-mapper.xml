@@ -75,7 +75,8 @@
                b.boardfile_name,
                b.boardfile_location
         FROM posts p LEFT JOIN boardfiles b 
-        ON p.post_id = b.post_id
+                     ON p.post_id = b.post_id
+                     
         WHERE p.post_id = #{postId}
         AND p.board_id = #{boardId}
 	</select>
@@ -405,6 +406,46 @@
     	SELECT *
 		FROM posts
 		WHERE user_id = #{userId}
+    </select>
+    
+    
+    <select id="getPostVoteyes" resultType="PostVO">
+    SELECT p.POST_ID,
+		   p.BOARD_ID,
+		   p.USER_ID,
+		   p.TITLE,
+		   p.POST_CONTENT,
+		   p.CREATE_DATE,
+		   p.WRITER,
+		   p.POST_VIEW,
+		   p.POST_LIKE,
+		   p.UPDATE_DATE,
+           i.vote_count,
+           i.vote_item_name,
+           i.vote_seq
+	 FROM posts p
+	 LEFT JOIN replies r ON p.post_id = r.post_id
+     LEFT JOIN votes v ON p.post_id = v.post_id
+     LEFT JOIN vote_items i ON v.vote_id = i.vote_id
+	 WHERE board_id = #{boardId}
+     AND post_id = #{postId}
+     AND vote_item_name ='찬성'
+    </select>
+    
+    <select id="getPostVoteno" resultType="PostVO">
+    SELECT p.POST_ID,
+		   p.BOARD_ID,
+		   p.USER_ID,
+           i.vote_count,
+           i.vote_item_name,
+           i.vote_seq
+	 FROM posts p
+	 LEFT JOIN replies r ON p.post_id = r.post_id
+     LEFT JOIN votes v ON p.post_id = v.post_id
+     LEFT JOIN vote_items i ON v.vote_id = i.vote_id
+	 WHERE board_id = #{boardId}
+     AND post_id = #{postId}
+     AND vote_item_name ='반대'
     </select>
     
     
