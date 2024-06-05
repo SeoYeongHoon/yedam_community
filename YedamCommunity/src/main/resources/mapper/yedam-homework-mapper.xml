@@ -220,7 +220,7 @@
 	
 	<!-- 최근 과제 목록 -->
 	<select id="selectRecentHomework" resultType="HomeWorkVO">
-		SELECT a.*
+		<!-- SELECT a.*
 		FROM   (SELECT  a.homework_id
        					,a.homework_title
        					,a.subject_id
@@ -235,7 +235,19 @@
 				WHERE   b.user_id = #{userId}
 				ORDER BY a.homework_date desc) a
 		<![CDATA[
-		WHERE   rn <= 5	]]>
+		WHERE   rn <= 5	]]> -->
+		
+		SELECT c.class_id,
+		       h.homework_id,
+		       h.homework_content,
+		       h.homework_date,
+		       h.homework_title,
+		       s.subject_name
+		FROM   homeworks h	JOIN curriculum c ON h.curriculum_id = c.curriculum_id
+		                    JOIN subjects s ON h.subject_id = s.subject_id
+		                    JOIN users u ON c.curriculum_id = u.curriculum_id
+		WHERE u.user_id = #{userId}
+		ORDER BY h.homework_id DESC
 	</select>
 	
 	<!-- 과제 수정 -->

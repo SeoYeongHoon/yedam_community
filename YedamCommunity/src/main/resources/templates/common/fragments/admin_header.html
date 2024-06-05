@@ -23,13 +23,13 @@
 		<img id="myImageLarge" th:src="@{${'/files' + #authentication.principal.profileImageLocation}}">
 	</div>
 </div>
-<aside class="sidebar-nav-wrapper" style="position:fixed;">
+<aside class="sidebar-nav-wrapper" style="position:fixed; box-shadow: 10px 10px 10px 1px rgba(0, 0, 0, 0.1);">
       <!-- <div class="navbar-logo">
         <a href="/admin/adminMain">
           <img src="../images/yedam_logo.png" alt="logo" style="width: 250px; margin: -50px -30px;" />
         </a>
       </div> -->
-	<nav class="sidebar-nav" style="margin-left: 0; width: 250px;">
+	<nav class="sidebar-nav" style="">
       	<div style="text-align: center; margin: 10px; color: black; font-weight: bold;">
 	      	<span class="icon" style="margin-right: 10px;">
 	      		<svg height="20" width="20" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -83,28 +83,29 @@
 	        </span>
 	        <span class="text" style="margin-left: -12px; font-weight: normal;">Yedam Community LMS</span>
       	</div>
-      	<div class="profile_image_btn" style="max-width: 100%; height: 315px; max-height: 100%; position: relative; padding: 20px 0; text-align: center; border-bottom: 1px solid rgb(192, 192, 192, 0.5);">
+      	<div class="profile_image_btn" style="max-width: 100%; height: 315px; max-height: 100%; position: relative; padding: 20px 0; text-align: center;">
 			<button id="myImageBtn"><img th:src="@{${'/files' + #authentication.principal.profileImageLocation}}" 
-				style="width: 140px; height: 140px; box-shadow: 0px 12px 24px -4px rgba(145, 158, 171, 0.12), 0px 0px 2px 0px rgba(145, 158, 171, 0.5);"></button>
+				style="width: 140px; height: 140px; padding: 10px; box-shadow: 4px 4px #000; border: 2px solid #000 !important;"></button>
 			<div class="profile_my_info" style="color: black; margin-top: 20px;">
 				<th:block sec:authorize="hasAuthority('ROLE_LEARN')">
 					<p style="font-weight: normal; font-size: 12pt; color: #e96b56;">
-						<수강생 />
+						&laquo;수강생&raquo;	
 					</p>
 				</th:block>
 				<th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
 					<p style="font-weight: normal; font-size: 12pt; color: #e96b56;">
-						<관리자 />
+						&laquo;관리자&raquo;
 					</p>
 				</th:block>
-				<p style="font-weight: normal; font-size: 15pt;">[[${#authentication.name}]] 님</p>
+				<p style="font-weight: bold; font-size: 15pt;">[[${#authentication.name}]]</p>
 				<ul style="padding: 10px;">
-					<a class="semiMenuItem" href="/mypage" style="font-weight: normal;"><li>프로필</li></a>
+					<a class="semiMenuItem" href="/mypage"><li>프로필</li></a>
 					<!-- <a href="/mypage">프로필</a></li> -->
-					<a class="semiMenuItem" href="/logout" style="font-weight: normal;"><li>로그아웃</li></a>
+					<a class="semiMenuItem" href="/logout"><li>로그아웃</li></a>
 				</ul>
 			</div>
 		</div>
+		
         <ul class="mt-4">
            <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
 	       		<li class="nav-item nav-item-has-children">
@@ -136,6 +137,7 @@
 		            </ul>
 	       		</li>
 	       </th:block>
+	       <span class="divider"><hr></span>
           
            <li class="nav-item nav-item-has-children">
 	            <a
@@ -195,6 +197,8 @@
 		            </th:block>
 	            </ul>
            </li>
+           
+	       <span class="divider"><hr></span>
           
            <li class="nav-item nav-item-has-children">
 	            <a
@@ -266,6 +270,8 @@
 	            </th:block>
 	            </ul>
            </li>
+           
+	       <span class="divider"><hr></span>
 		   
 		   <li class="nav-item nav-item-has-children">
             <a
@@ -303,6 +309,8 @@
               </li>
             </ul>
           </li>
+	      <span class="divider"><hr></span>
+	      
         </ul>
       </nav>
     </aside>
@@ -314,7 +322,6 @@
 	 	// 현재 페이지 URL
 	    function getCurrentPage() {
 	        var pathArray = window.location.pathname.split('/');
-	        console.log(pathArray);
 	        return pathArray[pathArray.length - 1];
 	    }
 	
@@ -322,7 +329,6 @@
 	    function setActiveMenuItem() {
 	        var currentPage = getCurrentPage();
 	        var navLinks = document.querySelectorAll('.sidebar-nav ul li a');
-	        console.log("현재 페이지: ", currentPage);
 	        
 	        for (var i = 0; i < navLinks.length; i++) {
             	
@@ -342,10 +348,8 @@
 		// 필터링으로 인한 페이징 넘버링 업데이트
 		//--------------------------------------------
 		function updatePagination(pageDTO, currentPage) {
-			console.log("pageDTO:", JSON.stringify(pageDTO, null, 5), "현재페이지:", currentPage);
 			let arr = new Array();
 			arr.push(pageDTO);
-			console.log("현재 페이지: " + arr[0].page);
 			currentPage = arr[0].page;
 			
 		    var pagination = $('.adminPaging');
@@ -356,7 +360,6 @@
 		    }
 			
 		    for (var p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
-				console.log("p값: " + p);
 				
 				var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
 				
@@ -399,9 +402,7 @@
 		
 		// 모달창 바깥 클릭 시 닫기
 		window.addEventListener('click', function(e) {
-			//console.log(e.target);
 		    if (e.target === imageModal) {
-		    	console.log("모달 꺼짐");
 		        imageModal.style.display = 'none';
 		    }
 		});

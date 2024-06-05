@@ -37,17 +37,18 @@
 			   </div>
 
                 <!-- 인기 게시글 -->
-                <aside class="sidebar-nav-wrapper" style="width: 350px; height: 500px; margin-left: 20px;">
+                <aside class="sidebar-nav-wrapper" style="width: 350px; height: 500px; margin-left: 20px; box-shadow: none;">
                     <nav class="sidebar-nav">
                         <ul>
                             <li class="nav-item nav-item-has-children">
-                                <div class="tab01-head how2 how2-cl1 bocl12 flex-s-c m-r-10 m-r-0-sr991">
-                                    <h3 class="f1-m-2 cl12 tab01-title">인기 게시글</h3>
-                                </div>
+                                <h3 class="bestPost">
+                                	인기 게시글
+                                	<img src="/images/best_post.png" style="width: 40px; height: auto;">
+                                </h3>
                                 <ul class="popular_list">
                                     <li th:each="post, iterStat : ${popularPosts}">
                                         <a th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|" class="popular_item">
-                                            <span class="popular_item_number"><p th:text="${iterStat.count}"></p></span><span class="popular_item_text" th:text="${post.title}"></span>
+                                            <span class="popular_item_number">[[${iterStat.count}]]</span><span class="popular_item_text" th:text="${post.title}"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -94,7 +95,7 @@
                             </div>
                             <div>
                                 <a class="board_mini_title" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-                                    <span style="font-size: 12pt; font-weight: bold;" th:text="${post.title}">이것은 제목입니다.</span>
+                                    <span class="post_title" th:text="${post.title}">이것은 제목입니다.</span>
                                 </a>
                             </div>
                         </li>
