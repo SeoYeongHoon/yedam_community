@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
@@ -32,5 +33,14 @@ public class CurriculumController {
 		List<CurriculumVO> list = curriculumService.CurriculumList();
 		model.addAttribute("class",list);
 		return "curriculum/selectClassExam";
+	}
+	
+	//강의실별 과목명 조회
+	@GetMapping("/selectSubject")
+	@ResponseBody
+	public List<CurriculumVO> selectSubject(CurriculumVO curriculumVO) {
+		List<CurriculumVO> list = curriculumService.classSubject(curriculumVO);
+		System.out.println("과목명 출력되는거 확인 : "+list);		
+		return list;
 	}
 }
