@@ -161,7 +161,7 @@ public interface PostService {
 	
 	List<VoteVO> getVotes();
 
-	int createVote(VoteVO vote);
+	int createVote(PostVO postVO);
 	
     List<VoteItemVO> getVoteItems(int voteId);
     

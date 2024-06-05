@@ -367,9 +367,10 @@ public class PostServiceImpl implements PostService {
 		return postMapper.getTotalCnt(filter, searchQuery);
 	}
 
+	
     @Override
-    public int createVote(VoteVO vote) {
-    	return voteMapper.insertVote(vote);
+    public int createVote(PostVO postVO) {
+    	return voteMapper.insertVote(postVO);
     }
 
     @Override

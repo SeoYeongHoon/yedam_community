@@ -50,12 +50,15 @@
     </div>
     <div th:case="4">
       <h3>질문과 토론 게시판</h3>
+      <div class="insertBtn">
+    <a th:href="@{/all/postInsertVote/}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+  </div>
    </div>
   </div>
   
-  <div class="insertBtn">
+<!--   <div class="insertBtn">
     <a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
-  </div>
+  </div> -->
 
   <!-- 검색 폼 -->
   <div class="input-style-1" style="position: absolute; top: 80px;">
