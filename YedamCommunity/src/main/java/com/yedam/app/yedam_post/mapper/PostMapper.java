@@ -130,5 +130,16 @@ public interface PostMapper {
 
 	// boardType로 boardId 조회
 	public int setBoardType(int boardType);
-
+	
+	// 투표여부 확인
+	Integer voteExists(Map<String, Object> map);
+	// 투표 삭제
+	int deleteVote(Map<String, Object> map);
+	// 투표 등록
+	int insertVoteUser(Map<String, Object> map);
+	// 투표 카운트 + 1
+	int VoteCountUP(Map<String, Object> map);
+	// 투표 카운트 - 1
+    int VoteCountDOWN(Map<String, Object> map);
+    
 }

@@ -44,9 +44,15 @@
 		</div>
 		<div th:case="2">
 			<h3>구인/ 구직 게시판</h3>
+			<div class="insertBtn">
+		<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+	</div> 
 		</div>
 		<div th:case="3">
 			<h3>정보 게시판</h3>
+			<div class="insertBtn">
+		<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+	</div> 
 		</div>
 		<div th:case="4">
 			<h3>질문과 토론 게시판</h3>
@@ -56,10 +62,7 @@
 		</div>
 	</div>
   
-	<div class="insertBtn">
-		<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
-	</div> 
-
+	
   <!-- 검색 폼 -->
   <div class="input-style-1" style="position: absolute; top: 80px;">
 	<form id="searchForm" method="get" th:action="@{/all/post/{boardId}(boardId=${boardId})}">

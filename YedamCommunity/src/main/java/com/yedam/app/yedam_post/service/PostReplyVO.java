@@ -28,7 +28,29 @@ public class PostReplyVO {
     private int commentId;
     private String commentContent;
     
-    // 대댓글을 끌고올려는곳
+    
+    
+    public int getCommentId() {
+		return commentId;
+	}
+
+	public void setCommentId(int commentId) {
+		this.commentId = commentId;
+	}
+
+	public String getCommentContent() {
+		return commentContent;
+	}
+
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
+	}
+
+	public int getReplyId() {
+		return replyId;
+	}
+
+	// 대댓글을 끌고올려는곳
     private List<PostCommentVO> comments;
 
     public Date getAddDate() {
