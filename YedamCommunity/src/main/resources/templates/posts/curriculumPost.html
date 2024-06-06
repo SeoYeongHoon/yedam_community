@@ -10,6 +10,29 @@
   width: 60%;
   margin: auto;
 }
+.postPaging {
+  display: inline-block;
+}
+
+.postPaging a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  /*border: 1px solid #ddd;*/
+  /*margin: 0 4px;*/
+}
+
+.postPaging a.active {
+  background-color: #219653;
+  color: white;
+  border: 1px solid #219653;
+}
+
+.postPaging a:hover:not(.active) {
+	background-color: #ddd;
+}
 .gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -38,9 +61,11 @@
 		<!-- 게시판 선택 버튼 -->
 		<div class="card-style mb-30" >
 			<ul class="buttons-group">
+				<li><button onclick="filterCurriculum(1, 0)" style="padding: 10px 30px;" value="0" class="main-btn success-btn-outline btn-hover active" type="button">전체</button></li>
+					
 				<li th:each="curriculums : ${curriculum}">
 					<button type="button" style="padding: 10px 30px;"
-							class="main-btn success-btn-outline btn-hover classNum active curriculum chooseCurriculum"
+							class="main-btn success-btn-outline btn-hover classNum curriculum chooseCurriculum"
 							th:value="${curriculums.curriculumId}">[[${curriculums.curriculumName}]]</button>
 				</li>
 			</ul>
@@ -86,8 +111,6 @@
 //-------------------------
 function gallery(curriculumId){
 	
-	
-	
 	$.ajax({
 		url:'/all/gallery',
 		type:'get',
@@ -127,21 +150,37 @@ $(document).ready(function() {
 	
     filterCurriculum(1);
     
-    let curriculumIds = []
 
+	//----------------------
+	// 과정별 버튼 클릭 active 이벤트
+	//----------------------
+	const buttons = document.querySelectorAll('.chooseCurriculum');
+
+	buttons.forEach(button => {
+		button.addEventListener('click', function () {
+			// 모든 버튼에서 active 클래스 제거
+			buttons.forEach(btn => btn.classList.remove('active'));
+			
+			// 클릭한 버튼에 active 클래스 추가
+			this.classList.add('active');
+		});
+	});
+
+	let curriculumIds = [];
+	
     $('.chooseCurriculum').each(function(){
 		curriculumIds.push($(this).val());
-	})
+	});
 	
 	curriculumIds.forEach(function(curriculumId){
 		gallery(curriculumId)
-	}) 
+	});
 });
 
 //--------------------------------------------
 // 현재 과제 리스트(필터링)
 //--------------------------------------------
-function filterCurriculum(page,filter) {
+function filterCurriculum(page, filter) {
     var filter = curriculumId;
     var searchQuery = $('#searchPost').val();
 	
@@ -156,8 +195,6 @@ function filterCurriculum(page,filter) {
         success: function(response) {
         	updatePost(response.posts);
             postPagination(response.page, page);
-            
-            	
         },
         error: function(error) {
             console.log('Error');
@@ -224,22 +261,6 @@ function updatePost(posts) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //----------------------
 //날짜 포멧 변환 함수
 //----------------------
@@ -254,6 +275,7 @@ function formatDate(date) {
 
 	return [ year, month, day ].join('-');
 } 
+
 
 </script>
 </body>
