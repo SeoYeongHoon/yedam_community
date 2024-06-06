@@ -91,6 +91,7 @@ public class PostController {
 	            }
 	            post.setBoardFiles(boardFilesVO);
 	        }
+	        System.err.println("list= " + list.get(0));
 	        
 	        model.addAttribute("postList", list);
 	        model.addAttribute("totalCount", totalCount);
@@ -160,13 +161,7 @@ public class PostController {
 		 List<PostVO> postList =  postService.selectCurriculum(curriculumId);
 		 return  postList;
 	  }
-	// --------------------------------------------
-	// 헤더에 게시판 타입 부여
-	// --------------------------------------------
-	public String boardType (Model model) {
-		
-		return "common/fragments/header";
-	}
+	
 	
 	// --------------------------------------------
 	// 게시글 단건 조회
@@ -228,7 +223,6 @@ public class PostController {
     public String postInsertProcess(PostVO postVO,
     		                        @RequestParam("file") MultipartFile file, 
                                     Authentication authentication) {
-        System.err.println("postVO에 뭐있니? = " + postVO);
         
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
