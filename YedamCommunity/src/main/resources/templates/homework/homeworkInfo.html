@@ -178,9 +178,8 @@ function autoResize(textarea) {
 			<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
 			<div id="file" style="padding: 50px; display: none;" class="card-style mb-30">
 				<input type="file" name="uploadFiles" multiple="multiple">
-				<button id="fileUpload" type="button"
-					style="padding: 10px; width: 100px; border: 1px solid black;">파일
-					등록</button>
+				<button id="fileUpload" type="button" style="padding: 5px 10px; float:right" class="main-btn dark-btn btn-hover">파일 추가</button>
+				<!-- <button class="updateReplyFile main-btn dark-btn btn-hover" value="${e.replyId}" type="button" style="padding: 5px 10px;">파일 추가</button> -->
 			</div>
 		</form>
 		
@@ -202,7 +201,7 @@ function autoResize(textarea) {
 	<hr>
 	
 	<form name="insertReply" id="addReply" method="post"
-		th:object="${homeworkList}" enctype="multipart/form-data">
+		  th:object="${homeworkList}" enctype="multipart/form-data">
 		<input id="targetId" type="hidden" th:field="*{homeworkTargetId}">
 		<input type="hidden" th:field="*{homeworkId}">
 		<textarea class="replyHomeworkArea" rows="4" cols="50" placeholder="내용을 입력하세요" th:field="*{replyContent}" oninput="autoResize(this)"></textarea>
@@ -229,11 +228,20 @@ function autoResize(textarea) {
 //--------------------------
 $().ready(function(){
 	let userType = $('#logType').val(); //로그인한 id
-	console.log('userType == ' + userType);
 	if(userType == 'ROLE_ADMIN'){
 		$('.admin').css('display','block');
 	}
 	
+	//마감일자 지나면 댓글입력창 없앰
+	let homeworkDate = $('#homeworkDate').val()
+	let today = formatDate(new Date());
+	console.log('today= '+today)
+	console.log('homeworkDate='+homeworkDate)
+ /*    
+	if(homeworkDate < today){
+		console.log("if  성공")
+		$('#addReply').css('display','none');
+	} */ 
 	replyList();
 	fileList();
 });
@@ -299,7 +307,7 @@ $('#deleteFile-'+ homeworkfileId).on('click',function(){
 //-------------------
 $('#updateHomework').on('click',function(e){
 	$('.homeworkUpdate').prop('readonly',false); // 수정할 input
-	$('.homeworkUpdate').css('backgroundColor','yellow') // 수정할 input
+	$('.homeworkUpdate').css('backgroundColor','skyblue') // 수정할 input
 	$('#updateHomeworks').css('display', 'block'); // 수정완료 버튼
 	$('.deleteFile').css('display', 'block'); // 파일삭제 버튼
 	$('#homeworkDate').css("display","none");
@@ -324,6 +332,7 @@ $('#fileUpload').on('click',function(e){
 			$('#homeworkFile').empty(); 
 			fileList();
 			$('.deleteFile').css('display', 'block');
+			
 			
 			
 		},
@@ -357,8 +366,6 @@ $('#updateHomeworks').on('click',function(){
 			console.log("date" + date)
 			$('#homeworkDate').prop('type','text');
 			$('#homeworkDate').val(homeworkDate);
-			
-			console.log(data)
 		},
 		error:function(err){
 			alert("updateHomework err")
