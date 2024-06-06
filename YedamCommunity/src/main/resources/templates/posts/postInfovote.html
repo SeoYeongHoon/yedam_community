@@ -81,6 +81,13 @@
       z-index: 999;
       display: none;
     }
+    .Yes-form {
+    	border: 1px solid #ccc;
+    }
+    
+    .No-form {
+    	border: 1px solid #ccc;
+    }
   </style>
 </head>
 
@@ -98,29 +105,27 @@
   <p th:text="${postvote.writer}">Post Writer</p>
   <p th:text="${postvote.postContent}">Post Content</p>
   
+  <input type="text" th:id="${postvote.voteSeq}" th:value="${postvote.voteItemName}"> 
+  <span id="post-vote-count" th:text="${postvote.voteCount}">0</span>
+  <input type="text" th:id="${postvoteno.voteSeq}" th:value="${postvoteno.voteItemName}">
+  <span id="post-vote2-count" th:text="${postvoteno.voteCount}">0</span>
 
- 
-	<input type="text" th:id="${postvote.voteSeq}" th:value="${postvote.voteItemName}"> 
-	<span th:text="${postvote.voteCount}">0</span>
-	<input type="text" th:id="${postvoteno.voteSeq}" th:value="${postvoteno.voteItemName}">
-	<span th:text="${postvoteno.voteCount}">0</span>
-
-<!-- 찬성 버튼 -->
-<form class="Yes-form">
+  <!-- 찬성 버튼 -->
+  <form class="Yes-form">
     <input type="hidden" name="postId" th:value="${postvote.postId}"/>
     <input type="hidden" name="voteSeq" th:value="${postvote.voteSeq}">
     <input type="hidden" name="userId" th:value="${userId}"/>
-    <button type="button" class="Yes-submit">찬성</button>
+    <button type="button" id="voteYes" class="Yes-submit" th:data-vote-id="${postvote.voteSeq}" th:data-vote-item-id="${postvote.voteItemId}">찬성</button>
   </form>
-  
- <!-- 반대 버튼 -->
-<form class="No-form">
+
+  <!-- 반대 버튼 -->
+  <form class="No-form">
     <input type="hidden" name="postId" th:value="${postvoteno.postId}"/>
     <input type="hidden" name="voteSeq" th:value="${postvoteno.voteSeq}">
     <input type="hidden" name="userId" th:value="${userId}"/>
-    <button type="button" class="No-submit">반대</button>
+    <button type="button" id="voteNo" class="No-submit" th:data-vote-id="${postvoteno.voteSeq}" th:data-vote-item-id="${postvoteno.voteItemId}">반대</button>
   </form>
-  
+
   <h5>댓글</h5>
   <ul id="reply-list">
     <li th:each="reply : ${postvote.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
@@ -159,34 +164,30 @@
   <!-- 신고버튼 -->
   <button type="button" id="reportBtn">신고</button> 
 
-    <!-- 게시글 신고 모달창 -->
-<div id="reportForm" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">게시글 신고</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<input type="hidden" id ="postId" name="postId" th:value="${postvote.postId}"/>
-                <input type="hidden" id="boardId" name="boardId" th:value="${postvote.boardId}"/>
-                <input type="hidden" name="reporter" th:value="${reporter}"/>
-                   <select name="reportType">
-                   <option value="1">부적절한 언어 사용</option>
-                   <option value="2">유해하거나 위험한 행위</option>
-                   <option value="3">성적인 내용</option>
-                   <option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
-                   </select>
-			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button type="button" id="report-submit">신고 제출</button>
-			</div>
-		</div>
-	</div>
-</div>
+  <div id="reportForm" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">게시글 신고</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="postId" name="postId" th:value="${postvote.postId}"/>
+          <input type="hidden" id="boardId" name="boardId" th:value="${postvote.boardId}"/>
+          <input type="hidden" name="reporter" th:value="${reporter}"/>
+          <select name="reportType">
+            <option value="1">부적절한 언어 사용</option>
+            <option value="2">유해하거나 위험한 행위</option>
+            <option value="3">성적인 내용</option>
+            <option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="report-submit">신고 제출</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div>
     <input id="writer" type="hidden" th:value="${postvote.writer}">
@@ -224,7 +225,6 @@
       $('#updateBtn' + replyWriter).css('display','block');
     }
   });
-
 
   //------------------------
   // 게시글수정/삭제버튼 권한
@@ -279,7 +279,7 @@
       contentType: false,
       data: formData,
       success: function (response) {
-        window.location.reload();
+        loadReplies();
       },
       error: function (error) {
         console.error("댓글 등록 실패:", error);
@@ -306,7 +306,7 @@
       type: 'post',
       data: {replyId: replyId, replyContent: replyContent},
       success: function (data) {
-        window.location.reload();
+        loadReplies();
       },
       error: function (err) {
         alert("댓글 업데이트 에러");
@@ -325,33 +325,11 @@
         type: "DELETE",
         data: {replyId: replyId},
         success: function (response) {
-          window.location.reload();
+          loadReplies();
         },
         error: function (error) {
           console.error("댓글 삭제 실패:", error);
           alert("댓글 삭제에 실패하였습니다.");
-        },
-      });
-    }
-  });
-
-
-  //--------------------------------------------
-  // 대댓글 삭제
-  //--------------------------------------------
-  $(document).on("click", ".delete-comment", function () {
-    if (confirm("대댓글을 삭제하시겠습니까?")) {
-      let commentId = $(this).data("comment-id");
-      $.ajax({
-        url: "/all/Comment",
-        type: "DELETE",
-        data: {commentId: commentId},
-        success: function (response) {
-        	window.location.reload();
-        },
-        error: function (error) {
-          console.error("대댓글 삭제 실패:", error);
-          alert("대댓글 삭제에 실패하였습니다.");
         },
       });
     }
@@ -377,26 +355,7 @@
       },
     });
   }
-
-  //--------------------------------------------
-  // 추천 개수 업데이트
-  //--------------------------------------------
-  function updateLikeCount() {
-    $.ajax({
-      url: window.location.pathname,
-      type: "GET",
-      success: function (response) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(response, 'text/html');
-        const newLikesCount = $(doc).find("#post-like-count").text();
-        $("#post-like-count").text(newLikesCount);
-      },
-      error: function (error) {
-        console.error("추천 개수 업데이트 실패:", error);
-      },
-    });
-  }
-
+  
   //--------------------------------------------
   // 추천 추가 함수
   //--------------------------------------------
@@ -423,34 +382,84 @@
   });
 
   //--------------------------------------------
-  // 신고관련
+  // 추천 개수 업데이트
   //--------------------------------------------
-  $(document).ready(function () {
-    // 신고 버튼 클릭 시 폼 표시
-    $("#reportBtn").on("click", function () {
-      $("#reportForm").modal();
+  function updateLikeCount() {
+    $.ajax({
+      url: window.location.pathname,
+      type: "GET",
+      success: function (response) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(response, 'text/html');
+        const newLikesCount = $(doc).find("#post-like-count").text();
+        $("#post-like-count").text(newLikesCount);
+      },
+      error: function (error) {
+        console.error("추천 개수 업데이트 실패:", error);
+      },
     });
+  }
 
-    // 신고 제출
-    $("#report-submit").on("click", function () {
-      let formData = $("#report-form").serialize();
-      $.ajax({
-        url: "/all/reportPost",
-        type: "POST",
-        data: formData,
-        success: function (response) {
-          if (response === "success") {
-            alert("신고가 접수되었습니다.");
-          } else {
-            alert("신고 접수에 실패하였습니다.");
-          }
-        },
-        error: function (err) {
-          alert("에러");
-        },
-      });
+  //--------------------------------------------
+  // 투표 수 업데이트 함수
+  //--------------------------------------------
+  function updateVoteCounts() {
+    $.ajax({
+      url: window.location.pathname,
+      type: "GET",
+      success: function (response) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(response, 'text/html');
+        const newVoteYesCount = $(doc).find("#post-vote-count").text();
+        const newVoteNoCount = $(doc).find("#post-vote2-count").text();
+        $("#post-vote-count").text(newVoteYesCount);
+        $("#post-vote2-count").text(newVoteNoCount);
+      },
+      error: function (error) {
+        console.error("투표 수 업데이트 실패:", error);
+      },
     });
+  }
+
+  //--------------------------------------------
+  // 찬성/반대 버튼 이벤트 핸들러
+  //--------------------------------------------
+  $('#voteYes').click(function() {
+    var voteId = $(this).data('vote-id');
+    var voteItemId = $(this).data('vote-item-id');
+    vote(voteId, voteItemId, 'yes');
   });
+
+  $('#voteNo').click(function() {
+    var voteId = $(this).data('vote-id');
+    var voteItemId = $(this).data('vote-item-id');
+    vote(voteId, voteItemId, 'no');
+  });
+
+  function vote(voteId, voteItemId, type) {
+    $.ajax({
+      url: '/all/vote',
+      method: 'POST',
+      data: {
+        voteId: voteId,
+        voteItemId: voteItemId
+      },
+      success: function(response) {
+        console.log("AJAX response: ", response);
+        alert(response ? "투표가 반영되었습니다." : "투표가 취소되었습니다.");
+        if (type === 'yes') {
+          $('#voteNo').prop('disabled', response); // 반대 버튼 활성/비활성화
+        } else if (type === 'no') {
+          $('#voteYes').prop('disabled', response); // 찬성 버튼 활성/비활성화
+        }
+        updateVoteCounts();
+      },
+      error: function(xhr, status, error) {
+        console.error("AJAX error: ", xhr.responseText);
+        alert("투표 처리 중 오류가 발생했습니다.");
+      }
+    });
+  }
 
   //--------------------------------------------
   // 이벤트 핸들러 재적용 함수
@@ -482,25 +491,25 @@
       });
     });
 
-    
-
     //--------------------------------------------
-    // 댓글 및 대댓글 삭제 이벤트 핸들러 재적용
+    // 댓글 삭제 이벤트 핸들러 재적용
     //--------------------------------------------
     $(".delete-reply").on("click", function () {
       let replyId = $(this).data("reply-id");
-      $.ajax({
-        url: "/all/Reply",
-        type: "DELETE",
-        data: {replyId: replyId},
-        success: function (response) {
-          loadReplies();
-        },
-        error: function (error) {
-          console.error("댓글 삭제 실패:", error);
-          alert("댓글 삭제에 실패하였습니다.");
-        },
-      });
+      if (confirm("댓글을 삭제하시겠습니까?")) {
+        $.ajax({
+          url: "/all/Reply",
+          type: "DELETE",
+          data: {replyId: replyId},
+          success: function (response) {
+            loadReplies();
+          },
+          error: function (error) {
+            console.error("댓글 삭제 실패:", error);
+            alert("댓글 삭제에 실패하였습니다.");
+          },
+        });
+      }
     });
   }
 
@@ -513,9 +522,6 @@
     }
     return true;
   }
-
-
-  </script>
+</script>
 </body>
 </html>
-

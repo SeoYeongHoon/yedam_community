@@ -422,7 +422,8 @@
 		   p.UPDATE_DATE,
            i.vote_count,
            i.vote_item_name,
-           i.vote_seq
+           i.vote_seq,
+           i.vote_item_id         
 	 FROM posts p
 	 LEFT JOIN replies r ON p.post_id = r.post_id
      LEFT JOIN votes v ON p.post_id = v.post_id
@@ -438,7 +439,8 @@
 		   p.USER_ID,
            i.vote_count,
            i.vote_item_name,
-           i.vote_seq
+           i.vote_seq,
+           i.vote_item_id
 	 FROM posts p
 	 LEFT JOIN replies r ON p.post_id = r.post_id
      LEFT JOIN votes v ON p.post_id = v.post_id
@@ -447,6 +449,43 @@
      AND post_id = #{postId}
      AND vote_item_name ='반대'
     </select>
+    
+    
+    <select id="voteExists" parameterType="map" resultType="int">
+    SELECT count(*)
+    FROM vote_users
+    WHERE vote_item_id = #{voteItemId}
+      AND user_id = #{userId}
+    </select>
+    
+    <insert id="insertVoteUser" parameterType="map">
+    INSERT INTO vote_users (vote_user_id
+                          , user_id
+                          , vote_date
+                          , vote_item_id)
+    VALUES (vote_user_id_seq.NEXTVAL
+          , #{userId}
+          , sysdate
+          , #{voteItemId})
+    </insert>
+    
+    <update id="VoteCountUP" parameterType="map">
+        UPDATE vote_items
+        SET vote_count = vote_count + 1
+        WHERE vote_item_id = #{voteItemId}
+    </update>
+    
+    <update id="VoteCountDOWN" parameterType="map">
+        UPDATE vote_items
+        SET vote_count = vote_count - 1
+        WHERE vote_item_id = #{voteItemId}
+    </update>
+    
+    <delete id="deleteVote" parameterType="map">
+          DELETE FROM vote_users 
+          WHERE user_id = #{userId}
+          AND vote_item_id = #{voteItemId}
+    </delete>
     
     
 </mapper>

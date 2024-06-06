@@ -105,7 +105,6 @@ public interface PostService {
     //--------------------------------------------
     public Map<String, Object> updateComment(PostCommentVO postcommentVO);
     
-    
     //--------------------------------------------
     // 대댓글 삭제
     //--------------------------------------------
@@ -177,6 +176,16 @@ public interface PostService {
 	int createVote(PostVO postVO);
 	
     int createVoteUser(VoteUserVO voteUser);
+    
+    Integer voteExists(Map<String, Object> map);
+    
+    int cancelVote(Map<String, Object> map);
+    
+    int submitVote(Map<String, Object> map);
+
+	public int VoteCountUP(Map<String, Object> map);
+
+	public int VoteCountDOWN(Map<String, Object> map);
 
 	
 }

@@ -234,6 +234,9 @@ public class PostServiceImpl implements PostService {
 		return reportMapper.insertReport(reportVO);
 	}
 
+	//--------------------------------------------
+	// 추천 등록
+	//--------------------------------------------
 	@Override
 	public int createLike(int postId, int userId) {
 		Map<String,Object> map = new HashMap<>();
@@ -242,6 +245,9 @@ public class PostServiceImpl implements PostService {
 		return postMapper.insertLike(map);
 	}
 
+	//--------------------------------------------
+	// 추천수 취소
+	//--------------------------------------------
 	@Override
 	public int LikeDelete(int postId, int userId) {
 		Map<String,Object> map = new HashMap<>();
@@ -407,4 +413,30 @@ public class PostServiceImpl implements PostService {
 		return postMapper.setBoardType(boardType);
 
 	}
+	@Override
+    public Integer voteExists(Map<String, Object> map) {
+        return postMapper.voteExists(map);
+    }
+
+	@Override
+    public int cancelVote(Map<String, Object> map) {
+        System.out.println("Vote canceled in service.");
+		return postMapper.deleteVote(map);
+    }
+
+    @Override
+    public int submitVote(Map<String, Object> map) {
+        System.out.println("Vote submitted in service.");
+		return postMapper.insertVoteUser(map);
+    }
+
+    @Override
+    public int VoteCountUP(Map<String, Object> map) {
+        return postMapper.VoteCountUP(map);
+    }
+
+    @Override
+    public int VoteCountDOWN(Map<String, Object> map) {
+        return postMapper.VoteCountDOWN(map);
+    }
 }

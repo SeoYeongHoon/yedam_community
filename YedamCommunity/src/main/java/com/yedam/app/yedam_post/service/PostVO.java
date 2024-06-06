@@ -73,6 +73,64 @@ public class PostVO {
 	private String voteItemName;
 	private int voteCount;
 
+	
+	
+	public int getBoardType() {
+		return boardType;
+	}
+
+	public void setBoardType(int boardType) {
+		this.boardType = boardType;
+	}
+
+	public int getIsProcessing() {
+		return isProcessing;
+	}
+
+	public void setIsProcessing(int isProcessing) {
+		this.isProcessing = isProcessing;
+	}
+
+	public Integer getVoteId() {
+		return voteId;
+	}
+
+	public void setVoteId(Integer voteId) {
+		this.voteId = voteId;
+	}
+
+	public int getVoteItemId() {
+		return voteItemId;
+	}
+
+	public void setVoteItemId(int voteItemId) {
+		this.voteItemId = voteItemId;
+	}
+
+	public int getVoteSeq() {
+		return voteSeq;
+	}
+
+	public void setVoteSeq(int voteSeq) {
+		this.voteSeq = voteSeq;
+	}
+
+	public String getVoteItemName() {
+		return voteItemName;
+	}
+
+	public void setVoteItemName(String voteItemName) {
+		this.voteItemName = voteItemName;
+	}
+
+	public int getVoteCount() {
+		return voteCount;
+	}
+
+	public void setVoteCount(int voteCount) {
+		this.voteCount = voteCount;
+	}
+
 	public int getReplyId() {
 		return replyId;
 	}

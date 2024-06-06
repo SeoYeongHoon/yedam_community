@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,14 +28,12 @@ import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
-import com.yedam.app.yedam_post.service.PostCommentVO;
-import com.yedam.app.yedam_post.service.PostReplyVO;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.ReportVO;
 /**
  * 게시판, 게시글
- * 2024.06.05
+ * 2024.06.06
  * 임우열
  */
 @Controller
@@ -286,7 +282,7 @@ public class PostController {
         postVO.setUserId(userVO.getuserId());
         postVO.setWriter(userVO.getUsername());
         postService.createVote(postVO);
-        return "redirect:/all/post/" + 4;
+        return "redirect:/all/posts/" + 4;
 	}
 	
 	// --------------------------------------------
@@ -304,6 +300,11 @@ public class PostController {
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 	    String userName = userVO.getUsername();
 	    String userType = userVO.getUserType();
+	    
+	    // 값 로그로 출력
+	    System.out.println("postVO.voteItemId: " + postVO.getVoteItemId());
+	    System.out.println("find.voteItemId: " + find.getVoteItemId());
+	    
 	    
 	    model.addAttribute("postvote", postVO);
 	    model.addAttribute("postvoteno",find);
@@ -330,7 +331,7 @@ public class PostController {
 		postVO.setBoardId(boardId);
 		postService.PostDelete(postVO);
 
-		return "redirect:/all/post/" + boardId;
+		return "redirect:/all/posts/" + boardId;
 	}
 
 	// --------------------------------------------
@@ -342,7 +343,7 @@ public class PostController {
 			                   , Model model) {
 
 		if (postId == null) {
-			return "redirect:/post/" + boardId;
+			return "redirect:/posts/" + boardId;
 		}
 		
 		// 파일 조회
@@ -462,8 +463,37 @@ public class PostController {
 		return response;
 	}
 	
-	
-	
-	
+	// 투표 처리
+	@PostMapping("/vote")
+	@ResponseBody
+	public boolean handleVote(@RequestParam("voteId") int voteId, 
+	                          @RequestParam("voteItemId") int voteItemId, 
+	                          Authentication authentication) {
+	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+	    int userId = userVO.getuserId();
 
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("voteId", voteId);
+	    map.put("userId", userId);
+	    map.put("voteItemId", voteItemId);
+
+	    Integer voteCheck = postService.voteExists(map); // 유저가 투표를 했는지 확인
+
+	    System.out.println("voteId: " + voteId);
+	    System.out.println("userId: " + userId);
+	    System.out.println("voteItemId: " + voteItemId);
+	    System.out.println("voteCheck: " + voteCheck);
+
+	    if (voteCheck == 0) {
+	        postService.submitVote(map); // 투표하지 않은 경우, 투표 추가
+	        System.out.println("Vote submitted.");
+	        postService.VoteCountUP(map);
+	    } else {
+	        postService.cancelVote(map); // 이미 투표한 경우, 투표 취소
+	        System.out.println("Vote canceled.");
+	        postService.VoteCountDOWN(map);
+	    }
+
+	    return voteCheck == 0;
+	}
 }
