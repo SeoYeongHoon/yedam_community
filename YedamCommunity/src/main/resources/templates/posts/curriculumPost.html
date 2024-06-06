@@ -33,6 +33,19 @@
 .postPaging a:hover:not(.active) {
 	background-color: #ddd;
 }
+.gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+    }
+    .gallery .wide {
+      grid-column: span 2;
+    }
+
 </style>
       
 <head>
@@ -89,7 +102,7 @@
 		  </div>
 	</div>
 	<h1>갤러리</h1>
-	<div id="gallery"></div>
+	<div class="gallery"></div>
 </div>
 <script>
 
@@ -97,8 +110,6 @@
 // 갤러리 출력
 //-------------------------
 function gallery(curriculumId){
-	
-	
 	
 	$.ajax({
 		url:'/all/gallery',
@@ -109,10 +120,10 @@ function gallery(curriculumId){
 			 let galleryList =
 				 `
 				 	<div onclick="location.href='/all/post/${e.boardId}/${e.postId}'">
-			 			<img src="/files/${e.boardfileLocation}" alt="">
+			 			<img src="/files/${e.boardfileLocation}" alt="${e.boardfileName}">
 			 		</div>
 				 `
-			$('#gallery').append(galleryList);
+			$('.gallery').append(galleryList);
 			})
 		},
 		error:function(err){
@@ -247,22 +258,6 @@ function updatePost(posts) {
         pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '">&raquo;</a>');
     }
 } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

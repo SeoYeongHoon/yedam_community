@@ -44,9 +44,15 @@
 		</div>
 		<div th:case="2">
 			<h3>구인/ 구직 게시판</h3>
+			<div class="insertBtn">
+		<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+	</div> 
 		</div>
 		<div th:case="3">
 			<h3>정보 게시판</h3>
+			<div class="insertBtn">
+		<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+	</div> 
 		</div>
 		<div th:case="4">
 			<h3>질문과 토론 게시판</h3>
@@ -56,10 +62,7 @@
 		</div>
 	</div>
   
-	<div class="insertBtn">
-		<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
-	</div> 
-
+	
   <!-- 검색 폼 -->
   <div class="input-style-1" style="position: absolute; top: 80px;">
 	<form id="searchForm" method="get" th:action="@{/all/post/{boardId}(boardId=${boardId})}">
@@ -112,13 +115,9 @@
 <!-- 갤러리 섹션 -->
 <h2>갤러리</h2>
   <div class="gallery">
-    <div th:each="post : ${postList}" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-        <div th:each="file, iterStat : ${post.boardFiles}">
-            <div th:if="${file.exists}" th:classappend="${iterStat.index >= 3 ? 'wide' : ''}">
-                <img th:src="@{|/files/${file.boardfileLocation}|}" th:alt="${file.boardfileName}" />
-                <p th:text="${file.boardfileName}">이미지 이름</p>
-            </div>
-        </div>
+  	<div th:each="post : ${postList}" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
+    	<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
+    	<p th:text="${post.boardfileName}">이미지 이름</p>
     </div>
   </div>
 </div>

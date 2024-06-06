@@ -167,7 +167,7 @@
         <input type="hidden" name="replyId" th:value="${reply.replyId}"/>
         <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
         <input type="hidden" name="boardId" th:value="${postInfo.boardId}"/>
-        <textarea th:id="|commentContent-${reply.replyId}|" name="commentContent" style="background-color: yellow;"></textarea>
+        <textarea th:id="|commentContent-${reply.replyId}|" name="commentContent"></textarea>
         <button type="button" th:id="|comment-submit-${reply.replyId}|" class="comment-submit border">대댓글 작성</button>
       </form>
     </li>
@@ -176,7 +176,7 @@
   <form id="reply-form" class="reply">
     <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
     <input type="hidden" name="boardId" th:value="${postInfo.boardId}"/>
-    <textarea name="replyContent" id="replyContent" style="background-color: skyblue;"></textarea>
+    <textarea name="replyContent" id="replyContent"></textarea>
     <button type="button" id="reply-submit">댓글 작성</button>
   </form>
 

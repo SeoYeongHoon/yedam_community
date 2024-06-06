@@ -364,28 +364,14 @@ public class CbtStudentController {
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		//시혐결과 문제정보
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-		List<QuizboxVO> list = new ArrayList<>();
-		for(int i = 0; i < one.length; i++) {			
-			quizboxVO.setUserId(userVO.getuserId());
-			quizboxVO.setTestId(testId);
-			quizboxVO.setQuizId(randQuizId[i]);
-			quizboxVO.setOne(one[i]);
-			quizboxVO.setTwo(two[i]);
-			quizboxVO.setThree(three[i]);
-			quizboxVO.setFour(four[i]);
-			quizboxVO.setFive(five[i]);
-			list.addAll(cbtStudentService.testResultQuiz(quizboxVO)); //매퍼 결과 전체 리스트에 추가
-		}
+		quizboxVO.setUserId(userVO.getuserId());
+		quizboxVO.setTestId(testId);
+		List<QuizboxVO> list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
 		int answerCnt = 0;
 		model.addAttribute("testResult",info); //시험결과 정보
 		model.addAttribute("testMin", min); //응시시간 분
 		model.addAttribute("testSec", sec); //응시시간 초
 		model.addAttribute("quizList", list); //시험결과 문제+보기 정보
-		model.addAttribute("one", one); //랜덤 1번보기 번호
-		model.addAttribute("two", two); //랜덤 2번보기 번호
-		model.addAttribute("three", three); //랜덤 3번보기 번호
-		model.addAttribute("four", four); //랜덤 4번보기 번호
-		model.addAttribute("five", five); //랜덤 5번보기 번호
 		model.addAttribute("logId", userVO.getuserId()); //로그인정보
 		model.addAttribute("answerCnt", answerCnt); //맞힌 개수 구하기 위한 임의 변수
 		return "cbt_student/testResult";
@@ -411,10 +397,9 @@ public class CbtStudentController {
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		//시험결과 문제정보
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-		List<QuizboxVO> list = new ArrayList<>();
 		quizboxVO.setUserId(userVO.getuserId());
 		quizboxVO.setTestId(testId);
-		list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
+		List<QuizboxVO> list = cbtStudentService.testResultQuiz(quizboxVO); //매퍼 결과 전체 리스트에 추가
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		//맞힌개수 틀린개수
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
