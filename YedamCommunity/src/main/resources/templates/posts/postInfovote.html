@@ -31,6 +31,7 @@
     .reply .reply-actions {
       display: flex;
       gap: 10px;
+      justify-content: end;
     }
 
     .post-info-header {
@@ -63,6 +64,7 @@
 
     .reply-textarea {
       width: 100%;
+      resize: none;
       box-sizing: border-box;
       padding: 10px;
       margin-bottom: 10px;
@@ -105,6 +107,8 @@
         border-radius: 4px;
         margin: 4px 2px;
         cursor: pointer;
+        position: absolute;
+        left: 43%;
     }
     
     .no-form {
@@ -119,6 +123,8 @@
         border-radius: 4px;
         margin: 4px 2px;
         cursor: pointer;
+        position: absolute;
+        left: 52%;
     }
     
     .vote-count {
@@ -128,6 +134,7 @@
     .post-repote {
     	display:inline-block;
     	float: right;
+    	
     }
     
     .post-delete {
@@ -159,6 +166,45 @@
     	border-radius: 4px;
     	color: white;
     }
+    
+    .post-reply-position{
+    margin-top: 100px;
+    }
+
+	.post-all-botton {
+		margin-top: 50px;
+		position: relative;
+		text-align: center;
+	}
+
+	.delete-reply {
+		background-color: #d50100;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+	}
+	
+	.reply-update {
+		background-color: #f7c800;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+	}
+	
+	.reply-updateBtn {
+		background-color: #FFA500;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+	}
+	
+
+	.post-reply-submit {
+		background-color: #365CF5;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+	}
   </style>
 </head>
 
@@ -176,14 +222,17 @@
   <p th:text="${postvote.writer}">Post Writer</p>
   <textarea rows="10" class="post-content" th:text="${postvote.postContent}" readonly>Post Content</textarea>
   
+  <!-- 찬성, 반대 카운트, 버튼, 삭제, 신고, 목록, 추천 묶여있는 div -->
+  <div class="post-all-botton">
   <div class="vote-count">
-    <input style="display: inline-block; width:40px;" type="text" th:id="${postvote.voteSeq}" th:value="${postvote.voteItemName}"> 
+    <input style="display: inline-block; width:35px;" type="text" th:id="${postvote.voteSeq}"> 
     <span style="display: inline-block; margin-right: 30px" id="post-vote-count" th:text="${postvote.voteCount}">0</span>
   
-    <input style="display: inline-block; width:40px;" type="text" th:id="${postvoteno.voteSeq}" th:value="${postvoteno.voteItemName}">
+    <input style="display: inline-block; width:50px;" type="text" th:id="${postvoteno.voteSeq}">
     <span style="display: inline-block;" id="post-vote2-count" th:text="${postvoteno.voteCount}">0</span>
   </div>
   
+
   <!-- 찬성 버튼 -->
   <form class="yes-form">
     <input type="hidden" name="postId" th:value="${postvote.postId}"/>
@@ -199,7 +248,7 @@
     <input type="hidden" name="userId" th:value="${userId}"/>
     <button type="button" id="voteNo" class="no-submit" th:data-vote-id="${postvoteno.voteSeq}" th:data-vote-item-id="${postvoteno.voteItemId}">반대</button>
   </form>
-
+ 
   <div class="post-repote">
     <input id="writer" type="hidden" th:value="${postvote.writer}">
     <input id="userName" type="hidden" th:value="${userName}">
@@ -215,6 +264,7 @@
     <input type="hidden" name="userId" th:value="${userId}"/>
     <button type="button" class="good-submit">추천</button>
   </form>
+  </div>
   </div>
   
   <!-- 신고버튼 -->
@@ -246,6 +296,16 @@
     </div>
   </div>
   
+  
+  
+  <div class="post-reply-position">
+  <form id="reply-form" class="reply">
+    <input type="hidden" name="postId" th:value="${postvote.postId}"/>
+    <input type="hidden" name="boardId" th:value="${postvote.boardId}"/>
+    <textarea class="reply-textarea" name="replyContent" id="replyContent"></textarea>
+    <button type="button" id="reply-submit" class="post-reply-submit">등록</button>
+  </form>
+  
   <h5>댓글</h5>
   <ul id="reply-list">
     <li th:each="reply : ${postvote.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
@@ -259,20 +319,15 @@
         <textarea class="reply-textarea" th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
       </div>
       <div class="reply-actions">
-        <button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">댓글 삭제</button>
-        <button th:id="|updateBtn${reply.replyWriter}|" type="button" class="border reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">댓글 수정</button>
+        <button th:id="|updateBtn${reply.replyWriter}|" type="button" class="border reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">수정</button>
+        <button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">삭제</button>
         <button type="button" class="border reply-updateBtn" th:data-reply-id="${reply.replyId}" style="display:none;">수정</button>
       </div>
      </li>
    </ul>
 
-  <form id="reply-form" class="reply">
-    <input type="hidden" name="postId" th:value="${postvote.postId}"/>
-    <input type="hidden" name="boardId" th:value="${postvote.boardId}"/>
-    <textarea class="reply-textarea" name="replyContent" id="replyContent"></textarea>
-    <button type="button" id="reply-submit">댓글 작성</button>
-  </form>
-
+  
+</div>
 </div>
 
 <script>
