@@ -144,11 +144,13 @@ public class PostController {
 		 @GetMapping("/gallery")
 		 @ResponseBody 
 		 public List<BoardFilesVO> gallery(@RequestParam int curriculumId) {
-			 //int boardType = 1;
-			 System.err.println("보드타입== "+curriculumId);
 			 List<BoardFilesVO> fileList = postService.successFileList(curriculumId);	 
-			 System.err.println("파일 리스트 == " + fileList.get(0));
-			 return  postService.successFileList(curriculumId);
+			 System.err.println("파일 리스트 == " + fileList);
+			 
+			 if (fileList != null) {
+				 return  postService.successFileList(curriculumId);
+			 }
+			 return  null;
 		  }
 		 
 		 
@@ -317,8 +319,10 @@ public class PostController {
         postVO.setCreateDate(new Date());
         postVO.setUpdateDate(new Date());
         
-        postVO.setBoardId(postService.findIdByCurriculum(curriculumSelect));
-        postVO.setBoardType(postService.findByCurriculum(curriculumSelect));
+        if (userVO.getUserType().equals("ROLE_ADMIN")) {
+        	postVO.setBoardId(postService.findIdByCurriculum(curriculumSelect));
+        	postVO.setBoardType(postService.findByCurriculum(curriculumSelect));
+        }
         
         postService.createPost(postVO);
         return "redirect:/all/curriculumPost";
