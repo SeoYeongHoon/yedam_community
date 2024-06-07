@@ -79,7 +79,7 @@
     }
 
     // 현재 페이지에 해당하는 메뉴에 active 추가
-    function setActiveHomeMenuItem() {
+    /* function setActiveHomeMenuItem() {
         var currentPage = getHomeCurrentPage();
         var navLinks = document.querySelectorAll('.main-nav ul li a');
         console.log("현재 페이지: ", currentPage);
@@ -88,11 +88,31 @@
         	
             if (navLinks[i].getAttribute('href') === ("/all/" + currentPage)) {
                 navLinks[i].classList.add('active');
-            } else if (navLinks[i].getAttribute('href') === ("/all/post/" + currentPage)) {
+            } else if (navLinks[i].getAttribute('href') === ("/all/posts/" + currentPage)) {
 				navLinks[i].classList.add('active'); 
 			}
 			 else {
             	navLinks[i].classList.remove('active');
+            }
+        }
+    } */
+    
+    function setActiveHomeMenuItem() {
+        // 현재 페이지 경로를 가져옴
+        var currentPath = window.location.pathname;
+        var navLinks = document.querySelectorAll('.main-nav ul li a');
+        console.log("현재 페이지 경로: ", currentPath);
+        
+        // 모든 메뉴 항목을 순회하면서 활성화 상태를 설정
+        for (var i = 0; i < navLinks.length; i++) {
+            // 현재 메뉴 항목의 href 속성 값을 가져옴
+            var linkPath = navLinks[i].getAttribute('href');
+            
+            // 현재 경로가 메뉴 항목의 href 속성과 일치하거나 포함될 경우 활성화
+            if (currentPath.startsWith(linkPath)) {
+                navLinks[i].classList.add('active');
+            } else {
+                navLinks[i].classList.remove('active');
             }
         }
     }

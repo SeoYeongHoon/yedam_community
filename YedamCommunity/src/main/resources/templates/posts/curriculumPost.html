@@ -33,14 +33,25 @@
 }
 
 .gallery {
+  padding: 30px 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 40px;
 }
 .gallery img {
-  width: 100%;
-  height: auto;
+  width: 300px;
+  height: 250px;
+  border-radius: 10px;
+  border: 1px solid darkgray;
+  padding: 10px;
+  box-shadow: 1px 5px 8px 0 #00000040;
+  cursor: pointer;
+  transition: transform .2s;
 }
+.gallery img:hover {
+  transform: scale(1.05);
+}
+
 .gallery .wide {
   grid-column: span 2;
 }
@@ -55,57 +66,55 @@
 <th:block th:each="post : ${postList}">
 	<input class="postId" type="hidden" th:value="${post.postId}">
 </th:block>
+<div class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
+    <p style="color: white">수료 과정별 게시판입니다.</p>
+</div>
 <div id="post_container">
-	<div class="col-lg-12" id="allClass" style="margin-top: 20px;">
-		<!-- 게시판 선택 버튼 -->
-		<div class="card-style mb-30" >
-			<ul class="buttons-group">
-				<li><button style="padding: 10px 30px;" id="allCurriculums" value="0" class="main-btn success-btn-outline classNum active btn-hover chooseCurriculum" type="button">전체</button></li>
-					
-				<li th:each="curriculums : ${curriculum}">
-					<button type="button" style="padding: 10px 30px;"
-							class="main-btn success-btn-outline btn-hover isActive classNum curriculum chooseCurriculum"
-							th:value="${curriculums.curriculumId}">[[${curriculums.curriculumName}]]</button>
-				</li>
-			</ul>
-		</div>
-		<!-- end card -->
-	</div>
- 	
-	
-	<div style="min-height: 410px; margin-top: 80px;">
-		<div id="postList" style="position: relative;">
-			<!-- 게시글 검색 -->
-			<div class="input-style-1" style="bottom: 0; left: 30px; margin:0px; position: absolute;">
-				<input name="id" id="searchPost" type="text" placeholder="게시글 검색" style="padding: 10px; width: 250px; ">
-				<img style="top: 12px; right: 10px; width: 20px; opacity: 0.5; position: absolute;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-			</div>
-			<!-- 게시글 검색 end -->
-			<div>
-				<input id="boardId" class="" type="text"  th:value="${boardId}" >
-		    	<a th:href="@{/all/curriculumPostInsert}" id="writePostBtn" class="main-btn light-btn-outline btn-hover addPostBtn">글쓰기</a>
-		 	</div>
-			<table class="table" style="margin: 30px; border-bottom: 2px solid #e9ecef;">
-			    <thead>
-			      <tr>
-			        <th class="col-no">No</th>
-			        <th class="col-title">제목</th>
-			        <th class="col-board">작성자</th>
-			        <th class="col-date">작성시간</th>
-			        <th class="col-no">조회수</th>
-			        <th class="col-no">추천수</th>
-			      </tr>
-			    </thead>
-			    <tbody id="tbody"></tbody>
-			  </table>
-			  <div class="center">
-			  	<div class="postPaging"></div>
-			  </div>
-		</div>
+	<!-- 게시판 선택 버튼 -->
+	<div class="card-style mb-30" style="max-width: 1200px; margin: 60px auto; margin-top: 0;">
+		<ul class="buttons-group" style="justify-content: center;">
+			<li><button style="padding: 10px 30px;" id="allCurriculums" value="0" class="main-btn success-btn-outline classNum active btn-hover chooseCurriculum" type="button">전체</button></li>
+				
+			<li th:each="curriculums : ${curriculum}">
+				<button type="button" style="padding: 10px 30px;"
+						class="main-btn success-btn-outline btn-hover isActive classNum curriculum chooseCurriculum"
+						th:value="${curriculums.curriculumId}">[[${curriculums.curriculumName}]]</button>
+			</li>
+		</ul>
 	</div>
 	
-	<div>
-		<h3>갤러리</h3>
+	<div id="postList" style="position: relative; min-height: 410px; width: 1200px; margin: 0 auto;">
+		<!-- 게시글 검색 -->
+		<div class="input-style-1" style="top: -30px; left: 0; position: absolute;">
+			<input name="id" id="searchPost" type="text" placeholder="게시글 검색" style="padding: 10px; width: 250px; ">
+			<img style="top: 12px; right: 10px; width: 20px; opacity: 0.5; position: absolute;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+		</div>
+		
+		<!-- 글쓰기 -->
+		<input id="boardId" class="" type="text"  th:value="${boardId}" >
+    	<a th:href="@{/all/curriculumPostInsert}" id="writePostBtn" class="main-btn light-btn-outline btn-hover addPostBtn">글쓰기</a>
+		<table class="table" style="border-bottom: 2px solid #e9ecef;">
+		    <thead>
+		      <tr>
+		        <th class="col-no">No</th>
+		        <th class="col-title">제목</th>
+		        <th class="col-board">작성자</th>
+		        <th class="col-date">작성시간</th>
+		        <th class="col-no">조회수</th>
+		        <th class="col-no">추천수</th>
+		      </tr>
+		    </thead>
+		    <tbody id="tbody"></tbody>
+		  </table>
+		  <div class="center">
+		  	<div class="postPaging"></div>
+		  </div>
+	</div>
+	
+	<div style="width: 1200px; margin: 50px auto;">
+		<div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+            <p style="color: white">갤러리</p>
+        </div>
 		<div class="gallery"></div>
 	</div>
 </div>
@@ -123,7 +132,7 @@
 				data.forEach(function(e){
 					let galleryList =
 						`
-						 	<div onclick="location.href='/all/post/${e.boardId}/${e.postId}'">
+						 	<div onclick="location.href='/all/post/${e.boardId}/${e.postId}'" style="text-align: center;">
 					 			<img src="/files/${e.boardfileLocation}" alt="${e.boardfileName}">
 					 		</div>
 						`

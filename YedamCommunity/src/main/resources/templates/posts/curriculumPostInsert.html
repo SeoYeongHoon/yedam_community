@@ -56,12 +56,8 @@
     <label for="title">제목:</label>
     <input type="text" id="title" th:value="${post.title}" th:name="title"/><br />
     
+    <!-- 어드민 계정일 시, 과정 선택하여 게시글 작성 가능 -->
     <th:block th:if="${#authentication.principal.userType == 'ROLE_ADMIN'}">
-			
-		<!-- <div>
-			<input id="boardId" class="" type="text"  th:value="${boardId}" >
-	    	<a th:href="@{/all/curriculumPostInsert}" id="writePostBtn" class="main-btn light-btn-outline btn-hover addPostBtn">과정 선택</a>
-	 	</div> -->
 	 	<div class="select-style-1" style="display: flex; position: relative; margin-top: 20px; margin-bottom: 10px; margin-left: -10px;">
 		 	<div class="select-position" style="min-width: 140px;">
 			 	<select th:name="curriculumSelect" id="selectCurriculum" style="padding: 10px; color: black; background-color: white;">
@@ -75,7 +71,11 @@
 				</select>
 			</div>
 		</div>
-		
+	</th:block>
+    
+    <!-- 수료생 계정일 시, 본인 과정에만 게시글 작성 가능 -->
+    <th:block th:if="${#authentication.principal.userType == 'ROLE_GRAD'}">
+    	<input th:name="curriculumSelect" type="hidden" th:value="${#authentication.principal.getUserCurriculumId}">
 	</th:block>
     
     <label for="postContent">내용:</label>

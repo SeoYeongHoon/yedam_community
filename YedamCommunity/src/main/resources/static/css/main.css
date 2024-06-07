@@ -411,10 +411,10 @@ a.left-topbar-item:hover {
   height: 100%;
   padding: 5px 0px;
   margin: 0 18px;
-  transition: all 0.3s;
+  /* transition: all 0.3s;
   -o-transition: all 0.3s;
   -moz-transition: all 0.3s;
-  -webkit-transition: all 0.3s;
+  -webkit-transition: all 0.3s; */
 }
 
 /* .main-menu > li > a::before {

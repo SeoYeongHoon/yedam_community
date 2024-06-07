@@ -391,8 +391,8 @@ a.control_next {
 #writePostBtn {
 	padding: 5px 15px;
 	position: absolute;
-    top: -40px;
-    right: -30px;
+    top: -20px;
+    right: 0px;
 }
 
 #writePostBtn::before {

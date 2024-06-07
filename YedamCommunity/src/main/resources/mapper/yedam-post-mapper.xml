@@ -101,7 +101,7 @@
         		b.board_id,
         		s.board_type
 		FROM boardfiles b JOIN boards s ON b.board_id = s.board_id
-		WHERE s.curriculum_id = #{curriculumId} 
+		WHERE s.curriculum_id = #{curriculumId} AND b.boardfile_name IS NOT NULL
 		ORDER BY boardfile_id DESC
   </select>
 
