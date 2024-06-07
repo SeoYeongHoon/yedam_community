@@ -60,6 +60,11 @@
 
 #cancelBtn {
 	background-color: silver;
+	padding: 10px 30px;
+}
+#homeworkInsertBtn {
+	padding: 10px 30px;
+    margin-right: 10px;
 }
 </style>
 </head>
@@ -107,26 +112,33 @@
 					<div class="col-5">
 						<div id="date" class="card-style mb-30">
 							<h6 class="mb-25">
-								<font style="vertical-align: inherit;"><font
-									style="vertical-align: inherit;">제출 기한 설정</font></font>
+								<font style="vertical-align: inherit;">
+									<font style="vertical-align: inherit;">제출 기한 설정</font>
+								</font>
 							</h6>
 							<div class="input-style-1">
-								<label><font style="vertical-align: inherit;"><font
-										style="vertical-align: inherit;">날짜</font></font></label> <input type="date"
-									th:field="*{homeworkDate}">
+								<label>
+									<font style="vertical-align: inherit;">
+								    	<font style="vertical-align: inherit;">날짜</font>
+								    </font>
+								</label> 
+								<input type="date"	th:field="*{homeworkDate}">
 							</div>
 						</div>
 						<!-- 파일 업로드 -->
-						<div id="file" style="padding: 50px;" class="card-style mb-30">
-							<input type="file" name="uploadFiles" multiple="multiple">
-						</div>
+							<div id="file" style="padding: 50px;" class="card-style mb-30">
+								<font style="vertical-align: inherit;">
+									<font style="vertical-align: inherit;">과제 파일 등록</font>
+								</font>
+								<input type="file" name="uploadFiles" multiple="multiple">
+							</div>
 					</div>
 					<!-- 등록 취소버튼 -->
 					<div id="btnWrap" class="col-12" style="text-align: center;">
-						<button id="insertBtn" class="main-btn primary-btn btn-hover"
-							type="button">등록</button>
+						<button id="homeworkInsertBtn" class="main-btn primary-btn btn-hover"
+								type="button">등록</button>
 						<button id="cancelBtn" class="main-btn primary-btn btn-hover"
-							type="button" onclick="location.href='homeworkList'">취소</button>
+								type="button" onclick="location.href='homeworkList'">취소</button>
 					</div>
 				</div>
 			</form>

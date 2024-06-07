@@ -201,3 +201,12 @@
     max-width: 100%;
     vertical-align: top !important;
 }
+
+.commentBtn {
+	display: flex;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 5px;
+	
+}
