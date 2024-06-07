@@ -736,8 +736,6 @@ function testResult(){
 	for(let i = 0; i < submitAnswerVal.length; i++){
 		submitAnswer[i] = submitAnswerVal[i].value
 	}
-	let testTimeMin = document.querySelector('#testTimeMin'); //현재 분
-	let testTimeSec = document.querySelector('#testTimeSec'); //현재 초
 	let testTimeVal = document.querySelector('#testTime'); //시험시간
 	let testTime = testTimeVal.value;
 	let minVal = document.querySelector('#min'); //폼 전송시 보낼 분
@@ -745,12 +743,12 @@ function testResult(){
 	let min = 0; //변수 초기화
 	let sec = 0;
 	//응시 시간 계산
-	if(Number(testTimeSec.innerText) > 0){ //초가 0보다 큰 경우
-		minVal.value = testTime - Number(testTimeMin.innerText) - 1;
-		secVal.value = 60 - Number(testTimeSec.innerText);
+	if(Number(minVal.value) > 0){ //초가 0보다 큰 경우
+		minVal.value = Number(testTime) - Number(minVal.value) - 1;
+		secVal.value = 60 - Number(secVal.value);
 	}
 	else{ //초가 0인 경우
-		minVal.value = testTime - Number(testTimeMin.innerText);
+		minVal.value = Number(testTime) - Number(minVal.value);
 		secVal.value = 0;
 	}
 	//답안 및 시험결과 저장 ajax
