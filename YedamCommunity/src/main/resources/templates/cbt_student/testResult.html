@@ -118,7 +118,13 @@
   		<span class="glyphicon glyphicon-chevron-up" th:text="TOP"></span>
 	</a>	
 </div>
-<script>                                                                                                                                                                                                                                                                                                                               
+<script>
+//<<시험응시 페이지로 뒤로가기 막기>>
+/*
+history.pushState(null, null, '/testResult');
+window.onpopstate = function(event) {
+history.go(1);
+};*/
 //<<탑 스크롤 관련>>
 $(window).scroll(function(){
 	if ($(this).scrollTop() > 300){
