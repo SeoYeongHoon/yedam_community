@@ -320,9 +320,7 @@
 		            <![CDATA[
 		            Where rownum <= (#{page} * 30)     
 		            ]]>
-		            <if test="subjectName != null and !subjectName.equals('') and !subjectName.equals('all') ">
 		            AND subject_name = #{subjectName}
-		            </if>
 		            ) a
 		WHERE a.rn > (#{page} - 1) * 30
 	</select>
@@ -334,14 +332,7 @@
         WHERE subject_name = #{subjectName}
         </if>
 	</select>
-	<!-- 문제저장소에 지문 출력 -->
-	<select id="selectAnswerAll" resultType="TeacherVO">
-		SELECT example_num||'. '||text_content as text_content
-			  , quiz_id
-		FROM answers
-		WHERE quiz_id = #{quizId}
-		ORDER BY example_num      
-	</select>
+	
 	<!-- <select id="quizAnswer" resultType="TeacherVO" parameterType="int">
 		SELECT example_num||'. '||text_content as text_content
 		FROM answers
@@ -357,13 +348,6 @@
 		ORDER BY example_num    
 	</select>
 	<!-- 문제 단건조회 -->
-	<select id="selectQuiz" resultType="TeacherVO">
-		SELECT quiz_id
-		      , quiz_content
-		      , quiz_solution
-		FROM quizes
-		WHERE quiz_id = #{quizId}
-	</select>
 	<select id="infoQuiz" resultType="TeacherVO" parameterType="int">
 		SELECT quiz_id
 		      , quiz_content
@@ -386,6 +370,17 @@
 		FROM subjects s JOIN curriculum c
 		                  ON s.curriculum_id = c.curriculum_id
 		WHERE is_complete = 2
+		ORDER BY subject_name
+	</select>
+	<!-- 과목명 출력(문제 필터링용) -->
+	<select id="selectSubjectAll2" resultType="TeacherVO" parameterType="int">
+		SELECT DISTINCT subject_name
+		FROM subjects s JOIN curriculum c
+		                  ON s.curriculum_id = c.curriculum_id
+		WHERE is_complete = 2
+		<if test="curriId != null and curriId != 0">
+		AND s.curriculum_id = #{curriId}
+		</if>
 		ORDER BY subject_name
 	</select>
 	<!-- 과목명 출력(과목명 삭제를 위해) -->

@@ -69,16 +69,15 @@ tr img {
 		</li>	
 	</ul>
 </div>
-<div id="subSelec" style="padding-top:10px;margin-bottom: 15px;">
+<div id="" style="padding-top:10px;margin-bottom: 15px;">
 	<h2>과목선택</h2>
-	<div class="select-position">
+	<div>
 		<select id="subject" style="width:auto; height:40px;">
-			<th:block th:each="subjectInfo, idxStat : ${subjectList}">
-				<option class="typeSelec" th:value="${subjectInfo.subjectName}">[[${subjectInfo.subjectName}]]</option>
-			</th:block>
+		
 		</select>
 	</div>
 </div>
+
 <div style="">
 	<label style="color:gray;">선택문제 총점</label>
 	<input type=text id="total" style="border:1px black solid;width:50px;position: relative;left: 90px;bottom: 30px;" readonly/>
@@ -142,7 +141,7 @@ tr img {
 							<!-- 해당 영역에 등록된 과목명 및 체크박스 생성  -->
 						</div>
 						<input type="hidden" id="hidden" name="curriculumId"/>	
-						<button type="submit"
+						<button type="button"
 							class="main-btn danger-btn-light square-btn btn-hover" id="delBtn" formaction="subjectdelete">삭제</button>
 					</div>
 				</form>	
@@ -182,7 +181,7 @@ tr img {
 			<div class="modal-body">
 				<p style="text-align: center;">과목명을 입력해주세요!</p>
 				<div style="text-align: center;">
-					<img alt="등록완료버튼" src="/images/failed.png">
+					<img alt="등록실패버튼" src="/images/failed.png">
 				</div>
 			</div>
 			<!-- 모달 푸터 -->
@@ -211,7 +210,31 @@ tr img {
 			</div>
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='' type="button" class="btn btn-primary close"
+				<button id='subAddOk' type="button" class="btn btn-primary close"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 과목 체크 안하고 삭제버튼 눌렀을때 알림 모달창 -->
+<div id="delSubFail" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">과목 삭제 실패</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">과목을 선택하세요</p>
+				<div style="text-align: center;">
+					<img alt="과목 선택 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='' type="button" class="btn btn-primary"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div>
@@ -223,19 +246,19 @@ tr img {
 		<div class="modal-content">
 			<!-- 모달 헤더 -->
 			<div class="modal-header">
-				<h5 class="modal-title">등록 완료</h5>
+				<h5 class="modal-title">삭제 확인</h5>
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<!-- 모달 본문 -->
 			<div class="modal-body">
-				<p style="text-align: center;">등록이 완료되었습니다!</p>
+				<p style="text-align: center;">삭제를 원하시면 확인버튼을 눌러주세요.</p>
 				<div style="text-align: center;">
-					<img alt="등록완료버튼" src="/images/registration.png">
+					<img alt="삭제완료버튼" src="/images/registration.png">
 				</div>
 			</div>
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
-				<button id='' type="button" class="btn btn-primary close"
+				<button id='subDelOk' type="button" class="btn btn-primary close"
 					data-dismiss="modal">확인</button>
 			</div>
 		</div>
@@ -295,14 +318,15 @@ tr img {
 		<div class="modal-content">
 			<!-- 모달 헤더 -->
 			<div class="modal-header">
-				<h5 class="modal-title"></h5>
+				<h5 class="modal-title">문제 선택 완료</h5>
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<!-- 모달 본문 -->
 			<div class="modal-body">
-				<p style="text-align: center;">다음 화면으로 넘어갑니다.</p>
+				<p style="text-align: center;">선택한 문제를 출제하시겠습니까?</p>
+				<p style="text-align: center;">출제를 원하실경우 확인버튼을 눌러주세요.</p>
 				<div style="text-align: center;">
-					<img alt="등록완료버튼" src="/images/registration.png">
+					<img alt="문제선택버튼" src="/images/registration.png">
 				</div>
 			</div>
 			<!-- 모달 푸터 -->
@@ -369,7 +393,7 @@ var curriId = 0;
 var solution = '';
 var answer = [];
 var eAnswer = [];
-var subjectName = ''; // 필터링에 사용될 과목명
+var subjectName = 'Java'; // 필터링에 사용될 과목명
 var textContent1 = '';
 var textContent2 = '';
 var textContent3 = '';
@@ -383,6 +407,40 @@ var exampleAnswer5 = '';
 var storageContent = [];
 var storageScore = []; 
 var storageQId = [];
+//--------------------------------------------
+// 과목명 select창 조회 ajax
+//--------------------------------------------
+function allSubList(){
+	let reCurr = window.localStorage.getItem('reCurriculumId')
+	if(reCurr == null){
+		curriId = 0;
+	} else {
+		curriId = reCurr
+	}
+	
+	$.ajax({
+		url : "subjecAllList",
+		type : "get",
+		data : {curriId : curriId},
+		async : false,
+		
+		success : function(data){
+			data.forEach((item,idx) => {
+				subjectName = item.subjectName;
+				
+				let subL = `
+				<option class="typeSelec" value="${subjectName}">${subjectName}</option>
+				`;
+				
+				$('#subject').append(subL)
+			})
+		},
+		error : function(err){
+			console.log('에러입니다');
+		}
+	});
+}
+allSubList();
 
 //--------------------------------------------
 // 퀴즈 문제 전체를 불러오는 함수
@@ -541,18 +599,19 @@ function quizContentList(page, subjectName){
 			alert('실패');
 		}
 	}); // 문제 전체 조회 ajax (필터링) 종료
+	
 }; //퀴즈 문제 전체를 불러오는 함수 종료
 
 //--------------------------------------------
 // 과목 추가/삭제 모달창에서 과목창 띄워주는 함수
 //--------------------------------------------
-function subList(curriId){
+function subList(){
 	curriId = $('#curr').val();
 	$('#insertSub').val(curriId);
 	$('#insertSub').attr('name','curriculumId');
 	$.ajax({
 		url : "subjectCurrList",
-		type : "post",
+		type : "get",
 		data : {curriId : curriId},
 		
 		success : function(data){
@@ -578,16 +637,36 @@ function subList(curriId){
 		}
 	}); 
 }
-subList(curriId);
+subList();
 //--------------------------------------------
-//과목 추가/삭제 모달창에서 과정명이 바뀌면 과목명도 같이 바뀌는 필터, curriculumId값 자동 등록.
+// 과목 추가/삭제 모달창에서 과정명이 바뀌면 과목명도 같이 바뀌는 필터, curriculumId값 자동 등록.
 //--------------------------------------------
 $('#curr').on('change', function(){
 		curriId = $(this).val();
 		$('#insertSub').val(curriId);
 		$('#insertSub').attr('name','curriculumId');
-		subList(curriId);
+		subList();
 });
+
+//--------------------------------------------
+// 과목삭제에서 체크박스 누르고 삭제버튼 누를시 삭제되는 기능
+//--------------------------------------------
+$('.form-check').on('click', '.checkbox', function(){
+	var chkVal = $(this).val();
+	curriId = $('#curr').val(); // 선택한 과정에서 curriculum_id값을 받아온다.
+	$('input[type="checkbox"][name="subjectName"]').click(function(){
+		if($(this).prop('checked')){
+		    $('input[type="checkbox"][name="subjectName"]').prop('checked',false);
+		    $(this).prop('checked',true);
+	  	}
+	});
+	if($(".checkbox").is(":checked")){
+		$('#hidden').val(curriId);
+		$("#subDelOk").attr("onclick", "location.href='/admin/subjectdelete?subjectName=" + chkVal + '&curriculumId='+ curriId +"'");
+	} else if($(".checkbox").is(":checked") == false){
+		$("#delBtn").attr("onclick", "");
+	};
+})															
 //--------------------------------------------
 // 과목추가/삭제모달 알림창 뜨는거
 //--------------------------------------------
@@ -601,39 +680,20 @@ function validationCheck(event){
 		return;
 	} else {
 		$('#okModal').modal('show');
-		$('#insertForm').submit();
+		$('#subAddOk').on('click', function(){
+			$('#insertForm').submit();
+		})	
 	}
 }
 
-
 $('#delBtn').on('click',function(){
-	if($('#delBtn').submit()){
-		$('#delModal').modal('show');
+	if($(".checkbox").is(":checked") == false){
+		$('#delSubFail').modal('show');
+		return;
 	} else {
-		alert('오류 발생.')
+		$('#delModal').modal('show');
 	}
 })
-
-//--------------------------------------------
-// 과목삭제에서 체크박스 누르고 삭제버튼 누를시 삭제되는 기능
-//--------------------------------------------
-$('.form-check').on('click', '.checkbox', function(){
-	var chkVal = $(this).val();
-	curriId = $('#curr').val();
-	$('input[type="checkbox"][name="subjectName"]').click(function(){
-		  if($(this).prop('checked')){
-		     $('input[type="checkbox"][name="subjectName"]').prop('checked',false);
-		     $(this).prop('checked',true);
-		    }
-	});
-	if($(".checkbox").is(":checked")){
-		$('#hidden').val(curriId);
-		$("#delBtn").attr("onclick", "location.href='/subjectdelete?subjectName=" + chkVal + '&curriculumId='+ curriId +"'");
-		
-	} else if($(".checkbox").is(":checked") == false){
-		$("#delBtn").attr("onclick", "");
-	};
-})															
 
 //--------------------------------------------
 // 모달창 작업
@@ -647,7 +707,7 @@ $('#subBtn').on('click', function(e){
 //--------------------------------------------
 // 과목명 필터링해서 문제 출력
 //--------------------------------------------
-$('#subject').on('change', function(){
+/* $('#subject').on('change', function(){
 	console.log('셀렉트 바뀜');
 	if($(this).val() == 'all'){
 		console.log('과목선택이 전체선택')
@@ -658,7 +718,7 @@ $('#subject').on('change', function(){
 		subjectName = $(this).val();
 		quizContentList(page, subjectName);
 	}
-});
+}); */
 
 //--------------------------------------------
 // 시험출제 버튼 누르면 선택된 문제들이 localstorage에 저장되고 페이지가 넘어감.
@@ -762,6 +822,7 @@ window.onload = function() {
 
 //--------------------------------------------
 // 재시험 출력 페이지에서 넘어오면 다음 버튼 눌렀을때 reCurriculumId값을 가져오게 된다.
+// reCurriculumId값이 존재할 경우 강의실 선택버튼 페이지를 건너띄게 된다.
 //--------------------------------------------
 let reCurriculumId = window.localStorage.getItem('reCurriculumId')
 

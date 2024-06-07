@@ -139,11 +139,9 @@ public class ExamController {
 	@GetMapping("quizlist")
 	public String quizList(TeacherVO teacherVO, Model model) {
 		List<TeacherVO> list = examService.currList();
-		List<TeacherVO> findVO = examService.answerList1(teacherVO);
 		List<TeacherVO> list2 = examService.subjectList();
 		
 		model.addAttribute("currList", list);
-		model.addAttribute("answerList", findVO);
 		model.addAttribute("subjectList", list2);
 		return "cbt_teacher/quiz";
 	}
@@ -268,10 +266,18 @@ public class ExamController {
 	//--------------------------------------------
 	// 과정명에 맞는 과목명만 출력
 	//--------------------------------------------
-	@PostMapping("subjectCurrList")
+	@GetMapping("subjectCurrList")
 	@ResponseBody
 	public List<TeacherVO> subjectCurrList(@RequestParam("curriId") int cId) {
 		return examService.subjectListOfCurr(cId);
+	}
+	//--------------------------------------------
+	// 과정명에 맞는 과목명만 출력 - 테스트중임. 삭제예정
+	//--------------------------------------------
+	@GetMapping("subjecAllList")
+	@ResponseBody
+	public List<TeacherVO> subjecAllList(@RequestParam("curriId") int cId) {
+		return examService.subjectList2(cId);
 	}
 	
 	//--------------------------------------------
