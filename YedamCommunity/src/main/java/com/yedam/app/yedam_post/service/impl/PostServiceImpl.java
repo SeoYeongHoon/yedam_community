@@ -420,13 +420,11 @@ public class PostServiceImpl implements PostService {
 
 	@Override
     public int cancelVote(Map<String, Object> map) {
-        System.out.println("Vote canceled in service.");
 		return postMapper.deleteVote(map);
     }
 
     @Override
     public int submitVote(Map<String, Object> map) {
-        System.out.println("Vote submitted in service.");
 		return postMapper.insertVoteUser(map);
     }
 

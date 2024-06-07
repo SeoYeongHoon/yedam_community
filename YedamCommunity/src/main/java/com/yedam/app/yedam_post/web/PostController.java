@@ -28,6 +28,8 @@ import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_common.PageDTO;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
+import com.yedam.app.yedam_post.service.PostCommentVO;
+import com.yedam.app.yedam_post.service.PostReplyVO;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.ReportVO;
@@ -175,12 +177,22 @@ public class PostController {
 	    String userName = userVO.getUsername();
 	    String userType = userVO.getUserType();
 	    
+	    // 댓글 조회
+	    List<PostReplyVO> replylist = postService.getPostReply(postId);
+	    
+	    for (PostReplyVO postreplyVO : replylist) {
+	        // 대댓글 조회
+	        List<PostCommentVO> commentlist = postService.getPostComment(postreplyVO);
+	        postreplyVO.setComments(commentlist);
+	    }
+	    
 	    // 파일 조회
 	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
 	    for (BoardFilesVO file : boardFilesVO) {
 	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
 	        file.setExists(find.exists());
 	    }
+	    postVO.setReplies(replylist);
 	    postVO.setBoardFiles(boardFilesVO);	   
 	    postVO.setBoardId(boardId);
 	    postVO.setPostId(postId);
@@ -253,14 +265,17 @@ public class PostController {
 	// --------------------------------------------
 	// 게시글 질문 토론 등록
 	// --------------------------------------------
-	@GetMapping("/postInsertVote")
-    public String postInsertForm(Model model
+	@GetMapping("/postInsertVote/{boardType}")
+    public String postInsertFormvote(Model model
     		                   , PostVO postVO
+    		                   , @PathVariable int boardType
     		                   , Authentication authentication) {
 		
+		postVO.setBoardType(boardType);
+		int boardId = postService.boardTypeSet(boardType);
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		postVO.setWriter(userVO.getUsername());
-        // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
+        postVO.setBoardId(boardId);
         model.addAttribute("post", postVO);
         return "posts/postInsertvote";
     }
@@ -285,6 +300,7 @@ public class PostController {
 	@GetMapping("/postvote/{boardId}/{postId}")
 	public String getPostVoteDetail(Model model,
    	  	 	     					PostVO postVO,
+   	  	 	     				    @PathVariable int postId,
 			                        Authentication authentication) {
 		// 게시글 단건 조회
 	    postVO = postService.getPostVotedetail(postVO);
@@ -295,11 +311,11 @@ public class PostController {
 	    String userName = userVO.getUsername();
 	    String userType = userVO.getUserType();
 	    
-	    // 값 로그로 출력
-	    System.out.println("postVO.voteItemId: " + postVO.getVoteItemId());
-	    System.out.println("find.voteItemId: " + find.getVoteItemId());
+	   // 댓글 조회
+	    List<PostReplyVO> replylist = postService.getPostReply(postId);
 	    
-	    
+	   postVO.setPostId(postId);
+	   postVO.setReplies(replylist);
 	    model.addAttribute("postvote", postVO);
 	    model.addAttribute("postvoteno",find);
 	    // 작성자 여부 추가
@@ -308,9 +324,6 @@ public class PostController {
 	    
 	    return "posts/postInfovote";
 	}
-	
-	
-	
 	
 	// --------------------------------------------
 	// 게시글 삭제 처리
@@ -474,18 +487,11 @@ public class PostController {
 
 	    Integer voteCheck = postService.voteExists(map); // 유저가 투표를 했는지 확인
 
-	    System.out.println("voteId: " + voteId);
-	    System.out.println("userId: " + userId);
-	    System.out.println("voteItemId: " + voteItemId);
-	    System.out.println("voteCheck: " + voteCheck);
-
 	    if (voteCheck == 0) {
 	        postService.submitVote(map); // 투표하지 않은 경우, 투표 추가
-	        System.out.println("Vote submitted.");
 	        postService.VoteCountUP(map);
 	    } else {
 	        postService.cancelVote(map); // 이미 투표한 경우, 투표 취소
-	        System.out.println("Vote canceled.");
 	        postService.VoteCountDOWN(map);
 	    }
 
