@@ -55,6 +55,7 @@
 	// 로그인 처리 및 아이디/비번 틀렸을 때 로직
 	//--------------------------------------------
 	$(document).ready(function() {
+		window.localStorage.clear(); // 계정 전환시 로컬스토리지 초기화
 	    function login() {
 	        const username = $('#loginId').val();
 	        const password = $('#password').val();

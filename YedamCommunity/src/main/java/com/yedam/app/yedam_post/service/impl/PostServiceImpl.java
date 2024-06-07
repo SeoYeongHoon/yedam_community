@@ -437,4 +437,14 @@ public class PostServiceImpl implements PostService {
     public int VoteCountDOWN(Map<String, Object> map) {
         return postMapper.VoteCountDOWN(map);
     }
+
+	@Override
+	public int findByCurriculum(int curriculumId) {
+		return postMapper.findByCurriculum(curriculumId);
+	}
+
+	@Override
+	public int findIdByCurriculum(int curriculumId) {
+		return postMapper.findIdByCurriculum(curriculumId);
+	}
 }

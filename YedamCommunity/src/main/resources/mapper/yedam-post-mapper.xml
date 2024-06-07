@@ -338,6 +338,21 @@
 		WHERE   board_type = #{boardType}
     </select>
     
+    <!-- curriculumId로 boardId, boardType 찾기 -->
+    <select id="findByCurriculum" resultType="int">
+    	SELECT board_type
+    	FROM   boards
+    	WHERE  curriculum_id = #{curriculumId}
+    </select>
+    
+    <!-- curriculumId로 boardId, boardType 찾기 -->
+    <select id="findIdByCurriculum" resultType="int">
+    	SELECT board_id
+    	FROM   boards
+    	WHERE  curriculum_id = #{curriculumId}
+
+    </select>
+    
     <!-- 해당 커리큘럼 게시글 조회 -->
      <select id="curriculumSelect" resultType="PostVO">
  		SELECT 

@@ -60,6 +60,14 @@ public class LoginUserVO implements UserDetails {
 		return userVO.getTel();
 	}
 	
+	public String getCompanyInfo() {
+		return userVO.getCompanyInfo();
+	}
+	
+	public int getUserCurriculumId() {
+		return userVO.getCurriculumId();
+	}
+	
 	public String getUserCurriculumName() {
 		return userVO.getCurriculumName();
 	}

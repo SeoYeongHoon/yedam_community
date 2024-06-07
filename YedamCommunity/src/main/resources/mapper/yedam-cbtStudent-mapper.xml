@@ -237,8 +237,13 @@
 		FROM    tests a 
 				JOIN answerbox b ON(a.test_id = b.test_id)
         		JOIN answers c ON(b.quiz_id = c.quiz_id)
-        		JOIN quizbox d ON(c.quiz_id = d.quiz_id)
-		WHERE   d.test_id = #{testId}
+        		JOIN (SELECT  quiz_id
+        					  ,quiz_content
+        					  ,quiz_score
+                     FROM     quizbox
+                     WHERE 	  quiz_id = #{quizId}
+                     AND	  test_id = #{testId}) d ON(b.quiz_id = d.quiz_id)
+		WHERE   b.test_id = #{testId}
 		AND		d.quiz_id = #{quizId}
 		GROUP BY d.quiz_id
          		 ,d.quiz_content
