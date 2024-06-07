@@ -16,9 +16,7 @@
 	<div class="card-style"
 		style="border: 1px solid gray; border-radius: 20px; width: 900px; margin: 0 auto; margin-top: 100px; margin-bottom: 100px;">
 		<br> <br>
-		<h1 th:if="${isResult == 0 && dateComp == 1}" style="text-align: center;">미응시</h1>
-		<h1 th:if="${isResult == 0 && dateComp == 0}" style="text-align: center;">응시하기</h1>
-		<h1 th:if="${isResult == 1}" style="text-align: center;">응시완료</h1>
+		<h1 th:if="${isResult == 0 && dateComp == 0}" style="text-align: center;">시험정보</h1>
 		<br> <br>
 		<table class="table">
 			<tr>
@@ -31,7 +29,7 @@
 			</tr>
 			<tr>
 				<th class="tdetail_2">응시기간</th>
-				<td>[[${#dates.format(testDetail.testDate, 'yyyy년 MM월 dd일')}]]</td>
+				<td>[[${#dates.format(testDetail.testDate, 'yyyy-MM-dd')}]]</td>
 			</tr>
 			<tr>
 				<th class="tdetail_2">제한시간</th>

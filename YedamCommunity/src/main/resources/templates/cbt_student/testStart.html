@@ -205,7 +205,7 @@
 	<!-- 문제갱신되는 부분 -->
 	<div id="quiz" class="card-style col-lg-10" style="height: 800px">
 		<div>
-			<h1>[[${page}]]. [[${testQuiz.quizContent}]]</h1>
+			<p style="font-size: 30px;">[[${page}]]. [[${testQuiz.quizContent}]]</p>
 		</div>
 		<p class="tstart_5">([[${testQuiz.quizScore}]]점)</p>
 		<br> <br> <br>
@@ -236,7 +236,6 @@ let testTimeSec = document.querySelector('#testTimeSec');
 let toastMsg = document.querySelector('#toast_message');
 let testTime = testTimeMin.innerText; //서버에서 받아온 시험시간
 let min = testTime; //분
-//let min = 10;
 let sec = 0; //초
 setInterval(function(){
 	sec--;
@@ -569,10 +568,8 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 	div.setAttribute('id', 'quiz');
 	div.setAttribute('class', 'card-style col-lg-10');
 	div.setAttribute('style', 'width: 800px');
-	let h1 = document.createElement('h1'); //h1태그 생성 >> 문제내용
-	h1.innerText = null;
-	let p = document.createElement('p'); //p태그 생성 >> 문제배점
-	p.innerText = null;
+	let p1 = document.createElement('p'); //p태그 생성 >> 문제제목
+	let p2 = document.createElement('p'); //p태그 생성 >> 문제배점
 	let br1 = document.createElement('br');
 	let br2 = document.createElement('br');
 	//<문제갱신 ajax>
@@ -591,10 +588,11 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 		traditional: true,
 		success: function(data){
 			let div1 = document.createElement('div'); //문제내용 감싸기
-			h1.innerText = page + '. ' + data.quizContent; //문제내용
-			p.innerText = '(' + data.quizScore + '점)'; //문제배점
-			div1.append(h1);
-			div1.append(p);
+			p1.innerText = page + '. ' + data.quizContent; //문제내용
+			p1.setAttribute('style', 'font-size: 30px');
+			p2.innerText = '(' + data.quizScore + '점)'; //문제배점
+			div1.append(p1);
+			div1.append(p2);
 			div1.append(br1);
 			div1.append(br2);
 			div.append(div1);

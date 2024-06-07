@@ -1,6 +1,5 @@
 package com.yedam.app.yedam_examstudent.web;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -72,7 +71,8 @@ public class CbtStudentController {
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		//시험 전체 목록에 따른 시험결과, 피드백, 미응시 찾기
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-		List<ExamResultVO> list2 = new ArrayList<>(); //피드백 관련 변수
+		testVO.setUserId(userVO.getuserId());
+		List<ExamResultVO> list2 = cbtStudentService.isTestFeedback(testVO); //피드백 관련 변수
 		int[] array1 = new int[list1.size()]; //시험결과 유무 관련 변수
 		for(int i = 0; i < list1.size(); i++) {
 			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -81,12 +81,6 @@ public class CbtStudentController {
 			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
 			array1[i] = (cbtStudentService.isTestResult(testVO));
-			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-			//피드백의 존재 유무 찾기
-			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-			testVO.setUserId(userVO.getuserId());
-			testVO.setTestId(list1.get(i).getTestId());
-			list2.add(cbtStudentService.isTestFeedback(testVO));
 		}
 		model.addAttribute("testSub", list); //시험과목
 		model.addAttribute("testList", list1); //시험목록
@@ -104,11 +98,11 @@ public class CbtStudentController {
 	@ResponseBody
 	@GetMapping("listFilter")
 	public Map<String, Object> listFilter(@RequestParam("type") String type,
-								   @RequestParam("filterData") String filterData,
-								   @RequestParam("page") int page,
-								   Authentication authentication,
-								   TestVO testVO,
-								   ExamResultVO examResultVO){
+								   			@RequestParam("filterData") String filterData,
+								   			@RequestParam("page") int page,
+								   			Authentication authentication,
+								   			TestVO testVO,
+								   			ExamResultVO examResultVO){
 		//ㅡㅡㅡ
 		//세션값
 		//ㅡㅡㅡ
@@ -127,7 +121,8 @@ public class CbtStudentController {
 		testVO.setUserId(userVO.getuserId());
 		testVO.setPage(page);
 		List<TestVO> list1 = cbtStudentService.testListAll(testVO);
-		List<ExamResultVO> list2 = new ArrayList<>(); //피드백 관련 변수
+		testVO.setUserId(userVO.getuserId());
+		List<ExamResultVO> list2 = cbtStudentService.isTestFeedback(testVO); //피드백 관련 변수
 		int[] array1 = new int[list1.size()]; //시험결과 유무 관련 변수
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		//시험 전체 목록에 따른 시험결과, 피드백, 미응시 찾기
@@ -139,12 +134,6 @@ public class CbtStudentController {
 			testVO.setUserId(userVO.getuserId());
 			testVO.setTestId(list1.get(i).getTestId());
 			array1[i] = (cbtStudentService.isTestResult(testVO));
-			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-			//피드백의 존재 유무 찾기
-			//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-			testVO.setUserId(userVO.getuserId());
-			testVO.setTestId(list1.get(i).getTestId());
-			list2.add(cbtStudentService.isTestFeedback(testVO));
 		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("testList",list1); //시험목록
@@ -345,11 +334,6 @@ public class CbtStudentController {
 			                 int min, 
 			                 int sec,
 			                 int[] randQuizId,
-			                 int[] one,
-				             int[] two,
-				             int[] three,
-				             int[] four,
-				             int[] five,
 			                 ExamResultVO examResultVO,
 			                 QuizboxVO quizboxVO,
 			                 Model model,
