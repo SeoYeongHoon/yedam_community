@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_common.PageDTO;
+import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
 import com.yedam.app.yedam_post.service.PostService;
@@ -50,6 +51,9 @@ public class PostController {
 	
 	@Autowired
 	private PostService postService;
+	
+	@Autowired
+	CurriculumService curriculumService;
 
 	// --------------------------------------------
 	// 게시글 리스트 조회
@@ -115,24 +119,24 @@ public class PostController {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		int userId = userVO.getuserId();
 		
-		int boardId =  postService.boardId(userId);
+		// int boardId =  postService.boardId(userId);
 		
-		List<CurriculumVO> List = postService.curriculumList();
+		List<CurriculumVO> list = postService.curriculumList();
 		List<PostVO> postList = postService.postlist();
-		model.addAttribute("boardId",boardId);
-		model.addAttribute("curriculum",List);
-		model.addAttribute("postList",postList);
+		// model.addAttribute("boardId",boardId);
+		model.addAttribute("curriculum", list);
+		model.addAttribute("postList", postList);
 		return "posts/curriculumPost";
 	}
 	
-	//--------------------------------
-	// 수교과정별게시판 게시글 전체 조회
-	//--------------------------------
-	 @GetMapping("/postList")
-	 @ResponseBody 
-	 public List<PostVO> curriculumPost() {
-		 return  postService.postlist();
-	  }
+//	//--------------------------------
+//	// 수교과정별게시판 게시글 전체 조회
+//	//--------------------------------
+//	 @GetMapping("/postList")
+//	 @ResponseBody 
+//	 public List<PostVO> curriculumPost() {
+//		 return  postService.postlist();
+//	  }
 	 
 	//--------------------------------
 	// 수교과정별게시판 갤러리 조회
@@ -210,7 +214,6 @@ public class PostController {
         model.addAttribute("post", postVO);
         return "posts/postInsert";
     }
-	
 
 	// --------------------------------------------
 	// 게시글 등록 처리
@@ -249,6 +252,78 @@ public class PostController {
         postService.createPost(postVO);
         return "redirect:/all/posts/" + postVO.getBoardType();
     }
+	
+	// --------------------------------------------
+	// 수료게시판 게시글 등록
+	// --------------------------------------------
+	@GetMapping("/curriculumPostInsert")
+    public String curriculumPostInsert(Model model
+    		                   , PostVO postVO
+//	    		                   , @PathVariable int boardType
+//    		                   , @RequestParam String curriculumSelect
+    		                   , Authentication authentication) {
+//		    postVO.setBoardType(boardType);
+//		    int boardId = postService.boardTypeSet(boardType);
+//		    postVO.setBoardId(boardId);
+		
+        // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+        List<CurriculumVO> currList = curriculumService.gradSelectAll();
+		model.addAttribute("class", currList);
+		
+		if (!userVO.getUserType().equals("ROLE_ADMIN")) {
+			postVO.setBoardId(postService.findIdByCurriculum(userVO.getUserCurriculumId()));
+			postVO.setBoardType(postService.findByCurriculum(userVO.getUserCurriculumId()));
+		}
+		
+        postVO.setWriter(userVO.getUsername());
+        model.addAttribute("post", postVO);
+        return "posts/curriculumPostInsert";
+    }
+	
+	// --------------------------------------------
+	// 게시글 등록 처리
+	// --------------------------------------------
+	@PostMapping("/coursePostInsert")
+    public String coursePostInsert(PostVO postVO,
+    		                       @RequestParam("file") MultipartFile file,
+    		                       @RequestParam int curriculumSelect,
+                                   Authentication authentication) {
+        System.err.println("과정 선택값: " + curriculumSelect);
+        if (!file.isEmpty()) {
+            String fileName = file.getOriginalFilename();
+            String filePath = uploadPath + fileName;
+
+            File directory = new File(uploadPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            Path savePath = Paths.get(filePath);
+            try {
+                file.transferTo(savePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            postVO.setBoardfileName(fileName);
+            postVO.setBoardfileSize(file.getSize());
+            postVO.setBoardfileLocation(fileName);
+            postVO.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
+        }
+
+        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+        postVO.setUserId(userVO.getuserId());
+        postVO.setWriter(userVO.getUsername());
+        postVO.setCreateDate(new Date());
+        postVO.setUpdateDate(new Date());
+        
+        postVO.setBoardId(postService.findIdByCurriculum(curriculumSelect));
+        postVO.setBoardType(postService.findByCurriculum(curriculumSelect));
+        
+        postService.createPost(postVO);
+        return "redirect:/all/curriculumPost";
+    }
+	
 	
 	// --------------------------------------------
 	// 게시글 질문 토론 등록

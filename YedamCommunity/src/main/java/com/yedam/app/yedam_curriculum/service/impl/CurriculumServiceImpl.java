@@ -16,10 +16,16 @@ public class CurriculumServiceImpl implements CurriculumService {
 	@Autowired
 	CurriculumMapper curriculumMapper;
 	
-	//과정 전체조회
+	// 수강 중인 과정 전체조회
 	@Override
 	public List<CurriculumVO> CurriculumList() {
 		return curriculumMapper.cSelectAll();
+	}
+
+	// 수료한 과정 전체 조회
+	@Override
+	public List<CurriculumVO> gradSelectAll() {
+		return curriculumMapper.gradSelectAll();
 	}
 
 	// 과정 선택 리스트(회원가입 때 사용)

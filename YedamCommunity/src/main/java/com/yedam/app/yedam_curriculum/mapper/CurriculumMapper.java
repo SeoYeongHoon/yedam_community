@@ -14,6 +14,9 @@ public interface CurriculumMapper {
 	// 수강과정 리스트
 	public List<CurriculumVO> cSelectAll();
 	
+	// 수료한 과정 전체 조회
+	public List<CurriculumVO> gradSelectAll();
+	
 	// 수강과정 등록
 	public int insertCurriculum(CurriculumVO curriculumVO);
 	
