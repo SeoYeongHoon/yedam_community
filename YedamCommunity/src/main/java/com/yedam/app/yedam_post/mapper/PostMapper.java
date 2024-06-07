@@ -142,4 +142,7 @@ public interface PostMapper {
 	// 투표 카운트 - 1
     int VoteCountDOWN(Map<String, Object> map);
     
+    public int findByCurriculum(int curriculumId);
+    
+    public int findIdByCurriculum(int curriculumId);
 }

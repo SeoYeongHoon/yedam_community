@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.yedam_user.service.UserVO;
 
 public interface CurriculumService {
-	//과정 전체 조회
+	// 수강 중인 과정 전체 조회
 	public List<CurriculumVO> CurriculumList();
+	
+	// 수료한 과정 전체 조회
+	public List<CurriculumVO> gradSelectAll();
 	
 	// 과정 추가
 	public int insertCurriculum(CurriculumVO curriculumVO);
