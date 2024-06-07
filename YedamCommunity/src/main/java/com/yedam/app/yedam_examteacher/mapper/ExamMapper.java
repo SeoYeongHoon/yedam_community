@@ -24,8 +24,6 @@ public interface ExamMapper {
 	//--------------------------------------------
 	// 문제 등록/조회 페이지 기능 모음	
 	//--------------------------------------------
-	public List<TeacherVO> selectQuizAll(); // 문제 저장소에 문제 출력 => 필터출력으로 대체. 나중에 삭제.
-	public List<TeacherVO> selectAnswerAll(TeacherVO teacherVO); // 문제 저장소에 지문 출력 -> 나중에 삭제
 	public List<TeacherVO> quizAnswer(@Param("qId") int qId); // 문제 지문 출력
 	public int insertQuiz(TeacherVO teacherVO); //객관식문제 등록
 	public int insertQuizJu(TeacherVO teacherVO); //주관식문제 등록
@@ -35,11 +33,11 @@ public interface ExamMapper {
 	public int insertAnswer4(TeacherVO teacherVO); // 문제 정답지문 등록
 	public int insertAnswer5(TeacherVO teacherVO); // 문제 정답지문 등록
 	public int insertAnswerJu(TeacherVO teacherVO); // 주관식 문제 정답지문 등록
-	public TeacherVO selectQuiz(TeacherVO teacherVO); // 문제 단건 조회 -> 나중에 삭제
 	public List<TeacherVO> selectCurr(); // 과정명 출력(과목 등록할때 사용)
 	public int insertSubject(TeacherVO teacherVO); // 과목 등록
 	public int deleteSubject(TeacherVO teacherVO); // 과목 삭제
 	public List<TeacherVO> selectSubjectAll(); // 과목명 출력	(문제 필터링할때 사용)
+	public List<TeacherVO> selectSubjectAll2(@Param("curriId") int cId); // 과목명 출력	(문제 필터링할때 사용)
 	public List<TeacherVO> subjectOfCurr(@Param("curriId") int cId); // 과목명 출력 (과목 추가/삭제때 사용)
 	//public List<TeacherVO> filterQuiz(@Param("sName") String sName); // 등록된 문제 필터출력 
 	List<TeacherVO> filterQuiz(Map<String, Object> params); // 문제 조회(페이징)

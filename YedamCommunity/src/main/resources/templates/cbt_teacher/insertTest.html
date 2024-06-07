@@ -3,8 +3,6 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <form th:action="@{/}" method="post" th:object="${teacherVO}">
 	<!-- ======= 시험 이름 입력 start ======= -->
 	<div class="input-style-1">
@@ -65,10 +63,13 @@
 	</div>
 	<ul class="buttons-group">
 		<li>
-			<button type="button"
+			<!-- <button type="button"
 				class="main-btn primary-btn square-btn btn-hover" id="addBtn"
 				th:onclick="|location.href='@{/admin/testlist}'|">
-				시험 출제하기</button>
+				시험 출제하기</button> -->
+			<button type="button"
+				class="main-btn primary-btn square-btn btn-hover" id="addBtn">
+				시험 출제하기</button>	
 		</li>
 		<li>
 			<button type="button"
@@ -77,6 +78,53 @@
 		</li>
 	</ul>
 </form>
+
+<!-- 내용 확인 모달창 -->
+<div id="errModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 실패</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">빈값을 입력해주세요!</p>
+				<div style="text-align: center;">
+					<img alt="빈값체크" th:src="@{/images/failed.png}">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='errBtn' type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 등록완료 모달 -->
+<div id="addModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">등록 완료</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;">출제가 완료되었습니다.</p>
+				<div style="text-align: center;">
+					<img alt="등록완료버튼" src="/images/registration.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='addOk' type="button" class="btn btn-primary close" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 var tName = '';
 var tContent = '';
@@ -96,7 +144,7 @@ var subjectName = window.localStorage.getItem('qSubjectName');
 //--------------------------------------------
 // input태그에 값 입력시 변수에 각각의 value값들 저장
 //--------------------------------------------
-$('#testName').on('change', function() {
+/* $('#testName').on('change', function() {
 	tName = $('#testName').val();
 	//window.localStorage.setItem('testName', tName);
 });
@@ -112,7 +160,7 @@ $('#testTime').on('change', function() {
 });
 $('#testDate').on('change', function(){
 	tDate = $('#testDate').val();
-})
+}) */
 
 // localstorage에 저장된 복수의 값을 배열 타입으로 변환
 var arryQContent = JSON.parse(qContent); // 시험 문제가 모여있는 배열	
@@ -154,89 +202,100 @@ $('#checkbox-1').on('change', function() {
 // 3. test_targets 테이블에 선택된 학생들에 대한 숫자만큼 insert문 동작
 //--------------------------------------------
 $('#addBtn').on('click', function() {
-	//--------------------------------------------
-	// tests 테이블에 insert 동작.
-	//--------------------------------------------
+	tName = $('#testName').val();
+	tContent = $('#testContent').val();
+	tTime = $('#testTime').val();
+	tDate = $('#testDate').val();
 	passScore = $('#passScore').val();
-	let obj = {
-		"curriculumId" : curriculumId,
-		"testContent" : tContent,
-		"testTime" : tTime,
-		"testName" : tName,
-		"classId" : classId,
-		"passScore" : passScore,
-		"subjectName" : subjectName,
-		"testDate" : tDate
-	};
-	$.ajax({
-		url : "testinsert",
-		type : "post",
-		async : false,
-		data : obj,
+	
+	if(tContent === '' || tTime === '' || tTime == 0 || tName === '' || tDate === '' || passScore === ''|| storageUser.length == 0){
+		$('#errModal').modal('show');
+	} else {
+		//--------------------------------------------
+		// tests 테이블에 insert 동작.
+		//--------------------------------------------
+		let obj = {
+			"curriculumId" : curriculumId,
+			"testContent" : tContent,
+			"testTime" : tTime,
+			"testName" : tName,
+			"classId" : classId,
+			"passScore" : passScore,
+			"subjectName" : subjectName,
+			"testDate" : tDate
+		};
+		$.ajax({
+			url : "testinsert",
+			type : "post",
+			async : false,
+			data : obj,
+			
+			success : function(data) {
+				testId = data;
+			},
+			error : function(err) {
+				alert('시험 등록 실패');
+				return;
+				
+			}
+		});
 		
-		success : function(data) {
-			testId = data;
-		},
-		error : function(err) {
-			alert('시험 등록 실패');
-			return;
-			
-		}
-	});
-	
-	//--------------------------------------------
-	// quizbox 테이블에 선택된 문제수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
-	//--------------------------------------------
-	obj = {
-	        "quizContent": arryQContent,
-	        "quizId": arryQuizId,
-	        "subjectName": arrySubName,
-	        "curriculumId": curriculumId,
-	        "quizScore": arryQuizScore,
-	        "testId" : testId
-	      };
-	
-	$.ajax({
-		url : "quizboxinsert",
-		type : "post",
-		contentType : 'application/json',
-		data : JSON.stringify(obj),
-		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
-			
-		success : function(data){
-			
-		},
-		error : function(err){
-			alert('시험 등록 실패(문제 등록 실패)');
-		}
-	});
-
-	//--------------------------------------------
-	// test_targets 테이블에 선택된 학생수 만큼 insert 동작(test테이블 값이 먼저 입력되어야 해서 setTimeout함수 사용)
-	//--------------------------------------------
-	obj = {
-	        "userId": storageUser,
-	        "testId" : testId
-	      };
-	
-	$.ajax({
-		url : "testuserinsert",
-		type : "post",
-		contentType : 'application/json',
-		data : JSON.stringify(obj),
-		async : false, // for문 안에서 ajax가 순차적으로 돌아야함.
+		//--------------------------------------------
+		// quizbox 테이블에 선택된 문제수 만큼 insert 동작
+		//--------------------------------------------
+		obj = {
+		        "quizContent": arryQContent,
+		        "quizId": arryQuizId,
+		        "subjectName": arrySubName,
+		        "curriculumId": curriculumId,
+		        "quizScore": arryQuizScore,
+		        "testId" : testId
+		      };
 		
-		success : function(data){
+		$.ajax({
+			url : "quizboxinsert",
+			type : "post",
+			contentType : 'application/json',
+			data : JSON.stringify(obj),
+			async : false,
+				
+			success : function(data){
+				
+			},
+			error : function(err){
+				alert('시험 등록 실패(문제 등록 실패)');
+			}
+		});
+	
+		//--------------------------------------------
+		// test_targets 테이블에 선택된 학생수 만큼 insert 동작
+		//--------------------------------------------
+		obj = {
+		        "userId": storageUser,
+		        "testId" : testId
+		      };
+		
+		$.ajax({
+			url : "testuserinsert",
+			type : "post",
+			contentType : 'application/json',
+			data : JSON.stringify(obj),
+			async : false,
 			
-		},
-		error : function(err){
-			alert('시험 등록 실패(시험 대상자 등록 실패)');
-		}
-	});
-})
-//--------------------------------------------
-// 출제하기 버튼 클릭하면 각 테이블에 정보 저장 기능 종료
-//--------------------------------------------
+			success : function(data){
+				$('#addOk').attr('onclick',"location.href='/admin/testlist'")
+				$('#addModal').modal('show');
+				setTimeout(function () {
+					location.replace('/admin/testlist');
+				}, 3000);
+			},
+			error : function(err){
+				alert('시험 등록 실패(시험 대상자 등록 실패)');
+			}
+		});
+		
+	} // 빈값 체크 if문 종료
+}) // 시험출제버튼 클릭 이벤트 종료
 
 //--------------------------------------------
 // 유저 선택 체크박스 관련 기능 시작
@@ -263,8 +322,9 @@ checkboxes.forEach(function(checkbox) {
 	});
 });
 //--------------------------------------------
-//유저 선택 체크박스 관련 기능 종료
+// 유저 선택 체크박스 관련 기능 종료
 //--------------------------------------------
+
 
 </script>
 </html>

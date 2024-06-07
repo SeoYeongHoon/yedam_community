@@ -124,20 +124,7 @@ public class ExamServiceImpl implements ExamService {
 		examMapper.insertQuizJu(teacherVO);
 		examMapper.insertAnswerJu(teacherVO);
 	}
-	//--------------------------------------------
-	// 등록된 문제 출력 => 필터출력으로 대체. 나중에 삭제.
-	//--------------------------------------------
-	@Override
-	public List<TeacherVO> quizList() {
-		return examMapper.selectQuizAll();
-	}
-	//--------------------------------------------
-	// 등록된 지문 출력 -> 나중에 삭제
-	//--------------------------------------------
-	@Override
-	public List<TeacherVO> answerList1(TeacherVO teacherVO) {
-		return examMapper.selectAnswerAll(teacherVO);
-	}
+
 	//--------------------------------------------
 	// 문제 지문 출력
 	//--------------------------------------------
@@ -145,13 +132,7 @@ public class ExamServiceImpl implements ExamService {
 	public List<TeacherVO> answerList(int qId) {
 		return examMapper.quizAnswer(qId);
 	}
-	//--------------------------------------------
-	// 문제 단건조회(자세히 보기)
-	//--------------------------------------------
-	@Override
-	public TeacherVO quizInfo(TeacherVO teacherVO) {
-		return examMapper.selectQuiz(teacherVO);
-	}
+
 	//--------------------------------------------
 	// 과정명 출력(과목명 추가할때 필요)
 	//--------------------------------------------
@@ -172,6 +153,10 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public List<TeacherVO> subjectList() {
 		return examMapper.selectSubjectAll();
+	}
+	@Override
+	public List<TeacherVO> subjectList2(int cId) {
+		return examMapper.selectSubjectAll2(cId);
 	}
 	//--------------------------------------------
 	// 과목 추가

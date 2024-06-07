@@ -22,15 +22,12 @@ public interface ExamService {
 	//--------------------------------------------
 	public void quizInsert(TeacherVO teacherVO); //객관식문제 등록
 	public void quizInsertJu(TeacherVO teacherVO); //주관식문제 등록
-	public List<TeacherVO> quizList(); // 문제저장소에 문제출력 -> 필터링 출력으로 기능구현함. 마지막에 삭제해야됨
-	public List<TeacherVO> answerList1(TeacherVO teacherVO); // 문제저장소에 지문출력 -> 나중에 삭제
 	public List<TeacherVO> answerList(int qId); // 문제에 대한 지문 출력
-	public TeacherVO quizInfo(TeacherVO teacherVO); // 문제 단건조회 => 나중에 삭제 (getQuizInfo로 진행함)
 	public List<TeacherVO> subjectList(); // 과목명 출력(문제 필터할때 사용)
+	public List<TeacherVO> subjectList2(int cId); // 과목명 출력(문제 필터할때 사용)
 	public int subjectInsert(TeacherVO teacherVO); // 과목명 추가
 	public int subjectDelete(TeacherVO teacherVO); // 과목명 삭제
 	//public Map<String, Object> subjectDelete(TeacherVO teacherVO); // 과목명 삭제 테스트중인 코드
-	//public List<TeacherVO> getQuizFilter(String sName); // 문제 필터링 출력
 	public List<TeacherVO> getQuizFilter(int page, String subjectName); // 문제 필터링 페이징 출력
 	int getQuizCount(String subjectName); // 문제 수 count
 	public List<TeacherVO> getQuizInfo(int qId); // 문제 자세히보기 (단건조회)
