@@ -7,7 +7,6 @@
 
 	<!-- 게시글 등록 - PL/SQL -->
     <insert id="insertPost" parameterType="PostVO" statementType="CALLABLE">
-        <![CDATA[
     DECLARE
         v_post_id NUMBER;
         v_boardfile_id NUMBER;
@@ -56,7 +55,6 @@
               , #{boardfileLocation, jdbcType=VARCHAR}
               , #{boardfileExt,      jdbcType=VARCHAR});
     END;
-    ]]>
     </insert>
 
 	<!-- 게시글 단건조회 -->
@@ -74,9 +72,8 @@
                b.boardfile_id,
                b.boardfile_name,
                b.boardfile_location
-        FROM posts p LEFT JOIN boardfiles b 
-                     ON p.post_id = b.post_id
-                     
+        FROM posts p 
+        LEFT JOIN boardfiles b     ON p.post_id = b.post_id         
         WHERE p.post_id = #{postId}
         AND p.board_id = #{boardId}
 	</select>
@@ -353,6 +350,7 @@
     	SELECT board_id
     	FROM   boards
     	WHERE  curriculum_id = #{curriculumId}
+
     </select>
     
     <!-- 해당 커리큘럼 게시글 조회 -->
@@ -421,7 +419,6 @@
 		WHERE user_id = #{userId}
     </select>
     
-    
     <select id="getPostVoteyes" resultType="PostVO">
     SELECT p.POST_ID,
 		   p.BOARD_ID,
@@ -438,11 +435,10 @@
            i.vote_seq,
            i.vote_item_id         
 	 FROM posts p
-	 LEFT JOIN replies r ON p.post_id = r.post_id
      LEFT JOIN votes v ON p.post_id = v.post_id
      LEFT JOIN vote_items i ON v.vote_id = i.vote_id
-	 WHERE board_id = #{boardId}
-     AND post_id = #{postId}
+	 WHERE p.board_id = #{boardId}
+     AND p.post_id = #{postId}
      AND vote_item_name ='찬성'
     </select>
     
@@ -455,11 +451,10 @@
            i.vote_seq,
            i.vote_item_id
 	 FROM posts p
-	 LEFT JOIN replies r ON p.post_id = r.post_id
      LEFT JOIN votes v ON p.post_id = v.post_id
      LEFT JOIN vote_items i ON v.vote_id = i.vote_id
-	 WHERE board_id = #{boardId}
-     AND post_id = #{postId}
+	 WHERE p.board_id = #{boardId}
+     AND p.post_id = #{postId}
      AND vote_item_name ='반대'
     </select>
     

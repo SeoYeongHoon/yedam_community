@@ -226,7 +226,7 @@
     <button id="updateBtn" type="button" style="display: none">수정</button>
     <button id="deleteBtn" type="button" style="display: none">삭제</button>
   </div>
-  <a th:href="@{/all/post/{boardId}(boardId=${boardId})}">목록</a>
+  <a th:href="@{/all/posts/{boardId}(boardId=${boardId})}">목록</a>
 </div>
 
 <script>
@@ -236,7 +236,6 @@
   let boardId = $('#boardId').val();
   let userType = $('#userType').val();
   let commentId = $('.commentId').val();
-  
   let replies = [];
   $('.replyId').each(function(){
     replies.push($(this).val());
@@ -296,7 +295,7 @@
       data: {postId : postId , boardId:boardId},
       success: function(data){
         $('#deleteModal').modal('show');
-        location.href='/all/post/' + boardId
+        location.href='/all/posts/' + boardId
       },
       error:function(e){
         alert('삭제 실패');
@@ -306,7 +305,7 @@
 
   // 삭제 모달 확인버튼
   $('#okBtn').on('click',function(){
-    location.href='/all/post/'+boardId;
+    location.href='/all/posts/'+boardId;
   });
 
   //--------------------------------------------

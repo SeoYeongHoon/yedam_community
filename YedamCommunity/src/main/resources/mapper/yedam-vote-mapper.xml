@@ -25,7 +25,7 @@
                          , post_like
                          , update_date)
         VALUES (post_id_seq.NEXTVAL
-              , 4
+              , #{boardId}
               , #{userId}
               , #{title}
               , #{postContent}
@@ -47,7 +47,7 @@
         VALUES (vote_id_seq.NEXTVAL
              , #{voteEndDate}
              , 0
-             , 4
+             , #{boardId}
              , v_post_id);
              
         SELECT vote_id_seq.CURRVAL
