@@ -176,6 +176,13 @@
     	AND user_id = #{userId}
     </select> 
     
+    <!-- 추천 유무 확인 -->
+    <select id="selectLikeStatus" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM board_likes
+        WHERE post_id = #{postId} AND user_id = #{userId}
+    </select>
+    
     <!-- 게시글 추천시 likes 테이블에 insert -->
     <insert id="insertLike" parameterType="PostVO">
     	INSERT INTO board_likes (like_id

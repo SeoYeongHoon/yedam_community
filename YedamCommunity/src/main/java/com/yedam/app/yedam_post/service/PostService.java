@@ -213,4 +213,9 @@ public interface PostService {
 	public int findByCurriculum(int curriculumId);
 	
 	public int findIdByCurriculum(int curriculumId);
+	
+	//--------------------------------------------
+  	// 추천 조회
+  	//--------------------------------------------
+	int selectLikeStatus(int postId, int userId);
 }

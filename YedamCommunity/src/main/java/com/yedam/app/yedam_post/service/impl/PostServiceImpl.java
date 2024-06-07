@@ -447,4 +447,9 @@ public class PostServiceImpl implements PostService {
 	public int findIdByCurriculum(int curriculumId) {
 		return postMapper.findIdByCurriculum(curriculumId);
 	}
+
+	@Override
+	public int selectLikeStatus(int postId, int userId) {
+		return postMapper.selectLikeStatus(postId, userId);
+	}
 }

@@ -11,7 +11,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -511,7 +513,7 @@ public class PostController {
 	@PostMapping("/boardLike")
 	@ResponseBody
 	public boolean updateLike(@RequestParam("postId") int postId, 
-			              Authentication authentication) {
+			              	  Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		PostVO postVO = new PostVO();
 		postVO.setUserId(userVO.getuserId());
@@ -526,6 +528,17 @@ public class PostController {
 			postService.LikeDelete(postId, userId); // boardlikes 테이블에 DELETE
 		}
 		return likeCheck==1? true : false;
+	}
+	
+	@GetMapping("/boardLikeStatus")
+	public ResponseEntity<Integer> getBoardLikeStatus(@RequestParam("postId") int postId, 
+													  Authentication authentication) {
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+		
+		System.err.println("포스트 ID: " + postId);
+		System.err.println("로그인 ID: " + userVO.getuserId());
+	    int likeStatus = postService.selectLikeStatus(postId, userVO.getuserId());
+	    return ResponseEntity.ok(likeStatus);
 	}
 	
 	// ----------------
