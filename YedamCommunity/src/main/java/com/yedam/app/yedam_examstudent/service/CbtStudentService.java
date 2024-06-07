@@ -14,7 +14,7 @@ public interface CbtStudentService {
 	//ㅡㅡㅡㅡㅡ
 	//피드백유무
 	//ㅡㅡㅡㅡㅡ
-	public ExamResultVO isTestFeedback(TestVO testVO);
+	public List<ExamResultVO> isTestFeedback(TestVO testVO);
 	//ㅡㅡㅡㅡㅡ
 	//재시험유무
 	//ㅡㅡㅡㅡㅡ

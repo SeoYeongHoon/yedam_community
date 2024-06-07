@@ -33,7 +33,7 @@ public class CbtStudentServiceImpl implements CbtStudentService{
 	//피드백유무
 	//ㅡㅡㅡㅡㅡ
 	@Override
-	public ExamResultVO isTestFeedback(TestVO testVO) {
+	public List<ExamResultVO> isTestFeedback(TestVO testVO) {
 		return cbtStudentMapper.isTestFeedback(testVO);
 	}
 	//ㅡㅡㅡㅡㅡ
