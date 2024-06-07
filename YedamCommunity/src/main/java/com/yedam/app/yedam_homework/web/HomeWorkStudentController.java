@@ -96,7 +96,6 @@ public class HomeWorkStudentController {
 							   Model model,
 							   Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		System.err.println("유저타입= "+userVO.getUserType());
 		model.addAttribute("userType",userVO.getUserType());
 		model.addAttribute("userName",userVO.getUsername());
 		// 과제 상세 조회
