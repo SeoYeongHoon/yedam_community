@@ -416,3 +416,13 @@ a.control_next {
     max-width: 100%;
     vertical-align: top !important;
 }
+
+.post_info_content {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.post_media_container {
+	width: 400px;
+	margin-bottom: 30px;
+}
