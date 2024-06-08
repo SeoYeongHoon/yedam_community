@@ -394,6 +394,11 @@ public class PostController {
 	    
 	   // 댓글 조회
 	    List<PostReplyVO> replylist = postService.getPostReply(postId);
+	    for (PostReplyVO postreplyVO : replylist) {
+	        // 대댓글 조회
+	        List<PostCommentVO> commentlist = postService.getPostComment(postreplyVO);
+	        postreplyVO.setComments(commentlist);
+	    }
 	    
 	   postVO.setPostId(postId);
 	   postVO.setReplies(replylist);
