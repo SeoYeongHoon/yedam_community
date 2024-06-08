@@ -38,6 +38,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-top: 10px
     }
 
     .post-info-header .title {
@@ -108,7 +109,7 @@
         margin: 4px 2px;
         cursor: pointer;
         position: absolute;
-        left: 43%;
+        left: 41%;
     }
     
     .no-form {
@@ -125,6 +126,14 @@
         cursor: pointer;
         position: absolute;
         left: 52%;
+    }
+    
+    .no-submit {
+        color: white;
+    }
+    
+    .yes-submit {
+        color: white;
     }
     
     .vote-count {
@@ -168,7 +177,7 @@
     }
     
     .post-reply-position{
-    margin-top: 100px;
+    	margin-top: 100px;
     }
 
 	.post-all-botton {
@@ -204,7 +213,9 @@
     	padding: 5px 15px;
     	border-radius: 4px;
     	color: white;
+    	margin-left: 1028px;
 	}
+	
   </style>
 </head>
 
@@ -296,8 +307,6 @@
     </div>
   </div>
   
-  
-  
   <div class="post-reply-position">
   <form id="reply-form" class="reply">
     <input type="hidden" name="postId" th:value="${postvote.postId}"/>
@@ -320,8 +329,8 @@
       </div>
       <div class="reply-actions">
         <button th:id="|updateBtn${reply.replyWriter}|" type="button" class="border reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">수정</button>
-        <button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">삭제</button>
         <button type="button" class="border reply-updateBtn" th:data-reply-id="${reply.replyId}" style="display:none;">수정</button>
+        <button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">삭제</button>
       </div>
      </li>
    </ul>

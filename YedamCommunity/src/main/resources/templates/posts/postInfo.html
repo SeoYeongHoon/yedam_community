@@ -1,661 +1,810 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Home">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Home">
 <style>
-   .reply {
-     border: 1px solid #e1e1e1;
-     padding: 10px;
-     margin-bottom: 10px;
-     border-radius: 5px;
-   }
+	.reply {
+		border: 1px solid #e1e1e1;
+		padding: 10px;
+		margin-bottom: 10px;
+		border-radius: 5px;
+	}
 
-   .comment {
-     border: 1px solid #e1e1e1;
-     padding: 10px;
-     margin-left: 20px;
-     margin-bottom: 10px;
-     border-radius: 5px;
-     background-color: #f9f9f9;
-   }
+	.comment {
+		border: 1px solid #e1e1e1;
+		padding: 10px;
+		margin-left: 20px;
+		margin-bottom: 10px;
+		border-radius: 5px;
+		background-color: #f9f9f9;
+	}
 
-   .reply .reply-content,
-   .comment .comment-content {
-     background-color: #f1f1f1;
-     border-radius: 5px;
-     padding: 10px;
-     margin-bottom: 10px;
-   }
+	.reply .reply-content, .comment .comment-content {
+		background-color: #f1f1f1;
+		border-radius: 5px;
+		padding: 10px;
+		margin-bottom: 10px;
+	}
 
-   .reply .reply-info,
-   .comment .comment-info {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     margin-bottom: 5px;
-   }
+	.reply .reply-info, .comment .comment-info {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 5px;
+	}
 
-   .reply .reply-actions,
-   .comment .comment-actions {
-     display: flex;
-     gap: 10px;
-   }
+	.reply .reply-actions, .comment .comment-actions {
+		display: flex;
+		gap: 10px;
+		justify-content: end;
+	}
 
-   .post-info-header {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-   }
+	.post-info-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 10px
+	}
 
-   .post-info-header .title {
-     margin-top: 15px;
-     font-size: 1.5em;
-     font-weight: bold;
-   }
+	.post-info-header .title {
+		margin-top: 15px;
+		font-size: 1.5em;
+		font-weight: bold;
+	}
 
-   .post-info-header .details {
-     font-size: 1.2em;
-     color: gray;
-   }
+	.post-info-header .details {
+		font-size: 1.2em;
+		color: gray;
+	}
 
-   textarea {
-     width: 100%;
-     box-sizing: border-box;
-     padding: 10px;
-     margin-bottom: 10px;
-     border: 1px solid #ccc;
-     border-radius: 5px;
-   }
+	.post-content {
+		width: 100%;
+		font-size: 15px;
+		background: rgba(239, 239, 239, 0.5);
+		border: 1px solid #e5e5e5;
+		border-radius: 4px;
+		padding: 16px;
+		color: black;
+		resize: none;
+	}
+	.reply-textarea, .comment-textarea {
+    	width: 100%;
+    	resize: none;
+    	box-sizing: border-box;
+    	padding: 10px;
+    	margin-bottom: 10px;
+    	border: 1px solid #ccc;
+    	border-radius: 5px;
+    }
+    
+    .custom-modal {
+	    position: fixed;
+  		top: 50%;
+    	left: 50%;
+    	transform: translate(-50%, -50%);
+    	background: white;
+    	padding: 20px;
+    	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    	z-index: 1000;
+    	display: none;
+    }
+    
+    .modal-backdrop {
+    	position: fixed;
+      	top: 0;
+      	left: 0;
+      	width: 100%;
+      	height: 100%;
+      	background: rgba(0,0,0,0.5);
+      	z-index: 999;
+      	display: none;
+    }
 
-   .custom-modal {
-     position: fixed;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     background: white;
-     padding: 20px;
-     box-shadow: 0 0 10px rgba(0,0,0,0.5);
-     z-index: 1000;
-     display: none;
-   }
+	.post-gallery {
+		margin-top: 20px;
+	}
 
-   .modal-backdrop {
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background: rgba(0,0,0,0.5);
-     z-index: 999;
-     display: none;
-   }
+	.post-repote {
+    	display: flex;
+    	float: right;
+    	margin-top: 75px;
+    }
+    .post-update {
+    	background-color: #ccc;
+    	padding: 5px 16px;
+    	border-radius: 4px;
+    	color: white;
+    }
+    
+    .post-delete {
+    	background-color: #ccc;
+    	padding: 5px 16px;
+    	border-radius: 4px;
+    	color: white;
+    	margin-left: 5px;
+    }
+    
+    .post-report {
+    	background-color: #ccc;
+    	padding: 5px 16px;
+    	border-radius: 4px;
+    	color: white;
+    	margin-left: 5px;
+    }
+    
+    .post-list {
+    	background-color: #ccc;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+    	margin-left: 5px;
+    }
+    
+    .good-submit {
+    	background-color: #ccc;
+    	padding: 5px 15px;
+    	margin-top: 5px;
+    	margin-left: 1051px;
+    	border-radius: 4px;
+    	color: white;
+    }
+    
+    .post-reply-position{
+		margin-top: 50px;
+    }
+
+	.post-all-botton {
+		margin-top: 50px;
+		position: relative;
+		text-align: center;
+	}
+
+	.delete-reply, .delete-comment{
+		background-color: #d50100;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+	}
+	
+	.reply-update, .comment-update {
+		background-color: #f7c800;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+	}
+	
+	.reply-updateBtn, .comment-updateBtn {
+		background-color: #FFA500;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+	}
+	
+
+	.post-reply-submit, .comment-submit {
+		background-color: #365CF5;
+    	padding: 5px 15px;
+    	border-radius: 4px;
+    	color: white;
+    	margin-left: 1028px;
+	}
 </style>
 
 <div class="container">
-  <div class="post-info-header">
-    <div class="title" th:text="${postInfo.title}">Post Title</div>
-    <div class="details">
-      <span th:text="${#dates.format(postInfo.createDate, 'yyyy-MM-dd HH:mm')}">2024-06-02 16:00</span> |
-      조회수: <span th:text="${postInfo.postView}">0</span> |
-      추천: <span id="post-like-count" th:text="${postInfo.postLike}">0</span>
-    </div>
-  </div>
-  <p th:text="${postInfo.writer}">Post Writer</p>
-  <p th:text="${postInfo.postContent}">Post Content</p>
+	<div class="post-info-header">
+		<div class="title" th:text="${postInfo.title}">Post Title</div>
+		<div class="details">
+			<span th:text="${#dates.format(postInfo.createDate, 'yyyy-MM-dd HH:mm')}">2024-06-02 16:00
+				</span> | 조회수: <span th:text="${postInfo.postView}">0</span> | 추천: <span
+				id="post-like-count" th:text="${postInfo.postLike}">0</span>
+		</div>
+	</div>
+	
+	<p th:text="${postInfo.writer}">Post Writer</p>
+	<textarea rows="10" class="post-content" th:text="${postInfo.postContent}" readonly>Post Content</textarea>
 
-  <h2 th:if="${#lists.size(postInfo.boardFiles) > 0}"></h2>
-  <div th:each="file : ${postInfo.boardFiles}">
-    <!-- 이미지 파일 출력 -->
-    <div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.jpg') or file.boardfileLocation.endsWith('.jpeg') or file.boardfileLocation.endsWith('.png') or file.boardfileLocation.endsWith('.gif'))}">
-      <img th:if="${file.exists}" th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
-      <div th:if="${not file.exists}">
-        <img src="/images/default-image.jpg" style="width: 50%; height: auto;"/>
-      </div>
-    </div>
-
-    <!-- 비디오 파일 출력 -->
-    <div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.mp4') or file.boardfileLocation.endsWith('.webm') or file.boardfileLocation.endsWith('.ogg'))}">
-      <video controls width="250" th:if="${file.exists}">
-        <source th:src="|/files/${file.boardfileLocation}|" type="video/mp4"/>
-      </video>
-      <div th:if="${not file.exists}">
-        <img src="/images/default-video.jpg" style="width: 50%; height: auto;"/>
-      </div>
-    </div>
-  </div>
-
-  <h5>댓글</h5>
-  <ul id="reply-list">
-    <li th:each="reply : ${postInfo.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
-      <div class="reply-info">
-        <input class="replyWriter" type="hidden" th:value="${reply.replyWriter}">
-        <span th:text="${reply.replyWriter}">Reply Writer</span>
-        <span th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd HH:mm')}">Reply Date</span>
-      </div>
-      <div class="reply-content">
-        <input class="replyId" type="hidden" th:value="${reply.replyId}">
-        <textarea th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
-      </div>
-      <div class="reply-actions">
-        <button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">댓글 삭제</button>
-        <button th:id="|updateBtn${reply.replyWriter}|" type="button" class="border reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">댓글 수정</button>
-        <button type="button" class="border reply-updateBtn" th:data-reply-id="${reply.replyId}" style="display:none;">수정</button>
-      </div>
-
-      <h5>답글</h5>
-      <ul>
-        <li th:each="comment : ${reply.comments}" th:id="|'comment-' + ${comment.commentId}|" class="comment">
-          <div class="comment-info">
-            <input class="commentWriter" type="hidden" th:value="${comment.commentWriter}">
-            <span th:text="${comment.commentWriter}">Comment Writer</span>
-            <span th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd HH:mm')}">Comment Date</span>
-          </div>
-          <div class="comment-content">
-            <input class="commentId" type="hidden" th:value="${comment.commentId}">
-            <textarea th:id="|commentId-${comment.commentId}|" th:text="${comment.commentContent}" readonly></textarea>
-          </div>
-          <div class="comment-actions">
-            <button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment " th:data-comment-id="${comment.commentId}" style="display:none;">대댓글 삭제</button>
-            <button th:id="|commentUpdate-${comment.commentWriter}|" type="button" class="border comment-update" th:data-comment-id="${comment.commentId}" style="display:none;">대댓글 수정</button>
-            <button type="button" class="border comment-updateBtn" th:data-comment-id="${comment.commentId}" style="display:none;">수정</button>
-          </div>
-        </li>
-      </ul>
-
-      <form class="comment-form">
-        <input type="hidden" name="replyId" th:value="${reply.replyId}"/>
-        <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
-        <input type="hidden" name="boardId" th:value="${postInfo.boardId}"/>
-        <textarea th:id="|commentContent-${reply.replyId}|" name="commentContent"></textarea>
-        <button type="button" th:id="|comment-submit-${reply.replyId}|" class="comment-submit border">대댓글 작성</button>
-      </form>
-    </li>
-  </ul>
-
-  <form id="reply-form" class="reply">
-    <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
-    <input type="hidden" name="boardId" th:value="${postInfo.boardId}"/>
-    <textarea name="replyContent" id="replyContent"></textarea>
-    <button type="button" id="reply-submit">댓글 작성</button>
-  </form>
-
-  <!-- 추천버튼 -->
-  <form class="Good-form">
-    <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
-    <input type="hidden" name="userId" th:value="${userId}"/>
-    <button type="button" class="Good-submit">추천</button>
-  </form>
-
-  <!-- 신고버튼 -->
-  <button type="button" id="reportBtn">신고</button> 
-
-    <!-- 게시글 신고 모달창 -->
-<div id="reportForm" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">게시글 신고</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+  <div class="post-all-botton">
+	<div class="post-gallery">
+		<h2 th:if="${#lists.size(postInfo.boardFiles) > 0}"></h2>
+		<div th:each="file : ${postInfo.boardFiles}">
+			<!-- 이미지 파일 출력 -->
+			<div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.jpg') or file.boardfileLocation.endsWith('.jpeg') or file.boardfileLocation.endsWith('.png') or file.boardfileLocation.endsWith('.gif'))}">
+				<img th:if="${file.exists}"	th:src="|/files/${file.boardfileLocation}|" style="width: 70%; height: auto;" />
+				<div th:if="${not file.exists}">
+					<img src="/images/default-image.jpg" style="width: 50%; height: auto;" />
+				</div>
 			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<input type="hidden" id ="postId" name="postId" th:value="${postInfo.postId}"/>
-                <input type="hidden" id="boardId" name="boardId" th:value="${postInfo.boardId}"/>
-                <input type="hidden" name="reporter" th:value="${reporter}"/>
-                   <select name="reportType">
-                   <option value="1">부적절한 언어 사용</option>
-                   <option value="2">유해하거나 위험한 행위</option>
-                   <option value="3">성적인 내용</option>
-                   <option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
-                   </select>
-			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button type="button" id="report-submit">신고 제출</button>
+
+			<!-- 비디오 파일 출력 -->
+			<div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.mp4') or file.boardfileLocation.endsWith('.webm') or file.boardfileLocation.endsWith('.ogg'))}">
+				<video controls width="250" th:if="${file.exists}">
+					<source th:src="|/files/${file.boardfileLocation}|" type="video/mp4" />
+				</video>
+				<div th:if="${not file.exists}">
+					<img src="/images/default-video.jpg" style="width: 50%; height: auto;" />
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+	
+	<div class="post-repote">
+		<input id="writer" type="hidden" th:value="${postInfo.writer}">
+		<input id="userName" type="hidden" th:value="${userName}">
+		<input id="userType" type="hidden" th:value="${userType}">
+		<button id="updateBtn" type="button" class="post-update">수정</button>
+		<button id="deleteBtn" type="button" class="post-delete">삭제</button>
+		<!-- 신고버튼 -->
+		<button type="button" id="reportBtn" class="post-report">신고</button>
+		<a th:href="@{/all/post/{boardId}(boardId=${boardId})}" class="post-list">목록</a>
 
-  <div>
-    <input id="writer" type="hidden" th:value="${postInfo.writer}">
-    <input id="userName" type="hidden" th:value="${userName}">
-    <input id="userType" type="hidden" th:value="${userType}">
-    <button id="updateBtn" type="button" style="display: none">수정</button>
-    <button id="deleteBtn" type="button" style="display: none">삭제</button>
-  </div>
-  <a th:href="@{/all/posts/{boardId}(boardId=${boardId})}">목록</a>
+	</div>
+	<!-- 추천버튼 -->
+		<form class="good-form">
+			<input type="hidden" name="postId" th:value="${postInfo.postId}" /> 
+			<input type="hidden" name="userId" th:value="${userId}" />
+			<button type="button" class="good-submit">추천</button>
+	    </form>
+ </div>
+ 
+ <!-- 게시글 신고 모달창 -->
+	<div id="reportForm" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">게시글 신고</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<input type="hidden" id="postId" name="postId" th:value="${postInfo.postId}" /> 
+					<input type="hidden" id="boardId" name="boardId" th:value="${postInfo.boardId}" /> 
+						<input type="hidden" name="reporter" th:value="${reporter}" /> <select
+						name="reportType">
+						<option value="1">부적절한 언어 사용</option>
+						<option value="2">유해하거나 위험한 행위</option>
+						<option value="3">성적인 내용</option>
+						<option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
+					</select>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button type="button" id="report-submit">신고 제출</button>
+				</div>
+			</div>
+		</div>
+	</div>
+ 
+ <div class="post-reply-position">
+	<form id="reply-form" class="reply">
+	  <input type="hidden" name="postId" th:value="${postInfo.postId}" />
+	  <input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
+	  <textarea class="reply-textarea" name="replyContent" id="replyContent"></textarea>
+	  <button type="button" id="reply-submit" class="post-reply-submit">등록</button>
+	</form>
+
+	<h5>댓글</h5>
+	<ul id="reply-list">
+		<li th:each="reply : ${postInfo.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
+			<div class="reply-info">
+				<input class="replyWriter" type="hidden" th:value="${reply.replyWriter}"> 
+				<span th:text="${reply.replyWriter}">Reply Writer</span> 
+					<span th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd HH:mm')}">Reply Date</span>
+			</div>
+			<div class="reply-content">
+				<input class="replyId" type="hidden" th:value="${reply.replyId}">
+				<textarea class="reply-textarea" th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
+			</div>
+			<div class="reply-actions">
+				<button th:id="|updateBtn${reply.replyWriter}|" type="button" class="border reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display: none;">수정</button>
+				<button type="button" class="border reply-updateBtn" th:data-reply-id="${reply.replyId}" style="display: none;">수정</button>
+				<button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display: none;">삭제</button>
+			</div>
+
+			<h5>답글</h5>
+			<ul>
+				<li th:each="comment : ${reply.comments}" th:id="|'comment-' + ${comment.commentId}|" class="comment">
+					<div class="comment-info">
+						<input class="commentWriter" type="hidden" th:value="${comment.commentWriter}"> <span
+							th:text="${comment.commentWriter}">Comment Writer</span> <span
+							th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd HH:mm')}">Comment	Date</span>
+					</div>
+					<div class="comment-content">
+						<input class="commentId" type="hidden" th:value="${comment.commentId}">
+						<textarea class="comment-textarea" th:id="|commentId-${comment.commentId}|" th:text="${comment.commentContent}" readonly></textarea>
+					</div>
+					<div class="comment-actions">
+						<button th:id="|commentUpdate-${comment.commentWriter}|" type="button" class="border comment-update" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
+						<button type="button" class="border comment-updateBtn" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
+						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment" th:data-comment-id="${comment.commentId}" style="display: none;">삭제</button>
+					</div>
+				</li>
+			</ul>
+
+			<form class="comment-form">
+				<input type="hidden" name="replyId" th:value="${reply.replyId}" /> 
+				<input type="hidden" name="postId" th:value="${postInfo.postId}" /> 
+				<input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
+				<textarea class="comment-textarea" th:id="|commentContent-${reply.replyId}|" name="commentContent"></textarea>
+				<button type="button" th:id="|comment-submit-${reply.replyId}|" class="comment-submit border">등록</button>
+			</form>
+		</li>
+	</ul>
+</div>
 </div>
 
 <script>
-  let writer = $('#writer').val();
-  let userName = $('#userName').val();
-  let postId = $('#postId').val();
-  let boardId = $('#boardId').val();
-  let userType = $('#userType').val();
-  let commentId = $('.commentId').val();
-  let replies = [];
-  $('.replyId').each(function(){
-    replies.push($(this).val());
-  });
-  
-  //------------------------
-  // 댓글/대댓글 버튼 권한
-  //------------------------
-  let replyWriters = [];
-  $('.replyWriter').each(function(){
-    replyWriters.push($(this).val());
-  });
-  
-  replyWriters.forEach(function(replyWriter){
-    if(replyWriter == userName){
-      $('#deleteBtn' + replyWriter).css('display','block');
-      $('#updateBtn' + replyWriter).css('display','block');
-    }
-  });
+	let writer = $('#writer').val();
+	let userName = $('#userName').val();
+	let postId = $('#postId').val();
+	let boardId = $('#boardId').val();
+	let userType = $('#userType').val();
+	let commentId = $('.commentId').val();
 
-  let commentWriters = [];
-  $('.commentWriter').each(function(){
-    commentWriters.push($(this).val());
-  });
-  
-  commentWriters.forEach(function(commentWriter){
-    if(commentWriter == userName){
-      $('#commentDelete-' + commentWriter).css('display','block');
-      $('#commentUpdate-' + commentWriter).css('display','block');
-    }
-  });
+	let replies = [];
+	$('.replyId').each(function() {
+		replies.push($(this).val());
+	});
 
-  //------------------------
-  // 게시글수정/삭제버튼 권한
-  //------------------------
-  if(writer == userName || userType == "ROLE_ADMIN"){
-    $('#updateBtn').css('display','block');
-    $('#deleteBtn').css('display','block');
-  }
+	//------------------------
+	// 댓글/대댓글 버튼 권한
+	//------------------------
+	let replyWriters = [];
+	$('.replyWriter').each(function() {
+		replyWriters.push($(this).val());
+	});
 
-  //------------------------
-  // 게시글 수정
-  //------------------------
-  $('#updateBtn').on('click',function(){
-    if(writer == userName){
-      location.href='/all/postUpdate/'+boardId + '/' + postId;
-    } 
-  });
+	replyWriters.forEach(function(replyWriter) {
+		if (replyWriter == userName) {
+			$('#deleteBtn' + replyWriter).css('display', 'block');
+			$('#updateBtn' + replyWriter).css('display', 'block');
+		}
+	});
 
-  //------------------------
-  // 게시글 삭제
-  //------------------------
-  $('#deleteBtn').on('click', function(){
-    $.ajax({
-      url : '/all/postDelete',
-      type: 'delete',
-      data: {postId : postId , boardId:boardId},
-      success: function(data){
-        $('#deleteModal').modal('show');
-        location.href='/all/posts/' + boardId
-      },
-      error:function(e){
-        alert('삭제 실패');
-      }
-    });
-  });
+	let commentWriters = [];
+	$('.commentWriter').each(function() {
+		commentWriters.push($(this).val());
+	});
 
-  // 삭제 모달 확인버튼
-  $('#okBtn').on('click',function(){
-    location.href='/all/posts/'+boardId;
-  });
+	commentWriters.forEach(function(commentWriter) {
+		if (commentWriter == userName) {
+			$('#commentDelete-' + commentWriter).css('display', 'block');
+			$('#commentUpdate-' + commentWriter).css('display', 'block');
+		}
+	});
 
-  //--------------------------------------------
-  // 댓글 작성
-  //--------------------------------------------
-  $(document).on("click", "#reply-submit", function () {
-    if(!replyCheck()) return;
-    let formData = new FormData(document.getElementById('reply-form'));
-    $.ajax({
-      url: "/all/Reply",
-      type: "POST",
-      processData: false,
-      contentType: false,
-      data: formData,
-      success: function (response) {
-        window.location.reload();
-      },
-      error: function (error) {
-        console.error("댓글 등록 실패:", error);
-      },
-    });
-  });
+	//------------------------
+	// 게시글수정/삭제버튼 권한
+	//------------------------
+	if (writer == userName || userType == "ROLE_ADMIN") {
+		$('#updateBtn').css('display', 'block');
+		$('#deleteBtn').css('display', 'block');
+	}
 
-  //--------------------------------------------
-  // 댓글 수정
-  //--------------------------------------------
-  $(document).on("click", ".reply-update", function () {
-    let replyId = $(this).data("reply-id");
-    $('#replyId-' + replyId).attr('readonly', false);
-    $(this).css('display', 'none');
-    $('.reply-updateBtn[data-reply-id="' + replyId + '"]').css('display', 'block');
-  });
+	//------------------------
+	// 게시글 수정
+	//------------------------
+	$('#updateBtn').on('click', function() {
+		if (writer == userName) {
+			location.href = '/all/postUpdate/' + boardId + '/' + postId;
+		}
+	});
 
-  $(document).on("click", ".reply-updateBtn", function () {
-    let replyId = $(this).data("reply-id");
-    let replyContent = $('#replyId-' + replyId).val();
+	//------------------------
+	// 게시글 삭제
+	//------------------------
+	$('#deleteBtn').on('click', function() {
+		$.ajax({
+			url : '/all/postDelete',
+			type : 'delete',
+			data : {
+				postId : postId,
+				boardId : boardId
+			},
+			success : function(data) {
+				$('#deleteModal').modal('show');
+				location.href = '/all/post/' + boardId
+			},
+			error : function(e) {
+				alert('삭제 실패');
+			}
+		});
+	});
 
-    $.ajax({
-      url: '/all/replyUpdate',
-      type: 'post',
-      data: {replyId: replyId, replyContent: replyContent},
-      success: function (data) {
-        window.location.reload();
-      },
-      error: function (err) {
-        alert("댓글 업데이트 에러");
-      }
-    });
-  });
-  
-  //--------------------------------------------
-  // 댓글 삭제
-  //--------------------------------------------
-  $(document).on("click", ".delete-reply", function () {
-    let replyId = $(this).data("reply-id");
-    if (confirm("댓글을 삭제하시겠습니까?")) {
-      $.ajax({
-        url: "/all/Reply",
-        type: "DELETE",
-        data: {replyId: replyId},
-        success: function (response) {
-          window.location.reload();
-        },
-        error: function (error) {
-          console.error("댓글 삭제 실패:", error);
-          alert("댓글 삭제에 실패하였습니다.");
-        },
-      });
-    }
-  });
+	// 삭제 모달 확인버튼
+	$('#okBtn').on('click', function() {
+		location.href = '/all/post/' + boardId;
+	});
 
-  //--------------------------------------------
-  // 대댓글 작성
-  //--------------------------------------------
-  $(document).on("click", ".comment-submit", function () {
-    let replyId = $(this).attr('id').split('-')[2]; // 고유한 replyId를 가져옴
-    let commentContentId = `#commentContent-${replyId}`; // 고유한 textarea id 생성
-    if(!commentCheck(commentContentId)) return;
-    let formData = $(this).closest("form").serialize();
-    $.ajax({
-      url: "/all/Comment",
-      type: "POST",
-      data: formData,
-      success: function (response) {
-    	  window.location.reload();
-      },
-      error: function (error) {
-        console.error("대댓글 등록 실패:", error);
-        alert("대댓글 등록에 실패하였습니다.");
-      },
-    });
-  });
+	//--------------------------------------------
+	// 댓글 작성
+	//--------------------------------------------
+	$(document).on("click", "#reply-submit", function() {
+		if (!replyCheck())
+			return;
+		let formData = new FormData(document.getElementById('reply-form'));
+		$.ajax({
+			url : "/all/Reply",
+			type : "POST",
+			processData : false,
+			contentType : false,
+			data : formData,
+			success : function(response) {
+				window.location.reload();
+			},
+			error : function(error) {
+				console.error("댓글 등록 실패:", error);
+			},
+		});
+	});
 
-  //--------------------------------------------
-  // 대댓글 수정
-  //--------------------------------------------
-  $(document).on("click", ".comment-update", function () {
-    let commentId = $(this).data("comment-id");
-    $('#commentId-' + commentId).attr('readonly', false);
-    $(this).css('display', 'none');
-    $('.comment-updateBtn[data-comment-id="' + commentId + '"]').css('display', 'block');
-  });
+	//--------------------------------------------
+	// 댓글 수정
+	//--------------------------------------------
+	$(document).on(
+			"click",
+			".reply-update",
+			function() {
+				let replyId = $(this).data("reply-id");
+				$('#replyId-' + replyId).attr('readonly', false);
+				$(this).css('display', 'none');
+				$('.reply-updateBtn[data-reply-id="' + replyId + '"]').css(
+						'display', 'block');
+			});
 
-  $(document).on("click", ".comment-updateBtn", function () {
-    let commentId = $(this).data("comment-id");
-    let commentContent = $('#commentId-' + commentId).val();
+	$(document).on("click", ".reply-updateBtn", function() {
+		let replyId = $(this).data("reply-id");
+		let replyContent = $('#replyId-' + replyId).val();
 
-    $.ajax({
-      url: '/all/commentUpdate',
-      type: 'post',
-      data: {commentId: commentId, commentContent: commentContent},
-      success: function (data) {
-    	  window.location.reload();
-      },
-      error: function (err) {
-        alert("대댓글 업데이트 에러");
-        console.error("대댓글 업데이트 실패:", err);
-      }
-    });
-  });
+		$.ajax({
+			url : '/all/replyUpdate',
+			type : 'post',
+			data : {
+				replyId : replyId,
+				replyContent : replyContent
+			},
+			success : function(data) {
+				window.location.reload();
+			},
+			error : function(err) {
+				alert("댓글 업데이트 에러");
+			}
+		});
+	});
 
-  //--------------------------------------------
-  // 대댓글 삭제
-  //--------------------------------------------
-  $(document).on("click", ".delete-comment", function () {
-    if (confirm("대댓글을 삭제하시겠습니까?")) {
-      let commentId = $(this).data("comment-id");
-      $.ajax({
-        url: "/all/Comment",
-        type: "DELETE",
-        data: {commentId: commentId},
-        success: function (response) {
-        	window.location.reload();
-        },
-        error: function (error) {
-          console.error("대댓글 삭제 실패:", error);
-          alert("대댓글 삭제에 실패하였습니다.");
-        },
-      });
-    }
-  });
+	//--------------------------------------------
+	// 댓글 삭제
+	//--------------------------------------------
+	$(document).on("click", ".delete-reply", function() {
+		let replyId = $(this).data("reply-id");
+		if (confirm("댓글을 삭제하시겠습니까?")) {
+			$.ajax({
+				url : "/all/Reply",
+				type : "DELETE",
+				data : {
+					replyId : replyId
+				},
+				success : function(response) {
+					window.location.reload();
+				},
+				error : function(error) {
+					console.error("댓글 삭제 실패:", error);
+					alert("댓글 삭제에 실패하였습니다.");
+				},
+			});
+		}
+	});
 
-  //--------------------------------------------
-  // 댓글 및 대댓글 로드
-  //--------------------------------------------
-  function loadReplies() {
-    $.ajax({
-      url: window.location.pathname,
-      type: "GET",
-      success: function (response) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(response, 'text/html');
-        const newReplies = $(doc).find("#reply-list").html();
-        $("#reply-list").html(newReplies);
-        // 기존 이벤트 핸들러 다시 적용
-        rebindEventHandlers();
-      },
-      error: function (error) {
-        console.error("댓글 로드 실패:", error);
-      },
-    });
-  }
+	//--------------------------------------------
+	// 대댓글 작성
+	//--------------------------------------------
+	$(document).on("click", ".comment-submit", function() {
+		let replyId = $(this).attr('id').split('-')[2]; // 고유한 replyId를 가져옴
+		let commentContentId = `#commentContent-${replyId}`; // 고유한 textarea id 생성
+		if (!commentCheck(commentContentId))
+			return;
+		let formData = $(this).closest("form").serialize();
+		$.ajax({
+			url : "/all/Comment",
+			type : "POST",
+			data : formData,
+			success : function(response) {
+				window.location.reload();
+			},
+			error : function(error) {
+				console.error("대댓글 등록 실패:", error);
+				alert("대댓글 등록에 실패하였습니다.");
+			},
+		});
+	});
 
-  //--------------------------------------------
-  // 추천 개수 업데이트
-  //--------------------------------------------
-  function updateLikeCount() {
-    $.ajax({
-      url: window.location.pathname,
-      type: "GET",
-      success: function (response) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(response, 'text/html');
-        const newLikesCount = $(doc).find("#post-like-count").text();
-        $("#post-like-count").text(newLikesCount);
-      },
-      error: function (error) {
-        console.error("추천 개수 업데이트 실패:", error);
-      },
-    });
-  }
+	//--------------------------------------------
+	// 대댓글 수정
+	//--------------------------------------------
+	$(document).on(
+			"click",
+			".comment-update",
+			function() {
+				let commentId = $(this).data("comment-id");
+				$('#commentId-' + commentId).attr('readonly', false);
+				$(this).css('display', 'none');
+				$('.comment-updateBtn[data-comment-id="' + commentId + '"]')
+						.css('display', 'block');
+			});
 
-  //--------------------------------------------
-  // 추천 추가 함수
-  //--------------------------------------------
-  $(".Good-submit").on("click", function () {
-    let formData = $(".Good-form").serialize();
-    $.ajax({
-      type: "POST",
-      url: "/all/boardLike",
-      dataType: "json",
-      data: formData,
-      success: function (likeCheck) {
-        if (likeCheck == 0) {
-          alert("추천완료");
-          updateLikeCount();
-        } else {
-          alert("추천취소");
-          updateLikeCount();
-        }
-      },
-      error: function () {
-        alert("통신 에러");
-      },
-    });
-  });
+	$(document).on("click", ".comment-updateBtn", function() {
+		let commentId = $(this).data("comment-id");
+		let commentContent = $('#commentId-' + commentId).val();
 
-  //--------------------------------------------
-  // 신고관련
-  //--------------------------------------------
-  $(document).ready(function () {
-    // 신고 버튼 클릭 시 폼 표시
-    $("#reportBtn").on("click", function () {
-      $("#reportForm").modal();
-    });
+		$.ajax({
+			url : '/all/commentUpdate',
+			type : 'post',
+			data : {
+				commentId : commentId,
+				commentContent : commentContent
+			},
+			success : function(data) {
+				window.location.reload();
+			},
+			error : function(err) {
+				alert("대댓글 업데이트 에러");
+				console.error("대댓글 업데이트 실패:", err);
+			}
+		});
+	});
 
-    // 신고 제출
-    $("#report-submit").on("click", function () {
-      let formData = $("#report-form").serialize();
-      $.ajax({
-        url: "/all/reportPost",
-        type: "POST",
-        data: formData,
-        success: function (response) {
-          if (response === "success") {
-            alert("신고가 접수되었습니다.");
-          } else {
-            alert("신고 접수에 실패하였습니다.");
-          }
-        },
-        error: function (err) {
-          alert("에러");
-        },
-      });
-    });
-  });
+	//--------------------------------------------
+	// 대댓글 삭제
+	//--------------------------------------------
+	$(document).on("click", ".delete-comment", function() {
+		if (confirm("대댓글을 삭제하시겠습니까?")) {
+			let commentId = $(this).data("comment-id");
+			$.ajax({
+				url : "/all/Comment",
+				type : "DELETE",
+				data : {
+					commentId : commentId
+				},
+				success : function(response) {
+					window.location.reload();
+				},
+				error : function(error) {
+					console.error("대댓글 삭제 실패:", error);
+					alert("대댓글 삭제에 실패하였습니다.");
+				},
+			});
+		}
+	});
 
-  //--------------------------------------------
-  // 이벤트 핸들러 재적용 함수
-  //--------------------------------------------
-  function rebindEventHandlers() {
-    // 댓글 수정 이벤트 핸들러 재적용
-    $(".reply-update").on("click", function () {
-      let replyId = $(this).data("reply-id");
-      $('#replyId-' + replyId).attr('readonly', false);
-      $(this).css('display', 'none');
-      $('.reply-updateBtn[data-reply-id="' + replyId + '"]').css('display', 'block');
-    });
+	//--------------------------------------------
+	// 댓글 및 대댓글 로드
+	//--------------------------------------------
+	function loadReplies() {
+		$.ajax({
+			url : window.location.pathname,
+			type : "GET",
+			success : function(response) {
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(response, 'text/html');
+				const newReplies = $(doc).find("#reply-list").html();
+				$("#reply-list").html(newReplies);
+				// 기존 이벤트 핸들러 다시 적용
+				rebindEventHandlers();
+			},
+			error : function(error) {
+				console.error("댓글 로드 실패:", error);
+			},
+		});
+	}
 
-    $(".reply-updateBtn").on("click", function () {
-      let replyId = $(this).data("reply-id");
-      let replyContent = $('#replyId-' + replyId).val();
+	//--------------------------------------------
+	// 추천 개수 업데이트
+	//--------------------------------------------
+	function updateLikeCount() {
+		$.ajax({
+			url : window.location.pathname,
+			type : "GET",
+			success : function(response) {
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(response, 'text/html');
+				const newLikesCount = $(doc).find("#post-like-count").text();
+				$("#post-like-count").text(newLikesCount);
+			},
+			error : function(error) {
+				console.error("추천 개수 업데이트 실패:", error);
+			},
+		});
+	}
 
-      $.ajax({
-        url: '/all/replyUpdate',
-        type: 'post',
-        data: {replyId: replyId, replyContent: replyContent},
-        success: function (data) {
-          loadReplies();
-        },
-        error: function (err) {
-          alert("댓글 업데이트 에러");
-          console.error("댓글 업데이트 실패:", err);
-        }
-      });
-    });
+	//--------------------------------------------
+	// 추천 추가 함수
+	//--------------------------------------------
+	$(".good-submit").on("click", function() {
+		let formData = $(".good-form").serialize();
+		$.ajax({
+			type : "POST",
+			url : "/all/boardLike",
+			dataType : "json",
+			data : formData,
+			success : function(likeCheck) {
+				if (likeCheck == 0) {
+					alert("추천완료");
+					updateLikeCount();
+				} else {
+					alert("추천취소");
+					updateLikeCount();
+				}
+			},
+			error : function() {
+				alert("통신 에러");
+			},
+		});
+	});
 
-    //--------------------------------------------
-    // 대댓글 수정 이벤트 핸들러 재적용
-    //--------------------------------------------
-    $(".comment-update").on("click", function () {
-      let commentId = $(this).data("comment-id");
-      $('#commentId-' + commentId).attr('readonly', false);
-      $(this).css('display', 'none');
-      $('.comment-updateBtn[data-comment-id="' + commentId + '"]').css('display', 'block');
-    });
+	//--------------------------------------------
+	// 신고관련
+	//--------------------------------------------
+	$(document).ready(function() {
+		// 신고 버튼 클릭 시 폼 표시
+		$("#reportBtn").on("click", function() {
+			$("#reportForm").modal();
+		});
 
-    $(".comment-updateBtn").on("click", function () {
-      let commentId = $(this).data("comment-id");
-      let commentContent = $('#commentId-' + commentId).val();
+		// 신고 제출
+		$("#report-submit").on("click", function() {
+			let formData = $("#report-form").serialize();
+			$.ajax({
+				url : "/all/reportPost",
+				type : "POST",
+				data : formData,
+				success : function(response) {
+					if (response === "success") {
+						alert("신고가 접수되었습니다.");
+					} else {
+						alert("신고 접수에 실패하였습니다.");
+					}
+				},
+				error : function(err) {
+					alert("에러");
+				},
+			});
+		});
+	});
 
-      $.ajax({
-        url: '/all/commentUpdate',
-        type: 'post',
-        data: {commentId: commentId, commentContent: commentContent},
-        success: function (data) {
-          loadReplies();
-        },
-        error: function (err) {
-          alert("대댓글 업데이트 에러");
-          console.error("대댓글 업데이트 실패:", err);
-        }
-      });
-    });
+	//--------------------------------------------
+	// 이벤트 핸들러 재적용 함수
+	//--------------------------------------------
+	function rebindEventHandlers() {
+		// 댓글 수정 이벤트 핸들러 재적용
+		$(".reply-update").on(
+				"click",
+				function() {
+					let replyId = $(this).data("reply-id");
+					$('#replyId-' + replyId).attr('readonly', false);
+					$(this).css('display', 'none');
+					$('.reply-updateBtn[data-reply-id="' + replyId + '"]').css(
+							'display', 'block');
+				});
 
-    //--------------------------------------------
-    // 댓글 및 대댓글 삭제 이벤트 핸들러 재적용
-    //--------------------------------------------
-    $(".delete-reply").on("click", function () {
-      let replyId = $(this).data("reply-id");
-      $.ajax({
-        url: "/all/Reply",
-        type: "DELETE",
-        data: {replyId: replyId},
-        success: function (response) {
-          loadReplies();
-        },
-        error: function (error) {
-          console.error("댓글 삭제 실패:", error);
-          alert("댓글 삭제에 실패하였습니다.");
-        },
-      });
-    });
+		$(".reply-updateBtn").on("click", function() {
+			let replyId = $(this).data("reply-id");
+			let replyContent = $('#replyId-' + replyId).val();
 
-    $(".delete-comment").on("click", function () {
-      let commentId = $(this).data("comment-id");
-      $.ajax({
-        url: "/all/Comment",
-        type: "DELETE",
-        data: {commentId: commentId},
-        success: function (response) {
-          loadReplies();
-        },
-        error: function (error) {
-          console.error("대댓글 삭제 실패:", error);
-          alert("대댓글 삭제에 실패하였습니다.");
-        },
-      });
-    });
-  }
+			$.ajax({
+				url : '/all/replyUpdate',
+				type : 'post',
+				data : {
+					replyId : replyId,
+					replyContent : replyContent
+				},
+				success : function(data) {
+					loadReplies();
+				},
+				error : function(err) {
+					alert("댓글 업데이트 에러");
+					console.error("댓글 업데이트 실패:", err);
+				}
+			});
+		});
 
-  function replyCheck(){
-    let name = $('#replyContent');
-    if(name.val() == ''){
-      alert('내용이 필요합니다.');
-      name.focus();
-      return false;
-    }
-    return true;
-  }
+		//--------------------------------------------
+		// 대댓글 수정 이벤트 핸들러 재적용
+		//--------------------------------------------
+		$(".comment-update")
+				.on(
+						"click",
+						function() {
+							let commentId = $(this).data("comment-id");
+							$('#commentId-' + commentId)
+									.attr('readonly', false);
+							$(this).css('display', 'none');
+							$(
+									'.comment-updateBtn[data-comment-id="'
+											+ commentId + '"]').css('display',
+									'block');
+						});
 
-  function commentCheck(commentContentId){
-    let name = $(commentContentId);
-    if(name.val() == ''){
-      alert('내용이 필요합니다.');
-      name.focus();
-      return false;
-    }
-    return true;
-  }
+		$(".comment-updateBtn").on("click", function() {
+			let commentId = $(this).data("comment-id");
+			let commentContent = $('#commentId-' + commentId).val();
+
+			$.ajax({
+				url : '/all/commentUpdate',
+				type : 'post',
+				data : {
+					commentId : commentId,
+					commentContent : commentContent
+				},
+				success : function(data) {
+					loadReplies();
+				},
+				error : function(err) {
+					alert("대댓글 업데이트 에러");
+					console.error("대댓글 업데이트 실패:", err);
+				}
+			});
+		});
+
+		//--------------------------------------------
+		// 댓글 및 대댓글 삭제 이벤트 핸들러 재적용
+		//--------------------------------------------
+		$(".delete-reply").on("click", function() {
+			let replyId = $(this).data("reply-id");
+			$.ajax({
+				url : "/all/Reply",
+				type : "DELETE",
+				data : {
+					replyId : replyId
+				},
+				success : function(response) {
+					loadReplies();
+				},
+				error : function(error) {
+					console.error("댓글 삭제 실패:", error);
+					alert("댓글 삭제에 실패하였습니다.");
+				},
+			});
+		});
+
+		$(".delete-comment").on("click", function() {
+			let commentId = $(this).data("comment-id");
+			$.ajax({
+				url : "/all/Comment",
+				type : "DELETE",
+				data : {
+					commentId : commentId
+				},
+				success : function(response) {
+					loadReplies();
+				},
+				error : function(error) {
+					console.error("대댓글 삭제 실패:", error);
+					alert("대댓글 삭제에 실패하였습니다.");
+				},
+			});
+		});
+	}
+
+	function replyCheck() {
+		let name = $('#replyContent');
+		if (name.val() == '') {
+			alert('내용이 필요합니다.');
+			name.focus();
+			return false;
+		}
+		return true;
+	}
+
+	function commentCheck(commentContentId) {
+		let name = $(commentContentId);
+		if (name.val() == '') {
+			alert('내용이 필요합니다.');
+			name.focus();
+			return false;
+		}
+		return true;
+	}
 </script>
 </body>
 </html>
