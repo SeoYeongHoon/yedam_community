@@ -9,6 +9,7 @@
      padding: 10px;
      margin-bottom: 10px;
      border-radius: 5px;
+	 margin-top: 15px;
    }
 
    .comment {
@@ -40,6 +41,9 @@
    .comment .comment-actions {
      display: flex;
      gap: 10px;
+	 justify-content: right;
+	 margin-right: 5px;
+     margin-bottom: 5px;
    }
 
    .post-info-header {
@@ -66,6 +70,8 @@
      margin-bottom: 10px;
      border: 1px solid #ccc;
      border-radius: 5px;
+	 resize: none;
+	 height: 100px;
    }
 
    .custom-modal {
@@ -137,11 +143,11 @@
 			<input type="hidden" name="postId" th:value="${postInfo.postId}" id="postInfoId"/>
 			<input type="hidden" name="userId" th:value="${userId}" />
 			<div>
-				<label id="postLikeItLabel" style="font-size: 14px; display: block;">추천 하기</label>
-				<label id="postLikedIconLabel" style="display: none; font-size: 14px;">추천 완료!</label>
+				<label id="postLikeItLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 0}">추천 하기</label>
+				<label id="postLikedIconLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 1}">추천 완료!</label>
 				<button type="button" class="Good-submit" style="border: 1px solid black; border-radius: 10%; width: 50px;">
-					<img id="postLikeItIcon" src="/images/icons/likeit.png" style="width: 100%; padding: 5px;">
-					<img id="postLikedIcon" src="/images/icons/likedit.png" style="width: 100%; padding: 5px; display: none;">
+					<img th:if="${isLikeChecked == 0}" id="postLikeItIcon" src="/images/icons/likeit.png" style="width: 100%; padding: 5px;">
+					<img th:if="${isLikeChecked == 1}" id="postLikedIcon" src="/images/icons/likedit.png" style="width: 100%; padding: 5px;">
 				</button>
 			</div>
 		</form>
@@ -160,7 +166,14 @@
 	    <button id="deleteBtn" class="main-btn danger-btn btn-hover" type="button" style="display: none; padding: 5px 15px;">삭제</button>
   	</div>
 	
-	<label>댓글</label>
+	<form id="reply-form" class="reply">
+		<input type="hidden" name="postId" th:value="${postInfo.postId}" />
+		<input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
+		<textarea name="replyContent" id="replyContent"></textarea>
+		<button type="button" id="reply-submit" style="padding: 5px 15px;" class="comment-submit main-btn dark-btn btn-hover">작성</button>
+	</form>
+	
+	<div class="add-line">댓글</div>
 	<ul id="reply-list">
 		<li th:each="reply : ${postInfo.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
 			<div class="reply-info">
@@ -173,14 +186,12 @@
 				<textarea th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
 			</div>
 			<div class="reply-actions">
-				<button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply"
-					th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">댓글
-					삭제</button>
-				<button th:id="|updateBtn${reply.replyWriter}|" type="button" class="border reply-update"
-					th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">댓글
-					수정</button>
-				<button type="button" class="border reply-updateBtn" th:data-reply-id="${reply.replyId}"
-					style="display:none;">수정</button>
+				<button th:id="|updateBtn${reply.replyWriter}|" type="button" class="reply-update main-btn warning-btn btn-hover"
+					th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none; padding: 5px 15px;">수정</button>
+				<button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="delete-reply main-btn danger-btn btn-hover"
+					th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none; padding: 5px 15px;">삭제</button>
+				<button type="button" class="reply-updateBtn main-btn warning-btn btn-hover" th:data-reply-id="${reply.replyId}"
+					style="display:none; padding: 5px 15px;">수정</button>
 			</div>
 
 			<ul>
@@ -196,12 +207,12 @@
 							readonly></textarea>
 					</div>
 					<div class="comment-actions">
-						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment "
-							th:data-comment-id="${comment.commentId}" style="display:none;">대댓글 삭제</button>
 						<button th:id="|commentUpdate-${comment.commentWriter}|" type="button"
-							class="border comment-update" th:data-comment-id="${comment.commentId}"
-							style="display:none;">대댓글 수정</button>
-						<button type="button" class="border comment-updateBtn" th:data-comment-id="${comment.commentId}"
+							class="comment-update main-btn warning-btn btn-hover" th:data-comment-id="${comment.commentId}"
+							style="display:none; padding: 5px 15px;">수정</button>
+						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment main-btn danger-btn btn-hover"
+							th:data-comment-id="${comment.commentId}" style="display:none; padding: 5px 15px;">삭제</button>
+						<button type="button" class="comment-updateBtn" th:data-comment-id="${comment.commentId}"
 							style="display:none;">수정</button>
 					</div>
 				</li>
@@ -212,18 +223,10 @@
 				<input type="hidden" name="postId" th:value="${postInfo.postId}" />
 				<input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
 				<textarea th:id="|commentContent-${reply.replyId}|" name="commentContent"></textarea>
-				<button type="button" th:id="|comment-submit-${reply.replyId}|" class="comment-submit border">대댓글
-					작성</button>
+				<button type="button" th:id="|comment-submit-${reply.replyId}|" style="padding: 5px 15px;" class="comment-submit main-btn dark-btn btn-hover">등록</button>
 			</form>
 		</li>
 	</ul>
-
-	<form id="reply-form" class="reply">
-		<input type="hidden" name="postId" th:value="${postInfo.postId}" />
-		<input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
-		<textarea name="replyContent" id="replyContent"></textarea>
-		<button type="button" id="reply-submit">댓글 작성</button>
-	</form>
 	
 	<a th:href="@{/all/posts/{boardId}(boardId=${boardId})}">목록</a>
 
@@ -551,67 +554,6 @@
       });
     });
 	
-	let postId = $('#postInfoId').val();
-	
-	let likeItIcon = $('#postLikeItIcon');
-	let likedIcon = $('#postLikedIcon');
-	let postLikeItLabel = $('#postLikeItLabel');
-	let postLikedIconLabel = $('#postLikedIconLabel');
-	
-	// 페이지 로드 시 추천 상태 불러오기
-	$.ajax({
-	    type: "GET",
-	    url: "/all/boardLikeStatus?postId=${postId}",
-	    dataType: "JSON",
-	    success: function(likeCheck) {
-	      if (likeCheck == 0) {
-	        likedIcon.css("display", "block");
-	        likeItIcon.css("display", "none");
-	        postLikeItLabel.css("display", "none");
-	        postLikedIconLabel.css("display", "block");
-	      } else {
-	        likedIcon.css("display", "none");
-	        likeItIcon.css("display", "block");
-	        postLikeItLabel.css("display", "block");
-	        postLikedIconLabel.css("display", "none");
-	      }
-		  updateLikeCount();
-	    },
-	    error: function(err) {
-	      alert("상태 불러오기 실패");
-		  console.log("에러", err);
-	    }
-	});
-	
-	$(".Good-submit").on("click", function () {
-	    let formData = $(".Good-form").serialize();
-		formData += `&postId=${postId}`;
-		
-	    $.ajax({
-	      type: "POST",
-	      url: "/all/boardLike",
-	      dataType: "json",
-	      data: formData,
-	      success: function (likeCheck) {
-	        if (likeCheck == 0) {
-			  likedIcon.css("display","block");
-			  likeItIcon.css("display","none");
-			  postLikeItLabel.css("display", "none");
-	        } else {
-			  likedIcon.css("display","none");
-			  likeItIcon.css("display","block");
-			  postLikeItLabel.css("display", "block");
-			  postLikedIconLabel.css("display", "none");
-	        }
-		  	updateLikeCount();
-	      },
-	      error: function () {
-	        alert("통신 에러");
-	      },
-	    });
-	  });
-  });
-
   //--------------------------------------------
   // 이벤트 핸들러 재적용 함수
   //--------------------------------------------
@@ -725,6 +667,43 @@
     }
     return true;
   }
+  
+	//--------------------------------------------
+	// 추천 추가 함수
+	//--------------------------------------------
+	$(".Good-submit").on("click", function () {
+	    let formData = $(".Good-form").serialize();
+		let postLikeItIcon = $('#postLikeItIcon');	// 추천 전 아이콘
+		let postLikedIcon = $('#postLikedIcon');	// 추천 후 아이콘
+		let postLikeItLabel = $('#postLikeItLabel');	// 추천 전 텍스트
+		let postLikedIconLabel = $('#postLikedIconLabel');	// 추천 후 텍스트
+		
+	    $.ajax({
+	      type: "POST",
+	      url: "/all/boardLike",
+	      dataType: "json",
+	      data: formData,
+	      success: function (likeCheck) {
+	        if (likeCheck == 0) {
+				postLikedIcon.css("display", "block");
+		        postLikeItIcon.css("display", "none");
+		        postLikeItLabel.css("display", "none");
+		        postLikedIconLabel.css("display", "block");
+	        } else {
+				postLikedIcon.css("display", "none");
+		        postLikeItIcon.css("display", "block");
+		        postLikeItLabel.css("display", "block");
+		        postLikedIconLabel.css("display", "none");
+	        }
+		  	updateLikeCount();
+			location.reload();
+	      },
+	      error: function () {
+	        alert("통신 에러");
+	      },
+	    });
+	  });
+	});
 </script>
 </body>
 </html>
