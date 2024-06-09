@@ -339,23 +339,21 @@
   $('#okBtn').on('click',function(){
     location.href='/all/posts/'+boardId;
   });
+
   
-
-
   function replyCheck(){
-    let name = $('#replyContent');
-    if(name.val() == ''){
-      alert('내용이 필요합니다.');
-      name.focus();
-      return false;
-    }
-    return true;
-  }
-
+	    let name = $('#replyContent');
+	    if(name.val() == ''){
+	      alert('내용이 필요합니다.');
+	      name.focus();
+	      return false;
+	    }
+	    return true;
+	  }
   //--------------------------------------------
   // 댓글 작성
   //--------------------------------------------
-  $('#reply-submit').on('click', () => {
+  $(document).on("click", "#reply-submit", function () {
     if(!replyCheck()) return;
     let formData = new FormData(document.getElementById('reply-form'));
     $.ajax({
@@ -371,7 +369,7 @@
         console.error("댓글 등록 실패:", error);
       },
     });
-  })
+  });
 
   //--------------------------------------------
   // 댓글 수정
@@ -420,19 +418,19 @@
       });
     }
   });
+
   
-
-
+  
   function commentCheck(commentContentId){
-    let name = $(commentContentId);
-    if(name.val() == ''){
-      alert('내용이 필요합니다.');
-      name.focus();
-      return false;
-    }
-    return true;
-  }
-
+	    let name = $(commentContentId);
+	    if(name.val() == ''){
+	      alert('내용이 필요합니다.');
+	      name.focus();
+	      return false;
+	    }
+	    return true;
+	  }
+	  
   //--------------------------------------------
   // 대댓글 작성
   //--------------------------------------------
@@ -671,7 +669,10 @@
       });
     });
   }
+
   
+
+
 	//--------------------------------------------
 	// 추천 추가 함수
 	//--------------------------------------------
