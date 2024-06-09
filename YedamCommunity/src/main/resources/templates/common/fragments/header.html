@@ -19,10 +19,10 @@
 					<!-- <th:block sec:authorize="hasAuthority('ROLE_LEARN')">
 						<li class="mega-menu-item"><a href="/all/testList2">LMS</a></li>
 					</th:block> -->
-					<li class="mega-menu-item"><a th:href="@{/all/curriculumPost}">수료 과정별 게시판</a></li>
-					<li class="mega-menu-item"><a th:href="@{/all/posts/2}">구인/구직 게시판</a></li>
-					<li class="mega-menu-item"><a th:href="@{/all/posts/3}">정보 공유 게시판</a></li>
-					<li class="mega-menu-item"><a th:href="@{/all/posts/4}">질문과 토론 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/curriculumPost}" id="graduatedBoard">수료 과정별 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/posts/2}" id="findJobBoard">구인/구직 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/posts/3}" id="infoBoard">정보 공유 게시판</a></li>
+					<li class="mega-menu-item"><a th:href="@{/all/posts/4}" id="debateBoard">질문과 토론 게시판</a></li>
 				</ul>
 				<!-- <th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD') or hasAuthority('ROLE_ADMIN')">
 					<div class="profile_my_info" style="position: absolute; right: 90px; color: black;">
@@ -102,11 +102,17 @@
         var currentPath = window.location.pathname;
         var navLinks = document.querySelectorAll('.main-nav ul li a');
         console.log("현재 페이지 경로: ", currentPath);
+		
+		var graduatedBoard = document.querySelector('#graduatedBoard');
+		var findJobBoard = document.querySelector('#findJobBoard');
+		var infoBoard = document.querySelector('#infoBoard');
+		var debateBoard = document.querySelector('#debateBoard');
         
         // 모든 메뉴 항목을 순회하면서 활성화 상태를 설정
         for (var i = 0; i < navLinks.length; i++) {
             // 현재 메뉴 항목의 href 속성 값을 가져옴
             var linkPath = navLinks[i].getAttribute('href');
+			console.log("href 속성: " + linkPath);
             
             // 현재 경로가 메뉴 항목의 href 속성과 일치하거나 포함될 경우 활성화
             if (currentPath.startsWith(linkPath)) {
@@ -114,8 +120,19 @@
             } else {
                 navLinks[i].classList.remove('active');
             }
+			
+			if (currentPath.startsWith("/all/post/2/")) {
+				graduatedBoard.classList.add('active');
+			} else if (currentPath.startsWith("/all/post/7/")) {
+				findJobBoard.classList.add('active');
+			} else if (currentPath.startsWith("/all/post/8/")) {
+				infoBoard.classList.add('active');
+			} else if (currentPath.startsWith("/all/postvote/9/")) {
+				debateBoard.classList.add('active');
+			}
         }
     }
+	
 	window.onload = function() {
 		setActiveHomeMenuItem();
 	}

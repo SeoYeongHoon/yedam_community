@@ -259,7 +259,7 @@
 }*/
 
 #manage-container {
-	min-height: 500px;
+	padding-bottom: 200px;
 }
 
 .content-top {
@@ -278,7 +278,7 @@
 }
 
 .course_wrapper {
-	max-width: 1400px;
+	/*max-width: 1400px;*/
 	position: relative;
 }
 

@@ -47,7 +47,19 @@
 </style>
 </head>
 <body>
-	
+  
+	<div th:switch="${boardId}">
+		<div th:case="2" class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
+		    <p style="color: white">구인/구직 게시판입니다.</p>
+		</div>
+		<div th:case="3" class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
+		    <p style="color: white">정보 공유 게시판입니다.</p>
+		</div>
+		<div th:case="4" class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
+		    <p style="color: white">질문과 토론 게시판입니다.</p>
+		</div>
+	</div>
+  
 	<div id="post_container">
 	<div th:switch="${boardId}" class="post-name">
 		<div th:case="2">
