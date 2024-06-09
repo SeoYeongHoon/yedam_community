@@ -114,6 +114,30 @@
 		</div>
 	</div>
 </div>
+<!-- 피드백을 입력하지 않았을때 뜨는 모달창 -->
+<div id="feedErr" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- 모달 헤더 -->
+			<div class="modal-header">
+				<h5 class="modal-title">피드백 입력 오류</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<!-- 모달 본문 -->
+			<div class="modal-body">
+				<p style="text-align: center;" id="totalScore">피드백 내용을 입력하세요</p>
+				<div style="text-align: center;">
+					<img alt="피드백입력 오류" src="/images/failed.png">
+				</div>
+			</div>
+			<!-- 모달 푸터 -->
+			<div class="modal-footer">
+				<button id='noFeed' type="button" class="btn btn-primary"
+					data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 $('#updateBtn').on('click', updateAjaxJq);
 
@@ -139,7 +163,6 @@ function updateAjaxJq(event){
 	})
 	.done(result =>{
 		if(result != null){
-			//alert('피드백이 등록(수정)되었습니다.');
 			$('#addModal').modal('show');
 			$('#addOk').on('click',function(){
 				location.href="/admin/testinfo?testId=" + testIdInfo;
@@ -154,8 +177,10 @@ function updateAjaxJq(event){
 function validationCheck(){
 	let feed = $('#feedback');
 	if(feed.val() == ''){
-		alert('피드백 내용은 필수로 입력해야합니다.');
-		feed.focus();
+		$('#feedErr').modal('show')
+		$('#noFeed').on('click',function(){
+			feed.focus();
+		})
 		return false;
 	}
 	

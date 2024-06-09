@@ -45,10 +45,13 @@ tr img {
 }
 .box{
 	width: 30%;
-    height: 50%;
+    max-height: 40%;
     margin-right: 5px; 
     margin-bottom: 5px; 
     border: 1px solid gray;
+}
+.row{
+	margin-bottom:5px;
 }
 </style>
 <div style="margin:30px 5px;">
@@ -78,9 +81,9 @@ tr img {
 	</div>
 </div>
 
-<div style="">
-	<label style="color:gray;">선택문제 총점</label>
-	<input type=text id="total" style="border:1px black solid;width:50px;position: relative;left: 90px;bottom: 30px;" readonly/>
+<div>
+	<label style="color:gray; ">선택문제 총점</label>
+	<input type=text id="total" style="border:1px black solid;width:50px;display: inline-block;" readonly/>
 </div>
 <div id="quizBox" class="row" style="margin:5px"></div>
 <div class="center">
