@@ -229,11 +229,23 @@
 	</div>
 </div>
 <script>
-
-window.addEventListener('beforeunload', function(event) {
-    // 페이지를 떠나려고 할 때 메시지 표시
-    event.returnValue = '페이지를 떠나시겠습니까?';
+//<<키값 통한 새로고침 막기 관련>>
+document.addEventListener('keydown', notReload);
+function notReload(event) {
+    if ((event.ctrlKey && (event.keyCode === 78 || event.keyCode === 82)) || event.keyCode === 116) {
+        event.preventDefault();
+        event.stopPropagation();
+        alert("새로고침키를 사용할 수 없습니다.");
+    }
+}
+//<<페이지 이동시 경고창>>
+$(document).ready(function() {
+	// beforeunload 이벤트 핸들러 추가
+	$(window).on('beforeunload', function() {
+		return '변경 사항을 저장하지 않을 수 있습니다. 정말로 이 페이지를 떠나시겠습니까?';
+	});
 });
+
 //<<시험타이머 관련>>
 let testTimeMin = document.querySelector('#testTimeMin');
 let testTimeMid = document.querySelector('#testTimeMid');
@@ -252,8 +264,8 @@ setInterval(function(){
 	let secVal = document.querySelector('#sec');
 	testTimeMin.innerText = String(min).padStart(2,0); //현재 분 저장
 	testTimeSec.innerText = String(sec).padStart(2,0); //현재 초 저장
-	minVal.value = testTimeMin.innerText;
-	secVal.value = testTimeSec.innerText;
+	//minVal.value = testTimeMin.innerText;
+	//secVal.value = testTimeSec.innerText;
 	if(min == 10 && sec == 0){ //10:00인 경우
 		toastMsg.innerText = '시험시간이 10분 남았습니다.';
 		toastMsg.classList.add('active');
@@ -708,6 +720,7 @@ function submitTest(){
 	});
 	//<모달창 확인 버튼>
 	$('#confirmBtn').on('click',function(e){ //확인버튼을 클릭하면
+		$(window).off('beforeunload'); //페이지이동시 경고창 제거
 		e.preventDefault(); //폼 전송 막기
 		modal.classList.remove('on'); //모달창 닫기
 		testResult(); //시험제출 함수 호출, ajax 실행
@@ -741,18 +754,20 @@ function testResult(){
 	}
 	let testTimeVal = document.querySelector('#testTime'); //시험시간
 	let testTime = testTimeVal.value;
+	let thisMin = document.querySelector('#testTimeMin'); //현재 분
+	let thisSec = document.querySelector('#testTimeSec'); //현재 초
 	let minVal = document.querySelector('#min'); //폼 전송시 보낼 분
 	let secVal = document.querySelector('#sec'); //폼 전송시 보낼 초
-	let min = 0; //변수 초기화
-	let sec = 0;
 	//응시 시간 계산
-	if(Number(minVal.value) > 0){ //초가 0보다 큰 경우
-		minVal.value = Number(testTime) - Number(minVal.value) - 1;
-		secVal.value = 60 - Number(secVal.value);
+	if(Number(thisSec.innerText) > 0){ //초가 0보다 큰 경우
+		minVal.value = Number(testTime) - Number(thisMin.innerText) - 1;
+		secVal.value = 60 - Number(thisSec.innerText);
 	}
 	else{ //초가 0인 경우
-		minVal.value = Number(testTime) - Number(minVal.value);
-		secVal.value = 0;
+		if(minVal != testTime){ //시간이 진행된 경우			
+			minVal.value = Number(testTime) - Number(thisMin.innerText);
+			secVal.value = 0;
+		}
 	}
 	//답안 및 시험결과 저장 ajax
 	$.ajax({ 
