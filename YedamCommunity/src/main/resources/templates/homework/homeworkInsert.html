@@ -124,21 +124,27 @@
 								</label> 
 								<input type="date"	th:field="*{homeworkDate}">
 							</div>
+							<div>
+								<font style="vertical-align: inherit;">
+										<font style="vertical-align: inherit;">과제 파일 등록</font>
+									</font>
+									<input type="file" name="uploadFiles" multiple="multiple">
+								</div>
 						</div>
 						<!-- 파일 업로드 -->
-							<div id="file" style="padding: 50px;" class="card-style mb-30">
+							<!-- <div id="file" style="padding: 50px;" class="card-style mb-30">
 								<font style="vertical-align: inherit;">
 									<font style="vertical-align: inherit;">과제 파일 등록</font>
 								</font>
 								<input type="file" name="uploadFiles" multiple="multiple">
-							</div>
+							</div> -->
 					</div>
 					<!-- 등록 취소버튼 -->
 					<div id="btnWrap" class="col-12" style="text-align: center;">
 						<button id="homeworkInsertBtn" class="main-btn primary-btn btn-hover"
 								type="button">등록</button>
 						<button id="cancelBtn" class="main-btn primary-btn btn-hover"
-								type="button" onclick="location.href='homeworkList'">취소</button>
+								type="button" onclick="location.href='homework_T'">취소</button>
 					</div>
 				</div>
 			</form>
