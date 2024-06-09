@@ -170,7 +170,7 @@
 		<input type="hidden" name="postId" th:value="${postInfo.postId}" />
 		<input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
 		<textarea name="replyContent" id="replyContent"></textarea>
-		<button type="button" id="reply-submit" style="padding: 5px 15px;" class="comment-submit main-btn dark-btn btn-hover">작성</button>
+		<button type="button" id="reply-submit" style="padding: 5px 15px;" class="main-btn dark-btn btn-hover">작성</button>
 	</form>
 	
 	<div class="add-line">댓글</div>
@@ -434,23 +434,23 @@
   //--------------------------------------------
   // 대댓글 작성
   //--------------------------------------------
-  $(document).on("click", ".comment-submit", function () {
-    let replyId = $(this).attr('id').split('-')[2]; // 고유한 replyId를 가져옴
-    let commentContentId = `#commentContent-${replyId}`; // 고유한 textarea id 생성
-    if(!commentCheck(commentContentId)) return;
-    let formData = $(this).closest("form").serialize();
-    $.ajax({
-      url: "/all/Comment",
-      type: "POST",
-      data: formData,
-      success: function (response) {
-    	  window.location.reload();
-      },
-      error: function (error) {
-        console.error("대댓글 등록 실패:", error);
-        alert("대댓글 등록에 실패하였습니다.");
-      },
-    });
+  $(".comment-submit").on("click", function() {
+	    let replyId = $(this).attr('id').split('-')[2]; // 고유한 replyId를 가져옴
+	    let commentContentId = `#commentContent-${replyId}`; // 고유한 textarea id 생성
+	    if(!commentCheck(commentContentId)) return;
+	    let formData = $(this).closest("form").serialize();
+	    $.ajax({
+	      url: "/all/Comment",
+	      type: "POST",
+	      data: formData,
+	      success: function (response) {
+	    	  window.location.reload();
+	      },
+	      error: function (error) {
+	        console.error("대댓글 등록 실패:", error);
+	        alert("대댓글 등록에 실패하였습니다.");
+	      },
+	    });
   });
 
   //--------------------------------------------
