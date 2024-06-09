@@ -212,8 +212,8 @@
 							style="display:none; padding: 5px 15px;">수정</button>
 						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment main-btn danger-btn btn-hover"
 							th:data-comment-id="${comment.commentId}" style="display:none; padding: 5px 15px;">삭제</button>
-						<button type="button" class="comment-updateBtn" th:data-comment-id="${comment.commentId}"
-							style="display:none;">수정</button>
+						<button type="button" class="comment-updateBtn main-btn warning-btn btn-hover" th:data-comment-id="${comment.commentId}"
+							style="display:none; padding: 5px 15px;">수정</button>
 					</div>
 				</li>
 			</ul>
