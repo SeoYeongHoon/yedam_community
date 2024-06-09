@@ -8,19 +8,19 @@
   <style>
     .insert-title {
         margin-top: 40px;
-    }
-    h1 {
         text-align: center;
         margin-bottom: 20px;
         font-size: 2em;
     }
-    label {
+    
+    .post-label {
         display: block;
         margin-bottom: 10px;
         font-weight: bold;
         font-size: 1.1em;
+        margin-right: 10px;
     }
-    input[type="text"], textarea {
+    .post-insert-title, .post-insert-textarea {
         width: 100%;
         padding: 10px;
         margin-bottom: 20px;
@@ -28,10 +28,7 @@
         border-radius: 5px;
         font-size: 1em;
     }
-    input[type="file"] {
-        margin-bottom: 20px;
-        font-size: 1em;
-    }
+    
     .submit-button {
         width: 100%;
         padding: 10px;
@@ -47,6 +44,16 @@
     .submit-button:hover {
         background-color: #357A38;
     }
+    
+    .type-button{ 
+        display: flex;
+    }
+    
+    .radio-button{
+    	box-sizing: border-box;
+    	margin-right: 10px;
+    	margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -54,25 +61,27 @@
   <h1 class="insert-title">게시글 작성</h1>
   <form th:action="@{/all/postInsertVote/}" th:object="${post}" method="post" enctype="multipart/form-data" id="post-form">
     <label for="title">제목:</label>
-    <input type="text" id="title" th:field="*{title}" /><br />
+    <input class="post-insert-title" type="text" id="title" th:field="*{title}" /><br />
     
         <h3>질문 / 토론</h3>
         <div class="form-group">
-            <label for="type">유형</label>
-            <input type="radio" id="question" name="type" value="question">
-            <label for="question">질문</label>
-            <input type="radio" id="discussion" name="type" value="discussion">
-            <label for="discussion">토론</label>
+            <label class="post-label" for="type">유형</label>
+            <div class="type-button">
+            <input class="radio-button" type="radio" id="question" name="type" value="question">
+            <label class="post-label" for="question">질문</label>
+            <input class="radio-button" type="radio" id="discussion" name="type" value="discussion">
+            <label class="post-label" for="discussion">토론</label>
+            </div>
         </div>
         <div class="form-group">
-            <label for="period">기간</label>
+            <label class="post-label" for="period">기간</label>
             <input type="date" id="endDate" name="voteEndDate">
         </div>
 		
     <label for="postContent">내용:</label>
-    <textarea id="postContent" th:field="*{postContent}"></textarea><br />
+    <textarea class="post-insert-textarea" id="postContent" th:field="*{postContent}"></textarea><br />
     
-    <label for="writer">작성자:</label>
+    <label class="post-label" for="writer">작성자:</label>
     <input type="text" id="writer" th:field="*{writer}" readonly /><br />
     
     <input type="hidden" th:field="*{boardId}" />
