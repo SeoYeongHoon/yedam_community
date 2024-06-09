@@ -133,7 +133,7 @@
         margin: 4px 2px;
         cursor: pointer;
         position: absolute;
-        left: 52%;
+        left: 50%;
     }
     
     .no-submit {
@@ -224,6 +224,7 @@
     	margin-left: 1028px;
 	}
 	
+	
   </style>
 </head>
 
@@ -244,9 +245,9 @@
   <!-- 찬성, 반대 카운트, 버튼, 삭제, 신고, 목록, 추천 묶여있는 div -->
   <div class="post-all-botton">
   <div class="vote-count">
-    <span style="display: inline-block; margin-right: 30px" id="post-vote-count" th:text="${postvote.voteCount}">0</span>
+    <span style="display: inline-block; margin-right: 7%;" id="post-vote-count" th:text="${postvote.voteCount}" class="post-vote-count">0</span>
   
-    <span style="display: inline-block;" id="post-vote2-count" th:text="${postvoteno.voteCount}">0</span>
+    <span style="display: inline-block; " id="post-vote2-count" th:text="${postvoteno.voteCount}" class="post-vote-count2">0</span>
   </div>
   
 
