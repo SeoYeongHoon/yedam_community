@@ -18,9 +18,11 @@
 }
 .true {
 	color: blue;
+	font-weight: bold;
 }
 .false {
 	color: red;
+	font-weight: bold;
 }
 
 #topBtn {
@@ -91,7 +93,7 @@
 		<div th:if="${quiz.isCorrect == 0}" class="card-style col-lg-6" style="border: 1px solid gray; border-radius: 20px; margin: 0 auto; margin-top: 10px;">						
 			<h1 class="tresult_1">[[${idx.count}]].</h1>
 			<!-- 채점 이미지 -->
-			<img src="/images/icons/false.png" style="position: absolute; left: -10px; top: -30px; width: 100px; height: 100px;">
+			<img src="/images/icons/false.png" style="position: absolute; left: -60px; top: -70px; width: 200px; height: 200px;">
 			<p class="tresult_1" style="font-size: 30px;">[[${quiz.quizContent}]]</p>
 			<input class="exampleAnswer" type="hidden" th:value="${quiz.exampleAnswer}">
 			<input class="testAnswer" type="hidden" th:value="${quiz.testAnswer}">
