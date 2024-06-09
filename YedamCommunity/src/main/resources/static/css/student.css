@@ -17,10 +17,12 @@
 /*맞는 보기*/
 .true {
 	color: blue;
+	font-weight: bold;
 }
 /*틀린 보기*/
 .false {
 	color: red;
+	font-weight: bold;
 }
 /*TOP 버튼*/
 #topBtn {
