@@ -307,7 +307,7 @@ $('#deleteFile-'+ homeworkfileId).on('click',function(){
 //과제 수정
 //-------------------
 $('#updateHomework').on('click',function(e){
-	$('.homeworkUpdate').prop('readonly',false); // 수정할 input
+	$('.homeworkUpdate').prop('disabled',false); // 수정할 input
 	$('.homeworkUpdate').css('backgroundColor','skyblue') // 수정할 input
 	$('#updateHomeworks').css('display', 'block'); // 수정완료 버튼
 	$('.deleteFile').css('display', 'block'); // 파일삭제 버튼
@@ -356,7 +356,7 @@ $('#updateHomeworks').on('click',function(){
 		type: "put",
 		data: {homeworkTitle : homeworkTitle, homeworkDate : homeworkDate , homeworkContent : homeworkContent, homeworkId : homeworkId},
 		success:function(data){
-			$('.homeworkUpdate').prop('readonly', true); //수정하고 인풋 readonly
+			$('.homeworkUpdate').prop('disabled', true); //수정하고 인풋 readonly
 			$('#updateHomeworks').css('display', 'none'); // 수정 등록버튼 
 			$('.homeworkUpdate').css('backgroundColor','transparent') // 배경색 무로 변경
 			$('.deleteFile').css('display', 'none'); // 파일삭제 버튼
@@ -430,7 +430,7 @@ $('#deleteHomeworks').on('click',function(){
 	                   		
 	            	   		<!-- 댓글 내용 -->
 	            	   		<textarea id="logContent" cols="70" rows="1" class="replyContent-${e.replyId}" readonly oninput="autoResize(this)">${e.replyContent}</textarea>
-	                   		<button type="button" id="updateConfirmBtn" class="main-btn warning-btn btn-hover contentUpdate-${e.replyId}">등록</button>
+	                   		<button type="button" id="updateConfirmBtn" class="main-btn warning-btn btn-hover contentUpdate-${e.replyId}" style="right: 0px;">등록</button>
 	                   		
 	                   		<!-- 작성일자 -->
 	                   		<input id="logDate" class="replyDate-${e.replyId}" type="text" value="${replyDate}"  readonly >
