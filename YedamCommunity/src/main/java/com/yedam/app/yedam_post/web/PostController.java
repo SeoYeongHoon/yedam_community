@@ -145,17 +145,17 @@ public class PostController {
 	//--------------------------------
 	// 수교과정별게시판 갤러리 조회
 	//--------------------------------
-		 @GetMapping("/gallery")
-		 @ResponseBody 
-		 public List<BoardFilesVO> gallery(@RequestParam int curriculumId) {
-			 List<BoardFilesVO> fileList = postService.successFileList(curriculumId);	 
-			 System.err.println("파일 리스트 == " + fileList);
-			 
-			 if (fileList != null) {
-				 return  postService.successFileList(curriculumId);
-			 }
-			 return  null;
-		  }
+	 @GetMapping("/gallery")
+	 @ResponseBody 
+	 public List<BoardFilesVO> gallery(@RequestParam int curriculumId) {
+		 List<BoardFilesVO> fileList = postService.successFileList(curriculumId);	 
+		 System.err.println("파일 리스트 == " + fileList);
+		 
+		 if (fileList != null) {
+			 return  postService.successFileList(curriculumId);
+		 }
+		 return  null;
+	  }
 		 
 		 
 	//--------------------------------
@@ -200,6 +200,15 @@ public class PostController {
 	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
 	        file.setExists(find.exists());
 	    }
+	    
+	    // 추천 조회
+	    int userId = userVO.getuserId();
+	    Integer likeCheck = postService.likeCheck(postId, userId);
+	    
+	    
+	    System.out.println("추천 status: " + likeCheck);
+	    model.addAttribute("isLikeChecked", likeCheck);
+	    
 	    postVO.setReplies(replylist);
 	    postVO.setBoardFiles(boardFilesVO);	   
 	    postVO.setBoardId(boardId);
@@ -532,18 +541,8 @@ public class PostController {
 			postService.updateLikeCancel(postId); // 게시판 테이블 -1
 			postService.LikeDelete(postId, userId); // boardlikes 테이블에 DELETE
 		}
-		return likeCheck==1? true : false;
-	}
-	
-	@GetMapping("/boardLikeStatus")
-	public ResponseEntity<Integer> getBoardLikeStatus(@RequestParam("postId") int postId, 
-													  Authentication authentication) {
-		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		
-		System.err.println("포스트 ID: " + postId);
-		System.err.println("로그인 ID: " + userVO.getuserId());
-	    int likeStatus = postService.selectLikeStatus(postId, userVO.getuserId());
-	    return ResponseEntity.ok(likeStatus);
+		System.out.println("추천 상태: " + likeCheck);
+		return likeCheck == 1 ? true : false;
 	}
 	
 	// ----------------
