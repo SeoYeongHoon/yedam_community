@@ -11,18 +11,21 @@ table {
 	width: 60%;
 }
 </style>
-<div>
-	<img src="">
-</div>
+
 <div>
 	<input type="hidden" id="uId" th:value="${userTestInfo.userId}">
-	<table style="scale: 1.5; margin-left: 0px; margin-bottom: 50px;">
+	<div class="title d-flex flex-wrap align-items-center justify-content-between" style="margin-top:30px">
+		<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
+			<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">학생 정보</h4>
+		</div>
+	</div>
+	<table style="margin-left: 10px; margin-bottom: 50px;font-size:25px">
 		<tr>
 			<th>이름</th>
 			<td th:text="${userTestInfo.name}">123</td>
 		</tr>
 		<tr>
-			<th>수강 정보</th>
+			<th>과정 정보</th>
 			<td th:text="${userTestInfo.curriculumName}">123</td>
 		</tr>
 		<tr>
@@ -33,7 +36,11 @@ table {
 	</table>
 </div>
 <div>
-	<h2>과목 성적</h2>
+	<div class="title d-flex flex-wrap align-items-center justify-content-between" style="margin-top:30px">
+		<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
+			<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">과목별 평균점수</h4>
+		</div>
+	</div>
 	<div class="chart" style="width:900px; height:400px;">
 		<canvas id="chart" style="width: 100%; height: 300px; margin-left: 45px;"></canvas>
 	</div>
@@ -82,7 +89,7 @@ function showPage(userId){
 	}); // 학생 과목 점수정보 end of ajax
 }
 showPage(userId)
-// 차트 그리기
+
 
 </script>
 </html>
