@@ -69,11 +69,9 @@ public class PostController {
 	                       @RequestParam(required = false, defaultValue = "6") Integer pageSize,
 	                       @RequestParam(required = false) String keyword,
 	                       Model model) {
-		System.err.println("boardType= "+ boardType);
 		
 		 int boardId = postService.boardTypeSet(boardType);
 		 postVO.setBoardId(boardId);
-		 System.err.println("boardId= ?" + boardId);
 	    try {
 	        postVO.setBoardType(boardType);
 
@@ -95,7 +93,6 @@ public class PostController {
 	            }
 	            post.setBoardFiles(boardFilesVO);
 	        }
-	        System.err.println("list= " + list.get(0));
 	        
 	        model.addAttribute("postList", list);
 	        model.addAttribute("totalCount", totalCount);
@@ -148,8 +145,7 @@ public class PostController {
 	 @GetMapping("/gallery")
 	 @ResponseBody 
 	 public List<BoardFilesVO> gallery(@RequestParam int curriculumId) {
-		 List<BoardFilesVO> fileList = postService.successFileList(curriculumId);	 
-		 System.err.println("파일 리스트 == " + fileList);
+		 List<BoardFilesVO> fileList = postService.successFileList(curriculumId);
 		 
 		 if (fileList != null) {
 			 return  postService.successFileList(curriculumId);
@@ -206,8 +202,6 @@ public class PostController {
 	    int userId = userVO.getuserId();
 	    Integer likeCheck = postService.likeCheck(postId, userId);
 	    
-	    
-	    System.out.println("추천 status: " + likeCheck);
 	    model.addAttribute("isLikeChecked", likeCheck);
 	    
 	    postVO.setReplies(replylist);
@@ -316,7 +310,6 @@ public class PostController {
     		                       @RequestParam("file") MultipartFile file,
     		                       @RequestParam int curriculumSelect,
                                    Authentication authentication) {
-        System.err.println("과정 선택값: " + curriculumSelect);
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             String filePath = uploadPath + fileName;
@@ -547,7 +540,6 @@ public class PostController {
 			postService.updateLikeCancel(postId); // 게시판 테이블 -1
 			postService.LikeDelete(postId, userId); // boardlikes 테이블에 DELETE
 		}
-		System.out.println("추천 상태: " + likeCheck);
 		return likeCheck == 1 ? true : false;
 	}
 	
@@ -564,7 +556,6 @@ public class PostController {
 		  int totalCnt = postService.getTotalCnt(filter,searchQuery);
 		  
 		  PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
-		  System.out.println("필터값: " + filter);
 		  
 		  Map<String, Object> response = new HashMap<>(); 
 		  response.put("posts",posts); 

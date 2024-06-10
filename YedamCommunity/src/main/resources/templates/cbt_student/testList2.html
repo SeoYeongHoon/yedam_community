@@ -85,21 +85,26 @@
 					</th:block>
 				</select>
 			</div>
+			<h3 id="hour" class="tlist_1">16</h3>
+			<h3 class="tlist_1">:</h3>
+			<h3 id="min" class="tlist_1">30</h3>
+			<h3 class="tlist_1">:</h3>
+			<h3 id="sec" class="tlist_1">14</h3>
+			<input id="testDate" type="hidden" th:value="${#dates.format(testList[0].testDate, 'yyyy-MM-dd HH:mm')}">
 			<!-- 검색 필터링 -->
 			<div class="input-style-1" style="position: absolute; top: 43px; right: 20px;">
 			<input id="testSearch" class="tlist_1" placeholder="시험명 검색" type="text" style="border: 1px solid black; padding: 10px; width: 250px;">
 			
-			<img id="searchBtn"
-						style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;"
-						src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			<img style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;"
+				src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 			</div>
 			<br>
 			<table class="table" style="table-layout: fixed;">
 				<thead>
 					<tr>
 						<th class="tlist_2">No.</th>
-						<th class="tlist_2">과목</th>
 						<th class="tlist_2">시험명</th>
+						<th class="tlist_2">과목</th>
 						<th class="tlist_2">시험일</th>
 						<th class="tlist_2">응시상태</th>
 						<th class="tlist_2">피드백</th>
@@ -113,9 +118,6 @@
 			<!-- 목록 페이징 -->
 			<!-- 시험이 있는 경우 -->
 			<div id="testExist" style="text-align: center; display: block;">
-				<!-- 
-				<a class="tlist_4" th:if="${page == 1}" th:text="'<'" href="#"></a>
-				<a class="tlist_4" th:unless="${page == 1}" th:text="'<'" th:href="@{/all/testList2(page=${page-1})}"></a> -->
 				<th:block th:if="${size % 10 == 0}">
 					<th:block th:each="num, stat : ${#numbers.sequence(0,(size / 10 - 1))}">
 						<a class="tlist_4" th:text="${stat.count}" th:href="@{/all/testList2(page=${stat.count})}"></a>
@@ -126,15 +128,6 @@
 						<a class="tlist_4" th:text="${stat.count}" th:href="@{/all/testList2(page=${stat.count})}"></a>
 					</th:block>
 				</th:block>
-				<!-- 
-				<th:block th:if="${size % 10 == 0}">
-					<a class="tlist_4" th:if="${page == (size / 10)}" th:text="'>'" href="#"></a>
-					<a class="tlist_4" th:unless="${page == (size / 10)}" th:text="'>'" th:href="@{/all/testList2(page=${page+1})}"></a>
-				</th:block>
-				<th:block th:unless="${size % 10 == 0}">
-					<a class="tlist_4" th:if="${page == (size / 10 + 1)}" th:text="'>'" href="#"></a>
-					<a class="tlist_4" th:unless="${page == (size / 10 + 1)}" th:text="'>'" th:href="@{/all/testList2(page=${page+1})}"></a>
-				</th:block> -->
 			</div>
 			<!-- 시험이 없는 경우 -->
 			<div id="testEmpty" style="display: none;">
@@ -168,6 +161,52 @@
 	</div>
 </div>
 <script>
+//<<남은 시험 시작시간 타이머>>
+let testDate = $('#testDate').val(); //반환된 시험시간
+//let date1 = new Date(testDate); //시험시간 변수
+//let hour1 = date1.getHours();
+//let minute1 = date1.getMinutes();
+//let second1 = date1.getSeconds();
+let hour1 = 17;
+let minute1 = 50;
+let second1 = 0;
+let date2 = new Date(); //현재시간 변수
+let hour2 = date2.getHours();
+let minute2 = date2.getMinutes();
+let second2 = date2.getSeconds();
+let hour = $('#hour'); //남은시간 타이머
+let min = $('#min');
+let sec = $('#sec');
+setInterval(function(){ //타이머 함수
+	if((second1 - second2) < 0){
+		hour.text(('0' + (hour1 - hour2)).substr(-2,2));
+		min.text(('0' + (minute1 - minute2 - 1)).substr(-2,2));
+		sec.text(60 - second2);
+	}
+	else{
+		hour.text(('0' + (hour1 - hour2)).substr(-2,2));
+		min.text(('0' + (minute1 - minute2)).substr(-2,2));
+		sec.text(('0' + (second1 - second2)).substr(-2,2));
+	}
+	/*
+	hour.text(hour1 - hour2);
+	min.text(minute1 - minute2);
+	sec.text(second1 - second2);
+	second2++;
+	if((second1 - second2) < 0){ //초가 0보다 작은 경우
+		if((minute1 - minute2) < 0){ //분이 0보다 작은 경우
+			hour1++ //전체 시 감소
+			min.text('59'); //분 초기화
+			sec.text('59'); //초 초기화
+		}
+		else{			
+			minute2++; //전체 분 감소
+			sec.text('59'); //초 초기화
+		}
+	}*/
+},1000)
+
+
 
 //<<미응시 모달창 관련>>
 $(document).on('click','.noTestBtn',function(){
@@ -197,13 +236,11 @@ $(document).on('click','.closeBtn',function(){
 //<<응시하기 버튼 관련>>
 $(document).on('click','.testStartBtn',function(){
 	let testId = $(this).parent().siblings('input').val();
-	//console.log(testId);
 	location.href='/all/testDetail?testId=' + testId;
 })
 //<<응시완료 버튼 관련>>
 $(document).on('click','.testEndBtn',function(){
 	let testId = $(this).parent().siblings('input').val();
-	//console.log(testId);
 	location.href='/all/testResult2?testId=' + testId;
 })
 
@@ -223,10 +260,12 @@ $(document).on('change','#subSelect',function(){
 	testListFilter(type, filterData); //필터링 함수 호출
 })
 //<<시험 검색 필터링 관련>>
-$('#searchBtn').on('click',function(){
-	let type = 'search';
-	let filterData = $('#testSearch').val();
-	testListFilter(type, filterData); //필터링 함수 호출
+$('#testSearch').on('keyup',function(e){
+	if(e.keyCode == 13){		
+		let type = 'search';
+		let filterData = $('#testSearch').val();
+		testListFilter(type, filterData); //필터링 함수 호출
+	}
 })
 //<<시험목록 필터링 함수 관련>>
 function testListFilter(type, filterData){
@@ -260,8 +299,8 @@ function testListFilter(type, filterData){
 					//시험정보
 					let html1 = `
 						<td class="tlist_2">${data.testList[i].rn}</td>
-						<td class="tlist_2">${data.testList[i].subjectName}</td>
 						<td class="tlist_2" style="width: 380px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${data.testList[i].testName}</td>
+						<td class="tlist_2">${data.testList[i].subjectName}</td>
 						<td class="tlist_2">${year}-${month}-${day}</td>`;
 					//응시상태
 					let html2 = '';

@@ -154,55 +154,58 @@ function autoResize(textarea) {
 <!-- 과제 상세페이지 시작 -->
 <input id="logType" type="hidden" th:value="${userType}">
 <input id="logName" type="hidden" th:value="${userName}">
-<div th:each="homeworkInfo : ${homeworkList}" style="padding: 30px;">
-	<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
-		class="main-btn danger-btn btn-hover admin"
-		style="float: right; padding: 10px 15px;" type="button">과제 삭제</button>
-	<button id="updateHomework"
-		class="main-btn warning-btn   btn-hover admin"
-		th:value="${homeworkInfo.homeworkId}" type="button" style="padding: 10px 15px;">과제 수정</button>
-	<div>
-		<hr>
-		<div class="input-style-1">
-			<label>제목</label>
-			<input id="title" class="homeworkUpdate" type="text" style="width: 100%;" th:value="${homeworkInfo.homeworkTitle}" disabled>
-
-		</div>
-		<div class="input-style-1">
-			<label>마감일자</label> 
-			<input id="homeworkDate"  type="text" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="width: 250px;" disabled>
-			<input id="updateDate" type="date" style="width: 250px; display:none;"class="homeworkUpdate">
-		</div>
-
-		<!-- 파일내역 출력 -->
-		<div id="homeworkFile"></div>
-		<!-- 파일 업로드 -->
-		<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
-			<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
-			<div id="file" style="padding: 50px; display: none;" class="card-style mb-30">
-				<input type="file" name="uploadFiles" multiple="multiple">
-				<button id="fileUpload" type="button" style="padding: 5px 10px; float:right" class="main-btn dark-btn btn-hover">파일 추가</button>
-				<!-- <button class="updateReplyFile main-btn dark-btn btn-hover" value="${e.replyId}" type="button" style="padding: 5px 10px;">파일 추가</button> -->
+<div class="container" style="padding-bottom: 100px;">
+	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56; max-width: 1140px; margin: 50px auto;">
+		<div th:each="homeworkInfo : ${homeworkList}" style="padding: 30px;">
+			<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
+				class="main-btn danger-btn btn-hover admin"
+				style="float: right; padding: 5px 15px;" type="button">과제 삭제</button>
+			<button id="updateHomework"
+				class="main-btn warning-btn btn-hover admin"
+				th:value="${homeworkInfo.homeworkId}" type="button" style="padding: 5px 15px;">과제 수정</button>
+			<button id="updateHomeworks" class="main-btn primary-btn btn-hover" type="button" style="display: none; padding: 5px 15px;">수정 하기</button>
+			<div>
+				<div class="input-style-1">
+					<label>제목</label>
+					<input id="title" class="homeworkUpdate" type="text" style="width: 100%;" th:value="${homeworkInfo.homeworkTitle}" disabled>
+		
+				</div>
+				<div class="input-style-1">
+					<label>마감일자</label> 
+					<input id="homeworkDate" type="date" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="width: 250px;" disabled>
+					<!-- <input id="updateDate" type="date" style="width: 250px; display:none;"class="homeworkUpdate"> -->
+				</div>
+		
+				<!-- 파일내역 출력 -->
+				<label>파일</label>
+				<div id="homeworkFile"></div>
+				<!-- 파일 업로드 -->
+				<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
+					<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
+					<div id="file" style="padding: 50px; display: none;" class="card-style mb-30">
+						<input type="file" name="uploadFiles" multiple="multiple">
+						<button id="fileUpload" type="button" style="padding: 5px 10px; float:right" class="main-btn dark-btn btn-hover">파일 추가</button>
+						<!-- <button class="updateReplyFile main-btn dark-btn btn-hover" value="${e.replyId}" type="button" style="padding: 5px 10px;">파일 추가</button> -->
+					</div>
+				</form>
+				
+				<hr>
+				
+				<div class="input-style-1">
+					<label>내용</label> 
+					<textarea cols="100" rows="10" class="homeworkUpdate" id="content" name="feedback" th:text="${homeworkInfo.homeworkContent}" disabled></textarea>
+				<!--<input id="content" class="homeworkUpdate" type="text"
+					th:value="${homeworkInfo.homeworkContent}"
+					style="padding: 10px; width: 250px; border: 1px solid black;"
+					readonly>-->
+		
+				</div>
 			</div>
-		</form>
-		
-		<button id=updateHomeworks class="main-btn primary-btn btn-hover" type="button" style="display: none;">등록</button>
-		
-		<hr>
-		
-		<div class="input-style-1">
-			<label>내용</label> 
-			<textarea cols="100" rows="10" class="homeworkUpdate" id="content" name="feedback" th:text="${homeworkInfo.homeworkContent}" disabled></textarea>
-		<!--<input id="content" class="homeworkUpdate" type="text"
-			th:value="${homeworkInfo.homeworkContent}"
-			style="padding: 10px; width: 250px; border: 1px solid black;"
-			readonly>-->
-
+			
+			<hr>
+			
 		</div>
 	</div>
-	
-	<hr>
-	
 	<form name="insertReply" id="addReply" method="post"
 		  th:object="${homeworkList}" enctype="multipart/form-data">
 		<input id="targetId" type="hidden" th:field="*{homeworkTargetId}">
@@ -220,187 +223,250 @@ function autoResize(textarea) {
 		<!-- 댓글출력 -->
 		<div id="replyList"></div>
 	</div>
+	
+	<th:block sec:authorize="hasAuthority('ROLE_LEARN')">
+		<a href="/all/homework_S" type="button" style="padding: 5px 15px;" class="main-btn dark-btn btn-hover">목록</a>
+	</th:block>
+	<th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
+		<a href="/admin/homework_T" type="button" style="padding: 5px 15px;" class="main-btn dark-btn btn-hover">목록</a>
+	</th:block>
 </div>
-<!-- end reply -->
-
 
 <script>
-
-//--------------------------
-// 페이지 로드 시 댓글 목록 불러오기
-//--------------------------
-$().ready(function(){
-	let userType = $('#logType').val(); //로그인한 id
-	if(userType == 'ROLE_ADMIN'){
-		$('.admin').css('display','block');
+	//--------------------------
+	// 페이지 로드 시 댓글 목록 불러오기
+	//--------------------------
+	$().ready(function(){
+		let userType = $('#logType').val(); //로그인한 id
+		if(userType == 'ROLE_ADMIN'){
+			$('.admin').css('display','block');
+		}
+		
+		//마감일자 지나면 댓글입력창 없앰
+		let homeworkDate = $('#homeworkDate').val()
+		let today = noTimeDate(new Date());
+	     
+		if(homeworkDate < today){
+			$('#addReply').css('display','none');
+		} 
+		
+		replyList();
+		fileList();
+	});
+	
+	//-------------------
+	//과제 파일목록 출력함수
+	//-------------------
+	function fileList(){
+		let homeworkId = $('#deleteHomeworks').val();
+		$.ajax({
+			url: '/all/homeworkFileList',
+			type:'get',
+			async: false,
+			data:{homeworkId : homeworkId},
+			success:function(data){
+				data.forEach(function(e){
+					let file =
+						`
+						<div>
+							<p>
+							<a class="filePath" value="${e.homeworkfileId}"  href="/homeworkdownload/${e.downloadLocation}" target="_blank">${e.homeworkfileName}</a>
+								<button id="deleteFile-${e.homeworkfileId}" value="${e.homeworkfileLocation}" type="button" class="close deleteFile" style="float:left; display:none;" >&times;</button>
+							</p>
+						</div>
+						`
+						$('#homeworkFile').append(file);
+						 deleteFile(e.homeworkfileId);
+				})
+				
+			},
+			error:function(err){
+				alert("파일 리스트 오류")
+			}
+		})
+	}
+	//-------------------
+	// 과제 파일 삭제함수
+	//-------------------
+	function deleteFile(homeworkfileId){
+	$('#deleteFile-'+ homeworkfileId).on('click',function(){
+		let homeworkfileLocation = $(this).val();
+		
+		$.ajax({
+			url: '/all/deleteFile',
+			type:'post',
+			data:{homeworkfileLocation : homeworkfileLocation, homeworkfileId: homeworkfileId},
+			success:function(e){
+				 $('#homeworkFile').empty(); 
+				fileList();
+				$('.deleteFile').css('display', 'block');
+			},
+			error:function(err){
+				alert('filedelete err')	
+			}
+		})
+		
+	})
 	}
 	
-	//마감일자 지나면 댓글입력창 없앰
-	let homeworkDate = $('#homeworkDate').val()
-	let today = noTimeDate(new Date());
-     
-	if(homeworkDate < today){
-		$('#addReply').css('display','none');
-	} 
-	
-	replyList();
-	fileList();
-});
-
-//-------------------
-//과제 파일목록 출력함수
-//-------------------
-function fileList(){
-	let homeworkId = $('#deleteHomeworks').val();
-	$.ajax({
-		url: '/all/homeworkFileList',
-		type:'get',
-		async: false,
-		data:{homeworkId : homeworkId},
-		success:function(data){
-			data.forEach(function(e){
-				let file =
-					`
-					<div>
-						<label>파일</label>
-						<p>
-						<a class="filePath" value="${e.homeworkfileId}"  href="/homeworkdownload/${e.downloadLocation}">${e.homeworkfileName}</a>
-							<button id="deleteFile-${e.homeworkfileId}" value="${e.homeworkfileLocation}" type="button" class="close deleteFile" style="float:left; display:none;" >&times;</button>
-						</p>
-					</div>
-					`
-					$('#homeworkFile').append(file);
-					 deleteFile(e.homeworkfileId);
-			})
-			
-		},
-		error:function(err){
-			alert("파일 리스트 오류")
-		}
+	//-------------------
+	//과제 수정
+	//-------------------
+	$('#updateHomework').on('click',function(e){
+		$('.homeworkUpdate').prop('disabled',false); // 수정할 input
+		$('#title').focus();
+		$('.homeworkUpdate').css('backgroundColor','#e5ebff') // 수정할 input
+		$('#updateHomeworks').css('display', 'block'); // 수정완료 버튼
+		$('.deleteFile').css('display', 'block'); // 파일삭제 버튼
+		$('#homeworkDate').prop("disabled", false);
+		$('#updateHomework').css("display", "none");
+		// $('#updateDate').css("display","block");
+		$('#addReply').css("display", "none");
+		$('#file').css('display','block'); //파일업로드 버튼 
 	})
-}
-//-------------------
-// 과제 파일 삭제함수
-//-------------------
-function deleteFile(homeworkfileId){
-$('#deleteFile-'+ homeworkfileId).on('click',function(){
-	let homeworkfileLocation = $(this).val();
-	
-	$.ajax({
-		url: '/all/deleteFile',
-		type:'post',
-		data:{homeworkfileLocation : homeworkfileLocation, homeworkfileId: homeworkfileId},
-		success:function(e){
-			 $('#homeworkFile').empty(); 
-			fileList();
-			$('.deleteFile').css('display', 'block');
-		},
-		error:function(err){
-			alert('filedelete err')	
-		}
+	//-------------------
+	// 과제 수정 (파일 업로드업로드 아작스)
+	//-------------------
+	$('#fileUpload').on('click',function(e){
+		let homeworkId = $('#homeworkId').val();
+		let formData = new FormData(document.getElementById('updateForm'));
+		formData.append('homeworkId', homeworkId);
+		$.ajax({
+			url:'/admin/updateFile',
+			type:'POST',
+			processData: false, // QueryString(key=value)로 자동변환 무시
+			contentType: false, // FormData가 가지고 있는 통신 정보를 사용
+			data: formData,
+			success:  function(result) {
+				$('#modal').modal('show');
+				$('#homeworkFile').empty(); 
+				fileList();
+				$('.deleteFile').css('display', 'block');
+				
+				
+				
+			},
+			error: function(reject){	
+				$('#modalError').modal('show');
+	           }
+		})
+		
 	})
+	//-------------------
+	// 과제 수정(업데이트 아작스)
+	//-------------------
+	$('#updateHomeworks').on('click',function(){
+		let homeworkDate = $('#homeworkDate').val()
+		let homeworkTitle = $('#title').val();
+		let homeworkContent = $('#content').val();
+		let homeworkId = $('#deleteHomeworks').val();
+		
+		Swal.fire({
+		    title: "과제를 수정하시겠습니까?",
+		    text: "확인 버튼을 클릭 시, 과제가 수정됩니다.",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '수락',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					url:"/admin/updateHomework",
+					type: "put",
+					data: {homeworkTitle : homeworkTitle, homeworkDate : homeworkDate , homeworkContent : homeworkContent, homeworkId : homeworkId},
+					success:function(data){
 	
-})
-}
-
-//-------------------
-//과제 수정
-//-------------------
-$('#updateHomework').on('click',function(e){
-	$('.homeworkUpdate').prop('disabled',false); // 수정할 input
-	$('.homeworkUpdate').css('backgroundColor','skyblue') // 수정할 input
-	$('#updateHomeworks').css('display', 'block'); // 수정완료 버튼
-	$('.deleteFile').css('display', 'block'); // 파일삭제 버튼
-	$('#homeworkDate').css("display","none");
-	$('#updateDate').css("display","block");
-	$('#file').css('display','block'); //파일업로드 버튼 
-})
-//-------------------
-// 과제 수정 (파일 업로드업로드 아작스)
-//-------------------
-$('#fileUpload').on('click',function(e){
-	let homeworkId = $('#homeworkId').val();
-	let formData = new FormData(document.getElementById('updateForm'));
-	formData.append('homeworkId', homeworkId);
-	$.ajax({
-		url:'/admin/updateFile',
-		type:'POST',
-		processData: false, // QueryString(key=value)로 자동변환 무시
-		contentType: false, // FormData가 가지고 있는 통신 정보를 사용
-		data: formData,
-		success:  function(result) {
-			$('#modal').modal('show');
-			$('#homeworkFile').empty(); 
-			fileList();
-			$('.deleteFile').css('display', 'block');
-			
-			
-			
-		},
-		error: function(reject){	
-			$('#modalError').modal('show');
-           }
-	})
-	
-})
-//-------------------
-// 과제 수정(업데이트 아작스)
-//-------------------
-$('#updateHomeworks').on('click',function(){
-	let homeworkDate = $('#updateDate').val()
-	let homeworkTitle = $('#title').val();
-	let homeworkContent = $('#content').val();
-	let homeworkId = $('#deleteHomeworks').val();
-	$.ajax({
-		url:"/admin/updateHomework",
-		type: "put",
-		data: {homeworkTitle : homeworkTitle, homeworkDate : homeworkDate , homeworkContent : homeworkContent, homeworkId : homeworkId},
-		success:function(data){
-			$('.homeworkUpdate').prop('disabled', true); //수정하고 인풋 readonly
-			$('#updateHomeworks').css('display', 'none'); // 수정 등록버튼 
-			$('.homeworkUpdate').css('backgroundColor','transparent') // 배경색 무로 변경
-			$('.deleteFile').css('display', 'none'); // 파일삭제 버튼
-			$('#modal').modal('show'); // 등록완료 모달
-			$('#file').css('display','none'); //파일업로드 버튼 
-			let date = $('#homeworkDate').val();
-			$('#homeworkDate').prop('type','text');
-			$('#homeworkDate').val(homeworkDate);
-			
-			//마감일자 지나면 댓글입력창 없앰
-			//let homeworkDate = $('#homeworkDate').val()
-			let today = noTimeDate(new Date());
-		     
-			if(homeworkDate < today){
-				$('#addReply').css('display','none');
-			} else{
-				$('#addReply').css('display','block');
+						Swal.fire({
+							icon: 'success',
+							text: '과제가 업데이트 되었습니다.',
+							confirmButtonText: '확인',
+						}).then((result) => {
+							$('.homeworkUpdate').prop('disabled', true); //수정하고 인풋 readonly
+							$('#updateHomeworks').css('display', 'none'); // 수정 등록버튼 
+							$('.homeworkUpdate').css('backgroundColor','transparent') // 배경색 무로 변경
+							$('.deleteFile').css('display', 'none'); // 파일삭제 버튼
+							// $('#modal').modal('show'); // 등록완료 모달
+							$('#file').css('display','none'); //파일업로드 버튼 
+							$('#addReply').css("display", "block");
+							$('#updateHomework').css("display", "block");
+							let date = $('#homeworkDate').val();
+							// $('#homeworkDate').prop('type','text');
+							$('#homeworkDate').prop("disabled", true);
+							$('#homeworkDate').val(homeworkDate);
+							
+							//마감일자 지나면 댓글입력창 없앰
+							//let homeworkDate = $('#homeworkDate').val()
+							let today = noTimeDate(new Date());
+						     
+							if(homeworkDate < today){
+								$('#addReply').css('display','none');
+							} else{
+								$('#addReply').css('display','block');
+							}
+						});
+					},
+					error:function(err){
+						Swal.fire({
+							icon: 'error',
+							text: '과제 수정 실패!',
+							confirmButtonText: '확인',
+						}).then((result) => {
+							location.href='/admin/homework_T';
+						});
+					}
+				});
 			}
-			
-		},
-		error:function(err){
-			alert("updateHomework err")
-		}
+		});
 	})
-})
-
-//-------------------
-//과제 삭제(아작스)
-//-------------------
-$('#deleteHomeworks').on('click',function(){
-	let homeworkId = $('#deleteHomeworks').val();
-	$.ajax({
-		   url: "/admin/deleteHomeworks",
-		   type: "delete",
-		   data: {homeworkId : homeworkId},
-		   success: function(data){
-			   $('#deleteHomework').modal('show'); // 삭제완료 모달
-		   },
-		   error: function(err){
-			   alert("deleteHomeworks err");
-		   }
-	   });
 	
-})
+	//-------------------
+	//과제 삭제(아작스)
+	//-------------------
+	$('#deleteHomeworks').on('click',function(){
+		let homeworkId = $('#deleteHomeworks').val();
+		
+		Swal.fire({
+		    title: "과제를 삭제하시겠습니까?",
+		    text: "확인 버튼을 클릭 시, 해당 과제가 삭제됩니다.",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '확인',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+				   url: "/admin/deleteHomeworks",
+				   type: "delete",
+				   data: {homeworkId : homeworkId},
+				   success: function(data){
+					  // $('#deleteHomework').modal('show'); // 삭제완료 모달
+						Swal.fire({
+							icon: 'success',
+							text: '과제가 삭제되었습니다.',
+							confirmButtonText: '확인',
+						}).then((result) => {
+							location.href='/admin/homework_T';
+						});
+					   
+				   },
+				   error: function(err){
+					   Swal.fire({
+							icon: 'error',
+							text: '과제 삭제 실패!',
+							confirmButtonText: '확인',
+						}).then((result) => {
+							location.href='/admin/homework_T';
+						});
+				   }
+				});
+			}
+		});
+		
+	});
 
    //--------------------------
    //댓글 목록 불러오기 함수
@@ -430,7 +496,7 @@ $('#deleteHomeworks').on('click',function(){
 	                   		
 	            	   		<!-- 댓글 내용 -->
 	            	   		<textarea id="logContent" cols="70" rows="1" class="replyContent-${e.replyId}" readonly oninput="autoResize(this)">${e.replyContent}</textarea>
-	                   		<button type="button" id="updateConfirmBtn" class="main-btn warning-btn btn-hover contentUpdate-${e.replyId}" style="right: 0px;">등록</button>
+	                   		<button type="button" id="updateConfirmBtn" class="main-btn warning-btn btn-hover contentUpdate-${e.replyId}" style="right: 0px;">수정</button>
 	                   		
 	                   		<!-- 작성일자 -->
 	                   		<input id="logDate" class="replyDate-${e.replyId}" type="text" value="${replyDate}"  readonly >
@@ -539,33 +605,34 @@ $('#deleteHomeworks').on('click',function(){
          }
       });
    } // replyList end
-//-------------------
-// 댓글 파일 삭제
-//-------------------
-   function deleteReplyFile(replyfileId){
-	let replyId = $('#replyId'+replyfileId).val(); // 댓글아이디
-   $('#deleteReplyFile'+ replyfileId).on('click',function(){ // 댓글파일 삭제버튼 클릭
-	   	let path = $(this).val(); // 파일경로 가져옴
-   		$.ajax({
-   			url: '/all/deleteReplyFile',
-   			type:'post',
-   			data:{replyfileLocation : path, replyfileId: replyfileId, replyId : replyId},
-   			success:function(data){
-	   			$('#replyFilesList'+data.replyId).empty(); // 댓글파일 리스트 초기화
-   				replyFile(data.replyId); // 다시 출력
-   				$('.deleteReplyFile'+replyId).css('display','block'); //파일 삭제버튼 보이기
-   			},
-   			error:function(err){
-   				alert('filedelete err')	
-   			}
-   		})// 댓글 파일삭제 end
-	   })// deleteReplyFile end
-   }
    
-//--------------------------
-//댓글 파일 다운로드
-//--------------------------
-function replyFile(replyId){
+	//-------------------
+	// 댓글 파일 삭제
+	//-------------------
+	   function deleteReplyFile(replyfileId){
+		let replyId = $('#replyId'+replyfileId).val(); // 댓글아이디
+	   $('#deleteReplyFile'+ replyfileId).on('click',function(){ // 댓글파일 삭제버튼 클릭
+		   	let path = $(this).val(); // 파일경로 가져옴
+	   		$.ajax({
+	   			url: '/all/deleteReplyFile',
+	   			type:'post',
+	   			data:{replyfileLocation : path, replyfileId: replyfileId, replyId : replyId},
+	   			success:function(data){
+		   			$('#replyFilesList'+data.replyId).empty(); // 댓글파일 리스트 초기화
+	   				replyFile(data.replyId); // 다시 출력
+	   				$('.deleteReplyFile'+replyId).css('display','block'); //파일 삭제버튼 보이기
+	   			},
+	   			error:function(err){
+	   				alert('filedelete err')	
+	   			}
+	   		})// 댓글 파일삭제 end
+		   })// deleteReplyFile end
+	   }
+   
+	//--------------------------
+	//댓글 파일 다운로드
+	//--------------------------
+	function replyFile(replyId){
 	   
 	   $.ajax({
 		   url : "/all/replyfile",
@@ -580,7 +647,7 @@ function replyFile(replyId){
 					   		<p class="mr-2">파일: </p>
 					   		<input id="replyId${e.replyfileId}" type="hidden" value="${e.replyId}"> 
 					   		<input id="replyfileId" type="hidden" value="${e.replyfileId}"> 
-					   		<a href="/replydownload/${e.downloadLocation}">${e.replyfileName}</a> 
+					   		<a href="/replydownload/${e.downloadLocation}" target="_blank">${e.replyfileName}</a> 
 					   		<button id="deleteReplyFile${e.replyfileId}" value="${e.replyfileLocation}" type="button" class="close deleteReplyFile${e.replyId}" style="float:left; display:none;" >&times;</button> 
 					   </div>
 					   `
@@ -592,13 +659,14 @@ function replyFile(replyId){
 			 alert("replyfile err")  
 		   }
 	   }); // 댓글 파일 다운로드 아작스 end
-} // replyFile end
+	}
 
    //--------------------------
    // 댓글 등록 버튼 클릭 이벤트
    //--------------------------
    $('#insertBtn').on('click', addReply); 
    
+
    //--------------------------
    //댓글 등록 함수
    //--------------------------
@@ -607,32 +675,46 @@ function replyFile(replyId){
       let formData = new FormData(document.getElementById('addReply')); // form에 입력한 값넣어서 formData 만들기
       
       if (replyContent.value == '') { // 내용이 빈칸이면
-         $('#modalReply').modal('show'); // 입력하라는 모달
-         replyContent.focus(); // 댓글입력창에 커서 띄우기
-         return;
-      } else {
-         $.ajax({
-            url : "/all/insertReply",
-            type : "POST",
-            processData : false, // QueryString(key=value)로 자동변환 무시
-            contentType : false, // FormData가 가지고 있는 통신 정보를 사용
-            data : formData,
-            success : function(json) {
-              /*  $('#modal').modal('show'); //성공모달 */
-               replyContent.value = ''; // 댓글 입력창 초기화 
-               $('#uploadFiles').val(''); // 댓글 파일필드 초기화
-               replyList();// 댓글 목록 새로고침
-            },
-            error : function(err) {
-               alert("addReply err");
-            }
-         }); // insertReply 아작스 END
-      }
-   } // addReply END
-   
-   
-   
-
+	         // $('#modalReply').modal('show'); // 입력하라는 모달
+	         Swal.fire({
+				icon: 'error',
+				text: '댓글을 입력해주세요!',
+				confirmButtonText: '확인',
+			}).then((result) => {
+				replyContent.focus(); // 댓글입력창에 커서 띄우기
+			});
+	         return;
+	     } else {
+	         Swal.fire({
+			    text: "댓글을 등록하시겠습니까?",
+			    icon: 'warning',
+			    showCancelButton: true,
+			    confirmButtonColor: '#3085d6',
+			    cancelButtonColor: '#d33',
+			    confirmButtonText: '확인',
+			    cancelButtonText: '취소',
+			 }).then((result) => {
+				if (result.isConfirmed) {
+					$.ajax({
+			            url : "/all/insertReply",
+			            type : "POST",
+			            processData : false, // QueryString(key=value)로 자동변환 무시
+			            contentType : false, // FormData가 가지고 있는 통신 정보를 사용
+			            data : formData,
+			            success : function(json) {
+			              /*  $('#modal').modal('show'); //성공모달 */
+			               replyContent.value = ''; // 댓글 입력창 초기화 
+			               $('#uploadFiles').val(''); // 댓글 파일필드 초기화
+			               replyList();// 댓글 목록 새로고침
+			            },
+			            error : function(err) {
+			               alert("addReply err");
+			            }
+			       }); // insertReply 아작스 END			
+				}
+			});
+	   	 }
+   }
    
    //--------------------------
    //댓글 수정 
@@ -643,24 +725,35 @@ function replyFile(replyId){
 	  	let date = $('.replyDate-'+replyId).val();
 		$('#replyFiles-'+replyId).css('display','block'); // 업로드 버튼
 		
-		$.ajax({
-			url:"/all/updateReply",
-			type:'PUT',
-			data: {replyContent : content, replyId :replyId, date : date},
-			success:function(data){
-				/* $('#modal').modal('show'); */
-				$('#replyUpdate-'+replyId).prop('readonly',true);
-				//$('.replyfiles-'+ replyId).empty();
-				replyList(); // 댓글 출력
-				$('#replyFilesList'+replyId).empty(); // 댓글 파일 초기화
-				replyFile(replyId); // 댓글파일 출력
-			},
-			error : function(err){
-				alert("update err")
+		Swal.fire({
+		    text: "댓글을 수정하시겠습니까?",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '확인',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					url:"/all/updateReply",
+					type:'PUT',
+					data: {replyContent : content, replyId :replyId, date : date},
+					success:function(data){
+						
+						$('#replyUpdate-'+replyId).prop('readonly',true);
+						//$('.replyfiles-'+ replyId).empty();
+						replyList(); // 댓글 출력
+						$('#replyFilesList'+replyId).empty(); // 댓글 파일 초기화
+						replyFile(replyId); // 댓글파일 출력
+					},
+					error : function(err){
+						alert("update err")
+					}
+				});				
 			}
-		})
-		
-	})   
+		});
+	 });
    }
    
 
@@ -679,7 +772,7 @@ function replyFile(replyId){
        			 	<textarea style="background-color: transparent; min-height: 60px;" id="logContent" cols="70" rows="1" class="commentContent-${e.commentId}" readonly oninput="autoResize(this)">${e.commentContent}</textarea>
        			 	<p style="font-size: 14px; width: 230px;">${commentDate}</p>
        			 	<div class ="commentBtn">
-       			 		<button class="main-btn warning-btn btn-hover  replyContentUpdate-${e.commentId}" type="button"  style="padding: 5px 15px; display: none;"	>등록</button>
+       			 		<button class="main-btn warning-btn btn-hover  replyContentUpdate-${e.commentId}" type="button"  style="padding: 5px 15px; display: none;"	>수정</button>
        			 		<button class="main-btn warning-btn btn-hover cUpdateBtn commentLogName  commentLogName-${e.commentId} commentLogName-${e.commentWriter}" type="button" style="padding: 5px 15px;  margin-right: 5px;" id="cUpdateBtn" value="${e.commentId}">수정</button>
        			 		<button class="main-btn danger-btn btn-hover commentLogName commentDeleteBtn commentLogName-${e.commentWriter}"  type="button" style="padding: 5px 15px;" onclick="(deleteComment(${e.commentId}))">삭제</button>
        			 	</div>
@@ -712,7 +805,9 @@ function replyFile(replyId){
    		 	$('.cUpdateBtn').css('display', 'none');
    		  	$('.commentLogName-' + commentId).css('display','none');
          	$('.commentContent-'+ commentId).prop('readonly',false);
-         	$('.commentContent-'+commentId).css('backgroundColor','skyblue');
+         	$('.commentContent-'+commentId).css('backgroundColor','white');
+         	$('.commentContent-'+commentId).css('border', '1px solid rgb(229, 229, 229)');
+         	$('.commentContent-'+commentId).css('borderRadius', '5px');
         	$('.replyContentUpdate-'+commentId).css('display','block');
         	$('.commentDeleteBtn').css('display','none')
         	replyUpdate(commentId);
@@ -725,19 +820,32 @@ function replyFile(replyId){
   function replyUpdate(commentId){
   $('.replyContentUpdate-'+commentId).on('click', function(data){
 	   let content = $('.commentContent-'+commentId).val();
-	  $.ajax({
-			url:"/all/updateComment",
-			type:'PUT',
-			data: {content : content, commentId : commentId},
-			success:function(data){
-				//$('#modal').modal('show');
-				$('.cUpdateContent').val('');
-				replyList();
-			},
-			error : function(err){
-				alert("update err")
+	   
+	   Swal.fire({
+		    text: "답글을 수정하시겠습니까?",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '확인',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					url:"/all/updateComment",
+					type:'PUT',
+					data: {content : content, commentId : commentId},
+					success:function(data){
+						//$('#modal').modal('show');
+						$('.cUpdateContent').val('');
+						replyList();
+					},
+					error : function(err){
+						alert("update err")
+					}
+				}); //updateComment 아작스 end		
 			}
-		}) //updateComment 아작스 end
+		});
    });
    } // replyUpdate 함수 end
    
@@ -773,37 +881,58 @@ function replyFile(replyId){
    //대댓글 삭제
    //--------------------------
    function deleteComment(commentId){
-	   
-	   $.ajax({
-		   url: "/all/deleteComment",
-		   type: "delete",
-		   data: {commentId : commentId},
-		   success: function(data){
-			   $('#deleteOK').modal('show');
-			   replyList();
-		   },
-		   error: function(err){
-			   alert("deleteComment err");
-		   }
-	   });// deleteComment ajax end
+	   Swal.fire({
+		    text: "댓글을 삭제하시겠습니까?",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '확인',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			if (result.isConfirmed) {
+			   $.ajax({
+				   url: "/all/deleteComment",
+				   type: "delete",
+				   data: {commentId : commentId},
+				   success: function(data){
+					   replyList();
+				   },
+				   error: function(err){
+					   alert("deleteComment err");
+				   }
+			   });// deleteComment ajax end
+			}
+		});
    }// deleteComment 함수 end
    
    //--------------------------
    //댓글 삭제
    //--------------------------
- 	function deleteReply(replyId){
- 		 $.ajax({
- 			   url: "/all/deleteReply",
- 			   type: "delete",
- 			   data: {replyId : replyId},
- 			   success: function(data){
- 				   $('#deleteOK').modal('show');
- 				   replyList();
- 			   },
- 			   error: function(err){
- 				   alert("deleteReply err");
- 			   }
- 		   });//deleteReply ajax end
+ 	function deleteReply(replyId) {
+ 		Swal.fire({
+		    text: "댓글을 삭제하시겠습니까?",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '확인',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+				   url: "/all/deleteReply",
+				   type: "delete",
+				   data: {replyId : replyId},
+				   success: function(data){
+					   replyList();
+				   },
+				   error: function(err){
+					   alert("deleteReply err");
+				   }
+			    });//deleteReply ajax end	
+			}
+		});
    }// deleteReply 함수 end
  	
  	
@@ -855,8 +984,5 @@ function replyFile(replyId){
 	    // 원하는 형식으로 문자열 생성
 	    return `${year}-${month}-${day}`;
 	}
-	
-	
-
 </script>
 </html>

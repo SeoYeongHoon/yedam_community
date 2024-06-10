@@ -5,7 +5,12 @@
 	layout:fragment="Admin">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
+<style>
+.feedBtn{
+	border: 1px solid gray;
+	width: 100px;
+}
+</style>
 <!-- ========= card-style-3 start ========= -->
 <div class="row testInfo">
 	<div class="col-12">
@@ -97,14 +102,18 @@ function userList(testId){
 				if(item.isReexam == 1){
 					//item.isReexam = '재시험 X';
 					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'));
-					$('#passFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
+					$('#passFeed').append($('<p/>').text(item.feedback)
+												   .attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'")
+												   .addClass('feedBtn'));
 					
 				} else {
 					//item.isReexam = '재시험 O';
 					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'),
 									      $('<input type="hidden">').attr({value : item.userId, id : "u"+idx}));
-					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
-					console.log("input태그 val값" + $('#u'+idx).val());
+
+					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'")
+												   .addClass('feedBtn'));
+
 					reUserId.push($('#u'+idx).val());
 				}
 			})
@@ -124,7 +133,7 @@ const btn1 = document.getElementById('reTest');
 if(pTagNum == 0){
 	btn1.style.display = 'none';
 } else {
-	console.log('p태그가 존재함')
+	//console.log('p태그가 존재함')
 }
 
 $('#reTest').on('click', function(){

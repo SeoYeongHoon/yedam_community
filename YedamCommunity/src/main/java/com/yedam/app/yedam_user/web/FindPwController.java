@@ -33,9 +33,6 @@ public class FindPwController {
 														 @RequestParam String name,
 														 @RequestParam String email,
 														 HttpServletResponse res) throws IOException {
-		System.out.println("아이디: " + id);
-		System.out.println("이름: " + name);
-		System.out.println("아이디: " + email);
 		
 		try {
 			userService.sendPasswordResetEmail(id, name, email);
