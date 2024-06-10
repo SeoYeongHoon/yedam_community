@@ -407,6 +407,14 @@ public class PostController {
 	        postreplyVO.setComments(commentlist);
 	    }
 	    
+	    
+	    // 추천 조회
+	    int userId = userVO.getuserId();
+	    Integer likeCheck = postService.likeCheck(postId, userId);
+	    
+	    model.addAttribute("isLikeChecked", likeCheck);
+	    
+	    
 	   postVO.setPostId(postId);
 	   postVO.setReplies(replylist);
 	    model.addAttribute("postvote", postVO);
