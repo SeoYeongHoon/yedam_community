@@ -177,6 +177,7 @@ function autoResize(textarea) {
 				</div>
 		
 				<!-- 파일내역 출력 -->
+				<label>파일</label>
 				<div id="homeworkFile"></div>
 				<!-- 파일 업로드 -->
 				<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
@@ -268,7 +269,6 @@ function autoResize(textarea) {
 					let file =
 						`
 						<div>
-							<label>파일</label>
 							<p>
 							<a class="filePath" value="${e.homeworkfileId}"  href="/homeworkdownload/${e.downloadLocation}" target="_blank">${e.homeworkfileName}</a>
 								<button id="deleteFile-${e.homeworkfileId}" value="${e.homeworkfileLocation}" type="button" class="close deleteFile" style="float:left; display:none;" >&times;</button>
