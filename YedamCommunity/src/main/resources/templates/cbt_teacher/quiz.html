@@ -44,51 +44,91 @@ tr img {
 		
 }
 .box{
-	width: 30%;
+	width: 400px;
+	height: 210px;
+	padding: 10px 15px;
     max-height: 40%;
-    margin-right: 5px; 
-    margin-bottom: 5px; 
-    border: 1px solid gray;
+    margin-right: 15px;
+}
+.quizBoxContent {
+	height: 100px;
+	margin: 10px;
+	color: black;
+}
+.quizBoxDescription {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
+	height: 70px;
+	line-height: 1.5em;
+}
+.infoBtn:hover {
+	text-decoration: underline;
 }
 .row{
 	margin-bottom:5px;
 }
+.quizBoxHeader {
+	display: flex;
+	align-items: center;
+}
+.scInput {
+	border: 1px solid #e5e5e5;
+    width: 70px;
+    height: 30px;
+    text-align: center;
+    border-radius: 5px;
+    background: rgba(239, 239, 239, 0.5);
+}
+.quizTotalScore {
+	display: inline-block;
+	border: 1px solid #e5e5e5;
+    width: 70px;
+    height: 30px;
+    text-align: center;
+    border-radius: 5px;
+    background: rgba(239, 239, 239, 0.5);
+}
 </style>
-<div style="margin:30px 5px;">
-	<!-- <button type="button" id="subBtn" style="margin-bottom: 10px;"
-		class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button> -->
-	<ul style="margin-bottom:10px;">
-		<li class="quizListMenu">
-			<a id="subBtn" class="main-btn primary-btn-light btn-hover">과목 추가/삭제</a>
-		</li>
-		<li class="quizListMenu">
-			<a href="quizinsert" class="main-btn primary-btn-light btn-hover">새문제</a>
-		</li>
-		<li class="quizListMenu">
-			<a href="#0" class="main-btn primary-btn-light btn-hover" id="quizSelect">선택문제 확인</a>
-		</li>
-		<li class="quizListMenu" style="margin-right:50px">
-			<a id="testInsert" class="main-btn danger-btn-light btn-hover" style="float:right;margin-right:200px">다음</a>
-		</li>	
-	</ul>
-</div>
-<div id="" style="padding-top:10px;margin-bottom: 15px;">
-	<h2>과목선택</h2>
-	<div>
-		<select id="subject" style="width:auto; height:40px;">
-		
-		</select>
+<div class="card-style mb-30" style="max-width: 1400px; margin: 60px auto;">
+	<div style="margin: 10px auto;">
+		<!-- <button type="button" id="subBtn" style="margin-bottom: 10px;"
+			class="main-btn primary-btn-light btn-hover">과목 추가/삭제</button> -->
+		<ul style="margin-bottom: 10px;">
+			<li class="quizListMenu">
+				<a href="quizinsert" class="main-btn primary-btn btn-hover" style="padding: 10px 15px;">+ 새 문제</a>
+			</li>
+			<li class="quizListMenu">
+				<a id="subBtn" class="main-btn primary-btn-light btn-hover" style="padding: 10px 15px;">과목 추가/삭제</a>
+			</li>
+			<li class="quizListMenu">
+				<a href="#0" class="main-btn primary-btn-light btn-hover" id="quizSelect" style="padding: 10px 15px;">선택문제 확인</a>
+			</li>
+			<li class="quizListMenu" style="margin-right:50px">
+				<a id="testInsert" class="main-btn danger-btn-light btn-hover" style="background-color: #e96b56; float: right; padding: 5px 15px; color: white;">다음 &#9654;</a>
+			</li>	
+		</ul>
 	</div>
-</div>
-
-<div>
-	<label style="color:gray; ">선택문제 총점</label>
-	<input type=text id="total" style="border:1px black solid;width:50px;display: inline-block;" readonly/>
-</div>
-<div id="quizBox" class="row" style="margin:5px"></div>
-<div class="center">
-	<div class="testPaging">
-		<!-- ajax실행으로 태그 생성 -->
+	<div id="" style="padding-top:10px;margin-bottom: 15px;">
+		<div class="select-style-1" style="position: relative; margin-bottom: 15px;">
+			<label>과목 선택</label>
+			<div class="select-position" style="width: 250px;">
+				<select name="" id="subject">
+				</select>
+			</div>
+		</div>
+	</div>
+	
+	<div>
+		<label style="color:gray;">선택문제 <span style="color: red;">총점</span></label>
+		<input type=text id="total" class="quizTotalScore" readonly/>
+	</div>
+	<div id="quizBox" class="row" style="margin:5px"></div>
+	<div class="center">
+		<div class="testPaging">
+			<!-- ajax실행으로 태그 생성 -->
+		</div>
 	</div>
 </div>
 
@@ -128,13 +168,15 @@ tr img {
 			<div class="modal-body">
 				<div class="input-style-1">
 					<!-- 과정 선택창 -->
-					<h5 class="modal-title">과정 선택</h5>
-					<div class="select-position">
-						<select id="curr">
-							<th:block th:each="currInfo, idxStat : ${currList}">
-								<option class="typeSelec" th:value="${currInfo.curriculumId}" th:name="${currInfo.curriculumId}">[[${currInfo.curriculumName}]] - [[${currInfo.classId}]]강의실</option>
-							</th:block>
-						</select>
+					<div class="select-style-1">
+						<h6 class="mb-2">과정 선택</h6>
+						<div class="select-position">
+							<select id="curr">
+								<th:block th:each="currInfo, idxStat : ${currList}">
+									<option class="typeSelec" th:value="${currInfo.curriculumId}" th:name="${currInfo.curriculumId}">[[${currInfo.curriculumName}]] - [[${currInfo.classId}]]강의실</option>
+								</th:block>
+							</select>
+						</div>
 					</div>
 				</div>	
 				<form th:action="@{/subjectdelete}" id="delForm" name="delForm" method="get" th:object="${teacherVO}">
@@ -144,7 +186,7 @@ tr img {
 							<!-- 해당 영역에 등록된 과목명 및 체크박스 생성  -->
 						</div>
 						<input type="hidden" id="hidden" name="curriculumId"/>	
-						<button type="button"
+						<button type="button" style="padding: 5px 15px;"
 							class="main-btn danger-btn-light square-btn btn-hover" id="delBtn" formaction="subjectdelete">삭제</button>
 					</div>
 				</form>	
@@ -156,7 +198,7 @@ tr img {
 						<input type="text" id="insertSubName" placeholder="과목명을 입력하세요" th:field=*{subjectName}></input>
 						<input type="hidden" id="insertSub"></input>
 					</div>
-					<button id="subAdd" class="main-btn primary-btn btn-hover"
+					<button id="subAdd" class="main-btn primary-btn btn-hover" style="padding: 5px 15px;"
 						type="submit">과목추가</button>
 				</div>
 				</form>
@@ -603,7 +645,7 @@ function quizContentList(page, subjectName){
 //--------------------------------------------
 // 과목 추가/삭제 모달창에서 과목창 띄워주는 함수
 //--------------------------------------------
-function subList(){
+function subList() {
 	curriId = $('#curr').val();
 	$('#insertSub').val(curriId);
 	$('#insertSub').attr('name','curriculumId');
@@ -664,7 +706,8 @@ $('.form-check').on('click', '.checkbox', function(){
 	} else if($(".checkbox").is(":checked") == false){
 		$("#delBtn").attr("onclick", "");
 	};
-})															
+});
+														
 //--------------------------------------------
 // 과목추가/삭제모달 알림창 뜨는거
 //--------------------------------------------
@@ -673,25 +716,62 @@ document.querySelector('form[name="insertForm"]')
 function validationCheck(event){
 	event.preventDefault();
 	if($('#insertSubName').val() == ''){
-		$('#addSubFail').modal('show') // 과목명 미입력시 모달창 생성
-		$('#insertSubName').focus();
-		return;
+		// $('#addSubFail').modal('show') // 과목명 미입력시 모달창 생성
+		// $('#insertSubName').focus();
+		Swal.fire({
+			icon: 'error',
+			text: '과목명을 입력해주세요!',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		})
 	} else {
-		$('#okModal').modal('show');
-		$('#subAddOk').on('click', function(){
+		// $('#okModal').modal('show');
+		Swal.fire({
+			icon: 'success',
+			text: '과목 등록 완료!',
+			confirmButtonText: '확인',
+		}).then((result) => {
 			$('#insertForm').submit();
-		})	
+		});
 	}
 }
 
 $('#delBtn').on('click',function(){
 	if($(".checkbox").is(":checked") == false){
-		$('#delSubFail').modal('show');
-		return;
+		// $('#delSubFail').modal('show');
+		Swal.fire({
+			icon: 'error',
+			text: '과목을 선택하세요!',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
 	} else {
-		$('#delModal').modal('show');
+		let chkVal = $(".checkbox:checked").val();
+		let curriId = $('#curr').val();
+		
+		// $('#delModal').modal('show');
+		Swal.fire({
+		    title: "과목을 삭제하시겠습니까?",
+		    text: "확인 버튼을 클릭 시, 과정이 삭제됩니다.",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '수락',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			Swal.fire({
+				icon: 'success',
+				text: '과목이 삭제되었습니다.',
+				confirmButtonText: '확인',
+			}).then((result) => {
+				location.href = '/admin/subjectdelete?subjectName=' + chkVal + '&curriculumId=' + curriId;
+			});
+		});
 	}
-})
+});
 
 //--------------------------------------------
 // 모달창 작업
@@ -744,17 +824,48 @@ $('#testInsert').on('click', function(){
 	$('#total').val(sum);
 	
 	// 문제를 선택(체크) 하지 않은 경우 알람창
-	if($('input[name="select"]:checked').length == 0){
-		$('#quizChkbox').modal('show');
+	if($('input[name="select"]:checked').length == 0) {
+		Swal.fire({
+			icon: 'error',
+			text: '문제를 선택하세요!',
+			confirmButtonText: '확인',
+		});
 		return false;
 	}
 	// 배점의 총합이 100이 됐는지 체크
 	if(sum == 100){
-		$('#scoreOk').modal('show');
+		Swal.fire({
+			title: "선택한 문제를 출제하시겠습니까?",
+		    text: "출제를 원하실경우 확인버튼을 눌러주세요.",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '확인',
+		    cancelButtonText: '취소',
+		 }).then((result) => {
+			if (result.isConfirmed) {
+				let reCurriculumId = window.localStorage.getItem('reCurriculumId');
+
+				if(reCurriculumId == null || reCurriculumId == "") {
+					location.href='/admin/selectClassExam';
+				} else {
+					location.href='/admin/retestinsert';
+				};
+			}
+		});
+		// $('#scoreOk').modal('show');
 	} else {
-		$('#totalScore').text('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum);
-		$('#scoreFail').modal('show');
-		return false;
+		Swal.fire({
+			icon: 'error',
+			title: '현재 배점 총합: ' + sum,
+			text: '배점의 합을 100점으로 맞춰주세요!',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return false;
+		});
+		// $('#totalScore').text('배점의 합을 100점으로 맞춰주세요.\n' + '현재 배점 총합 : ' + sum);
+		// $('#scoreFail').modal('show');
 	}
 	
 	// 값 저장시 ["","",""] 배열타입으로 저장하기 위해 변환작업.
@@ -788,23 +899,22 @@ function updateList(quizes){
 		uName = quiz.name;
 		
 		let temp = `
-			<div style="color:gray;" class="box" id="${qId}">
-				<div>
-					<input type="checkbox" class="quizChk " name="select"  id="qContent${idx}" value="${qContent}" style="zoom : 1.5;display: inline-block;margin: 3px;"></input>
-					<label for="qContent${idx}">문제선택</label>
-					<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}" style="border:1px solid black;width:60px;display: inline-block;">
-					<p style="display: inline-block;font-size: 12px;float: right;padding-right: 5px;">과목명 : ${subName}</p>
+			<div style="color:gray;" class="card-style-1 mb-30 box" id="${qId}">
+				<div class="quizBoxHeader">
+					<input type="checkbox" class="quizChk" name="select" id="qContent${idx}" value="${qContent}" style="zoom : 1.5; margin: 3px;"></input>
+					<label style="margin-bottom: 0; margin-right: 10px;" for="qContent${idx}">문제선택</label>
+					<input type="text" class="scInput" placeholder="배점입력" id="qScore${idx}">
+					<p style="font-size: 13px; position: absolute; right: 10px; padding-right: 5px;">과목명: <span style="color: #e96b56;">${subName}</span></p>
 				</div>
 				
 				<input type="hidden" id="qId${idx}" value="${qId}" />
 				<input type="hidden" id="sName${idx}" value="${subName}" />
-				<div class="card-content" style="margin: 10px;">
-					<h4>${qContent}</h4>
-					<br>
+				<div class="quizBoxContent">
+					<p class="quizBoxDescription">${qContent}</p>
 				</div>
 				<div style="margin: 3px;">
 					<button type="button" class="infoBtn" id="${qId}btn" name="${qId}" value="${qId}">자세히 보기</button>
-					<p style="display: inline-block;font-size: 12px;float: right;">작성자 : ${uName}</p>
+					<p style="display: inline-block;font-size: 14px;float: right;">출제자: <span style="color: #365CF5;">${uName}</span></p>
 				</div>
 			</div>
 			`;
@@ -902,7 +1012,6 @@ $('#modalWrap').on('click','.updateShowBtn', function(){
 						  , readonly:false})
 	$('#textContent5').attr({style:'border:1px black solid'
 						  , readonly:false})					  
-})
+});
 </script>
-
 </html>

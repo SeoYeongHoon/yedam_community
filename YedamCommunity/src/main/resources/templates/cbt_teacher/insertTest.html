@@ -3,81 +3,94 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/admin_layout}"
 	layout:fragment="Admin">
-<form th:action="@{/}" method="post" th:object="${teacherVO}">
-	<!-- ======= 시험 이름 입력 start ======= -->
-	<div class="input-style-1">
-		<h6 class="mb-25">시험 Title</h6>
-		<input type="text" placeholder="시험의 이름 입력" th:field="*{testName}" maxlength="80" />
-	</div>
-	<!-- ======= 시험 이름 입력 end ======= -->
-
-	<!-- ======= 시험 안내사항 입력 start ======= -->
-	<h6 class="mb-25">시험 안내사항</h6>
-	<div class="input-style-1">
-		<textarea placeholder="시험의 안내사항을 입력하세요." rows="8" cols="100"
-			th:field="*{testContent}"></textarea>
-	</div>
-	<!-- ======= 시험 안내사항 입력 end ======= -->
-	<br>
-	<!-- ======= 시험 시작일 입력 start ======= -->
-	<div>
-		<h6 class="mb-25">시험 시작일</h6>
-		<input type="datetime-local" placeholder="시간입력(분)" style="border: 1px solid"
-			name="testDate" id="testDate" value="">
-	</div>
-	<!-- ======= 시험 시작일 입력 end ======= -->
-	<br>
-	<!-- ======= 시험 제한시간 입력 start ======= -->
-	<div>
-		<h6 class="mb-25">제한 시간</h6>
-		<input type="text" placeholder="시간입력(분)" style="border: 1px solid"
-			name="testTime" id="testTime">
-	</div>
-	<br>
-	<div style="position:relative; top:10px">		
-		<h6 class="mb-25">합격 점수</h6>
-		<input type="text" placeholder="합격점수 입력" style="border: 1px solid"
-			name="passScore" id="passScore">
-	</div>
-	<br>
-	<!-- ======= 시험 제한시간 입력 end ======= -->
-
-	<!-- ======= 시험 대상 선택 start ======= -->
-	<div class="card-style mb-30">
-		<h6 class="mb-25">시험 대상</h6>
-		<div class="form-check checkbox-style mb-20">
-			<input class="form-check-input" type="checkbox" value=""
-				id="checkbox-1" /> <label class="form-check-label" for="checkbox-1">
-				전체 추가</label>
+<div class="card-style mb-30" style="max-width: 1400px; margin: 60px auto;">
+	<form th:action="@{/}" method="post" th:object="${teacherVO}">
+		<!-- ======= 시험 이름 입력 start ======= -->
+		<div class="input-style-1">
+			<label>시험 제목</label>
+			<input type="text" placeholder="시험의 이름 입력" th:field="*{testName}" maxlength="80" />
 		</div>
-		<!-- end checkbox -->
-		<th:block th:each="userInfo, idxStat : ${userList}">
-			<div class="form-check checkbox-style mb-20">
-				<input class="form-check-input checkbox" type="checkbox"
-					th:value="${userInfo.userId}" th:id="user+${idxStat.index}" /> <label
-					class="form-check-label" th:for="user+${idxStat.index}">[[${userInfo.name}]]</label>
+		<!-- ======= 시험 이름 입력 end ======= -->
+	
+		<!-- ======= 시험 안내사항 입력 start ======= -->
+		<label>시험 안내사항</label>
+		<div class="input-style-1">
+			<textarea placeholder="시험의 안내사항을 입력하세요." rows="8" cols="100"
+				th:field="*{testContent}"></textarea>
+		</div>
+		<!-- ======= 시험 안내사항 입력 end ======= -->
+		<br>
+		<!-- ======= 시험 시작일 입력 start ======= -->
+		<div>
+			<!--<h6 class="mb-25">시험 시작일</h6>
+			<input type="datetime-local" placeholder="시간입력(분)" style="border: 1px solid"
+				name="testDate" id="testDate" value="">-->
+			<div class="input-style-1" style="width: 300px;">
+				<label>시험 시작일</label> 
+				<input type="datetime-local" placeholder="시간입력(분)"	name="testDate" id="testDate" value="">
 			</div>
-		</th:block>
-		<!-- end checkbox -->
-		<!-- ======= 시험 대상 선택 end ======= -->
-	</div>
-	<ul class="buttons-group">
-		<li>
-			<!-- <button type="button"
-				class="main-btn primary-btn square-btn btn-hover" id="addBtn"
-				th:onclick="|location.href='@{/admin/testlist}'|">
-				시험 출제하기</button> -->
-			<button type="button"
-				class="main-btn primary-btn square-btn btn-hover" id="addBtn">
-				시험 출제하기</button>	
-		</li>
-		<li>
-			<button type="button"
-				class="main-btn deactive-btn square-btn btn-hover"
-				th:onclick="|location.href='@{/admin/selectClassExam}'|">돌아가기</button>
-		</li>
-	</ul>
-</form>
+		</div>
+		<!-- ======= 시험 시작일 입력 end ======= -->
+		<br>
+		<!-- ======= 시험 제한시간 입력 start ======= -->
+		<div>
+			<div class="input-style-1" style="width: 300px;">
+				<label>제한 시간</label> 
+				<input type="text" placeholder="시간입력(분)" name="testTime" id="testTime">
+			</div>
+			<!--<h6 class="mb-25">제한 시간</h6>
+			<input type="text" placeholder="시간입력(분)" style="border: 1px solid"
+				name="testTime" id="testTime">-->
+		</div>
+		<br>
+		<div style="position:relative; top:10px">
+			<div class="input-style-1" style="width: 300px;">
+				<label>합격 점수</label> 
+				<input type="text" placeholder="합격점수 입력" name="passScore" id="passScore">
+			</div>	
+			<!--<h6 class="mb-25">합격 점수</h6>
+			<input type="text" placeholder="합격점수 입력" name="passScore" id="passScore">-->
+		</div>
+		<br>
+		<!-- ======= 시험 제한시간 입력 end ======= -->
+	
+		<!-- ======= 시험 대상 선택 start ======= -->
+		<div class="card-style mb-30">
+			<h6 class="mb-25">시험 대상</h6>
+			<div class="form-check checkbox-style mb-20">
+				<input class="form-check-input" type="checkbox" value=""
+					id="checkbox-1" /> <label class="form-check-label" for="checkbox-1">
+					전체 추가</label>
+			</div>
+			<!-- end checkbox -->
+			<th:block th:each="userInfo, idxStat : ${userList}">
+				<div class="form-check checkbox-style mb-20">
+					<input class="form-check-input checkbox" type="checkbox"
+						th:value="${userInfo.userId}" th:id="user+${idxStat.index}" /> <label
+						class="form-check-label" th:for="user+${idxStat.index}">[[${userInfo.name}]]</label>
+				</div>
+			</th:block>
+			<!-- end checkbox -->
+			<!-- ======= 시험 대상 선택 end ======= -->
+		</div>
+		<ul class="buttons-group">
+			<li>
+				<!-- <button type="button"
+					class="main-btn primary-btn square-btn btn-hover" id="addBtn"
+					th:onclick="|location.href='@{/admin/testlist}'|">
+					시험 출제하기</button> -->
+				<button type="button"
+					class="main-btn primary-btn square-btn btn-hover" id="addBtn">
+					시험 출제하기</button>	
+			</li>
+			<li>
+				<button type="button"
+					class="main-btn deactive-btn square-btn btn-hover"
+					th:onclick="|location.href='@{/admin/selectClassExam}'|">돌아가기</button>
+			</li>
+		</ul>
+	</form>
+</div>
 
 <!-- 내용 확인 모달창 -->
 <div id="errModal" class="modal fade">
@@ -209,7 +222,14 @@ $('#addBtn').on('click', function() {
 	passScore = $('#passScore').val();
 	
 	if(tContent === '' || tTime === '' || tTime == 0 || tName === '' || tDate === '' || passScore === ''|| storageUser.length == 0){
-		$('#errModal').modal('show');
+		// $('#errModal').modal('show');
+		Swal.fire({
+			icon: 'error',
+			text: '빈 값을 입력해주세요!',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return false;
+		});
 	} else {
 		//--------------------------------------------
 		// tests 테이블에 insert 동작.
@@ -224,73 +244,90 @@ $('#addBtn').on('click', function() {
 			"subjectName" : subjectName,
 			"testDate" : tDate
 		};
-		$.ajax({
-			url : "testinsert",
-			type : "post",
-			async : false,
-			data : obj,
+		Swal.fire({
+			title: "등록 성공!",
+		    text: "출제가 완료되었습니다.",
+		    icon: 'success',
+		    confirmButtonText: '확인',
+		 }).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					url : "testinsert",
+					type : "post",
+					async : false,
+					data : obj,
+					
+					success : function(data) {
+						testId = data;
+					},
+					error : function(err) {
+						Swal.fire({
+							icon: 'error',
+							text: '시험 등록 실패!',
+							confirmButtonText: '확인',
+						}).then((result) => {
+							return;
+						});
+					}
+				});
+				
+				//--------------------------------------------
+				// quizbox 테이블에 선택된 문제수 만큼 insert 동작
+				//--------------------------------------------
+				obj = {
+				        "quizContent": arryQContent,
+				        "quizId": arryQuizId,
+				        "subjectName": arrySubName,
+				        "curriculumId": curriculumId,
+				        "quizScore": arryQuizScore,
+				        "testId" : testId
+				      };
+				
+				$.ajax({
+					url : "quizboxinsert",
+					type : "post",
+					contentType : 'application/json',
+					data : JSON.stringify(obj),
+					async : false,
+						
+					success : function(data){
+						
+					},
+					error : function(err){
+						Swal.fire({
+							icon: 'error',
+							text: '시험 등록 실패! (문제 등록 실패)',
+							confirmButtonText: '확인',
+						}).then((result) => {
+							
+						});
+					}
+				});
 			
-			success : function(data) {
-				testId = data;
-			},
-			error : function(err) {
-				alert('시험 등록 실패');
-				return;
+				//--------------------------------------------
+				// test_targets 테이블에 선택된 학생수 만큼 insert 동작
+				//--------------------------------------------
+				obj = {
+				        "userId": storageUser,
+				        "testId" : testId
+				      };
 				
-			}
-		});
-		
-		//--------------------------------------------
-		// quizbox 테이블에 선택된 문제수 만큼 insert 동작
-		//--------------------------------------------
-		obj = {
-		        "quizContent": arryQContent,
-		        "quizId": arryQuizId,
-		        "subjectName": arrySubName,
-		        "curriculumId": curriculumId,
-		        "quizScore": arryQuizScore,
-		        "testId" : testId
-		      };
-		
-		$.ajax({
-			url : "quizboxinsert",
-			type : "post",
-			contentType : 'application/json',
-			data : JSON.stringify(obj),
-			async : false,
-				
-			success : function(data){
-				
-			},
-			error : function(err){
-				alert('시험 등록 실패(문제 등록 실패)');
-			}
-		});
-	
-		//--------------------------------------------
-		// test_targets 테이블에 선택된 학생수 만큼 insert 동작
-		//--------------------------------------------
-		obj = {
-		        "userId": storageUser,
-		        "testId" : testId
-		      };
-		
-		$.ajax({
-			url : "testuserinsert",
-			type : "post",
-			contentType : 'application/json',
-			data : JSON.stringify(obj),
-			async : false,
-			
-			success : function(data){
-				$('#addOk').attr('onclick',"location.href='/admin/testlist'")
-				$('#addModal').modal('show');
-				setTimeout(function () {
-					location.replace('/admin/testlist');
-				}, 3000);
-			},
-			error : function(err){
-				alert('시험 등록 실패(시험 대상자 등록 실패)');
+				$.ajax({
+					url : "testuserinsert",
+					type : "post",
+					contentType : 'application/json',
+					data : JSON.stringify(obj),
+					async : false,
+					
+					success : function(data){
+						location.href='/admin/testlist';
+						// $('#addOk').attr('onclick',"location.href='/admin/testlist'")
+						// $('#addModal').modal('show');
+					},
+					error : function(err){
+						alert('시험 등록 실패(시험 대상자 등록 실패)');
+					}
+				});
 			}
 		});
 		
