@@ -290,7 +290,7 @@ public class CbtStudentController {
 	//ㅡㅡㅡㅡㅡㅡㅡㅡ
 	@ResponseBody
 	@PostMapping("testStart1")
-	public boolean testStart(@RequestParam("submitAnswer") String[] submitAnswer, 
+	public boolean testStart(@RequestParam("submitAnswer") int[] submitAnswer, 
 							@RequestParam("randQuizId") int[] randQuizId,
 							@RequestParam("randRn") int[] randRn,
 							@RequestParam("randQuizScore") int[] randQuizScore,

@@ -323,7 +323,7 @@
 	<!-- 문제 제출 답안 저장 - test_results 테이블 -->
 	<update id="insertTestSubmit" parameterType="TestResultVO">
 		DECLARE
-    		v_answer varchar2(50); <!-- 내 답안 -->
+    		v_answer NUMBER(10); <!-- 내 답안 -->
     		v_iscorrect NUMBER(10); <!-- 답안 정답 유무 -->
     		v_tid NUMBER(10); <!-- 시험대상자식별번호 -->
     		v_rid NUMBER(10); <!-- 시험결과식별번호 -->

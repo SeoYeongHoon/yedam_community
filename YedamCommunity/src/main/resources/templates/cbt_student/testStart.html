@@ -26,6 +26,9 @@
 .tstart_6 {
  	line-height: 50px;
 }
+.tstart_7 {
+	width: 100px;
+}
  /*토스트 메시지*/
 #toast_message {
     opacity: 0;
@@ -119,7 +122,18 @@
 			<br>
 			<h3 class="tstart_2">남은문제:</h3>
 			<h3 id="remainQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]</h3>
-		</div>	
+		</div>
+		<div>
+			<div class="tstart_5">
+				<button id="zoomOut" class="tstart_7 main-btn dark-btn-outline square-btn btn-hover">축소</button>
+			</div>
+			<div class="tstart_5" style="width: 100px">
+				<button id="zoomStatus" class="tstart_7 main-btn dark-btn-outline square-btn btn-hover">100%</button>
+			</div>
+			<div class="tstart_5">
+				<button id="zoomIn" class="tstart_7 main-btn dark-btn-outline square-btn btn-hover">확대</button>
+			</div>
+		</div>
 		<div>
 			<!-- 문제갱신 위한 ajax용 데이터 -->
 			<div>
@@ -232,7 +246,7 @@
 //<<키값 통한 새로고침 막기 관련>>
 document.addEventListener('keydown', notReload);
 function notReload(event) {
-    if ((event.ctrlKey && (event.keyCode === 78 || event.keyCode === 82)) || event.keyCode === 116) {
+    if ((event.ctrlKey && (event.keyCode === 78 || event.keyCode === 82)) || event.keyCode === 116) { //새로고침 키
         event.preventDefault();
         event.stopPropagation();
         alert("새로고침키를 사용할 수 없습니다.");
@@ -242,9 +256,31 @@ function notReload(event) {
 $(document).ready(function() {
 	// beforeunload 이벤트 핸들러 추가
 	$(window).on('beforeunload', function() {
-		return '변경 사항을 저장하지 않을 수 있습니다. 정말로 이 페이지를 떠나시겠습니까?';
+		return '변경 사항이 저장되지 않을 수 있습니다. 정말로 이 페이지를 떠나시겠습니까?';
 	});
 });
+
+//<<화면크기 축소 및 확대>>
+let nowZoom = 100; // 현재 비율
+$('#zoomOut').on('click',function(){
+	$('#zoomIn').attr('disabled', false);
+	nowZoom = nowZoom - 10;
+	$('#zoomStatus').text(nowZoom + "%");
+	if(nowZoom <= 70){ //최소 70%
+		$('#zoomOut').attr('disabled', true);
+ 	}
+	$('#quiz').css({zoom: nowZoom + "%"}); //문제 부분 축소
+})
+$('#zoomIn').on('click',function(){
+	$('#zoomOut').attr('disabled', false);
+	nowZoom = nowZoom + 10;
+	$('#zoomStatus').text(nowZoom + "%");
+	if(nowZoom >= 130){ //최대 130%
+		$('#zoomIn').attr('disabled', true);
+ 	}
+	$('#quiz').css({zoom: nowZoom + "%"}); //문제 부분 확대
+})
+
 
 //<<시험타이머 관련>>
 let testTimeMin = document.querySelector('#testTimeMin');
@@ -332,7 +368,7 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							//하나라도 색상이 되어 있는 경우
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
-								submitAnswer[i].value = oneExample[i].vlaue;
+								submitAnswer[i].value = oneExample[i].value;
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
@@ -373,10 +409,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
 								submitAnswer[i].value = twoExample[i].value;
+								console.log(submitAnswer[i].value);
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
 								submitAnswer[i].value = twoExample[i].value;
+								console.log(submitAnswer[i].value);
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -413,10 +451,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
 								submitAnswer[i].value = threeExample[i].value;
+								console.log(submitAnswer[i].value);
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
 								submitAnswer[i].value = threeExample[i].value;
+								console.log(submitAnswer[i].value);
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -453,10 +493,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
 								submitAnswer[i].value = fourExample[i].value;
+								console.log(submitAnswer[i].value);
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
 								submitAnswer[i].value = fourExample[i].value;
+								console.log(submitAnswer[i].value);
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -493,10 +535,12 @@ $(document).on('click', '.selectedContent', function(e){ //동적으로 생성�
 							if(one[i].style.background == 'aqua' || two[i].style.background == 'aqua' || three[i].style.background == 'aqua' || four[i].style.background == 'aqua' || five[i].style.background == 'aqua'){								
 								remainQuizCnt.innerText = remainQuizCnt.innerText; //남은 문제개수 유지
 								submitAnswer[i].value = fiveExample[i].value;
+								console.log(submitAnswer[i].value);
 							}
 							else{ //모두 색상이 되어 있지 않은 경우
 								remainQuizCnt.innerText = remainQuizCnt.innerText - 1; //남은 문제개수 감소
 								submitAnswer[i].value = fiveExample[i].value;
+								console.log(submitAnswer[i].value);
 							}
 							e.target.style.background = 'aqua'; //보기 색상 넣기
 							one[i].style.background = 'white'; //답안 색상 넣기
@@ -677,6 +721,9 @@ $('#nextQuiz, #prevQuiz, .selectedQuiz').on('click', function(e){ //이번버튼
 					}
 				}
 			}
+			//<문제 재생성시 문제 부분 비율 줌 유지>
+			let zoomStatus = $('#zoomStatus').text();
+			$('#quiz').css({zoom: zoomStatus}); //문제 부분 확대
 		},
 		error: function(){
 			console.log('error');
