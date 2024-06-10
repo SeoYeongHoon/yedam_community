@@ -76,11 +76,11 @@
 			<p class="tresult_1">([[${quiz.quizScore}]]점)</p>
 			<div>
 				<p>보기번호 정답/오답 표시</p>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 1 ? 'true' : (quiz.exampleNum != 1 && quiz.testAnswer == 1)? 'false':_}">[[${quiz.one}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 2 ? 'true' : (quiz.exampleNum != 2 && quiz.testAnswer == 2)? 'false':_}">[[${quiz.two}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 3 ? 'true' : (quiz.exampleNum != 3 && quiz.testAnswer == 3)? 'false':_}">[[${quiz.three}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 4 ? 'true' : (quiz.exampleNum != 4 && quiz.testAnswer == 4)? 'false':_}">[[${quiz.four}]]</span>
-				<span class="tresult_4" th:classappend="${quiz.exampleNum == 5 ? 'true' : (quiz.exampleNum != 5 && quiz.testAnswer == 5)? 'false':_}">[[${quiz.five}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.oneContent) ? 'true' : (quiz.textContent != quiz.oneContent && quiz.answerContent == quiz.oneContent) ? 'false':_}">① [[${quiz.oneContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.twoContent) ? 'true' : (quiz.textContent != quiz.twoContent && quiz.answerContent == quiz.twoContent) ? 'false':_}">② [[${quiz.twoContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.threeContent) ? 'true' : (quiz.textContent != quiz.threeContent && quiz.answerContent == quiz.threeContent) ? 'false':_}">③ [[${quiz.threeContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.fourContent) ? 'true' : (quiz.textContent != quiz.fourContent && quiz.answerContent == quiz.fourContent) ? 'false':_}">④ [[${quiz.fourContent}]]</span>
+				<span class="tresult_4" th:classappend="${(quiz.textContent == quiz.fiveContent) ? 'true' : (quiz.textContent != quiz.fiveContent && quiz.answerContent == quiz.fiveContent) ? 'false':_}">⑤ [[${quiz.fiveContent}]]</span>
 			</div>
 			<hr>
 			<h3>풀이</h3>	
