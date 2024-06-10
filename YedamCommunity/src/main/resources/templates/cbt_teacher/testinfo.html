@@ -13,6 +13,11 @@
 			<input type="hidden" id="tId" th:value="${testInfo.testId}"/>
 			<input type="hidden" id="currId" th:value="${testInfo.curriculumId}"/>
 			<input type="hidden" id="classId" th:value="${testInfo.classId}"/>
+			<div class="title d-flex flex-wrap align-items-center justify-content-between" style="margin-top:30px">
+				<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
+					<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">강의실 정보</h4>
+				</div>
+			</div>
 			<h1 th:text="${testInfo.classId}+강의실">n강의실</h1>
 			<br>
 			<h4 th:text="${testInfo.curriculumName}">과정명</h4>
@@ -23,16 +28,19 @@
 		</div>
 		<div class="title mt-30 mb-30">
 			<h2
-				th:text="${testInfo.testName}+' '+${#dates.format(testInfo.testDate, 'yyyy.MM.dd')}">시험명
+				th:text="'시험명 : ' + ${testInfo.testName}+' '+${#dates.format(testInfo.testDate, 'yyyy.MM.dd')}">시험명
 				시작기간~종료기간</h2>
 		</div>
 	</div>
 	<!-- end col -->
-
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 		<div class="card-style-3 mb-30">
 			<div class="card-content">
-				<h4>시험 통과자</h4>
+				<div class="title d-flex flex-wrap align-items-center justify-content-between">
+					<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
+						<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">시험 통과자</h4>
+					</div>
+				</div>
 				<br>
 				<div class="test row ">
 					<div class="col-8" id="passUser"></div>
@@ -42,14 +50,17 @@
 		</div>
 	</div>
 	<!-- end col -->
-	
-	<div align="right" class="col-12">
+	<div align="right" class="col-12" style="margin-bottom:10px">
 		<button type="button" id="reTest" class="tlist_1 status-btn close-btn" onclick="location.href='/admin/quizlist'">재시험 출제</button>
 	</div>
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 		<div class="card-style-3 mb-30">
+			<div class="title d-flex flex-wrap align-items-center justify-content-between">
+				<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
+					<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">재시험자</h4>
+				</div>
+			</div>
 			<div class="card-content">
-				<h4>재시험 명단</h4>
 				<br>
 				<div class="test row">
 					<div class="col-8" id="failUser"></div>
@@ -111,7 +122,6 @@ userList(testId);
 let pTagNum = $('#failUser').children($('<p/>')).length;
 const btn1 = document.getElementById('reTest');
 if(pTagNum == 0){
-	console.log('p태그가 없음')
 	btn1.style.display = 'none';
 } else {
 	console.log('p태그가 존재함')

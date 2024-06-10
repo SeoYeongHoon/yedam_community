@@ -1,135 +1,277 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Home">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Home">
 <head>
-  <title>게시글 목록</title>
-  <style>
-    .pagination {
-      display: inline-block;
-    }
-    .pagination a {
-      color: black;
-      float: left;
-      padding: 8px 16px;
-      text-decoration: none;
-    }
-    .pagination a.active {
-      background-color: #4CAF50;
-      color: white;
-    }
-    .pagination a:hover:not(.active) {
-      background-color: #ddd;
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .gallery img {
-      width: 100%;
-      height: auto;
-    }
-    .gallery .wide {
-      grid-column: span 2;
-    }
-  </style>
+<title>게시글 목록</title>
+<style>
+.pagination {
+	display: inline-block;
+}
+
+.pagination a {
+	color: black;
+	float: left;
+	padding: 8px 16px;
+	text-decoration: none;
+}
+
+.pagination a.active {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.pagination a:hover:not(.active) {
+	background-color: #ddd;
+}
+
+.gallery {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+}
+
+.gallery img {
+	width: 100%;
+	height: auto;
+}
+
+.gallery .wide {
+	grid-column: span 2;
+}
+.post-name {
+ padding-left: 10px;
+}
+
+</style>
 </head>
 <body>
-<div id="post_container">
-	<div th:switch="${boardId}" style="margin-bottom: 100px;">
-		<div th:case="1">
-			<h3>수료 과정별 게시판</h3>
+  
+	<div th:switch="${boardId}">
+		<div th:case="2" class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
+		    <p style="color: white">구인/구직 게시판입니다.</p>
 		</div>
-		<div th:case="2">
-			<h3>구인/ 구직 게시판</h3>
-			<div class="insertBtn">
-		<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
-	</div> 
+		<div th:case="3" class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
+		    <p style="color: white">정보 공유 게시판입니다.</p>
 		</div>
-		<div th:case="3">
-			<h3>정보 게시판</h3>
-			<div class="insertBtn">
-		<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
-	</div> 
-		</div>
-		<div th:case="4">
-			<h3>질문과 토론 게시판</h3>
-			<div class="insertBtn">
-				<a th:href="@{/all/postInsertVote/}" id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
-			</div>
+		<div th:case="4" class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
+		    <p style="color: white">질문과 토론 게시판입니다.</p>
 		</div>
 	</div>
   
+	<div id="post_container">
+	<div th:switch="${boardId}" class="post-name">
+		<div th:case="2">
+	  <h3>구인/ 구직 게시판</h3>
+		</div>
+		<div th:case="3">
+	  <h3>정보 게시판</h3>
+		</div>
+		<div th:case="4">
+	  <h3>질문과 토론 게시판</h3>
+		</div>
+	</div>
 	
-  <!-- 검색 폼 -->
-  <div class="input-style-1" style="position: absolute; top: 80px;">
-	<form id="searchForm" method="get" th:action="@{/all/post/{boardId}(boardId=${boardId})}">
-	    <input type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
-	    <!-- <button type="submit">검색</button> -->
-		<img style="position: absolute; top: 12px; right: 10px; width: 20px; opacity: 0.5;" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-  	</form>
-  </div>
+		<!-- 검색 폼 -->
+		<div class="input-style-1" style="padding: 10px; width: 250px; " >
+			<form id="searchForm" method="get" th:action="@{/all/posts/{boardId}(boardId=${boardId})}">
+				<input type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
+				<!-- <button type="submit">검색</button> -->
+				<img style="position: absolute; top: 25px; right: 25px; width: 20px; opacity: 0.5;"
+					src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			</form>
+		</div>
+		
+		<div th:switch="${boardId}" style="margin-bottom: 100px;">
+			<div th:case="2">
+				<div class="insertBtn" style="position: absolute; top: 110px; right:0px;">
+					<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}"
+						id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="postTableHeader">게시글 번호</th>
+							<th class="postTableHeader">제목</th>
+							<th class="postTableHeader">작성자</th>
+							<th class="postTableHeader">작성시간</th>
+							<th class="postTableHeader">조회수</th>
+							<th class="postTableHeader">추천수</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="postListRow" th:each="info : ${postList}"
+							th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
+							<td class="postTableData" th:text="${info.postId}">1</td>
+							<td class="postTableData" th:text="${info.title}">제목</td>
+							<td class="postTableData" th:text="${info.writer}">작성자</td>
+							<td class="postTableData"
+								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
+							<td class="postTableData" th:text="${info.postView}">조회수</td>
+							<td class="postTableData" th:text="${info.postLike}">추천수</td>
+						</tr>
+					</tbody>
+				</table>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="postTableHeader">게시글 번호</th>
-        <th class="postTableHeader">제목</th>
-        <th class="postTableHeader">작성자</th>
-        <th class="postTableHeader">작성시간</th>
-        <th class="postTableHeader">조회수</th>
-        <th class="postTableHeader">추천수</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="postListRow" th:each="info : ${postList}" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
-        <td class="postTableData" th:text="${info.postId}">1</td>
-        <td class="postTableData" th:text="${info.title}">제목</td>
-        <td class="postTableData" th:text="${info.writer}">작성자</td>
-        <td class="postTableData" th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
-        <td class="postTableData" th:text="${info.postView}">조회수</td>
-        <td class="postTableData" th:text="${info.postLike}">추천수</td>
-      </tr>
-    </tbody>
-  </table>
+				<div class="center">
+					<div class="pagination col-lg-6">
+						<div th:if="${currentPage > 1}">
+							<a
+								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
+						</div>
+						<div
+							th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
+							<a
+								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
+								th:text="${page}"
+								th:classappend="${page == currentPage} ? 'active'"></a>
+						</div>
+						<div
+							th:if="${currentPage < (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1)}">
+							<a
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${currentPage + 1}, pageSize=${pageSize})}">&raquo;</a>
+						</div>
+					</div>
+				</div>
 
-  <div class="center">
-    <div class="pagination col-lg-6">
-      <div th:if="${currentPage > 1}">
-        <a th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
-      </div>
-      <div th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
-        <a th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
-           th:text="${page}"
-           th:classappend="${page == currentPage} ? 'active'"></a>
-      </div>
-      <div th:if="${currentPage < (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1)}">
-        <a th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage + 1}, pageSize=${pageSize})}">&raquo;</a>
-      </div>
-    </div>
-  </div>
+				<!-- 갤러리 섹션 -->
+				<h2>갤러리</h2>
+				
+				<div class="gallery">
+					<div th:each="post : ${postList}"
+						th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
+						<img th:src="@{|/files/${post.boardfileLocation}|}"
+							th:alt="${post.boardfileName}" />
+						<p th:text="${post.boardfileName}">이미지 이름</p>
+					</div>
+				</div>
+			</div>
+			<div th:case="3">
+				<div class="insertBtn" style="position: absolute; top: 110px; right:0px;">
+					<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}"
+						id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="postTableHeader">게시글 번호</th>
+							<th class="postTableHeader">제목</th>
+							<th class="postTableHeader">작성자</th>
+							<th class="postTableHeader">작성시간</th>
+							<th class="postTableHeader">조회수</th>
+							<th class="postTableHeader">추천수</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="postListRow" th:each="info : ${postList}"
+							th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
+							<td class="postTableData" th:text="${info.postId}">1</td>
+							<td class="postTableData" th:text="${info.title}">제목</td>
+							<td class="postTableData" th:text="${info.writer}">작성자</td>
+							<td class="postTableData"
+								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
+							<td class="postTableData" th:text="${info.postView}">조회수</td>
+							<td class="postTableData" th:text="${info.postLike}">추천수</td>
+						</tr>
+					</tbody>
+				</table>
 
+				<div class="center">
+					<div class="pagination col-lg-6">
+						<div th:if="${currentPage > 1}">
+							<a
+								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
+						</div>
+						<div
+							th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
+							<a
+								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
+								th:text="${page}"
+								th:classappend="${page == currentPage} ? 'active'"></a>
+						</div>
+						<div
+							th:if="${currentPage < (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1)}">
+							<a
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${currentPage + 1}, pageSize=${pageSize})}">&raquo;</a>
+						</div>
+					</div>
+				</div>
 
-<!-- 갤러리 섹션 -->
-<h2>갤러리</h2>
-  <div class="gallery">
-  	<div th:each="post : ${postList}" th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-    	<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
-    	<p th:text="${post.boardfileName}">이미지 이름</p>
-    </div>
-  </div>
-</div>
-<script th:inline="javascript">
+				<!-- 갤러리 섹션 -->
+				<h2>갤러리</h2>
+				<div class="gallery">
+					<div th:each="post : ${postList}"
+						th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
+						<img th:src="@{|/files/${post.boardfileLocation}|}"
+							th:alt="${post.boardfileName}" />
+						<p th:text="${post.boardfileName}">이미지 이름</p>
+					</div>
+				</div>
+			</div>
+			<div th:case="4">
+				<div class="insertBtn" style="position: absolute; top: 110px; right:0px;">
+					<a th:href="@{/all/postInsertVote/{boardId}(boardId=${boardId})}"
+						id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
+				</div>
 
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="postTableHeader">게시글 번호</th>
+							<th class="postTableHeader">제목</th>
+							<th class="postTableHeader">작성자</th>
+							<th class="postTableHeader">작성시간</th>
+							<th class="postTableHeader">조회수</th>
+							<th class="postTableHeader">추천수</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="postListRow" th:each="info : ${postList}"
+							th:onclick="|location.href='@{/all/postvote/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
+							<td class="postTableData" th:text="${info.postId}">1</td>
+							<td class="postTableData" th:text="${info.title}">제목</td>
+							<td class="postTableData" th:text="${info.writer}">작성자</td>
+							<td class="postTableData"
+								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
+							<td class="postTableData" th:text="${info.postView}">조회수</td>
+							<td class="postTableData" th:text="${info.postLike}">추천수</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="center">
+					<div class="pagination col-lg-6">
+						<div th:if="${currentPage > 1}">
+							<a
+								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
+						</div>
+						<div
+							th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
+							<a
+								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
+								th:text="${page}"
+								th:classappend="${page == currentPage} ? 'active'"></a>
+						</div>
+						<div
+							th:if="${currentPage < (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1)}">
+							<a
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${currentPage + 1}, pageSize=${pageSize})}">&raquo;</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<script th:inline="javascript">
   //--------------------------------------------
   // 게시글 검색
   //--------------------------------------------
   function searchPosts() {
     const keyword = document.getElementById('searchKeyword').value;
     const boardId = [[${boardId}]];
-    location.href = `/all/post/${boardId}?keyword=${keyword}`;
+    location.href = `/all/posts/${boardId}?keyword=${keyword}`;
   }
 
   $(document).ready(function() {

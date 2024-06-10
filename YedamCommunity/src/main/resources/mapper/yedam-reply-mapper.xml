@@ -55,7 +55,6 @@
 		WHERE   reply_id = #{replyId}
 	</update>
 	
-	
 	<!-- 댓글 삭제 -->
     <delete id="deleteReply1" parameterType="int">
         DELETE 

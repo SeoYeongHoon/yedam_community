@@ -158,35 +158,64 @@ public interface PostService {
     //--------------------------------------------
 	public List<PostVO> getPostsByFilter (int filter, int page, String searchQuery);
 	
+	//--------------------------------------------
 	// 페이징용 카운트
+	//--------------------------------------------
 	public int getTotalCnt(int filter, String searchQuery);
 	
+	//--------------------------------------------
 	// 접속유저id로 boardId 조회
+	//--------------------------------------------
 	public int boardId(int userId);	
 
+	//--------------------------------------------
 	// 질문 토론 단건조회 Yes
+	//--------------------------------------------
 	public PostVO getPostVotedetail(PostVO postVO);
 
+	//--------------------------------------------
 	// boardType로 boardId 조회
+	//--------------------------------------------
 	public int boardTypeSet(int boardType);
 	
+	//--------------------------------------------
 	
+	//--------------------------------------------
 	public PostVO getPostVotedetailNo(PostVO postVO);
-
-	int createVote(PostVO postVO);
 	
-    int createVoteUser(VoteUserVO voteUser);
+	//--------------------------------------------
+	
+	//--------------------------------------------
+	public int createVote(PostVO postVO);
+	
+	//--------------------------------------------
+	//--------------------------------------------
+	public int createVoteUser(VoteUserVO voteUser);
     
-    Integer voteExists(Map<String, Object> map);
+    //--------------------------------------------
+    //--------------------------------------------
+	public Integer voteExists(Map<String, Object> map);
     
-    int cancelVote(Map<String, Object> map);
+    //--------------------------------------------
+    //--------------------------------------------
+	public int cancelVote(Map<String, Object> map);
     
-    int submitVote(Map<String, Object> map);
-
+    //--------------------------------------------
+    //--------------------------------------------
+	public int submitVote(Map<String, Object> map);
+	
+    //--------------------------------------------
+    //--------------------------------------------
 	public int VoteCountUP(Map<String, Object> map);
 
 	public int VoteCountDOWN(Map<String, Object> map);
 
+	public int findByCurriculum(int curriculumId);
 	
+	public int findIdByCurriculum(int curriculumId);
+	
+	//--------------------------------------------
+  	// 추천 조회
+  	//--------------------------------------------
+	int selectLikeStatus(int postId, int userId);
 }
-

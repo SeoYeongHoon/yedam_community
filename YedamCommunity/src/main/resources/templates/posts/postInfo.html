@@ -9,6 +9,7 @@
      padding: 10px;
      margin-bottom: 10px;
      border-radius: 5px;
+	 margin-top: 15px;
    }
 
    .comment {
@@ -40,6 +41,9 @@
    .comment .comment-actions {
      display: flex;
      gap: 10px;
+	 justify-content: right;
+	 margin-right: 5px;
+     margin-bottom: 5px;
    }
 
    .post-info-header {
@@ -50,12 +54,12 @@
 
    .post-info-header .title {
      margin-top: 15px;
-     font-size: 1.5em;
+     font-size: 1.2em;
      font-weight: bold;
    }
 
    .post-info-header .details {
-     font-size: 1.2em;
+     font-size: 1em;
      color: gray;
    }
 
@@ -66,6 +70,8 @@
      margin-bottom: 10px;
      border: 1px solid #ccc;
      border-radius: 5px;
+	 resize: none;
+	 height: 100px;
    }
 
    .custom-modal {
@@ -93,140 +99,166 @@
 </style>
 
 <div class="container">
-  <div class="post-info-header">
-    <div class="title" th:text="${postInfo.title}">Post Title</div>
-    <div class="details">
-      <span th:text="${#dates.format(postInfo.createDate, 'yyyy-MM-dd HH:mm')}">2024-06-02 16:00</span> |
-      조회수: <span th:text="${postInfo.postView}">0</span> |
-      추천: <span id="post-like-count" th:text="${postInfo.postLike}">0</span>
-    </div>
-  </div>
-  <p th:text="${postInfo.writer}">Post Writer</p>
-  <p th:text="${postInfo.postContent}">Post Content</p>
-
-  <h2 th:if="${#lists.size(postInfo.boardFiles) > 0}"></h2>
-  <div th:each="file : ${postInfo.boardFiles}">
-    <!-- 이미지 파일 출력 -->
-    <div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.jpg') or file.boardfileLocation.endsWith('.jpeg') or file.boardfileLocation.endsWith('.png') or file.boardfileLocation.endsWith('.gif'))}">
-      <img th:if="${file.exists}" th:src="|/files/${file.boardfileLocation}|" style="width: 50%; height: auto;"/>
-      <div th:if="${not file.exists}">
-        <img src="/images/default-image.jpg" style="width: 50%; height: auto;"/>
-      </div>
-    </div>
-
-    <!-- 비디오 파일 출력 -->
-    <div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.mp4') or file.boardfileLocation.endsWith('.webm') or file.boardfileLocation.endsWith('.ogg'))}">
-      <video controls width="250" th:if="${file.exists}">
-        <source th:src="|/files/${file.boardfileLocation}|" type="video/mp4"/>
-      </video>
-      <div th:if="${not file.exists}">
-        <img src="/images/default-video.jpg" style="width: 50%; height: auto;"/>
-      </div>
-    </div>
-  </div>
-
-  <h5>댓글</h5>
-  <ul id="reply-list">
-    <li th:each="reply : ${postInfo.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
-      <div class="reply-info">
-        <input class="replyWriter" type="hidden" th:value="${reply.replyWriter}">
-        <span th:text="${reply.replyWriter}">Reply Writer</span>
-        <span th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd HH:mm')}">Reply Date</span>
-      </div>
-      <div class="reply-content">
-        <input class="replyId" type="hidden" th:value="${reply.replyId}">
-        <textarea th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
-      </div>
-      <div class="reply-actions">
-        <button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">댓글 삭제</button>
-        <button th:id="|updateBtn${reply.replyWriter}|" type="button" class="border reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">댓글 수정</button>
-        <button type="button" class="border reply-updateBtn" th:data-reply-id="${reply.replyId}" style="display:none;">수정</button>
-      </div>
-
-      <h5>답글</h5>
-      <ul>
-        <li th:each="comment : ${reply.comments}" th:id="|'comment-' + ${comment.commentId}|" class="comment">
-          <div class="comment-info">
-            <input class="commentWriter" type="hidden" th:value="${comment.commentWriter}">
-            <span th:text="${comment.commentWriter}">Comment Writer</span>
-            <span th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd HH:mm')}">Comment Date</span>
-          </div>
-          <div class="comment-content">
-            <input class="commentId" type="hidden" th:value="${comment.commentId}">
-            <textarea th:id="|commentId-${comment.commentId}|" th:text="${comment.commentContent}" readonly></textarea>
-          </div>
-          <div class="comment-actions">
-            <button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment " th:data-comment-id="${comment.commentId}" style="display:none;">대댓글 삭제</button>
-            <button th:id="|commentUpdate-${comment.commentWriter}|" type="button" class="border comment-update" th:data-comment-id="${comment.commentId}" style="display:none;">대댓글 수정</button>
-            <button type="button" class="border comment-updateBtn" th:data-comment-id="${comment.commentId}" style="display:none;">수정</button>
-          </div>
-        </li>
-      </ul>
-
-      <form class="comment-form">
-        <input type="hidden" name="replyId" th:value="${reply.replyId}"/>
-        <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
-        <input type="hidden" name="boardId" th:value="${postInfo.boardId}"/>
-        <textarea th:id="|commentContent-${reply.replyId}|" name="commentContent"></textarea>
-        <button type="button" th:id="|comment-submit-${reply.replyId}|" class="comment-submit border">대댓글 작성</button>
-      </form>
-    </li>
-  </ul>
-
-  <form id="reply-form" class="reply">
-    <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
-    <input type="hidden" name="boardId" th:value="${postInfo.boardId}"/>
-    <textarea name="replyContent" id="replyContent"></textarea>
-    <button type="button" id="reply-submit">댓글 작성</button>
-  </form>
-
-  <!-- 추천버튼 -->
-  <form class="Good-form">
-    <input type="hidden" name="postId" th:value="${postInfo.postId}"/>
-    <input type="hidden" name="userId" th:value="${userId}"/>
-    <button type="button" class="Good-submit">추천</button>
-  </form>
-
-  <!-- 신고버튼 -->
-  <button type="button" id="reportBtn">신고</button> 
-
-    <!-- 게시글 신고 모달창 -->
-<div id="reportForm" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">게시글 신고</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+	<div class="add-line"><h4>수료 과정별 게시판</h4></div>
+	
+	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56;">
+		<div class="how2 how2-cl3 flex-s-c board_type" style="justify-content: space-between; height: 80px; align-items: baseline; padding-top: 10px;">
+            <p style="font-size: 1.2em; font-weight: bold;" th:text="${postInfo.title}"></p>
+			<div class="details">
+				조회수: <span th:text="${postInfo.postView}">0</span> |
+				추천: <span id="post-like-count" th:text="${postInfo.postLike}">0</span>
 			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<input type="hidden" id ="postId" name="postId" th:value="${postInfo.postId}"/>
-                <input type="hidden" id="boardId" name="boardId" th:value="${postInfo.boardId}"/>
-                <input type="hidden" name="reporter" th:value="${reporter}"/>
-                   <select name="reportType">
-                   <option value="1">부적절한 언어 사용</option>
-                   <option value="2">유해하거나 위험한 행위</option>
-                   <option value="3">성적인 내용</option>
-                   <option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
-                   </select>
+			<div style="display: flex; position: absolute; bottom: 0;">
+				<p style="margin-right: 13px;" th:text="${postInfo.writer}">Post Writer</p> |
+				<span style="margin-left: 13px;" th:text="${#dates.format(postInfo.createDate, 'yyyy-MM-dd HH:mm:ss')}">2024-06-02 16:00</span>
 			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button type="button" id="report-submit">신고 제출</button>
+        </div>
+		<div class="post_info_content">
+			<p th:text="${postInfo.postContent}">Post Content</p>
+		</div>
+	
+		<h2 th:if="${#lists.size(postInfo.boardFiles) > 0}"></h2>
+		<div class="post_media_container" th:each="file : ${postInfo.boardFiles}">
+			<!-- 이미지 파일 출력 -->
+			<div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.jpg') or file.boardfileLocation.endsWith('.jpeg') or file.boardfileLocation.endsWith('.png') or file.boardfileLocation.endsWith('.gif'))}">
+				<img th:if="${file.exists}" th:src="|/files/${file.boardfileLocation}|" style="width: 100%; height: auto;" />
+				<div th:if="${not file.exists}">
+					<img src="/images/default-image.jpg" style="width: 100%; height: auto;"/>
+				</div>
+			</div>
+	
+			<!-- 비디오 파일 출력 -->
+			<div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.mp4') or file.boardfileLocation.endsWith('.webm') or file.boardfileLocation.endsWith('.ogg'))}">
+				<video controls width="250" th:if="${file.exists}">
+					<source th:src="|/files/${file.boardfileLocation}|" type="video/mp4" style="width: 100%; height: auto;" />
+				</video>
+				<div th:if="${not file.exists}">
+					<img src="/images/default-video.jpg" style="width: 100%; height: auto;" />
+				</div>
+			</div>
+		</div>
+
+		<!-- 추천버튼 -->
+		<form class="Good-form center">
+			<input type="hidden" name="postId" th:value="${postInfo.postId}" id="postInfoId"/>
+			<input type="hidden" name="userId" th:value="${userId}" />
+			<div>
+				<label id="postLikeItLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 0}">추천 하기</label>
+				<label id="postLikedIconLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 1}">추천 완료!</label>
+				<button type="button" class="Good-submit" style="border: 1px solid black; border-radius: 10%; width: 50px;">
+					<img th:if="${isLikeChecked == 0}" id="postLikeItIcon" src="/images/icons/likeit.png" style="width: 100%; padding: 5px;">
+					<img th:if="${isLikeChecked == 1}" id="postLikedIcon" src="/images/icons/likedit.png" style="width: 100%; padding: 5px;">
+				</button>
+			</div>
+		</form>
+
+		<!-- 신고버튼(본인 이외의 계정일 때만 신고 가능) -->
+		<th:block th:if="${#authentication.name != postInfo.writer}">
+			<button type="button" style="position: absolute; right: 15px; bottom: 10px;" id="reportBtn">신고</button>
+		</th:block>
+	</div>
+	
+	<div style="display: flex; justify-content: end;">
+	    <input id="writer" type="hidden" th:value="${postInfo.writer}">
+	    <input id="userName" type="hidden" th:value="${userName}">
+	    <input id="userType" type="hidden" th:value="${userType}">
+	    <button id="updateBtn" class="main-btn warning-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">수정</button>
+	    <button id="deleteBtn" class="main-btn danger-btn btn-hover" type="button" style="display: none; padding: 5px 15px;">삭제</button>
+  	</div>
+	
+	<form id="reply-form" class="reply">
+		<input type="hidden" name="postId" th:value="${postInfo.postId}" />
+		<input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
+		<textarea name="replyContent" id="replyContent"></textarea>
+		<button type="button" id="reply-submit" style="padding: 5px 15px;" class="main-btn dark-btn btn-hover">작성</button>
+	</form>
+	
+	<div class="add-line">댓글</div>
+	<ul id="reply-list">
+		<li th:each="reply : ${postInfo.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
+			<div class="reply-info">
+				<input class="replyWriter" type="hidden" th:value="${reply.replyWriter}">
+				<span th:text="${reply.replyWriter}">Reply Writer</span>
+				<span th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd HH:mm:ss')}">Reply Date</span>
+			</div>
+			<div class="reply-content">
+				<input class="replyId" type="hidden" th:value="${reply.replyId}">
+				<textarea th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
+			</div>
+			<div class="reply-actions">
+				<button th:id="|updateBtn${reply.replyWriter}|" type="button" class="reply-update main-btn warning-btn btn-hover"
+					th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none; padding: 5px 15px;">수정</button>
+				<button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="delete-reply main-btn danger-btn btn-hover"
+					th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none; padding: 5px 15px;">삭제</button>
+				<button type="button" class="reply-updateBtn main-btn warning-btn btn-hover" th:data-reply-id="${reply.replyId}"
+					style="display:none; padding: 5px 15px;">수정</button>
+			</div>
+
+			<ul>
+				<li th:each="comment : ${reply.comments}" th:id="|'comment-' + ${comment.commentId}|" class="comment">
+					<div class="comment-info">
+						<input class="commentWriter" type="hidden" th:value="${comment.commentWriter}">
+						<span th:text="${comment.commentWriter}">Comment Writer</span>
+						<span th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd HH:mm:ss')}">Comment Date</span>
+					</div>
+					<div class="comment-content">
+						<input class="commentId" type="hidden" th:value="${comment.commentId}">
+						<textarea th:id="|commentId-${comment.commentId}|" th:text="${comment.commentContent}"
+							readonly></textarea>
+					</div>
+					<div class="comment-actions">
+						<button th:id="|commentUpdate-${comment.commentWriter}|" type="button"
+							class="comment-update main-btn warning-btn btn-hover" th:data-comment-id="${comment.commentId}"
+							style="display:none; padding: 5px 15px;">수정</button>
+						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment main-btn danger-btn btn-hover"
+							th:data-comment-id="${comment.commentId}" style="display:none; padding: 5px 15px;">삭제</button>
+						<button type="button" class="comment-updateBtn main-btn warning-btn btn-hover" th:data-comment-id="${comment.commentId}"
+							style="display:none; padding: 5px 15px;">수정</button>
+					</div>
+				</li>
+			</ul>
+
+			<form class="comment-form">
+				<input type="hidden" name="replyId" th:value="${reply.replyId}" />
+				<input type="hidden" name="postId" th:value="${postInfo.postId}" />
+				<input type="hidden" name="boardId" th:value="${postInfo.boardId}" />
+				<textarea th:id="|commentContent-${reply.replyId}|" name="commentContent"></textarea>
+				<button type="button" th:id="|comment-submit-${reply.replyId}|" style="padding: 5px 15px;" class="comment-submit main-btn dark-btn btn-hover">등록</button>
+			</form>
+		</li>
+	</ul>
+	
+	<a th:href="@{/all/posts/{boardId}(boardId=${boardId})}">목록</a>
+
+	<!-- 게시글 신고 모달창 -->
+	<div id="reportForm" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 모달 헤더 -->
+				<div class="modal-header">
+					<h5 class="modal-title">게시글 신고</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 모달 본문 -->
+				<div class="modal-body">
+					<input type="hidden" id="postId" name="postId" th:value="${postInfo.postId}" />
+					<input type="hidden" id="boardId" name="boardId" th:value="${postInfo.boardId}" />
+					<input type="hidden" name="reporter" th:value="${reporter}" />
+					<select name="reportType">
+						<option value="1">부적절한 언어 사용</option>
+						<option value="2">유해하거나 위험한 행위</option>
+						<option value="3">성적인 내용</option>
+						<option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
+					</select>
+				</div>
+				<!-- 모달 푸터 -->
+				<div class="modal-footer">
+					<button type="button" id="report-submit">신고 제출</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
-  <div>
-    <input id="writer" type="hidden" th:value="${postInfo.writer}">
-    <input id="userName" type="hidden" th:value="${userName}">
-    <input id="userType" type="hidden" th:value="${userType}">
-    <button id="updateBtn" type="button" style="display: none">수정</button>
-    <button id="deleteBtn" type="button" style="display: none">삭제</button>
-  </div>
-  <a th:href="@{/all/post/{boardId}(boardId=${boardId})}">목록</a>
+	
 </div>
 
 <script>
@@ -236,7 +268,6 @@
   let boardId = $('#boardId').val();
   let userType = $('#userType').val();
   let commentId = $('.commentId').val();
-  
   let replies = [];
   $('.replyId').each(function(){
     replies.push($(this).val());
@@ -296,7 +327,7 @@
       data: {postId : postId , boardId:boardId},
       success: function(data){
         $('#deleteModal').modal('show');
-        location.href='/all/post/' + boardId
+        location.href='/all/posts/' + boardId
       },
       error:function(e){
         alert('삭제 실패');
@@ -306,9 +337,19 @@
 
   // 삭제 모달 확인버튼
   $('#okBtn').on('click',function(){
-    location.href='/all/post/'+boardId;
+    location.href='/all/posts/'+boardId;
   });
 
+  
+  function replyCheck(){
+	    let name = $('#replyContent');
+	    if(name.val() == ''){
+	      alert('내용이 필요합니다.');
+	      name.focus();
+	      return false;
+	    }
+	    return true;
+	  }
   //--------------------------------------------
   // 댓글 작성
   //--------------------------------------------
@@ -378,26 +419,38 @@
     }
   });
 
+  
+  
+  function commentCheck(commentContentId){
+	    let name = $(commentContentId);
+	    if(name.val() == ''){
+	      alert('내용이 필요합니다.');
+	      name.focus();
+	      return false;
+	    }
+	    return true;
+	  }
+	  
   //--------------------------------------------
   // 대댓글 작성
   //--------------------------------------------
-  $(document).on("click", ".comment-submit", function () {
-    let replyId = $(this).attr('id').split('-')[2]; // 고유한 replyId를 가져옴
-    let commentContentId = `#commentContent-${replyId}`; // 고유한 textarea id 생성
-    if(!commentCheck(commentContentId)) return;
-    let formData = $(this).closest("form").serialize();
-    $.ajax({
-      url: "/all/Comment",
-      type: "POST",
-      data: formData,
-      success: function (response) {
-    	  window.location.reload();
-      },
-      error: function (error) {
-        console.error("대댓글 등록 실패:", error);
-        alert("대댓글 등록에 실패하였습니다.");
-      },
-    });
+  $(".comment-submit").on("click", function() {
+	    let replyId = $(this).attr('id').split('-')[2]; // 고유한 replyId를 가져옴
+	    let commentContentId = `#commentContent-${replyId}`; // 고유한 textarea id 생성
+	    if(!commentCheck(commentContentId)) return;
+	    let formData = $(this).closest("form").serialize();
+	    $.ajax({
+	      url: "/all/Comment",
+	      type: "POST",
+	      data: formData,
+	      success: function (response) {
+	    	  window.location.reload();
+	      },
+	      error: function (error) {
+	        console.error("대댓글 등록 실패:", error);
+	        alert("대댓글 등록에 실패하였습니다.");
+	      },
+	    });
   });
 
   //--------------------------------------------
@@ -492,27 +545,7 @@
   //--------------------------------------------
   // 추천 추가 함수
   //--------------------------------------------
-  $(".Good-submit").on("click", function () {
-    let formData = $(".Good-form").serialize();
-    $.ajax({
-      type: "POST",
-      url: "/all/boardLike",
-      dataType: "json",
-      data: formData,
-      success: function (likeCheck) {
-        if (likeCheck == 0) {
-          alert("추천완료");
-          updateLikeCount();
-        } else {
-          alert("추천취소");
-          updateLikeCount();
-        }
-      },
-      error: function () {
-        alert("통신 에러");
-      },
-    });
-  });
+  
 
   //--------------------------------------------
   // 신고관련
@@ -542,8 +575,7 @@
         },
       });
     });
-  });
-
+	
   //--------------------------------------------
   // 이벤트 핸들러 재적용 함수
   //--------------------------------------------
@@ -638,25 +670,45 @@
     });
   }
 
-  function replyCheck(){
-    let name = $('#replyContent');
-    if(name.val() == ''){
-      alert('내용이 필요합니다.');
-      name.focus();
-      return false;
-    }
-    return true;
-  }
+  
 
-  function commentCheck(commentContentId){
-    let name = $(commentContentId);
-    if(name.val() == ''){
-      alert('내용이 필요합니다.');
-      name.focus();
-      return false;
-    }
-    return true;
-  }
+
+	//--------------------------------------------
+	// 추천 추가 함수
+	//--------------------------------------------
+	$(".Good-submit").on("click", function () {
+	    let formData = $(".Good-form").serialize();
+		let postLikeItIcon = $('#postLikeItIcon');	// 추천 전 아이콘
+		let postLikedIcon = $('#postLikedIcon');	// 추천 후 아이콘
+		let postLikeItLabel = $('#postLikeItLabel');	// 추천 전 텍스트
+		let postLikedIconLabel = $('#postLikedIconLabel');	// 추천 후 텍스트
+		
+	    $.ajax({
+	      type: "POST",
+	      url: "/all/boardLike",
+	      dataType: "json",
+	      data: formData,
+	      success: function (likeCheck) {
+	        if (likeCheck == 0) {
+				postLikedIcon.css("display", "block");
+		        postLikeItIcon.css("display", "none");
+		        postLikeItLabel.css("display", "none");
+		        postLikedIconLabel.css("display", "block");
+	        } else {
+				postLikedIcon.css("display", "none");
+		        postLikeItIcon.css("display", "block");
+		        postLikeItLabel.css("display", "block");
+		        postLikedIconLabel.css("display", "none");
+	        }
+		  	updateLikeCount();
+			location.reload();
+	      },
+	      error: function () {
+	        alert("통신 에러");
+	      },
+	    });
+	  });
+	});
 </script>
 </body>
 </html>

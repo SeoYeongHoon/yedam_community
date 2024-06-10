@@ -11,7 +11,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,8 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.yedam_common.LoginUserVO;
 import com.yedam.app.yedam_common.PageDTO;
+import com.yedam.app.yedam_curriculum.service.CurriculumService;
 import com.yedam.app.yedam_curriculum.service.CurriculumVO;
 import com.yedam.app.yedam_post.service.BoardFilesVO;
+import com.yedam.app.yedam_post.service.PostCommentVO;
+import com.yedam.app.yedam_post.service.PostReplyVO;
 import com.yedam.app.yedam_post.service.PostService;
 import com.yedam.app.yedam_post.service.PostVO;
 import com.yedam.app.yedam_post.service.ReportVO;
@@ -50,6 +55,9 @@ public class PostController {
 	
 	@Autowired
 	private PostService postService;
+	
+	@Autowired
+	CurriculumService curriculumService;
 
 	// --------------------------------------------
 	// 게시글 리스트 조회
@@ -115,37 +123,39 @@ public class PostController {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		int userId = userVO.getuserId();
 		
-		int boardId =  postService.boardId(userId);
+		// int boardId =  postService.boardId(userId);
 		
-		List<CurriculumVO> List = postService.curriculumList();
+		List<CurriculumVO> list = postService.curriculumList();
 		List<PostVO> postList = postService.postlist();
-		model.addAttribute("boardId",boardId);
-		model.addAttribute("curriculum",List);
-		model.addAttribute("postList",postList);
+		// model.addAttribute("boardId",boardId);
+		model.addAttribute("curriculum", list);
+		model.addAttribute("postList", postList);
 		return "posts/curriculumPost";
 	}
 	
-	//--------------------------------
-	// 수교과정별게시판 게시글 전체 조회
-	//--------------------------------
-	 @GetMapping("/postList")
-	 @ResponseBody 
-	 public List<PostVO> curriculumPost() {
-		 return  postService.postlist();
-	  }
+//	//--------------------------------
+//	// 수교과정별게시판 게시글 전체 조회
+//	//--------------------------------
+//	 @GetMapping("/postList")
+//	 @ResponseBody 
+//	 public List<PostVO> curriculumPost() {
+//		 return  postService.postlist();
+//	  }
 	 
 	//--------------------------------
 	// 수교과정별게시판 갤러리 조회
 	//--------------------------------
-		 @GetMapping("/gallery")
-		 @ResponseBody 
-		 public List<BoardFilesVO> gallery(@RequestParam int curriculumId) {
-			 //int boardType = 1;
-			 System.err.println("보드타입== "+curriculumId);
-			 List<BoardFilesVO> fileList = postService.successFileList(curriculumId);	 
-			 System.err.println("파일 리스트 == " + fileList.get(0));
+	 @GetMapping("/gallery")
+	 @ResponseBody 
+	 public List<BoardFilesVO> gallery(@RequestParam int curriculumId) {
+		 List<BoardFilesVO> fileList = postService.successFileList(curriculumId);	 
+		 System.err.println("파일 리스트 == " + fileList);
+		 
+		 if (fileList != null) {
 			 return  postService.successFileList(curriculumId);
-		  }
+		 }
+		 return  null;
+	  }
 		 
 		 
 	//--------------------------------
@@ -175,12 +185,31 @@ public class PostController {
 	    String userName = userVO.getUsername();
 	    String userType = userVO.getUserType();
 	    
+	    // 댓글 조회
+	    List<PostReplyVO> replylist = postService.getPostReply(postId);
+	    
+	    for (PostReplyVO postreplyVO : replylist) {
+	        // 대댓글 조회
+	        List<PostCommentVO> commentlist = postService.getPostComment(postreplyVO);
+	        postreplyVO.setComments(commentlist);
+	    }
+	    
 	    // 파일 조회
 	    List<BoardFilesVO> boardFilesVO = postService.getBoardFiles(postId, boardId);
 	    for (BoardFilesVO file : boardFilesVO) {
 	        File find = new File(uploadPath + "/" + file.getBoardfileLocation());
 	        file.setExists(find.exists());
 	    }
+	    
+	    // 추천 조회
+	    int userId = userVO.getuserId();
+	    Integer likeCheck = postService.likeCheck(postId, userId);
+	    
+	    
+	    System.out.println("추천 status: " + likeCheck);
+	    model.addAttribute("isLikeChecked", likeCheck);
+	    
+	    postVO.setReplies(replylist);
 	    postVO.setBoardFiles(boardFilesVO);	   
 	    postVO.setBoardId(boardId);
 	    postVO.setPostId(postId);
@@ -210,7 +239,6 @@ public class PostController {
         model.addAttribute("post", postVO);
         return "posts/postInsert";
     }
-	
 
 	// --------------------------------------------
 	// 게시글 등록 처리
@@ -251,16 +279,93 @@ public class PostController {
     }
 	
 	// --------------------------------------------
+	// 수료게시판 게시글 등록
+	// --------------------------------------------
+	@GetMapping("/curriculumPostInsert")
+    public String curriculumPostInsert(Model model
+    		                   , PostVO postVO
+//	    		                   , @PathVariable int boardType
+//    		                   , @RequestParam String curriculumSelect
+    		                   , Authentication authentication) {
+//		    postVO.setBoardType(boardType);
+//		    int boardId = postService.boardTypeSet(boardType);
+//		    postVO.setBoardId(boardId);
+		
+        // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
+		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+        List<CurriculumVO> currList = curriculumService.gradSelectAll();
+		model.addAttribute("class", currList);
+		
+		if (!userVO.getUserType().equals("ROLE_ADMIN")) {
+			postVO.setBoardId(postService.findIdByCurriculum(userVO.getUserCurriculumId()));
+			postVO.setBoardType(postService.findByCurriculum(userVO.getUserCurriculumId()));
+		}
+		
+        postVO.setWriter(userVO.getUsername());
+        model.addAttribute("post", postVO);
+        return "posts/curriculumPostInsert";
+    }
+	
+	// --------------------------------------------
+	// 게시글 등록 처리
+	// --------------------------------------------
+	@PostMapping("/coursePostInsert")
+    public String coursePostInsert(PostVO postVO,
+    		                       @RequestParam("file") MultipartFile file,
+    		                       @RequestParam int curriculumSelect,
+                                   Authentication authentication) {
+        System.err.println("과정 선택값: " + curriculumSelect);
+        if (!file.isEmpty()) {
+            String fileName = file.getOriginalFilename();
+            String filePath = uploadPath + fileName;
+
+            File directory = new File(uploadPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            Path savePath = Paths.get(filePath);
+            try {
+                file.transferTo(savePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            postVO.setBoardfileName(fileName);
+            postVO.setBoardfileSize(file.getSize());
+            postVO.setBoardfileLocation(fileName);
+            postVO.setBoardfileExt(fileName.substring(fileName.lastIndexOf('.') + 1));
+        }
+
+        LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
+        postVO.setUserId(userVO.getuserId());
+        postVO.setWriter(userVO.getUsername());
+        postVO.setCreateDate(new Date());
+        postVO.setUpdateDate(new Date());
+        
+        if (userVO.getUserType().equals("ROLE_ADMIN")) {
+        	postVO.setBoardId(postService.findIdByCurriculum(curriculumSelect));
+        	postVO.setBoardType(postService.findByCurriculum(curriculumSelect));
+        }
+        
+        postService.createPost(postVO);
+        return "redirect:/all/curriculumPost";
+    }
+	
+	
+	// --------------------------------------------
 	// 게시글 질문 토론 등록
 	// --------------------------------------------
-	@GetMapping("/postInsertVote")
-    public String postInsertForm(Model model
+	@GetMapping("/postInsertVote/{boardType}")
+    public String postInsertFormvote(Model model
     		                   , PostVO postVO
+    		                   , @PathVariable int boardType
     		                   , Authentication authentication) {
 		
+		postVO.setBoardType(boardType);
+		int boardId = postService.boardTypeSet(boardType);
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		postVO.setWriter(userVO.getUsername());
-        // 현재 로그인한 사용자 정보를 가져와서 writer 필드에 설정
+        postVO.setBoardId(boardId);
         model.addAttribute("post", postVO);
         return "posts/postInsertvote";
     }
@@ -285,6 +390,7 @@ public class PostController {
 	@GetMapping("/postvote/{boardId}/{postId}")
 	public String getPostVoteDetail(Model model,
    	  	 	     					PostVO postVO,
+   	  	 	     				    @PathVariable int postId,
 			                        Authentication authentication) {
 		// 게시글 단건 조회
 	    postVO = postService.getPostVotedetail(postVO);
@@ -295,11 +401,16 @@ public class PostController {
 	    String userName = userVO.getUsername();
 	    String userType = userVO.getUserType();
 	    
-	    // 값 로그로 출력
-	    System.out.println("postVO.voteItemId: " + postVO.getVoteItemId());
-	    System.out.println("find.voteItemId: " + find.getVoteItemId());
+	   // 댓글 조회
+	    List<PostReplyVO> replylist = postService.getPostReply(postId);
+	    for (PostReplyVO postreplyVO : replylist) {
+	        // 대댓글 조회
+	        List<PostCommentVO> commentlist = postService.getPostComment(postreplyVO);
+	        postreplyVO.setComments(commentlist);
+	    }
 	    
-	    
+	   postVO.setPostId(postId);
+	   postVO.setReplies(replylist);
 	    model.addAttribute("postvote", postVO);
 	    model.addAttribute("postvoteno",find);
 	    // 작성자 여부 추가
@@ -308,9 +419,6 @@ public class PostController {
 	    
 	    return "posts/postInfovote";
 	}
-	
-	
-	
 	
 	// --------------------------------------------
 	// 게시글 삭제 처리
@@ -419,7 +527,7 @@ public class PostController {
 	@PostMapping("/boardLike")
 	@ResponseBody
 	public boolean updateLike(@RequestParam("postId") int postId, 
-			              Authentication authentication) {
+			              	  Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		PostVO postVO = new PostVO();
 		postVO.setUserId(userVO.getuserId());
@@ -433,7 +541,8 @@ public class PostController {
 			postService.updateLikeCancel(postId); // 게시판 테이블 -1
 			postService.LikeDelete(postId, userId); // boardlikes 테이블에 DELETE
 		}
-		return likeCheck==1? true : false;
+		System.out.println("추천 상태: " + likeCheck);
+		return likeCheck == 1 ? true : false;
 	}
 	
 	// ----------------
@@ -474,18 +583,11 @@ public class PostController {
 
 	    Integer voteCheck = postService.voteExists(map); // 유저가 투표를 했는지 확인
 
-	    System.out.println("voteId: " + voteId);
-	    System.out.println("userId: " + userId);
-	    System.out.println("voteItemId: " + voteItemId);
-	    System.out.println("voteCheck: " + voteCheck);
-
 	    if (voteCheck == 0) {
 	        postService.submitVote(map); // 투표하지 않은 경우, 투표 추가
-	        System.out.println("Vote submitted.");
 	        postService.VoteCountUP(map);
 	    } else {
 	        postService.cancelVote(map); // 이미 투표한 경우, 투표 취소
-	        System.out.println("Vote canceled.");
 	        postService.VoteCountDOWN(map);
 	    }
 

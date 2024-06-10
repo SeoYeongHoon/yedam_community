@@ -420,13 +420,11 @@ public class PostServiceImpl implements PostService {
 
 	@Override
     public int cancelVote(Map<String, Object> map) {
-        System.out.println("Vote canceled in service.");
 		return postMapper.deleteVote(map);
     }
 
     @Override
     public int submitVote(Map<String, Object> map) {
-        System.out.println("Vote submitted in service.");
 		return postMapper.insertVoteUser(map);
     }
 
@@ -439,4 +437,19 @@ public class PostServiceImpl implements PostService {
     public int VoteCountDOWN(Map<String, Object> map) {
         return postMapper.VoteCountDOWN(map);
     }
+
+	@Override
+	public int findByCurriculum(int curriculumId) {
+		return postMapper.findByCurriculum(curriculumId);
+	}
+
+	@Override
+	public int findIdByCurriculum(int curriculumId) {
+		return postMapper.findIdByCurriculum(curriculumId);
+	}
+
+	@Override
+	public int selectLikeStatus(int postId, int userId) {
+		return postMapper.selectLikeStatus(postId, userId);
+	}
 }

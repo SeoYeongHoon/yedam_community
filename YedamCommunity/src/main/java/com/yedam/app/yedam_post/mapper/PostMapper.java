@@ -112,34 +112,67 @@ public interface PostMapper {
     //--------------------------------------------
 	public List<PostVO> curriculumSelect(int curriculumId);
 	
+	//--------------------------------------------
 	// 게시글 페이징 및 필터링
+	//--------------------------------------------
 	public List<PostVO> getPostsByFilter (int filter, int page, String searchQuery);
 	
+	//--------------------------------------------
 	// 페이징용 카운트
+	//--------------------------------------------
 	int getTotalCnt(int filter, String searchQuery);
 	
+	//--------------------------------------------
 	// 접속유저id로 boardId 조회
+	//--------------------------------------------
 	public int getBoardId(int userId);
 	
-
+	//--------------------------------------------
 	// 질문 토론 단건조회 Yes
+	//--------------------------------------------
 	PostVO getPostVoteyes(PostVO postVO);
 	
+	//--------------------------------------------
 	// 질문 토론 단건조회 No
+	//--------------------------------------------
 	PostVO getPostVoteno(PostVO postVO);
-
+	
+	//--------------------------------------------
 	// boardType로 boardId 조회
+	//--------------------------------------------
 	public int setBoardType(int boardType);
 	
+	//--------------------------------------------
 	// 투표여부 확인
+	//--------------------------------------------
 	Integer voteExists(Map<String, Object> map);
+	
+	//--------------------------------------------
 	// 투표 삭제
+	//--------------------------------------------
 	int deleteVote(Map<String, Object> map);
+	
+	//--------------------------------------------
 	// 투표 등록
+	//--------------------------------------------
 	int insertVoteUser(Map<String, Object> map);
+	
+	//--------------------------------------------
 	// 투표 카운트 + 1
+	//--------------------------------------------
 	int VoteCountUP(Map<String, Object> map);
+	
+	//--------------------------------------------
 	// 투표 카운트 - 1
+	//--------------------------------------------
     int VoteCountDOWN(Map<String, Object> map);
     
+    public int findByCurriculum(int curriculumId);
+    
+    public int findIdByCurriculum(int curriculumId);
+    
+    //--------------------------------------------
+  	// 추천 조회
+  	//--------------------------------------------
+    int selectLikeStatus(int postId, int userId);
 }

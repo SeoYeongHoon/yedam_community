@@ -41,12 +41,21 @@ tr img {
 .testPaging a:hover:not(.active) {
 	background-color: #ddd;
 }
+.testListRow {
+	cursor: pointer;
+}
+.testListRow:hover {
+	background-color: rgb(229 231 235);
+}
+.table tbody tr:first-child > * {
+	padding-top: 5px;	
+}
 </style>
 <div class="row" style="margin-top:10px">
 	<div class="col-12">
-		<div style='float: right;'>
-			<a href="quizlist" class=" primary-btn rounded-full btn-hover"
-				style='padding: 10px;'> <font style="vertical-align: inherit;">
+		<div style="position: absolute; right: 60px; top: 90px; z-index: 99;">
+			<a href="quizlist" class="primary-btn main-btn btn-hover"
+				style="padding: 5px 15px;"> <font style="vertical-align: inherit;">
 					<font style="vertical-align: inherit;">+ 시험</font>
 			</font>
 			</a>
@@ -230,7 +239,7 @@ function updateList(tests){
 		}
 		
 		let temp = `
-			<tr>
+			<tr class="testListRow">
 				<td class="min-width">${tName} [과목 : ${sName}]</td>
 				<td class="min-width">${classId}강의실</td>
 				<td class="min-width tDate">${tDate}</td>

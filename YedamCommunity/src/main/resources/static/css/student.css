@@ -17,10 +17,12 @@
 /*맞는 보기*/
 .true {
 	color: blue;
+	font-weight: bold;
 }
 /*틀린 보기*/
 .false {
 	color: red;
+	font-weight: bold;
 }
 /*TOP 버튼*/
 #topBtn {
@@ -200,4 +202,13 @@
     text-overflow: ellipsis;
     max-width: 100%;
     vertical-align: top !important;
+}
+
+.commentBtn {
+	display: flex;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 5px;
+	
 }
