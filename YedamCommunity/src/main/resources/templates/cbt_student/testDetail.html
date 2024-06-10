@@ -11,6 +11,12 @@
 .tdetail_2 {
 	text-align: center;
 }
+.tdetail_3 {
+	display: inline-block;
+}
+.tdetail_4 {
+	color: red;
+}
 </style>
 <div>
 	<div class="card-style"
@@ -28,8 +34,17 @@
 				<td>[[${testDetail.testName}]]</td>
 			</tr>
 			<tr>
-				<th class="tdetail_2">응시기간</th>
-				<td>[[${#dates.format(testDetail.testDate, 'yyyy-MM-dd')}]]</td>
+				<th class="tdetail_2">시작시간</th>
+				<td>[[${#dates.format(testDetail.testDate, 'yyyy-MM-dd HH:mm')}]] 
+				<h6 class="tdetail_3">( </h6>
+				<h6 id="hour" class="tdetail_3 tdetail_4"></h6>
+				<h6 class="tdetail_3">시간</h6>
+				<h6 id="min" class="tdetail_3 tdetail_4"></h6>
+				<h6 class="tdetail_3">분</h6>
+				<h6 id="sec" class="tdetail_3 tdetail_4"></h6>
+				<h6 class="tdetail_3"> 초 전)</h6>
+				<input id="testDate" type="hidden" th:value="${#dates.format(testDetail.testDate, 'yyyy-MM-dd HH:mm')}">
+				</td>
 			</tr>
 			<tr>
 				<th class="tdetail_2">제한시간</th>
@@ -72,7 +87,7 @@
 						<input type="hidden" name="four" th:value="${quiz.four}">
 						<input type="hidden" name="five" th:value="${quiz.five}">
 					</div>
-					<button type="submit" class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover">시작</button>
+					<button id="testStartBtn" type="submit" class="tdetail_1 main-btn dark-btn-outline square-btn btn-hover" disabled>시작</button>
 				</form>
 			</th:block>
 			<th:block th:if="${isResult == 1}">
@@ -89,11 +104,77 @@
 	</div>
 </div>
 <script>
-let testDate = $('#testDate').val();
-let date = new Date('testDate');
-let hour = date.getHours();
-console.log(testDate);
-console.log(date);
-console.log(hour);
+
+//<<남은 시험 시작시간 타이머>>
+let testDate = $('#testDate').val(); //반환된 시험시간
+let date1 = new Date(testDate); //시험시간 변수
+let hour1 = date1.getHours();
+let minute1 = date1.getMinutes();
+let second1 = date1.getSeconds();
+let date2 = new Date(); //현재시간 변수
+let hour2 = date2.getHours();
+let minute2 = date2.getMinutes();
+let second2 = date2.getSeconds();
+let hour = $('#hour'); //남은시간 타이머
+let min = $('#min');
+let sec = $('#sec');
+
+window.onload = function(){
+	if(date2 > date1){ //시작시간이 지난 경우
+		hour.text('00');
+		min.text('00');
+		sec.text('00');
+	}
+	else{ //시작시간이 지나지 않은 경우
+		if((second1 - second2) < 0){ //초 차이가 음수인 경우
+			if((minute1 - minute2) < 0){ //분 차이가 음수인 경우
+				hour.text(('0' + (hour1 - hour2 - 1)).substr(-2,2));
+				min.text(('0' + ((minute1 + 60) - minute2)).substr(-2,2));
+				sec.text(('0' + ((second1 + 60) - second2)).substr(-2,2));
+			}
+			else{
+				hour.text(('0' + (hour1 - hour2)).substr(-2,2));
+				min.text(('0' + (minute1 - minute2 - 1)).substr(-2,2));
+				sec.text(('0' + ((second1 + 60) - second2)).substr(-2,2));
+			}
+		}
+		else{
+			if((minute1 - minute2) < 0){
+				hour.text(('0' + (hour1 - hour2 - 1)).substr(-2,2));
+				min.text(('0' + ((minute1 + 60) - minute2)).substr(-2,2));
+				sec.text(('0' + (second1 - second2)).substr(-2,2));
+			}
+			else{
+				hour.text(('0' + (hour1 - hour2)).substr(-2,2));
+				min.text(('0' + (minute1 - minute2)).substr(-2,2));
+				sec.text(('0' + (second1 - second2)).substr(-2,2));
+			}
+		}
+	}
+}
+
+let timer = setInterval(function(){ //타이머 함수
+	if(date2 > date1){
+		hour.text('00');
+		min.text('00');
+		sec.text('00');
+	}
+	else{
+		sec.text(('0' + (sec.text() - 1)).substr(-2,2)); //초 감소
+		if(sec.text() < 0 && min.text() == 0){ //시,분 감소
+			hour.text(('0' + (hour.text() - 1)).substr(-2,2));
+			min.text(('059').substr(-2,2));
+			sec.text(('059').substr(-2,2));
+		}
+		if(sec.text() < 0){ //분 감소
+			min.text(('0' + (min.text() - 1)).substr(-2,2));
+			sec.text(('059').substr(-2,2));
+		}
+		if(hour.text() == 0 && min.text() == 0 && sec.text() == 0){ //타이머 멈추기
+			clearInterval(timer);
+			$('#testStartBtn').attr('disabled', false);
+		}
+	}
+},1000)
 </script>
 </html>
