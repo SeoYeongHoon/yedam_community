@@ -187,7 +187,6 @@ function classInfo(classId){
 		data : {classId : classId},
 					
 		success : function(data){
-			console.log("최초 로딩 데이터 : "+data)
 			data.forEach((item,idx) => {
 				label.push(item.subjectName);
 				chartData.push(item.subjectAvg);
@@ -307,7 +306,6 @@ $('#allClass').on('click','.classNum', function(classId) {
 		data : {classId : classId},
 					
 		success : function(data){
-			console.log("버튼 클릭했을떄 data : "+data)
 			data.forEach((item,idx) => {
 				label.push(item.subjectName);
 				chartData.push(item.subjectAvg);

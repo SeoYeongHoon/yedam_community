@@ -74,7 +74,7 @@
 	// 현재 페이지 URL
     function getHomeCurrentPage() {
         var pathArray = window.location.pathname.split('/');
-        console.log(pathArray);
+        //console.log(pathArray);
         return pathArray[pathArray.length - 1];
     }
 
@@ -101,7 +101,7 @@
         // 현재 페이지 경로를 가져옴
         var currentPath = window.location.pathname;
         var navLinks = document.querySelectorAll('.main-nav ul li a');
-        console.log("현재 페이지 경로: ", currentPath);
+        //console.log("현재 페이지 경로: ", currentPath);
 		
 		var graduatedBoard = document.querySelector('#graduatedBoard');
 		var findJobBoard = document.querySelector('#findJobBoard');
@@ -112,7 +112,7 @@
         for (var i = 0; i < navLinks.length; i++) {
             // 현재 메뉴 항목의 href 속성 값을 가져옴
             var linkPath = navLinks[i].getAttribute('href');
-			console.log("href 속성: " + linkPath);
+			//console.log("href 속성: " + linkPath);
             
             // 현재 경로가 메뉴 항목의 href 속성과 일치하거나 포함될 경우 활성화
             if (currentPath.startsWith(linkPath)) {
