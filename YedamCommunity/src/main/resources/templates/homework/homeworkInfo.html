@@ -175,7 +175,9 @@ function autoResize(textarea) {
 		</div>
 
 		<!-- 파일내역 출력 -->
-		<div id="homeworkFile"></div>
+		<div id="homeworkFile">
+			<label>파일</label>
+		</div>
 		<!-- 파일 업로드 -->
 		<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
 			<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
@@ -262,7 +264,7 @@ function fileList(){
 				let file =
 					`
 					<div>
-						<label>파일</label>
+						
 						<p>
 						<a class="filePath" value="${e.homeworkfileId}"  href="/homeworkdownload/${e.downloadLocation}">${e.homeworkfileName}</a>
 							<button id="deleteFile-${e.homeworkfileId}" value="${e.homeworkfileLocation}" type="button" class="close deleteFile" style="float:left; display:none;" >&times;</button>
@@ -358,19 +360,22 @@ $('#updateHomeworks').on('click',function(){
 		success:function(data){
 			$('.homeworkUpdate').prop('disabled', true); //수정하고 인풋 readonly
 			$('#updateHomeworks').css('display', 'none'); // 수정 등록버튼 
-			$('.homeworkUpdate').css('backgroundColor','transparent') // 배경색 무로 변경
+			$('.homeworkUpdate').css('backgroundColor','rgba(239, 239, 239, 0.5)') // 배경색 무로 변경
 			$('.deleteFile').css('display', 'none'); // 파일삭제 버튼
 			$('#modal').modal('show'); // 등록완료 모달
 			$('#file').css('display','none'); //파일업로드 버튼 
-			let date = $('#homeworkDate').val();
-			$('#homeworkDate').prop('type','text');
-			$('#homeworkDate').val(homeworkDate);
 			
-			//마감일자 지나면 댓글입력창 없앰
-			//let homeworkDate = $('#homeworkDate').val()
+			let date = $('#homeworkDate').val();
+			if(homeworkDate !=''){
+				$('#updateDate').val(homeworkDate);
+			}else{
+				$('#updateDate').val(date);
+			}
+			
+			let udate=$('#updateDate').val();
 			let today = noTimeDate(new Date());
 		     
-			if(homeworkDate < today){
+			if(homeworkDate < today && udate < today){
 				$('#addReply').css('display','none');
 			} else{
 				$('#addReply').css('display','block');
