@@ -13,7 +13,7 @@ public class TeacherVO {
 	// tests 테이블
 	private int testId;
 	private String testName;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	private Date testDate;
 	private int testTime;
 	private String testContent;

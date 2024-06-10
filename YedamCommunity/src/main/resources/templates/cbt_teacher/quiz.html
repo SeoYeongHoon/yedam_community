@@ -533,27 +533,27 @@ function quizContentList(page, subjectName){
 											<div class="row row1" style="padding-left:15px">
 												<p class="">1. </p>
 												<input class="col-8" type="text" id="textContent1" value="${textContent1}" readonly="true" />
-												<input class="eAnswer" type="hidden" value="${exampleAnswer}" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer}" name="${exampleAnswer}"/>
 											</div>
 											<div class="row row2" style="padding-left:15px">
 												<p class="">2. </p>
 												<input class="col-8" type="text" id="textContent2" value="${textContent2}" readonly="true" />
-												<input class="eAnswer" type="hidden" value="${exampleAnswer2}" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer2}" name="${exampleAnswer2}"/>
 											</div>
 											<div class="row row3" style="padding-left:15px">
 												<p class="">3. </p>
 												<input class="col-8" type="text" id="textContent3" value="${textContent3}" readonly="true" />
-												<input class="eAnswer" type="hidden" value="${exampleAnswer3}" />
-											</div>
+												<input class="eAnswer" type="hidden" value="${exampleAnswer3}" name="${exampleAnswer3}"/>
+											</div> 
 											<div class="row row4" style="padding-left:15px">
 												<p class="">4. </p>
 												<input class="col-8" type="text" id="textContent4" value="${textContent4}" readonly="true" />
-												<input class="eAnswer" type="hidden" value="${exampleAnswer4}" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer4}" name="${exampleAnswer4}"/>
 											</div>
 											<div class="row row5" style="padding-left:15px">
 												<p class="">5. </p>
 												<input class="col-8" type="text" id="textContent5" value="${textContent5}" readonly="true" />
-												<input class="eAnswer" type="hidden" value="${exampleAnswer5}" />
+												<input class="eAnswer" type="hidden" value="${exampleAnswer5}" name="${exampleAnswer5}"/>
 											</div>
 										</div>
 										<br>
@@ -578,10 +578,8 @@ function quizContentList(page, subjectName){
 										$('.row3').hide();
 										$('.row2').hide();
 									}
-									
-									if($('.eAnswer').val() == 1){
-										$('.eAnswer').attr('style','yellow')
-									}
+									//$('input[name=1]').parent().css('color','red');
+								
 								})
 							},
 							error : function(err){
