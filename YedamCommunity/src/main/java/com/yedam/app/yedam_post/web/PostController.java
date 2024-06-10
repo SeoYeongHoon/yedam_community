@@ -280,7 +280,7 @@ public class PostController {
 	@GetMapping("/curriculumPostInsert")
     public String curriculumPostInsert(Model model
     		                   , PostVO postVO
-//	    		                   , @PathVariable int boardType
+//	    		               , @PathVariable int boardType
 //    		                   , @RequestParam String curriculumSelect
     		                   , Authentication authentication) {
 //		    postVO.setBoardType(boardType);

@@ -214,7 +214,7 @@
     	color: white;
 	}
 	
-	.good-label {
+	.Good-label {
 	    margin-top: 20px;
 	    margin-bottom: 5px;
     }
@@ -268,35 +268,34 @@
 		  </form>
 		 
 		 
-		  <form class="good-form center" >
+		  <form class="Good-form center" >
 			<input type="hidden" name="postId" th:value="${postvote.postId}" id="postvoteId"/>
 			<input type="hidden" name="userId" th:value="${userId}"/>
 			  <div>
-				<label class="good-label" id="postLikeItLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 0}">추천 하기</label>
-				<label class="good-label" id="postLikedIconLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 1}">추천 완료!</label>
-				<button type="button" class="good-submit" style="border: 1px solid black; border-radius: 10%; width: 50px;">
+				<label class="Good-label" id="postLikeItLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 0}">추천 하기</label>
+				<label class="Good-label" id="postLikedIconLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 1}">추천 완료!</label>
+				<button type="button" class="Good-submit" style="border: 1px solid black; border-radius: 10%; width: 50px;">
 					<img th:if="${isLikeChecked == 0}" id="postLikeItIcon" src="/images/icons/likeit.png" style="width: 100%; padding: 5px;">
 					<img th:if="${isLikeChecked == 1}" id="postLikedIcon" src="/images/icons/likedit.png" style="width: 100%; padding: 5px;">
 				</button>
 		  	  </div>
 		  </form>
 		  
-		   		<!-- 신고버튼(본인 이외의 계정일 때만 신고 가능) -->
-		   		<th:block th:if="${#authentication.name != postvote.writer}">
+		   	<!-- 신고버튼(본인 이외의 계정일 때만 신고 가능) -->
+		   	<th:block th:if="${#authentication.name != postvote.writer}">
 			    <button type="button" id="reportBtn" class="post-report">신고</button> 
-				 </th:block>  
+			</th:block>  
 	  </div>
   </div>
-  
-  		    <div style="display: flex; justify-content: end;">
-			 	<input id="writer" type="hidden" th:value="${postvote.writer}">
-			   	<input id="userName" type="hidden" th:value="${userName}">
-			   	<input id="userType" type="hidden" th:value="${userType}">
-			    <!-- <button id="updateBtn" type="button" style="display: none" style="display: inline-block;" >수정</button> -->
-			    <button id="deleteBtn" type="button" class="post-delete">삭제</button>
-			    <a th:href="@{/all/posts/4}" class="post-list">목록</a>
-			    <!-- 신고버튼(본인 이외의 계정일 때만 신고 가능) -->
-	  		</div>
+     <div style="display: flex; justify-content: end;">
+	 	<input id="writer" type="hidden" th:value="${postvote.writer}">
+	   	<input id="userName" type="hidden" th:value="${userName}">
+	   	<input id="userType" type="hidden" th:value="${userType}">
+	    <!-- <button id="updateBtn" type="button" style="display: none" style="display: inline-block;" >수정</button> -->
+	    <button id="deleteBtn" type="button" class="post-delete">삭제</button>
+	    <a th:href="@{/all/posts/4}" class="post-list">목록</a>
+	    <!-- 신고버튼(본인 이외의 계정일 때만 신고 가능) -->
+	 </div>
   
   <div class="post-reply-position">
   <form id="reply-form" class="reply">
@@ -319,9 +318,9 @@
         <textarea class="reply-textarea" th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
       </div>
       <div class="reply-actions">
-        <button th:id="|updateBtn${reply.replyWriter}|" type="button" class="border reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">수정</button>
+        <button th:id="|updateBtn${reply.replyWriter}|" type="button" th:class="|updateBtn${reply.replyWriter}| + ' ' + border + ' ' + reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display: none;">수정</button>
         <button type="button" class="border reply-updateBtn" th:data-reply-id="${reply.replyId}" style="display:none;">수정</button>
-        <button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="border delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none;">삭제</button>
+        <button th:id="|deleteBtn${reply.replyWriter}|" type="button" th:class="|deleteBtn${reply.replyWriter}| + ' ' + border + ' ' + post-delete + ' ' + delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display: none;">삭제</button>
       </div>
       <h5>답글</h5>
 			<ul>
@@ -336,9 +335,9 @@
 						<textarea class="comment-textarea" th:id="|commentId-${comment.commentId}|" th:text="${comment.commentContent}" readonly></textarea>
 					</div>
 					<div class="comment-actions">
-						<button th:id="|commentUpdate-${comment.commentWriter}|" type="button" class="border comment-update" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
+						<button th:id="|commentUpdate-${comment.commentWriter}|" type="button" th:class="|commentUpdate-${comment.commentWriter}| + ' ' + border + ' ' + comment-update" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
 						<button type="button" class="border comment-updateBtn" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
-						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment" th:data-comment-id="${comment.commentId}" style="display: none;">삭제</button>
+						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" th:class="|commentDelete-${comment.commentWriter}| + ' ' + delete-comment" th:data-comment-id="${comment.commentId}" style="display: none;">삭제</button>
 					</div>
 				</li>
 			</ul>
@@ -405,11 +404,14 @@
   
   replyWriters.forEach(function(replyWriter){
     if(replyWriter == userName){
-      $('#deleteBtn' + replyWriter).css('display','block');
-      $('#updateBtn' + replyWriter).css('display','block');
+      $('.deleteBtn' + replyWriter).css('display','block');
+      $('.updateBtn' + replyWriter).css('display','block');
     }
   });
   
+  //------------------------
+  // 대댓글 버튼 권한
+  //------------------------
   let commentWriters = [];
 	$('.commentWriter').each(function() {
 		commentWriters.push($(this).val());
@@ -417,8 +419,8 @@
 
 	commentWriters.forEach(function(commentWriter) {
 		if (commentWriter == userName) {
-			$('#commentDelete-' + commentWriter).css('display', 'block');
-			$('#commentUpdate-' + commentWriter).css('display', 'block');
+			$('.commentDelete-' + commentWriter).css('display', 'block');
+			$('.commentUpdate-' + commentWriter).css('display', 'block');
 		}
 	});
 
@@ -522,7 +524,8 @@
       },
     });
   });
-
+  
+  
   //--------------------------------------------
   // 댓글 수정
   //--------------------------------------------
@@ -669,8 +672,8 @@
   //--------------------------------------------
   // 추천 추가 함수
   //--------------------------------------------
-  $(".good-submit").on("click", function () {
-    let formData = $(".good-form").serialize();
+  $(".Good-submit").on("click", function () {
+    let formData = $(".Good-form").serialize();
     let postLikeItIcon = $('#postLikeItIcon');	// 추천 전 아이콘
 	let postLikedIcon = $('#postLikedIcon');	// 추천 후 아이콘
 	let postLikeItLabel = $('#postLikeItLabel');	// 추천 전 텍스트
