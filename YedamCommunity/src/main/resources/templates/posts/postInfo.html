@@ -175,7 +175,7 @@
 	    <input id="userType" type="hidden" th:value="${userType}">
 	    <button id="updateBtn" class="main-btn warning-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">수정</button>
 
-	    <button id="deleteBtn" th:class="main-btn danger-btn  btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">삭제</button>
+	    <button id="deleteBtn" class="main-btn danger-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">삭제</button>
 	    <div th:switch="${boardId}">
 	   		<div th:if="${boardId <= 6}">
 	   			 <a class="post-list" th:href="@{/all/curriculumPost}">목록</a>

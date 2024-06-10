@@ -19,7 +19,7 @@
           <div class="cards-styles" >
             <div class="row" >
               <div class="col-4" th:each="classInfo : ${class}">
-                <div class="card-style-1 mb-30 classSelectCard">
+                <div class="card-style-1 mb-30 classSelectCard" style="cursor: pointer;">
                   <div class="card-content classSelect" th:onclick="|location.href='@{/admin/homeworkInsert(curriculumId=${classInfo.curriculumId})}'|">
                     <h4 style="font-weight: normal;">[[${classInfo.classId}]]강의실</h4>
                     <hr>

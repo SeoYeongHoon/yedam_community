@@ -24,7 +24,7 @@
 			<div class="col-4 curri" th:each="classInfo, idx : ${class}">
 				<input type="hidden" th:id="curriId" th:value="${classInfo.curriculumId}"/>
 				<input type="hidden" th:id="classId" th:value="${classInfo.classId}"/>
-				<div class="card-style-1 mb-30">
+				<div class="card-style-1 mb-30" style="cursor: pointer;">
 					<div class="card-content" th:id="${classInfo.classId}">
 						<h4>
 							<font style="vertical-align: inherit;"> 

@@ -156,7 +156,7 @@ function autoResize(textarea) {
 <input id="logName" type="hidden" th:value="${userName}">
 <div class="container" style="padding-bottom: 100px;">
 	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56; max-width: 1140px; margin: 50px auto;">
-		<div th:each="homeworkInfo : ${homeworkList}" style="padding: 30px;">
+		<div th:each="homeworkInfo : ${homeworkList}">
 			<button id="deleteHomeworks" th:value="${homeworkInfo.homeworkId}"
 				class="main-btn danger-btn btn-hover admin"
 				style="float: right; padding: 5px 15px;" type="button">과제 삭제</button>
@@ -164,7 +164,7 @@ function autoResize(textarea) {
 				class="main-btn warning-btn btn-hover admin"
 				th:value="${homeworkInfo.homeworkId}" type="button" style="padding: 5px 15px;">과제 수정</button>
 			<button id="updateHomeworks" class="main-btn primary-btn btn-hover" type="button" style="display: none; padding: 5px 15px;">수정 하기</button>
-			<div>
+			<div class="mt-30">
 				<div class="input-style-1">
 					<label>제목</label>
 					<input id="title" class="homeworkUpdate" type="text" style="width: 100%;" th:value="${homeworkInfo.homeworkTitle}" disabled>
