@@ -99,7 +99,7 @@
    
    .post-list {
     background-color: #ccc;
-    padding: 5px 15px;
+    padding: 7px 16px;
     border-radius: 4px;
     color: white;
    }
@@ -174,8 +174,18 @@
 	    <input id="userName" type="hidden" th:value="${userName}">
 	    <input id="userType" type="hidden" th:value="${userType}">
 	    <button id="updateBtn" class="main-btn warning-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">수정</button>
-	    <button id="deleteBtn" class="main-btn danger-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">삭제</button>
-	    	<a class="post-list" th:href="@{/all/posts/{boardId}(boardId=${boardId})}">목록</a>
+	    <button id="deleteBtn" th:class="main-btn danger-btn  btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">삭제</button>
+	    <div th:switch="${boardId}">
+	   		<div th:if="${boardId <= 6}">
+	   			 <a class="post-list" th:href="@{/all/curriculumPost}">목록</a>
+	   		</div>
+			<div th:case="7">
+	  			<a class="post-list" th:href="@{/all/posts/2}">목록</a>
+			</div>
+			<div th:case="8">
+	  			<a class="post-list" th:href="@{/all/posts/3}">목록</a>
+			</div>
+		</div>
   	</div>
 	
 	<form id="reply-form" class="reply">
@@ -198,12 +208,9 @@
 				<textarea th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
 			</div>
 			<div class="reply-actions">
-				<button th:id="|updateBtn${reply.replyWriter}|" type="button" class="reply-update main-btn warning-btn btn-hover"
-					th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none; padding: 5px 15px;">수정</button>
-				<button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="delete-reply main-btn danger-btn btn-hover"
-					th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none; padding: 5px 15px;">삭제</button>
-				<button type="button" class="reply-updateBtn main-btn warning-btn btn-hover" th:data-reply-id="${reply.replyId}"
-					style="display:none; padding: 5px 15px;">수정</button>
+				<button th:id="|updateBtn${reply.replyWriter}|" type="button" class="reply-update main-btn warning-btn btn-hover" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none; padding: 5px 15px;">수정</button>
+				<button th:id="|deleteBtn${reply.replyWriter}|" type="button" class="delete-reply main-btn danger-btn btn-hover" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display:none; padding: 5px 15px;">삭제</button>
+				<button type="button" class="reply-updateBtn main-btn warning-btn btn-hover" th:data-reply-id="${reply.replyId}" style="display:none; padding: 5px 15px;">수정</button>
 			</div>
 
 			<ul>
@@ -222,10 +229,8 @@
 						<button th:id="|commentUpdate-${comment.commentWriter}|" type="button"
 							class="comment-update main-btn warning-btn btn-hover" th:data-comment-id="${comment.commentId}"
 							style="display:none; padding: 5px 15px;">수정</button>
-						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment main-btn danger-btn btn-hover"
-							th:data-comment-id="${comment.commentId}" style="display:none; padding: 5px 15px;">삭제</button>
-						<button type="button" class="comment-updateBtn main-btn warning-btn btn-hover" th:data-comment-id="${comment.commentId}"
-							style="display:none; padding: 5px 15px;">수정</button>
+						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" class="delete-comment main-btn danger-btn btn-hover"	th:data-comment-id="${comment.commentId}" style="display:none; padding: 5px 15px;">삭제</button>
+						<button type="button" class="comment-updateBtn main-btn warning-btn btn-hover" th:data-comment-id="${comment.commentId}" style="display:none; padding: 5px 15px;">수정</button>
 					</div>
 				</li>
 			</ul>
@@ -268,10 +273,9 @@
 			</div>
 		</div>
 	</div>
-	
 </div>
-
 <script>
+
   let writer = $('#writer').val();
   let userName = $('#userName').val();
   let postId = $('#postId').val();
@@ -616,6 +620,8 @@
       });
     });
 
+   
+    
     //--------------------------------------------
     // 대댓글 수정 이벤트 핸들러 재적용
     //--------------------------------------------
@@ -679,9 +685,6 @@
       });
     });
   }
-
-  
-
 
 	//--------------------------------------------
 	// 추천 추가 함수
