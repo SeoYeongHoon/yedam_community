@@ -81,7 +81,6 @@
 			var reportDate = document.querySelectorAll('.report_date');
 			
 			for (let i = 0; i < reportDate.length; i++) {
-			    console.log(formatDate(reportDate[i].innerText));
 			    
 			    reportDate[i].innerText = formatDate(reportDate[i].innerText);
 			}
@@ -94,10 +93,28 @@
 			var notSolvedBtn = document.querySelector('.notSolvedBtn');
 			var solvedBtn = document.querySelector('.solvedBtn');
 			
-			if (confirm("처리를 완료하시겠습니까?")) {
-				solvedBtn.style.display = 'block';
-				notSolvedBtn.style.display = 'none';
-			}
+			Swal.fire({
+			    title: "처리를 완료하시겠습니까?",
+			    text: "확인 버튼을 클릭 시, 해당 게시글의 처리 상태가 완료됩니다.",
+			    icon: 'warning',
+			    showCancelButton: true,
+			    confirmButtonColor: '#3085d6',
+			    cancelButtonColor: '#d33',
+			    confirmButtonText: '확인',
+			    cancelButtonText: '취소',
+			}).then((result) => {
+				if (result.isConfirmed) {
+
+					Swal.fire({
+						icon: 'success',
+						text: '처리가 완료되었습니다!',
+						confirmButtonText: '확인',
+					}).then((result) => {
+						solvedBtn.style.display = 'block';
+						notSolvedBtn.style.display = 'none';
+					});
+				}
+			});
 		}
 	</script>
 </html>

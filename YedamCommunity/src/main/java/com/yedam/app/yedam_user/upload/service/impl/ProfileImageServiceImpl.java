@@ -75,7 +75,7 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 				
 				System.err.println("이미지 리스트: " + imageList);
 			} else {
-				imageList.add(setFilePath("/default_profile.jpg"));
+				imageList.add(setFilePath("/images/default_profile.jpg"));
 			}
 
 		}
