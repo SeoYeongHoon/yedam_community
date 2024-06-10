@@ -34,7 +34,6 @@ public class ReplyController {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		postReplyVO.setReplyWriter(userVO.getUsername());
 		postService.createReply(postReplyVO);
-		System.out.println("postReplyVO : " + postReplyVO);
 		return "success";
 	}
 	//--------------------------------------------
@@ -72,7 +71,6 @@ public class ReplyController {
     @ResponseBody
     public String addComment(PostCommentVO postcommentVO,
     		                 Authentication authentication) {
-    	System.err.println("대댓글등록 넘어와따"+postcommentVO);
 		
 		  LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 		  postcommentVO.setCommentWriter(userVO.getUsername());
@@ -87,8 +85,8 @@ public class ReplyController {
 	@PostMapping("/commentUpdate")
 	@ResponseBody
 	public  Map<String, Object> commentUpdate (PostCommentVO postcommentVO) {
-		System.err.println("댓글 정보= "+ postcommentVO);
-			postService.updateComment(postcommentVO);
+		postService.updateComment(postcommentVO);
+		
 		return null;
 	}
 	

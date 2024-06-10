@@ -71,7 +71,6 @@
 		
 		function quitRequest() {
 			var userId = $('#userIdInfo').val();
-			console.log(userId)
 			if(confirm("정말로 회원탈퇴를 하시겠습니까?")) {
 				$.ajax({
 					url: '/quitUser?userId=' + userId,
@@ -443,7 +442,6 @@
 							// window.location.href = '/all/home';
 		                },
 		                error: function(xhr, status, error) {
-		                    console.error(error);
 		                    alert('정보 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.');
 		                }
 		            });

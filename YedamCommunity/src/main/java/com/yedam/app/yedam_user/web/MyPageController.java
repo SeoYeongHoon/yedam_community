@@ -104,7 +104,6 @@ public class MyPageController {
         }
         if (password != null && !password.isEmpty()) {
         	if (!password.equals(passwordConfirm)) {
-        		System.out.println("비밀번호가 서로 다릅니다.");
         		rttr.addFlashAttribute("pwError", "비밀번호가 서로 다릅니다.");
         		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비밀번호가 서로 다릅니다.");
         	}

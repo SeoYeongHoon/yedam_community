@@ -118,7 +118,6 @@ public class ExamController {
 	@ResponseBody
 	public String quizboxInsertProcess(@RequestBody QuizVO quizVO) {
 		examService.quizboxInsert(quizVO);
-		System.out.println("quizbox에 들어간 값 : " + quizVO);
 		return "true";
 	}
 	//--------------------------------------------
@@ -159,7 +158,6 @@ public class ExamController {
 			LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
 			teacherVO.setUserId(userVO.getuserId());
 		} catch(NullPointerException e) {
-			System.out.println(e);
 			return "redirect:/";	// 로그인 풀리면 로그인 페이지로 이동.
 		}
 		
@@ -173,7 +171,6 @@ public class ExamController {
 	@PostMapping("quizinsert")
 	public String quizInsertProcess(TeacherVO teacherVO) {
 		examService.quizInsert(teacherVO);
-		System.out.println("서브젝트값 받았나 확인 : "+ teacherVO);
 		return "redirect:quizlist";
 	}
 	//--------------------------------------------
@@ -364,7 +361,6 @@ public class ExamController {
 		model.addAttribute("userInfo", findVO);
 		model.addAttribute("testInfo", findVO2);
 		model.addAttribute("quizResultList", quizResultList);
-		System.out.println("해당학생이 푼 문제리스트: " + quizResultList);
 		return "cbt_teacher/feedback";
 	}
 	//--------------------------------------------
