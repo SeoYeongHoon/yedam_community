@@ -110,8 +110,10 @@ function userList(testId){
 					//item.isReexam = '재시험 O';
 					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'),
 									      $('<input type="hidden">').attr({value : item.userId, id : "u"+idx}));
+
 					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'")
 												   .addClass('feedBtn'));
+
 					reUserId.push($('#u'+idx).val());
 				}
 			})

@@ -5,26 +5,6 @@
 	  layout:fragment="Admin">
 	  
 	<script>
-		/* function addCurriculum(event) {
-			var formData = new FormData(document.getElementById('add_course_form'));
-	        console.log("폼데이터: " + formData);
-	        $.ajax({
-	            url: '/admin/course',
-	            type: 'POST',
-	            data: formData,
-	            success: function(response) {
-					if (response.status === "success") {
-                        alert(response.message);	
-                    } else {
-                        alert(response.message);
-                    }
-	            },
-	            error: function(xhr, status, error) {
-	                alert("과정 등록에 실패했습니다. 다시 시도해주세요.");
-	                console.error(error);
-	            }
-	        });
-		} */
 		
 		//--------------------------------------------
 		// 과정 클릭시 해당과정의 학생 목록 출력
@@ -37,7 +17,6 @@
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
 					var students = JSON.parse(xhr.responseText);
-					console.log("학생정보", students);
 					
 					var tbody = document.getElementById('courseInfoDetail');
 					var courseTitle = document.getElementById('courseName');
@@ -190,7 +169,6 @@
 			if (confirm('과정을 삭제하시겠습니까?')) {
 				var xhr = new XMLHttpRequest();
 				var curriculumId = document.getElementById('currId').value;
-				console.log(curriculumId);
 				xhr.open('DELETE', '/admin/course/' + curriculumId, true);
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState == 4 && xhr.status == 200) {
@@ -208,9 +186,7 @@
 		var courseModalBack = document.querySelector('.courseModal');
 		
 		window.addEventListener('click', function(e) {
-			console.log(e.target);
 		    if (e.target === courseModalBack) {
-		    	console.log("모달 꺼짐");
 		        document.querySelector('.courseModal').style.display = 'none';
 		    }
 		});

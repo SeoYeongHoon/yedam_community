@@ -83,8 +83,6 @@ qSubjectName = window.localStorage.getItem('qSubjectName');
 $('.curri').on('click', function(){
 	currId = $(this).children('input#curriId').val();
 	classId = $(this).children('input#classId').val();
-	console.log(currId);
-	console.log(classId);
 	window.localStorage.setItem('curriculumId', currId);
 	window.localStorage.setItem('classId', classId);
 	

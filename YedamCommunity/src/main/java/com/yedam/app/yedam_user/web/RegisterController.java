@@ -61,12 +61,10 @@ public class RegisterController {
 	    	// 아이디 비번 확인
 	    	boolean isExist = userService.isUserExist(userVO.getId());
 	    	if (isExist) {
-	    		System.out.println("이미 존재하는 아이디입니다.");
 	    		rttr.addFlashAttribute("idError", "이미 존재하는 아이디입니다.");
 	    		return "redirect:/register";
 	    	}
 	    	if (!password.equals(passwordConfirm)) {
-	    		System.out.println("비밀번호가 서로 다릅니다.");
 	    		rttr.addFlashAttribute("pwError", "비밀번호가 서로 다릅니다.");
 	    		return "redirect:/register";
 	    	}
@@ -90,7 +88,6 @@ public class RegisterController {
             return "register/registerComplete";
         } catch (Exception e) {
             model.addAttribute("error", "회원가입 실패! 다시 시도해주세요.");
-            System.out.println(e);
             return "redirect:/";
         }
 	}
@@ -103,8 +100,6 @@ public class RegisterController {
 	// 이메일 인증용 전송
 	@PostMapping("/sendVerificationEmail")
 	public ResponseEntity<String> sendVarificationEmail(@RequestParam String email) {
-		
-		System.out.println("이메일:" + email);
 		
 		try {
 			userService.sendVerificationEmail(email);
@@ -119,10 +114,8 @@ public class RegisterController {
 	@PostMapping("/verifyCode")
 	public ResponseEntity<String> verifyCode(@RequestParam String email,
 											 @RequestParam String code) {
-		System.out.println("verifyCode 메소드 실행");
 		boolean isVerified = userService.verifyCode(email, code);
 		if (isVerified) {
-			System.out.println("인증성공");
 			return ResponseEntity.ok("인증완료");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증실패");

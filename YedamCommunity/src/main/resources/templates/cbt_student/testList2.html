@@ -197,13 +197,11 @@ $(document).on('click','.closeBtn',function(){
 //<<응시하기 버튼 관련>>
 $(document).on('click','.testStartBtn',function(){
 	let testId = $(this).parent().siblings('input').val();
-	//console.log(testId);
 	location.href='/all/testDetail?testId=' + testId;
 })
 //<<응시완료 버튼 관련>>
 $(document).on('click','.testEndBtn',function(){
 	let testId = $(this).parent().siblings('input').val();
-	//console.log(testId);
 	location.href='/all/testResult2?testId=' + testId;
 })
 

@@ -71,7 +71,6 @@
 		
 		function quitRequest() {
 			var userId = $('#userIdInfo').val();
-			console.log(userId)
 			if(confirm("정말로 회원탈퇴를 하시겠습니까?")) {
 				$.ajax({
 					url: '/quitUser?userId=' + userId,
@@ -119,7 +118,13 @@
 				        <a class="profile_change_btn" onclick="document.getElementById('change_image').click();">
 				            <input id="change_image" name="uploadFiles" type="file" style="display:none;" onchange="displayUploadedImg(this);">
 				            <p class="change_image_text">변경</p>
-				            <img class="mypage_profile_image" th:src="@{'/files' + ${#authentication.principal.profileImageLocation}}">
+				            <!-- <img class="mypage_profile_image" th:src="@{'/files' + ${#authentication.principal.profileImageLocation}}"> -->
+				            <th:block th:if="${#authentication.principal.profileImageLocation}">
+							    <img id="profileImage" class="mypage_profile_image" th:src="@{'/files' + ${#authentication.principal.profileImageLocation}}" onerror="this.onerror=null; this.src='/images/default_profile.jpg';">
+							</th:block>
+							<th:block th:if="!${#authentication.principal.profileImageLocation}">
+							    <img id="profileImage" class="mypage_profile_image" src="/images/default_profile.jpg">
+							</th:block>		            
 				        </a>
 				        <div class="input-style-1">
 				            <label>이름</label> 
@@ -414,23 +419,43 @@
 			event.preventDefault();
 	        let formData = new FormData(document.getElementById('updateUser'));
 
-	        if (confirm("정보를 수정하시겠습니까?")) {
-	            $.ajax({
-	                url: '/updateUserInfo',
-	                type: 'POST',
-	                data: formData,
-					processData: false,
-					contentType: false,
-	                success: function(response) {
-	                    alert('정보가 성공적으로 업데이트되었습니다.');
-						window.location.href = '/all/home';
-	                },
-	                error: function(xhr, status, error) {
-	                    console.error(error);
-	                    alert('정보 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.');
-	                }
-	            });
-	        }
+	        Swal.fire({
+			    title: '정보를 수정하시겠습니까?',
+			    text: "수락 버튼을 클릭 시, 회원 정보가 변경됩니다.",
+			    icon: 'warning',
+			    showCancelButton: true,
+			    confirmButtonColor: '#3085d6',
+			    cancelButtonColor: '#d33',
+			    confirmButtonText: '수락',
+			    cancelButtonText: '취소',
+			    // reverseButtons: true, // 버튼 순서 거꾸로
+			   
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$.ajax({
+		                url: '/updateUserInfo',
+		                type: 'POST',
+		                data: formData,
+						processData: false,
+						contentType: false,
+		                success: function(response) {
+							// window.location.href = '/all/home';
+		                },
+		                error: function(xhr, status, error) {
+		                    alert('정보 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.');
+		                }
+		            });
+					Swal.fire({
+						icon: 'success',
+						text: '수정이 완료되었습니다!',
+						confirmButtonText: '확인',
+					}).then((result) => {
+						location.reload();
+					});
+				}
+			});
 	    });
+		
+		
 	</script>
 </html>

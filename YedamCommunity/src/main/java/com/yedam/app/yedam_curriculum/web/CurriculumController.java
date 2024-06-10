@@ -40,7 +40,6 @@ public class CurriculumController {
 	@ResponseBody
 	public List<CurriculumVO> selectSubject(CurriculumVO curriculumVO) {
 		List<CurriculumVO> list = curriculumService.classSubject(curriculumVO);
-		System.out.println("과목명 출력되는거 확인 : "+list);		
 		return list;
 	}
 }

@@ -70,7 +70,6 @@ public class AdminController {
 		if (!SecurityUtils.hasRole("ROLE_ADMIN")) {
             return "error/access";
         }
-		System.out.println(curriculumVO.getCurriculumEndDate());
 		List<UserVO> requestList = userService.stdList();
 		List<CurriculumVO> currList = curriculumService.CurriculumList();
 		model.addAttribute("requests", requestList);
@@ -161,7 +160,6 @@ public class AdminController {
 					row.put("stdPhone", csvRecord.get("전화번호"));
 					row.put("stdEmail", csvRecord.get("이메일"));
 					data.add(row);
-					System.out.println("ROW 데이터: " + row);
 					userService.insertTempUsers(row);
 				}
 				
@@ -169,7 +167,6 @@ public class AdminController {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
-		System.out.println("데이터: " + data);
 		return ResponseEntity.ok(data);
 	}
 	
@@ -186,11 +183,9 @@ public class AdminController {
 //	과정 등록
 	@PostMapping("/course")
 	public String addCourse(MultipartFile[] uploadFiles, CurriculumVO curriculumVO, Model model) {
-		System.err.println("커리큘럼 VO = " + curriculumVO);
 		
 	    try {
 	      
-	    	System.out.println("데이터 입력");
 	        List<String> imageList = profileImageService.uploadFile(uploadFiles);
             if (!imageList.isEmpty()) {
                 String imagePath = imageList.get(0);
@@ -200,16 +195,13 @@ public class AdminController {
                 curriculumVO.setProfileImageSize((int) profileImage.getSize());
                 curriculumVO.setProfileImageExt(profileImage.getOriginalFilename().substring(profileImage.getOriginalFilename().lastIndexOf(".") + 1));
                 curriculumVO.setDownloadLocation(imagePath);
-                System.out.println("데이터 입력 완료");
             }
             curriculumService.insertCurriculum(curriculumVO);
 	        
 	        model.addAttribute("message", "과정이 성공적으로 등록되었습니다.");
-	        System.out.println("과정등록 성공!");
 	        return "redirect:/admin/course";
 	    } catch (Exception e) {
 	        model.addAttribute("message", "과정 등록에 실패했습니다.");
-	        System.err.println("과정등록 실패!");
 	        return "admin/manageCourse";
 	    }
 	}

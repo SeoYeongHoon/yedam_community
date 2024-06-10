@@ -287,18 +287,43 @@
 		function ajax() {
 			// 파일외 입력태그
 			let title = document.getElementById('homeworkTitle');
+			let content = document.getElementById('homeworkContent');
 			let date = document.getElementById('homeworkDate');
 			
 			// 파일 업로드
 			let formData = new FormData(document.getElementById('insertForm'));
 			
 			 if (title.value == '') {
-				$('#modalTitle').modal('show');
-				title.focus();
+				// $('#modalTitle').modal('show');
+				Swal.fire({
+					icon: 'error',
+					text: '제목을 입력하세요!',
+					confirmButtonText: '확인',
+				}).then((result) => {
+					title.focus();
+				});
+				
+				return;
+			} else if (content.value == '') {
+				Swal.fire({
+					icon: 'error',
+					text: '내용을 입력하세요!',
+					confirmButtonText: '확인',
+				}).then((result) => {
+					content.focus();
+				});
+				
 				return;
 			} else if (date.value == '') {
-				$('#modalDate').modal('show');
-				date.focus();
+				// $('#modalDate').modal('show');
+				Swal.fire({
+					icon: 'error',
+					text: '기한을 입력하세요!',
+					confirmButtonText: '확인',
+				}).then((result) => {
+					date.focus();
+				});
+				
 				return;
 			} 
 			
@@ -310,12 +335,24 @@
 				contentType: false, // FormData가 가지고 있는 통신 정보를 사용
 				data: formData,
 				success:  function(result) {
-					$('#modal').modal('show');
-					
+					Swal.fire({
+						icon: 'success',
+						text: '과제 등록이 완료되었습니다.',
+						confirmButtonText: '확인',
+					}).then((result) => {
+						location.href='/admin/homework_T';
+					});
 				},
-				error: function(reject){	
-					$('#modalError').modal('show');
-	               }
+				error: function(reject) {	
+					// $('#modalError').modal('show');
+					Swal.fire({
+						icon: 'error',
+						text: '과제 등록 실패!',
+						confirmButtonText: '확인',
+					}).then((result) => {
+						location.href='/admin/homework_T';
+					});
+	            }
 			})
 			
 		};
