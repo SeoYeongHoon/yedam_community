@@ -110,7 +110,17 @@
 </style>
 
 <div class="container">
-	<div class="add-line"><h4>수료 과정별 게시판</h4></div>
+	<div th:switch="${boardId}">
+	   		<div th:if="${boardId <= 6}">
+	   			 <div class="add-line"><h4>수료 과정별 게시판</h4></div>
+	   		</div>
+			<div th:case="7">
+	  			<div class="add-line"><h4>구인/구직 게시판</h4></div>
+			</div>
+			<div th:case="8">
+	  			<div class="add-line"><h4>정보 게시판</h4></div>
+			</div>
+		</div>
 	
 	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56;">
 		<div class="how2 how2-cl3 flex-s-c board_type" style="justify-content: space-between; height: 80px; align-items: baseline; padding-top: 10px;">
