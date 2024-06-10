@@ -35,10 +35,10 @@ public class HomeController {
     public String BoardList(Model model) {
         
 		// 게시판 1 - 수강별, 2 - 구인/ 구인, 3 - 정보, 4 - 질문
-        List<PostVO> board1Posts = postservice.getPostAll(1);
-        List<PostVO> board2Posts = postservice.getPostAll(2);
-        List<PostVO> board3Posts = postservice.getPostAll(3);
-        List<PostVO> board4Posts = postservice.getPostAll(4);
+        List<PostVO> board1Posts = postservice.getPostAll(5);
+        List<PostVO> board2Posts = postservice.getPostAll(7);
+        List<PostVO> board3Posts = postservice.getPostAll(8);
+        List<PostVO> board4Posts = postservice.getPostAll(9);
         
         List<PostVO> allPosts = new ArrayList<>();
         allPosts.addAll(board1Posts);
@@ -59,7 +59,7 @@ public class HomeController {
         // 인기 게시글
         List<PostVO> popularPosts = allPosts.stream()
                                             .sorted(Comparator.comparingInt(PostVO::getPostLike).reversed())
-                                            .limit(10) // 상위 5개 게시글
+                                            .limit(10) // 상위 10개 게시글
                                             .collect(Collectors.toList());
         
         model.addAttribute("board1Posts", board1Posts);

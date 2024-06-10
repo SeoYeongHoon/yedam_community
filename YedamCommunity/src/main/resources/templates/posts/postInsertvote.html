@@ -59,7 +59,7 @@
 <body>
 <div class="container">
   <h1 class="insert-title">게시글 작성</h1>
-  <form th:action="@{/all/postInsertVote/}" th:object="${post}" method="post" enctype="multipart/form-data" id="post-form">
+  <form th:action="@{/all/postInsertVote/}" th:object="${post}" method="post" enctype="multipart/form-data" id="post-form" onsubmit="return postvoteCheck()">
     <label for="title">제목:</label>
     <input class="post-insert-title" type="text" id="title" th:field="*{title}" /><br />
     
@@ -91,6 +91,31 @@
 </div>
 <script>
 
+function postvoteCheck(){
+    let title = document.getElementById('title');
+    let postContent = document.getElementById('postContent');
+    let endDate = document.getElementById('endDate');
+    
+    if(title.value == ''){
+        alert('제목이 필요합니다.');
+        title.focus();
+        return false;
+    }
+    
+    if(postContent.value == ''){
+        alert('내용이 필요합니다.');
+        postContent.focus();
+        return false;
+    }
+    
+    if(endDate.value == ''){
+        alert('기간이 필요합니다.');
+        endDate.focus();
+        return false;
+    }
+    
+    return true;
+}
 </script>
 </body>
 </html>

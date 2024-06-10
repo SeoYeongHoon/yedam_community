@@ -12,7 +12,6 @@
       padding: 10px;
       margin-bottom: 10px;
       border-radius: 5px;
-	  padding-bottom: 40px;
     }
     
     .comment {
@@ -49,15 +48,15 @@
       align-items: center;
       margin-top: 10px
     }
-
+    
     .post-info-header .title {
-      margin-top: 15px;
-      font-size: 1.5em;
-      font-weight: bold;
-    }
+     margin-top: 15px;
+     font-size: 1.2em;
+     font-weight: bold;
+   }
 
     .post-info-header .details {
-      font-size: 1.2em;
+      font-size: 1em;
       color: gray;
     }
     
@@ -115,10 +114,8 @@
         display: inline-block;
         font-size: 16px;
         border-radius: 4px;
-        margin: 4px 2px;
+        margin: 4px;
         cursor: pointer;
-        position: absolute;
-        left: 41%;
     }
     
     .no-form {
@@ -133,8 +130,6 @@
         border-radius: 4px;
         margin: 4px 2px;
         cursor: pointer;
-        position: absolute;
-        left: 50%;
     }
     
     .no-submit {
@@ -156,17 +151,17 @@
     }
     
     .post-delete {
-    	background-color: #ccc;
-    	padding: 5px 16px;
+    	background-color: #d50100;
+    	padding: 5px 15px;
     	border-radius: 4px;
     	color: white;
+    	margin-right: 5px;
     }
     
     .post-report {
-    	background-color: #ccc;
-    	padding: 5px 16px;
-    	border-radius: 4px;
-    	color: white;
+    	position: absolute;
+    	right: -18px;
+    	bottom: -22px;
     }
     
     .post-list {
@@ -176,17 +171,12 @@
     	color: white;
     }
     
-    .good-submit {
-    	background-color: #ccc;
-    	padding: 5px 15px;
-    	margin-top: 5px;
-    	margin-left: 130px;
-    	border-radius: 4px;
-    	color: white;
+    .post-list:hover {
+    	color:white;
     }
     
     .post-reply-position{
-    	margin-top: 100px;
+    	margin-top: 10px;
     }
 
 	.post-all-botton {
@@ -218,112 +208,105 @@
 	
 
 	.post-reply-submit, .comment-submit {
-		background-color: #365CF5;
+		background-color: #1A2142;
     	padding: 5px 15px;
     	border-radius: 4px;
     	color: white;
-		float: right;
 	}
 	
+	.good-label {
+	    margin-top: 20px;
+	    margin-bottom: 5px;
+    }
 	
   </style>
 </head>
 
 <body>
 <div class="container">
-  <div class="post-info-header">
-    <div class="title" th:text="${postvote.title}">Post Title</div>
-    <div class="details">
-      <span th:text="${#dates.format(postvote.createDate, 'yyyy-MM-dd HH:mm')}">2024-06-02 16:00</span> |
-      조회수: <span th:text="${postvote.postView}">0</span> |
-      추천: <span id="post-like-count" th:text="${postvote.postLike}">0</span>
-    </div>
+	<div class="add-line"> <h4>질문/토론 게시판</h4></div>
+	  
+	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56;">
+		  <div class="how2 how2-cl3 flex-s-c board_type" style="justify-content: space-between; height: 80px; align-items: baseline; padding-top: 10px;">
+			    <p style="font-size: 1.2em; font-weight: bold;" class="title" th:text="${postvote.title}">Post Title</p>
+			    <div class="details">
+			      조회수: <span th:text="${postvote.postView}">0</span> |
+			      추천: <span id="post-like-count" th:text="${postvote.postLike}">0</span>
+			    </div>
+			  <div style="display: flex; position: absolute; bottom: 0;">
+				 <p style="margin-right: 13px;" th:text="${postvote.writer}">Post Writer</p> |
+				 <span style="margin-left: 13px;" th:text="${#dates.format(postvote.createDate, 'yyyy-MM-dd HH:mm:ss')}">2024-06-02 16:00</span>
+			  </div>
+		  </div>
+	  <div class="post_info_content">
+		<p th:text="${postvote.postContent}">Post Content</p>
+	  </div>
+	  
+	  <!-- 찬성, 반대 카운트, 버튼, 삭제, 신고, 목록, 추천 묶여있는 div -->
+	  <div class="post-all-botton">
+		  <div class="vote-count">
+		     <span style="display: inline-block; margin-right: 8%;" id="post-vote-count" th:text="${postvote.voteCount}" class="post-vote-count">0</span>
+		  
+		     <span style="display: inline-block; " id="post-vote2-count" th:text="${postvoteno.voteCount}" class="post-vote-count2">0</span>
+		  </div>
+		  
+		
+		  <!-- 찬성 버튼 -->
+		  <form class="yes-form">
+		    <input type="hidden" name="postId" th:value="${postvote.postId}"/>
+		    <input type="hidden" name="voteSeq" th:value="${postvote.voteSeq}">
+		    <input type="hidden" name="userId" th:value="${userId}"/>
+		    <button type="button" id="voteYes" class="yes-submit" th:data-vote-id="${postvote.voteSeq}" th:data-vote-item-id="${postvote.voteItemId}">찬성</button>
+		  </form>
+		
+		  <!-- 반대 버튼 -->
+		  <form class="no-form">
+		    <input type="hidden" name="postId" th:value="${postvoteno.postId}"/>
+		    <input type="hidden" name="voteSeq" th:value="${postvoteno.voteSeq}">
+		    <input type="hidden" name="userId" th:value="${userId}"/>
+		    <button type="button" id="voteNo" class="no-submit" th:data-vote-id="${postvoteno.voteSeq}" th:data-vote-item-id="${postvoteno.voteItemId}">반대</button>
+		  </form>
+		 
+		 
+		  <form class="good-form center" >
+			<input type="hidden" name="postId" th:value="${postvote.postId}" id="postvoteId"/>
+			<input type="hidden" name="userId" th:value="${userId}"/>
+			  <div>
+				<label class="good-label" id="postLikeItLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 0}">추천 하기</label>
+				<label class="good-label" id="postLikedIconLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 1}">추천 완료!</label>
+				<button type="button" class="good-submit" style="border: 1px solid black; border-radius: 10%; width: 50px;">
+					<img th:if="${isLikeChecked == 0}" id="postLikeItIcon" src="/images/icons/likeit.png" style="width: 100%; padding: 5px;">
+					<img th:if="${isLikeChecked == 1}" id="postLikedIcon" src="/images/icons/likedit.png" style="width: 100%; padding: 5px;">
+				</button>
+		  	  </div>
+		  </form>
+		  
+		   		<!-- 신고버튼(본인 이외의 계정일 때만 신고 가능) -->
+		   		<th:block th:if="${#authentication.name != postvote.writer}">
+			    <button type="button" id="reportBtn" class="post-report">신고</button> 
+				 </th:block>  
+	  </div>
   </div>
   
-  <p th:text="${postvote.writer}">Post Writer</p>
-  <textarea rows="10" class="post-content" th:text="${postvote.postContent}" readonly>Post Content</textarea>
-  
-  <!-- 찬성, 반대 카운트, 버튼, 삭제, 신고, 목록, 추천 묶여있는 div -->
-  <div class="post-all-botton">
-  <div class="vote-count">
-    <span style="display: inline-block; margin-right: 7%;" id="post-vote-count" th:text="${postvote.voteCount}" class="post-vote-count">0</span>
-  
-    <span style="display: inline-block; " id="post-vote2-count" th:text="${postvoteno.voteCount}" class="post-vote-count2">0</span>
-  </div>
-  
-
-  <!-- 찬성 버튼 -->
-  <form class="yes-form">
-    <input type="hidden" name="postId" th:value="${postvote.postId}"/>
-    <input type="hidden" name="voteSeq" th:value="${postvote.voteSeq}">
-    <input type="hidden" name="userId" th:value="${userId}"/>
-    <button type="button" id="voteYes" class="yes-submit" th:data-vote-id="${postvote.voteSeq}" th:data-vote-item-id="${postvote.voteItemId}">찬성</button>
-  </form>
-
-  <!-- 반대 버튼 -->
-  <form class="no-form">
-    <input type="hidden" name="postId" th:value="${postvoteno.postId}"/>
-    <input type="hidden" name="voteSeq" th:value="${postvoteno.voteSeq}">
-    <input type="hidden" name="userId" th:value="${userId}"/>
-    <button type="button" id="voteNo" class="no-submit" th:data-vote-id="${postvoteno.voteSeq}" th:data-vote-item-id="${postvoteno.voteItemId}">반대</button>
-  </form>
- 
-  <div class="post-repote">
-    <input id="writer" type="hidden" th:value="${postvote.writer}">
-    <input id="userName" type="hidden" th:value="${userName}">
-    <input id="userType" type="hidden" th:value="${userType}">
-    <!-- <button id="updateBtn" type="button" style="display: none" style="display: inline-block;" >수정</button> -->
-    <button id="deleteBtn" type="button" class="post-delete">삭제</button>
-    <!-- 신고버튼 -->
-    <button type="button" id="reportBtn" class="post-report">신고</button> 
-     <a th:href="@{/all/posts/4}" class="post-list">목록</a>
-     
-   <form class="good-form">
-    <input type="hidden" name="postId" th:value="${postvote.postId}"/>
-    <input type="hidden" name="userId" th:value="${userId}"/>
-    <button type="button" class="good-submit">추천</button>
-  </form>
-  </div>
-  </div>
-  
-  <!-- 신고버튼 -->
-  <div id="reportForm" class="modal fade">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      	<!-- 모달 헤더 -->
-        <div class="modal-header">
-          <h5 class="modal-title">게시글 신고</h5>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <!-- 모달 본문 -->
-        <div class="modal-body">
-          <input type="hidden" id="postId" name="postId" th:value="${postvote.postId}"/>
-          <input type="hidden" id="boardId" name="boardId" th:value="${postvote.boardId}"/>
-          <input type="hidden" name="reporter" th:value="${reporter}"/>
-          <select name="reportType">
-            <option value="1">부적절한 언어 사용</option>
-            <option value="2">유해하거나 위험한 행위</option>
-            <option value="3">성적인 내용</option>
-            <option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
-          </select>
-        </div>
-        <!-- 모달 푸터 -->
-        <div class="modal-footer">
-          <button type="button" id="report-submit">신고 제출</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  		    <div style="display: flex; justify-content: end;">
+			 	<input id="writer" type="hidden" th:value="${postvote.writer}">
+			   	<input id="userName" type="hidden" th:value="${userName}">
+			   	<input id="userType" type="hidden" th:value="${userType}">
+			    <!-- <button id="updateBtn" type="button" style="display: none" style="display: inline-block;" >수정</button> -->
+			    <button id="deleteBtn" type="button" class="post-delete">삭제</button>
+			    <a th:href="@{/all/posts/4}" class="post-list">목록</a>
+			    <!-- 신고버튼(본인 이외의 계정일 때만 신고 가능) -->
+	  		</div>
   
   <div class="post-reply-position">
   <form id="reply-form" class="reply">
     <input type="hidden" name="postId" th:value="${postvote.postId}"/>
     <input type="hidden" name="boardId" th:value="${postvote.boardId}"/>
     <textarea class="reply-textarea" name="replyContent" id="replyContent"></textarea>
-    <button type="button" id="reply-submit" class="post-reply-submit">등록</button>
+    <button type="button" id="reply-submit" class="post-reply-submit">작성</button>
   </form>
   
-  <h5>댓글</h5>
+  <div class="add-line">댓글</div>
   <ul id="reply-list">
     <li th:each="reply : ${postvote.replies}" th:id="|'reply-' + ${reply.replyId}|" class="reply">
       <div class="reply-info">
@@ -370,6 +353,34 @@
      </li>
    </ul>
 </div>
+ <!-- 신고버튼 -->
+  <div id="reportForm" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      	<!-- 모달 헤더 -->
+        <div class="modal-header">
+          <h5 class="modal-title">게시글 신고</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- 모달 본문 -->
+        <div class="modal-body">
+          <input type="hidden" id="postId" name="postId" th:value="${postvote.postId}"/>
+          <input type="hidden" id="boardId" name="boardId" th:value="${postvote.boardId}"/>
+          <input type="hidden" name="reporter" th:value="${reporter}"/>
+          <select name="reportType">
+            <option value="1">부적절한 언어 사용</option>
+            <option value="2">유해하거나 위험한 행위</option>
+            <option value="3">성적인 내용</option>
+            <option value="4">스팸 또는 혼동을 야기하는 콘텐츠</option>
+          </select>
+        </div>
+        <!-- 모달 푸터 -->
+        <div class="modal-footer">
+          <button type="button" id="report-submit">신고 제출</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -378,7 +389,7 @@
   let postId = $('#postId').val();
   let boardId = $('#boardId').val();
   let userType = $('#userType').val();
-  
+  let commentId = $('.commentId').val();
   let replies = [];
   $('.replyId').each(function(){
     replies.push($(this).val());
@@ -415,8 +426,15 @@
   // 게시글수정/삭제버튼 권한
   //------------------------
   if(writer == userName || userType == "ROLE_ADMIN"){
-    $('#updateBtn')
-    $('#deleteBtn')
+    $('#updateBtn');
+    $('#deleteBtn');
+  } else {
+	$('#deleteBtn').css("display", "none");
+	$('#updateBtn').css("display", "none");
+  }
+  
+  if(writer == userName){
+	  $('#reportBtn').css("display", "none");
   }
 
   //------------------------
@@ -546,10 +564,7 @@
 	//--------------------------------------------
 	// 대댓글 수정
 	//--------------------------------------------
-	$(document).on(
-			"click",
-			".comment-update",
-			function() {
+	$(document).on("click",	".comment-update", function() {
 				let commentId = $(this).data("comment-id");
 				$('#commentId-' + commentId).attr('readonly', false);
 				$(this).css('display', 'none');
@@ -627,19 +642,30 @@
   //--------------------------------------------
   $(".good-submit").on("click", function () {
     let formData = $(".good-form").serialize();
+    let postLikeItIcon = $('#postLikeItIcon');	// 추천 전 아이콘
+	let postLikedIcon = $('#postLikedIcon');	// 추천 후 아이콘
+	let postLikeItLabel = $('#postLikeItLabel');	// 추천 전 텍스트
+	let postLikedIconLabel = $('#postLikedIconLabel');	// 추천 후 텍스트
+	
     $.ajax({
       type: "POST",
       url: "/all/boardLike",
       dataType: "json",
       data: formData,
       success: function (likeCheck) {
-        if (likeCheck == 0) {
-          alert("추천완료");
-          updateLikeCount();
-        } else {
-          alert("추천취소");
-          updateLikeCount();
-        }
+    	  if (likeCheck == 0) {
+				postLikedIcon.css("display", "block");
+		        postLikeItIcon.css("display", "none");
+		        postLikeItLabel.css("display", "none");
+		        postLikedIconLabel.css("display", "block");
+	        } else {
+				postLikedIcon.css("display", "none");
+		        postLikeItIcon.css("display", "block");
+		        postLikeItLabel.css("display", "block");
+		        postLikedIconLabel.css("display", "none");
+	        }
+    	  updateLikeCount();
+		  location.reload();
       },
       error: function () {
         alert("통신 에러");
@@ -740,7 +766,7 @@
         voteItemId: voteItemId
       },
       success: function(response) {
-        console.log("AJAX response: ", response);
+        // console.log("response: ", response);
         alert(response ? "투표가 반영되었습니다." : "투표가 취소되었습니다.");
         if (type === 'yes') {
           $('#voteNo').prop('disabled', response); // 반대 버튼 활성/비활성화
@@ -827,6 +853,7 @@
 		}
 		return true;
 	}
+  
 </script>
 </body>
 </html>

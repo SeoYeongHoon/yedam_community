@@ -179,6 +179,7 @@ public class PostController {
 	                            Model model) {
 	    // 게시글 단건 조회
 	    PostVO postVO = postService.getPostReplies(postId, boardId);
+	    int postcnt = postService.PostViewCnt(postId, boardId);
 	    
 	    // 현재 로그인한 유저와 작성자 비교
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
@@ -215,6 +216,7 @@ public class PostController {
 	    postVO.setPostId(postId);
 	    model.addAttribute("boardId", boardId);
 	    model.addAttribute("postInfo", postVO);
+	    model.addAttribute("viewcnt", postcnt);
 	    // 작성자 여부 추가
 	    model.addAttribute("userName", userName);
 	    model.addAttribute("userType", userType);
@@ -391,10 +393,13 @@ public class PostController {
 	public String getPostVoteDetail(Model model,
    	  	 	     					PostVO postVO,
    	  	 	     				    @PathVariable int postId,
+   	  	 	     				    @PathVariable int boardId,
 			                        Authentication authentication) {
 		// 게시글 단건 조회
 	    postVO = postService.getPostVotedetail(postVO);
 	    PostVO find = postService.getPostVotedetailNo(postVO);
+	    
+	    int postcnt = postService.PostViewCnt(postId, boardId);
 	    
 	    // 현재 로그인한 유저와 작성자 비교
 	    LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
@@ -413,6 +418,7 @@ public class PostController {
 	   postVO.setReplies(replylist);
 	    model.addAttribute("postvote", postVO);
 	    model.addAttribute("postvoteno",find);
+	    model.addAttribute("viewcnt", postcnt);
 	    // 작성자 여부 추가
 	    model.addAttribute("userName", userName);
 	    model.addAttribute("userType", userType);
