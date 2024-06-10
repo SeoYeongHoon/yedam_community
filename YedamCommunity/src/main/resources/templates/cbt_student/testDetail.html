@@ -48,6 +48,7 @@
 				<td>[[${testDetail.testContent}]]</td>
 			</tr>
 		</table>
+		<input id="testDate" type="hidden" th:value="${testDetail.testDate}">
 		<br> <br>
 		<div style="text-align: center">
 			<th:block th:if="${isResult == 0 && dateComp == 1}">
@@ -87,4 +88,12 @@
 		<br> <br>
 	</div>
 </div>
+<script>
+let testDate = $('#testDate').val();
+let date = new Date('testDate');
+let hour = date.getHours();
+console.log(testDate);
+console.log(date);
+console.log(hour);
+</script>
 </html>
