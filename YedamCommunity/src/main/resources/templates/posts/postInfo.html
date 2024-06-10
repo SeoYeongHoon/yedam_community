@@ -96,6 +96,17 @@
      z-index: 999;
      display: none;
    }
+   
+   .post-list {
+    background-color: #ccc;
+    padding: 5px 15px;
+    border-radius: 4px;
+    color: white;
+   }
+   
+    .post-list:hover {
+    color:white;
+    }
 </style>
 
 <div class="container">
@@ -120,7 +131,7 @@
 		<h2 th:if="${#lists.size(postInfo.boardFiles) > 0}"></h2>
 		<div class="post_media_container" th:each="file : ${postInfo.boardFiles}">
 			<!-- 이미지 파일 출력 -->
-			<div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.jpg') or file.boardfileLocation.endsWith('.jpeg') or file.boardfileLocation.endsWith('.png') or file.boardfileLocation.endsWith('.gif'))}">
+			<div th:if="${file.boardfileLocation != null and (file.boardfileLocation.endsWith('.jpg') or file.boardfileLocation.endsWith('.jpeg') or file.boardfileLocation.endsWith('.png') or file.boardfileLocation.endsWith('.gif') or file.boardfileLocation.endsWith('.jfif'))}">
 				<img th:if="${file.exists}" th:src="|/files/${file.boardfileLocation}|" style="width: 100%; height: auto;" />
 				<div th:if="${not file.exists}">
 					<img src="/images/default-image.jpg" style="width: 100%; height: auto;"/>
@@ -163,7 +174,8 @@
 	    <input id="userName" type="hidden" th:value="${userName}">
 	    <input id="userType" type="hidden" th:value="${userType}">
 	    <button id="updateBtn" class="main-btn warning-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">수정</button>
-	    <button id="deleteBtn" class="main-btn danger-btn btn-hover" type="button" style="display: none; padding: 5px 15px;">삭제</button>
+	    <button id="deleteBtn" class="main-btn danger-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">삭제</button>
+	    	<a class="post-list" th:href="@{/all/posts/{boardId}(boardId=${boardId})}">목록</a>
   	</div>
 	
 	<form id="reply-form" class="reply">
@@ -228,8 +240,6 @@
 		</li>
 	</ul>
 	
-	<a th:href="@{/all/posts/{boardId}(boardId=${boardId})}">목록</a>
-
 	<!-- 게시글 신고 모달창 -->
 	<div id="reportForm" class="modal fade">
 		<div class="modal-dialog">
@@ -339,7 +349,6 @@
   $('#okBtn').on('click',function(){
     location.href='/all/posts/'+boardId;
   });
-
   
   function replyCheck(){
 	    let name = $('#replyContent');
@@ -350,6 +359,7 @@
 	    }
 	    return true;
 	  }
+  
   //--------------------------------------------
   // 댓글 작성
   //--------------------------------------------

@@ -3,6 +3,11 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layouts/default_layout}"
       layout:fragment="Home">
+<style>
+	#success {
+	  background: green;
+	}
+</style>      
     <!-- <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a> -->
     <div class="table-top-content" style="height: 40px; border-radius: 0px; padding: 8px 16px; text-align: center;">
@@ -247,9 +252,33 @@
             </div>-->
         </div>
     </div>
+    <button class="btn btn-secondary m-2" id="confirmStart">Confirm 실행</button>
 <script>
-$(document).ready(function() {
-	window.localStorage.clear(); // 메인화면 이동시 로컬스토리지 초기화	
-});
+	$(document).ready(function() {
+		window.localStorage.clear(); // 메인화면 이동시 로컬스토리지 초기화	
+	});
+
+	$("#confirmStart").click(function () {
+		Swal.fire({
+		    title: '정말로 그렇게 하시겠습니까?',
+		    text: "다시 되돌릴 수 없습니다. 신중하세요.",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '승인',
+		    cancelButtonText: '취소',
+		    reverseButtons: true, // 버튼 순서 거꾸로
+		   
+		}).then((result) => {
+		    if (result.isConfirmed) {
+		     Swal.fire(
+		       '승인이 완료되었습니다.',
+		       '화끈하시네요~!',
+		       'success'
+		     )
+		   }
+	 	});
+	});
 </script>    
 </html>

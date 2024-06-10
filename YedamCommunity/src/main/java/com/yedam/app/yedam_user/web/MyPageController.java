@@ -58,9 +58,8 @@ public class MyPageController {
 						 HomeWorkVO homeWorkVO,
 						 PostVO postVO,
 						 Model model) {
-		System.out.println("유저정보: " + SecurityUtils.getCurrentLogId());
+		
 		int logid = SecurityUtils.getCurrentLogId();
-		System.out.println("로그인 아이디: " + logid);
 		
 		// 내 게시글 출력
 		List<PostVO> myPostList = postService.getMyPost(logid);
