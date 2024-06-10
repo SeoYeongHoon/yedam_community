@@ -175,7 +175,19 @@
 	    <input id="userType" type="hidden" th:value="${userType}">
 	    <button id="updateBtn" class="main-btn warning-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">수정</button>
 	    <button id="deleteBtn" class="main-btn danger-btn btn-hover" type="button" style="display: none; padding: 5px 15px; margin-right: 5px;">삭제</button>
-	    	<a class="post-list" th:href="@{/all/posts/{boardId}(boardId=${boardId})}">목록</a>
+	    
+	    <div th:switch="${boardId}">
+	    	<div th:if="${boardId < 7}">
+			    <a class="post-list" th:href="@{/all/curriculumPost}">목록</a>
+			</div>
+			<div th:case="7">
+			    <a class="post-list" th:href="@{/all/posts/2}">목록</a>
+			</div>
+			<div th:case="8">
+			    <a class="post-list" th:href="@{/all/posts/3}">목록</a>
+			</div>
+		</div>
+		
   	</div>
 	
 	<form id="reply-form" class="reply">
@@ -330,19 +342,51 @@
   //------------------------
   // 게시글 삭제
   //------------------------
-  $('#deleteBtn').on('click', function(){
-    $.ajax({
-      url : '/all/postDelete',
-      type: 'delete',
-      data: {postId : postId , boardId:boardId},
-      success: function(data){
-        $('#deleteModal').modal('show');
-        location.href='/all/posts/' + boardId
-      },
-      error:function(e){
-        alert('삭제 실패');
-      }
-    });
+  $('#deleteBtn').on('click', function() {
+	  Swal.fire({
+		    title: "글을 삭제하시겠습니까?",
+		    text: "확인 버튼을 클릭 시, 해당 글이 삭제됩니다.",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '확인',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+				      url : '/all/postDelete',
+				      type: 'delete',
+				      data: {postId : postId , boardId:boardId},
+				      success: function(data) {
+				    	  Swal.fire({
+								icon: 'success',
+								text: '글이 삭제되었습니다.',
+								confirmButtonText: '확인',
+						  }).then((result) => {
+							  	if (boardId < 7) {
+							  		location.href='/all/curriculumPost'
+							  	} else if (boardId == 7) {
+							        location.href='/all/posts/2'
+							  	} else if (boardId == 8) {
+							        location.href='/all/posts/3'
+							  	} else if (boardId == 9) {
+							        location.href='/all/posts/4'
+							  	}
+						  });
+				      },
+				      error:function(e) {
+				    	  Swal.fire({
+								icon: 'error',
+								text: '삭제 실패!',
+								confirmButtonText: '확인',
+						  }).then((result) => {
+						        location.href='/all/posts/' + boardId
+						  });
+				      }
+			    });
+			}
+		});
   });
 
   // 삭제 모달 확인버튼
@@ -422,7 +466,6 @@
           window.location.reload();
         },
         error: function (error) {
-          console.error("댓글 삭제 실패:", error);
           alert("댓글 삭제에 실패하였습니다.");
         },
       });
@@ -457,7 +500,6 @@
 	    	  window.location.reload();
 	      },
 	      error: function (error) {
-	        console.error("대댓글 등록 실패:", error);
 	        alert("대댓글 등록에 실패하였습니다.");
 	      },
 	    });
@@ -486,7 +528,6 @@
       },
       error: function (err) {
         alert("대댓글 업데이트 에러");
-        console.error("대댓글 업데이트 실패:", err);
       }
     });
   });
@@ -505,7 +546,6 @@
         	window.location.reload();
         },
         error: function (error) {
-          console.error("대댓글 삭제 실패:", error);
           alert("대댓글 삭제에 실패하였습니다.");
         },
       });
@@ -639,7 +679,6 @@
         },
         error: function (err) {
           alert("대댓글 업데이트 에러");
-          console.error("대댓글 업데이트 실패:", err);
         }
       });
     });
@@ -657,7 +696,6 @@
           loadReplies();
         },
         error: function (error) {
-          console.error("댓글 삭제 실패:", error);
           alert("댓글 삭제에 실패하였습니다.");
         },
       });
@@ -673,7 +711,6 @@
           loadReplies();
         },
         error: function (error) {
-          console.error("대댓글 삭제 실패:", error);
           alert("대댓글 삭제에 실패하였습니다.");
         },
       });

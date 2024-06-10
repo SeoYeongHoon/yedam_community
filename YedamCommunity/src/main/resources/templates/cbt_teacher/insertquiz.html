@@ -296,7 +296,6 @@ $('#radio-2').change(function(e){
 $('#addBtnJu').on('click',function(){
 	let corJu = $('#textContentJu').val();
 	$('#quizAnswerJu').attr("value",corJu);
-	console.log($('#quizAnswerJu').val());
 })
 
 $('.addbt').on('click', function validationCheck(event){
@@ -390,7 +389,6 @@ $('.exampleAnswer').on('change',function(){
 
 // 지문입력 input태그 변경 감지해서 val값 설정
 $('#radioArea').on('change', '.correct', function(){
-	console.log("인풋장에 입력된 this.val: "+$(this).val())
 	let cor = $(this).parent().children('.correct').val();
 	$(this).parent().children('.correct2').attr("value",cor);
 })

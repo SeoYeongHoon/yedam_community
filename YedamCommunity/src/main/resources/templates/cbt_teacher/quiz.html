@@ -354,10 +354,8 @@ $(document).ready(function() {
 });
 
 function testPagination(pageDTO, currentPage) {
-	//console.log("pageDTO:", JSON.stringify(pageDTO, null, 12), "현재페이지:", currentPage);
 	let arr = new Array();
 	arr.push(pageDTO);
-	//console.log("현재 페이지: " + arr[0].page);
 	currentPage = arr[0].page;
 			
 	var pagination = $('.testPaging');
@@ -368,7 +366,6 @@ function testPagination(pageDTO, currentPage) {
 	}
 			
 	for (var p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
-		//console.log("p값: " + p);
 				
 		var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
 				
@@ -830,7 +827,6 @@ window.onload = function() {
 let reCurriculumId = window.localStorage.getItem('reCurriculumId')
 
 if(reCurriculumId == null || reCurriculumId == ""){
-	console.log("reCurriculumId 값이 없다 : " + reCurriculumId)
 	$('#scoreOkBtn').attr('onclick', "location.href='/admin/selectClassExam'")
 } else {
 	$('#scoreOkBtn').attr('onclick', "location.href='/admin/retestinsert'")
@@ -839,7 +835,6 @@ if(reCurriculumId == null || reCurriculumId == ""){
 // 문제 삭제 기능
 //--------------------------------------------
 $('#modalWrap').on('click', '.quizDelBtn', function(){
-	console.log($(this).val());
 	let quizId = $(this).val();
 	$.ajax({
 		url : "quizdelete",

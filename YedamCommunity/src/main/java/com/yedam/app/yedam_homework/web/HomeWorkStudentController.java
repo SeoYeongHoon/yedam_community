@@ -64,7 +64,6 @@ public class HomeWorkStudentController {
 	public String homeworksList(Model model,
 			 					Authentication authentication) {
 		LoginUserVO userVO = (LoginUserVO) authentication.getPrincipal();
-		System.err.println("유저 아이디 = "+userVO.getuserId());
 		model.addAttribute("userId",userVO.getuserId());
 		List<CurriculumVO> subjects = curriculumService.subjectList(userVO.getuserId());
 		model.addAttribute("subject", subjects);
@@ -76,7 +75,6 @@ public class HomeWorkStudentController {
 	@ResponseBody
 	public List<HomeWorkVO> homeworkListS(@RequestParam("userid") int userid) {
 		List<HomeWorkVO> userhomework = homeworkService.userHomeworkList(userid);
-		System.err.println(userhomework);
 		return userhomework;
 	}
 
@@ -245,7 +243,6 @@ public class HomeWorkStudentController {
 	@ResponseBody
 	public String updateReplyFile(@RequestPart MultipartFile[] uploadReplyFile,
 								 @RequestParam("replyId") int replyId) {
-		System.err.println("댓글 업로드 파일 ==" + uploadReplyFile);
 		// 과제 파일 업로드
 		homeworkfileService.replyUploadFile(uploadReplyFile, replyId);
 		return null;

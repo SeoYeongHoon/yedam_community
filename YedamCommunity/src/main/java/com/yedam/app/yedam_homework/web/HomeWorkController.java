@@ -139,7 +139,6 @@ public class HomeWorkController {
 	@PutMapping("/updateHomework")
 	@ResponseBody
 	public Map<String, Object> updateHomework(HomeWorkVO homeworkVO) {
-		System.err.println("과제수정 "+homeworkVO);
 		return homeworkService.homeworkUpdate(homeworkVO);
 	}
 	
@@ -149,9 +148,6 @@ public class HomeWorkController {
 	@ResponseBody
 	public String updateFile(@RequestPart MultipartFile[] uploadFiles,
 							@RequestParam("homeworkId") int homeworkId) {
-		
-		System.err.println("파일1 == "+ uploadFiles);
-		System.err.println("과제 아이디1 == "+ homeworkId);
 		
 		// 과제 파일 업로드
 		homeworkfileService.homeworkUploadFile(uploadFiles, homeworkId);

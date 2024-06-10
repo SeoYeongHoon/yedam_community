@@ -104,7 +104,6 @@ function userList(testId){
 					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'),
 									      $('<input type="hidden">').attr({value : item.userId, id : "u"+idx}));
 					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'"));
-					console.log("input태그 val값" + $('#u'+idx).val());
 					reUserId.push($('#u'+idx).val());
 				}
 			})
@@ -124,7 +123,7 @@ const btn1 = document.getElementById('reTest');
 if(pTagNum == 0){
 	btn1.style.display = 'none';
 } else {
-	console.log('p태그가 존재함')
+	console.log('p태그가 존재함');
 }
 
 $('#reTest').on('click', function(){
