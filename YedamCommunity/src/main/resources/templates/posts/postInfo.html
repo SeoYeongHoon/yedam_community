@@ -335,7 +335,7 @@
   // 게시글 수정
   //------------------------
   $('#updateBtn').on('click',function(){
-    if(writer == userName){
+    if(writer == userName || userName == 'Administrator'){
       location.href='/all/postUpdate/'+boardId + '/' + postId;
     } 
   });

@@ -98,12 +98,12 @@
 			<div class="profile_my_info" style="color: black; margin-top: 20px;">
 				<th:block sec:authorize="hasAuthority('ROLE_LEARN')">
 					<p style="font-weight: normal; font-size: 12pt; color: #e96b56;">
-						&laquo;수강생&raquo;	
+						&#9664; 수강생 &#9654;
 					</p>
 				</th:block>
 				<th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
 					<p style="font-weight: normal; font-size: 12pt; color: #e96b56;">
-						&laquo;관리자&raquo;
+						&#9664; 관리자 &#9654;
 					</p>
 				</th:block>
 				<p style="font-weight: bold; font-size: 15pt;">[[${#authentication.name}]]</p>

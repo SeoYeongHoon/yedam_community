@@ -129,7 +129,7 @@
 				</div>
 
 				<!-- 갤러리 섹션 -->
-				<h2>갤러리</h2>
+				<!-- <h2>갤러리</h2>
 				
 				<div class="gallery">
 					<div th:each="post : ${postList}"
@@ -138,10 +138,10 @@
 							th:alt="${post.boardfileName}" />
 						<p th:text="${post.boardfileName}">이미지 이름</p>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<div th:case="3">
-				<div class="insertBtn" style="position: absolute; top: 110px; right:0px;">
+				<div class="insertBtn" style="position: absolute; top: 53px; right:0px;">
 					<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}"
 						id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
 				</div>
@@ -171,7 +171,7 @@
 				</table>
 
 				<div class="center">
-					<div class="pagination col-lg-6">
+					<div class="pagination">
 						<div th:if="${currentPage > 1}">
 							<a
 								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
@@ -203,7 +203,7 @@
 				</div>
 			</div>
 			<div th:case="4">
-				<div class="insertBtn" style="position: absolute; top: 110px; right:0px;">
+				<div class="insertBtn" style="position: absolute; top: 53px; right:0px;">
 					<a th:href="@{/all/postInsertVote/{boardId}(boardId=${boardId})}"
 						id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
 				</div>
@@ -234,7 +234,7 @@
 				</table>
 
 				<div class="center">
-					<div class="pagination col-lg-6">
+					<div class="pagination">
 						<div th:if="${currentPage > 1}">
 							<a
 								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
@@ -254,27 +254,41 @@
 					</div>
 				</div>
 			</div>
+			
+			<div style="width: 1200px; margin: 50px auto;">
+				<div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+		            <p style="color: white">갤러리</p>
+		        </div>
+				<div class="gallery">
+					<div th:each="post : ${postList}"
+						 th:with="isExist = ${post.boardfileLocation != null}"
+						 th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
+						<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
+						<!-- <p th:text="${post.boardfileName}">이미지 이름</p> -->
+					</div>
+				</div>
+			</div>
 		</div>
 
 	</div>
-	<script th:inline="javascript">
-  //--------------------------------------------
-  // 게시글 검색
-  //--------------------------------------------
-  function searchPosts() {
-    const keyword = document.getElementById('searchKeyword').value;
-    const boardId = [[${boardId}]];
-    location.href = `/all/posts/${boardId}?keyword=${keyword}`;
-  }
-
-  $(document).ready(function() {
-    $('#searchKeyword').on('keypress', function(event) {
-      if (event.which === 13) {
-        event.preventDefault();
-        searchPosts();
-      }
-    });
-  });
+<script>
+	//--------------------------------------------
+	// 게시글 검색
+	//--------------------------------------------
+	function searchPosts() {
+	  const keyword = document.getElementById('searchKeyword').value;
+	  const boardId = [[${boardId}]];
+	  location.href = `/all/posts/${boardId}?keyword=${keyword}`;
+	}
+	
+	$(document).ready(function() {
+	  $('#searchKeyword').on('keypress', function(event) {
+	    if (event.which === 13) {
+	      event.preventDefault();
+	      searchPosts();
+	    }
+	  });
+	});
 </script>
 </body>
 </html>

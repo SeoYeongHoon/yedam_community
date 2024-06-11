@@ -8,7 +8,7 @@
 	display : none;
 }
 </style>	
-<form name="insertForm" th:action="@{/admin/quizinsert}" method="post" th:object="${teacherVO}">
+<form name="insertForm" th:action="@{/admin/quizinsert}" method="post" th:object="${teacherVO}" style="padding: 30px;">
 	<!-- ======= 과목설정 select ======= -->
 	<div class="card-style mb-30">
 		<div class="select-style-1">
@@ -56,7 +56,7 @@
 		           <input class="form-check-label" name="exampleNum" value="1" type="hidden" />
 		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">1.</p>
 				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent" id="textContent"
-					   style="border:1px solid black;"/>
+					   style="margin-left: 5px; background: rgba(239, 239, 239, 0.5); border: 1px solid #e5e5e5; border-radius: 4px; padding-left: 5px;"/>
 				<input class="correct2" type="hidden" name="quizAnswer"/> <!-- 문제의 정답 자동등록 -->
 			</div>
 			<!-- end radio -->
@@ -65,7 +65,7 @@
 		           <input class="form-check-label" name="exampleNum" value="2" type="hidden" />
 		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">2.</p>
 				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent2" id="textContent2"
-				       style="border:1px solid black;"/>
+				       style="margin-left: 5px; background: rgba(239, 239, 239, 0.5); border: 1px solid #e5e5e5; border-radius: 4px; padding-left: 5px;"/>
 				<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->       
 			</div>
 			<!-- end radio -->
@@ -74,7 +74,7 @@
 		           <input class="form-check-label" name="exampleNum" value="3" type="hidden" />
 		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">3.</p>
 				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent3" id="textContent3"
-				       style="border:1px solid black;"/>
+				       style="margin-left: 5px; background: rgba(239, 239, 239, 0.5); border: 1px solid #e5e5e5; border-radius: 4px; padding-left: 5px;"/>
 				<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
 			</div>
 			<!-- end radio -->
@@ -83,7 +83,7 @@
 		           <input class="form-check-label" name="exampleNum" value="4" type="hidden" />
 		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">4.</p>
 				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent4" id="textContent4"
-				       style="border:1px solid black;"/>
+				       style="margin-left: 5px; background: rgba(239, 239, 239, 0.5); border: 1px solid #e5e5e5; border-radius: 4px; padding-left: 5px;"/>
 				<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
 			</div>
 			<!-- end radio -->
@@ -92,7 +92,7 @@
 		           <input class="form-check-label" name="exampleNum" value="5" type="hidden" />
 		           <p class="col-0.5" style="padding-left:10px;margin-right: 5px;">5.</p>
 				<input class="correct col-10" type="text" placeholder="지문을 입력하세요." name="textContent5" id="textContent5"
-				       style="border:1px solid black;"/>
+				       style="margin-left: 5px; background: rgba(239, 239, 239, 0.5); border: 1px solid #e5e5e5; border-radius: 4px; padding-left: 5px;"/>
 				<input class="correct2" type="hidden" name=""/> <!-- 문제의 정답 자동등록 -->        
 			</div>
 		</div>
@@ -106,12 +106,12 @@
 		</div>
 		<!-- end textarea -->
 	<!-- ======= 문제 해설 style end ======= -->
-	<ul class="buttons-group">
+	<ul class="buttons-group" style="justify-content: center;">
 		<li>
-			<button type="submit" class="main-btn primary-btn square-btn btn-hover addbt" id="addBtn">등록</button>
+			<button type="button" class="main-btn primary-btn btn-hover addbt" id="addBtn" style="padding: 5px 15px;">등록</button>
 		</li>
 		<li>
-	        <button type="button" class="main-btn deactive-btn square-btn btn-hover" th:onclick="|location.href='@{/admin/quizlist}'|">취소</button>
+	        <button type="button" class="main-btn deactive-btn btn-hover" th:onclick="|location.href='@{/admin/quizlist}'|" style="padding: 5px 15px;">취소</button>
 	    </li>
 	</ul>	
 	</div>
@@ -299,79 +299,142 @@ $('#addBtnJu').on('click',function(){
 })
 
 $('.addbt').on('click', function validationCheck(event){
-	event.preventDefault();
+	// event.preventDefault();
 	// 문제를 입력하지 않았을때 모달창 출력
 	let qContent = document.getElementById('quizContent');
 	let qContentJu = document.getElementById('quizContentJu');
-	if(qContent.value == '' && qContentJu.value == ''){
-		$('#quizContentErr').modal('show');
-		return;
-	}
-	// 문제 지문 1번을 입력하지 않았을때 모달창 출력
-	let tContent = document.getElementById('textContent');
 	let tContentJu = document.getElementById('textContentJu');
-	if(tContent.value == '' && tContentJu.value == ''){
-		$('#TextContentErr').modal('show');
-		return;
-	}
-	// 문제 지문 2번을 입력하지 않았을때 모달창 출력
+	let tContent = document.getElementById('textContent');
 	let tContent2 = document.getElementById('textContent2');
-	if(tContent2.value == '' && tContentJu.value == ''){
-		$('#TextContentErr').modal('show');
-		tContent2.focus();
-		return;
-	}
-	// 문제 지문 3번을 입력하지 않았을때 모달창 출력
 	let tContent3 = document.getElementById('textContent3');
-	if(tContent3.value == '' && tContentJu.value == ''){
-		$('#TextContentErr').modal('show');
-		tContent3.focus();
-		return;
-	}
-	// 문제 지문 4번을 입력하지 않았을때 모달창 출력
 	let tContent4 = document.getElementById('textContent4');
-	if(tContent4.value == '' && tContentJu.value == ''){
-		$('#TextContentErr').modal('show');
-		tContent4.focus();
-		return;
-	}
-	// 문제 지문 5번을 입력하지 않았을때 모달창 출력
 	let tContent5 = document.getElementById('textContent5');
-	if(tContent5.value == '' && tContentJu.value == ''){
-		$('#TextContentErr').modal('show');
-		tContent5.focus();
-		return;
-	}
-	// 문제 해설을 입력하지 않았을때 모달창 출력
 	let qSolution = document.getElementById('quizSolution');
 	let qSolutionJu = document.getElementById('quizSolutionJu');
-	if(qSolution.value == '' && qSolutionJu.value == ''){
-		$('#solutionErr').modal('show');
-		return;
-	}
-	// radio 버튼이 선택되지 않았을때 모달창 출력
-	if($('.exampleAnswer').is(':checked')){
-		$('#quizAddOk').modal('show');
+	
+	
+	
+	if(qContent.value == '' && qContentJu.value == '') {
+		// $('#quizContentErr').modal('show');
+		Swal.fire({
+			icon: 'error',
+			text: '문제를 입력하세요.',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
+	} else if (tContent.value == '' && tContentJu.value == '') {
+		// 문제 지문 1번을 입력하지 않았을때 모달창 출력
+		// $('#TextContentErr').modal('show');
+		// return;
+		Swal.fire({
+			icon: 'error',
+			text: '지문1을 입력하세요.',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
+	} else if(tContent2.value == '' && tContentJu.value == ''){
+		// 문제 지문 2번을 입력하지 않았을때 모달창 출력
+		Swal.fire({
+			icon: 'error',
+			text: '지문2을 입력하세요.',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
+	} else if(tContent3.value == '' && tContentJu.value == ''){
+		// 문제 지문 3번을 입력하지 않았을때 모달창 출력
+		Swal.fire({
+			icon: 'error',
+			text: '지문3을 입력하세요.',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
+	} else if(tContent4.value == '' && tContentJu.value == ''){
+		// 문제 지문 4번을 입력하지 않았을때 모달창 출력
+		Swal.fire({
+			icon: 'error',
+			text: '지문4를 입력하세요.',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
+	} else if(tContent5.value == '' && tContentJu.value == ''){
+		// 문제 지문 5번을 입력하지 않았을때 모달창 출력
+		Swal.fire({
+			icon: 'error',
+			text: '지문5를 입력하세요.',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
+	} else if(qSolution.value == '' && qSolutionJu.value == '') {
+		// 문제 해설을 입력하지 않았을때 모달창 출력
+		Swal.fire({
+			icon: 'error',
+			text: '해설을 입력하세요.',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
+	} else if(!$('.exampleAnswer').is(':checked')) {
+		Swal.fire({
+			icon: 'error',
+			text: '답을 선택하세요.',
+			confirmButtonText: '확인',
+		}).then((result) => {
+			return;
+		});
 	} else {
-		$('#radioErr').modal('show');
-		return;
+		// 모든값이 입력됐을경우 최종확인 모달창이 뜸
+		Swal.fire({
+		    title: "객관식 문제를 등록하시겠습니까?",
+		    text: "확인 버튼을 클릭 시, 문제가 등록됩니다.",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#3085d6',
+		    cancelButtonColor: '#d33',
+		    confirmButtonText: '확인',
+		    cancelButtonText: '취소',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				insertForm.submit();
+			}
+		});
 	}
 	
-	// 모든값이 입력됐을경우 최종확인 모달창이 뜸
-	$('#quizAddOk').modal('show');
+	// $('#quizAddOk').modal('show');
 	// 최종확인 모달창의 확인버튼을 누를시 submit 동작
-	$('#okBtn').on('click', function(){
+	/* $('#okBtn').on('click', function(){
 		insertForm.submit();
-	})
+	}) */
 })
 // 주관식 문제 등록버튼 눌렀을때 form action 속성 변경
 $('#addBtnJu').on('click', function(){
-	$('form').attr('action','/admin/quizinsertJu')
-	$('#quizAddOk').modal('show');
+	Swal.fire({
+	    title: "주관식 문제를 등록하시겠습니까?",
+	    text: "확인 버튼을 클릭 시, 문제가 등록됩니다.",
+	    icon: 'warning',
+	    showCancelButton: true,
+	    confirmButtonColor: '#3085d6',
+	    cancelButtonColor: '#d33',
+	    confirmButtonText: '확인',
+	    cancelButtonText: '취소',
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$('form').attr('action','/admin/quizinsertJu');
+			insertForm.submit();
+		}
+	});
 	
-	$('#okBtn').on('click', function(){
+	
+	// $('#quizAddOk').modal('show');
+	
+	/* $('#okBtn').on('click', function(){
 		insertForm.submit();
-	})
+	}); */
 })
 // 정답체크한 radio 지문만 정답으로 등록되도록 하는 기능
 $('.exampleAnswer').on('change',function(){
