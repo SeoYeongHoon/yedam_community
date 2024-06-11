@@ -258,7 +258,7 @@ public class HomeWorkStudentController {
 											   @RequestParam(defaultValue = "") String searchQuery,
 											   @RequestParam("userId") int userId) {
 		List<HomeWorkVO> homeworks = homeworkService.getHomeworksByFilterStudent(filter, page, searchQuery,userId);
-		int totalCnt = homeworkService.getTotalCnt(filter, searchQuery);
+		int totalCnt = homeworkService.getTotalCntStudent(filter, searchQuery,userId);
 		
 		PageDTO pageDTO = new PageDTO(page, totalCnt, 5);
 		

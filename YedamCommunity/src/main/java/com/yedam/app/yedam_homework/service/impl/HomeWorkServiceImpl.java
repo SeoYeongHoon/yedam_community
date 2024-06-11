@@ -106,7 +106,7 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 		return homeworkMapper.getHomeworksByFilterStudent(params);
 	}
 	
-	// 페이징용 카운트
+	// 페이징용 카운트(교수)
 	@Override
 	public int getTotalCnt(int filter, String searchQuery) {
 		return homeworkMapper.getTotalCnt(filter, searchQuery);
@@ -128,6 +128,12 @@ public class HomeWorkServiceImpl implements HomeWorkService{
 		map.put("reply", homeworkVO);
 		
 		return map;
+	}
+
+	// 페이징용 카운트(학생)
+	@Override
+	public int getTotalCntStudent(int filter, String searchQuery, int userId) {
+		return homeworkMapper.getTotalCntStudent(filter,searchQuery,userId);
 	}
 
 

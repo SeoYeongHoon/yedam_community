@@ -17,6 +17,7 @@ public interface HomeWorkMapper {
 
 	// 과제등록
 	public int insertHomework(HomeWorkVO homeworkVO);
+
 	// 과제 수정
 	public int updateHomework(HomeWorkVO homeworkVO);
 
@@ -43,13 +44,16 @@ public interface HomeWorkMapper {
 
 	// 최근 과제 출력
 	public List<HomeWorkVO> selectRecentHomework(int userId);
-	
+
 	// 과제 페이징 및 필터링(교수)
 	public List<HomeWorkVO> getHomeworksByFilter(Map<String, Object> params);
-	
+
 	// 과제 페이징 및 필터링(학생)
 	public List<HomeWorkVO> getHomeworksByFilterStudent(Map<String, Object> params);
-	
-	// 페이징용 카운트
+
+	// 페이징용 카운트(교수)
 	int getTotalCnt(int filter, String searchQuery);
+
+	// 페이징용 카운트(학생)
+	int getTotalCntStudent(int filter, String searchQuery,int userId);
 }
