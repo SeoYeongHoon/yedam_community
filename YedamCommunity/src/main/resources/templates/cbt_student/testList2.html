@@ -264,7 +264,7 @@ function testListFilter(type, filterData){
 					let html2 = '';
 					if(data.isResult[i] == 0 && date2 < date1){						
 						html2 = `<td class="tlist_2">
-							<button class="unTestBtn tlist_3 main-btn warning-btn square-btn btn-hover">응시전</button></td>`;
+							<button class="testStartBtn tlist_3 main-btn primary-btn square-btn btn-hover">응시대기</button></td>`;
 					}
 					else if(data.isResult[i] == 0 && (date2 > date1 && date2 < date3)){						
 						html2 = `<td class="tlist_2">
