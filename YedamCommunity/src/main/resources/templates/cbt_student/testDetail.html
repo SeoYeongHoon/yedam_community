@@ -122,6 +122,7 @@ window.onload = function(){
 		hour.text('00');
 		min.text('00');
 		sec.text('00');
+		$('#testStartBtn').attr('disabled', false);
 	}
 	else{ //시작시간이 지나지 않은 경우
 		if((second1 - second2) < 0){ //초 차이가 음수인 경우
