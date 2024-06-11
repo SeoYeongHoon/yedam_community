@@ -219,6 +219,14 @@
 	    margin-bottom: 5px;
     }
 	
+	.fa-thumbs-up {
+    	font-size: 50px;
+    	transition: all .2s ease-in-out;
+    }
+    .fa-thumbs-up:hover {
+    	transform: scale(1.05);
+    }
+	
   </style>
 </head>
 
@@ -274,9 +282,11 @@
 			  <div>
 				<label class="Good-label" id="postLikeItLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 0}">추천 하기</label>
 				<label class="Good-label" id="postLikedIconLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 1}">추천 완료!</label>
-				<button type="button" class="Good-submit" style="border: 1px solid black; border-radius: 10%; width: 50px;">
-					<img th:if="${isLikeChecked == 0}" id="postLikeItIcon" src="/images/icons/likeit.png" style="width: 100%; padding: 5px;">
-					<img th:if="${isLikeChecked == 1}" id="postLikedIcon" src="/images/icons/likedit.png" style="width: 100%; padding: 5px;">
+				<button type="button" class="Good-submit" style="border: none; border-radius: 10%; width: 50px;">
+					<!-- <img th:if="${isLikeChecked == 0}" id="postLikeItIcon" src="/images/icons/likeit.png" style="width: 100%; padding: 5px;">
+					<img th:if="${isLikeChecked == 1}" id="postLikedIcon" src="/images/icons/likedit.png" style="width: 100%; padding: 5px;"> -->
+					<i th:if="${isLikeChecked == 0}" class="far fa-thumbs-up" id="postLikeItIcon"></i>
+					<i th:if="${isLikeChecked == 1}" class="fas fa-thumbs-up" id="postLikedIcon"></i>
 				</button>
 		  	  </div>
 		  </form>
