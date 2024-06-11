@@ -118,7 +118,6 @@ let second2 = date2.getSeconds();
 let hour = $('#hour'); //남은시간 타이머
 let min = $('#min');
 let sec = $('#sec');
-
 window.onload = function(){
 	if(date2 > date1){ //시작시간이 지난 경우
 		hour.text('00');
@@ -158,6 +157,7 @@ let timer = setInterval(function(){ //타이머 함수
 		hour.text('00');
 		min.text('00');
 		sec.text('00');
+		$('#testStartBtn').attr('disabled', false);
 	}
 	else{
 		sec.text(('0' + (sec.text() - 1)).substr(-2,2)); //초 감소
