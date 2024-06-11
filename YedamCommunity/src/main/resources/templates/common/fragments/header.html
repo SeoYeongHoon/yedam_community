@@ -23,6 +23,9 @@
 					<th:block th:if="${#authentication.principal.userType == 'ROLE_GRAD' OR #authentication.principal.userType == 'ROLE_ADMIN'}">
 						<li class="mega-menu-item"><a href="/all/curriculumPost" id="graduatedBoard">수료 과정별 게시판</a></li>
 					</th:block>
+					<th:block th:if="${#authentication.principal.userType == 'ROLE_LEARN'}">
+						<li class="mega-menu-item"><a href="/all/testList2" id="graduatedBoard">LMS</a></li>
+					</th:block>
 					<!-- <th:block sec:authorize="hasAuthority('ROLE_GRAD')">
 						<li class="mega-menu-item"><a th:href="@{/all/curriculumPost}" id="graduatedBoard">수료 과정별 게시판</a></li>
 					</th:block> -->
