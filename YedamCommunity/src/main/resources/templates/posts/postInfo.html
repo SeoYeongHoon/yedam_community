@@ -112,13 +112,13 @@
 <div class="container">
 	<div th:switch="${boardId}">
 	   		<div th:if="${boardId <= 6}">
-	   			 <div class="add-line"><h4>수료 과정별 게시판</h4></div>
+	   			 <div class="add-line"><h5>수료 과정별 게시판</h5></div>
 	   		</div>
 			<div th:case="7">
-	  			<div class="add-line"><h4>구인/구직 게시판</h4></div>
+	  			<div class="add-line"><h5>구인/구직 게시판</h5></div>
 			</div>
 			<div th:case="8">
-	  			<div class="add-line"><h4>정보 게시판</h4></div>
+	  			<div class="add-line"><h5>정보 게시판</h5></div>
 			</div>
 		</div>
 	

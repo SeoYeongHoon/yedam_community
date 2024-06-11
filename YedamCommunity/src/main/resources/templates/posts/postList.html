@@ -43,7 +43,12 @@
 .post-name {
  padding-left: 10px;
 }
-
+.postListContainer {
+	position: relative;
+    min-height: 410px;
+    width: 1200px;
+    margin: 0 auto;
+}
 </style>
 </head>
 <body>
@@ -61,31 +66,19 @@
 	</div>
   
 	<div id="post_container">
-	<div th:switch="${boardId}" class="post-name">
-		<div th:case="2">
-	  <h3>구인/ 구직 게시판</h3>
-		</div>
-		<div th:case="3">
-	  <h3>정보 게시판</h3>
-		</div>
-		<div th:case="4">
-	  <h3>질문과 토론 게시판</h3>
-		</div>
-	</div>
-	
-		<!-- 검색 폼 -->
-		<div class="input-style-1" style="padding: 10px; width: 250px; " >
-			<form id="searchForm" method="get" th:action="@{/all/posts/{boardId}(boardId=${boardId})}">
-				<input type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
-				<!-- <button type="submit">검색</button> -->
-				<img style="position: absolute; top: 25px; right: 25px; width: 20px; opacity: 0.5;"
-					src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-			</form>
-		</div>
 		
-		<div th:switch="${boardId}" style="margin-bottom: 100px;">
+		<div th:switch="${boardId}" class="postListContainer" style="margin-bottom: 100px;">
+			<!-- 검색 폼 -->
+			<div class="input-style-1" style="padding: 10px; width: 250px; margin-bottom: 0;" >
+				<form id="searchForm" method="get" th:action="@{/all/posts/{boardId}(boardId=${boardId})}">
+					<input type="text" name="keyword" id="searchKeyword" placeholder="검색어를 입력하세요" />
+					<!-- <button type="submit">검색</button> -->
+					<img style="position: absolute; top: 25px; right: 25px; width: 20px; opacity: 0.5;"
+						src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+				</form>
+			</div>
 			<div th:case="2">
-				<div class="insertBtn" style="position: absolute; top: 110px; right:0px;">
+				<div class="insertBtn" style="position: absolute; top: 53px; right:0px;">
 					<a th:href="@{/all/postInsert/{boardId}(boardId=${boardId})}"
 						id="writePostBtn" class="main-btn light-btn-outline btn-hover">글쓰기</a>
 				</div>
@@ -115,7 +108,7 @@
 				</table>
 
 				<div class="center">
-					<div class="pagination col-lg-6">
+					<div class="pagination">
 						<div th:if="${currentPage > 1}">
 							<a
 								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
