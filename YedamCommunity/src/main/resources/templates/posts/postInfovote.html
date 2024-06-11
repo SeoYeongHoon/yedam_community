@@ -161,8 +161,8 @@
     
     .post-report {
     	position: absolute;
-    	right: -18px;
-    	bottom: -22px;
+		right: 10px;
+	    bottom: 5px;
     }
     
     .post-list {
@@ -182,7 +182,6 @@
 
 	.post-all-botton {
 		margin-top: 50px;
-		position: relative;
 		text-align: center;
 	}
 
@@ -241,7 +240,7 @@
 <div class="container">
 	<div class="add-line"><h5>질문/토론 게시판</h5></div>
 	  
-	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56;">
+	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56; min-height: 650px; position: relative;">
 		  <div class="how2 how2-cl3 flex-s-c board_type" style="justify-content: space-between; height: 80px; align-items: baseline; padding-top: 10px;">
 			    <p style="font-size: 1.2em; font-weight: bold;" class="title" th:text="${postvote.title}">Post Title</p>
 			    <div class="details">
@@ -283,10 +282,10 @@
 		  </form>
 		 
 		 
-		  <form class="Good-form center" >
+		  <form class="Good-form center" style="height: 70px;">
 			<input type="hidden" name="postId" th:value="${postvote.postId}" id="postvoteId"/>
 			<input type="hidden" name="userId" th:value="${userId}"/>
-			  <div>
+			  <div id="goodFormContent">
 				<label class="Good-label" id="postLikeItLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 0}">추천 하기</label>
 				<label class="Good-label" id="postLikedIconLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 1}">추천 완료!</label>
 				<button type="button" class="Good-submit" style="border: none; border-radius: 10%; width: 50px;">
@@ -708,7 +707,7 @@
   //--------------------------------------------
   // 추천 추가 함수
   //--------------------------------------------
-  $(".Good-submit").on("click", function () {
+  $(document).on("click", ".Good-submit", function () {
     let formData = $(".Good-form").serialize();
     let postLikeItIcon = $('#postLikeItIcon');	// 추천 전 아이콘
 	let postLikedIcon = $('#postLikedIcon');	// 추천 후 아이콘
@@ -732,8 +731,8 @@
 		        postLikeItLabel.css("display", "block");
 		        postLikedIconLabel.css("display", "none");
 	        }
-    	  updateLikeCount();
-		  location.reload();
+			updateLikeCount();
+			updateLikeForm();
       },
       error: function () {
         alert("통신 에러");
@@ -759,6 +758,27 @@
       },
     });
   }
+  
+	//--------------------------------------------
+	// 추천 아이콘 변경
+	//--------------------------------------------
+  function updateLikeForm() {
+      $.ajax({
+        url: window.location.pathname,
+        type: "GET",
+        success: function (response) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(response, 'text/html');
+          var newLikesForm = $(doc).find("#goodFormContent").html();
+          $("#goodFormContent").html(newLikesForm);
+        },
+        error: function (error) {
+          console.error("추천 개수 업데이트 실패:", error);
+        },
+      });
+  }
+  
+  
   //--------------------------------------------
   // 신고관련
   //--------------------------------------------

@@ -69,10 +69,8 @@
 </head>
 <body>
 <div class="container">
-  <h1 class="insert-title">게시글 작성</h1>
   <form th:action="@{/all/postInsertVote/}" th:object="${post}" method="post" enctype="multipart/form-data" id="post-form" onsubmit="return postvoteCheck()">
   	<div class="card-style mb-30 mt-30" style="border-top: 2px solid #e96b56;">
-  
     	<label for="title">제목:</label>
     	<input class="post-insert-title" type="text" id="title" th:field="*{title}" /><br />
 		 <h3 style="margin-bottom: 10px;">질문 / 토론</h3>

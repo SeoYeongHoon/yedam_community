@@ -7,6 +7,8 @@
 .header_container {
 	max-width: 1600px;
 	display: flex;
+	height: 440px;
+	position: relative;
 }
 
 .sidebar-nav-wrapper {
@@ -20,6 +22,73 @@
     width: 100%;
     text-align: end;
     font-size: 18px;
+}
+
+.postSliderWrapper {
+	position: absolute;
+    bottom: 0;
+    width: 950px;
+    overflow: hidden;
+    height: 170px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+}
+
+.postSlider {
+	display: flex;
+	height: 100%;
+	overflow: hidden;
+}
+
+.postSliderTrack {
+    display: flex;
+    width: 200%;
+    animation: scroll 30s linear infinite;
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.postSliderContent {
+	font-size: 12pt;
+	cursor: pointer;
+    margin: 10px;
+    color: black;
+}
+
+.postSliderContent:hover {
+	font-size: 12pt;
+	color: black;
+    transform:scale(1.05);
+    transition: transform .2s;
+}
+
+.postSliderHeader {
+	font-size: 13pt;
+    width: 240px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    vertical-align: top !important;
+}
+
+.postSliderItem {
+	padding: 0 5px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    height: 70px;
+    line-height: 1.5em;
+    font-size: 12pt;
 }
 
 #footer {
@@ -173,6 +242,26 @@ a.control_prev, a.control_next {
     box-shadow: rgba(0, 0, 0, 0.3) 1.95px 1.95px 2.6px;
 }
 
+a.control_next {
+	position: absolute;
+	z-index: 999;
+	display: block;
+	width: 50px;
+    height: 50px;
+	background: #fff;
+	color: #2a2a2a;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 18px;
+	cursor: pointer;
+	top: 36%;
+	border-radius: 50%;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.3) 1.95px 1.95px 2.6px;
+}
+
 a.control_prev:hover, a.control_next:hover {
 	background-color: #ddd !important;
   	color: black !important;
@@ -185,7 +274,7 @@ a.control_prev {
 }
 
 a.control_next {
-	right: 0;
+	right: -15px;
 	color: #000 !important;
     background-color: #f1f1f1 !important;
 }
