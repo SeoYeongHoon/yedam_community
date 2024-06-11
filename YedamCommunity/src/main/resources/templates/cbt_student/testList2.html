@@ -9,17 +9,18 @@
 	display: inline-block;
 }
 .tlist_2 {
-	text-align: center;
+	/* text-align: center; */
 }
 .tlist_3 { /*버튼크기*/
 	width: 120px;
 }
 .tlist_4 {
-	font-size: 30px;
 	color: white;
 	background-color: blue;
-	width: 40px;
-	height: 40px;
+	padding: 8px 16px;
+}
+.tlist_4:hover {
+	color: white;
 }
 /*모달 > 바깥 영역*/
 .noTestModal,
@@ -72,9 +73,11 @@
 }
 </style>
 <div>
-	<div class="card-style" style="width: 1500px; margin: 0 auto; margin-top: 50px;">
-		<h1 style="margin: 50px;">내 시험</h1>
+	<div class="card-style" style="margin: 50px auto;">
 		<div id="testList" class="select-style-1" style="position: relative;">
+			<div class="table-top-content" style="width: 150px; margin-bottom: 30px; height: 40px; padding: 10px 16px;">
+				<h4 style="color: white">내 시험</h4>
+		    </div>
 			<!-- 과목 필터링 -->
 			<label>과목선택</label>
 			<div class="select-position" style="width: 250px;">
@@ -96,12 +99,12 @@
 			<table class="table" style="table-layout: fixed;">
 				<thead>
 					<tr>
-						<th class="tlist_2">No.</th>
-						<th class="tlist_2">시험명</th>
-						<th class="tlist_2">과목</th>
-						<th class="tlist_2">시험일</th>
-						<th class="tlist_2">응시상태</th>
-						<th class="tlist_2">피드백</th>
+						<th class="col-no">No.</th>
+						<th class="col-title">시험명</th>
+						<th class="col-board">과목</th>
+						<th class="col-board">시험일</th>
+						<th class="col-board">응시상태</th>
+						<th class="col-board">피드백</th>
 					</tr>
 				</thead>
 				<!-- 시험목록 출력 -->
@@ -264,37 +267,37 @@ function testListFilter(type, filterData){
 					let html2 = '';
 					if(data.isResult[i] == 0 && date2 < date1){						
 						html2 = `<td class="tlist_2">
-							<button class="testStartBtn tlist_3 main-btn primary-btn square-btn btn-hover">응시대기</button></td>`;
+						<button class="testStartBtn tlist_3 main-btn primary-btn btn-hover">응시대기</button></td>`;
 					}
 					else if(data.isResult[i] == 0 && (date2 > date1 && date2 < date3)){						
 						html2 = `<td class="tlist_2">
-							<button class="testStartBtn tlist_3 main-btn primary-btn square-btn btn-hover">응시하기</button></td>`;
+							<button class="testStartBtn tlist_3 main-btn primary-btn btn-hover" style="padding: 10px;">응시하기</button></td>`;
 					}
 					else if(data.isResult[i] == 0 && date2 > date4){						
 						html2 = `<td class="tlist_2">
-							<button class="noTestBtn tlist_3 main-btn danger-btn square-btn btn-hover">미응시</button></td>`;
+							<button class="noTestBtn tlist_3 main-btn danger-btn btn-hover" style="padding: 10px;">미응시</button></td>`;
 					}
 					else if(data.isResult[i] == 1){						
 						html2 = `<td class="tlist_2">
-							<button class="testEndBtn tlist_3 main-btn success-btn square-btn btn-hover">응시완료</button></td>`;
+							<button class="testEndBtn tlist_3 main-btn success-btn btn-hover" style="padding: 10px;">응시완료</button></td>`;
 					}
 					//피드백
 					let html3 = '';
 					if(data.isResult[i] == 0 && date2 < date1){					
 						html3 = `<td class="tlist_2">
-							<button type="button" class="tlist_3 main-btn warning-btn square-btn btn-hover">응시전</button></td>`;
+							<button type="button" class="tlist_3 main-btn warning-btn btn-hover" style="padding: 10px;">응시전</button></td>`;
 					}
 					else if(data.isResult[i] == 0 && (date2 > date1 && date2 < date3)){					
 						html3 = `<td class="tlist_2">
-							<button type="button" class="tlist_3 main-btn warning-btn square-btn btn-hover">응시중</button></td>`;
+							<button type="button" class="tlist_3 main-btn warning-btn btn-hover" style="padding: 10px;">응시중</button></td>`;
 					}
 					else if(data.isResult[i] == 0 && date2 > date3){					
 						html3 = `<td class="tlist_2">
-							<button type="button" class="tlist_3 main-btn danger-btn square-btn btn-hover">미응시</button></td>`;
+							<button type="button" class="tlist_3 main-btn danger-btn btn-hover" style="padding: 10px;">미응시</button></td>`;
 					}
 					else if(data.isResult[i] == 1 && data.isFeedback[i].feedback){
 						html3 = `<td class="tlist_2">
-							<button type="button" class="tlist_3 feedbackOn main-btn success-btn square-btn btn-hover">피드백완료</button>
+							<button type="button" class="tlist_3 feedbackOn main-btn success-btn btn-hover" style="padding: 10px;">피드백완료</button>
 							<div class="feedbackModal">
 								<div class="modal-dialog modal-dialog-centered" style="width: 500px; height: 500px; margin-top: 200px; background-color: white; border-radius: 10px;">
 									<br><br>
@@ -323,7 +326,7 @@ function testListFilter(type, filterData){
 					}
 					else if(data.isResult[i] == 1 && !data.isFeedback[i].feedback){
 						html3 = `<td class="tlist_2">
-							<button type="button" class="tlist_3 main-btn primary-btn square-btn btn-hover">피드백대기</button></td>`;
+							<button type="button" class="tlist_3 main-btn primary-btn btn-hover" style="padding: 10px;">피드백대기</button></td>`;
 					}
 					//해당 시험 번호 값
 					let input = $('<input>');

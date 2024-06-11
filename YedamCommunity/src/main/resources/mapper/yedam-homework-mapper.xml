@@ -21,19 +21,7 @@
 		ORDER BY  h.homework_id DESC
 	</select>
 	
-	<!-- 학생별 과제 조회 -->
-	<!-- <select id="selectUserHomework" resultType="HomeWorkVO">
-		SELECT  h.homework_title,
-        		h.homework_date,
-        		h.homework_id,
-        		c.class_id,
-        		s.subject_name
-		FROM    homeworks h JOIN curriculum c ON (h.curriculum_id = c.curriculum_id)
-                			JOIN users u ON (c.curriculum_id = u.curriculum_id)
-        		        	JOIN subjects s ON (s.curriculum_id = c.curriculum_id)
-		WHERE   h.subject_id = s.subject_id AND user_id = #{userid}
-		ORDER BY  h.homework_id DESC
-	</select> -->
+	
 
 	<!-- 상세조회 -->
 	<select id="selectHomework" resultType="HomeWorkVO">
@@ -158,12 +146,12 @@
 		FROM (
     			SELECT b.*, ROWNUM rnum
     			FROM (
-        				SELECT c.class_id,
-               				   h.homework_id,
-               				   h.homework_content,
-               				   h.homework_date,
-			                   h.homework_title,
-               				   s.subject_name
+        				SELECT DISTINCT	   c.class_id,
+			               				   h.homework_id,
+			               				   h.homework_content,
+			               				   h.homework_date,
+						                   h.homework_title,
+			               				   s.subject_name
         				FROM homeworks h	JOIN curriculum c ON h.curriculum_id = c.curriculum_id
         									JOIN subjects s ON h.subject_id = s.subject_id
         									JOIN users u ON c.curriculum_id = u.curriculum_id

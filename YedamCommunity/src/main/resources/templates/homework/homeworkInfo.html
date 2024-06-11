@@ -28,128 +28,6 @@ function autoResize(textarea) {
   	textarea.style.height = (textarea.scrollHeight) + 8 + 'px'; // 새로운 높이로 설정
 }
 </script>
-<!-- 댓글내용 확인 모달창 -->
-<div id="modalReply" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">등록 실패</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<p style="text-align: center;">댓글을 입력해주세요!</p>
-				<div style="text-align: center;">
-					<img alt="등록완료버튼" th:src="@{/images/failed.png}">
-				</div>
-			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button id='errBtn' type="button" class="btn btn-primary"
-					data-dismiss="modal">확인</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- 등록완료 모달창 -->
-<div id="modal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">등록 완료</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<p style="text-align: center;">등록이 완료되었습니다!</p>
-				<div style="text-align: center;">
-					<img alt="등록완료버튼" th:src="@{/images/registration.png}">
-				</div>
-			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button id='okBtn' type="button" class="btn btn-primary close"
-					data-dismiss="modal">확인</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- 대댓글 내용 확인 모달창 -->
-<div id="commentCentent" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">등록 실패</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<p style="text-align: center;">대댓글을 입력해주세요!</p>
-				<div style="text-align: center;">
-					<img alt="등록완료버튼" th:src="@{/images/failed.png}">
-				</div>
-			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button id='errBtn' type="button" class="btn btn-primary"
-					data-dismiss="modal">확인</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 삭제 완료 모달창 -->
-<div id="deleteOK" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">삭제 완료</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<p style="text-align: center;">댓글이 삭제되었습니다!</p>
-				<div style="text-align: center;">
-					<img alt="등록완료버튼" th:src="@{/images/registration.png}">
-				</div>
-			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button id='okBtn' type="button" class="btn btn-primary close"
-					data-dismiss="modal">확인</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 과제삭제 모달창 -->
-<div id="deleteHomework" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- 모달 헤더 -->
-			<div class="modal-header">
-				<h5 class="modal-title">삭제 완료</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<!-- 모달 본문 -->
-			<div class="modal-body">
-				<p style="text-align: center;">과제가 삭제되었습니다.</p>
-				<div style="text-align: center;">
-					<img alt="등록완료버튼" th:src="@{/images/registration.png}">
-				</div>
-			</div>
-			<!-- 모달 푸터 -->
-			<div class="modal-footer">
-				<button id='checkBtn' type="button" class="btn btn-primary"
-					onclick="location.href='/admin/homework_T'">확인</button>
-			</div>
-		</div>
-	</div>
-</div>
 
 <!-- 과제 상세페이지 시작 -->
 <input id="logType" type="hidden" th:value="${userType}">
@@ -172,8 +50,7 @@ function autoResize(textarea) {
 				</div>
 				<div class="input-style-1">
 					<label>마감일자</label> 
-					<input id="homeworkDate" type="date" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" style="width: 250px;" disabled>
-					<!-- <input id="updateDate" type="date" style="width: 250px; display:none;"class="homeworkUpdate"> -->
+					<input id="homeworkDate" type="date" th:value="${#dates.format(homeworkInfo.homeworkDate,'yyyy-MM-dd')}" class="homeworkUpdate" style="width: 250px;" disabled>
 				</div>
 		
 				<!-- 파일내역 출력 -->
@@ -183,9 +60,8 @@ function autoResize(textarea) {
 				<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
 					<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
 					<div id="file" style="padding: 50px; display: none;" class="card-style mb-30">
-						<input type="file" name="uploadFiles" multiple="multiple">
+						<input type="file" class="uploadFiles" name="uploadFiles" multiple="multiple">
 						<button id="fileUpload" type="button" style="padding: 5px 10px; float:right" class="main-btn dark-btn btn-hover">파일 추가</button>
-						<!-- <button class="updateReplyFile main-btn dark-btn btn-hover" value="${e.replyId}" type="button" style="padding: 5px 10px;">파일 추가</button> -->
 					</div>
 				</form>
 				
@@ -194,11 +70,6 @@ function autoResize(textarea) {
 				<div class="input-style-1">
 					<label>내용</label> 
 					<textarea cols="100" rows="10" class="homeworkUpdate" id="content" name="feedback" th:text="${homeworkInfo.homeworkContent}" disabled></textarea>
-				<!--<input id="content" class="homeworkUpdate" type="text"
-					th:value="${homeworkInfo.homeworkContent}"
-					style="padding: 10px; width: 250px; border: 1px solid black;"
-					readonly>-->
-		
 				</div>
 			</div>
 			
@@ -212,7 +83,7 @@ function autoResize(textarea) {
 		<input type="hidden" th:field="*{homeworkId}">
 		<textarea class="replyHomeworkArea" rows="4" cols="50" placeholder="내용을 입력하세요" th:field="*{replyContent}" oninput="autoResize(this)"></textarea>
 		<div class="col-12" style="text-align: end;">
-			<input type="file" name="uploadFiles" multiple style="margin-top: 10px; margin-left: -14px;">
+			<input type="file" name="uploadFiles" class="uploadFiles" multiple style="margin-top: 10px; margin-left: -14px;">
 			<button id="insertBtn" class="main-btn primary-btn btn-hover"
 				type="button">등록</button>
 		</div>
@@ -318,9 +189,7 @@ function autoResize(textarea) {
 		$('.homeworkUpdate').css('backgroundColor','#e5ebff') // 수정할 input
 		$('#updateHomeworks').css('display', 'block'); // 수정완료 버튼
 		$('.deleteFile').css('display', 'block'); // 파일삭제 버튼
-		$('#homeworkDate').prop("disabled", false);
 		$('#updateHomework').css("display", "none");
-		// $('#updateDate').css("display","block");
 		$('#addReply').css("display", "none");
 		$('#file').css('display','block'); //파일업로드 버튼 
 	})
@@ -338,7 +207,12 @@ function autoResize(textarea) {
 			contentType: false, // FormData가 가지고 있는 통신 정보를 사용
 			data: formData,
 			success:  function(result) {
-				$('#modal').modal('show');
+				Swal.fire({
+					icon: 'success',
+					text: '파일 등록 완료',
+					confirmButtonText: '확인',
+				})
+				$('.uploadFiles').val('');
 				$('#homeworkFile').empty(); 
 				fileList();
 				$('.deleteFile').css('display', 'block');
@@ -387,17 +261,14 @@ function autoResize(textarea) {
 							$('#updateHomeworks').css('display', 'none'); // 수정 등록버튼 
 							$('.homeworkUpdate').css('backgroundColor','transparent') // 배경색 무로 변경
 							$('.deleteFile').css('display', 'none'); // 파일삭제 버튼
-							// $('#modal').modal('show'); // 등록완료 모달
 							$('#file').css('display','none'); //파일업로드 버튼 
 							$('#addReply').css("display", "block");
 							$('#updateHomework').css("display", "block");
 							let date = $('#homeworkDate').val();
-							// $('#homeworkDate').prop('type','text');
 							$('#homeworkDate').prop("disabled", true);
 							$('#homeworkDate').val(homeworkDate);
 							
 							//마감일자 지나면 댓글입력창 없앰
-							//let homeworkDate = $('#homeworkDate').val()
 							let today = noTimeDate(new Date());
 						     
 							if(homeworkDate < today){
@@ -704,7 +575,7 @@ function autoResize(textarea) {
 			            success : function(json) {
 			              /*  $('#modal').modal('show'); //성공모달 */
 			               replyContent.value = ''; // 댓글 입력창 초기화 
-			               $('#uploadFiles').val(''); // 댓글 파일필드 초기화
+			               $('.uploadFiles').val(''); // 댓글 파일필드 초기화
 			               replyList();// 댓글 목록 새로고침
 			            },
 			            error : function(err) {

@@ -26,7 +26,6 @@ tr img {
 
 .testPaging a {
 	  color: black;
-	  float: left;
 	  padding: 8px 16px;
 	  text-decoration: none;
 	  transition: background-color .3s;
@@ -148,7 +147,7 @@ tr img {
 			<!-- 모달 푸터 -->
 			<div class="modal-footer">
 				<button id='errBtn' type="button" class="btn btn-primary"
-					data-dismiss="modal">확인</button>
+					data-dismiss="modal">닫기</button>
 			</div>
 		</div> <!-- modal-content end -->	
 	</div> <!-- modalBody end -->
@@ -563,16 +562,14 @@ function quizContentList(page, subjectName){
 									solution = item.quizSolution;
 									qContent = item.quizContent;
 									let qInfo = `
-										<div>
-											<h4>문제</h4>
-											<br>
-											<textarea rows="7" cols="80" id="quizContent" readonly="true">${qContent}</textarea>
-										</div>	
-										<br>
-										<div>
-											<h4>보기</h4>
-											<br>
-											<div class="row row1" style="padding-left:15px">
+										<h4 class="mb-2">문제</h4>
+										<div class="card-style mb-30" style="padding: 10px;">
+											<textarea rows="7" cols="80" id="quizContent" style="resize: none; width: 100%;" readonly="true">${qContent}</textarea>
+										</div>
+										
+										<h4 class="mb-2">보기</h4>
+										<div class="card-style mb-30" style="padding: 10px;">
+											<div class="row row1" style="padding-left: 15px;">
 												<p class="">1. </p>
 												<input class="col-8" type="text" id="textContent1" value="${textContent1}" readonly="true" />
 												<input class="eAnswer" type="hidden" value="${exampleAnswer}" name="${exampleAnswer}"/>
@@ -598,19 +595,18 @@ function quizContentList(page, subjectName){
 												<input class="eAnswer" type="hidden" value="${exampleAnswer5}" name="${exampleAnswer5}"/>
 											</div>
 										</div>
-										<br>
-										<div>
-											<h4>해설</h4>
-											<br>
-											<textarea rows="5" cols="50" id="quizSolution" readonly="true">${solution}</textarea>
+										
+										<h4 class="mb-2">해설</h4>
+										<div class="card-style mb-2" style="padding: 10px;">
+											<textarea rows="5" cols="50" id="quizSolution" readonly="true" style="resize: none">${solution}</textarea>
 										</div>
-										<div style="text-align: center;" class="btnDiv">
-											<button id="del${qId}" value="${qId}" class="main-btn danger-btn btn-hover quizDelBtn"
+										<div style="" class="btnDiv">
+											<button value="${qId}" class="main-btn warning-btn btn-hover updateShowBtn" style="padding: 5px 15px;"
+												type="button">수정</button>
+											<button id="update${qId}" value="${qId}" class="main-btn info-btn btn-hover quizUpBtn" style="display: none;"
+												type="button">수정</button>
+											<button id="del${qId}" value="${qId}" class="main-btn danger-btn btn-hover quizDelBtn" style="padding: 5px 15px;"
 												type="button">삭제</button>
-											<button id="update${qId}" value="${qId}" class="main-btn info-btn btn-hover quizUpBtn"
-												type="button" style="visibility:hidden">문제 수정</button>
-											<button value="${qId}" class="main-btn info-btn btn-hover updateShowBtn"
-												type="button">수정하기</button>
 										`;
 									$("#quizInfo").append(qInfo);
 								
@@ -944,18 +940,45 @@ if(reCurriculumId == null || reCurriculumId == ""){
 //--------------------------------------------
 $('#modalWrap').on('click', '.quizDelBtn', function(){
 	let quizId = $(this).val();
-	$.ajax({
-		url : "quizdelete",
-		type : "get",
-		data : {quizId : quizId},
-		
-		success : function(data){
-			location.reload();
-		},
-		error : function(err){
-			console.log('에러입니다');
+	
+	Swal.fire({
+	    title: "문제를 삭제하시겠습니까?",
+	    text: "확인 버튼을 클릭 시, 문제가 삭제됩니다.",
+	    icon: 'warning',
+	    showCancelButton: true,
+	    confirmButtonColor: '#3085d6',
+	    cancelButtonColor: '#d33',
+	    confirmButtonText: '확인',
+	    cancelButtonText: '취소',
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+				url : "quizdelete",
+				type : "get",
+				data : {quizId : quizId},
+				
+				success : function(data){
+					Swal.fire({
+						icon: 'success',
+						text: '문제가 삭제되었습니다.',
+						confirmButtonText: '확인',
+					}).then((result) => {
+						location.reload();
+					});
+				},
+				error : function(err){
+					Swal.fire({
+						icon: 'error',
+						text: '삭제 실패!',
+						confirmButtonText: '확인',
+					}).then((result) => {
+						location.reload();
+					});
+				}
+			});
 		}
-	}); 
+	});
+	
 })
 //--------------------------------------------
 // 문제 및 지문 수정기능
@@ -996,22 +1019,16 @@ $('#modalWrap').on('click', '.quizUpBtn', function(){
 // 수정하기 버튼 누르면 수정 가능하도록 인풋창 활성화
 //--------------------------------------------
 $('#modalWrap').on('click','.updateShowBtn', function(){
-	$('.updateShowBtn').attr('style','visibility:hidden');
-	$('.quizUpBtn').attr('style','');
-	$('#quizContent').attr({style:'border:1px black solid'
-						  ,	readonly:false})
-	$('#quizSolution').attr({style:'border:1px black solid'
-						  , readonly:false})
-	$('#textContent1').attr({style:'border:1px black solid'
-						  , readonly:false})	
-	$('#textContent2').attr({style:'border:1px black solid'
-						  , readonly:false})
-	$('#textContent3').attr({style:'border:1px black solid'
-						  , readonly:false})
-	$('#textContent4').attr({style:'border:1px black solid'
-						  , readonly:false})
-	$('#textContent5').attr({style:'border:1px black solid'
-						  , readonly:false})					  
+	$('.updateShowBtn').attr('style','display: none');
+	$('.quizUpBtn').attr('style', 'display: inline-block; padding: 5px 15px;');
+	$('#quizContent').attr({style: 'background-color: #f1f1f1; padding: 10px; resize: none; border-radius: 5px; width: 100%;', readonly:false});
+	$('#quizSolution').attr({style: 'background-color: #f1f1f1; padding: 10px; resize: none; border-radius: 5px; width: 100%;', readonly:false});
+	$('#textContent1').attr({style: 'background-color: #f1f1f1; margin-left: 10px; border-radius: 5px; padding-left: 5px;', readonly:false});
+	$('#textContent2').attr({style: 'background-color: #f1f1f1; margin-left: 10px; border-radius: 5px; padding-left: 5px;', readonly:false});
+	$('#textContent3').attr({style: 'background-color: #f1f1f1; margin-left: 10px; border-radius: 5px; padding-left: 5px;', readonly:false});
+	$('#textContent4').attr({style: 'background-color: #f1f1f1; margin-left: 10px; border-radius: 5px; padding-left: 5px;', readonly:false});
+	$('#textContent5').attr({style: 'background-color: #f1f1f1; margin-left: 10px; border-radius: 5px; padding-left: 5px;', readonly:false});	
+	$('#quizContent').focus();		  
 });
 </script>
 </html>

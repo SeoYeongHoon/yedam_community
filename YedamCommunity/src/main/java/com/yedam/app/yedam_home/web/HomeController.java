@@ -35,7 +35,10 @@ public class HomeController {
     public String BoardList(Model model) {
         
 		// 게시판 1 - 수강별, 2 - 구인/ 구인, 3 - 정보, 4 - 질문
-        List<PostVO> board1Posts = postservice.getPostAll(5);
+		
+		
+		
+		List<PostVO> board1Posts = postservice.getPostsByFilter(0, 1, "");
         List<PostVO> board2Posts = postservice.getPostAll(7);
         List<PostVO> board3Posts = postservice.getPostAll(8);
         List<PostVO> board4Posts = postservice.getPostAll(9);

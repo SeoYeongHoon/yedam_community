@@ -32,63 +32,88 @@
         font-size: 1em;
     }
     .submit-button {
-        width: 100%;
-        padding: 10px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 1.1em;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        margin-bottom: 10px;
+	        width: 120px;
+	        padding: 10px;
+	        background-color: #e96b56;
+	        color: white;
+	        border: none;
+	        border-radius: 3px;
+	        font-size: 1.1em;
+	        cursor: pointer;
+	        transition: background-color 0.3s;
+	        margin-bottom: 10px;
     }
     .submit-button:hover {
-        background-color: #357A38;
+        background-color: rgb(236, 124, 104);
+    }
+    .postContentText {
+      	height: 500px;
+      	width: 100%;
+	    border: 1px solid #e5e5e5;
+	    border-radius: 4px;
+	    padding: 16px;
+	    color: black;
+	    resize: none;
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <h1 class="insert-title">게시글 작성</h1>
-  <form th:action="@{/all/postInsert}" th:object="${post}" method="post" enctype="multipart/form-data" id="post-form" onsubmit="return postCheck()">
-    <label class="post-label" for="title">제목:</label>
-    <input type="text" id="title" th:field="*{title}" /><br />
-    
-    <label class="post-label" for="postContent">내용:</label>
-    <textarea id="postContent" th:field="*{postContent}"></textarea><br />
-    
-    <label class="post-label" for="writer">작성자:</label>
-    <input type="text" id="writer" th:field="*{writer}" readonly /><br />
-    
-    <label class="post-label" for="file">파일:</label>
-    <input type="file" id="file" name="file" multiple="multiple"/><br />
-    
-    <input type="hidden" th:field="*{boardId}" />
-    <input type="hidden" th:field="*{boardType}" />
-    <input type="hidden" th:field="*{userId}" />
-    <button class="submit-button" type="submit">등록</button>
-  </form>
+<div class="container mb-30">
+	<form th:action="@{/all/postInsert}" th:object="${post}" method="post" enctype="multipart/form-data" id="post-form" onsubmit="return postCheck()">
+		<div class="card-style mb-30 mt-30" style="border-top: 2px solid #e96b56;">
+		
+	        <label class="post-label" for="title">제목:</label>
+		    <input type="text" id="title" th:field="*{title}" /><br />
+		    
+		    <label class="post-label" for="postContent">내용:</label>
+		    <textarea id="postContent" class="postContentText" th:field="*{postContent}"></textarea><br />
+		    
+		    <label class="post-label" for="writer">작성자:</label>
+		    <input type="text" id="writer" th:field="*{writer}" readonly disabled/><br />
+		    
+		    <label class="post-label" for="file">파일:</label>
+		    <input type="file" id="file" name="file" multiple="multiple"/><br />
+		    
+		    <input type="hidden" th:field="*{boardId}" />
+		    <input type="hidden" th:field="*{boardType}" />
+		    <input type="hidden" th:field="*{userId}" />
+		    <!-- <button class="submit-button" type="submit">등록</button> -->
+		</div>
+		<div class="center">
+			<button id="insertFormBtn" class="submit-button" type="submit">등록</button>
+		    <div th:switch="${boardId}" style="display: inline-block;">
+		   		<div th:if="${boardId <= 6}">
+		   			<a class="main-btn light-btn btn-hover" style="padding: 10px; width: 120px;" th:href="@{/all/curriculumPost}">취소</a>
+		   		</div>
+				<div th:case="7">
+					<a class="main-btn light-btn btn-hover" style="padding: 10px; width: 120px;" th:href="@{/all/posts/2}">취소</a>
+				</div>
+				<div th:case="8">
+					<a class="main-btn light-btn btn-hover" style="padding: 10px; width: 120px;" th:href="@{/all/posts/3}">취소</a>
+				</div>
+			</div>
+		</div>
+    </form>
 </div>
-<script>
-function postCheck(){
-    let title = document.getElementById('title');
-    let postContent = document.getElementById('postContent');
-    
-    if(title.value == ''){
-        alert('제목이 필요합니다.');
-        title.focus();
-        return false;
-    }
-    
-    if(postContent.value == ''){
-        alert('내용이 필요합니다.');
-        postContent.focus();
-        return false;
-    }
-    return true;
-}
 
+<script>
+	function postCheck(){
+	    let title = document.getElementById('title');
+	    let postContent = document.getElementById('postContent');
+	    
+	    if(title.value == ''){
+	        alert('제목이 필요합니다.');
+	        title.focus();
+	        return false;
+	    }
+	    
+	    if(postContent.value == ''){
+	        alert('내용이 필요합니다.');
+	        postContent.focus();
+	        return false;
+	    }
+	    return true;
+	}
 </script>
 </body>
 </html>

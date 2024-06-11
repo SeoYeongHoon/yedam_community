@@ -197,6 +197,7 @@ function testList(page, searchQuery){
 		success : function(data){
 			updateList(data.tests);
 			testPagination(data.page, page);
+			process();
 		},
 		error : function(err){
 			console.log('에러입니다');
@@ -254,7 +255,7 @@ function updateList(tests){
 //--------------------------------------------
 //날짜 포멧 변환 함수
 //--------------------------------------------
-var today2 = '';
+
 function formatDate(date) {
     var d = new Date(date),
         min = '' + d.getMinutes(),
@@ -268,12 +269,40 @@ function formatDate(date) {
     if (hour.length < 2) hour = '0' + hour;
     if (min.length < 2) min = '0' + min;
 
-    today2 = year+'-'+month+'-'+day+' '+"18:00" // 오늘 오후 6시 고정시간
+    //today2 = year+'-'+month+'-'+day+' '+"18:00" // 오늘 오후 6시 고정시간
     //return [year, month, day, hour, min].join('-');
     return [year+'-'+month+'-'+day+' '+hour+':'+min];
 } // 날짜 포멧 변환 end
+
+function formatDateEnd(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year+'-'+month+'-'+day+' '+"18:00"]; // 오늘 오후 6시 고정시간
+} // 날짜 포멧 변환 end
+
+function formatDateEndYesterday(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year+'-'+month+'-'+day+' '+"00:00"]; // 오늘 자정
+} // 날짜 포멧 변환 end
+
 var today = new Date();
 var today1 = formatDate(today); // 오늘 현재시간
+var today2 = formatDateEnd(today); // 오늘 오후6시
+var today3 = formatDateEndYesterday(today); // 오늘 자정
+
 //--------------------------------------------
 // 날짜 비교해서 시험진행 상태 변경
 // today1:오늘현재시간 today2:오늘오후6시 
@@ -282,18 +311,19 @@ function process(){
 	var arry = [];
 	$('.tDate').each(function (index, item) {
 		 arry.push($(item).text());
-		 if(today1 > today2){
-		 	$('#'+index).text('시험종료');
-		 	$('#'+index).attr('class', 'status-btn close-btn process');
-		 } else if(today1 > arry[index]) {
+		 
+		 if(today1 >= arry[index] && today1 < today2 && arry[index] > today3) {
 		 	$('#'+index).text('시험중');
 		 	$('#'+index).attr('class', 'status-btn active-btn process');
 		 } else if(today1 < arry[index]){
 			$('#'+index).text('대기중');
 			$('#'+index).attr('class', 'status-btn info-btn process');
-		 }
+		 } else {
+			$('#'+index).text('시험종료');
+			$('#'+index).attr('class', 'status-btn close-btn process'); 
+		}		
 	});
-}
+}	
 
 window.onload = function() {
 	setActiveMenuItem();
