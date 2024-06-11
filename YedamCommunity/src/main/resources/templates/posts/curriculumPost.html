@@ -32,30 +32,6 @@
 	background-color: #ddd;
 }
 
-.gallery {
-  padding: 30px 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-}
-.gallery img {
-  width: 300px;
-  height: 250px;
-  border-radius: 10px;
-  border: 1px solid darkgray;
-  padding: 10px;
-  box-shadow: 1px 5px 8px 0 #00000040;
-  cursor: pointer;
-  transition: transform .2s;
-}
-.gallery img:hover {
-  transform: scale(1.05);
-}
-
-.gallery .wide {
-  grid-column: span 2;
-}
-
 </style>
       
 <head>
@@ -133,7 +109,7 @@
 					let galleryList =
 						`
 						 	<div onclick="location.href='/all/post/${e.boardId}/${e.postId}'" style="text-align: center;">
-					 			<img src="/files/${e.boardfileLocation}" alt="${e.boardfileName}">
+					 			<img src="/files/${e.boardfileLocation}" alt="${e.boardfileName}" onerror="this.onerror=null; this.src='/images/no_image.png';">
 					 		</div>
 						`
 					$('.gallery').append(galleryList);

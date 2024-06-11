@@ -8,6 +8,8 @@
 .tstart_1 { /*상단바 레이아웃*/
 	justify-content: space-between;
 	display: flex;
+	margin-bottom: 20px;
+	align-items: center;
 }
 .tstart_2 {
 	display: inline-block;
@@ -94,19 +96,25 @@
 .modal.on {
 	display: block;
 }
+.selectedContent {
+	cursor: pointer;
+}
 </style>
-<div id="start" class="row">
+<div id="start" class="row" style="padding: 20px;">
 	<!-- 타이머 토스트 알림창 -->
 	<div id="toast_message"></div> 
 	<!-- 상단1 -->
 	<div class="card-style col-lg-12 tstart_1">
-		<h1>[[${testStart.testName}]]</h1>
+		<div class="table-top-content" style="width: 500px; margin-bottom: 0; height: 50px; padding: 13px;">
+            <h3 style="color: white">[[${testStart.testName}]]</h3>
+        </div>
+		<!-- <h3>[[${testStart.testName}]]</h3> -->
 		<div>
-			<h3 class="tstart_2">제한시간:</h3>
-			<h3 id="testTimeMin" class="tstart_2">[[${testStart.testTime}]]</h3>
+			<h4 class="tstart_2">제한시간:</h4>
+			<h4 id="testTimeMin" class="tstart_2">[[${testStart.testTime}]]</h4>
 			<input id="testTime" type="hidden" th:value="${testStart.testTime}">
-			<h3 id="testTimeMid" class="tstart_2">:</h3>
-			<h3 id="testTimeSec" class="tstart_2">00</h3>
+			<h4 id="testTimeMid" class="tstart_2">:</h4>
+			<h4 id="testTimeSec" class="tstart_2">00</h4>
 		</div>
 		<div>
 			<h3 class="tstart_2">응시자:</h3>
@@ -117,21 +125,21 @@
 	<div class="card-style col-lg-12 tstart_1">
 		<!-- 문제개수 관련 -->
 		<div>
-			<h3 class="tstart_2">전체문제:</h3>
-			<h3 id="allQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]</h3>
+			<h4 class="tstart_2 mb-2">전체문제:</h4>
+			<h4 id="allQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]</h4>
 			<br>
-			<h3 class="tstart_2">남은문제:</h3>
-			<h3 id="remainQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]</h3>
+			<h4 class="tstart_2">남은문제:</h4>
+			<h4 id="remainQuizCnt" class="tstart_2">[[${#lists.size(randRn)}]]</h4>
 		</div>
 		<div>
 			<div class="tstart_5">
-				<button id="zoomOut" class="tstart_7 main-btn dark-btn-outline square-btn btn-hover">축소</button>
+				<button id="zoomOut" class="tstart_7 main-btn dark-btn btn-hover">축소</button>
 			</div>
 			<div class="tstart_5" style="width: 100px">
-				<button id="zoomStatus" class="tstart_7 main-btn dark-btn-outline square-btn btn-hover">100%</button>
+				<button id="zoomStatus" class="tstart_7 main-btn dark-btn btn-hover">100%</button>
 			</div>
 			<div class="tstart_5">
-				<button id="zoomIn" class="tstart_7 main-btn dark-btn-outline square-btn btn-hover">확대</button>
+				<button id="zoomIn" class="tstart_7 main-btn dark-btn btn-hover">확대</button>
 			</div>
 		</div>
 		<div>
@@ -165,13 +173,13 @@
 			</div>
 			<!-- 시험관련 버튼 -->
 			<div class="tstart_5">
-				<a id="prevQuiz" class="main-btn dark-btn-outline square-btn btn-hover">이전</a>
+				<a id="prevQuiz" style="color: #fff;" class="main-btn dark-btn btn-hover">이전</a>
 			</div>
 			<div class="tstart_5">
-				<a id="nextQuiz" class="main-btn dark-btn-outline square-btn btn-hover">다음</a>
+				<a id="nextQuiz" style="color: #fff;" class="main-btn dark-btn btn-hover">다음</a>
 			</div>
 			<div class="tstart_5">
-				<a id="submitBtn" class="main-btn dark-btn-outline square-btn btn-hover">제출</a>
+				<a id="submitBtn" style="color: #fff;" class="main-btn dark-btn btn-hover">제출</a>
 			</div>
 		</div>
 		<!-- 제출관련 모달형식 -->
@@ -256,7 +264,8 @@ function notReload(event) {
 $(document).ready(function() {
 	// beforeunload 이벤트 핸들러 추가
 	$(window).on('beforeunload', function() {
-		return '변경 사항이 저장되지 않을 수 있습니다. 정말로 이 페이지를 떠나시겠습니까?';
+		loading_page.style.display = 'none';
+		return;
 	});
 });
 
@@ -731,15 +740,45 @@ function submitTest(){
 	let h3 = document.createElement('h3'); //텍스트 태그 생성
 	//<시험제출 버튼>
 	$('#submitBtn').on('click',function(){ //제출버튼을 클릭하면
-		modal.classList.add('on'); //모달창 열기
-		if(remainQuizCnt.innerText > 0){ //남은 문제개수가 있으면
-			h3.innerText = remainQuizCnt.innerText + '개 문제가 남았습니다.';
-			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기
+
+		if (remainQuizCnt.innerText > 0){ //남은 문제개수가 있으면
+			/* h3.innerText = remainQuizCnt.innerText + '개 문제가 남았습니다.';
+			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기 */
+			Swal.fire({
+			    title: "풀지 않은 문제가 있습니다. 답안을 제출하시겠습니까?",
+			    text: remainQuizCnt.innerText + "개 문제가 남아있습니다 !!",
+			    icon: 'warning',
+			    showCancelButton: true,
+			    confirmButtonColor: '#3085d6',
+			    cancelButtonColor: '#d33',
+			    confirmButtonText: '확인',
+			    cancelButtonText: '취소',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					testResult();
+				}
+			});
 		}
-		else{
-			h3.innerText = '문제를 모두 풀었습니다.';
-			remainQuizSubmit.append(h3) //생성한 텍스트 남은 문제 출력부분에 붙이기
+		else {
+			/* h3.innerText = '문제를 모두 풀었습니다.';
+			remainQuizSubmit.append(h3) */ //생성한 텍스트 남은 문제 출력부분에 붙이기
+			Swal.fire({
+			    title: "답안을 제출하시겠습니까?",
+			    text: "!! 답안 제출 이후에는 답안 변경이 불가능합니다. !!",
+			    icon: 'warning',
+			    showCancelButton: true,
+			    confirmButtonColor: '#3085d6',
+			    cancelButtonColor: '#d33',
+			    confirmButtonText: '확인',
+			    cancelButtonText: '취소',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					testResult();
+				}
+			});
 		}
+		
+		// modal.classList.add('on'); //모달창 열기
 	});
 	//<모달창 닫기 버튼>
 	$('#closeBtn').on('click',function(){ //닫기버튼을 클릭하면

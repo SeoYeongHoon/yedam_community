@@ -27,21 +27,6 @@
 .pagination a:hover:not(.active) {
 	background-color: #ddd;
 }
-
-.gallery {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 10px;
-}
-
-.gallery img {
-	width: 100%;
-	height: auto;
-}
-
-.gallery .wide {
-	grid-column: span 2;
-}
 .post-name {
  padding-left: 10px;
 }
@@ -87,24 +72,24 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="postTableHeader">게시글 번호</th>
-							<th class="postTableHeader">제목</th>
-							<th class="postTableHeader">작성자</th>
-							<th class="postTableHeader">작성시간</th>
-							<th class="postTableHeader">조회수</th>
-							<th class="postTableHeader">추천수</th>
+							<th class="col-no">No</th>
+							<th class="col-title">제목</th>
+							<th class="col-board">작성자</th>
+							<th class="col-date">작성시간</th>
+							<th class="col-no">조회수</th>
+							<th class="col-no">추천수</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr class="postListRow" th:each="info : ${postList}"
 							th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
-							<td class="postTableData" th:text="${info.postId}">1</td>
-							<td class="postTableData" th:text="${info.title}">제목</td>
-							<td class="postTableData" th:text="${info.writer}">작성자</td>
-							<td class="postTableData"
-								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
-							<td class="postTableData" th:text="${info.postView}">조회수</td>
-							<td class="postTableData" th:text="${info.postLike}">추천수</td>
+							<td class="col-no replyTableData" th:text="${info.postId}">1</td>
+							<td class="col-title ellipsis replyTableData" th:text="${info.title}">제목</td>
+							<td class="col-board replyTableData" th:text="${info.writer}">작성자</td>
+							<td class="col-date replyTableData"
+								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd HH:mm:ss')}">작성시간</td>
+							<td class="col-no replyTableData" th:text="${info.postView}">조회수</td>
+							<td class="col-no replyTableData" th:text="${info.postLike}">추천수</td>
 						</tr>
 					</tbody>
 				</table>
@@ -138,10 +123,9 @@
 					<div class="gallery">
 						
 						<div th:each="post : ${postList}"
+							 th:if="${post.boardfileLocation != null}"
 							 th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-							<th:block th:if="${post.boardfileLocation != null}">
 								<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
-							</th:block>
 							<!-- <p th:text="${post.boardfileName}">이미지 이름</p> -->
 						</div>
 					</div>
@@ -155,24 +139,24 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="postTableHeader">게시글 번호</th>
-							<th class="postTableHeader">제목</th>
-							<th class="postTableHeader">작성자</th>
-							<th class="postTableHeader">작성시간</th>
-							<th class="postTableHeader">조회수</th>
-							<th class="postTableHeader">추천수</th>
+							<th class="col-no">No</th>
+							<th class="col-title">제목</th>
+							<th class="col-board">작성자</th>
+							<th class="col-date">작성시간</th>
+							<th class="col-no">조회수</th>
+							<th class="col-no">추천수</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr class="postListRow" th:each="info : ${postList}"
 							th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
-							<td class="postTableData" th:text="${info.postId}">1</td>
-							<td class="postTableData" th:text="${info.title}">제목</td>
-							<td class="postTableData" th:text="${info.writer}">작성자</td>
-							<td class="postTableData"
-								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
-							<td class="postTableData" th:text="${info.postView}">조회수</td>
-							<td class="postTableData" th:text="${info.postLike}">추천수</td>
+							<td class="col-no replyTableData" th:text="${info.postId}">1</td>
+							<td class="col-title ellipsis replyTableData" th:text="${info.title}">제목</td>
+							<td class="col-board replyTableData" th:text="${info.writer}">작성자</td>
+							<td class="col-date replyTableData"
+								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd HH:mm:ss')}">작성시간</td>
+							<td class="col-no replyTableData" th:text="${info.postView}">조회수</td>
+							<td class="col-no replyTableData" th:text="${info.postLike}">추천수</td>
 						</tr>
 					</tbody>
 				</table>
@@ -206,10 +190,9 @@
 					<div class="gallery">
 						
 						<div th:each="post : ${postList}"
+							 th:if="${post.boardfileLocation != null}"
 							 th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-							<th:block th:if="${post.boardfileLocation != null}">
 								<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
-							</th:block>
 							<!-- <p th:text="${post.boardfileName}">이미지 이름</p> -->
 						</div>
 					</div>
@@ -225,24 +208,24 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="postTableHeader">게시글 번호</th>
-							<th class="postTableHeader">제목</th>
-							<th class="postTableHeader">작성자</th>
-							<th class="postTableHeader">작성시간</th>
-							<th class="postTableHeader">조회수</th>
-							<th class="postTableHeader">추천수</th>
+							<th class="col-no">No</th>
+							<th class="col-title">제목</th>
+							<th class="col-board">작성자</th>
+							<th class="col-date">작성시간</th>
+							<th class="col-no">조회수</th>
+							<th class="col-no">추천수</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr class="postListRow" th:each="info : ${postList}"
 							th:onclick="|location.href='@{/all/postvote/{boardId}/{postId}(boardId=${info.boardId}, postId=${info.postId})}'|">
-							<td class="postTableData" th:text="${info.postId}">1</td>
-							<td class="postTableData" th:text="${info.title}">제목</td>
-							<td class="postTableData" th:text="${info.writer}">작성자</td>
-							<td class="postTableData"
-								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd')}">작성시간</td>
-							<td class="postTableData" th:text="${info.postView}">조회수</td>
-							<td class="postTableData" th:text="${info.postLike}">추천수</td>
+							<td class="col-no replyTableData" th:text="${info.postId}">1</td>
+							<td class="col-title ellipsis replyTableData" th:text="${info.title}">제목</td>
+							<td class="col-board replyTableData" th:text="${info.writer}">작성자</td>
+							<td class="col-date replyTableData"
+								th:text="${#dates.format(info.createDate, 'yyyy-MM-dd HH:mm:ss')}">작성시간</td>
+							<td class="col-no replyTableData" th:text="${info.postView}">조회수</td>
+							<td class="col-no replyTableData" th:text="${info.postLike}">추천수</td>
 						</tr>
 					</tbody>
 				</table>
@@ -274,10 +257,9 @@
 					<div class="gallery">
 						
 						<div th:each="post : ${postList}"
+							 th:if="${post.boardfileLocation != null}"
 							 th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-							<th:block th:if="${post.boardfileLocation != null}">
 								<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
-							</th:block>
 							<!-- <p th:text="${post.boardfileName}">이미지 이름</p> -->
 						</div>
 					</div>
