@@ -197,6 +197,7 @@ function testList(page, searchQuery){
 		success : function(data){
 			updateList(data.tests);
 			testPagination(data.page, page);
+			process();
 		},
 		error : function(err){
 			console.log('에러입니다');
@@ -311,7 +312,7 @@ function process(){
 	$('.tDate').each(function (index, item) {
 		 arry.push($(item).text());
 		 
-		 if(today1 > arry[index] && today1 < today2 && arry[index] > today3) {
+		 if(today1 >= arry[index] && today1 < today2 && arry[index] > today3) {
 		 	$('#'+index).text('시험중');
 		 	$('#'+index).attr('class', 'status-btn active-btn process');
 		 } else if(today1 < arry[index]){
