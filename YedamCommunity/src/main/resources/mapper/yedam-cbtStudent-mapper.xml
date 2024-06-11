@@ -126,6 +126,7 @@
         		ORDER BY quiz_id, DBMS_RANDOM.VALUE) a
         		JOIN quizbox b ON(a.quiz_id = b.quiz_id)
 		WHERE   b.test_id = #{testId})
+		
 		SELECT  ROWNUM AS rn
         		,aa.quiz_id
         		,aa.test_id
@@ -154,7 +155,7 @@
     		v_answerbox_cnt NUMBER(5,0);
     		v_answerbox_id	NUMBER(5,0);
 		BEGIN
-			<!-- 보기유무 찾기 -->
+			<!-- 보기유무 조회 -->
     		SELECT  COUNT(answerbox_id)
     		INTO    v_answerbox_cnt
     		FROM    test_targets a
@@ -165,7 +166,7 @@
     		AND		c.quiz_id = #{quizId};
     		<!-- 이미 보기가 있는 경우 -->
     		IF v_answerbox_cnt > 0 THEN
-    			<!-- 보기 식별번호 찾기 -->
+    			<!-- 보기 식별번호 조회 -->
     			SELECT  answerbox_id
     			INTO	v_answerbox_id
     			FROM    test_targets a
@@ -258,18 +259,12 @@
 	
 	<!-- 시험 결과 정보 등록 - exam_results 테이블 -->
 	<update id="insertTestResult" parameterType="ExamResultVO">
-	<selectKey keyProperty="resultId" resultType="int" order="BEFORE">
-		SELECT  result_id_seq.NEXTVAL
-		FROM    DUAL
-	</selectKey>
 		DECLARE
 			v_sub NUMBER(10); <!-- 과목번호 -->
     		v_target NUMBER(10); <!-- 시험대상자번호 -->
     		v_pscore NUMBER(10); <!-- 합격 점수 -->
-    		v_rid_cnt NUMBER(10); <!-- 시험결과 개수 -->
-    		v_rid NUMBER(10); <!-- 시험결과 개수 -->
 		BEGIN
-			<!-- 현재 시험의 기준점수, 대상자번호, 과목번호, 총점 가져오기 -->
+			<!-- 기준점수, 대상자번호, 과목번호 조회 -->
 			SELECT  DISTINCT a.pass_score, 
 			        b.test_target_id, 
 			        c.subject_id
@@ -281,68 +276,39 @@
 					ON (b.test_id = c.test_id)
 			WHERE   b.test_id = #{testId}
 			AND     b.user_id = #{userId};
-			<!-- 시험결과 존재여부 구하기 -->
-			SELECT  COUNT(a.result_id)
-			INTO    v_rid_cnt
-        	FROM    exam_results a 
-        			JOIN test_targets b 
-        			ON(a.test_target_id = b.test_target_id)
-        	WHERE   b.test_id = #{testId}
-        	AND     b.user_id = #{userId};
-        	<!-- 시험결과 존재여부 구하기 -->
-        	IF v_rid_cnt = 0 THEN <!-- 처음 응시하는 경우 -->
-        		<!-- 테이블에 시험결과 정보 등록하기 -->
-				INSERT INTO exam_results(result_id
-			                         	 ,subject_id
-			                         	 ,pass_score
-			                         	 ,test_target_id)
-				VALUES(result_id_seq.NEXTVAL
-			       	   ,v_sub
-			      	   ,v_pscore
-			           ,v_target);
-				COMMIT;
-			ELSE <!-- 재시험인 경우 -->
-				<!-- 시험결과식별번호 구하기 -->
-				SELECT  a.result_id
-				INTO    v_rid
-	        	FROM    exam_results a 
-	        			JOIN test_targets b 
-	        			ON(a.test_target_id = b.test_target_id)
-	        	WHERE   b.test_id = #{testId}
-	        	AND     b.user_id = #{userId};
-				<!-- 이전 총점 바꾸기 -->
-				UPDATE  exam_results
-				SET     result_score = 0
-				WHERE   result_id = v_rid;
-				COMMIT;
-    			<!-- 기존 답안 정보 삭제하기 -->
-    			DELETE FROM test_results
-    			WHERE result_id = v_rid;
-    			COMMIT;
-        	END IF;
+        	<!-- 시험결과 정보 등록 -->
+			INSERT INTO exam_results(result_id
+			                         ,subject_id
+			                         ,pass_score
+			                         ,test_target_id)
+			VALUES(result_id_seq.NEXTVAL
+			       ,v_sub
+			       ,v_pscore
+			       ,v_target);
+			COMMIT;
 		END;
 	</update>
 	<!-- 문제 제출 답안 저장 - test_results 테이블 -->
 	<update id="insertTestSubmit" parameterType="TestResultVO">
 		DECLARE
-    		v_answer NUMBER(10); <!-- 내 답안 -->
-    		v_iscorrect NUMBER(10); <!-- 답안 정답 유무 -->
+    		v_answer NUMBER(10); <!-- 원래답안 -->
+    		v_iscorrect NUMBER(10); <!-- 정답유무 -->
     		v_tid NUMBER(10); <!-- 시험대상자식별번호 -->
     		v_rid NUMBER(10); <!-- 시험결과식별번호 -->
 		BEGIN
-			<!-- 현재 문제의 원래 답안 가져오기 -->
+			<!-- 원래 답안 조회 -->
     		SELECT  example_num
     		INTO    v_answer
     		FROM    answers
     		WHERE   quiz_id = #{quizId}
     		AND     example_answer = 1;
-    		<!-- 시험대상자번호 가져오기 -->
+    		<!-- 시험대상자번호 조회 -->
     		SELECT  test_target_id
     		INTO	v_tid
     		FROM  	test_targets
     		WHERE   test_id = #{testId}
     		AND		user_id = #{userId};
-    		<!-- 시험결과식별번호 가져오기 -->
+    		<!-- 시험결과식별번호 조회 -->
     		SELECT  MAX(result_id) AS result_id
     		INTO    v_rid
     		FROM    exam_results a
@@ -350,13 +316,13 @@
     				ON(a.test_target_id = b.test_target_id)
     		WHERE 	b.test_id = #{testId}
     		AND     b.test_target_id = v_tid;
-    		<!-- 정답 유무 비교 -->
+    		<!-- 정답유무 확인 -->
 			IF v_answer = #{testAnswer} THEN
         		v_iscorrect := 1;
     		ELSE
         		v_iscorrect := 0;
     		END IF;
-			<!-- 한 문제씩 제출 답안 저장하기 -->
+			<!-- 제출 답안 등록 -->
     		INSERT INTO test_results(test_result_id
 		                         	 ,test_answer
 		                         	 ,quiz_id
@@ -375,39 +341,38 @@
 	<!-- 시험 결과 총점 업데이트 -->
 	<update id="insertTestResultScore" parameterType="ExamResultVO">
 		DECLARE
-			v_rscore1 NUMBER(10,0); <!-- 전 총점 -->
-			v_rscore2 NUMBER(10,0); <!-- 현 총점 -->
-			v_pscore NUMBER(10,0); <!-- 합격점 -->
+			v_rscore NUMBER(10,0); <!-- 총점 -->
+			v_pscore NUMBER(10,0); <!-- 합격점수 -->
 			v_rid NUMBER(10,0); <!-- 시험결과식별번호 -->
 			v_isreexam NUMBER(10); <!-- 재시험유무 -->
 		BEGIN
-			<!-- 시험결과식별번호, 합격점 가져오기 -->
-			SELECT  a.result_id, a.pass_score, a.result_score
-			INTO   	v_rid, v_pscore, v_rscore1
+			<!-- 시험결과식별번호, 합격점 조회 -->
+			SELECT  a.result_id, a.pass_score
+			INTO   	v_rid, v_pscore
 			FROM    exam_results a
 					JOIN test_targets b
 					ON(a.test_target_id = b.test_target_id)
 			WHERE   b.test_id = #{testId}
 			AND		b.user_id = #{userId};
-			<!-- 현 총점 가져오기 -->
+			<!-- 시험 총점 계산 -->
 			SELECT  SUM(CASE WHEN is_correct = 1 THEN b.quiz_score
 			                                     ELSE 0 
 			                                     END) AS result_score
-			INTO    v_rscore2
+			INTO    v_rscore
 			FROM    test_results a 
      				JOIN quizbox b 
      				ON(a.quiz_id = b.quiz_id)
 			WHERE   a.result_id = v_rid
 			AND		b.test_id = #{testId};
 			<!-- 재시험유무 확인 -->
-			IF v_rscore2 >= v_pscore THEN
+			IF v_rscore >= v_pscore THEN
 				v_isreexam := 1;
 			ELSE
 			    v_isreexam := 0;
 			END IF;
 			<!-- 총점 등록 -->
 			UPDATE  exam_results
-			SET	    result_score = v_rscore2,
+			SET	    result_score = v_rscore,
 			        is_reexam = v_isreexam
 			WHERE   result_id = v_rid;
 			COMMIT;
