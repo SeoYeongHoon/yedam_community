@@ -13,8 +13,21 @@ public class ErrorController {
 		return "errorPages/quit";
 	}
 	
+	// 403 에러 페이지
 	@GetMapping("/access")
 	public String accessDeniedForm() {
 		return "errorPages/access";
+	}
+	
+	// 404 에러 페이지
+	@GetMapping("/error404")
+	public String noPageFound() {
+		return "errorPages/error404";
+	}
+	
+	// 500 에러 페이지
+	@GetMapping("/error500")
+	public String exceptionError() {
+		return "errorPages/error500";
 	}
 }

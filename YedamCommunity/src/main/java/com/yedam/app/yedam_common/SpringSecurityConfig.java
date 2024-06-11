@@ -33,7 +33,7 @@ public class SpringSecurityConfig {
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/all/home").authenticated()
 				.antMatchers("/all/**").permitAll()
-				.antMatchers("/css/**", "/fonts/**", "/images/**", "/js/**", "/vendor/**").permitAll()
+				.antMatchers("/css/**", "/fonts/**", "/images/**", "/js/**", "/vendor/**", "/errorPages/access").permitAll()
 				.anyRequest().authenticated())
 			.formLogin(login -> login
 				.loginPage("/all/login").permitAll()
@@ -46,6 +46,8 @@ public class SpringSecurityConfig {
 				.permitAll());
 		
 		http.csrf(csrf -> csrf.disable());
+		
+		http.exceptionHandling().accessDeniedPage("/errorPages/access");
 		
 		return http.build();
 	}
