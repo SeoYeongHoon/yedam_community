@@ -20,7 +20,7 @@
         font-size: 1.1em;
         margin-right: 10px;
     }
-    .post-insert-title, .post-insert-textarea {
+     input[type="text"], textarea {
         width: 100%;
         padding: 10px;
         margin-bottom: 20px;
@@ -30,19 +30,20 @@
     }
     
     .submit-button {
-        width: 100%;
-        padding: 10px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 1.1em;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        margin-bottom: 10px;
+	        width: 120px;
+	        padding: 10px;
+	        background-color: #e96b56;
+	        color: white;
+	        border: none;
+	        border-radius: 3px;
+	        font-size: 1.1em;
+	        cursor: pointer;
+	        transition: background-color 0.3s;
+	        margin-bottom: 10px;
     }
+    
     .submit-button:hover {
-        background-color: #357A38;
+        background-color: rgb(236, 124, 104);
     }
     
     .type-button{ 
@@ -54,39 +55,51 @@
     	margin-right: 10px;
     	margin-bottom: 10px;
     }
+    
+    .postContentText {
+      	height: 500px;
+      	width: 100%;
+	    border: 1px solid #e5e5e5;
+	    border-radius: 4px;
+	    padding: 16px;
+	    color: black;
+	    resize: none;
+    }
   </style>
 </head>
 <body>
 <div class="container">
   <h1 class="insert-title">게시글 작성</h1>
   <form th:action="@{/all/postInsertVote/}" th:object="${post}" method="post" enctype="multipart/form-data" id="post-form" onsubmit="return postvoteCheck()">
-    <label for="title">제목:</label>
-    <input class="post-insert-title" type="text" id="title" th:field="*{title}" /><br />
-    
-        <h3>질문 / 토론</h3>
-        <div class="form-group">
-            <label class="post-label" for="type">유형</label>
+  	<div class="card-style mb-30 mt-30" style="border-top: 2px solid #e96b56;">
+  
+    	<label for="title">제목:</label>
+    	<input class="post-insert-title" type="text" id="title" th:field="*{title}" /><br />
+		 <h3 style="margin-bottom: 10px;">질문 / 토론</h3>
+			<label class="post-label" for="type">유형</label>
             <div class="type-button">
-            <input class="radio-button" type="radio" id="question" name="type" value="question">
-            <label class="post-label" for="question">질문</label>
-            <input class="radio-button" type="radio" id="discussion" name="type" value="discussion">
-            <label class="post-label" for="discussion">토론</label>
+	            	<input class="radio-button" type="radio" id="question" name="type" value="question">
+	            <label class="post-label" for="question">질문</label>
+	            	<input class="radio-button" type="radio" id="discussion" name="type" value="discussion">
+	            <label class="post-label" for="discussion">토론</label>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="post-label" for="period">기간</label>
-            <input type="date" id="endDate" name="voteEndDate">
-        </div>
-		
-    <label for="postContent">내용:</label>
-    <textarea class="post-insert-textarea" id="postContent" th:field="*{postContent}"></textarea><br />
-    
-    <label class="post-label" for="writer">작성자:</label>
-    <input type="text" id="writer" th:field="*{writer}" readonly /><br />
-    
-    <input type="hidden" th:field="*{boardId}" />
-    <input type="hidden" th:field="*{userId}" />
-    <button class="submit-button" type="submit">등록</button>
+	    		<label class="post-label" for="postContent">내용:</label>
+	    			<textarea class="postContentText" id="postContent" th:field="*{postContent}"></textarea><br />
+	    
+	   
+	        	<label class="post-label" for="period">기간</label>
+	        		<input type="date" id="endDate" name="voteEndDate">
+	    
+	    		<label class="post-label" for="writer">작성자:</label>
+	    			<input type="text" id="writer" th:field="*{writer}" readonly /><br />
+
+	    			<input type="hidden" th:field="*{boardId}" />
+	    			<input type="hidden" th:field="*{userId}" />
+    </div>
+    	<div class="center">
+    				<button class="submit-button" type="submit">등록</button>
+    				<a class="main-btn light-btn btn-hover" style="padding: 10px; width: 120px;" th:href="@{/all/posts/4}">취소</a>
+  		</div>
   </form>
 </div>
 <script>
