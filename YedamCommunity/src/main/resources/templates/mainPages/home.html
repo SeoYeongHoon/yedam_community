@@ -61,7 +61,30 @@
                         </ul>
                     </nav>
                 </aside>
+				<div class="postSliderWrapper">
+					<div class="postSlider">
+						<div class="postSliderTrack">
+		                    <div th:each="post, iterStat : ${popularPosts}" style="margin: 0 10px;">
+		                        <a th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|" 
+								   class="postSliderContent card-style"
+								   style="padding: 10px;">
+									<div class="how2 how2-cl1 flex-s-c board_type"><span class="postSliderHeader" th:text="${post.title}"></span></div>
+		                            <span class="postSliderItem" th:text="${post.postContent}"></span>
+		                        </a>
+		                    </div>
+							<div th:each="post, iterStat : ${popularPosts}" style="margin: 0 10px;">
+		                        <a th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|" 
+								   class="postSliderContent card-style"
+								   style="padding: 10px;">
+									<div class="how2 how2-cl1 flex-s-c board_type"><span class="postSliderHeader" th:text="${post.title}"></span></div>
+		                            <span class="postSliderItem" th:text="${post.postContent}"></span>
+		                        </a>
+		                    </div>
+						</div>
+	                </div>			
+				</div>
             </div>
+			
 
             <!-- 게시판 최신 글 -->
             <div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
@@ -111,6 +134,8 @@
 	                </div>
 				</th:block>
 
+				<li class="mega-menu-item" style="display: none;">[[${#authentication.principal.userType == 'ROLE_GRAD'}]]</li>
+				<th:block th:if="${#authentication.principal.userType == 'ROLE_GRAD' OR #authentication.principal.userType == 'ROLE_ADMIN'}">
                 <!-- boardId = 2 -->
                 <div class="board_content">
                     <div class="how2 how2-cl3 flex-s-c board_type">
@@ -149,6 +174,7 @@
                         </li>
                     </ul>
                 </div>
+				</th:block>
 
                 <!-- boardId = 3 -->
                 <div class="board_content">

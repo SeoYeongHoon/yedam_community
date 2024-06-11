@@ -14,11 +14,12 @@
 
    .comment {
      border: 1px solid #e1e1e1;
-     padding: 10px;
+     padding: 5px;
      margin-left: 20px;
      margin-bottom: 10px;
      border-radius: 5px;
      background-color: #f9f9f9;
+	 position: relative;
    }
 
    .reply .reply-content,
@@ -238,7 +239,7 @@
 				<li th:each="comment : ${reply.comments}" th:id="|'comment-' + ${comment.commentId}|" class="comment">
 					<div class="comment-info">
 						<input class="commentWriter" type="hidden" th:value="${comment.commentWriter}">
-						<span th:text="${comment.commentWriter}">Comment Writer</span>
+						<span th:text="${comment.commentWriter}" class="commentWriterName">Comment Writer</span>
 						<span th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd HH:mm:ss')}">Comment Date</span>
 					</div>
 					<div class="comment-content">

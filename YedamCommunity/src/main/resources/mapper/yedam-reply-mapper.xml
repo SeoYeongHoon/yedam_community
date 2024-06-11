@@ -80,7 +80,6 @@
 		WHERE  r.reply_writer = (SELECT name
 		                         FROM users
 		                         WHERE user_id = #{userId})
-		AND    r.board_id IS NOT NULL
 		UNION ALL
 		SELECT r.board_id,
 		       r.post_id,
@@ -91,7 +90,6 @@
 		WHERE  c.comment_writer = (SELECT name
 		                           FROM users
 		                           WHERE user_id = #{userId})
-		AND    r.board_id IS NOT NULL
 		ORDER BY add_date                           
    </select>
   </mapper>

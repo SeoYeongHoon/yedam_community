@@ -16,11 +16,12 @@
     
     .comment {
 	  border: 1px solid #e1e1e1;
-	  padding: 10px;
+	  padding: 5px;
 	  margin-left: 20px;
 	  margin-bottom: 10px;
 	  border-radius: 5px;
 	  background-color: #f9f9f9;
+	  position: relative;
 	}
 
 	.reply .reply-content, .comment .comment-content {
@@ -160,8 +161,8 @@
     
     .post-report {
     	position: absolute;
-    	right: -18px;
-    	bottom: -22px;
+		right: 10px;
+	    bottom: 5px;
     }
     
     .post-list {
@@ -181,7 +182,6 @@
 
 	.post-all-botton {
 		margin-top: 50px;
-		position: relative;
 		text-align: center;
 	}
 
@@ -228,13 +228,19 @@
     }
 	
   </style>
+<script>
+	function autoResize(textarea) {
+	  	textarea.style.height = 'auto'; // 기존 높이를 초기화
+	  	textarea.style.height = (textarea.scrollHeight) + 8 + 'px'; // 새로운 높이로 설정
+	}
+</script>
 </head>
 
 <body>
 <div class="container">
 	<div class="add-line"><h5>질문/토론 게시판</h5></div>
 	  
-	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56;">
+	<div class="card-style mb-10 mt-30" style="border-top: 2px solid #e96b56; min-height: 650px; position: relative;">
 		  <div class="how2 how2-cl3 flex-s-c board_type" style="justify-content: space-between; height: 80px; align-items: baseline; padding-top: 10px;">
 			    <p style="font-size: 1.2em; font-weight: bold;" class="title" th:text="${postvote.title}">Post Title</p>
 			    <div class="details">
@@ -276,10 +282,10 @@
 		  </form>
 		 
 		 
-		  <form class="Good-form center" >
+		  <form class="Good-form center" style="height: 70px;">
 			<input type="hidden" name="postId" th:value="${postvote.postId}" id="postvoteId"/>
 			<input type="hidden" name="userId" th:value="${userId}"/>
-			  <div>
+			  <div id="goodFormContent">
 				<label class="Good-label" id="postLikeItLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 0}">추천 하기</label>
 				<label class="Good-label" id="postLikedIconLabel" style="font-size: 14px; display: block;" th:if="${isLikeChecked == 1}">추천 완료!</label>
 				<button type="button" class="Good-submit" style="border: none; border-radius: 10%; width: 50px;">
@@ -311,7 +317,7 @@
   <form id="reply-form" class="reply">
     <input type="hidden" name="postId" th:value="${postvote.postId}"/>
     <input type="hidden" name="boardId" th:value="${postvote.boardId}"/>
-    <textarea class="reply-textarea" name="replyContent" id="replyContent"></textarea>
+    <textarea class="reply-textarea" name="replyContent" id="replyContent" ></textarea>
     <button type="button" id="reply-submit" class="post-reply-submit">작성</button>
   </form>
   
@@ -325,40 +331,39 @@
       </div>
       <div class="reply-content">
         <input class="replyId" type="hidden" th:value="${reply.replyId}">
-        <textarea class="reply-textarea" th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" readonly></textarea>
+        <textarea cols="70" rows="3" class="reply-textarea" th:id="|replyId-${reply.replyId}|" th:text="${reply.replyContent}" oninput="autoResize(this)" readonly></textarea>
       </div>
       <div class="reply-actions">
         <button th:id="|updateBtn${reply.replyWriter}|" type="button" th:class="|updateBtn${reply.replyWriter}| + ' ' + border + ' ' + reply-update" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display: none;">수정</button>
         <button type="button" class="border reply-updateBtn" th:data-reply-id="${reply.replyId}" style="display:none;">수정</button>
         <button th:id="|deleteBtn${reply.replyWriter}|" type="button" th:class="|deleteBtn${reply.replyWriter}| + ' ' + border + ' ' + post-delete + ' ' + delete-reply" th:data-reply-id="${reply.replyId}" th:value="${reply.replyWriter}" style="display: none;">삭제</button>
       </div>
-      <h5>답글</h5>
-			<ul>
-				<li th:each="comment : ${reply.comments}" th:id="|'comment-' + ${comment.commentId}|" class="comment">
-					<div class="comment-info">
-						<input class="commentWriter" type="hidden" th:value="${comment.commentWriter}"> <span
-							th:text="${comment.commentWriter}">Comment Writer</span> <span
-							th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd HH:mm')}">Comment	Date</span>
-					</div>
-					<div class="comment-content">
-						<input class="commentId" type="hidden" th:value="${comment.commentId}">
-						<textarea class="comment-textarea" th:id="|commentId-${comment.commentId}|" th:text="${comment.commentContent}" readonly></textarea>
-					</div>
-					<div class="comment-actions">
-						<button th:id="|commentUpdate-${comment.commentWriter}|" type="button" th:class="|commentUpdate-${comment.commentWriter}| + ' ' + border + ' ' + comment-update" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
-						<button type="button" class="border comment-updateBtn" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
-						<button th:id="|commentDelete-${comment.commentWriter}|" type="button" th:class="|commentDelete-${comment.commentWriter}| + ' ' + delete-comment" th:data-comment-id="${comment.commentId}" style="display: none;">삭제</button>
-					</div>
-				</li>
-			</ul>
+		<ul>
+			<li th:each="comment : ${reply.comments}" th:id="|'comment-' + ${comment.commentId}|" class="comment">
+				<div class="comment-info">
+					<input class="commentWriter" type="hidden" th:value="${comment.commentWriter}"> <span class="commentWriterName"
+						th:text="${comment.commentWriter}">Comment Writer</span> <span
+						th:text="${#dates.format(comment.commentDate, 'yyyy-MM-dd HH:mm')}">Comment	Date</span>
+				</div>
+				<div class="comment-content">
+					<input class="commentId" type="hidden" th:value="${comment.commentId}">
+					<textarea cols="70" rows="3" class="comment-textarea" th:id="|commentId-${comment.commentId}|" th:text="${comment.commentContent}" oninput="autoResize(this)" readonly></textarea>
+				</div>
+				<div class="comment-actions">
+					<button th:id="|commentUpdate-${comment.commentWriter}|" type="button" th:class="|commentUpdate-${comment.commentWriter}| + ' ' + border + ' ' + comment-update" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
+					<button type="button" class="border comment-updateBtn" th:data-comment-id="${comment.commentId}" style="display: none;">수정</button>
+					<button th:id="|commentDelete-${comment.commentWriter}|" type="button" th:class="|commentDelete-${comment.commentWriter}| + ' ' + delete-comment" th:data-comment-id="${comment.commentId}" style="display: none;">삭제</button>
+				</div>
+			</li>
+		</ul>
 
-			<form class="comment-form">
-				<input type="hidden" name="replyId" th:value="${reply.replyId}" /> 
-				<input type="hidden" name="postId" th:value="${postvote.postId}" /> 
-				<input type="hidden" name="boardId" th:value="${postvote.boardId}" />
-				<textarea class="comment-textarea" th:id="|commentContent-${reply.replyId}|" name="commentContent"></textarea>
-				<button type="button" th:id="|comment-submit-${reply.replyId}|" class="comment-submit border">등록</button>
-			</form>
+		<form class="comment-form">
+			<input type="hidden" name="replyId" th:value="${reply.replyId}" /> 
+			<input type="hidden" name="postId" th:value="${postvote.postId}" /> 
+			<input type="hidden" name="boardId" th:value="${postvote.boardId}" />
+			<textarea class="comment-textarea" th:id="|commentContent-${reply.replyId}|" oninput="autoResize(this)" name="commentContent"></textarea>
+			<button type="button" th:id="|comment-submit-${reply.replyId}|" class="comment-submit border">등록</button>
+		</form>
      </li>
    </ul>
 </div>
@@ -568,19 +573,35 @@
   //--------------------------------------------
   $(document).on("click", ".delete-reply", function () {
     let replyId = $(this).data("reply-id");
-    if (confirm("댓글을 삭제하시겠습니까?")) {
-      $.ajax({
-        url: "/all/Reply",
-        type: "DELETE",
-        data: {replyId: replyId},
-        success: function (response) {
-        	window.location.reload();
-        },
-        error: function (error) {
-          alert("댓글 삭제에 실패하였습니다.");
-        },
-      });
-    }
+	Swal.fire({
+	    title: "댓글을 삭제하시겠습니까?",
+	    text: "확인 버튼을 클릭 시, 해당 댓글이 삭제됩니다.",
+	    icon: 'warning',
+	    showCancelButton: true,
+	    confirmButtonColor: '#3085d6',
+	    cancelButtonColor: '#d33',
+	    confirmButtonText: '확인',
+	    cancelButtonText: '취소',
+	}).then((result) => {
+		if (result.isConfirmed) {
+		  let commentId = $(this).data("comment-id");
+		  $.ajax({
+		        url: "/all/Reply",
+		        type: "DELETE",
+		        data: {replyId: replyId},
+		        success: function (response) {
+		        	location.reload();
+		        },
+		        error: function (error) {
+		        	Swal.fire({
+						icon: 'error',
+						text: '삭제 실패!',
+						confirmButtonText: '확인',
+					  });
+		        },
+		      });
+		}
+	});
   });
   
 //--------------------------------------------
@@ -640,22 +661,26 @@
 	// 대댓글 삭제
 	//--------------------------------------------
 	$(document).on("click", ".delete-comment", function() {
-		if (confirm("대댓글을 삭제하시겠습니까?")) {
-			let commentId = $(this).data("comment-id");
-			$.ajax({
-				url : "/all/Comment",
-				type : "DELETE",
-				data : {
-					commentId : commentId
-				},
-				success : function(response) {
+		let commentId = $(this).data("comment-id");
+		$.ajax({
+			url : "/all/Comment",
+			type : "DELETE",
+			data : {
+				commentId : commentId
+			},
+			success : function(response) {
+				Swal.fire({
+						icon: 'success',
+						text: '대댓글이 삭제되었습니다.',
+						confirmButtonText: '확인',
+				}).then((result) => {
 					window.location.reload();
-				},
-				error : function(error) {
-					alert("대댓글 삭제에 실패하였습니다.");
-				},
-			});
-		}
+				})
+			},
+			error : function(error) {
+				alert("대댓글 삭제에 실패하였습니다.");
+			},
+		});
 	});
 
 	//--------------------------------------------
@@ -682,7 +707,7 @@
   //--------------------------------------------
   // 추천 추가 함수
   //--------------------------------------------
-  $(".Good-submit").on("click", function () {
+  $(document).on("click", ".Good-submit", function () {
     let formData = $(".Good-form").serialize();
     let postLikeItIcon = $('#postLikeItIcon');	// 추천 전 아이콘
 	let postLikedIcon = $('#postLikedIcon');	// 추천 후 아이콘
@@ -706,8 +731,8 @@
 		        postLikeItLabel.css("display", "block");
 		        postLikedIconLabel.css("display", "none");
 	        }
-    	  updateLikeCount();
-		  location.reload();
+			updateLikeCount();
+			updateLikeForm();
       },
       error: function () {
         alert("통신 에러");
@@ -733,6 +758,27 @@
       },
     });
   }
+  
+	//--------------------------------------------
+	// 추천 아이콘 변경
+	//--------------------------------------------
+  function updateLikeForm() {
+      $.ajax({
+        url: window.location.pathname,
+        type: "GET",
+        success: function (response) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(response, 'text/html');
+          var newLikesForm = $(doc).find("#goodFormContent").html();
+          $("#goodFormContent").html(newLikesForm);
+        },
+        error: function (error) {
+          console.error("추천 개수 업데이트 실패:", error);
+        },
+      });
+  }
+  
+  
   //--------------------------------------------
   // 신고관련
   //--------------------------------------------
@@ -854,22 +900,7 @@
     //--------------------------------------------
     // 댓글 삭제 이벤트 핸들러 재적용
     //--------------------------------------------
-    $(".delete-reply").on("click", function () {
-      let replyId = $(this).data("reply-id");
-      if (confirm("댓글을 삭제하시겠습니까?")) {
-        $.ajax({
-          url: "/all/Reply",
-          type: "DELETE",
-          data: {replyId: replyId},
-          success: function (response) {
-            loadReplies();
-          },
-          error: function (error) {
-            alert("댓글 삭제에 실패하였습니다.");
-          },
-        });
-      }
-    });
+    
   }
 
   function replyCheck(){

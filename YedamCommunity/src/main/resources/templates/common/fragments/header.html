@@ -29,7 +29,9 @@
 					<!-- <th:block sec:authorize="hasAuthority('ROLE_GRAD')">
 						<li class="mega-menu-item"><a th:href="@{/all/curriculumPost}" id="graduatedBoard">수료 과정별 게시판</a></li>
 					</th:block> -->
-					<li class="mega-menu-item"><a th:href="@{/all/posts/2}" id="findJobBoard">구인/구직 게시판</a></li>
+					<th:block th:if="${#authentication.principal.userType == 'ROLE_GRAD' OR #authentication.principal.userType == 'ROLE_ADMIN'}">
+						<li class="mega-menu-item"><a th:href="@{/all/posts/2}" id="findJobBoard">구인/구직 게시판</a></li>
+					</th:block>
 					<li class="mega-menu-item"><a th:href="@{/all/posts/3}" id="infoBoard">정보 공유 게시판</a></li>
 					<li class="mega-menu-item"><a th:href="@{/all/posts/4}" id="debateBoard">질문과 토론 게시판</a></li>
 				</ul>
