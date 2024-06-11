@@ -111,6 +111,8 @@
 	                </div>
 				</th:block>
 
+				<li class="mega-menu-item" style="display: none;">[[${#authentication.principal.userType == 'ROLE_GRAD'}]]</li>
+				<th:block th:if="${#authentication.principal.userType == 'ROLE_GRAD' OR #authentication.principal.userType == 'ROLE_ADMIN'}">
                 <!-- boardId = 2 -->
                 <div class="board_content">
                     <div class="how2 how2-cl3 flex-s-c board_type">
@@ -149,6 +151,7 @@
                         </li>
                     </ul>
                 </div>
+				</th:block>
 
                 <!-- boardId = 3 -->
                 <div class="board_content">
