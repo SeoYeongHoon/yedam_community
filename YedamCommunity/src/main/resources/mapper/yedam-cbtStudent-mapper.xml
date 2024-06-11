@@ -137,11 +137,11 @@
         		,aa.quiz_score
 		FROM    (SELECT a.quiz_id
 						,a.test_id
-                		,MAX(DECODE(MOD(a.rn,5), 1, a.example_num)) AS one
-                		,MAX(DECODE(MOD(a.rn,5), 2, a.example_num)) AS two
-                		,MAX(DECODE(MOD(a.rn,5), 3, a.example_num)) AS three
-                		,MAX(DECODE(MOD(a.rn,5), 4, a.example_num)) AS four
-                		,MAX(DECODE(MOD(a.rn,5), 0, a.example_num)) AS five
+                		,NVL(MAX(DECODE(MOD(a.rn,5), 1, a.example_num)),0) AS one
+                		,NVL(MAX(DECODE(MOD(a.rn,5), 2, a.example_num)),0) AS two
+                		,NVL(MAX(DECODE(MOD(a.rn,5), 3, a.example_num)),0) AS three
+                		,NVL(MAX(DECODE(MOD(a.rn,5), 4, a.example_num)),0) AS four
+                		,NVL(MAX(DECODE(MOD(a.rn,5), 0, a.example_num)),0) AS five
                 		,a.quiz_score
         		FROM    a
         		GROUP BY a.quiz_id
@@ -161,6 +161,7 @@
             		JOIN tests b ON(a.test_id = b.test_id)
             		JOIN answerbox c ON(b.test_id = c.test_id)
     		WHERE   a.user_id = #{userId}
+    		AND		b.test_id = #{testId}
     		AND		c.quiz_id = #{quizId};
     		<!-- 이미 보기가 있는 경우 -->
     		IF v_answerbox_cnt > 0 THEN
@@ -171,6 +172,7 @@
             			JOIN tests b ON(a.test_id = b.test_id)
             			JOIN answerbox c ON(b.test_id = c.test_id)
     			WHERE   a.user_id = #{userId}
+    			AND		b.test_id = #{testId}
     			AND		c.quiz_id = #{quizId};
     			<!-- 랜덤보기 수정 -->
         		UPDATE  answerbox
