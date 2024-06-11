@@ -183,7 +183,7 @@ function autoResize(textarea) {
 				<form method="post" enctype="multipart/form-data" id="updateForm" th:object="${homeworkVO}">
 					<input id="homeworkId" type="hidden" th:value="${homeworkInfo.homeworkId}">
 					<div id="file" style="padding: 50px; display: none;" class="card-style mb-30">
-						<input type="file" name="uploadFiles" multiple="multiple">
+						<input type="file" class="uploadFiles" name="uploadFiles" multiple="multiple">
 						<button id="fileUpload" type="button" style="padding: 5px 10px; float:right" class="main-btn dark-btn btn-hover">파일 추가</button>
 						<!-- <button class="updateReplyFile main-btn dark-btn btn-hover" value="${e.replyId}" type="button" style="padding: 5px 10px;">파일 추가</button> -->
 					</div>
@@ -212,7 +212,7 @@ function autoResize(textarea) {
 		<input type="hidden" th:field="*{homeworkId}">
 		<textarea class="replyHomeworkArea" rows="4" cols="50" placeholder="내용을 입력하세요" th:field="*{replyContent}" oninput="autoResize(this)"></textarea>
 		<div class="col-12" style="text-align: end;">
-			<input type="file" name="uploadFiles" multiple style="margin-top: 10px; margin-left: -14px;">
+			<input type="file" name="uploadFiles" class="uploadFiles" multiple style="margin-top: 10px; margin-left: -14px;">
 			<button id="insertBtn" class="main-btn primary-btn btn-hover"
 				type="button">등록</button>
 		</div>
@@ -338,7 +338,12 @@ function autoResize(textarea) {
 			contentType: false, // FormData가 가지고 있는 통신 정보를 사용
 			data: formData,
 			success:  function(result) {
-				$('#modal').modal('show');
+				Swal.fire({
+					icon: 'success',
+					text: '파일 등록 완료',
+					confirmButtonText: '확인',
+				})
+				$('.uploadFiles').val('');
 				$('#homeworkFile').empty(); 
 				fileList();
 				$('.deleteFile').css('display', 'block');
@@ -704,7 +709,7 @@ function autoResize(textarea) {
 			            success : function(json) {
 			              /*  $('#modal').modal('show'); //성공모달 */
 			               replyContent.value = ''; // 댓글 입력창 초기화 
-			               $('#uploadFiles').val(''); // 댓글 파일필드 초기화
+			               $('.uploadFiles').val(''); // 댓글 파일필드 초기화
 			               replyList();// 댓글 목록 새로고침
 			            },
 			            error : function(err) {
