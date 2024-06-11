@@ -15,6 +15,7 @@
                homework_target_id
         FROM replies
         WHERE post_id = #{postId}
+        ORDER BY reply_id
     </select>
   
   <!-- 댓글 단건 조회 -->
