@@ -118,6 +118,7 @@ $(document).ready(function() {
 //--------------------------------------------
 function filterHomeworks(page) {
     var filter = $('#subjectSelect').val();
+    console.log("filter : " + filter)
     var searchQuery = $('#searchHomework').val();
 	let userId = $('#userId').val();
     $.ajax({
@@ -130,6 +131,9 @@ function filterHomeworks(page) {
             userId : userId
         },
         success: function(response) {
+        	console.log("homeworks" + response.homeworks)
+        	console.log("response.page" + response.page)
+        	console.log("page" +page)
             updateHomeworks(response.homeworks);
             homeworkPagination(response.page, page);
         },
@@ -173,32 +177,36 @@ function updateHomeworks(homeworks) {
 //--------------------------------------------
 // 페이지네이션 함수
 //--------------------------------------------
- function homeworkPagination(pageDTO, currentPage) {
-    var pagination = $('.homeworkPaging');
-    pagination.empty();
+  function homeworkPagination(pageDTO, currentPage) {
+	console.log(" pageDTO: "+pageDTO)
+	console.log(" currentPage: "+currentPage)
+	    var pagination = $('.homeworkPaging');
+	    pagination.empty();
+	    console.log("pageDTO.prev= " + pageDTO.prev)
 
-    if (pageDTO.prev) {
-        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '">&laquo;</a>');
-    }
+	    if (pageDTO.prev) {
+	        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.starPage - 1) + '">&laquo;</a>');
+	    }
 
-    for (let p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
-        var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
+	    for (let p = pageDTO.starPage; p <= pageDTO.endPage; p++) {
+	        var pageLink = $('<a href="javascript:void(0)" data-page="' + p + '">' + p + '</a>');
 
-        if (p === currentPage) {
-            pageLink.addClass('active');
-        }
+	        if (p === currentPage) {
+	            pageLink.addClass('active');
+	        }
 
-        pageLink.on('click', function() {
-            filterHomeworks(p);
-        });
+	        pageLink.on('click', function() {
+	            filterHomeworks(p);
+	        });
 
-        pagination.append(pageLink);
-    }
+	        pagination.append(pageLink);
+	    }
 
-    if (pageDTO.next) {
-        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '">&raquo;</a>');
-    }
-} 
+	    if (pageDTO.next) {
+	        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '">&raquo;</a>');
+	    }
+	} 
+	
 	//날짜 포멧 변환 함수
 	function formatDate(date) {
 		var d = new Date(date), month = '' + (d.getMonth() + 1), day = ''

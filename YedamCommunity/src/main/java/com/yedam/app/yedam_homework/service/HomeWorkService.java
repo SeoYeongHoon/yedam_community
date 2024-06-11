@@ -47,7 +47,11 @@ public interface HomeWorkService {
 	// 과제 페이징 및 필터링(학생)
 	public List<HomeWorkVO> getHomeworksByFilterStudent(int filter, int page, String searchQuery, int userId);
 
-	// 페이징용 카운트
+	// 페이징용 카운트(교수)
 	public int getTotalCnt(int filter, String searchQuery);
+	
+	// 페이징용 카운트(학생)
+	public int getTotalCntStudent(int filter, String searchQuery, int userId);
+	
 
 }
