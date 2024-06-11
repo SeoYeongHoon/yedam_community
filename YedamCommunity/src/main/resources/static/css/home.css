@@ -420,6 +420,7 @@ a.control_next {
 .post_info_content {
 	margin-top: 30px;
 	margin-bottom: 30px;
+	min-height: 230px;
 }
 
 .post_media_container {
