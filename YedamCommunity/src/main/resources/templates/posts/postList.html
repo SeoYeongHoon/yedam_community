@@ -7,19 +7,21 @@
 <title>게시글 목록</title>
 <style>
 .pagination {
-	display: inline-block;
+	display: inline-flex;
 }
 
 .pagination a {
-	color: black;
-	float: left;
-	padding: 8px 16px;
-	text-decoration: none;
+	  color: black;
+	  float: left;
+	  padding: 8px 16px;
+	  text-decoration: none;
+	  transition: background-color .3s;
 }
 
 .pagination a.active {
-	background-color: #4CAF50;
+	background-color: #219653;
 	color: white;
+  	border: 1px solid #219653;
 }
 
 .pagination a:hover:not(.active) {
@@ -111,12 +113,12 @@
 					<div class="pagination">
 						<div th:if="${currentPage > 1}">
 							<a
-								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
 						</div>
 						<div
 							th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
 							<a
-								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
 								th:text="${page}"
 								th:classappend="${page == currentPage} ? 'active'"></a>
 						</div>
@@ -129,16 +131,21 @@
 				</div>
 
 				<!-- 갤러리 섹션 -->
-				<!-- <h2>갤러리</h2>
-				
-				<div class="gallery">
-					<div th:each="post : ${postList}"
-						th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-						<img th:src="@{|/files/${post.boardfileLocation}|}"
-							th:alt="${post.boardfileName}" />
-						<p th:text="${post.boardfileName}">이미지 이름</p>
+				<div style="width: 1200px; margin: 50px auto;">
+					<div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+			            <p style="color: white">갤러리</p>
+			        </div>
+					<div class="gallery">
+						
+						<div th:each="post : ${postList}"
+							 th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
+							<th:block th:if="${post.boardfileLocation != null}">
+								<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
+							</th:block>
+							<!-- <p th:text="${post.boardfileName}">이미지 이름</p> -->
+						</div>
 					</div>
-				</div> -->
+				</div>
 			</div>
 			<div th:case="3">
 				<div class="insertBtn" style="position: absolute; top: 53px; right:0px;">
@@ -174,12 +181,12 @@
 					<div class="pagination">
 						<div th:if="${currentPage > 1}">
 							<a
-								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
 						</div>
 						<div
 							th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
 							<a
-								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
 								th:text="${page}"
 								th:classappend="${page == currentPage} ? 'active'"></a>
 						</div>
@@ -192,16 +199,23 @@
 				</div>
 
 				<!-- 갤러리 섹션 -->
-				<h2>갤러리</h2>
-				<div class="gallery">
-					<div th:each="post : ${postList}"
-						th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-						<img th:src="@{|/files/${post.boardfileLocation}|}"
-							th:alt="${post.boardfileName}" />
-						<p th:text="${post.boardfileName}">이미지 이름</p>
+				<div style="width: 1200px; margin: 50px auto;">
+					<div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+			            <p style="color: white">갤러리</p>
+			        </div>
+					<div class="gallery">
+						
+						<div th:each="post : ${postList}"
+							 th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
+							<th:block th:if="${post.boardfileLocation != null}">
+								<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
+							</th:block>
+							<!-- <p th:text="${post.boardfileName}">이미지 이름</p> -->
+						</div>
 					</div>
 				</div>
 			</div>
+			
 			<div th:case="4">
 				<div class="insertBtn" style="position: absolute; top: 53px; right:0px;">
 					<a th:href="@{/all/postInsertVote/{boardId}(boardId=${boardId})}"
@@ -237,12 +251,12 @@
 					<div class="pagination">
 						<div th:if="${currentPage > 1}">
 							<a
-								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${currentPage - 1}, pageSize=${pageSize})}">&laquo;</a>
 						</div>
 						<div
 							th:each="page : ${#numbers.sequence(1, (totalCount / pageSize) + (totalCount % pageSize == 0 ? 0 : 1))}">
 							<a
-								th:href="@{/all/post/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
+								th:href="@{/all/posts/{boardId}(boardId=${boardId}, page=${page}, pageSize=${pageSize})}"
 								th:text="${page}"
 								th:classappend="${page == currentPage} ? 'active'"></a>
 						</div>
@@ -253,21 +267,23 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			
-			<div style="width: 1200px; margin: 50px auto;">
-				<div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
-		            <p style="color: white">갤러리</p>
-		        </div>
-				<div class="gallery">
-					<div th:each="post : ${postList}"
-						 th:with="isExist = ${post.boardfileLocation != null}"
-						 th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
-						<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
-						<!-- <p th:text="${post.boardfileName}">이미지 이름</p> -->
+				<div style="width: 1200px; margin: 50px auto;">
+					<div class="table-top-content" style="width: 300px; margin-left: 20px; margin-bottom: 0; height: 40px; padding: 8px 16px;">
+			            <p style="color: white">갤러리</p>
+			        </div>
+					<div class="gallery">
+						
+						<div th:each="post : ${postList}"
+							 th:onclick="|location.href='@{/all/post/{boardId}/{postId}(boardId=${post.boardId}, postId=${post.postId})}'|">
+							<th:block th:if="${post.boardfileLocation != null}">
+								<img th:src="@{|/files/${post.boardfileLocation}|}" th:alt="${post.boardfileName}" />
+							</th:block>
+							<!-- <p th:text="${post.boardfileName}">이미지 이름</p> -->
+						</div>
 					</div>
 				</div>
 			</div>
+			
 		</div>
 
 	</div>

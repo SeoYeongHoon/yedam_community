@@ -259,7 +259,7 @@
 	//--------------------------------------------
 	// 페이지네이션 함수
 	//--------------------------------------------
-	 function postPagination(pageDTO, currentPage) {
+	function postPagination(pageDTO, currentPage) {
 	    var pagination = $('.postPaging');
 	    pagination.empty();
 	
@@ -284,7 +284,7 @@
 	    if (pageDTO.next) {
 	        pagination.append('<a href="javascript:void(0)" data-page="' + (pageDTO.endPage + 1) + '">&raquo;</a>');
 	    }
-	} 
+	}
 	
 	
 	
