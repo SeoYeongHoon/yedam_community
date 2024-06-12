@@ -25,7 +25,6 @@ public class LoginUserVO implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> auth = new ArrayList<>();
 		auth.add(new SimpleGrantedAuthority(userVO.getUserType())); // userType의 값에 따라 권한을 부여한다.
-//		auth.add(new SimpleGrantedAuthority(userVO.getProfileImageLocation()));
 		
 		return auth;
 	}

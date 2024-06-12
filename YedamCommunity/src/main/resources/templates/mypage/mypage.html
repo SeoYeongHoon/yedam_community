@@ -446,8 +446,6 @@
 			    cancelButtonColor: '#d33',
 			    confirmButtonText: '수락',
 			    cancelButtonText: '취소',
-			    // reverseButtons: true, // 버튼 순서 거꾸로
-			   
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
@@ -457,19 +455,18 @@
 						processData: false,
 						contentType: false,
 		                success: function(response) {
-							// window.location.href = '/all/home';
+							Swal.fire({
+								icon: 'success',
+								text: '수정이 완료되었습니다!',
+								confirmButtonText: '확인',
+							}).then((result) => {
+								location.reload();
+							});
 		                },
 		                error: function(xhr, status, error) {
 		                    alert('정보 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.');
 		                }
 		            });
-					Swal.fire({
-						icon: 'success',
-						text: '수정이 완료되었습니다!',
-						confirmButtonText: '확인',
-					}).then((result) => {
-						location.reload();
-					});
 				}
 			});
 	    });
