@@ -29,11 +29,10 @@ public class SpringSecurityConfig {
 		
 		http
 			.authorizeHttpRequests(requests -> requests
-//				.antMatchers("/**").permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/all/home").authenticated()
 				.antMatchers("/all/**").permitAll()
-				.antMatchers("/css/**", "/fonts/**", "/images/**", "/js/**", "/vendor/**", "/errorPages/access").permitAll()
+				.antMatchers("/css/**", "/fonts/**", "/images/**", "/js/**", "/vendor/**", "/errorPages/**").permitAll()
 				.anyRequest().authenticated())
 			.formLogin(login -> login
 				.loginPage("/all/login").permitAll()

@@ -13,12 +13,6 @@
 						<a href="/all/home"><img src="/images/logo_main.PNG" alt="LOGO"></a>
 					</div>
 					<li class="mega-menu-item"><a href="/all/home">Home</a>
-					<!-- <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
-						<li class="mega-menu-item"><a href="/admin/teachermain">LMS</a></li>
-					</th:block> -->
-					<!-- <th:block sec:authorize="hasAuthority('ROLE_LEARN')">
-						<li class="mega-menu-item"><a href="/all/testList2">LMS</a></li>
-					</th:block> -->
 					<li class="mega-menu-item" style="display: none;">[[${#authentication.principal.userType == 'ROLE_GRAD'}]]</li>
 					<th:block th:if="${#authentication.principal.userType == 'ROLE_GRAD' OR #authentication.principal.userType == 'ROLE_ADMIN'}">
 						<li class="mega-menu-item"><a href="/all/curriculumPost" id="graduatedBoard">수료 과정별 게시판</a></li>
@@ -26,21 +20,12 @@
 					<th:block th:if="${#authentication.principal.userType == 'ROLE_LEARN'}">
 						<li class="mega-menu-item"><a href="/all/testList2" id="graduatedBoard">LMS</a></li>
 					</th:block>
-					<!-- <th:block sec:authorize="hasAuthority('ROLE_GRAD')">
-						<li class="mega-menu-item"><a th:href="@{/all/curriculumPost}" id="graduatedBoard">수료 과정별 게시판</a></li>
-					</th:block> -->
 					<th:block th:if="${#authentication.principal.userType == 'ROLE_GRAD' OR #authentication.principal.userType == 'ROLE_ADMIN'}">
 						<li class="mega-menu-item"><a th:href="@{/all/posts/2}" id="findJobBoard">구인/구직 게시판</a></li>
 					</th:block>
 					<li class="mega-menu-item"><a th:href="@{/all/posts/3}" id="infoBoard">정보 공유 게시판</a></li>
 					<li class="mega-menu-item"><a th:href="@{/all/posts/4}" id="debateBoard">질문과 토론 게시판</a></li>
 				</ul>
-				<!-- <th:block sec:authorize="hasAuthority('ROLE_LEARN') or hasAuthority('ROLE_GRAD') or hasAuthority('ROLE_ADMIN')">
-					<div class="profile_my_info" style="position: absolute; right: 90px; color: black;">
-						<p style="font-weight: normal; color: #51BC56">[[${#authentication.name}]] <span style="color: black;">님</span></p>
-						<p>환영합니다!</p>
-					</div>
-				</th:block> -->
 				<div class="profile_image_btn">
 					<button id="myMenuBtn">
 						<th:block th:if="${#authentication.principal.profileImageLocation}">
