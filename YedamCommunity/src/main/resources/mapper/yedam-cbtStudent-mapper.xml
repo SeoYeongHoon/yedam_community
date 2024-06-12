@@ -152,8 +152,8 @@
 	<!-- 랜덤보기 등록 -->
 	<insert id="insertTestQuizExample" parameterType="AnswerboxVO">
 		DECLARE
-    		v_answerbox_cnt NUMBER(5,0);
-    		v_answerbox_id	NUMBER(5,0);
+    		v_answerbox_cnt NUMBER(5,0); <!-- 보기유무 -->
+    		v_answerbox_id	NUMBER(5,0); <!-- 보기순서관리번호 -->
 		BEGIN
 			<!-- 보기유무 조회 -->
     		SELECT  COUNT(answerbox_id)
