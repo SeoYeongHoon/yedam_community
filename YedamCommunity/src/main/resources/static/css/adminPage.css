@@ -425,5 +425,5 @@
 
 .test {
 	overflow-y: scroll;
-    height: 300px;
+    align-items: center;
 }
