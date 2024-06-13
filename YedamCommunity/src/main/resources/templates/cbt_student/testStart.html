@@ -254,7 +254,9 @@
 //<<키값 통한 새로고침 막기 관련>>
 document.addEventListener('keydown', notReload);
 function notReload(event) {
-    if ((event.ctrlKey && (event.keyCode === 78 || event.keyCode === 82)) || event.keyCode === 116) { //새로고침 키
+    if ((event.ctrlKey && (event.keyCode === 78 
+    		|| event.keyCode === 82)) 
+    		|| event.keyCode === 116) { //새로고침 키
         event.preventDefault();
         event.stopPropagation();
         alert("새로고침키를 사용할 수 없습니다.");
@@ -268,12 +270,11 @@ $(document).ready(function() {
 		return;
 	});
 });
-
 //<<화면크기 축소 및 확대>>
 let nowZoom = 100; // 현재 비율
 $('#zoomOut').on('click',function(){
 	$('#zoomIn').attr('disabled', false);
-	nowZoom = nowZoom - 10;
+	nowZoom = nowZoom - 10; //비율 감소
 	$('#zoomStatus').text(nowZoom + "%");
 	if(nowZoom <= 70){ //최소 70%
 		$('#zoomOut').attr('disabled', true);
@@ -282,7 +283,7 @@ $('#zoomOut').on('click',function(){
 })
 $('#zoomIn').on('click',function(){
 	$('#zoomOut').attr('disabled', false);
-	nowZoom = nowZoom + 10;
+	nowZoom = nowZoom + 10; //비율 증가
 	$('#zoomStatus').text(nowZoom + "%");
 	if(nowZoom >= 130){ //최대 130%
 		$('#zoomIn').attr('disabled', true);
