@@ -239,9 +239,6 @@ function testListFilter(type, filterData){
 			if(data.testList.length != 0){ //시험 개수가 0이 아닌 경우
 				for(let i = 0; i < data.testList.length; i++){
 					let date1 = new Date(data.testList[i].testDate); //해당 날짜 00:00:00 시험시작
-					//date1.setHours(00);
-					//date1.setMinutes(00);
-					//date1.setSeconds(00);
 					let year = date1.getFullYear();
 					let month = ('0' + (date1.getMonth() + 1)).substr(-2, 2);
 					let day = ('0' + date1.getDate()).substr(-2, 2);

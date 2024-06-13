@@ -153,26 +153,26 @@ window.onload = function(){
 }
 
 let timer = setInterval(function(){ //타이머 함수
-	if(date2 > date1){ //
-		hour.text('00');
+	if(date2 > date1){ //시험시작 시간이 현재 시간보다 큰 경우
+		hour.text('00'); 
 		min.text('00');
 		sec.text('00');
-		$('#testStartBtn').attr('disabled', false);
+		$('#testStartBtn').attr('disabled', false); //시작 버튼 활성화
 	}
 	else{
-		sec.text(('0' + (sec.text() - 1)).substr(-2,2)); //초 감소
-		if(sec.text() < 0 && min.text() == 0){ //시,분 감소
-			hour.text(('0' + (hour.text() - 1)).substr(-2,2));
-			min.text(('059').substr(-2,2));
-			sec.text(('059').substr(-2,2));
+		sec.text(('0' + (sec.text() - 1)).substr(-2,2));
+		if(sec.text() < 0 && min.text() == 0){
+			hour.text(('0' + (hour.text() - 1)).substr(-2,2)); //시간 감소
+			min.text(('059').substr(-2,2)); //분 초기화
+			sec.text(('059').substr(-2,2)); //초 초기화
 		}
-		if(sec.text() < 0){ //분 감소
-			min.text(('0' + (min.text() - 1)).substr(-2,2));
-			sec.text(('059').substr(-2,2));
+		if(sec.text() < 0){
+			min.text(('0' + (min.text() - 1)).substr(-2,2)); //분 감소
+			sec.text(('059').substr(-2,2)); //초 초기화
 		}
-		if(hour.text() == 0 && min.text() == 0 && sec.text() == 0){ //타이머 멈추기
-			clearInterval(timer);
-			$('#testStartBtn').attr('disabled', false);
+		if(hour.text() == 0 && min.text() == 0 && sec.text() == 0){
+			clearInterval(timer); //타이머 멈추기
+			$('#testStartBtn').attr('disabled', false); //시작 버튼 활성화
 		}
 	}
 },1000)
