@@ -7,74 +7,79 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
 .feedBtn{
-	border: 1px solid gray;
+	padding: 10px 15px;
+	display: block;
+	margin-bottom: 5px;
 	width: 100px;
+}
+#reTest {
+	position: absolute;
+    right: 0;
+    top: -42px;
 }
 </style>
 <!-- ========= card-style-3 start ========= -->
-<div class="row testInfo">
-	<div class="col-12">
-		<div class="address-item">
-			<input type="hidden" id="tId" th:value="${testInfo.testId}"/>
-			<input type="hidden" id="currId" th:value="${testInfo.curriculumId}"/>
-			<input type="hidden" id="classId" th:value="${testInfo.classId}"/>
-			<div class="title d-flex flex-wrap align-items-center justify-content-between" style="margin-top:30px">
-				<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
-					<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">강의실 정보</h4>
-				</div>
-			</div>
-			<h1 th:text="${testInfo.classId}+강의실">n강의실</h1>
-			<br>
-			<h4 th:text="${testInfo.curriculumName}">과정명</h4>
-			<p class="text-sm">
-				<span class="text-medium"
-					th:text="${#dates.format(testInfo.curriculumStartDate, 'yyyy.MM.dd')}+'~'+${#dates.format(testInfo.curriculumEndDate, 'yyyy.MM.dd')}">시험기간</span>
-			</p>
-		</div>
-		<div class="title mt-30 mb-30">
-			<h2
-				th:text="'시험명 : ' + ${testInfo.testName}+' '+${#dates.format(testInfo.testDate, 'yyyy.MM.dd')}">시험명
-				시작기간~종료기간</h2>
-		</div>
-	</div>
-	<!-- end col -->
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-		<div class="card-style-3 mb-30">
-			<div class="card-content">
-				<div class="title d-flex flex-wrap align-items-center justify-content-between">
+<div class="card-style-3" style="margin: 30px; padding: 0 30px; width: 1100px;">
+	<div class="row testInfo">
+		<div class="col-12">
+			<div class="address-item">
+				<input type="hidden" id="tId" th:value="${testInfo.testId}"/>
+				<input type="hidden" id="currId" th:value="${testInfo.curriculumId}"/>
+				<input type="hidden" id="classId" th:value="${testInfo.classId}"/>
+				<div class="title d-flex flex-wrap align-items-center justify-content-between" style="margin-top:30px">
 					<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
-						<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">시험 통과자</h4>
+						<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">강의실 정보</h4>
 					</div>
 				</div>
+				<h1 th:text="${testInfo.classId}+강의실">n강의실</h1>
 				<br>
-				<div class="test row ">
-					<div class="col-8" id="passUser"></div>
-					<div class="col-4" id="passFeed"></div>
+				<h4 th:text="${testInfo.curriculumName}">과정명</h4>
+				<p class="text-sm">
+					<span class="text-medium"
+						th:text="${#dates.format(testInfo.curriculumStartDate, 'yyyy.MM.dd')}+'~'+${#dates.format(testInfo.curriculumEndDate, 'yyyy.MM.dd')}">시험기간</span>
+				</p>
+			</div>
+			<div class="title mt-30 mb-30">
+				<h2
+					th:text="'시험명 : ' + ${testInfo.testName}+' '+${#dates.format(testInfo.testDate, 'yyyy.MM.dd')}">시험명
+					시작기간~종료기간</h2>
+			</div>
+		</div>
+		<!-- end col -->
+		<div class="" style="display: flex; position: relative;">
+			<div class="card-style-3 mb-30" style="width: 500px; margin-right: 20px;">
+				<div class="card-content">
+					<div class="title d-flex flex-wrap align-items-center justify-content-between">
+						<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
+							<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">시험 통과자</h4>
+						</div>
+					</div>
+					<br>
+					<div class="test row ">
+						<div class="col-8" id="passUser"></div>
+						<div class="col-4" id="passFeed"></div>
+					</div>
+				</div>
+			</div>
+			<button type="button" id="reTest" class="tlist_1 status-btn close-btn" onclick="location.href='/admin/quizlist'">재시험 출제</button>
+			<div class="card-style-3 mb-30" style="width: 500px;">
+				<div class="title d-flex flex-wrap align-items-center justify-content-between">
+					<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
+						<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">재시험자</h4>
+					</div>
+				</div>
+				<div class="card-content">
+					<br>
+					<div class="test row">
+						<div class="col-8" id="failUser"></div>
+						<div class="col-4" id="failFeed"></div>
+					</div>
 				</div>
 			</div>
 		</div>
+		<!-- end col -->
+		
 	</div>
-	<!-- end col -->
-	<div align="right" class="col-12" style="margin-bottom:10px">
-		<button type="button" id="reTest" class="tlist_1 status-btn close-btn" onclick="location.href='/admin/quizlist'">재시험 출제</button>
-	</div>
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-		<div class="card-style-3 mb-30">
-			<div class="title d-flex flex-wrap align-items-center justify-content-between">
-				<div class="table-top-content" style="width: 280px; height: 55px; padding: 18px;">
-					<h4 class="mb-10" style="font-weight: normal; color: white" id="chartClass">재시험자</h4>
-				</div>
-			</div>
-			<div class="card-content">
-				<br>
-				<div class="test row">
-					<div class="col-8" id="failUser"></div>
-					<div class="col-4" id="failFeed"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end col -->
 </div>
 <!-- end row -->
 <!-- ========= card-style-3 end ========= -->
@@ -101,18 +106,19 @@ function userList(testId){
 				
 				if(item.isReexam == 1){
 					//item.isReexam = '재시험 X';
-					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'));
+					$('#passUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점')
+							   					   .css('padding', '10px 15px').css('font-weight', 'bold')).css('height', '500px');
 					$('#passFeed').append($('<p/>').text(item.feedback)
 												   .attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'")
-												   .addClass('feedBtn'));
+												   .addClass('feedBtn primary-btn main-btn btn-hover')).css('height', '500px');
 					
 				} else {
 					//item.isReexam = '재시험 O';
-					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점'),
-									      $('<input type="hidden">').attr({value : item.userId, id : "u"+idx}));
+					$('#failUser').append($('<p/>').text(item.name + ' / ' + item.resultScore + '점').css('padding', '10px 15px').css('font-weight', 'bold'),
+									      $('<input type="hidden">').attr({value : item.userId, id : "u"+idx})).css('height', '500px');
 
 					$('#failFeed').append($('<p/>').text(item.feedback).attr("onclick","location.href='/admin/feedback?userId="+item.userId+"&testId="+item.testId+"'")
-												   .addClass('feedBtn'));
+												   .addClass('feedBtn primary-btn main-btn btn-hover')).css('height', '500px');
 
 					reUserId.push($('#u'+idx).val());
 				}
